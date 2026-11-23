@@ -6,6 +6,7 @@ import pytest
 
 from scripts.paid_postgres_rehearsal import require_current_restore
 from scripts.referral_postgres_rehearsal import ReferralRehearsal
+from scripts.support_postgres_rehearsal import SupportRehearsal
 
 
 @pytest.mark.parametrize('mutation', ['claim', 'sponsor', 'invitation', 'revocation', 'proof', 'table'])
@@ -30,18 +31,19 @@ def test_restore_cannot_silently_lose_referral_state(mutation):
         require_current_restore(current, restored)
 
 
-def test_referral_runner_uses_temporary_owned_local_docker_only(tmp_path, monkeypatch):
+@pytest.mark.parametrize('runner', [ReferralRehearsal, SupportRehearsal])
+def test_writer_runner_uses_temporary_owned_local_docker_only(tmp_path, monkeypatch, runner):
     with pytest.raises(ValueError, match='TEMPORARY_REHEARSAL_ONLY'):
-        ReferralRehearsal(Path('/not-a-temporary-referral-rehearsal'))
+        runner(Path('/not-a-temporary-writer-rehearsal'))
     with pytest.raises(FileExistsError):
-        ReferralRehearsal(tmp_path)
+        runner(tmp_path)
     linked = tmp_path / 'linked'
     linked.symlink_to(tmp_path, target_is_directory=True)
     with pytest.raises(ValueError, match='REHEARSAL_SYMLINK'):
-        ReferralRehearsal(linked / 'new')
+        runner(linked / 'new')
     monkeypatch.setenv('PGSERVICE', 'not-for-tests')
     monkeypatch.setenv('DOCKER_HOST', 'tcp://not-for-tests:2375')
-    rehearsal = ReferralRehearsal(tmp_path / 'rehearsal')
+    rehearsal = runner(tmp_path / 'rehearsal')
     calls = []
 
     def command(arguments, **settings):

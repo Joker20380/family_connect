@@ -1,5 +1,20 @@
 # Текущее состояние / Current state
 
+**23 November — CONTROL-HA HA-02E Support ID transactions VERIFIED; migration IN_PROGRESS.**
+Continuation from23dfd4ba in the metadata branch. Support request proof/observation
+and whole-batch alias backfill now share SQLite/PostgreSQL transactions; inventory
+and safe lookup use the same repository.155 real DB contracts PASS /0 skips
+(66 support +40 enrollment +49 paid),443 consumer/runner checks PASS /21 optional
+skips; expanded isolated operator.pyz backfill/inventory/lookup smoke PASS.
+Actual PostgreSQL17.11 SIGKILL/current restore passes12 synthetic tables/19 rows,
+including paid state and read-side restricted fixtures. Stale restore refused;
+consumed/pending proofs, aliases, version observations, revoke and audit sequence survive.
+FIELD grants/CRL/admission-file writers are NOT migrated; PostgreSQL FIELD mutation
+is explicitly refused before file I/O. Support sender and other writers remain pending.
+No production/OS/GeoIP/consent/client change; console5ce82415 and Android126/catalog9
+unchanged. Prior four exact-package failures remain open. RU still a dependency.
+[Scope and next gates](control-ha-storage.md#ha-02e--support-id-transactions) · [Evidence/rollback](releases/2026-11-23-control-ha.md#ha-02e--support-id-observation-and-recovery).
+
 **23 November — CONTROL-HA HA-02D referral transactions VERIFIED; migration IN_PROGRESS.**
 Source22caaf6c is ordinarily pushed and remote-SHA verified in the existing metadata
 branch (base1171b9dc). Shared SQLite/PostgreSQL

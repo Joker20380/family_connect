@@ -46,6 +46,8 @@ def write_admission(path, previous, devices):
 
 
 def change(access, path, support, enabled, expires=None):
+    if access.enrollment_repository is not None:
+        raise NotImplementedError('FIELD admission requires fenced file/grant migration')
     support = support_ids.normalize(support)
     descriptor = os.open(path.with_name('field-operator.lock'), os.O_RDWR | os.O_CREAT | os.O_NOFOLLOW, 0o600)
     with os.fdopen(descriptor, 'r+') as lock:

@@ -84,8 +84,8 @@ ledger, отзывах и challenge, не только числе устройс
 потери quorum, ремонта узла, CA renewal, backup restore и независимый мониторинг.
 HA не устраняет причину локальных зависаний RU.
 
-HA-02A/B/C/D: enrollment, paid ledger/subscription, synthetic all-node membership,
-referral transactions и PostgreSQL crash/restore
+HA-02A/B/C/D/E: enrollment, paid ledger/subscription, synthetic all-node membership,
+referral и Support ID transactions, PostgreSQL crash/restore
 стенд реализованы. HA-02B отвергает stale backup после новых payment/revoke/proof
 записей и проверяет актуальный restore всех девяти лабораторных таблиц. Это не
 production reverse migration: serving-set fencing, production wiring/deadlines,
@@ -95,6 +95,10 @@ production reverse migration: serving-set fencing, production wiring/deadlines,
 HA-02D отдельно проверяет referral restore девяти лабораторных таблиц/18 строк,
 сохранение подтверждённых приглашений/отзывов и отказ stale pre-claim backup.
 Оба набора из девяти таблиц относятся к разным стендам, не к полному product backup.
+HA-02E отдельно проверяет Support ID/наблюдения вместе с paid state:12 синтетических
+таблиц/19 строк. Restricted grants/readiness — только read-side fixtures; перенос
+FIELD grant/audit/CRL/admission-file writers этим не выполнен. PostgreSQL FIELD
+операции явно запрещены до файловых побочных эффектов. Это не новый CLI backend.
 [Точная граница и карта writers](control-ha-storage.md).
 
 Результаты: [checkpoint 23 ноября](releases/2026-11-23-control-ha.md).

@@ -84,6 +84,10 @@ class SQLiteEnrollment(EnrollmentTransaction):
         from .referrals import ReferralTransaction
         return ReferralTransaction(self)
 
+    def support(self):
+        from .support_ids import SupportTransaction
+        return SupportTransaction(self)
+
 
 class Access:
  def __init__(self,path,clock=time.time,*,enrollment_repository=None):

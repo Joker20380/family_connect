@@ -36,6 +36,10 @@ class PostgresEnrollmentTransaction(EnrollmentTransaction):
         from .referrals_postgres import PostgresReferralTransaction
         return PostgresReferralTransaction(self)
 
+    def support(self):
+        from .support_postgres import PostgresSupportTransaction
+        return PostgresSupportTransaction(self)
+
     def registered(self, device):
         row = self.database.execute('SELECT support_id FROM device_support WHERE device=%s', (device,)).fetchone()
         if row is not None:

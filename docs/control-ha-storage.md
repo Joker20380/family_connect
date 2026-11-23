@@ -1,7 +1,8 @@
 # HA-02 — каноническое хранилище и очередь writers
 
 23 November 2026. **IN_PROGRESS; HA-02A enrollment, HA-02B paid/subscription и
-HA-02C membership и HA-02D referral contracts квалифицированы на синтетическом стенде.**
+HA-02C membership, HA-02D referral и HA-02E Support ID contracts
+квалифицированы на синтетическом стенде.**
 Это не production, не репликация и не cutover.
 [Общие gates](control-ha.md) · [Результаты](releases/2026-11-23-control-ha.md).
 
@@ -163,6 +164,49 @@ revocation и активация ещё не использованного пр
 SQLite semantics выше изменены только в исходниках; accepted production bytes не
 заменены. Rollback текущего шага — остановка owned стенда, без восстановления RU/NL.
 
+## HA-02E — Support ID transactions
+
+`support_ids.py` использует общий `SupportTransaction` для request, backfill,
+inventory и lookup. PostgreSQL доступен только в явно созданном synthetic store
+с marker `family-connect/ha-support-synthetic/v1`; отсутствующий/неверный marker
+запрещает все четыре операции без fallback/DDL. SQLite остаётся production default,
+его schema и CLI не переключены. Общая реализация включена в существующий операторский
+архив без добавления PG driver в runtime или ослабления exact-package pins.
+
+- Request атомарно потребляет support proof и сохраняет platform/app-version/last_seen.
+  Ошибка после UPDATE или потеря backend откатывает оба изменения. Отсутствующий
+  Support ID не создаётся при выдаче: отдельный backfill, затем retry ещё действительного
+  proof. После commit тот же proof отклоняется; свежий proof возвращает тот же alias.
+- Backfill выполняется одной транзакцией вместе с возвращаемым inventory. Повторные
+  и конкурентные вызовы сохраняют существующие aliases/bindings, включая revoked
+  devices. Коллизии retry32 сохранены; исчерпание/сбой посередине откатывает весь batch.
+- Receipt не определяет platform и не перезаписывает более новое наблюдение запроса.
+  Для одинаковых backend outcomes введены `ack_at DESC NULLS LAST, correlation ASC`;
+  JSON не-объект, неверная версия и отсутствующий/отрицательный timestamp не являются
+  наблюдением. Невалидный последний ACK не разрешает fallback на старый READY.
+- Read-only lookup сохраняет safe response без device identity/ключей, явную FIELD
+  list и отдельную существующую all-activated политику. В all-activated expired grant
+  остаётся ELIGIBLE по прежнему контракту; revoked — нет. Это не изменение допусков.
+- Таблицы restricted grants/readiness в стенде — **read-side fixtures**, не перенос
+  их writers. `support_admin.change` на PG отказывает до открытия lock/admission/CRL
+  файлов. SQLite FIELD поведение сохранено и проверено прежними операторскими тестами.
+  Grant/audit transaction ordering, file publication/reconciliation и sender bindings
+  остаются отдельными задачами. Чтение support ID не даёт разрешения на FIELD mutation.
+
+155 real DB contracts /0 skips (66 support +40 enrollment +49 paid);443 consumer/
+runner checks /21 optional skips. Дополнительно выполнены backfill/inventory/lookup
+из настоящего воспроизводимого `.pyz` через `python -I` на synthetic SQLite.
+Реальный PostgreSQL SIGKILL/restart и отдельный restore сравнивают все12 lab tables/
+19 rows с заранее сохранённым committed state: ID/version/proof/revoke/paid и audit
+sequence. Stale backup отклоняется именно этой сверкой, не новым production recovery
+service. Pending proof после restore работает один раз. Это не RPO0/replication,
+полный product backup или обратная миграция. Число155 не сумма всех прошлых этапов:
+неизменённые membership/referral PG suites в этом шаге заново не запускались.
+
+Никакого нового сбора OS/GeoIP/consent: здесь только прежний Support ID/app-version
+контракт. Production данные, ключи, архивы и клиентские версии не менялись. Откат
+checkpoint — остановка owned disposable стенда; live DB из старого backup не нужна.
+
 ## Карта оставшихся canonical writers
 
 Это source-level карта семейств, не утверждение о завершённой live-инвентаризации.
@@ -174,7 +218,8 @@ CLI и периодические задания; число таблиц produc
 | `access.py`: invites/devices/challenges, регистрационный Support ID | One-use, binding uniqueness, limit8, TTL, monotonic revoke, rollback | HA-02A synthetic PASS; production SQLite |
 | `paid_beta.py`, `transport_membership.py`, paid CLI | Immutable ledger, payload-bound event ID, cohort/binding triggers, terminal revoke, exact paid/noncohort projection | HA-02B/C DB + membership contracts synthetic PASS; production CLI/wiring pending |
 | `subscription.py` | Собственное атомарное потребление challenge вместе с paid projection, не только `Access.complete` | HA-02B synthetic PASS; production остаётся SQLite |
-| `support_ids.py`, `support_admin.py`, `support.py` | Backfill/observation/audit; admission-file + grant + audit consistency; support sender bindings | Pending; новая DDL audit не означает перенос writer |
+| `support_ids.py` | Stable aliases, atomic backfill и proof/observation; safe inventory/lookup | HA-02E synthetic PASS; full import/production wiring pending |
+| `support_admin.py`, `support.py` | Admission-file + grant + audit consistency; support sender bindings | Writers pending; PG FIELD mutations explicitly refused before file I/O, SQLite CLI retained |
 | `referrals.py` | Sponsor-bound request idempotency, pool/daily limits, proof/link и claim/invitation в одной транзакции | HA-02D synthetic PASS; full import/production wiring pending |
 | `chat.py`, `chat_service.py`, `chat_sync.py` | Chat identity/proof, directory sequence, service sender revoke; filesystem exports | Pending |
 | `restricted.py`, `restricted_admin.py`, `readiness_receipts.py` | Grants, отдельные restricted challenges, certificates, readiness, CRL sequence | Pending |
@@ -191,7 +236,7 @@ signing keys не входят в migration и остаются офлайн.
 
 ## Следующие gates
 
-1. Перевести остальные writers/CLI (далее support/admin), затем metadata,
+1. Перевести остальные writers/CLI (далее restricted/admin DB и support sender), затем metadata,
    tombstones/files и остальные строки карты. Не допускать mixed backend writers;
    synthetic membership не заменяет production wiring, deadline и package gates.
 2. Создать явную versioned all-table migration: snapshot consistency, nullable и

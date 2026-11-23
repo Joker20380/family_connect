@@ -4,7 +4,7 @@ import re
 import secrets
 import sqlite3
 
-from .access import Rejected
+from .access import Rejected, SQLiteEnrollment
 
 ALPHABET = '23456789ABCDEFGHJKMNPQRSTVWXYZ'
 PATTERN = r'FC-[23456789ABCDEFGHJKMNPQRSTVWXYZ]{4}-[23456789ABCDEFGHJKMNPQRSTVWXYZ]{4}'
@@ -45,17 +45,15 @@ def registered(database, device):
     raise RuntimeError('Support ID allocation unavailable')
 
 
-def receipt(database, device):
-    if not database.execute("SELECT 1 FROM sqlite_master WHERE name='restricted_readiness_results'").fetchone():
-        return None
-    row = database.execute('SELECT ack,ack_at,expires FROM restricted_readiness_results '
-                           'WHERE device=? AND ack IS NOT NULL ORDER BY ack_at DESC LIMIT 1', (device,)).fetchone()
+def parse_receipt(row):
     if row is None:
         return None
     try:
         value = json.loads(row['ack'])
-        if (not isinstance(value.get('app_version'), str) or not re.fullmatch(VERSION, value['app_version'])
-                or type(value.get('version_code')) is not int or not 1 <= value['version_code'] <= 2147483647):
+        if (type(value) is not dict or not isinstance(value.get('app_version'), str)
+                or not re.fullmatch(VERSION, value['app_version'])
+                or type(value.get('version_code')) is not int or not 1 <= value['version_code'] <= 2147483647
+                or type(row['ack_at']) is not int or row['ack_at'] < 0):
             return None
         return dict(version=value['app_version'], code=value['version_code'], seen=row['ack_at'],
                     expires=row['expires'], ready=value.get('result') == 'READY')
@@ -63,28 +61,94 @@ def receipt(database, device):
         return None
 
 
-def backfill(access):
-    with access.db() as database:
-        create(database)
-        for row in database.execute('SELECT device FROM devices').fetchall():
-            device = row['device']
-            registered(database, device)
-            observed = receipt(database, device)
-            if observed is not None:
-                database.execute('UPDATE device_support SET app_version=?,version_code=?,last_seen=?,observation_source=? '
-                                 'WHERE device=? AND (last_seen IS NULL OR last_seen<?)',
-                                 (observed['version'], observed['code'], observed['seen'], 'readiness_ack', device, observed['seen']))
-    return inventory(access)
+class SupportTransaction:
+    def __init__(self, enrollment):
+        self.enrollment = enrollment
+        self.database = enrollment.database
+        self.placeholder = enrollment.placeholder
 
+    def ensure_schema(self):
+        create(self.database)
 
-def inventory(access):
-    with access.db() as database:
-        row = database.execute('SELECT count(*) AS total,sum(d.revoked=0) AS non_revoked,sum(d.revoked!=0) AS revoked,'
-                               'count(s.support_id) AS support_ids,count(s.platform) AS platform_known,'
-                               'count(s.app_version) AS version_known FROM devices d LEFT JOIN device_support s ON s.device=d.device').fetchone()
+    def table_exists(self, table):
+        return self.database.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (table,)).fetchone() is not None
+
+    def receipt(self, device):
+        if not self.table_exists('restricted_readiness_results'):
+            return None
+        row = self.database.execute('SELECT ack,ack_at,expires FROM restricted_readiness_results '
+            f'WHERE device={self.placeholder} AND ack IS NOT NULL '
+            'ORDER BY ack_at DESC NULLS LAST,correlation ASC LIMIT 1', (device,)).fetchone()
+        return parse_receipt(row)
+
+    def devices(self):
+        return self.database.execute('SELECT device FROM devices ORDER BY device').fetchall()
+
+    def support_id(self, device):
+        row = self.database.execute(f'SELECT support_id FROM device_support WHERE device={self.placeholder}', (device,)).fetchone()
+        if row is None:
+            raise RuntimeError('Support inventory mismatch')
+        return row['support_id']
+
+    def active(self, device):
+        row = self.enrollment.device(device)
+        invitation = self.enrollment.device_invitation(device)
+        if row is None or row['revoked'] or invitation is None or invitation['revoked']:
+            raise Rejected()
+
+    def observe_receipt(self, device, observed):
+        self.database.execute(f'UPDATE device_support SET app_version={self.placeholder},version_code={self.placeholder},'
+            f'last_seen={self.placeholder},observation_source={self.placeholder} '
+            f'WHERE device={self.placeholder} AND (last_seen IS NULL OR last_seen<{self.placeholder})',
+            (observed['version'], observed['code'], observed['seen'], 'readiness_ack', device, observed['seen']))
+
+    def observe_request(self, device, value, now):
+        self.database.execute(f'UPDATE device_support SET platform={self.placeholder},app_version={self.placeholder},'
+            f'version_code={self.placeholder},last_seen={self.placeholder},observation_source={self.placeholder} '
+            f'WHERE device={self.placeholder}',
+            (value['platform'], value['app_version'], value['version_code'], now, 'support_request', device))
+
+    def inventory(self):
+        row = self.database.execute('SELECT count(*) AS total,'
+            'sum(CASE WHEN d.revoked=0 THEN 1 ELSE 0 END) AS non_revoked,'
+            'sum(CASE WHEN d.revoked!=0 THEN 1 ELSE 0 END) AS revoked,'
+            'count(s.support_id) AS support_ids,count(s.platform) AS platform_known,'
+            'count(s.app_version) AS version_known FROM devices d LEFT JOIN device_support s ON s.device=d.device').fetchone()
         result = {key: value or 0 for key, value in dict(row).items()}
         result.update(platform_unknown=result['total'] - result['platform_known'], version_unknown=result['total'] - result['version_known'])
         return result
+
+    def lookup(self, support):
+        return self.database.execute('SELECT s.*,d.revoked,i.revoked AS invite_revoked FROM device_support s '
+            'JOIN devices d ON d.device=s.device LEFT JOIN invites i ON i.device=s.device '
+            f'WHERE s.support_id={self.placeholder}', (support,)).fetchone()
+
+    def grant(self, device):
+        if not self.table_exists('restricted_grants'):
+            return None
+        return self.database.execute(f'SELECT revoked,expires FROM restricted_grants WHERE device={self.placeholder}', (device,)).fetchone()
+
+
+def receipt(database, device):
+    return SupportTransaction(SQLiteEnrollment(database)).receipt(device)
+
+
+def backfill(access):
+    with access.enrollment() as transaction:
+        database = transaction.support()
+        database.ensure_schema()
+        for row in database.devices():
+            device = row['device']
+            transaction.registered(device)
+            observed = database.receipt(device)
+            if observed is not None:
+                database.observe_receipt(device, observed)
+        return database.inventory()
+
+
+def inventory(access):
+    with access.enrollment() as transaction:
+        return transaction.support().inventory()
 
 
 def request(access, value):
@@ -95,18 +159,12 @@ def request(access, value):
             or not re.fullmatch(VERSION, value['app_version']) or type(value['version_code']) is not int
             or not 1 <= value['version_code'] <= 2147483647):
         raise Rejected()
-    record = access.complete(value['proof'], 'support')
-    with access.db() as database:
-        row = database.execute('SELECT d.revoked,i.revoked AS invite_revoked FROM devices d JOIN invites i '
-                               'ON i.device=d.device WHERE d.device=?', (record['device'],)).fetchone()
-        if row is None or row['revoked'] or row['invite_revoked']:
-            raise Rejected()
-        assigned = database.execute('SELECT support_id FROM device_support WHERE device=?', (record['device'],)).fetchone()
-        if assigned is None:
-            raise RuntimeError('Support inventory mismatch')
-        support = assigned['support_id']
-        database.execute('UPDATE device_support SET platform=?,app_version=?,version_code=?,last_seen=?,observation_source=? WHERE device=?',
-                         (value['platform'], value['app_version'], value['version_code'], int(access.clock()), 'support_request', record['device']))
+    with access.enrollment() as transaction:
+        database = transaction.support()
+        record = access.complete(value['proof'], 'support', transaction=transaction)
+        database.active(record['device'])
+        support = database.support_id(record['device'])
+        database.observe_request(record['device'], value, int(access.clock()))
         return dict(schema=1, device_support_id=support)
 
 
@@ -114,16 +172,14 @@ def lookup(access, support, admitted, *, all_activated=False):
     if type(all_activated) is not bool:
         raise ValueError('Invalid admission mode')
     support = normalize(support)
-    with access.db() as database:
-        row = database.execute('SELECT s.*,d.revoked,i.revoked AS invite_revoked FROM device_support s '
-                               'JOIN devices d ON d.device=s.device LEFT JOIN invites i ON i.device=s.device WHERE s.support_id=?', (support,)).fetchone()
+    with access.enrollment() as transaction:
+        database = transaction.support()
+        row = database.lookup(support)
         if row is None:
             raise ValueError('Support ID not found')
-        grant = None
-        if database.execute("SELECT 1 FROM sqlite_master WHERE name='restricted_grants'").fetchone():
-            grant = database.execute('SELECT revoked,expires FROM restricted_grants WHERE device=?', (row['device'],)).fetchone()
+        grant = database.grant(row['device'])
         now = int(access.clock())
-        observed = receipt(database, row['device'])
+        observed = database.receipt(row['device'])
         readiness = 'UNKNOWN' if observed is None else 'EXPIRED' if not observed['expires'] or observed['expires'] <= now else 'READY' if observed['ready'] else 'NOT_READY'
         family = 'NOT_PROVISIONED' if grant is None else 'REVOKED' if grant['revoked'] else 'EXPIRED' if grant['expires'] is not None and grant['expires'] <= now else 'ACTIVE'
         revoked = bool(row['revoked'] or row['invite_revoked'])

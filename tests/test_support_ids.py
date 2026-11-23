@@ -211,3 +211,22 @@ def test_operator_artifact_is_reproducible_and_isolated(tmp_path):
         assert archive.getinfo('clients/desktop/').is_dir()
     result = subprocess.run([sys.executable, '-I', str(first), '--help'], cwd=tmp_path, capture_output=True, text=True, check=True)
     assert 'enable-field' in result.stdout and 'disable-field' in result.stdout
+    access = Access(tmp_path / 'packaged.sqlite', clock=lambda: 1000)
+    access.initialize()
+    device, support = enroll(access)
+    support_ids.request(access, request(access, device))
+    admission = tmp_path / 'admission.json'
+    admission.write_text(json.dumps(dict(devices=[])))
+    admission.chmod(0o600)
+    before = support_ids.inventory(access)
+    for action in ('backfill', 'inventory'):
+        result = subprocess.run([sys.executable, '-I', str(first), '--db', str(access.path), action],
+                                cwd=tmp_path, capture_output=True, text=True, check=True)
+        assert json.loads(result.stdout) == before
+    result = subprocess.run([sys.executable, '-I', str(first), '--db', str(access.path),
+        '--admission', str(admission), '--support-id', support, 'lookup'],
+        cwd=tmp_path, capture_output=True, text=True, check=True)
+    safe = json.loads(result.stdout)
+    assert safe['device_support_id'] == support and safe['version_code'] == 59
+    assert safe['platform'] == 'android' and safe['family_state'] == 'NOT_PROVISIONED'
+    assert device.reference not in result.stdout

@@ -192,3 +192,34 @@ replication, alternate endpoint, serving-set change or server deployment is impl
 Rollback stops only the disposable owned containers. After a lost claim response,
 retain the same secret/token/request ID; after committed issue, use a fresh one-use
 proof for the same link. Never restore stale state to recover an ambiguous result.
+
+## HA-02E: isolated Support ID observations and recovery
+
+Use the same pinned PostgreSQL17.11 image and locked psycopg3.3.9 environment:
+
+```sh
+python -m scripts.support_postgres_rehearsal --workdir /tmp/fc-ha-new-support-rehearsal
+```
+
+This risk-selected runner executes155 real DB contracts with zero skips:66 support,
+40 enrollment and49 paid. It does not rerun unchanged referral/membership contracts.
+Cases cover atomic support proof/observation, missing aliases without allocation,
+whole-batch backfill rollback, collision exhaustion/retry, independent concurrent
+API connections, revoke races, ACK loss, actual killed backend and strict PG marker.
+Readiness null ordering/ties, invalid optional ACKs, version freshness and safe
+lookup/admission semantics are checked against both backends. FIELD mutation on PG
+must refuse before any file open; the live operator CLI remains SQLite-only.
+
+The recovery fixture combines enrollment/support/paid with two explicitly synthetic
+restricted read-side tables; it is not a restricted writer migration. The source
+container is SIGKILLed with uncommitted observation/proof changes. Restart must
+preserve all committed rows and drop both unfinished writes. Separate old/current
+restore containers reject a stale pre-observation dump and require exact current
+12-table/19-row state. Aliases, version freshness, consumed/pending proofs, revoke,
+payment replay and audit sequence continuity are exercised after restore.
+
+The comparison uses the known lab committed snapshot; no production high-watermark
+or disaster-recovery service is implemented. Existing ownership/loopback/private-file
+guards and cleanup apply unchanged. No live configuration, product secret or server
+data is read. Stop only the owned disposable lab for rollback. This does not complete
+FIELD grant/audit/file writers, sender bindings, canonical import, replicas or HA.

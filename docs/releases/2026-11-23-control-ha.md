@@ -12,7 +12,7 @@ source inspection is not a fresh server-health check.
 ## Progress
 
 - HA-01 isolated scope implemented and verified; details below.
-- HA-02A enrollment, HA-02B paid/subscription, HA-02C membership and HA-02D referral slices qualified below; remaining
+- HA-02A enrollment, HA-02B paid/subscription, HA-02C membership, HA-02D referral and HA-02E Support ID slices qualified below; remaining
   HA-02 and HA-03..05 pending:
   no full canonical PostgreSQL migration, fenced authority,
   alternate API, client fallback or live cutover installed.
@@ -24,6 +24,79 @@ source inspection is not a fresh server-health check.
 - Old-main handoff `cf645e71` is retained locally. Its ordinary push was rejected
   `non-fast-forward`; no force, rebase, merge or change to pre-existing work.
   The feature branch, not that unpushed handoff, is the available source checkpoint.
+
+## HA-02E — Support ID observation and recovery
+
+Continuation from `23dfd4ba41e6641b14098e6572a418028e3dcef9` in the existing metadata
+branch. Scope: Support ID backfill/observation/read models, not all support/admin
+writers. Production SQLite, console5ce82415, public Android126/catalog9 and RU
+serving membership unchanged. No SSH, server restart, deployment, client release,
+new OS/GeoIP collection, consent change or fresh RU/NL health claim.
+
+### Implementation and failure semantics
+
+- Shared `SupportTransaction` serves backfill/request/inventory/lookup. Explicit
+  synthetic PG purpose/version guard refuses missing/mismatched marker; no automatic
+  DDL, production DSN or mixed-backend fallback. SQLite schema remains compatible.
+- Request proof consumption and version observation commit together. Missing alias
+  does not allocate during delivery. UPDATE/backend failure preserves the unused
+  proof and previous observation. Retry before TTL can succeed after recovery;
+  after commit, a fresh proof returns the same ID rather than replaying an old proof.
+- Backfill and returned counts share one transaction; preserve aliases, bindings,
+  revoked rows and32-attempt collision bounds. Failure midway rolls back all IDs
+  and observations. Readiness never infers platform or overwrites newer request data.
+- Explicit receipt-ordering parity: NULL timestamps last, correlation tie-break.
+  Non-object JSON and missing/negative seen timestamps no longer count as observations.
+  A malformed latest ACK does not select an older READY. Existing lookup/admission
+  semantics are unchanged, including expired-grant eligibility in all-activated mode.
+- PG FIELD mutation is refused before any file open. Restricted grants/readiness
+  rows in this lab are read-side fixtures, not migrated grant/audit/CRL/file writers.
+  Existing SQLite operator remains usable. Support sender/technical-metadata and
+  remaining canonical writers are not included in this checkpoint.
+
+### Qualification and reproducibility
+
+Same locked environment, psycopg/psycopg-binary3.3.9 and pinned PostgreSQL17.11;
+no dependency or public-version change. From the authoritative source worktree:
+
+```sh
+python -m scripts.support_postgres_rehearsal --workdir /tmp/fc-control-ha-20261123/support-1
+python -m pytest -q -ra tests/test_friends_access.py tests/test_referrals.py tests/test_friends_client.py tests/test_friends_http_runtime.py tests/test_support_ids.py tests/test_support_http.py tests/test_friends_support_owner.py tests/test_friends_owner.py tests/test_friends_restricted.py tests/test_friends_chat.py tests/test_gateway_routing.py tests/test_gateway_selection.py tests/test_online_diagnostics.py tests/test_technical_metadata.py tests/test_subscription_http.py tests/test_paid_beta.py tests/test_paid_beta_readiness.py tests/test_read_readiness_ack.py tests/test_support_collector.py tests/test_enrollment_rehearsal.py tests/test_paid_rehearsal.py tests/test_referral_rehearsal.py
+python -m pytest -q tests/test_support_ids.py::test_operator_artifact_is_reproducible_and_isolated
+```
+
+- 155 DB contracts PASS /0 skips in54.05s:66 support +40 enrollment +49 paid.
+  This is risk-selected, not a cumulative total of all previous stages. Existing
+  membership/referral PG contracts were not rerun for unchanged implementations.
+- 443 consumer/runner checks PASS /21 optional skips in44.21s:16 real nginx,
+  1 pinned sync archive,4 locked Go checks require their explicit environments.
+  No skipped check counts as PASS or platform/full-release qualification.
+- The existing reproducible operator artifact test was then expanded: `python -I`
+  executes real `.pyz` backfill/inventory/lookup against a private synthetic SQLite
+  registry. Expanded test1 PASS in2.33s (overlaps the443 selection, not444 distinct
+  tests). Alias/app version are retained, no device identity appears in safe output.
+- Actual PostgreSQL SIGKILL/restart with open uncommitted UPDATEs passes; current
+  dump restores exactly12 nonempty lab tables/19 rows into a separate owned container.
+  Counts:5 challenges,2 support IDs,2 devices,2 invites,1 audit,3 purpose markers,
+  1 paid event,1 subscription,1 restricted grant fixture,1 readiness fixture.
+  Confirmed alias/version/proof/revoke/payment state survives; uncommitted version999
+  and proof consumption disappear. Pending proof works once, stale readiness cannot
+  downgrade, duplicate payment stays duplicate, restored audit sequence advances.
+- A real pre-observation dump is restored separately and refused by exact comparison
+  with the known committed fixture. This is not a production freshness detector,
+  replica/RPO0 proof, full product backup or reverse import after new writes.
+- Preliminary SQLite pass49/35 skips; real runner requires zero skipped contracts.
+  Private evidence: `/tmp/fc-control-ha-20261123/support-1/`,
+  `support-sqlite-1.log`, `support-regressions-1.log`, `support-operator-1.log`.
+  Password/env/dump/log/raw receipt and synthetic IDs stay outside Git.
+- Prior four confirmed historical exact-overlay failures remain an open deployment
+  gate; no old pins changed or packaging requalification claimed by operator smoke.
+
+Rollback now: stop only ownership-checked disposable containers; live state has not
+changed. Do not restore old production SQLite. Next: restricted/admin DB writers,
+support sender and remaining canonical writers, metadata/tombstones/files, full
+import/recovery and replication; HA-03 file/receiver fencing, HA-04 endpoints/clients
+and HA-05 guarded cutover remain mandatory. No claim that RU dependency is removed.
 
 ## HA-02D — referral transactions and recovery
 
@@ -423,7 +496,7 @@ are published. Read [remaining writer gates and recovery rules](../control-ha-st
 ## Remaining work — not a production HA acceptance
 
 HA-02 must finish **all** canonical writers beyond the qualified enrollment,
-paid/subscription, membership and referral slices: support/admin, separate metadata
+paid/subscription, membership, referral and Support ID slices: restricted/admin and support sender, separate metadata
 tombstones, remaining writers/CLI and filesystem coordination. Full import, PostgreSQL replication and
 Patroni/RPO0 gates are not implemented by this checkpoint.
 Then HA-03 receiver-enforced fencing, HA-04 multi-endpoint clients and HA-05 live
