@@ -85,6 +85,12 @@ def test_object_limit_refuses(database, monkeypatch):
         census.database_schema(database)
 
 
+def test_source_hash_cannot_escape_declared_root_with_parent_segments(database):
+    traversed = database.parent / '..' / database.parent.name / database.name
+    with pytest.raises(ValueError, match='UNSAFE_PATH'):
+        census.file_hash(traversed)
+
+
 def test_discovery_only_explicit_stores_not_backups_or_nested_databases(tmp_path, database):
     root = tmp_path / 'product'
     root.mkdir()
@@ -218,3 +224,92 @@ def test_partial_or_failed_observation_refuses(observed_schemas, change):
         observation['databases'][1]['status'] = 'REFUSED'
     with pytest.raises(ValueError):
         census.compare_schemas(observation, application, handoff)
+
+
+def test_exact_family_transient_fragment_is_observed_without_expanding_scope(monkeypatch):
+    monkeypatch.setattr(census, 'systemctl', lambda *args: 'Id=family-connect-test.service\nActiveState=active\n'
+        'MainPID=0\nControlPID=0\nFragmentPath=/run/systemd/transient/family-connect-test.service\n')
+    monkeypatch.setattr(census, 'file_hash', lambda *args: '0' * 64)
+    result = census.observe_unit('family-connect-test.service')
+    assert result['fragment_sha256'] == '0' * 64
+    assert result['state']['MainPID'] == '0' and result['all_writers_qualified'] is False
+    monkeypatch.setattr(census, 'systemctl', lambda *args: 'Id=family-connect-test.service\n'
+        'FragmentPath=/run/systemd/transient/neighbour.service\n')
+    with pytest.raises(ValueError, match='UNIT_FRAGMENT_SCOPE'):
+        census.observe_unit('family-connect-test.service')
+
+
+@pytest.fixture
+def containers():
+    return [dict(Name='/fc-control-plane-0-' + name + '-1', Image='sha256:' + 'a' * 64,
+        State=dict(Running=True, Restarting=False, ExitCode=0, Pid=123), RestartCount=0,
+        Config=dict(Labels={'com.docker.compose.project': 'fc-control-plane-0'},
+                    Env=['PASSWORD=private-password'], Cmd=['--token=private-token']),
+        Mounts=[dict(Type='bind', RW=True, Source='/private/customer-state', Destination='/private/mount')])
+        for name in ('console', 'postgres', 'system_publisher')]
+
+
+def test_panel_observation_is_exact_project_and_never_exports_secrets(containers, monkeypatch):
+    calls = []
+    def run(command, **options):
+        calls.append(command)
+        return SimpleNamespace(returncode=0, stdout=json.dumps(containers).encode())
+    monkeypatch.setattr(census.subprocess, 'run', run)
+    result = census.panel_containers()
+    assert calls == [['docker', 'inspect', 'fc-control-plane-0-console-1', 'fc-control-plane-0-postgres-1',
+                      'fc-control-plane-0-system_publisher-1']]
+    raw = json.dumps(result)
+    assert all(value not in raw for value in ('private-password', 'private-token', '/private/customer-state', '/private/mount'))
+    assert all(item['all_writers_qualified'] is False for item in result)
+
+
+@pytest.mark.parametrize('changed', ['name', 'project', 'image', 'count'])
+def test_other_or_unidentified_containers_refuse(containers, monkeypatch, changed):
+    if changed == 'name':
+        containers[0]['Name'] = '/neighbour'
+    elif changed == 'project':
+        containers[0]['Config']['Labels']['com.docker.compose.project'] = 'neighbour'
+    elif changed == 'image':
+        containers[0]['Image'] = 'mutable-tag'
+    else:
+        containers.pop()
+    monkeypatch.setattr(census.subprocess, 'run', lambda *args, **kwargs:
+        SimpleNamespace(returncode=0, stdout=json.dumps(containers).encode()))
+    with pytest.raises(ValueError):
+        census.panel_containers()
+
+
+@pytest.mark.parametrize('kind', ['cron', 'authorized_keys'])
+def test_dispatch_scan_is_private_literal_evidence_not_complete_coverage(kind):
+    raw = (b'# ignored\ncommand="/opt/apps/family_connect/helper --secret private-token",restrict '
+           b'ssh-ed25519 public-material user@example.test\ncommand="/other/project/helper" other-material\n')
+    result = census.scoped_dispatch_lines(raw, kind)
+    assert len(result['scoped_lines']) == 1 and result['other_line_count'] == 1
+    assert result['coverage'] == 'LITERAL_ROOT_MATCH_ONLY' and result['all_writers_qualified'] is False
+    assert all(value not in json.dumps(result) for value in ('private-token', 'public-material', 'user@example.test', '/other/project'))
+    assert result['scoped_lines'][0]['forced_command_candidate'] == (kind == 'authorized_keys')
+
+
+def test_dispatch_bounds_and_kind_refuse():
+    with pytest.raises(ValueError, match='DISPATCH_BOUNDS'):
+        census.scoped_dispatch_lines(b'x' * (128 * 1024 + 1), 'cron')
+    with pytest.raises(ValueError, match='DISPATCH_LINE_BOUNDS'):
+        census.scoped_dispatch_lines(b'x\n' * 257, 'cron')
+    with pytest.raises(ValueError, match='DISPATCH_KIND'):
+        census.scoped_dispatch_lines(b'value', 'execute')
+
+
+def test_missing_root_crontab_is_distinguished_from_failed_observation(tmp_path, monkeypatch):
+    keys = tmp_path / 'authorized_keys'
+    calls = []
+    def run(command, **options):
+        calls.append(command)
+        return SimpleNamespace(returncode=1, stdout=b'', stderr=b'no crontab for root\n')
+    monkeypatch.setattr(census.subprocess, 'run', run)
+    result = census.root_dispatchers(keys)
+    assert calls == [['crontab', '-l', '-u', 'root']]
+    assert result['authorized_keys']['status'] == result['crontab']['status'] == 'ABSENT'
+    monkeypatch.setattr(census.subprocess, 'run', lambda *args, **kwargs:
+        SimpleNamespace(returncode=1, stdout=b'', stderr=b'permission denied private detail'))
+    with pytest.raises(ValueError, match='CRON_OBSERVATION_FAILED'):
+        census.root_dispatchers(keys)

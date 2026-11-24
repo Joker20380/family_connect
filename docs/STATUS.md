@@ -1,5 +1,17 @@
 # Текущее состояние / Current state
 
+**24 November03:20UTC — writer-discovery coverage extended; no live barrier.**
+All32/9/5 selected RU/NL1/NL2 units are now observed without refusal. The eight old RU
+pressure units are transient units, not masked units; they report no main/control PID
+at sampling. Their exact scoped transient fragments are hashed, not started/removed.
+Root authorized-key literal scans find1/3/2 Family Connect command candidates; root
+crontabs are absent. Other accounts/system cron and manual administration remain outside
+coverage. The panel is on the OWNER host, not RU: console, postgres and system_publisher
+are running/healthy with the existing images. No queue contents or configuration secrets
+read out; no service/container mutation.39 focused checks PASS /0 skips.
+The [census follow-up](releases/2026-11-24-control-ha-installed-census.md#writer-discovery-follow-up-0320utc)
+records this correction and remaining coverage; it does not close the writer gate.
+
 **24 November — closed handoff state now survives isolated import, restore and replication.**
 Following census7c8a5747, a separate strict installed-schema adapter retains all five
 handoff tables in the same PG transaction as the other stores. It refuses open operations,

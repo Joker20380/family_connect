@@ -22,8 +22,12 @@ read-only retained domain, not live handoff runtime activation; see the
 [retention evidence](releases/2026-11-24-control-ha-handoff-retention.md).
 Next work inside HA-02: remaining writer classification and bounded barrier, actual-current
 custody with independently owner-approved trust, then independent full-state recovery.
-Eight refused legacy pressure units, unobserved cron/forced commands/panel/operator and
-offline writers, and unhealthy RU unit prestate prevent a live capture permit today.
+The03:20UTC census follow-up resolves the eight pressure-unit refusals as scoped
+transient units with no main/control PID at sampling. All32/9/5 unit observations pass;
+root key candidate scans and absent root crontabs are observed. The OWNER-host panel's
+three containers are observed separately, not assumed to run on RU.39 checks PASS.
+System cron/other accounts, complete forced-command semantics, operator queues/manual
+writers and unhealthy RU unit prestate still prevent a live capture permit today.
 No live stop/restart or import activation was performed. Schema recognition alone does
 not close the installed-snapshot gate; all three remaining gates stay IN_PROGRESS.
 The prior forward-only approval was development without server changes. Live capture

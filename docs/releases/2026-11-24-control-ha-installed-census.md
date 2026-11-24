@@ -110,3 +110,54 @@ Remaining HA-02: explicit handoff-preserving import/recovery; complete writer ce
 and qualified coherent capture; actual-current authorization/journal custody; independent
 full recovery with all external secrets/configs/receiver floors. No HA-03..05 work or
 production PostgreSQL/Patroni cutover is selected by this checkpoint.
+
+## Writer discovery follow-up 03:20UTC
+
+Following closed-handoff retention source63ecb859, the same read-only census now accepts
+only the **exact requested Family Connect name** under `/run/systemd/transient/` as an
+additional fragment location. It does not authorize arbitrary transient units, start old
+probes or weaken symlink/size checks. The earlier eight refusals were transient fragments,
+not missing/unsafe source data or masked units. All eight have main/control PID0 at the
+sample; six report active/exited and two failed. This does not prove no escaped/manual
+process or no future restart; it is not a process fence.
+
+Final pinned SSH03:20:25–03:20:28UTC: **32/9/5 unit observations,0 refusals**. Source SHA256
+`9663e56436797a980bcaa6c5cc8a793077829b0b17ef54f7d24948abb67ca67c`.
+This records the actual probe bytes; the subsequently tested source-only guard also
+rejects parent (`..`) path segments without changing these observational projections.
+Root authorized-key lines are read with bounded no-follow checks, never exported.
+Literal Family Connect root matches yield1/3/2 command candidates and2/1/1 other
+noncomment lines. Only digests/counts are returned; this is not complete OpenSSH-option
+parsing or proof that an unmatched entry cannot write. Root crontabs are absent on all
+three hosts; system cron and other accounts remain unobserved. Never interpret these
+bounded candidate counts as a complete writer allowlist.
+
+The historical panel runbook describes the **OWNER workstation**, not a RU container.
+An initial exact-name RU probe refused; it was not treated as absence of panel authority.
+The owner-local observation uses a separate `--panel-only` mode and checks exact names,
+Compose project label and immutable image IDs for only these three existing containers:
+
+| Container | Image SHA256 | Observed state |
+| --- | --- | --- |
+| console |`5ce824159e9f206c27ba92185097857382aa5fec71678ce5e728423509d1446a`|running/healthy|
+| postgres |`18cfe3ef5e6815560c98237d6216d1e5119702fb0f3894c8785dd58b8bbe5d73`|running/healthy|
+| system_publisher |`50de6f25a04c1127b127b3278314619c69eddeec229d0d4ad9b7e67c1d2ffeab`|running/healthy|
+
+Only read-only Docker inspect runs. Environment/command/source-mount values are hashed;
+only known standard destination roles are retained. No Docker exec, restart, compose up,
+volume change, queue export or neighbouring container operation. Health flags are not
+an end-to-end delivery/recovery test. The publisher and panel state must be included in
+operator/queue recovery planning rather than omitted because the authority DB is on RU.
+
+**39 focused census tests PASS,0failed,0skipped**: prior28 plus parent-path traversal refusal, exact transient scope,
+project/name/image mismatch refusal, secret-suppressing container projection, bounded
+literal dispatcher scan and absent-vs-failed cron distinction. Existing PG/import gates
+are not rerun for this observational-only change; their separate receipts remain valid
+for their respective source checkpoints. Private evidence is in `writers-final/`,
+`owner-panel.json`, `pressure-mask.json`, `dispatcher-tests.log` under the original census
+evidence directory. Earlier failed/partial observations remain retained.
+
+Remaining writer gate: complete system/account/forced-command and queue/dispatcher
+classification, independent publisher ownership, administrative quiescence and a
+qualified bounded coherent capture/abort plan. `all_writers_qualified=false` remains
+mandatory. No live service mutation, new signer, current-state permit or version change.

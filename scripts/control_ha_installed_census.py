@@ -15,7 +15,7 @@ PRODUCT = Path('/opt/apps/family_connect')
 DATABASE_NAMES = ('access.db', 'diagnostics.sqlite', 'notices.sqlite', 'technical-metadata.sqlite')
 MAX_OBJECTS = 256
 MAX_BYTES = 96 * 1024 * 1024
-PROPERTIES = ('Id', 'LoadState', 'ActiveState', 'SubState', 'MainPID', 'ControlPID',
+PROPERTIES = ('Id', 'LoadState', 'ActiveState', 'SubState', 'MainPID', 'ControlPID', 'Type',
               'Result', 'ExecMainStatus', 'NRestarts', 'Restart', 'Environment',
               'FragmentPath', 'DropInPaths', 'ExecStart', 'EnvironmentFiles', 'ControlGroup', 'Triggers', 'TriggeredBy')
 UNIT = re.compile(r'family-connect-[A-Za-z0-9_.@-]{1,120}\.(?:service|timer)\Z')
@@ -36,14 +36,15 @@ def digest(raw):
 
 def identity(path):
     path = Path(path)
-    require(path.is_absolute() and all(not parent.is_symlink() for parent in (path, *path.parents)), 'UNSAFE_PATH')
+    require(path.is_absolute() and '..' not in path.parts and
+            all(not parent.is_symlink() for parent in (path, *path.parents)), 'UNSAFE_PATH')
     record = path.stat()
     require(stat.S_ISREG(record.st_mode) and record.st_nlink == 1 and 0 < record.st_size <= MAX_BYTES,
             'UNSAFE_FILE')
     return (record.st_dev, record.st_ino, record.st_size, record.st_mtime_ns, record.st_ctime_ns)
 
 
-def file_hash(path, maximum=2 * 1024 * 1024):
+def file_bytes(path, maximum=2 * 1024 * 1024):
     before = identity(path)
     require(before[2] <= maximum, 'FILE_BOUNDS')
     descriptor = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
@@ -52,7 +53,11 @@ def file_hash(path, maximum=2 * 1024 * 1024):
         require((opened.st_dev, opened.st_ino) == before[:2], 'FILE_REPLACED')
         raw = source.read(maximum + 1)
     require(len(raw) == before[2] and identity(path) == before, 'FILE_CHANGED')
-    return digest(raw)
+    return raw
+
+
+def file_hash(path, maximum=2 * 1024 * 1024):
+    return digest(file_bytes(path, maximum))
 
 
 def database_schema(path):
@@ -139,7 +144,7 @@ def observe_unit(name):
     values = dict(line.split('=', 1) for line in raw.splitlines() if '=' in line)
     require(set(values) <= set(PROPERTIES) and values.get('Id') == name, 'UNIT_PROPERTIES')
     retained = {key: values.get(key, '') for key in
-                ('Id', 'LoadState', 'ActiveState', 'SubState', 'MainPID', 'ControlPID',
+                ('Id', 'LoadState', 'ActiveState', 'SubState', 'MainPID', 'ControlPID', 'Type',
                  'Result', 'ExecMainStatus', 'NRestarts', 'Restart', 'Triggers', 'TriggeredBy')}
     private_fields = {key: digest(values.get(key, '').encode()) for key in
                       ('ExecStart', 'Environment', 'EnvironmentFiles', 'ControlGroup', 'DropInPaths')}
@@ -155,6 +160,7 @@ def observe_unit(name):
     if fragment:
         path = Path(fragment)
         require(path.is_relative_to('/etc/systemd/system') or path.is_relative_to('/run/systemd/system') or
+                path == Path('/run/systemd/transient') / name or
                 path.is_relative_to('/usr/lib/systemd/system') or path.is_relative_to('/lib/systemd/system'),
                 'UNIT_FRAGMENT_SCOPE')
         try:
@@ -165,6 +171,65 @@ def observe_unit(name):
         fragment_hash = None
     return dict(state=retained, private_field_sha256=private_fields, entrypoint_source_sha256=sources,
                 fragment_sha256=fragment_hash, all_writers_qualified=False)
+
+
+def panel_containers():
+    names = ('fc-control-plane-0-console-1', 'fc-control-plane-0-postgres-1', 'fc-control-plane-0-system_publisher-1')
+    result = subprocess.run(['docker', 'inspect', *names], capture_output=True, timeout=10,
+                            env={'PATH': os.defpath, 'LC_ALL': 'C'})
+    require(result.returncode == 0 and len(result.stdout) <= 1024 * 1024, 'PANEL_OBSERVATION_FAILED')
+    values = json.loads(result.stdout)
+    require(type(values) is list and len(values) == len(names) and {item['Name'] for item in values} == {'/' + name for name in names},
+            'PANEL_CONTAINER_SCOPE')
+    observed = []
+    for item in values:
+        require(item['Config']['Labels'].get('com.docker.compose.project') == 'fc-control-plane-0', 'PANEL_PROJECT_SCOPE')
+        require(re.fullmatch(r'sha256:[0-9a-f]{64}', item['Image']), 'PANEL_IMAGE_ID')
+        observed.append(dict(name=item['Name'], image=item['Image'], running=item['State']['Running'],
+            restarting=item['State']['Restarting'], exit_code=item['State']['ExitCode'],
+            pid=item['State']['Pid'], restart_count=item['RestartCount'],
+            health=item['State'].get('Health', {}).get('Status', 'not-configured'),
+            environment_sha256=digest(canonical(item['Config'].get('Env'))),
+            command_sha256=digest(canonical([item['Config'].get('Entrypoint'), item['Config'].get('Cmd')])),
+            mounts=[dict(type=mount['Type'], read_write=mount['RW'], source_sha256=digest(mount['Source'].encode()),
+                         destination=mount['Destination'] if mount['Destination'] in ('/var/lib/postgresql/data',
+                             '/app/control_plane/.local') else 'OTHER_PRIVATE_MOUNT') for mount in item['Mounts']],
+            queue_contents_observed=False, all_writers_qualified=False))
+    return observed
+
+
+def scoped_dispatch_lines(raw, kind):
+    require(type(raw) is bytes and len(raw) <= 128 * 1024, 'DISPATCH_BOUNDS')
+    require(kind in ('cron', 'authorized_keys'), 'DISPATCH_KIND')
+    lines = [line.strip() for line in raw.decode('utf-8').splitlines() if line.strip() and not line.lstrip().startswith('#')]
+    require(len(lines) <= 256, 'DISPATCH_LINE_BOUNDS')
+    scoped = []
+    for line in lines:
+        if '/opt/apps/family_connect/' not in line and '/var/lib/fc-profile-control/' not in line:
+            continue
+        command = re.search(r'(?:^|,)command="((?:[^"\\]|\\.)*)"', line) if kind == 'authorized_keys' else None
+        scoped.append(dict(line_sha256=digest(line.encode()), forced_command_candidate=command is not None,
+                           command_sha256=digest(command.group(1).encode()) if command else None))
+    return dict(kind=kind, scoped_lines=scoped, other_line_count=len(lines) - len(scoped),
+                coverage='LITERAL_ROOT_MATCH_ONLY', all_writers_qualified=False)
+
+
+def root_dispatchers(keys=Path('/root/.ssh/authorized_keys')):
+    records = {}
+    if keys.exists():
+        records['authorized_keys'] = scoped_dispatch_lines(file_bytes(keys, 128 * 1024), 'authorized_keys')
+    else:
+        records['authorized_keys'] = dict(status='ABSENT')
+    result = subprocess.run(['crontab', '-l', '-u', 'root'], capture_output=True, timeout=10,
+                            env={'PATH': os.defpath, 'LC_ALL': 'C'})
+    if result.returncode == 1 and result.stderr.strip() == b'no crontab for root':
+        records['crontab'] = dict(status='ABSENT')
+    else:
+        require(result.returncode == 0, 'CRON_OBSERVATION_FAILED')
+        records['crontab'] = scoped_dispatch_lines(result.stdout, 'cron')
+    records['system_cron_and_other_accounts'] = 'NOT_OBSERVED'
+    records['all_writers_qualified'] = False
+    return records
 
 
 def collect(node):
@@ -182,7 +247,14 @@ def collect(node):
             units.append(observe_unit(name))
         except (ValueError, OSError, subprocess.SubprocessError):
             units.append(dict(unit=name, status='REFUSED', reason='UNIT_OBSERVATION_FAILED'))
+    dispatchers = {}
+    for name, observer in [('root', root_dispatchers)]:
+        try:
+            dispatchers[name] = observer()
+        except (ValueError, KeyError, TypeError, OSError, subprocess.SubprocessError):
+            dispatchers[name] = dict(status='REFUSED', reason='DISPATCH_OBSERVATION_FAILED')
     return dict(version=1, node=node, started_at=started, finished_at=int(time.time()),
+        dispatchers=dispatchers,
         databases=databases, units=units, discovery='EXPLICIT_FRIENDS_DEFAULTS_NOT_COMPLETE_COVERAGE',
         configured_store_binding='NOT_ATTESTED',
         missing_default_stores=sorted(set(DATABASE_NAMES) - {Path(item['path']).name for item in databases}),
@@ -220,9 +292,12 @@ def compare_schemas(observation, application_manifest, handoff_manifest):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--node', choices=('RU', 'NL1', 'NL2'), required=True)
+    selection = parser.add_mutually_exclusive_group(required=True)
+    selection.add_argument('--node', choices=('RU', 'NL1', 'NL2'))
+    selection.add_argument('--panel-only', action='store_true')
     args = parser.parse_args()
-    print(canonical(collect(args.node)).decode())
+    value = dict(version=1, node='OWNER', panel=panel_containers(), all_writers_qualified=False) if args.panel_only else collect(args.node)
+    print(canonical(value).decode())
 
 
 if __name__ == '__main__':
