@@ -3,19 +3,16 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Next within the existing complete-recovery block: execute the prepared cold source/dependency
-kit against retained canonical, RU/NL1/NL2, worker and mailbox capsules.239 focused checks
-PASS; actual cold evidence is still pending. Do not count a venv/import-only check as the
-native retained-data result. The source kit has no credentials or production state; custody
-inputs and their independent keys/checkpoints remain private. Root-main publication is now
-reconciled at2ae5c512, not an active blocker or a deployment.
-[Qualification gate and remaining boundaries](releases/2026-11-24-control-ha-recovery-kit.md).
-First cold attempt refused at namespace construction, before source execution. New input/work
-mountpoints are corrected to private tmpfs paths; retry with a new kit checkpoint/destination.
-Second attempt proves offline dependency installation but refuses missing shared desktop
-parsers. Include the two exact source modules and qualify imports with the checkout absent.
-Third attempt isolates a probe label-format mismatch, not invalid retained data. Correct
-the derived readback reference and rerun the complete cold gate; do not relax native validation.
+Actual cold source/dependency gate PASS12:31:38UTC from8acc6bd2:419 committed source files,
+28 pinned wheels and native checks on610 canonical rows,207 receiver records/82 allocations,
+legacy worker and mailbox, with no source/developer venv/network/Docker fallback. Changed
+kit/custody pins are refused;242 focused tests PASS,0 skips. Do not repeat this completed
+tooling/Python-dependency slice as pending. Root-main divergence is also resolved at2ae5c512.
+Remaining selected work: actual approval-authority workflow, coherent all-writer/in-flight
+capture, recovery-host OS/tool prerequisites and off-machine custody, then final combined
+post-ACK/stale-copy readback from that approved coherent point. These stay within the same
+three partial HA-02 blocks; replication PASS. No HA-03..05, live cutover or version change.
+[Actual evidence and rollback](releases/2026-11-24-control-ha-recovery-kit.md#actual-execution--123138utc).
 
 OWNER image-loss cold bootstrap passes11:43:57UTC: all three exact images recovered from
 encrypted custody, native Python/Django/crypto/libpq probes and PG17.11 restart/dump/restore

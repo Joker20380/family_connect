@@ -1,23 +1,18 @@
 # Текущее состояние / Current state
 
-**24 November — cold recovery source/dependency kit prepared; actual run pending.**
-The stdlib bootstrap binds committed source, native schemas and all28 locked Python wheels
-to a separately retained checkpoint. Fresh-image execution installs only hash-locked offline
-wheels into a new Python3.13 venv; retained canonical, three-node, worker and mailbox inputs
-are authenticated before native checks, with network/process dispatch denied.239 focused
-tests PASS,0 skips; this is preparation, not a cold-run or HA-02 acceptance result.
-The old root-main publication divergence was reconciled/pushed at2ae5c512; it is no longer
-a blocker. HA source remains on the separate metadata branch, not deployed or merged to main.
-First actual attempt refuses before execution: the retained image root is read-only and has
-no `/work` mountpoint. All new mounts now live under the private `/tmp` tmpfs; a regression
-check covers the command topology. The failed receipt is preserved; corrected cold run pending.
-Second attempt installs/verifies all28 wheels offline, then refuses a missing transitive
-desktop-parser import. The two pure parser/version modules are now explicitly retained;
-a checkout-removed import regression covers the complete recovery entry set. No fallback.
-Third attempt passes the full import/dependency set but correctly refuses the probe's
-non-native checkpoint label. Use a deterministic32-hex readback reference bound to the
-authenticated input hashes, never a new approval authority. Native fixture regression added.
-[Scope, execution gate and rollback](releases/2026-11-24-control-ha-recovery-kit.md).
+**24 November12:31:38UTC — actual canonical/fleet cold source and dependency readback PASS.**
+Committed source8acc6bd2 recovers419 source files and all28 hash-locked wheels in a new
+Python3.13 venv inside the retained image, without network, Docker, original checkout or
+developer venv. Actual encrypted retained inputs authenticate:610 canonical rows,207 receiver
+decisions/82 allocations,3 legacy jobs and mailbox56 dynamic/3 static members. Native
+lease/denial/allocator/retry/expiry checks pass with zero dispatch. Changed kit/custody pins
+are refused in fresh namespaces; originals unchanged.242 focused tests PASS,0 skips.
+This closes the explicit recovery-tool source/Python-dependency availability gap, not OS
+bootstrap/off-site custody or final coherent post-ACK recovery. Three HA-02 acceptance blocks
+remain partial: independent trust, coherent capture and complete recovery; replication PASS.
+Root-main publication was reconciled at2ae5c512; HA source remains separately published,
+not merged to main, installed or publicly released. No live services/versions changed.
+[Actual evidence, remaining prerequisites and rollback](releases/2026-11-24-control-ha-recovery-kit.md#actual-execution--123138utc).
 
 **24 November11:43:57UTC — actual OWNER image-loss cold bootstrap PASS.**
 All three exact linux/amd64 images recover from a private encrypted archive, without Docker,

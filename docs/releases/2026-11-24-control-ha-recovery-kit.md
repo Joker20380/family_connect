@@ -1,8 +1,54 @@
 # CONTROL-HA — offline recovery source and dependencies, 24 November 2026
 
 Selected task: CONTROL-HA-20261123 / HA-02, existing complete-recovery acceptance block.
-Preparation PASS; actual cold execution pending. No product version, installation, public
+Actual cold execution PASS; complete HA-02 remains IN_PROGRESS. No product version, installation, public
 artifact/catalog, gateway policy or production service change. This is not HA-03 activation.
+
+## Actual execution — 12:31:38UTC
+
+Source8acc6bd2be51d941f6a1eda3aea6f6a3da82cca9 was committed, pushed and independently
+remote-SHA verified before execution. The accepted fourth attempt completes at
+2026-11-24T12:31:38.391132Z. The standalone bootstrap runs in the retained console image
+and restores419 exact committed source files plus28 wheels. A new CPython3.13 venv installs
+every locked distribution offline with hashes and passes `pip check`; all distribution
+origins and10 recovery entry modules resolve only to restored source/new venv. Binary
+psycopg/libpq180006 is available. Original `/app`, checkout, developer venv, Docker socket,
+host home and live volumes are not exposed to the namespace.
+
+Authenticated actual retained-data results, not synthetic replacements:
+
+- Canonical:610 rows/35 import data tables;66 migrated plus3 explicit new device identities,
+  4 paid-event identities,20 referral links/63 claims, issuer/admission/sender/routing and
+  empty metadata observations pass without generating new authority.
+- RU/NL1/NL2:207 duplicate decisions retain their exact state;12 terminal denials and3 paid
+  clock cases pass.82 peer allocations retain their floors; NL2's sequence gap remains8,
+  so next allocation is9. No native engine command executes and no lease is renewed.
+- Legacy worker:3 retained jobs are already expired at their capture time; duplicate,
+  durable retry/restart and expiry refusal pass using in-memory adapters on a copied DB.
+  No real gateway command or external-command-fence claim.
+- Mailbox:9 retained files preserve sequence456216,56 dynamic and3 static members, native
+  key/bootstrap/volume bindings at capture time. No daemon/spool activation.
+
+The audit hook records zero network/process dispatch attempts. The namespace exits normally;
+no daemon is started. All21 original custody inputs are byte-identical after qualification.
+Two additional fresh-namespace negative checks PASS: changing one kit byte refuses before
+creating restore output; changing the independent store checkpoint refuses native readback.
+Neither test alters the original checkpoint/capsules.242 focused tests PASS,0 skips; two
+existing Starlette/AnyIO deprecation warnings do not indicate validation failures.
+
+| Accepted evidence | SHA-256 |
+| --- | --- |
+| Source/wheel kit | `95f29f3e3d698283552c41e1b3148797c96091b0a45aa0684700a31bdb7bcd76` |
+| Actual cold receipt | `f7054e2783626860292fd6cf0bf30eff8090037df8914a3d8be0b1bf8f5c620b` |
+| Actual negative receipt | `8dfbfae0d2429cc3f2f42947a5e30448f1afdcc3ec0d5c8f4868b319bb237e6f` |
+
+Private evidence: owner's `control-ha/20261124-recovery-kit-01/attempt04`; source/wheel kit
+has no product data. Independent kit/bootstrap pins and original custody keys stay under
+the separate owner-private `control-ha-keys` location; short-lived copied inputs are private.
+Earlier failed attempts are retained, not overwritten. Local separate custody is NOT proof
+of off-machine survival or independent owner approval. The different historical capture
+times are NOT a coherent fleet checkpoint. This run does not repeat actual OWNER-PG/post-ACK
+restore; that earlier result and the final joint recovery gate remain explicitly distinct.
 
 ## Scope and trust boundary
 
@@ -62,19 +108,20 @@ These retained points have different timestamps. Successful checks would close t
 Python-dependency availability gap, NOT establish a coherent cross-store capture or current
 forward approval. OWNER native Django/image probes remain the separate accepted image check.
 
-Preparation:239 focused tests PASS,0 skips (32 new toolkit checks and adjacent canonical,
-capsule, node, worker, mailbox and OWNER-image contracts). Actual execution is pending;
-no runtime PASS is inferred from tests. Private artifacts are retained under the owner's
+Initial preparation:239 focused tests PASS,0 skips (32 new toolkit checks and adjacent canonical,
+capsule, node, worker, mailbox and OWNER-image contracts). Actual execution was then pending;
+it subsequently passes above with242 tests. No runtime PASS is inferred from tests alone.
+Private artifacts are retained under the owner's
 `control-ha/20261124-recovery-kit-01`, with independent pins outside that kit directory.
 
-## Remaining acceptance and rollback
+## Failed qualification attempts and corrections
 
 First actual attempt from source7222367599efb5da5195ad7eeb0c91c178a2e191 authenticates
 the kit but bubblewrap refuses before any image program executes: `/work` cannot be created
 on the read-only image root. The correction places every new input/work mountpoint beneath
 the private `/tmp` tmpfs and adds a command-topology regression test. The failed attempt and
 its checkpoint remain private evidence, not an overwritten success. Corrected cold execution
-is pending; no production action or rollback is involved.
+was pending at this correction; no production action or rollback was involved.
 
 The second attempt from22c24c58255a0f1625f03fff8b6868743c33ed82 independently restores417
 sources, installs all28 hash-locked wheels with no index and passes `pip check`. It then
@@ -83,7 +130,7 @@ version parsers. The correction includes only `clients/desktop/profile_config.py
 `clients/desktop/updates.py`, not a desktop GUI/install/runtime. A subprocess regression
 imports the complete entry set using only copied committed sources and checks every loaded
 project module's origin. No source-path fallback is added. Keep the second failed receipt;
-the complete corrected cold native-data run remains pending.
+the complete corrected cold native-data run was still pending at that point.
 
 The third attempt fromec31ac0f0961cd0d385b6a6b2bf70a4fc2955d89 restores419 source files
 and passes the complete offline dependency/import set. Native canonical preflight then
@@ -92,7 +139,9 @@ characters. The correction derives that readback-only reference deterministicall
 authenticated store/file hash maps. It neither weakens the existing validator nor creates
 forward approval authority. A native canonical fixture regression verifies the reference,
 identical retained rows and `independent_forward_trust=False`. Preserve the failed receipt;
-the corrected complete gate must run again from a new committed kit.
+the corrected complete gate subsequently passes from a new committed kit as recorded above.
+
+## Remaining acceptance and rollback
 
 The fixed four HA-02 gates remain: replication PASS in isolation; current independent
 approval/trust, coherent all-writer/in-flight capture and final complete recovery are partial.
