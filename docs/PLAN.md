@@ -26,13 +26,21 @@ The03:20UTC census follow-up resolves the eight pressure-unit refusals as scoped
 transient units with no main/control PID at sampling. All32/9/5 unit observations pass;
 root key candidate scans and absent root crontabs are observed. The OWNER-host panel's
 three containers are observed separately, not assumed to run on RU.39 checks PASS.
-System cron/other accounts, complete forced-command semantics, operator queues/manual
-writers and unhealthy RU unit prestate still prevent a live capture permit today.
+Follow-up observes3/6/5 selected system accounts with no crontabs and8/9/11 system-cron
+files without literal Family Connect roots. NL1 family-restricted adds one SSH command
+candidate. OWNER PG metadata has39 tables/283 columns; sampled operator requests are
+7 APPLIED, fleet operations0, system messages1 published. No pending state in these
+three sampled models, but no queue fence/coherent snapshot. Other accounts/wrappers,
+complete forced-command semantics, manual writers and unhealthy RU unit prestate
+still prevent a live capture permit today.
 No live stop/restart or import activation was performed. Schema recognition alone does
 not close the installed-snapshot gate; all three remaining gates stay IN_PROGRESS.
 The prior forward-only approval was development without server changes. Live capture
 and registration/use of an actual checkpoint approval authority require their own
 bounded reviewed authorization; a generated fixture key is not owner consent.
+Owner decision needed before crossing that live boundary; all allowed read-only/source
+work and the existing all-HA-02 goal remain selected. Do not label HA-02 COMPLETE or
+claim that approval alone satisfies the still-unqualified barrier/full-recovery gates.
 The chronological source checkpoints below retain their original scope and test results.
 Depends on accepted paid-v2/HMAC2/metadata runtime and owner request.
 HA-01 isolated scope COMPLETE: read-only fingerprints, real three-voter mTLS

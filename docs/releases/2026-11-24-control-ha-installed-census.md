@@ -161,3 +161,43 @@ Remaining writer gate: complete system/account/forced-command and queue/dispatch
 classification, independent publisher ownership, administrative quiescence and a
 qualified bounded coherent capture/abort plan. `all_writers_qualified=false` remains
 mandatory. No live service mutation, new signer, current-state permit or version change.
+
+## Account and owner queue follow-up
+
+Additional read-only pinned SSH sampled root plus the selected `fc-`/`family-` system
+accounts:3 on RU,6 on NL1 and5 on NL2. All their crontabs are absent. The bounded scan
+of system crontab/daily/hourly/weekly/monthly files observed8/9/11 files,0 refusals and
+0 literal Family Connect root matches. It did not execute cron, traverse private SSH
+keys, operate neighbouring services or claim that generic/relative-path shell wrappers
+cannot reach Family Connect. NL1 family-restricted has one additional literal scoped
+authorized-key candidate beyond the three root candidates. Public-key/command bytes
+remain private; returned evidence contains counts/digests, not credentials.
+
+OWNER-local PostgreSQL was inspected separately with pinned project/name/image and
+container ID, via `psql --no-psqlrc`, `BEGIN READ ONLY`,5s statement/1s lock timeouts
+and ROLLBACK. No Django imports/migrations or queue dispatch ran. Public schema metadata
+contains39 tables/283 columns. Fixed aggregate queries return7 APPLIED operator requests,
+0 fleet deployment operations and1 published system message. Unknown status values
+would be bucketed as UNRECOGNIZED rather than printed. No row IDs, users, message body,
+receipt, session, password or key payload was exported. These separate transactions
+are point observations, not one global snapshot or proof no future request can arrive.
+PostgreSQL statistics/audit activity are observational side effects, not a claim of
+literally zero host effects. This later SQL probe is distinct from the earlier inspect-
+only container observation.
+
+Private receipts: `accounts/{RU,NL1,NL2}.json` and corresponding source-hash/time metadata;
+`owner-postgres-schema.json`, `owner-queue-counts.json`,
+`owner-additional-queue-counts.json`, all under the original census evidence directory.
+No production state backup or source-capsule restore is claimed. This follow-up changes
+documentation only; local links and whitespace are checked, not the historical full suite.
+
+**Decision boundary:** the previous explicit forward-only permission was development
+without service stops/server changes. Completing HA-02 now needs an independently
+owner-approved current checkpoint and a qualified bounded live capture. Confirm the
+new live scope before any such operation; do not treat a generic continuation, a
+self-trusted test key or the missing old approval as that artifact. Before execution,
+finish the concrete writer list, interruption budget, abort/recovery preflight and
+independent trust/custody requirements. This does not authorize production PostgreSQL
+cutover, release changes, issuer rotation or retroactive approval of historical records.
+The all-HA-02 goal remains active/IN_PROGRESS; three gates remain open and no completion
+percentage or unsupported ETA is asserted.

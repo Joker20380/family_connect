@@ -1,5 +1,21 @@
 # Текущее состояние / Current state
 
+**24 November — remaining live-capture boundary made explicit.**
+Further read-only discovery sampled3/6/5 selected root/Family Connect system accounts
+on RU/NL1/NL2: their crontabs are absent;8/9/11 system-cron files contain no literal
+Family Connect root reference. NL1's family-restricted account has one additional
+scoped authorized-key candidate. These bounded lexical observations do not classify
+every shell wrapper, account, manual writer or in-flight process. OWNER panel public
+schema has39 tables/283 columns. Separate read-only SQL counts show7 APPLIED operator
+requests,0 fleet deployment operations and1 published system message; no pending state
+in these three sampled models, not a queue fence or coherent snapshot.
+All HA-02 work stays selected, but actual live capture cannot be inferred from the
+prior development-only/no-server-change approval. Need an explicit owner decision
+for a bounded reviewed live-capture/forward-checkpoint path; no stop, signer creation
+or deployment is performed while that boundary is unresolved. Complete writer/barrier
+qualification and full off-node recovery still remain technical gates, not mere approval
+formalities. [Evidence and decision boundary](releases/2026-11-24-control-ha-installed-census.md#account-and-owner-queue-follow-up).
+
 **24 November03:20UTC — writer-discovery coverage extended; no live barrier.**
 All32/9/5 selected RU/NL1/NL2 units are now observed without refusal. The eight old RU
 pressure units are transient units, not masked units; they report no main/control PID
