@@ -6,6 +6,47 @@ divergence is reconciled/pushed at2ae5c512; older publication-blocker statements
 historical, not active instructions or a current blocker.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## OWNER admission — source only
+
+[Authoritative source and continuation report](https://github.com/Joker20380/family_connect/blob/e225db603e595e8e86a15579f622f4a2d75c7ec7/docs/releases/2026-11-24-control-ha-admission-drain.md#owner-panel-and-publisher-continuation)
+is pushed and remote-SHA verified ate225db603e595e8e86a15579f622f4a2d75c7ec7. Main updates
+navigation only; HA source remains on its existing feature branch, not merged or deployed.
+
+Optional `FC_CONTROL_CAPTURE_GATE` encloses dynamic Django requests before session/auth
+middleware through rendering/commit/session persistence. All methods participate; closed
+admission gives503 before writer work. Django-converted500, exceptions and unsupported
+streaming retain pending; streaming is closed inside admission without consuming the body.
+The management CLI acquires before Django config/setup and holds through command completion;
+busy returns75, invalid gate/enabled development runserver returns1. Writable synthetic
+registry/seed, system-message publisher and support IPC reuse the current operation or open
+one when invoked directly. Publisher admission includes the network reply/readback and PG
+queue commit. Caught publication/IPC failure remains uncertain after later successful retry.
+Process death does not silently remove pending. No auto-initialization or marker clearing.
+
+Validation: full panel **350 passed,0 skips** on newly created disposable real PostgreSQL,
+using the panel lockfile (all pins verified) and Python3.14.4. It includes actual session/PG
+commit, converted500, caught external failures, busy-before-config management invocation,
+and a real process killed during an admitted command. Earlier focused101 checks overlap.
+Shared gate31 passed,0 skips. A source-allowlisted build of the actual panel Dockerfile
+passes network-disabled/read-only runtime probes on Python3.13.17: default off, migration
+refused before DB/config when closed, incompatible UID rejected, normal marker settlement.
+Owned PG/probe containers are removed. Private credentials/state/logs stay outside Git.
+No full fleet, remote completion or ASGI qualification is claimed by these runs.
+
+No host access, installed image, Compose/env/mount, watchdog/policy, version/catalog/release
+or live capture changes. No live rollback is required. For future opt-in withdrawal, cancel
+capture/release its guardian before reverting code or environment; preserve pending evidence
+and independently reconcile external operations. Do not restore a stale DB or stop paid-watch.
+The strict single-UID gate requires verified effective identity/mounts across console,
+publisher and CLI; do not loosen ownership permissions to bridge their current UID choices.
+
+Remaining: forced-SSH/receiver/direct-dispatch integration; effective all-participant
+bindings and flush latency; remote asynchronous settlement; independently approved,
+provably overlapping capture and complete post-ACK/stale-copy recovery with independent
+key/access custody. Direct ORM/programmatic commands outside admitted entrypoints, new
+close/signal hooks and streaming jobs are not covered by this source slice. Replication
+PASS; the same three HA-02 gates remain partial. No HA-03/cutover or new lettered stage.
+
 ## Pinned renewal admission — source only
 
 [Authoritative source and continuation report](https://github.com/Joker20380/family_connect/blob/d8aabdcf2ac688b21a63269326242cc3463c023a/docs/releases/2026-11-24-control-ha-admission-drain.md#pinned-renewal-dispatch-continuation)

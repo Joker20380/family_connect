@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+**24 November — OWNER admission implemented; no live changes.**
+HA sourcee225db60 is pushed and remote-SHA verified. Opt-in OWNER admission now encloses
+dynamic Django requests/session saves, management commands, synthetic registry writes,
+system-message publication/PG queue commit and support IPC. Caught failures/process death
+retain uncertainty; closed admission refuses before work. Default remains off.
+Full panel suite350 PASS/0 skips on disposable real PostgreSQL; core gate31 PASS;
+local Python3.13 Docker build/runtime probes PASS, including wrong-UID refusal.
+No host, installed image, Compose/mount, service, policy or version changes. Next: remaining
+forced-SSH/receiver/direct dispatch, effective bindings/UIDs, external completion/latency,
+overlapping capture and independent approval/custody/final recovery. Replication PASS;
+the same three HA-02 gates remain partial. Do not repeat completed OWNER source/NL2 checks.
+[Exact scope, limits and rollback](releases/2026-11-24-control-ha-installed-recovery.md#owner-admission--source-only).
+
 **24 November — pinned renewal admission implemented; no live changes.**
 HA sourced8aabdcf is pushed and remote-SHA verified. An explicit isolated-Python capsule
 launcher gates offline/online renewal, node CLI and scheduled credential/directory work;
@@ -7,7 +20,7 @@ it verifies exact sources/API before native execution. Caught SSH failures remai
 after successful retry. Legacy invocation stays ungated; existing SSH routes are unchanged.
 319 tests PASS/1 optional native skip/22 root-SSH cases deselected; retained-adapter set
 305 PASS/8 optional PG skips (overlap, not summed). No hosts, services, policies or versions
-changed. Next: remaining forced-SSH/direct receivers and OWNER writers, effective bindings,
+changed. Remaining at that checkpoint: forced-SSH/direct receivers and OWNER writers, effective bindings,
 remote completion/latency, coherent capture and independent approval/custody/final recovery.
 Replication PASS; three HA-02 gates remain partial.
 [Exact scope and rollback](releases/2026-11-24-control-ha-installed-recovery.md#pinned-renewal-admission--source-only).
