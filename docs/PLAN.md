@@ -11,26 +11,24 @@ remains selected; this publication task does not advance its acceptance gates.
 [Reconciliation record](releases/2026-11-24-source-reconciliation.md).
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Opt-in admission/drain source is now at4dcfdb72 on the existing HA feature branch, pushed
-and remote-SHA verified. Fixed AWG/mailbox/snapshot/fleet-agent receiver commands now have
-a sealed-source parent launcher; direct renewal dispatch supports the gate and retains
-caught uncertainty. Parent death is not child cancellation; an ACK is not process exit.
-Final regression300 PASS/1 accepted-native skip/1 reproduced pre-existing failure deselected;
-native AWG/mailbox isolated probes PASS with simulated engines.22 separate root-only
-snapshot cases are not qualified. Existing native artifacts/SSH routes remain unchanged;
-no deployment, live capture or version change.
-[Receiver scope and rollback](releases/2026-11-24-control-ha-installed-recovery.md#receiver-admission--source-only).
-Next selected work: effective installed participation, remaining manual entrypoints/bypasses
-and approved source/config/argv/UID/mount bindings for all participants;
-independent external completion and load/flush-latency qualification before overlapping
-fleet capture. Direct ORM/programmatic commands outside admitted entrypoints and asynchronous
-remote support completion are not newly fenced; console/publisher UID compatibility still
-requires qualification. Do not reimplement completed timer/payment/renewal/OWNER/receiver source
+Feature552f0ed8 is pushed/remote-SHA verified. Targeted read-only OWNER inspection confirms
+console/publisher host UID10001/1000, not a common identity; neither configures the gate.
+Installed images remain5ce82415/50de6f25. Image/instance/argv/environment/mount bindings
+match before/after, but publisher process records differ between the two observations:
+unchanged configuration/counts are not quiescence.104 focused tests PASS/0 skips.
+No Docker exec, server access, service/mount/policy change, deployment or version change.
+[Actual bindings and rollback](releases/2026-11-24-control-ha-installed-recovery.md#installed-owner-admission-bindings--read-only).
+Next selected work: qualify identity-preserving joint drain of separate OWNER gates in
+isolation, without widening0700/0600 or changing product/token ownership. Complete actual
+source/config/argv/UID/mount and manual/SSH entrypoint bindings, independent external
+completion and load/flush-latency qualification before overlapping fleet capture.
+Direct ORM/programmatic commands and asynchronous remote support remain coverage gaps.
+Do not reimplement completed timer/payment/renewal/OWNER/receiver source
 slices or repeat inventory/NL2 recovery. Keep paid-watch running; current NL scope is not working-service deployment
 permission. Independent current approval, coherent capture, off-laptop key/access custody
 and final combined recovery remain the same three partial HA-02 gates; replication PASS,
 no new lettered stage, HA-03 or cutover.
-[Implementation and boundary contract](releases/2026-11-24-control-ha-installed-recovery.md#receiver-admission--source-only).
+[Implementation and next boundary](releases/2026-11-24-control-ha-installed-recovery.md#installed-owner-admission-bindings--read-only).
 
 Owner-confirmed NL2 isolated retained-state recovery PASS14:12UTC, final cleanup/service
 checks PASS14:20UTC; source/reporte353ff85 pushed and verified. Wrong-key refusal,50 focused

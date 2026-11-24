@@ -1,5 +1,17 @@
 # Текущее состояние / Current state
 
+**24 November — installed OWNER admission bindings checked; no live changes.**
+HA source552f0ed8 is pushed and remote-SHA verified. Actual console/publisher host
+identities are10001/1000; neither container configures the admission gate. Installed
+images remain5ce82415/50de6f25. A GET-only preflight records redacted configuration,
+identity and mount bindings without Docker exec, server access or service changes.
+104 focused tests PASS/0 skips; matching observations never permit capture.
+Next: qualify identity-preserving joint drain of separate OWNER gates in isolation,
+then finish actual/manual bindings, external settlement/latency and the existing coherent
+capture/approval/custody/final recovery gates. Do not weaken permissions or change service
+identities as a shortcut. Replication PASS; the same three HA-02 blocks remain partial.
+[Actual result and rollback](releases/2026-11-24-control-ha-installed-recovery.md#installed-owner-admission-bindings--read-only).
+
 **24 November — pinned SSH/receiver admission implemented; no live changes.**
 HA source4dcfdb72 is pushed and remote-SHA verified. An explicit sealed-source launcher
 holds admission across AWG/mailbox/snapshot/fleet-agent native child lifetime; early ACK

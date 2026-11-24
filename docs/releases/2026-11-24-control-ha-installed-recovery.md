@@ -6,6 +6,39 @@ divergence is reconciled/pushed at2ae5c512; older publication-blocker statements
 historical, not active instructions or a current blocker.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## Installed OWNER admission bindings — read-only
+
+[Authoritative source and report](https://github.com/Joker20380/family_connect/blob/552f0ed885dd9e3a0a615e03a0403637bc0afdeb/docs/releases/2026-11-24-control-ha-owner-admission-binding.md)
+is pushed and remote-SHA verified at552f0ed885dd9e3a0a615e03a0403637bc0afdeb. Main changes
+navigation only; the HA implementation is not merged into main or deployed.
+
+Actual16:49:41UTC and final16:52:37UTC GET-only OWNER checks observe console image5ce82415
+under host UID:GID10001:10001 and publisher image50de6f25 under1000:1000, not root.
+Both run with read-only root filesystems; neither configures `FC_CONTROL_CAPTURE_GATE`.
+No gate mount can be resolved from an absent setting. Container/image/argv/environment/
+mount bindings match; publisher process records change between observations even though
+counts/UIDs/configuration match. Neither result is a drain, loaded-source attestation,
+namespace/inode verification or capture permission.
+
+The new preflight uses only six bounded Docker Unix-socket GETs against the two known
+OWNER containers and their immutable IDs. No Docker exec, product rows/files/tokens,
+remote host access, service operation, lock or signal to a participant is involved.
+Private environment/argv/mount paths are hashed.104 focused tests PASS/0 skips;
+four feature docs/1029 local-link targets and whitespace checks PASS. External URLs are
+not claimed HTTP-verified. Raw private evidence stays outside Git. Final observation
+SHA256:`2a6a7b7db97e6d16e8f10fb73639716ed175cece4fb6fffbd70d6e838b48ce06`.
+
+The actual enablement blocker is explicit: source hooks are not installed/configured,
+and the two observed runtime identities are not interchangeable for the single-UID gate.
+Do not loosen0700/0600, change token/product ownership or run the console as root.
+Next qualify an identity-preserving jointly drained set of separate OWNER gates in
+isolation, then finish actual/manual/SSH source/config/UID/mount bindings and external
+completion/latency before the overlapping capture. Independent approval, key/access
+custody and final combined current/post-ACK/stale restore remain required. Replication
+PASS; the same three HA-02 gates remain partial, no new stage or HA-03/cutover.
+Rollback: stop the read-only observer; there is no live change to undo. Installed
+images, working services/watchdogs, versions and public catalogs remain unchanged.
+
 ## Receiver admission — source only
 
 [Authoritative source and report](https://github.com/Joker20380/family_connect/blob/4dcfdb7250d63c74ddde7e7a3fc4b5b3cafbc246/docs/releases/2026-11-24-control-ha-receiver-admission.md)
