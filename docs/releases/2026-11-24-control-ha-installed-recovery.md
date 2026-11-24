@@ -4,6 +4,34 @@ Authoritative implementation remains `/home/joker/.codex/worktrees/dad9/family_c
 on `feature/device-technical-metadata-20261115`, not this divergent old main.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## Actual canonical/three-node integration
+
+Implementation `0ea7dbd54f16e5cecf12b81d0ea32a35afc9d2a7` is pushed and remote-SHA verified;
+execution source `0cddf92d676f3f24ef2543224368aa44b63d2b63` was published before the lab run.
+[Pinned joint recovery report](https://github.com/Joker20380/family_connect/blob/0ea7dbd54f16e5cecf12b81d0ea32a35afc9d2a7/docs/releases/2026-11-24-control-ha-joint-nodes.md#actual-execution--095721utc)
+contains the exact provenance/dump/receipt hashes, test evidence and rollback boundaries.
+
+- At09:57:21UTC, all207 retained decisions match native PostgreSQL output at their original
+  timestamps.69 canonical identities exist on each receiver; all82 allocated peers bind
+  correctly. RU/NL1/NL2 sequence floors20/55/8 stay unchanged; next NL2 private allocation9.
+- Fresh PG restore repeats exact parity.207 duplicate decisions preserve deadlines;
+  12 terminal denials and3 paid expiry/reboot checks pass without gateway commands.
+- A native revocation is acknowledged only in the isolated lab. All three scratch receivers
+  deny access across reconstruction and reject an old allow with a refreshed timestamp.
+  Fresh post-ACK PG restore repeats all three denials; stale dump and old import are refused.
+- 109 focused real-PG tests pass without skips. Original node capsules and OWNER containers
+  remain unchanged. Four owned actual-run PG containers/volumes are removed. No SSH/live
+  service action, production write, public release or installed/invitation version change.
+
+The retained07:22 canonical and08:10 node points are NOT a new coherent fleet checkpoint.
+Lab dumps are private qualification evidence, not production rollback images. Rollback
+requires no production action; preserve original private capsules and remove only owned
+test resources. This closes the canonical/three-node integration gap, not HA-02 as a whole.
+Worker/OWNER joint recovery, coherent all-writer/in-flight dispatcher capture, machine-loss
+source/image dependencies and independent forward trust remain. No HA-03..05 is selected.
+Old-main navigation remains separate from the published implementation; never force-push
+over its divergent remote or include the owner's unrelated dirty files.
+
 ## Actual native canonical PG recovery
 
 Implementation `475e260bf6d1fde7ef2a9f14e9d960a53e7cecad` is pushed and remote-SHA verified;

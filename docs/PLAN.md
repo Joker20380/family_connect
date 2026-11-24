@@ -3,7 +3,13 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Current source475e260b is pushed/remote-SHA verified. Actual610-row native canonical import
+Current source0ea7dbd5 is pushed/remote-SHA verified. Actual canonical/three-node integration
+passes09:57UTC:207 decisions/82 peers, fresh PG parity, lab revocation recovery and stale/old
+allow refusal;109 real-PG tests,0 skips. Production untouched. Next selected work remains
+worker/OWNER joint integration, coherent all-writer/in-flight dispatcher capture, machine-loss
+source/image custody and independently approved trust. No HA-03..05 or cutover.
+[Current evidence](releases/2026-11-24-control-ha-installed-recovery.md#actual-canonicalthree-node-integration).
+Earlier source475e260b is pushed/remote-SHA verified. Actual610-row native canonical import
 and49-table PG crash/fresh/new-ACK/stale recovery pass;249 focused real-PG tests without skips.
 The66 mapped/3 new alias shape is supported without weakening the old adapter or regenerating
 history. Next inside HA-02: joint receiver/worker/OWNER integration, coherent canonical/

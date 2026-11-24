@@ -1,5 +1,15 @@
 # Текущее состояние / Current state
 
+**24 November09:57UTC — actual canonical/three-node integration PASS.**
+Source0ea7dbd54f16e5cecf12b81d0ea32a35afc9d2a7 is pushed and remote-SHA verified.
+207 original-timestamp PostgreSQL decisions match all RU/NL1/NL2 caches and82 allocator
+bindings. Fresh restore repeats parity; one LABORATORY revocation survives receiver
+reconstruction and post-ACK PG restore. Old allow/stale dump/old import are refused.
+109 focused real-PG tests PASS,0 skips. Original capsules/OWNER containers unchanged;
+no SSH, live write, service/version/deployment change. HA-02 remains IN_PROGRESS for
+worker/OWNER joint recovery, coherent all-writer/dispatcher capture, machine-loss source/
+image custody and independent forward trust. [Evidence/rollback](releases/2026-11-24-control-ha-installed-recovery.md#actual-canonicalthree-node-integration).
+
 **24 November09:37UTC — actual canonical PostgreSQL recovery PASS.**
 Source475e260bf6d1fde7ef2a9f14e9d960a53e7cecad is pushed/remote-SHA verified. The retained
 610-row snapshot imports into49 PG tables; crash/fresh restore and recovery after a new
