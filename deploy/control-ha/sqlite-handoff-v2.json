@@ -1,0 +1,140 @@
+{
+  "version": 2,
+  "purpose": "family-connect/installed-handoff-schema/v2/observation-only",
+  "source": "tests/fixtures/mesh_perf3b/successor_owner_handoff.py",
+  "source_sha256": "f139a75a005c5c677828ba4c5e3b07206db950a4908e6e1e51c8e4120fed8c7d",
+  "definitions": [
+    [
+      "table",
+      "restricted_owner_handoff",
+      "restricted_owner_handoff",
+      "CREATE TABLE restricted_owner_handoff (slot INTEGER PRIMARY KEY CHECK(slot=1), operation TEXT UNIQUE NOT NULL, device TEXT NOT NULL, family TEXT NOT NULL, gateway TEXT NOT NULL, phase TEXT NOT NULL, deadline INTEGER NOT NULL, invocation TEXT NOT NULL, canary TEXT, return_view TEXT, floor TEXT, fetch_id TEXT)"
+    ],
+    [
+      "table",
+      "restricted_owner_handoff_current",
+      "restricted_owner_handoff_current",
+      "CREATE TABLE restricted_owner_handoff_current (slot INTEGER PRIMARY KEY CHECK(slot=1), operation TEXT NOT NULL UNIQUE, generation INTEGER NOT NULL)"
+    ],
+    [
+      "trigger",
+      "restricted_owner_handoff_current_no_delete",
+      "restricted_owner_handoff_current",
+      "CREATE TRIGGER restricted_owner_handoff_current_no_delete BEFORE DELETE ON restricted_owner_handoff_current BEGIN SELECT RAISE(ABORT,'HANDOFF_HISTORY_REQUIRED'); END"
+    ],
+    [
+      "trigger",
+      "restricted_owner_handoff_identity",
+      "restricted_owner_handoff_operations",
+      "CREATE TRIGGER restricted_owner_handoff_identity BEFORE UPDATE OF slot,operation,device,family,gateway,deadline,generation,predecessor,prepared_at,prepare_inputs ON restricted_owner_handoff_operations BEGIN SELECT RAISE(ABORT,'HANDOFF_INPUTS_IMMUTABLE'); END"
+    ],
+    [
+      "trigger",
+      "restricted_owner_handoff_legacy_delete",
+      "restricted_owner_handoff",
+      "CREATE TRIGGER restricted_owner_handoff_legacy_delete BEFORE DELETE ON restricted_owner_handoff BEGIN SELECT RAISE(ABORT,'LEGACY_HANDOFF_READ_ONLY'); END"
+    ],
+    [
+      "trigger",
+      "restricted_owner_handoff_legacy_insert",
+      "restricted_owner_handoff",
+      "CREATE TRIGGER restricted_owner_handoff_legacy_insert BEFORE INSERT ON restricted_owner_handoff BEGIN SELECT RAISE(ABORT,'LEGACY_HANDOFF_READ_ONLY'); END"
+    ],
+    [
+      "trigger",
+      "restricted_owner_handoff_legacy_update",
+      "restricted_owner_handoff",
+      "CREATE TRIGGER restricted_owner_handoff_legacy_update BEFORE UPDATE ON restricted_owner_handoff BEGIN SELECT RAISE(ABORT,'LEGACY_HANDOFF_READ_ONLY'); END"
+    ],
+    [
+      "index",
+      "restricted_owner_handoff_one_open",
+      "restricted_owner_handoff_operations",
+      "CREATE UNIQUE INDEX restricted_owner_handoff_one_open ON restricted_owner_handoff_operations(slot) WHERE phase!='CLEANED'"
+    ],
+    [
+      "table",
+      "restricted_owner_handoff_operations",
+      "restricted_owner_handoff_operations",
+      "CREATE TABLE restricted_owner_handoff_operations (slot INTEGER NOT NULL CHECK(slot=1), operation TEXT PRIMARY KEY, device TEXT NOT NULL, family TEXT NOT NULL, gateway TEXT NOT NULL, phase TEXT NOT NULL CHECK(phase IN ('PREPARED','ACTIVE','RETURN','CLEANED')), deadline INTEGER NOT NULL, invocation TEXT NOT NULL, canary TEXT, return_view TEXT, floor TEXT, fetch_id TEXT, generation INTEGER NOT NULL UNIQUE CHECK(generation>0), predecessor TEXT, prepared_at INTEGER, prepare_inputs TEXT NOT NULL, captured INTEGER NOT NULL CHECK(captured IN (0,1)))"
+    ],
+    [
+      "trigger",
+      "restricted_owner_handoff_operations_no_delete",
+      "restricted_owner_handoff_operations",
+      "CREATE TRIGGER restricted_owner_handoff_operations_no_delete BEFORE DELETE ON restricted_owner_handoff_operations BEGIN SELECT RAISE(ABORT,'HANDOFF_HISTORY_REQUIRED'); END"
+    ],
+    [
+      "table",
+      "restricted_owner_handoff_schema",
+      "restricted_owner_handoff_schema",
+      "CREATE TABLE restricted_owner_handoff_schema (version INTEGER PRIMARY KEY CHECK(version=2), legacy_sha256 TEXT NOT NULL)"
+    ],
+    [
+      "trigger",
+      "restricted_owner_handoff_schema_immutable",
+      "restricted_owner_handoff_schema",
+      "CREATE TRIGGER restricted_owner_handoff_schema_immutable BEFORE UPDATE ON restricted_owner_handoff_schema BEGIN SELECT RAISE(ABORT,'HANDOFF_SCHEMA_IMMUTABLE'); END"
+    ],
+    [
+      "trigger",
+      "restricted_owner_handoff_schema_no_delete",
+      "restricted_owner_handoff_schema",
+      "CREATE TRIGGER restricted_owner_handoff_schema_no_delete BEFORE DELETE ON restricted_owner_handoff_schema BEGIN SELECT RAISE(ABORT,'HANDOFF_HISTORY_REQUIRED'); END"
+    ],
+    [
+      "table",
+      "restricted_owner_handoff_security",
+      "restricted_owner_handoff_security",
+      "CREATE TABLE restricted_owner_handoff_security (device TEXT PRIMARY KEY, family TEXT NOT NULL, gateway TEXT NOT NULL, floor TEXT NOT NULL, operation TEXT NOT NULL, generation INTEGER NOT NULL, fetch_id TEXT)"
+    ],
+    [
+      "trigger",
+      "restricted_owner_handoff_security_identity",
+      "restricted_owner_handoff_security",
+      "CREATE TRIGGER restricted_owner_handoff_security_identity BEFORE UPDATE OF device,family,gateway ON restricted_owner_handoff_security BEGIN SELECT RAISE(ABORT,'HANDOFF_SCOPE_IMMUTABLE'); END"
+    ],
+    [
+      "trigger",
+      "restricted_owner_handoff_security_no_delete",
+      "restricted_owner_handoff_security",
+      "CREATE TRIGGER restricted_owner_handoff_security_no_delete BEFORE DELETE ON restricted_owner_handoff_security BEGIN SELECT RAISE(ABORT,'HANDOFF_HISTORY_REQUIRED'); END"
+    ],
+    [
+      "trigger",
+      "restricted_owner_handoff_terminal",
+      "restricted_owner_handoff_operations",
+      "CREATE TRIGGER restricted_owner_handoff_terminal BEFORE UPDATE ON restricted_owner_handoff_operations WHEN OLD.phase='CLEANED' BEGIN SELECT RAISE(ABORT,'HANDOFF_TERMINAL'); END"
+    ],
+    [
+      "index",
+      "sqlite_autoindex_restricted_owner_handoff_1",
+      "restricted_owner_handoff",
+      null
+    ],
+    [
+      "index",
+      "sqlite_autoindex_restricted_owner_handoff_current_1",
+      "restricted_owner_handoff_current",
+      null
+    ],
+    [
+      "index",
+      "sqlite_autoindex_restricted_owner_handoff_operations_1",
+      "restricted_owner_handoff_operations",
+      null
+    ],
+    [
+      "index",
+      "sqlite_autoindex_restricted_owner_handoff_operations_2",
+      "restricted_owner_handoff_operations",
+      null
+    ],
+    [
+      "index",
+      "sqlite_autoindex_restricted_owner_handoff_security_1",
+      "restricted_owner_handoff_security",
+      null
+    ]
+  ]
+}

@@ -112,6 +112,15 @@ before production, keeping8s operation /12s watchdog /paid lease≤120s unchange
 
 ## Import and recovery input contract
 
+The [24 November installed census](releases/2026-11-24-control-ha-installed-census.md)
+recognizes the deployed four-store schema but finds five additional owner-handoff
+tables in the registry. The observation-only
+[pinned definitions](../deploy/control-ha/sqlite-handoff-v2.json) match the existing
+successor migration; they are not a new accepted importer schema. Retain legacy/current
+operation history, security floors and generation bindings. Do not strip these tables,
+infer they are disposable from their original fixture location, or treat CLEANED as
+permission to discard anti-replay state. The old strict importer remains closed.
+
 The next all-store synthetic importer must explicitly inventory versioned tables,
 types/constraints/triggers/IDs/sequences and each external reference. Unknown tables,
 missing authority inputs, mismatched hashes/generations, newer receiver floors,

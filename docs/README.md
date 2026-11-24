@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 24 November: actual installed schemas; five handoff authority tables identified, importer still refuses, no live barrier](releases/2026-11-24-control-ha-installed-census.md).
+
 [CONTROL-HA · 24 November: all HA-02 gates selected; strict PostgreSQL/Patroni replica failures and commit-cancellation protection, no production cutover](releases/2026-11-24-control-ha-replication.md).
 
 [CONTROL-HA · 24 November: portable encrypted forward-checkpoint inputs; fresh-process/source-removed readback, external keys/trust/floors, no activation or production backup acceptance](releases/2026-11-24-control-ha-forward-archive.md).

@@ -11,6 +11,17 @@ uncertainty. Actual-current authorization/custody, installed schema/writer censu
 coherent capture, complete independent recovery still block HA-02 COMPLETE. Live writer
 stops/capture require the scoped barrier and abort plan; no cutover is implied.
 [Current gate evidence and rollback](releases/2026-11-24-control-ha-replication.md).
+The [installed schema census](releases/2026-11-24-control-ha-installed-census.md)
+at02:51UTC recognizes all34 live application tables, including five owner-handoff
+tables absent from the v1 importer; their22 definitions match retained migration source.
+Preserve their terminal history/security floors/current-generation binding; never drop
+them or weaken the unknown-schema rejection to make import pass.28 census checks PASS.
+Next work inside HA-02: explicit handoff recovery/import, remaining writer classification
+and bounded barrier, actual-current custody, then independent full-state recovery.
+Eight refused legacy pressure units, unobserved cron/forced commands/panel/operator and
+offline writers, and unhealthy RU unit prestate prevent a live capture permit today.
+No live stop/restart or import activation was performed. Schema recognition alone does
+not close the installed-snapshot gate; all three remaining gates stay IN_PROGRESS.
 The chronological source checkpoints below retain their original scope and test results.
 Depends on accepted paid-v2/HMAC2/metadata runtime and owner request.
 HA-01 isolated scope COMPLETE: read-only fingerprints, real three-voter mTLS

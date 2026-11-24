@@ -1,5 +1,23 @@
 # Текущее состояние / Current state
 
+**24 November — installed schema census identifies the missing handoff domain.**
+Read-only pinned SSH02:51:37–02:51:39UTC observed RU's four application stores and
+32/9/5 Family Connect units on RU/NL1/NL2. All29 previously supported application
+tables match exactly; RU also has five owner-handoff tables and17 associated indexes/
+triggers. All22 extra definitions match the retained successor-handoff migration source.
+They contain authority/floor/history state, not disposable test residue. The v1 importer
+still correctly refuses this schema; recognition is **not import/recovery acceptance**.
+28 census guards PASS /0 skips. Accepted HTTP4e2df679 and its default store root match;
+loaded Python bytecode and all-writer coverage are not attested. Eight old RU pressure
+units remain refused by the scoped observer; cron/forced commands, panel/operator queues,
+gateway publishers and offline writers remain to classify before any live barrier.
+RU AWG/reconcile/certificate-renewal units report failures; active HTTP and NL unit states
+are not an end-to-end VPN health test. No restart/stop, DB/config write, deploy or release.
+HA-02 stays IN_PROGRESS with three gates open after the isolated replication PASS.
+Next within the already selected HA-02 scope: preserve/validate the handoff domain in
+recovery/import; finish actual-current custody and writer/barrier qualification, then
+independent full recovery. [Evidence, exact limits and rollback](releases/2026-11-24-control-ha-installed-census.md).
+
 **24 November — owner selects completion of all HA-02 gates; replication rehearsal passes.**
 The request “дальше. работай до завершения 2 этапа” extends the selected scope beyond
 the journal slice to all four existing stage2 gates. It does not select HA-03..05 or
