@@ -4,6 +4,32 @@ Selected task: CONTROL-HA-20261123 / HA-02, existing complete-recovery acceptanc
 Actual cold execution PASS; complete HA-02 remains IN_PROGRESS. No product version, installation, public
 artifact/catalog, gateway policy or production service change. This is not HA-03 activation.
 
+## Bounded NL2 recovery runner
+
+The [systemd runner](../../scripts/control_ha_recovery_systemd.py) adapts the accepted
+offline native probe to existing NL2 tooling instead of installing Docker/bubblewrap.
+Exact scoped paths and a separate transient unit prefix reject production-unit/path
+substitution. It uses a read-only retained Python image, DynamicUser, private network/user/
+device namespaces, no capabilities, no-new-privileges, AF_UNIX only and hidden live paths.
+Limits:512MiB memory, no swap,25% of one CPU,32 tasks,600s runtime,5s kill deadline,
+idle I/O/priority19. KillMode=control-group covers descendants after disconnect/timeouts.
+The only writable application tree is a320MiB private temporary filesystem. Encrypted
+capsules/toolkit are read-only; custody keys and independent checkpoints enter over stdin,
+not argv, the journal or a persistent input directory. There is no release-signing key.
+
+50 focused toolkit/runner tests PASS. Actual NL2 recovery is still pending at this source
+checkpoint. The first no-data isolation probe refused interface enumeration through
+AF_NETLINK because the configured AF_UNIX-only policy correctly denied that family;
+read `/proc/self/net/dev` instead. No private input was exposed by the failed probe.
+The retained image's absolute internal symlinks must be converted to equivalent relative
+links before safe data-filtered extraction, with a separate transport hash. Original image
+and custody inputs remain unchanged. No installed image entrypoint is executed.
+
+This is a prerequisite of the same recovery gate, not full coherent/off-site acceptance.
+Rollback stops only the exact transient recovery unit, drops its temporary memory and
+preserves encrypted custody/source receipts; never restore over live state or restart
+production services. Source tests are not proof of actual cgroup/mount isolation.
+
 ## Current host authorization and preflight
 
 Owner answers “да” to the explicit current NL1/NL2 HA-02 preflight and isolated-recovery

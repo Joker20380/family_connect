@@ -3,6 +3,11 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+Bounded NL2 systemd recovery runner and50 focused tests are ready; actual isolated
+readback of retained inputs remains next, after published-source and safe-image checks.
+No live writer pause or final coherent acceptance is implied.
+[Runner scope](releases/2026-11-24-control-ha-recovery-kit.md#bounded-nl2-recovery-runner).
+
 Owner confirms current NL1/NL2 targets for HA-02 preflight/isolated recovery without
 working-service changes. The target ambiguity is resolved; no repeated permission request.
 Actual13:53UTC strict-pinned preflight selects NL2 for bounded isolation qualification;

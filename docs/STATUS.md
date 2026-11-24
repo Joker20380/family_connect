@@ -1,5 +1,12 @@
 # Текущее состояние / Current state
 
+**24 November — bounded NL2 recovery runner prepared, actual readback pending.**
+Systemd-native runner uses an isolated retained image, dynamic non-root identity,
+no network/capabilities,512MiB memory/no swap,25% CPU and600s hard runtime bound.
+Secrets arrive only on stdin into private temporary memory; no keys in argv or persistent
+mounts.50 focused tests PASS. No package install, production daemon or completed remote
+recovery is claimed. [Scope](releases/2026-11-24-control-ha-recovery-kit.md#bounded-nl2-recovery-runner).
+
 **24 November13:53UTC — owner confirms current NL targets; live preflight complete.**
 The owner answers “да” to scoped HA-02 checks/isolated recovery on NL1 185.10.158.212
 and NL2 185.10.158.196 without changing working services. The host-scope question below
