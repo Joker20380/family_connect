@@ -42,9 +42,15 @@ def candidate_for(current):
     sources = {node: dict(runtime_sha256=digest(b'runtime'), configuration_sha256=digest(node.encode()))
                for node in forward.NODES}
     issuer = Ed25519PrivateKey.from_private_bytes(state.artifacts['issuer_material']['runtime-key'])
+    plan = parse((current['roots']['coordinator'] / 'plan.json').read_bytes())
+    gateway_ids = plan['gateway_ids']
+    authorities = current.get('authorities', {
+        'NL': encoded(plan['candidate']['authority']), 'NL2': encoded(plan['secondary']['candidate']['authority'])})
+    floors = {node: restricted.delegation(parse(raw), current['anchor'], NOW)[0]['sequence']
+              for node, raw in authorities.items()}
     request = forward.request_for(recovery_checkpoint, history_checkpoint, sequence=2, captured_at=NOW,
         expires_at=NOW + 300, sources=sources, publications=current['publications'],
-        issuer_public_sha256=digest(issuer.public_key().public_bytes_raw()))
+        issuer_public_sha256=digest(issuer.public_key().public_bytes_raw()), gateway_ids=gateway_ids, authorities=authorities)
     signer = Ed25519PrivateKey.generate()
     number = x509.load_pem_x509_crl(state.artifacts['issuer_material']['crl']).extensions.get_extension_for_class(
         x509.CRLNumber).value.crl_number
@@ -53,7 +59,8 @@ def candidate_for(current):
         recovery_checkpoint=recovery_checkpoint, history_checkpoint=history_checkpoint,
         arguments=dict(minimum_sequence=1, minimum_crl=number, now=NOW, recovery_bundle=recovery_bundle, recovery_key=recovery_key,
             history_bundle=history_bundle, history_key=current['key'], anchor=current['anchor'],
-            sources=sources, publications=dict(current['publications'])))
+            sources=sources, publications=dict(current['publications']), gateway_ids=gateway_ids,
+            authorities=authorities, minimum_authority_sequences=floors))
 
 
 def verify(candidate, **overrides):
@@ -84,11 +91,15 @@ def test_source_removed_readback_preserves_all_bytes_without_history_authority(c
     assert qualified.current.stores == current['recovered'].stores
     assert qualified.current.artifacts == current['recovered'].artifacts
     assert qualified.history.trees == before.trees
+    assert qualified.authorities == candidate['arguments']['authorities']
+    assert qualified.publications == candidate['arguments']['publications']
     summary = qualified.summary()
     assert summary['result'] == 'FORWARD_CHECKPOINT_OFFLINE_QUALIFIED'
     assert summary['activation'] == 'FORBIDDEN'
     assert summary['database_import'] == summary['host_resume'] == 'NOT_AUTHORIZED'
     assert summary['capture_consistency'] == summary['full_recovery'] == 'NOT_QUALIFIED'
+    assert summary['publication_semantics'] == 'BOTH_GATEWAYS_CHECKED_OFFLINE'
+    assert summary['live_publication'] == 'NOT_ATTESTED'
     assert not hasattr(qualified, 'snapshot')
     assert 'runtime-key' not in repr(qualified)
 
@@ -135,7 +146,9 @@ def test_native_post_renewal_certificate_and_consumed_proof_survive_source_remov
     current = dict(recovered=preflight_receivers(bundle, key, checkpoint, fixture.service.anchor, now=NOW),
         roots=dict(coordinator=fleet.controller.root, RU=fleet.nodes['RU'].state,
                    NL1=fleet.nodes['NL'].state, NL2=fleet.nodes['NL2'].state), key=key, anchor=fixture.service.anchor,
-        publications={slot: fleet.nodes['RU'].directory_destination(slot).read_bytes() for slot in ('NL', 'NL2')})
+        publications={slot: fleet.nodes['RU'].directory_destination(slot).read_bytes() for slot in ('NL', 'NL2')},
+        authorities={'NL': fleet.nodes['RU'].read('issuer.json')[0],
+                     'NL2': fleet.nodes['RU'].read('issuer-NL2.json')[0]})
     plan = parse((fleet.controller.root / 'plan.json').read_bytes())
     candidate = candidate_for(current)
     shutil.rmtree(root)
@@ -256,6 +269,69 @@ def test_every_publication_is_exactly_bound(candidate, node):
     publications[node] += b' '
     with pytest.raises(ImportRejected, match='FORWARD_PUBLICATION_MISMATCH'):
         verify(candidate, publications=publications)
+
+
+@pytest.mark.parametrize('node', ['NL', 'NL2'])
+def test_delegation_bytes_are_bound_to_the_fresh_authorization(candidate, node):
+    authorities = dict(candidate['arguments']['authorities'])
+    authorities[node] += b' '
+    with pytest.raises(ImportRejected, match='FORWARD_GATEWAY_MISMATCH'):
+        verify(candidate, authorities=authorities)
+
+
+@pytest.mark.parametrize('kind', ['expired', 'other-node', 'wrong-family'])
+def test_fresh_authorization_does_not_legitimize_bad_secondary_publication(candidate, kind):
+    publications = dict(candidate['arguments']['publications'])
+    value = parse(publications['NL2'])
+    if kind == 'expired':
+        value.update(issued_at=restricted.iso(NOW - 1), expires_at=restricted.iso(NOW))
+    elif kind == 'other-node':
+        value['seeds'][0]['gateway'] = candidate['arguments']['gateway_ids']['NL']
+    else:
+        value['family'] = 'f' * 32
+    publications['NL2'] = encoded(value)
+    candidate['arguments']['publications'] = publications
+    authorize(candidate, lambda document: document.update(publications=forward.publication_hashes(publications)))
+    with pytest.raises(ImportRejected, match='FORWARD_PUBLICATION_INVALID'):
+        verify(candidate)
+
+
+@pytest.mark.parametrize('node', ['NL', 'NL2'])
+def test_new_checkpoint_sequence_does_not_lower_known_gateway_authority_floor(candidate, node):
+    floors = dict(candidate['arguments']['minimum_authority_sequences'])
+    floors[node] += 1
+    with pytest.raises(ImportRejected, match='FORWARD_AUTHORITY_ROLLBACK'):
+        verify(candidate, minimum_authority_sequences=floors)
+
+
+def test_gateway_assignment_is_bound_not_inferred_from_secondary_content(candidate):
+    identities = dict(candidate['arguments']['gateway_ids'], NL2='f' * 32)
+    with pytest.raises(ImportRejected, match='FORWARD_GATEWAY_MISMATCH'):
+        verify(candidate, gateway_ids=identities)
+
+
+def test_material_readback_does_not_alias_callers_mapping(candidate):
+    qualified = verify(candidate)
+    candidate['arguments']['publications']['NL2'] = b'changed'
+    candidate['arguments']['authorities']['NL2'] = b'changed'
+    assert qualified.publications['NL2'] != b'changed'
+    assert qualified.authorities['NL2'] != b'changed'
+
+
+def test_input_maps_cannot_change_between_hash_and_semantic_checks(candidate, monkeypatch):
+    original = forward.preflight_maintenance
+    approved_publication = candidate['arguments']['publications']['NL2']
+    approved_authority = candidate['arguments']['authorities']['NL2']
+    def preflight(*args, **kwargs):
+        publication = parse(approved_publication)
+        publication['seeds'][0]['join_url'] = 'https://telemost.yandex.ru/j/changed-after-pin'
+        candidate['arguments']['publications']['NL2'] = encoded(publication)
+        candidate['arguments']['authorities']['NL2'] += b' '
+        return original(*args, **kwargs)
+    monkeypatch.setattr(forward, 'preflight_maintenance', preflight)
+    qualified = verify(candidate)
+    assert qualified.publications['NL2'] == approved_publication
+    assert qualified.authorities['NL2'] == approved_authority
 
 
 def test_signed_different_issuer_is_not_a_key_rotation_permit(candidate):

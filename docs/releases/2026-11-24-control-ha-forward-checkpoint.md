@@ -1,5 +1,10 @@
 # 24 November 2026 — forward-only current-state checkpoint contract
 
+Historical source checkpoint38a3ac27. The unpublished contract is tightened by the
+[subsequent two-publication checkpoint](2026-11-24-control-ha-forward-publications.md):
+gateway/delegation bindings are now mandatory and both publications are checked.
+The limitations/results below describe this earlier implementation, not active NEXTs.
+
 ## Authorization and scope
 
 The owner answered «да» to development of the forward-only route **without stopping

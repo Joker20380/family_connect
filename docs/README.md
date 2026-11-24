@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 24 November: both current publications checked against signed gateway delegations, expiry and independent sequence floors; offline only, fixed four-block stage2 remainder](releases/2026-11-24-control-ha-forward-publications.md).
+
 [CONTROL-HA · 24 November: owner-approved forward-checkpoint development; separate signed offline contract, immutable history, source-removed current-state checks; no server changes](releases/2026-11-24-control-ha-forward-checkpoint.md).
 
 [CONTROL-HA · 24 November: prior provenance investigation and proposed decision, subsequently approved for development only](releases/2026-11-24-control-ha-provenance-decision.md).

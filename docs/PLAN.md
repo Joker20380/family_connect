@@ -281,8 +281,17 @@ proof checks qualify this bounded contract only.251 tests PASS /3 optional Postg
 skips:75 new +56 unchanged current-audit +45 custody +75 bounded-maintenance.
 The75 new tests have no skips. No signing CLI, production signer,
 live collector, importer/resume API or permissive old-equality switch was added.
-Remaining selected gate: independently established current source/capture bindings and
-publication semantics, qualified coherent capture and current-state recovery. Known
+24 November continuation closes the second-publication semantic gap in the same offline
+contract: mandatory signed gateway/delegation bindings, native validation of both
+publications at capture/verification time, common CA/family/minimum revision and
+independent per-gateway authority-sequence floors. No permissive/default path accepts
+the old request shape. Exact public material is retained without caller-map aliasing.
+This is not a new phase/letter or installed-source attestation.
+Final local qualification:219passed,0skipped (forward checkpoint86, publication
+semantics77, unchanged current-audit regression56); no production acceptance claimed.
+[Publication contract, tests and remaining work](releases/2026-11-24-control-ha-forward-publications.md).
+Remaining selected gate: independently established actual source/capture/publication
+bindings, qualified coherent capture and current-state recovery. Known
 synthetic schemas/bounded-maintenance adapters are not installed-schema acceptance.
 No next queued block is started; all four stage2 exit blocks still apply.
 [Implemented contract, tests and precise limits](releases/2026-11-24-control-ha-forward-checkpoint.md).

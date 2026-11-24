@@ -1,5 +1,27 @@
 # Текущее состояние / Current state
 
+**24 November — CONTROL-HA both forward-checkpoint publications checked offline.**
+The selected journal/current-state contract now requires both gateway identities and
+exact root-signed delegation hashes in the fresh authorization. Both publications are
+validated with native directory rules at capture and verification time, against their
+own signed gateway/family. Both delegates must use the same CA/family/minimum revision;
+separately retained authority-sequence floors prevent stale delegated state.
+Swapped nodes, wrong signatures/policy, expired/future directories and lower authority
+sequences refuse even with a newly signed checkpoint. Exact authority/publication bytes
+survive source removal; caller map changes cannot replace already pinned material.
+This closes the second-publication semantic gap in the offline contract, not installed
+provenance, live publication, gateway leaf/private-key recovery or coherent capture.
+Old request shapes are refused; no real signing authority/approval or deployment added.
+Final local qualification:219passed,0skipped (checkpoint86, publications77,
+unchanged current-audit regression56), without claiming full recovery or live acceptance.
+Selected task remains IN_PROGRESS. Remaining stage2 work is the unfinished actual-current
+journal/capture binding plus three integration blocks: installed schemas/writers,
+full independent off-host recovery and strict PostgreSQL/Patroni quorum/RPO0. No credible
+calendar estimate exists before those checks and a separately reviewed capture window.
+No next queued block, SSH, service/config/policy/version changes or fresh health claim.
+Console5ce82415, RU HTTP4e2df679, NL GeoIP22 November, Android126/catalog9 unchanged.
+RU dependence persists. [Results, contract and rollback](releases/2026-11-24-control-ha-forward-publications.md).
+
 **24 November — CONTROL-HA forward-checkpoint development authorized; offline contract implemented.**
 Owner explicitly approved development without stopping services or changing servers.
 The new, separate current-state contract binds both encrypted capsules, full opaque
