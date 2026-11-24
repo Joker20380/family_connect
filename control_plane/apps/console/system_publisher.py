@@ -10,6 +10,8 @@ import urllib.request
 
 from django.core.exceptions import PermissionDenied
 from django.db import transaction
+from control.capture_gate import external_operation
+from fc_control_plane.capture import operation
 
 from .models import SystemMessage
 from .system_messages import MessageForm, audit, payload
@@ -105,6 +107,7 @@ class Publisher:
             raise PublicationUnknown
 
 
+@operation()
 def publish_next(publisher):
     with transaction.atomic():
         message = SystemMessage.objects.select_for_update(skip_locked=True).filter(status='queued').order_by('created_at').first()
@@ -117,7 +120,8 @@ def publish_next(publisher):
             form = MessageForm(value)
             if not form.is_valid() or any(value[field] != content for field, content in form.cleaned_data.items()):
                 raise PublicationRefused
-            publisher.publish(value)
+            with external_operation():
+                publisher.publish(value)
             message.status = 'published'
         except (PermissionDenied, PublicationRefused):
             message.status = 'refused'

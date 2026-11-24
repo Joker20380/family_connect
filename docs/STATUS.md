@@ -1,5 +1,20 @@
 # Текущее состояние / Current state
 
+**24 November — OWNER admission implemented and locally qualified; not deployed.**
+Opt-in `FC_CONTROL_CAPTURE_GATE` now encloses dynamic Django requests (including session
+saves), management commands, synthetic registry writes, system-message publication/queue
+commit and support IPC. Closed admission refuses before writer work; caught remote failures,
+HTTP500, streaming responses and process death preserve durable uncertainty. Default is off;
+no Compose/env/mount, host, service, route, watchdog, version or policy changes.
+Full OWNER suite **350 PASS,0 skips** against disposable real PostgreSQL; core gate31 PASS.
+The exact source-only Docker build passes Python3.13 runtime probes, including wrong-UID
+refusal; it is not installed or distributed. Next: remaining forced-SSH/receiver/direct
+dispatch, effective all-participant bindings/UIDs, external completion and latency, then
+overlapping capture/independent approval/custody/final recovery. Do not repeat this OWNER
+source slice or the completed NL2 recovery. Replication PASS; the same three HA-02 gates
+remain partial, no HA-03 or cutover.
+[Scope, exact checks and rollback](releases/2026-11-24-control-ha-admission-drain.md#owner-panel-and-publisher-continuation).
+
 **24 November — pinned renewal admission implemented; source only.**
 An explicit isolated-Python capsule launcher gates offline/online renewal, node CLI and
 scheduled credential/directory evaluation before native config/stdin/DB work. It verifies
@@ -7,7 +22,7 @@ the caller's manifest pin, exact sources and API; rejects extra bytecode/source 
 Caught SSH/ACK failures retain uncertainty across successful retry. Legacy entrypoints
 remain ungated by default.319 tests PASS/1 optional native skip/22 root-SSH cases deselected;
 separate retained-adapter set305 PASS/8 optional PG skips (overlapping counts).
-No host, service, route, watchdog, version or policy changes. Next: remaining forced-SSH/
+No host, service, route, watchdog, version or policy changes. Remaining at that checkpoint: forced-SSH/
 receiver/direct-dispatch and OWNER PG/synthetic writers, effective bindings, remote
 completion and latency, then overlapping capture/independent approval/custody/final recovery.
 Replication PASS; three HA-02 gates still partial, no HA-03 or cutover.

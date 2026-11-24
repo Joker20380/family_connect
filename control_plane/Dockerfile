@@ -4,6 +4,7 @@ WORKDIR /app
 COPY control_plane/requirements.lock /tmp/requirements.lock
 RUN pip install --no-cache-dir --require-hashes -r /tmp/requirements.lock
 COPY control/friends/*.py /app/control/friends/
+COPY control/capture_gate.py /app/control/
 COPY device_identity/*.py /app/device_identity/
 COPY fleet /app/fleet
 COPY control_plane/manage.py control_plane/pyproject.toml /app/control_plane/

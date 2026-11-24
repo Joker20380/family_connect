@@ -8,6 +8,7 @@ import time
 import uuid
 
 from django.conf import settings
+from fc_control_plane.capture import operation
 
 from control.friends import paid_beta, support_ids
 from control.friends.access import Access
@@ -47,6 +48,17 @@ def guard(database, *, legacy=False):
 
 @contextmanager
 def registry(*, write=False):
+    if write:
+        with operation():
+            with _registry(write=True) as database:
+                yield database
+    else:
+        with _registry() as database:
+            yield database
+
+
+@contextmanager
+def _registry(*, write=False):
     try:
         with paid_beta.connection(checked_path(), write=write) as database:
             guard(database)
@@ -62,6 +74,7 @@ def _fixture_invitation_code():
     return 'FC-' + '-'.join(raw[offset:offset + 4] for offset in range(0, 32, 4))
 
 
+@operation()
 def seed_fixture():
     if any(parent.is_symlink() for parent in (ROOT, *ROOT.parents)):
         raise BackendError('SYNTHETIC_FIXTURE_REQUIRED')

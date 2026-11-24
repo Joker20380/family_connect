@@ -9,6 +9,7 @@ from django.http import Http404
 from django.shortcuts import redirect, render
 from django.views.decorators.debug import sensitive_post_parameters
 from django.views.decorators.http import require_POST, require_safe
+from fc_control_plane.capture import operation as capture_operation
 
 from .models import AuditRecord, InventoryDevice, SubscriptionSnapshot, SubscriptionEventObservation
 from .views import staff
@@ -56,6 +57,7 @@ def known_device(pseudonym):
         raise Http404
 
 
+@capture_operation()
 def invoke(operation, **arguments):
     path = getattr(settings, 'SUPPORT_SOCKET', '')
     if not path:

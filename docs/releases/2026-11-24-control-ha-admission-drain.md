@@ -7,6 +7,104 @@ version bump, catalog/signing change, live capture or recovery acceptance occurs
 The current [writer-boundary contract](2026-11-24-control-ha-writer-boundary.md#minimum-boundary-contract)
 and four existing HA-02 acceptance gates remain authoritative.
 
+## OWNER panel and publisher continuation
+
+Source-only continuation based on `d8aabdcf2ac688b21a63269326242cc3463c023a`.
+It implements the OWNER entrypoint portion of the existing writer-boundary task, not
+a new stage, a fleet-wide gate, a deployment or full HA-02 acceptance.
+
+### OWNER admission boundaries
+
+- `fc_control_plane.capture` reads optional `FC_CONTROL_CAPTURE_GATE`; unset/empty means
+  disabled. The directory must already exist and have the shared gate's strict ownership,
+  mode and inode invariants. It is never created implicitly. Cached gate objects retain
+  their pins; replacing a lock is refused, not silently accepted by subsequent requests.
+- `CaptureAdmission` sits after security/static middleware but before sessions, CSRF,
+  authentication and views. Every dynamic request, including GET, holds admission through
+  rendering, transaction commits and response-time session writes. Static short circuits
+  are not writers. Busy admission returns redacted503/no-store/Retry-After1 before the
+  protected chain. Django-converted500 and exceptions retain uncertainty. Enabled streaming
+  is refused503 and closed inside the gate without iterating its body; it is not qualified
+  as a long-lived writer. Disabled streaming behavior is unchanged.
+- `manage.py` acquires admission before Django setup/config/command dispatch and holds it
+  until native return, including migrations and outer commits. Busy returns75; invalid
+  gate or enabled `runserver` returns1 with a redacted diagnostic. Successful `None`/0 exit
+  settles only this operation; failing exit/death retains pending. Enabled development
+  `runserver` is deliberately unsupported rather than holding admission for a whole server
+  lifetime; the panel runtime remains Gunicorn/WSGI. Ordinary existing invocations remain
+  unchanged with the opt-in absent.
+- Writable synthetic `backend.registry` and `seed_fixture` enter before path/DB/file work,
+  including commit/rename. Nested request/CLI/helper calls share one marker. Failures mark
+  uncertainty before callers can translate or catch them.
+- `publish_next` enters before its PG transaction and exits after commit. Remote publication
+  and readback execute inside an external-effect scope; a caught refusal/unknown result
+  can still commit the queue status while retaining pending. Later same-ID success cannot
+  erase that marker. Existing authorization, no automatic unknown retry, token separation,
+  native timeouts, loop interval and queue semantics are unchanged.
+- Support `invoke` covers local socket dispatch/reply and translated/caught errors. This
+  is **not** proof that an asynchronously queued remote support action has completed.
+- The panel Dockerfile includes the shared `control/capture_gate.py`. No Compose overlay,
+  runtime environment, gate mount, UID, service unit or production image is changed.
+
+### OWNER validation
+
+All PostgreSQL runs use a separately labeled disposable container from the pinned HA
+rehearsal manifest, a newly generated private credential and a new synthetic OWNER database.
+No product database, installed panel, SSH host or existing container is used. Owned PG
+containers/volumes and runtime probe containers are removed after checks.
+
+- Initial focused run: **101 passed,0 skips** for `test_capture_admission.py`,
+  `test_system_messages.py`, `test_backend_workflow.py`, `test_support.py`, `test_settings.py`
+  in `control_plane/tests`. This predates the extra real-process-death case below.
+- Final full panel run: **350 passed,0 skips**,88.17s, using
+  `/mnt/data/fc-subscription-notifications-20261114/venv/bin/python -m pytest -q`
+  from `control_plane/` with private disposable PG settings. Every installed package in
+  `control_plane/requirements.lock` matches its pin (including Django5.2.18,
+  psycopg/psycopg-binary3.3.6); host Python3.14.4. This includes actual PG commit/session
+  writes, Django exception conversion, busy-before-configuration CLI, synthetic failure,
+  caught IPC/publication uncertainty, successful retry retaining older pending, and a real
+  blocked management subprocess whose SIGKILL leaves pending and refuses subsequent drain.
+  Counts overlap the focused run; they are not additive acceptance totals.
+- Shared gate: **31 passed,0 skips** with
+  `/tmp/fc-control-ha-20261123/venv/bin/python -m pytest -q tests/test_capture_gate.py`.
+- The actual Dockerfile builds successfully from a temporary allowlist of tracked/current
+  source files, excluding repository state, credentials, evidence and `.git`. Image
+  `sha256:807e8077d06fa6909f07b146cc3f5daf5db645c94804a41e9a29128db0760c1e`
+  uses the pinned Python3.13 base and hash-locked dependencies. Network-disabled, read-only,
+  capability-dropped runtime probes on Python3.13.17 verify default-disabled operation,
+  closed-gate migration refusal before Django settings/DB access, wrong-UID refusal, and
+  admitted marker creation/removal. This is a local build/probe only, not an installed,
+  publicly distributed or invitation-page version. No version/catalog/checksum update.
+
+The first disposable PG setup attempt refused `CREATE DATABASE` inside a transaction;
+the harness was corrected to use autocommit before either recorded test run. It ran no
+tests and cleaned its own container; it is not counted as a passed run or a product fix.
+Private logs remain local. Public docs/link and whitespace checks cover this report and
+the changed STATUS/PLAN/README/operator guide before source publication.
+
+### OWNER rollback and remaining gates
+
+There is no live change to undo. This source slice adds no schema migration and does not
+modify retained captures. Before any future opt-in deployment, qualify one fixed gate path,
+same effective UID and mounts across web, publisher, CLI and the remaining participants;
+the current console UID10001 and a file-owner publisher UID are **not** assumed equivalent.
+Do not weaken0700/0600 ownership to make a probe pass. Removing the opt-in/reverting the
+code restores previous behavior only after any capture controller has released admission
+and capture is disabled; preserve pending evidence and independently settle external work.
+Never bypass the gate and claim a coherent capture, restore an old product DB, clear pending
+automatically, or stop paid-watch/deny enforcement as a rollback shortcut.
+
+This qualifies the current synchronous request/CLI/helper boundaries, not arbitrary direct
+ORM writes, programmatic `call_command` outside `manage.py`, new close/signal hooks, ASGI,
+streaming jobs, remote asynchronous completion or all effective production launch paths.
+Full-request admission includes read-only requests and may conservatively retain failed
+ones; production flush latency, drain/timeout budgets and availability are still unqualified.
+The local5s drain/2s hold guardian is unchanged and this source gate does not authorize it
+to capture the fleet. Remaining: forced-SSH/receiver/direct dispatch integration and exact
+effective bindings, remote settlement, provably overlapping capture with independent
+current approval/key custody, and combined post-ACK/stale-copy recovery from that point.
+Replication remains PASS; the same three HA-02 acceptance blocks remain partial. No HA-03.
+
 ## Pinned renewal dispatch continuation
 
 This source-only continuation is based onfd378475. It adds an explicit admission wrapper
