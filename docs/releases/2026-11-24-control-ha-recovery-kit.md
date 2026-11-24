@@ -85,6 +85,15 @@ imports the complete entry set using only copied committed sources and checks ev
 project module's origin. No source-path fallback is added. Keep the second failed receipt;
 the complete corrected cold native-data run remains pending.
 
+The third attempt fromec31ac0f0961cd0d385b6a6b2bf70a4fc2955d89 restores419 source files
+and passes the complete offline dependency/import set. Native canonical preflight then
+correctly rejects the probe's human-readable checkpoint label: its contract requires32 hex
+characters. The correction derives that readback-only reference deterministically from both
+authenticated store/file hash maps. It neither weakens the existing validator nor creates
+forward approval authority. A native canonical fixture regression verifies the reference,
+identical retained rows and `independent_forward_trust=False`. Preserve the failed receipt;
+the corrected complete gate must run again from a new committed kit.
+
 The fixed four HA-02 gates remain: replication PASS in isolation; current independent
 approval/trust, coherent all-writer/in-flight capture and final complete recovery are partial.
 Still required: recovery-host OS/tool availability, off-machine independent custody, actual

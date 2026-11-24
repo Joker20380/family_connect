@@ -54,6 +54,16 @@ def test_native_profile_preserves_exact_authority_and_handoff(source):
     assert 'private' not in repr(result) and 'rows=' not in repr(result)
 
 
+def test_cold_probe_uses_native_reference_format_without_new_authority(source):
+    from scripts.control_ha_recovery_probe import prepare_canonical
+    result = prepare_canonical(*source, now=NOW)
+    assert len(result.snapshot.checkpoint) == 32
+    assert len(bytes.fromhex(result.snapshot.checkpoint)) == 16
+    assert result.snapshot.checkpoint == prepare_canonical(*source, now=NOW).snapshot.checkpoint
+    assert result.snapshot.rows == prepared(source).snapshot.rows
+    assert result.summary()['independent_forward_trust'] is False
+
+
 def test_new_native_entity_is_explicit_and_does_not_regenerate_alias_history(source):
     files = source[1]
     original = prepared(source)

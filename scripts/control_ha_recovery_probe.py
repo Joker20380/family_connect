@@ -42,10 +42,17 @@ def canonical_probe(inputs):
                              kit.document((inputs / 'RU.checkpoint.json').read_bytes()))
     files = {name: base64.b64decode(entry['body'], validate=True) for name, entry in external['entries'].items()
              if entry['kind'] == 'file' and (name in native.FIXED or name.startswith('routing/'))}
-    prepared = native.preflight(stores, files, {name: kit.digest(raw) for name, raw in stores.items()},
-        {name: kit.digest(raw) for name, raw in files.items()}, 'cold-source-dependency-readback-20261124',
-        now=manifest['captured_at_ns'] // 1000000000)
+    prepared = prepare_canonical(stores, files, now=manifest['captured_at_ns'] // 1000000000)
     return prepared.summary()
+
+
+def prepare_canonical(stores, files, *, now):
+    from scripts import control_ha_installed_composite as native
+    store_pins = {name: kit.digest(raw) for name, raw in stores.items()}
+    file_pins = {name: kit.digest(raw) for name, raw in files.items()}
+    reference = kit.digest(kit.encoded(dict(purpose='cold-native-readback-reference-only',
+                                          stores=store_pins, files=file_pins)))[:32]
+    return native.preflight(stores, files, store_pins, file_pins, reference, now=now)
 
 
 def fleet_probe(inputs, scratch):

@@ -14,6 +14,9 @@ check covers the command topology. The failed receipt is preserved; corrected co
 Second attempt installs/verifies all28 wheels offline, then refuses a missing transitive
 desktop-parser import. The two pure parser/version modules are now explicitly retained;
 a checkout-removed import regression covers the complete recovery entry set. No fallback.
+Third attempt passes the full import/dependency set but correctly refuses the probe's
+non-native checkpoint label. Use a deterministic32-hex readback reference bound to the
+authenticated input hashes, never a new approval authority. Native fixture regression added.
 [Scope, execution gate and rollback](releases/2026-11-24-control-ha-recovery-kit.md).
 
 **24 November11:43:57UTC — actual OWNER image-loss cold bootstrap PASS.**

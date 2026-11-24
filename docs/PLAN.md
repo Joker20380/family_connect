@@ -14,6 +14,8 @@ First cold attempt refused at namespace construction, before source execution. N
 mountpoints are corrected to private tmpfs paths; retry with a new kit checkpoint/destination.
 Second attempt proves offline dependency installation but refuses missing shared desktop
 parsers. Include the two exact source modules and qualify imports with the checkout absent.
+Third attempt isolates a probe label-format mismatch, not invalid retained data. Correct
+the derived readback reference and rerun the complete cold gate; do not relax native validation.
 
 OWNER image-loss cold bootstrap passes11:43:57UTC: all three exact images recovered from
 encrypted custody, native Python/Django/crypto/libpq probes and PG17.11 restart/dump/restore
