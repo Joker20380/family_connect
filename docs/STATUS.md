@@ -1,5 +1,17 @@
 # Текущее состояние / Current state
 
+**24 November — selected NL service environments match; diagnostic hook tested in isolation.**
+HA sourced76df5cf is pushed/remote-SHA verified. Read-only21:35:59–21:36:00UTC checks match three
+selected process variables on NL1 and one on NL2;11 other names per process remain unqualified.
+Both scoped restricted-bootstrap services are active/running; this is not a whole-fleet health
+claim. Exact NL1 stop-post passes seven synthetic cases, but invalid input/storage may return
+zero without a report. Its success is not capture/transaction-completion proof.162 tests PASS/
+0 skips,70 new cases. NL2 NeedDaemonReload=yes remains unexplained; no reload/helper dispatch,
+working-service/deployment/version change. Next: remaining runtime/helper/AWG settlement and
+collector/manual coverage, concrete joint activation/capture proposal, coherent interval and
+independent approval/custody/final recovery. Replication PASS; three fixed HA-02 gates partial.
+[Findings, remaining limits and rollback](releases/2026-11-24-control-ha-installed-recovery.md#selected-environment-and-diagnostic-stop-post--no-activation).
+
 **24 November — mailbox reader cleanup now fails closed; no deployment.**
 HA source0eccb9e3 is pushed/remote-SHA verified. A timed join no longer counts as completed
 cleanup when its reader is alive; all teardown stages are attempted after errors. Terminal

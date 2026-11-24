@@ -6,6 +6,48 @@ divergence is reconciled/pushed at2ae5c512; older publication-blocker statements
 historical, not active instructions or a current blocker.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## Selected environment and diagnostic stop-post — no activation
+
+[Authoritative observer, tests, exact native evidence and rollback](https://github.com/Joker20380/family_connect/blob/d76df5cf9f1d8ec0126db036279b7bbe35a55da1/docs/releases/2026-11-24-control-ha-service-environment.md)
+are pushed/remote-SHA verified atd76df5cf9f1d8ec0126db036279b7bbe35a55da1. Main remains navigation
+only. No RU access, production helper/hook dispatch, service start/stop/reload, unit/environment/
+key/image change, product database access or deployment. Client/build/installed/public-installer/
+catalog/invitation versions remain unchanged; no binaries built/published, signing or release tag.
+
+Final read-only NL1/NL2 observations at21:35:59–21:36:00UTC bind loaded assignments/provider files
+to the same active/running restricted-bootstrap PID/start/invocation and stable file identities.
+NL1: three selected environment names match; NL2: one. No missing/different/incorrectly retained
+selected values;11 additional names per process are not qualified. No values disclosed. Observer
+refuses unsupported syntax/dispatch, ambiguous paths, unsafe files and changing observations.
+This is not full runtime attestation, an atomic write-free interval or whole-fleet/VPN health.
+
+NL1 has one diagnostic Python stop-post; NL2 has none. Exact NL1 source passes seven local
+synthetic container cases: synchronous valid report, duplicate protection, invalid directory/
+invocation zero-exit without a report, foreign-invocation exclusion, timed-out child killed and
+reaped before completion, and32-report retention. UID979/Python3.14.10, network disabled,
+read-only rootfs, no host mounts/sockets, dropped capabilities and bounded disposable tmpfs.
+This is not installed NL1 Python3.14.4/systemd/output-directory qualification. The hook is passive
+diagnostics, not proof of product transaction completion; its silent error policy is not changed.
+No claim it explains earlier RU failures. Source receipt/argv, checksums, private evidence pointer,
+initial observer/fixture refusals and final successful runs are detailed in the feature report.
+
+**162 tests PASS/0 skips /1.45s**, including70 new cases. Feature docs:4 files/1067 link targets/
+zero errors; main navigation:3 files/696 link targets/zero errors; whitespace PASS.
+Existing unrelated announcement-pin failure and GUI/device limits
+are not overwritten by this focused result. NL2 NeedDaemonReload=yes remains unexplained; no
+daemon-reload performed. Raw environment data/hook source/evidence remain private, outside Git.
+
+Next: remaining full runtime/helper/AWG settlement, collectors and bounded manual-write coverage,
+concrete approved joint activation/capture proposal, actual coherent interval and independent
+current-input approval/custody/final recovery. The original four gates remain fixed: replication
+PASS in isolation; the same three partial gates. Do not repeat these selected-environment/hook
+checks as additional gates or treat this source push as working-NL deployment authorization.
+No new stage, completion percentage or calendar estimate.
+
+Rollback: no production change to undo. Observer runs from SSH stdin without remote installation;
+container-only fixtures are removed. Revert observer/tests before future use if necessary, retain
+private evidence/pending markers and existing recovery access. No service restart/restore needed.
+
 ## Mailbox reader cleanup — native local proof
 
 [Authoritative source, tests, provenance delta and rollback](https://github.com/Joker20380/family_connect/blob/0eccb9e34c3e0f71e5fb5a40bbd99696362e1c82/docs/releases/2026-11-24-control-ha-mailbox-cleanup.md)

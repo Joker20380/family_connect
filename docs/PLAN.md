@@ -11,20 +11,21 @@ remains selected; this publication task does not advance its acceptance gates.
 [Reconciliation record](releases/2026-11-24-source-reconciliation.md).
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Feature0eccb9e3 is pushed/remote-SHA verified. Routed cleanup now checks actual reader termination,
-attempts all cleanup steps on failure and refuses route fallback/success when cleanup is uncertain.
-The already implemented support gate retains the marker, even after a later successful exchange.
-153 focused tests PASS/0 skips,16 new cases, real local TCP/RNS relay/recipient ACK and native Unix
-cleanup.19 provenance checks PASS; one unrelated existing announcement-pin failure is documented.
-Linux package import PASS with system GI/pinned dependencies; no GUI/device release acceptance.
-Explicit source-only delta preserves accepted client hashes. No RU/NL access, service/unit/deployment/
-version change. Local proof does not bind installed runtime; candidates remain unapproved/uninstalled.
-[Native proof, exact limits and rollback](releases/2026-11-24-control-ha-installed-recovery.md#mailbox-reader-cleanup--native-local-proof).
-Next selected work: remaining native helper/environment/stop-post and AWG/support completion/runtime
-bindings, collector/manual coverage, concrete independently approved joint activation/capture
-proposal and real coherent interval, then independent current approval/custody/final recovery.
+Featured76df5cf is pushed/remote-SHA verified. Scoped read-only NL checks bind loaded assignments/
+provider files to three selected process names on NL1 and one on NL2;11 other names per process
+are outside the comparison. Both units active/running at21:35:59–21:36:00UTC; no fleet-wide health
+claim. NL1's exact diagnostic stop-post passes seven isolated synthetic cases. Invalid input/
+storage can silently return zero: this is not a durable-report or capture permit. NL2 has no
+stop-post; its unexplained reload marker remains.162 tests PASS/0 skips,70 new observer cases.
+No RU access, service/helper dispatch, reload, deployment or version change; working-NL deployment
+remains outside scope. Candidates stay unapproved/uninstalled.
+[Native observations, limits and rollback](releases/2026-11-24-control-ha-installed-recovery.md#selected-environment-and-diagnostic-stop-post--no-activation).
+Next selected work: remaining full helper/runtime and AWG external settlement, collector/manual
+coverage and concrete independently approved joint activation/capture proposal; then real coherent
+interval and independent current-input approval/custody/final recovery. Replication PASS;
+the same three gates partial, not a new stage or calendar estimate.
 Keep strict NL1 inventory refusal and unexplained NL2 reload marker visible; no bypass/reload.
-Do not repeat reader cleanup, support source admission, cache stand/comparison, runtime/sudo/unit census,
+Do not repeat selected environment/hook checks, reader cleanup, support admission, cache comparison, runtime/sudo/unit census,
 source-chain/lock stand, SSH census or wrapper bridge as new acceptance work. Original four
 acceptance gates are fixed; prior1–2/2–4 day estimates are withdrawn, not a rolling deadline.
 Never delete transaction journals or chmod/reload working services merely to make checks pass.
