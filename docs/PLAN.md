@@ -11,6 +11,13 @@ remains selected; this publication task does not advance its acceptance gates.
 [Reconciliation record](releases/2026-11-24-source-reconciliation.md).
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+Next live action requires reconciling the owner-supplied host list with current
+NL1 185.10.158.212 / NL2 185.10.158.196. Listed186.246.45.246 is retired; do not probe it
+or silently substitute targets. Confirm scope, then check recovery capacity/isolation
+and effective all-writer/in-flight coverage without changing working services. No new
+stage, live capacity result, checkpoint approval or completed acceptance gate.
+[Decision boundary](releases/2026-11-24-control-ha-installed-recovery.md#next-live-action--host-scope-reconciliation).
+
 Current source/reportbcb005a1 is pushed/remote-SHA verified; actual cold execution from8acc6bd2
 passes12:31:38UTC.419 committed source files/28 offline wheels support native retained
 canonical, three-node, worker and mailbox checks without original source/venv/network/Docker.

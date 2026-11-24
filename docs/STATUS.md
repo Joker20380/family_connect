@@ -1,5 +1,14 @@
 # Текущее состояние / Current state
 
+**24 November13:50UTC — HA-02 next live action needs host-scope confirmation.**
+Current owner instructions name the retired NL186.246.45.246; collector and retained
+fleet evidence name NL1 185.10.158.212 / NL2 185.10.158.196 instead. Confirm these two
+targets for scoped HA-02 preflight/isolated recovery before substituting hosts. No new
+SSH, capacity result, transfer, service change or completed recovery gate. Do not contact
+the retired/excluded addresses or infer that current NL resources are unavailable.
+Replication remains PASS; the same three HA-02 blocks remain partial.
+[Evidence and continuation](releases/2026-11-24-control-ha-installed-recovery.md#next-live-action--host-scope-reconciliation).
+
 **24 November12:31:38UTC — actual cold recovery source/dependency readback PASS.**
 Authoritative source/reportbcb005a1 is pushed and remote-SHA verified on the metadata branch;
 execution source8acc6bd2 retains419 source files and28 hash-locked wheels. A fresh image venv

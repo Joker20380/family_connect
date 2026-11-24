@@ -6,6 +6,30 @@ divergence is reconciled/pushed at2ae5c512; older publication-blocker statements
 historical, not active instructions or a current blocker.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## Next live action — host scope reconciliation
+
+At24 November13:50UTC a source-only prerequisite review finds a target mismatch:
+owner-supplied `AGENTS.md` names RU185.251.89.19 and retired NL186.246.45.246, while
+the collector and retained fleet records name NL1 185.10.158.212 and NL2 185.10.158.196.
+Earlier NL1 health/NL2 admission records do not silently amend the current instructions.
+Request confirmation of those current NL targets for HA-02 preflight and isolated
+recovery without changing working services. Never contact the retired/excluded targets.
+
+No SSH, new host trust, capacity check, data/key transfer, service operation or installation
+has occurred. Availability/suitability is NOT_CHECKED, not failed. Do not infer a need
+to purchase another host. After scope confirmation, read-only capacity/tool/isolation
+and writer/queue checks determine whether a bounded recovery destination and coherent
+capture are possible; stop before disruption if coverage or rollback protection is missing.
+Host permission does not authorize a future checkpoint's content or production cutover.
+
+The [authoritative feature report](https://github.com/Joker20380/family_connect/blob/4e76ac580c90ff706418ca232d4bceaec2e8871b/docs/releases/2026-11-24-control-ha-recovery-kit.md#next-live-action--host-scope-reconciliation)
+is pushed and remote-SHA verified at4e76ac580c90ff706418ca232d4bceaec2e8871b. This documentation-only checkpoint
+does not change the accepted execution source8acc6bd2 or the existing242-test result.
+Three feature documents/610 local links and whitespace checks pass; external URLs were
+not HTTP-verified. The same three HA-02 acceptance blocks remain partial; replication PASS.
+No version/release/deployment change; rollback is documentation revert only, with all
+prior private custody preserved. No new lettered stage or HA-03 work is introduced.
+
 ## Actual cold recovery source and dependencies
 
 Implementation/report `bcb005a1ef4de4d75e7abb9cc4e800a7dee44ae7` is pushed and independently
