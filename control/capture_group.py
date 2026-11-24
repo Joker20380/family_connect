@@ -112,7 +112,7 @@ def command(channel, expected, deadline, operation=None):
     return value
 
 
-def serve(gate, channel, coordinator, expected_pins, *, drain_seconds=5, hold_seconds=2, renewal=None):
+def serve(gate, channel, coordinator, expected_pins, *, drain_seconds=5, hold_seconds=2, renewal=None, systemd=None):
     drain = duration(drain_seconds, 5)
     hold = duration(hold_seconds, 2)
     expected_pins = pins(expected_pins)
@@ -130,6 +130,10 @@ def serve(gate, channel, coordinator, expected_pins, *, drain_seconds=5, hold_se
         require(request['command'] == 'BEGIN', 'GROUP_BEGIN')
         operation = request['operation']
         with gate.drain(drain_seconds), ExitStack() as settlement:
+            lifecycle = None
+            if systemd is not None:
+                from .capture_systemd import SystemdState
+                lifecycle = settlement.enter_context(SystemdState(systemd).hold())
             if renewal is not None:
                 from .capture_renewal import RenewalState
                 retained = settlement.enter_context(RenewalState(renewal).hold())
@@ -146,6 +150,8 @@ def serve(gate, channel, coordinator, expected_pins, *, drain_seconds=5, hold_se
             with gate.opened():
                 if renewal is not None:
                     retained.verify()
+                if lifecycle is not None:
+                    lifecycle.verify()
                 acknowledged = time.monotonic_ns()
                 require(clock() == common['clock'] and acknowledged < expires, 'GROUP_EXPIRED')
                 send(channel, dict(status='HELD', acknowledged_ns=acknowledged, **common))

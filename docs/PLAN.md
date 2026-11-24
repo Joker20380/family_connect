@@ -3,18 +3,19 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-AWG owned-engine cleanup is fixed in source: network failure cannot skip remaining cleanup,
-termination/reap or interface deletion. Graceful-stop failure attempts kill/reap and propagates;
-signal setup failure is covered.17 new tests include real owned Python children and gate pending
-retention.169 focused PASS/1 skip, then the exact skipped PostgreSQL parity case PASS on owned
-PostgreSQL17.11; no unresolved skip in this selected set. Four pre-existing legacy packaging
-failures remain, with unchanged pins/guards. [Evidence and rollback](releases/2026-11-24-control-ha-awg-cleanup.md).
-Next selected work: installed AWG/systemd queued-job/cgroup completion and gate/runtime bindings,
-collector/manual coverage and concrete joint activation/capture proposal; actual coherent interval
-and independently approved current inputs/custody/final recovery follow. Emergency `--no-block`
-stop, paid-watch and working services are unchanged. Source cleanup is not installed admission or
-network-quiescence proof. Replication PASS; the same three HA-02 gates partial. No new stage/ETA,
-deployment or version change; do not repeat these owned-process cleanup tests as a new gate.
+Guardian schema3 now rejects queued systemd jobs/control processes, changed running lifecycle/
+recursive process tree and NeedDaemonReload before DRAINED/HELD. Closed source includes the veto;
+schemas1/2 remain compatible.223 focused PASS/0 skips,43 new cases, including actual local
+user-systemd child/stop-post/ACK tests. [Evidence and rollback](releases/2026-11-24-control-ha-systemd-lifecycle.md).
+Read-only22:06UTC: AWG/TCP/paid-watch active/running on both NL hosts; NL1 stable observations,
+NL2 refusal on all three NeedDaemonReload=yes units. Installed gateway differs from candidate.
+Next selected work: diagnose NL2 loaded/disk mismatch without reload; finish actual writer/
+lifecycle/collector/manual bindings and explicit joint activation proposal, then coherent interval
+and independent current-input approval/custody/final recovery. Do not repeat queued-stop or
+owned-child cleanup qualification as new gates. Lifecycle observations are a veto, not a systemd
+admission lock or proof of all-writer quiescence. Emergency `--no-block` stop, paid-watch and
+working services are unchanged. Replication PASS; three fixed gates partial, no new stage/ETA.
+No deployment/version change; legacy packaging/announcement limits remain separately documented.
 
 At the preceding service-environment checkpoint:
 Scoped NL service-environment binding is observed, not activated:21:35:59–21:36:00UTC loaded

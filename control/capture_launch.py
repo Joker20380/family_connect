@@ -19,8 +19,10 @@ import zipfile
 from .capture_gate import Gate, GateError, require
 from . import capture_group as group
 from . import capture_renewal as renewal
+from . import capture_systemd as systemd
 
-SOURCES = ('control/capture_gate.py', 'control/capture_group.py', 'control/capture_launch.py', 'control/capture_renewal.py')
+SOURCES = ('control/capture_gate.py', 'control/capture_group.py', 'control/capture_launch.py',
+           'control/capture_renewal.py', 'control/capture_systemd.py')
 MAIN = b'from control.capture_launch import guardian_main\nraise SystemExit(guardian_main())\n'
 SEALS = fcntl.F_SEAL_WRITE | fcntl.F_SEAL_GROW | fcntl.F_SEAL_SHRINK | fcntl.F_SEAL_SEAL
 NAMESPACES = ('mnt', 'pid', 'user', 'time')
@@ -117,7 +119,7 @@ def validate(binding):
     require(type(binding) is dict and set(binding) ==
             {'schema', 'source_sha256', 'runtime_sha256', 'namespaces', 'mappings', 'coordinator', 'guardians'},
             'LAUNCH_BINDING')
-    require(type(binding['schema']) is int and binding['schema'] in (1, 2), 'LAUNCH_SCHEMA')
+    require(type(binding['schema']) is int and binding['schema'] in (1, 2, 3), 'LAUNCH_SCHEMA')
     sha(binding['source_sha256'])
     sha(binding['runtime_sha256'])
     require(type(binding['namespaces']) is dict and set(binding['namespaces']) == set(NAMESPACES), 'LAUNCH_NAMESPACES')
@@ -131,11 +133,13 @@ def validate(binding):
             all(type(number) is int and 0 <= number < 2**32 - 1 for number in binding['coordinator']), 'LAUNCH_COORDINATOR')
     guardians = binding['guardians']
     require(type(guardians) is list and 2 <= len(guardians) <= 8, 'LAUNCH_GUARDIANS')
-    all_pins, states = [], []
+    all_pins, states, units = [], [], []
     for item in guardians:
-        fields = {'uid', 'gid', 'groups', 'gate', 'pins'} | ({'renewal'} if binding['schema'] == 2 else set())
+        fields = {'uid', 'gid', 'groups', 'gate', 'pins'} | ({'renewal'} if binding['schema'] >= 2 else set())
+        if binding['schema'] == 3:
+            fields.add('systemd')
         require(type(item) is dict and set(item) == fields, 'LAUNCH_GUARDIAN')
-        minimum = 0 if binding['schema'] == 2 and item['renewal'] is not None else 1
+        minimum = 0 if item.get('renewal') is not None or item.get('systemd') is not None else 1
         require(all(type(item[name]) is int and minimum <= item[name] < 2**32 - 1 for name in ('uid', 'gid')), 'LAUNCH_IDENTITY')
         if item['uid'] == 0 or item['gid'] == 0:
             require(item['uid'] == item['gid'] == 0 and item['groups'] == [] and binding['coordinator'] == [0, 0],
@@ -145,11 +149,17 @@ def validate(binding):
                 item['groups'] == sorted(set(item['groups'])), 'LAUNCH_GROUPS')
         absolute(item['gate'])
         all_pins.extend(tuple(pair) for pair in group.pins(item['pins']).values())
+        if item.get('systemd') is not None:
+            lifecycle = systemd.validate(item['systemd'])
+            require(lifecycle['scope'] != 'system' or item['uid'] == item['gid'] == 0,
+                    'LAUNCH_SYSTEMD_IDENTITY')
+            units.extend((lifecycle['scope'], item['uid'], name) for name in lifecycle['units'])
         if item.get('renewal') is not None:
             state = renewal.validate(item['renewal'])
             states.append(state['state'])
             all_pins.extend(tuple(pair) for pair in state['pins'].values())
     require(len(set(states)) == len(states), 'LAUNCH_RENEWAL_ALIAS')
+    require(len(set(units)) == len(units), 'LAUNCH_SYSTEMD_ALIAS')
     require(len({item['gate'] for item in guardians}) == len(guardians) and
             len(set(all_pins)) == len(all_pins), 'LAUNCH_GATE_ALIAS')
     return binding
@@ -271,7 +281,8 @@ def guardian_main():
         group.configure(channel)
         group.send(channel, dict(status='READY', binding_sha256=request['binding_sha256']))
         signal.setitimer(signal.ITIMER_REAL, 0)
-        group.serve(gate, channel, request['coordinator'], item['pins'], renewal=item.get('renewal'))
+        group.serve(gate, channel, request['coordinator'], item['pins'], renewal=item.get('renewal'),
+                    systemd=item.get('systemd'))
         return 0
     except (OSError, ValueError, TypeError, KeyError):
         return 1

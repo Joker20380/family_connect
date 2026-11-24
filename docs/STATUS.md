@@ -1,17 +1,18 @@
 # Текущее состояние / Current state
 
-**24 November — AWG owned-engine cleanup now attempts every stage; source only.**
-Network cleanup errors no longer skip child termination/reaping or interface deletion. Failed
-graceful stop attempts kill plus a bounded wait and still reports failure; signal-handler setup
-is now inside the cleanup scope. Three regressions reproduced before the fix;17 new cases pass,
-including real owned Python children and pending-marker retention after timeout/retry. Focused
-run169 PASS/1 PostgreSQL skip; that exact case separately PASS on owned PostgreSQL17.11 with
-cleanup verified. Four legacy packaging failures occur before the changed gateway is read;
-their relevant sources match based76df5cf, and no old input pins/guards were weakened.
-No RU/NL access, deployment or version change. Paid-watch and asynchronous emergency stop remain
-unchanged. Next: actual AWG/systemd job/cgroup settlement and gate/runtime bindings, collectors/
-manual coverage, approved joint interval and independent approval/custody/final recovery.
-Replication PASS; three HA-02 gates partial. [Implementation, test limits and rollback](releases/2026-11-24-control-ha-awg-cleanup.md).
+**24 November — queued systemd work now vetoes guardian ACK; no activation.**
+Opt-in schema3 binds the approved running unit/invocation/process-tree snapshot; checks before
+DRAINED and HELD refuse queued jobs, control processes, drift and NeedDaemonReload. This is a
+veto, not a lock on systemd or uncooperative writers.223 focused tests PASS/0 skips,43 new cases:
+real user-systemd proves successful asynchronous stop still leaves a child, and MainPID=0 still
+leaves an ExecStopPost/control process/job. Both refuse completion; unchanged active service passes.
+Read-only22:06:44–22:06:45UTC: AWG/TCP/paid-watch active/running on both NL hosts. NL1's six
+snapshots match pairwise; NL2's three units refuse because NeedDaemonReload=yes. No reload or
+service change; these are point observations, not VPN/data-plane or installed gate acceptance.
+Installed gateway source on both hosts differs from the candidate; earlier cleanup is not deployed.
+Next: explain NL2 loaded/disk mismatch read-only; finish writer/lifecycle/collector/manual bindings
+and the explicit activation proposal, then approved joint interval and independent custody/recovery.
+Replication PASS; the same three HA-02 gates partial. [Evidence, limits and rollback](releases/2026-11-24-control-ha-systemd-lifecycle.md).
 
 **24 November — NL selected service environments match; stop-post qualified only in isolation.**
 Read-only21:35:59–21:36:00UTC checks bind loaded assignments/provider files to the same running
