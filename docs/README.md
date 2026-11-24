@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 24 November: canonical/OWNER/legacy joint integration prepared; separate namespaces, native isolated panel ingest and fixed three-block acceptance remainder](releases/2026-11-24-control-ha-owner-joint.md).
+
 [CONTROL-HA · 24 November: actual canonical/three-receiver integration PASS;207 decisions/82 peers, post-revocation recovery and stale refusal,109 real-PG tests, no activation](releases/2026-11-24-control-ha-joint-nodes.md).
 
 [CONTROL-HA · 24 November: actual610-row canonical import and49-table PG crash/current/stale recovery PASS; 249 tests, no fleet fence or activation](releases/2026-11-24-control-ha-native-canonical.md).

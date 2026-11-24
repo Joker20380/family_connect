@@ -1,5 +1,12 @@
 # Текущее состояние / Current state
 
+**24 November — canonical/OWNER/legacy joint qualification prepared.**
+Read-only census confirms69 canonical,50 synthetic and4 legacy key identities are disjoint;
+OWNER aliases/HMAC exactly bind to canonical custody. The prepared native OWNER importer
+probe uses a private network-none PG restore and fresh lab credentials, never the running
+panel or dispatchers. Actual joint execution is pending; source/image custody, coherent
+all-writer capture and independent trust remain. [Scope and fixed remainder](releases/2026-11-24-control-ha-owner-joint.md).
+
 **24 November09:57:21UTC — actual canonical/three-receiver integration PASS.**
 All207 original-timestamp PostgreSQL decisions match RU/NL1/NL2 caches and82 allocator
 bindings, including the NL2 sequence gap. Fresh restore repeats parity; a laboratory-only

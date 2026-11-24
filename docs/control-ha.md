@@ -239,6 +239,11 @@ gateway leaf/private keys и независимое off-host custody всё ещ
 
 ### Когда заканчивается этап 2
 
+Точное текущее толкование: из четырёх приёмочных блоков репликация закрыта, три ещё
+частично открыты. Это не25% готовности и не оценка оставшихся часов. Остаток не растёт
+новыми буквенными этапами: current inputs/trust, coherent capture и complete recovery.
+[Совместная OWNER/legacy проверка и фиксированный остаток](releases/2026-11-24-control-ha-owner-joint.md#fixed-remainder-of-stage-2).
+
 Совместная проверка canonical PostgreSQL → три receiver/allocator PASS09:57:21UTC:
 207 совпавших решений/82 peer bindings, сохранённый sequence gap, лабораторный revoke
 после нового ACK переживает restore; old allow/stale dump отвергнуты.109 real-PG tests,
