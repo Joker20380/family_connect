@@ -1,5 +1,15 @@
 # Текущее состояние / Current state
 
+**24 November04:45UTC — actual capture and off-RU restore PASS (bounded scope).**
+Four RU application SQLite stores are captured under simultaneous zero-wait write locks;
+the barrier lasts41.79ms and releases automatically. OWNER restores the encrypted images
+in a new offline directory:34 tables/607 rows, exact bytes and closed handoff1/2/1/1/1.
+76 focused tests PASS /0 skips. Observed RU/NL1/NL2 service states/PIDs/invocations/restart
+counters stay unchanged; RU management HTTP listener responds before/after. No service stop,
+production restore/cutover or version change. External files/keys/history, NL receiver/mailbox,
+legacy worker and OWNER-panel recovery are **not** covered; HA-02 remains IN_PROGRESS.
+[Executed capture, custody, rollback and remaining gates](releases/2026-11-24-control-ha-live-capture.md).
+
 **24 November — limited live-capture scope explicitly approved.**
 Owner confirmation “подтверждаю давай делай” answers the preceding request for a bounded
 live snapshot with temporary management-write blocking, checked interruption/rollback

@@ -75,9 +75,53 @@ locked before the first image, each busy-store abort, a killed/stalled capture r
 locks, uncheckpointed WAL commits, unchanged source DB/WAL bytes, unsafe/hot-journal refusal,
 no output before success and alarm ownership. No production capture result is inferred.
 
-## Current result
+## Executed capture and off-node four-store restore
 
-Permission recorded; bounded four-store capture implementation qualified locally. No live capture, barrier success,
-actual independent restore or HA-02 completion is claimed by this checkpoint. Product
-versions/public downloads/catalogs remain unchanged. Source-only rollback is to stop this
-preflight; there is no server change to undo at this point.
+At **24 November04:45:16UTC**, the pinned SSH capture executes source
+`084530ce30862a5353c99ada36e3b22704dcddec`. Acquisition/serialization/rollback/close take
+**0.041791344 seconds**, below the one-second abort deadline. The common fully locked
+interval containing all four image reads is approximately7.816ms. All transactions are
+rolled back and connections closed before transmission. Four images total598016 bytes
+and retain34 installed tables. No timer, service, forced command, profile or issuer changes.
+
+The604197-byte encrypted capsule is retained on OWNER, outside Git, not on RU.
+Its SHA256 is `b2e867323b73c53a6450f0ebe11a7b6955b82e4de103819ba90be891dc2527f2`;
+the archive SHA256 is `d1b4f0274ed6dc0896abd9bdda5776be4cf69028c8f54a7044152b4b5d1454db`.
+AES256-GCM key and expected checkpoint are in a separate owner-only local custody
+directory; the key is never logged or committed. This is off-RU retention, **not yet an
+independent external custodian or a signed whole-fleet forward checkpoint**.
+
+`scripts/control_ha_live_sqlite_restore.py` checks the external checkpoint, ciphertext
+hash, AEAD tag, archive/image hashes, exact installed schema/PRAGMAs, integrity/FKs and
+closed handoff history/security floors before creating a new0700 offline target. It refuses
+existing targets, unsafe archives, wrong keys, stale pins, unknown schemas and public
+output parents; it never connects to production or executes captured code. Actual
+fresh-process restoration on OWNER passes: **four stores /34 tables /607 rows**,
+exact byte readback and retained handoff counts1/2/1/1/1. All private values stay private.
+This restores SQLite, not an accepted PG import or application restart.76 focused
+capture/restore/census tests PASS /0 skips.
+
+Before/after RU/NL1/NL2 AWG/TCP/paid-watch observations, and the RU management unit, have
+identical states/PIDs/invocations/restart counters. RU loopback HEAD on the actual management
+port returns501 before/after: listener reachability, not authenticated product health or
+a VPN traffic test. Pre-existing RU failed/inactive services are **not** restarted or
+disguised as healthy. NL service state stays unchanged; no data-plane stop is performed.
+
+An earlier read-only probe fails because it shadows an HTTP module name. It aborts
+**before capture or any DB lock**; its failure receipt is retained. The corrected probe
+precedes the single successful live capture. All capsule/key/evidence/restored files
+remain private local state outside Git/CI.
+
+Rollback is already complete: transactions closed, locks released; no live DB restore,
+version rollback or service restart is necessary. Source tools may be left unused.
+Do not copy offline restored files over production. Installed/public versions, downloads,
+catalogs and backend choices remain unchanged.
+
+## Remaining HA-02 gates
+
+The actual four-store capture/restore slice passes, but HA-02 is **IN_PROGRESS**. It does
+not cover external files/issuer keys/renewal histories, NL receiver/mailbox state, legacy
+peer-worker state or the OWNER panel. Their coherent writer/dispatcher boundary and complete
+independently trusted recovery remain required. New acknowledged writes/current restore/
+stale-copy refusal remain qualified in the laboratory, not across the complete actual fleet.
+The previously accepted strict PG/Patroni replication gate remains PASS. No HA-03..05 starts.

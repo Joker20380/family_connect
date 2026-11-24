@@ -3,15 +3,19 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+Actual04:45UTC four-store capture and new-directory off-RU restore PASS:41.79ms bounded
+barrier,34 tables/607 rows preserved, no observed service state change;76 tests PASS /0 skips.
+This closes the raw four-store slice, not external-file/fleet/OWNER writer coverage or full
+trusted recovery. Continue those existing gates, not HA-03..05.
 Owner now explicitly confirms the bounded live-capture request (“подтверждаю давай делай”):
 temporary management-write blocking is allowed after a concrete preflight/abort/rollback
 plan; no production PostgreSQL cutover. This supersedes the permission-pending statements
 below, not the three open technical gates. Proceed with current installed writer scope,
 safe capture and independent restore; do not request the same permission again merely
 because the runbook contains a stop step. [Current execution record](releases/2026-11-24-control-ha-live-capture.md).
-First bounded operation: one-second zero-wait simultaneous RU four-store SQLite lock/capture,
-with automatic lock release and no paid-watch/VPN stop. Installed watchdog coupling rules
-out a generic stop-all barrier. Then qualify actual rows off-node while completing external
+First bounded operation completed: one-second zero-wait simultaneous RU four-store SQLite
+lock/capture with automatic release and no paid-watch/VPN stop; actual images restored
+off-node. Installed watchdog coupling rules out a generic stop-all barrier. Continue external
 file/forced-command/OWNER writer coverage; four-store capture alone does not close that gate.
 Latest owner scope24 November: “дальше. работай до завершения 2 этапа”. All four HA-02
 acceptance blocks are now selected; do not stop at another journal-only slice or start
