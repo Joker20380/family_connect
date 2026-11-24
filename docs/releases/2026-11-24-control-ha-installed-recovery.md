@@ -4,6 +4,32 @@ Authoritative implementation remains `/home/joker/.codex/worktrees/dad9/family_c
 on `feature/device-technical-metadata-20261115`, not this divergent old main.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## Actual native canonical PG recovery
+
+Implementation `475e260bf6d1fde7ef2a9f14e9d960a53e7cecad` is pushed and remote-SHA verified;
+execution source `723e90eff7ab9bec27e08caed58cb23e7f55049a` was published before the lab run.
+[Pinned actual canonical report](https://github.com/Joker20380/family_connect/blob/475e260bf6d1fde7ef2a9f14e9d960a53e7cecad/docs/releases/2026-11-24-control-ha-native-canonical.md)
+records the exact scope, input/dump/receipt hashes, test counts and acceptance boundary.
+
+- At09:37:05UTC, the retained07:22 canonical point passes native-format checks and PostgreSQL17.11
+  import/recovery:610 source rows,35 import data tables including one new empty outbox,
+  49 PG tables/624 rows including import/schema markers.16 external files bind to the import.
+- Native aliases retain66 mapped plus3 explicit new devices and4 mapped event identities.
+  PEM issuer, CRL/certificates, v2 admission,20 referral links/63 claims, sender and signed
+  routing validate; no alias, key, grant or handoff history is regenerated. Legacy-v1 remains strict.
+- An uncommitted revocation is rolled back across owned-lab PG kill/restart. Exact fresh restore
+  passes. A new LABORATORY device ACK survives later restore; stale dump, old import after ACK
+  and consumed-proof replay are refused. One canonical paid subscription denies expired access.
+- 249 focused real-PG tests pass,0 failures/errors/skips. All owned lab containers/volumes removed;
+  existing OWNER containers unchanged, no SSH/server action or production data write.
+
+Installed/public/invitation versions are unchanged. The private lab dump is not a jointly
+fenced production rollback image. Original authenticated encrypted capsules/key checkpoints
+stay unchanged; rollback needs no production action. HA-02 remains IN_PROGRESS for joint
+receiver/worker/OWNER integration, coherent all-writer/dispatcher capture, source/image custody
+and independent forward trust. No HA-03..05 or cutover selected. Old-main navigation remains
+separate from the published implementation; never force-push over its divergent history.
+
 ## Actual OWNER runtime recovery
 
 Implementation `699ac9b179754995687cb4dbd68b816a09785520` is pushed and remote-SHA verified;

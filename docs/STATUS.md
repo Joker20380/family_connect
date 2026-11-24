@@ -1,5 +1,15 @@
 # Текущее состояние / Current state
 
+**24 November09:37UTC — actual canonical PostgreSQL recovery PASS.**
+Source475e260bf6d1fde7ef2a9f14e9d960a53e7cecad is pushed/remote-SHA verified. The retained
+610-row snapshot imports into49 PG tables; crash/fresh restore and recovery after a new
+laboratory enrollment ACK pass. Stale dump, old import and consumed-proof replay are refused.
+Native alias/admission/PEM/referral/sender/routing integration preserves66 mapped/3 new device
+identities without changing old adapter strictness or handoff history.249 real-PG tests PASS,
+0 skips. No production writes, version/deployment change or service restart; lab resources removed.
+HA-02 remains IN_PROGRESS for joint component integration, coherent all-writer/dispatcher
+capture, complete source/image custody and independent trust. [Evidence/rollback](releases/2026-11-24-control-ha-installed-recovery.md#actual-native-canonical-pg-recovery).
+
 **24 November09:17UTC — OWNER runtime/synthetic recovery PASS.**
 Authoritative source699ac9b179754995687cb4dbd68b816a09785520 is pushed/remote-SHA verified.
 The24.374ms bounded barrier retains20 exact runtime files and9 tables/223 rows. Fresh-process

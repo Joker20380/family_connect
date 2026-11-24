@@ -3,7 +3,13 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Current source699ac9b1 is pushed/remote-SHA verified. OWNER runtime/synthetic capture and
+Current source475e260b is pushed/remote-SHA verified. Actual610-row native canonical import
+and49-table PG crash/fresh/new-ACK/stale recovery pass;249 focused real-PG tests without skips.
+The66 mapped/3 new alias shape is supported without weakening the old adapter or regenerating
+history. Next inside HA-02: joint receiver/worker/OWNER integration, coherent canonical/
+all-writer/dispatcher capture, source/image custody and independent forward trust. No HA-03..05.
+[Current evidence](releases/2026-11-24-control-ha-installed-recovery.md#actual-native-canonical-pg-recovery).
+Earlier source699ac9b1 is pushed/remote-SHA verified. OWNER runtime/synthetic capture and
 native readback now PASS:20 files,9 tables/223 rows,24.374ms barrier,140 alias resolutions,
 3 paid expiry denials;76 focused tests PASS. Existing3 containers unchanged, no dispatch,
 default startup/migration, original volume mount or release/version change. Next inside
