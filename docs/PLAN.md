@@ -3,6 +3,21 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+Support-worker opt-in admission is implemented in source: requests/initialization, bindings,
+enqueue/outbox expiry, notifications, periodic scheduling and background exchange through close.
+Caught failure/death retains uncertainty; later success cannot erase pending. Closed package
+imports include the shared gate. No installed worker/unit/runtime activation or RU/NL access.
+123 focused tests PASS/0 skips, including20 new worker checks;17 package versions match locks.
+[Worker integration, fixed completion map and rollback](releases/2026-11-24-control-ha-support-admission.md).
+Next selected work: actual helper/environment/stop-post and AWG/mailbox/support native completion
+and runtime bindings, collector/manual coverage, then the concrete independently approved joint
+activation/capture proposal, actual coherent interval and independent approval/custody/recovery.
+Do not repeat support source admission, cache checks or earlier censuses as new acceptance work.
+The four original gates remain fixed: replication PASS; inputs/trust, coherent capture and final
+independent recovery partial. Prior1–2/2–4 day estimates are withdrawn, not a rolling deadline.
+Current NL scope excludes working-service deployment; source push is not activation permission.
+
+At the preceding cache/unit-qualification checkpoint:
 Targeted cache and selected unit-setting qualification is complete, not full runtime acceptance.
 Four NL1 caches match retained readable source without execution; actual pinned Python3.14.4
 UID979/root synthetic stand20:32:29UTC proves source fallback versus cache reads, with cleanup.
@@ -11,7 +26,7 @@ NL2's14 selected loaded/disk settings match; no applicable on-disk drop-ins foun
 remains unexplained, not permission to reload; full Unit/environment/lifecycle equivalence is open.
 190 tests PASS/0 skips plus native stand PASS. No working-service/deployment/version changes.
 [Targeted findings and exact limits](releases/2026-11-24-control-ha-runtime-qualification.md).
-Next selected work: full helper/runtime/environment/stop-post and AWG/mailbox/support external
+At that checkpoint, remaining work was full helper/runtime/environment/stop-post and AWG/mailbox/support external
 settlement; bounded manual-write coordination, independent source/runtime/gate approval, actual
 drain/overlap/coherent capture and current independent approval/custody/final recovery. Keep the
 strict inventory and unexplained reload marker visible in any activation proposal. Do not repeat

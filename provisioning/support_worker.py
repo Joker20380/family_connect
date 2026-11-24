@@ -18,6 +18,8 @@ from messenger.mailbox import MailboxError
 from messenger.store import Store
 from provisioning.subscription_notifications import Notifications
 from provisioning.chat_transport import SystemMailbox, initialize
+from provisioning.support_capture import admitted
+from control.capture_gate import Busy, Gate, GateError, external_operation
 from control.friends.pseudonyms import handle
 
 
@@ -44,6 +46,12 @@ class SupportChat(Chat):
 
 
 class SupportStore(Store):
+    def __init__(self, *args, capture_gate=None, **kwargs):
+        self.capture_gate = Gate() if capture_gate is None else capture_gate
+        with self.capture_gate.operation(), external_operation():
+            super().__init__(*args, **kwargs)
+
+    @admitted
     def pending_outbox(self):
         pending = super().pending_outbox()
         allowed = self.authority.contacts()
@@ -52,9 +60,18 @@ class SupportStore(Store):
                     if bytes.fromhex(self._get('message:' + ident)['peer']) in allowed
                     and self.authority.notifications.allow(ident)]
 
+    @admitted
+    def close(self):
+        super().close()
+
 
 class SupportOwner:
     def __init__(self, store, sender_public):
+        self.capture_gate = store.capture_gate
+        self._initialize(store, sender_public)
+
+    @admitted
+    def _initialize(self, store, sender_public):
         self.store = store
         self.chat = SupportChat(store, create_identity=False, durable_delivery=True, platform='linux')
         if self.chat.public.hex() != sender_public:
@@ -63,6 +80,7 @@ class SupportOwner:
         store.authority = self
         self.notifications = Notifications(self)
 
+    @admitted
     def update(self, snapshot):
         fields = {'schema', 'sequence', 'expires_at', 'sender_public', 'node', 'devices'}
         if (type(snapshot) is not dict or set(snapshot) != fields or type(snapshot['schema']) is not int or snapshot['schema'] != 1
@@ -151,6 +169,7 @@ class SupportOwner:
                     result[bytes.fromhex(binding['address'])] = bytes.fromhex(binding['public'])
             return result
 
+    @admitted
     def send(self, pseudonym, address, request_id, actor, text):
         if (type(request_id) is not str or re.fullmatch('[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}', request_id) is None
                 or type(actor) is not str or re.fullmatch('[1-9][0-9]{0,18}', actor) is None
@@ -159,6 +178,7 @@ class SupportOwner:
         with self.store._lock, self.store._db:
             return self.enqueue(pseudonym, address, request_id, actor, text)
 
+    @admitted
     def enqueue(self, pseudonym, address, request_id, source, text, *, expires_at=None):
         binding = self.binding(pseudonym)
         request = dict(pseudonym=binding['pseudonym'], address=address, text=text)
@@ -208,6 +228,7 @@ class SupportOwner:
                     result.append(dict(pseudonym=pseudonym, incoming=count))
             return result
 
+    @admitted
     def invoke(self, request):
         if type(request) is not dict or set(request) != {'operation', 'arguments'} or type(request['arguments']) is not dict:
             raise SupportError('invalid_request')
@@ -225,8 +246,10 @@ class SupportOwner:
 class SupportMailbox:
     def __init__(self, owner, snapshot_path, runtime, *, snapshot_uid=None):
         self.owner, self.snapshot_path, self.runtime = owner, snapshot_path, runtime
+        self.capture_gate = owner.capture_gate
         self.snapshot_uid = os.getuid() if snapshot_uid is None else snapshot_uid
 
+    @admitted
     def refresh(self):
         descriptor = os.open(self.snapshot_path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
         with os.fdopen(descriptor, 'rb') as stream:
@@ -239,6 +262,15 @@ class SupportMailbox:
         return snapshot
 
     def exchange(self, *, timeout=12, cancel=None):
+        try:
+            return self.admitted_exchange(timeout=timeout, cancel=cancel)
+        except Busy:
+            raise MailboxError('busy') from None
+        except GateError:
+            raise MailboxError('unavailable') from None
+
+    @admitted
+    def admitted_exchange(self, *, timeout, cancel):
         try:
             snapshot = self.refresh()
             mailbox = SystemMailbox(self.owner.chat, snapshot['node'], self.runtime)
@@ -270,15 +302,22 @@ class SupportHandler(socketserver.StreamRequestHandler):
             if len(raw) > 16384 or not raw.endswith(b'\n'):
                 raise SupportError('invalid_request')
             request = json.loads(raw, object_pairs_hook=unique)
-            try:
-                self.server.mailbox.refresh()
-            except (OSError, ValueError, KeyError):
-                if request.get('operation') == 'send':
-                    raise SupportError('binding_unavailable') from None
-            result = self.server.owner.invoke(request)
-            if request['operation'] == 'send':
-                self.server.delivery.request_sync()
+            with self.server.owner.capture_gate.operation(), external_operation():
+                try:
+                    self.server.mailbox.refresh()
+                except GateError:
+                    raise
+                except (OSError, ValueError, KeyError):
+                    if request.get('operation') == 'send':
+                        raise SupportError('binding_unavailable') from None
+                result = self.server.owner.invoke(request)
+                if request['operation'] == 'send':
+                    self.server.delivery.request_sync()
             response = dict(ok=True, result=result)
+        except Busy:
+            response = dict(ok=False, error='capture_busy')
+        except GateError:
+            response = dict(ok=False, error='support_unavailable')
         except SupportError as failure:
             response = dict(ok=False, error=str(failure))
         except Exception:
@@ -289,20 +328,34 @@ class SupportHandler(socketserver.StreamRequestHandler):
             pass
 
 
-def main():
+def periodic(owner, delivery, subscription_feed, *, uid):
+    try:
+        with owner.capture_gate.operation(), external_operation():
+            if subscription_feed:
+                owner.notifications.refresh(subscription_feed, uid=uid)
+            delivery.request_sync()
+        return True
+    except GateError:
+        return False
+
+
+def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ('store', 'key', 'sender-public', 'snapshot', 'runtime', 'socket'):
         parser.add_argument('--' + name, required=True)
     parser.add_argument('--snapshot-uid', type=int, default=0)
     parser.add_argument('--subscription-feed', type=Path)
-    args = parser.parse_args()
-    key_path = Path(args.key)
-    info = key_path.lstat()
-    if not stat.S_ISREG(info.st_mode) or info.st_mode & 0o077 or info.st_size != 32:
-        parser.error('Private external 32-byte store key required')
-    store = SupportStore(args.store, key_path.read_bytes(), create=False)
-    owner = SupportOwner(store, args.sender_public)
-    mailbox = SupportMailbox(owner, Path(args.snapshot), initialize(args.runtime), snapshot_uid=args.snapshot_uid)
+    parser.add_argument('--capture-gate', type=Path)
+    args = parser.parse_args(argv)
+    gate = Gate(args.capture_gate)
+    with gate.operation(), external_operation():
+        key_path = Path(args.key)
+        info = key_path.lstat()
+        if not stat.S_ISREG(info.st_mode) or info.st_mode & 0o077 or info.st_size != 32:
+            parser.error('Private external 32-byte store key required')
+        store = SupportStore(args.store, key_path.read_bytes(), create=False, capture_gate=gate)
+        owner = SupportOwner(store, args.sender_public)
+        mailbox = SupportMailbox(owner, Path(args.snapshot), initialize(args.runtime), snapshot_uid=args.snapshot_uid)
     delivery = DeliveryController(mailbox, timeout=30)
     stopped = threading.Event()
     signal.signal(signal.SIGTERM, lambda *_: stopped.set())
@@ -315,9 +368,7 @@ def main():
             while not stopped.is_set():
                 server.handle_request()
                 if time.monotonic() >= next_sync:
-                    if args.subscription_feed:
-                        owner.notifications.refresh(args.subscription_feed, uid=args.snapshot_uid)
-                    delivery.request_sync()
+                    periodic(owner, delivery, args.subscription_feed, uid=args.snapshot_uid)
                     next_sync = time.monotonic() + 60
     finally:
         if delivery.close(timeout=31):

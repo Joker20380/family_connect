@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 24 November: opt-in support-worker admission for IPC, notification and background exchange;123 tests, durable failure/death refusal, fixed completion map, no deployment](releases/2026-11-24-control-ha-support-admission.md).
+
 [CONTROL-HA · 24 November: four NL1 caches/source and actual permission stand PASS,14 NL2 loaded/disk settings match;190 tests, explicit remaining limits, no deployment](releases/2026-11-24-control-ha-runtime-qualification.md).
 
 [CONTROL-HA · 24 November: actual NL Python/sudo/systemd bindings, explicit cache/unit qualification limits,135 tests; both scoped services active, no deployment](releases/2026-11-24-control-ha-profile-runtime.md).

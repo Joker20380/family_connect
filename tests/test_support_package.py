@@ -43,6 +43,8 @@ def test_closed_support_kit_imports_outside_checkout_and_is_reproducible(tmp_pat
     hashes = build(output)
     assert hashes['app/provisioning/support_worker.py'] == hashlib.sha256(
         (ROOT / 'provisioning/support_worker.py').read_bytes()).hexdigest()
+    for name in ('provisioning/support_capture.py', 'control/capture_gate.py'):
+        assert hashes['app/' + name] == hashlib.sha256((ROOT / name).read_bytes()).hexdigest()
     assert 'registry/http/friends-http.pyz' in hashes
     assert not any(name.endswith(('.key', '.db', '.env')) or 'state' in Path(name).parts for name in hashes)
     environment = dict(os.environ, PYTHONPATH=str(output / 'app'), PYTHONDONTWRITEBYTECODE='1')
@@ -50,6 +52,8 @@ def test_closed_support_kit_imports_outside_checkout_and_is_reproducible(tmp_pat
         result = subprocess.run([sys.executable, '-m', module, '--help'], cwd=tmp_path,
                                 env=environment, capture_output=True, timeout=15)
         assert result.returncode == 0, result.stderr.decode()
+        if module == 'provisioning.support_worker':
+            assert b'--capture-gate' in result.stdout
     first, second = tmp_path / 'first.tar.gz', tmp_path / 'second.tar.gz'
     archive(output, first)
     archive(output, second)

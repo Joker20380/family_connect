@@ -1,5 +1,19 @@
 # Текущее состояние / Current state
 
+**24 November — support worker now has opt-in source admission; no deployment.**
+Panel IPC completion was not asynchronous worker completion. Worker source now gates store/
+owner initialization, requests/bindings/enqueue, notifications/expiry, periodic scheduling and
+each background exchange through transport close. Caught failures/death retain pending; retry
+cannot erase uncertainty. Missing/changed gates do not fall back; existing default is unchanged.
+Closed commissioning kit includes the helper/shared gate. Native SQLite/Unix IPC/child-death
+tests are synthetic, not installed transport/runtime acceptance.123 tests PASS/0 skips;
+17 package versions match locks. No RU/NL access or live changes.
+Next: native helper/environment/stop-post and AWG/mailbox/support completion/runtime bindings,
+collector/manual coverage and a concrete approved joint activation/capture proposal, then current
+independent approval/custody/final recovery. Replication PASS; three HA-02 gates partial.
+The report fixes the existing four-gate completion map and withdraws unsupported day estimates.
+[Implementation, completion map and rollback](releases/2026-11-24-control-ha-support-admission.md).
+
 **24 November — cache-content/permission and selected unit-setting checks complete; no activation.**
 NL1's four retained caches match readable sources without execution. Actual pinned Python3.14.4
 synthetic stand20:32:29UTC proves UID979 source fallback with a root-only cache; root reads that

@@ -12,7 +12,7 @@ from scripts.package_friends_http import build as build_http
 ROOT = Path(__file__).resolve().parents[1]
 MESSENGER = ('__init__', 'chat', 'codec', 'delivery', 'mailbox', 'notices', 'routed',
              'store', 'subscription_view', 'support')
-PROVISIONING = ('__init__', 'chat_transport', 'chat_bridge_protocol', 'support_worker', 'support_bindings', 'support_identity',
+PROVISIONING = ('__init__', 'chat_transport', 'chat_bridge_protocol', 'support_worker', 'support_capture', 'support_bindings', 'support_identity',
                 'subscription_notifications', 'subscription_collector')
 UNITS = ('family-connect-support.service', 'family-connect-support-bindings.service',
          'family-connect-support-bindings.timer', 'family-connect-subscription-notifications.service',
@@ -23,6 +23,7 @@ def build(output, source=ROOT):
     inputs = {'app/messenger/' + name + '.py': 'messenger/' + name + '.py' for name in MESSENGER}
     inputs.update({'app/provisioning/' + name + '.py': 'provisioning/' + name + '.py' for name in PROVISIONING})
     inputs['app/control/friends/pseudonyms.py'] = 'control/friends/pseudonyms.py'
+    inputs['app/control/capture_gate.py'] = 'control/capture_gate.py'
     inputs['registry/pseudonyms.py'] = 'control/friends/pseudonyms.py'
     inputs.update({'units/' + name: 'deploy/support-chat/' + name for name in UNITS})
     inputs.update({'provisioning.lock': 'provisioning/requirements.lock', 'messenger.lock': 'messenger/requirements.lock',

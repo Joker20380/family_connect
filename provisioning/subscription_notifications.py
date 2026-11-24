@@ -6,6 +6,8 @@ import stat
 import time
 import uuid
 
+from provisioning.support_capture import admitted
+
 
 def date(value):
     return datetime.fromtimestamp(value, timezone.utc).strftime('%d.%m.%Y %H:%M:%S UTC')
@@ -38,6 +40,7 @@ def render(event):
 class Notifications:
     def __init__(self, owner):
         self.owner, self.store = owner, owner.store
+        self.capture_gate = owner.capture_gate
         self.current = None
         self.error = 'source_unavailable'
 
@@ -72,6 +75,7 @@ class Notifications:
             created_at=observed, expires_at=observed + 7 * 86400, expected=expected, message_id=None,
             status='baseline_excluded' if excluded else 'saved', reason=None, attempt=0, retry_at=0))
 
+    @admitted
     def ingest(self, feed, *, now=None):
         now = time.time() if now is None else now
         if (feed.get('schema') != 1 or not now < feed['expires_at'] <= now + 120
@@ -156,6 +160,7 @@ class Notifications:
             return 'identity_changed'
         return None
 
+    @admitted
     def dispatch(self, *, now=None):
         now = time.time() if now is None else now
         from messenger import codec
@@ -213,6 +218,7 @@ class Notifications:
                            delivery_status=self.store._get('message:' + job['message_id'])['status'] if job['message_id'] else None)
                       for job in self.jobs() if job['pseudonym'] == pseudonym])
 
+    @admitted
     def refresh(self, path, *, uid=0):
         try:
             descriptor = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
