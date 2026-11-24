@@ -3,22 +3,23 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Selected next action: execute the prepared closed20-file OWNER runtime/synthetic capture,
-then authenticated fresh-process restore and native isolated-image readback. Retain exact
-credentials privately; never start default Compose/publisher or touch original volumes in
-the probe. Abort on drift/busy/deadline; no live restore. The PG pair, native composite,
-canonical/dispatcher coherence and independent trust remain required afterwards.
-[OWNER capture plan](releases/2026-11-24-control-ha-live-capture.md#owner-runtime-custody-plan).
+OWNER runtime/synthetic custody now passes09:17:14UTC:20 files,9 tables/223 rows,24.374ms
+barrier; fresh-process exact restore and pinned native-image table/paid/alias/expiry checks.
+No network/dispatch or existing-container restart; do not repeat this as pending custody.
+Current next action within selected HA-02: native composite integration of actual installed
+formats. Coherent PG/synthetic/canonical/all-writer/dispatcher capture and independently
+approved forward trust remain gates; no cutover or HA-03..05 selected.
+[OWNER actual evidence](releases/2026-11-24-control-ha-live-capture.md#actual-owner-runtime-readback--091714utc).
 Legacy-worker DB/queue/persisted-intent recovery now passes08:43:22UTC:19 files,13 tables/
 58 rows,41.191ms barrier, native duplicate/restart/retry/expiry checks without dispatch.
-Do not repeat this completed slice. Remaining critical path: OWNER runtime/configuration,
+Do not repeat this completed slice. Remaining critical path after OWNER runtime completion:
 native composite integration, coherent canonical/all-writer/dispatcher capture and independently
 approved forward trust. An earlier timed-out Docker exec is not fenced by this capture.
 [Evidence](releases/2026-11-24-control-ha-live-capture.md#actual-worker-readback--084322utc).
-Next OWNER preflight locates the actual console/runtime configuration, HMAC/aliases/token
+Earlier OWNER preflight locates the actual console/runtime configuration, HMAC/aliases/token
 and a separate synthetic SQLite store:9 tables/223 rows, including50 synthetic identities
-and7 paid events. It is not the already restored PostgreSQL database. Prepare the exact
-closed file/store scope and abort plan before any capture; do not run default Compose
+and7 paid events. It is not the already restored PostgreSQL database. The prepared exact
+closed file/store scope and abort plan were executed09:17; do not run default Compose
 startup, seed/migrations, publisher or live restoration. Its pair with PG and dispatcher
 coherence remains unqualified. [Census](releases/2026-11-24-control-ha-live-capture.md#owner-runtime-preflight).
 Mailbox authority slice completed08:18:34UTC:9 files,8.170ms lock, sequence456216,

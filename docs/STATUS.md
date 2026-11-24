@@ -1,12 +1,22 @@
 # Текущее состояние / Current state
 
+**24 November09:17:14UTC — actual OWNER runtime/synthetic recovery PASS.**
+The24.374ms local seed/SQLite barrier retains20 exact runtime files and9 tables/223 rows.
+Fresh-process authenticated restore matches every file; the pinned native console image
+confirms all table/paid-projection hashes,140 alias resolutions and3 paid expiry denials.
+No network/PG/publisher request, original volume mount, database change or existing-container
+restart occurs.76 focused tests PASS; no installed/public version change. This closes
+the bounded OWNER runtime custody slice, not the PG/synthetic pair or full HA-02 gate.
+Next: native composite integration, coherent canonical/all-writer/dispatcher capture and
+independent forward trust. [Actual evidence](releases/2026-11-24-control-ha-live-capture.md#actual-owner-runtime-readback--091714utc).
+
 **24 November — bounded OWNER runtime custody prepared.**
 The closed20-file scope preserves exact runtime inputs/credentials and the9-table synthetic
 store, separately from the already restored PG point. Zero-wait seed/SQLite locks have a250ms
 kernel deadline; any drift/contention aborts without service changes. Authenticated offline
 restore only creates a new private directory. Native image qualification uses network-none,
 read-only mounts/root, nonroot and no publisher/PG connections. Fixture image checks pass;
-actual capture/readback is still pending, not HA-02 acceptance or a coherent PG pair.
+actual capture/readback subsequently passes09:17:14UTC above, not HA-02 acceptance or a coherent PG pair.
 [Scope and abort/rollback](releases/2026-11-24-control-ha-live-capture.md#owner-runtime-custody-plan).
 
 **24 November — OWNER runtime follow-up is read-only census, not recovery.**
@@ -15,7 +25,7 @@ Compose inputs, two environment files, HMAC/aliases and publisher-token location
 identified privately. The console volume contains a separate synthetic SQLite store:
 9 tables/223 rows (50 synthetic devices,7 paid events). Preserve it alongside PG; do not
 pretend the PG-only restore covers it. No source secret values, observations or DB rows
-are printed, no startup/publisher/migration is run and no OWNER runtime capsule exists yet.
+are printed and no startup/publisher/migration is run. This census precedes the completed09:17 runtime capsule above.
 [Next bounded scope](releases/2026-11-24-control-ha-live-capture.md#owner-runtime-preflight).
 
 **24 November08:43:22UTC — legacy-worker actual offline recovery PASS.**

@@ -270,6 +270,12 @@ HA-02 COMPLETE — только совместный PASS этих четырё�
 также восстановлены вне RU (19 файлов,13 таблиц/58 строк,41.191ms; native retry/expiry/
 duplicate checks без Docker dispatch). Это не fence для ранее запущенного внешнего exec
 и не общее согласованное восстановление; [evidence](releases/2026-11-24-control-ha-live-capture.md#actual-worker-readback--084322utc).
+Дополнение09:17:14UTC: OWNER runtime/synthetic custody также PASS:20 файлов,
+9 таблиц/223 строки,24.374ms; native image проверяет140 alias resolutions и3 запрета
+после expiry без сети/PG/publisher. Контейнеры без изменений. Открыты native composite,
+coherent PG/synthetic/canonical/all-writer/dispatcher capture и independent trust,
+не повторный локальный сбор receiver/worker/OWNER runtime.
+[OWNER evidence](releases/2026-11-24-control-ha-live-capture.md#actual-owner-runtime-readback--091714utc).
 HA-02 остаётся IN_PROGRESS. По последнему запросу выбраны все четыре блока;
 остаток — **журналы/фактическое состояние, установленный capture, полное восстановление**, не ещё
 одна-две небольшие правки. Дата окончания не установлена: она зависит от реальных

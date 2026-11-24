@@ -1,5 +1,38 @@
 # 24 November 2026 — authorized bounded live capture
 
+## Actual OWNER runtime readback — 09:17:14UTC
+
+Source25d84dcd19f139009970ba2d6a622dbfec7f3e6a captures the actual OWNER runtime/synthetic
+point at2026-11-24T09:17:14.453588Z. Local seed/SQLite barrier24.374ms,20 files,
+9 tables/223 rows (the exact preflight profile). All host input witnesses, mounted-token
+comparison and three-container image/ID/configuration/start/PID/restart observations pass.
+Capsule258,815 bytes, ciphertext SHA256
+`6bee0597fb38161819a6cc2f1310e6d66852f0876c515ecd40f4efd965c1fcd7`, document SHA256
+`9a247180ccc0f9fa3f5ad3c5cb8d3612ed4df2520aadc05d8a8cd7d5fe160e2a`.
+Owner-private capsule/receipts/new offline copies:
+`~/.local/share/family-connect/control-ha/20261124-owner-runtime-01/`;
+separate key/checkpoint under `control-ha-keys/` with the same basename. No secret, raw
+container environment, alias/pseudonym, DB row or observation is committed or printed.
+
+Fresh-process authenticated offline restoration matches every file and all9 table counts/
+digests. A second private copy runs in the exact pinned console image, not the publisher
+image: native table inventory and paid projection at capture time match;140 historical/
+current alias resolutions bind to preserved handles and HMAC generation; all3 paid records
+deny access after their retained expiry boundaries. The Publisher constructor only parses
+the exact preserved credential/origin, never calls `.request`. SQLite hash is unchanged.
+Zero dispatch/PG/network calls, no original volume or production restore, unique probe
+container removed and all3 installed container identities/configurations unchanged afterward.
+
+76 focused OWNER/inventory/SQLite tests pass,0 failures/skips. Installed, public and
+invitation-page versions are unchanged; no release/deployment/rollback occurs. Recovery
+uses `unseal` with the separate exact checkpoint/key then `restore` to a NEW private
+directory; native qualification is another copy. Never activate the saved Compose files.
+Rollback/abort remains release of local locks and cleanup of owned offline resources only.
+The pinned image and referenced collector archives are dependencies, not exported by this
+20-file format. The already retained PG point is from07:38:49UTC: these are NOT a jointly
+fenced PG/synthetic/dispatcher capture. Native composite integration, coherent all-writer
+capture and independently approved forward trust still block HA-02 COMPLETE.
+
 ## OWNER runtime preflight
 
 Read-only follow-up after worker recovery resolves the three exact existing containers'
@@ -23,7 +56,7 @@ Only `registry.sqlite3` (135,168 bytes) and existing `seed.lock` are present in 
 no WAL/SHM/journal is observed. No source row values are emitted or retained by this census.
 This is explicitly synthetic OWNER authority, not an additional live gateway registry.
 
-Remaining OWNER capture must include this store and exact runtime inputs, preserving
+At this earlier preflight, the then-remaining OWNER capture needed this store and exact runtime inputs, preserving
 HMAC generation/aliases, Django/DB credentials and publisher credential without regeneration.
 It needs a bounded database/seed barrier, file-stability verification, encrypted private
 custody and new-directory/native-image readback with no network, original volumes, default
@@ -623,9 +656,10 @@ container. This qualifies runtime custody, not dispatcher recovery or HA-02 COMP
 
 ## Remaining HA-02 gates
 
-The actual four-store capture/restore slice passes, but HA-02 is **IN_PROGRESS**. It does
-not cover external files/issuer keys/renewal histories, NL receiver/mailbox state, legacy
-peer-worker state or the OWNER panel. Their coherent writer/dispatcher boundary and complete
-independently trusted recovery remain required. New acknowledged writes/current restore/
-stale-copy refusal remain qualified in the laboratory, not across the complete actual fleet.
+The actual local custody slices now pass: four RU SQLite stores, external authority/history,
+node receiver/allocator, mailbox authority, legacy worker, OWNER PG and OWNER runtime/synthetic.
+They have distinct capture times, not a joint canonical/fleet/dispatcher fence. HA-02 stays
+**IN_PROGRESS** for native composite integration, complete coherent writer/dispatcher coverage,
+machine-loss dependencies and independently trusted recovery. New acknowledged writes/current
+restore/stale-copy refusal remain qualified in the laboratory, not across the complete actual fleet.
 The previously accepted strict PG/Patroni replication gate remains PASS. No HA-03..05 starts.
