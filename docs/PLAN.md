@@ -267,9 +267,20 @@ This closes content compatibility for the observed certificate delta only:
 challenge proof and historical paid entitlement are not reconstructed; original
 approval and coherent capture/recovery authorization remain unqualified.
 [Content diagnostic and actual observation](releases/2026-11-24-control-ha-certificate-delta.md).
-Continue this same task with trusted provenance and coherent post-renewal current-state
-binding; preserve the immutable baseline and qualify a separate current-state snapshot,
-not replacement old rows or retroactive consent. No permissive equality bypass. A recorded
+24 November follow-up: exact installed fcb31164 source reconstructs the observed
+14-module e9fd3175 digest. Its native scheduled record stores a derived decision, not
+original controller config/approval; seven selected retained artifacts do not establish
+that custody. Bounded investigation complete, not an exhaustive search or journal PASS.
+SELECTED task remains IN_PROGRESS / OWNER DECISION REQUIRED. Do not keep rechecking
+the same evidence or generate another diagnostic variant. Choose an independent original
+approval source, or explicitly approve development of the recommended forward-only
+current-state checkpoint contract. This changes the proposed trust basis, not history:
+new current authorization, preserved immutable/opaque old journals, coherent fresh
+capture and existing cryptographic/floor/recovery gates. No implemented bypass or
+production capture, writer stop, deployment or new stage is authorized by this proposal.
+[Decision and proposed acceptance boundary](releases/2026-11-24-control-ha-provenance-decision.md).
+Until that decision, preserve current-state data and the immutable baseline; no old rows
+or retroactive consent. No permissive equality bypass. A recorded
 schedule result and a start intent are not original approval or service liveness.
 The actual observation is not end-to-end traffic validation or recovery acceptance;
 do not invent approval, add a permissive switch or select another hypothetical variant.

@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 24 November: exact installed code did not retain original schedule approval; bounded investigation complete, forward-only current-checkpoint decision required](releases/2026-11-24-control-ha-provenance-decision.md).
+
 [CONTROL-HA · 24 November: cryptographic post-renewal certificate-content check with bound all_activated policy; actual fleet observation, no recovery authorization](releases/2026-11-24-control-ha-certificate-delta.md).
 
 [CONTROL-HA · 24 November: actual current fleet/config/service evidence; later certificate issuance diverges from renewal baseline, recovery still blocked](releases/2026-11-24-control-ha-installed-current.md).

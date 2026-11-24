@@ -1,5 +1,26 @@
 # Текущее состояние / Current state
 
+**24 November — CONTROL-HA original-approval investigation reaches a decision boundary.**
+Offline reconstruction of exact installed sourcefcb31164 reproduces the14-module
+e9fd3175 digest observed on all three hosts at00:34UTC. Its runtime supplies a boolean
+schedule flag; the controller stores the derived gate, not original config/owner approval.
+Seven selected retained staging/package artifacts were read without execution; the six
+JSON trees contain no approval/controller-config artifact. Three source manifests say
+production_configuration=absent, operation_permit=null. This is not an exhaustive backup
+search, but the missing original approval cannot be reconstructed from this native record.
+Do not repeat the same search/test loop without a newly identified evidence source.
+Selected journal task remains IN_PROGRESS / OWNER DECISION REQUIRED: either supply
+independent original custody, or approve development of a forward-only current-state
+checkpoint contract. Recommended second route keeps old journals immutable/non-executable,
+uses a new explicit authorization for current capture, and still requires coherent
+capture, all-store recovery, fencing/floors/signatures and the other stage2 gates.
+This is a proposal, not retroactive approval, permission to stop writers or recovery PASS.
+No implementation/runtime/host/service/policy/version changes or fresh SSH/health probe.
+Previous175-test receipt belongs tocc4be524; this turn qualifies documentation/evidence only.
+Console5ce82415, RU HTTP4e2df679, NL GeoIP22 November, Android126/catalog9 unchanged;
+RU dependence and the same four stage2 blocks remain. No queued block started.
+[Exact evidence, decision scope and rollback](releases/2026-11-24-control-ha-provenance-decision.md).
+
 **24 November — CONTROL-HA post-renewal certificate content checked; recovery still BLOCKED.**
 Read-only RU/NL1/NL2 observation00:34:17–00:34:20UTC: same COMMITTED plan,
 matching config/unit/material/publication bindings; RU API and both NL bootstrap
