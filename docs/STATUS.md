@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+**24 November — local admission/drain implemented and tested; not deployed.**
+Opt-in gate now covers Friends HTTP/routing administration, both retention threads and
+the product admin/legacy-worker child. It closes new admission, drains admitted operations,
+and retains durable uncertainty after writer death, RPC timeout or failed remote readback.
+A separate pipe guardian releases on EOF/death/deadline: at most5s drain,2s hold,7s total
+under normal kernel scheduling. No paid-watch stop, service restart, fleet capture or
+version change.170 focused checks PASS,0 skips; broader regression307 PASS/93 optional-PG
+skips/3 pre-existing fixture failures, all3 reproduced on unchanged0e282c34.
+The gate defaults off; live writer coverage and flush-latency qualification are still needed.
+Next: schedulers/CLI/forced-SSH and OWNER publishers, effective participant bindings and
+external-completion proof, then overlapping capture. Replication PASS; the same three
+HA-02 gates remain partial. [Implementation, tests and rollback](releases/2026-11-24-control-ha-admission-drain.md).
+
 **24 November14:38–14:44UTC — writer-boundary observation complete; capture still refused.**
 New read-only preflight covers32/9/5 RU/NL1/NL2 units, explicit service-account/default
 SSH dispatchers, system cron and scoped cgroup processes without taking locks or sending

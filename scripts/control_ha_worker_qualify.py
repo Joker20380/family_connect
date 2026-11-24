@@ -11,6 +11,22 @@ from provisioning.envelope import ProvisioningRejected
 from scripts import control_ha_worker_custody as custody
 from scripts.control_ha_live_sqlite import require
 
+NATIVE_SOURCES = (
+    'control/migrations/001_product.sql',
+    'control/migrations/002_provisioning.sql',
+    'control/migrations/003_gateway.sql',
+    'control/product/gateways.py',
+    'control/product/provisioning.py',
+    'control/product/store.py',
+    'provisioning/envelope.py',
+    'provisioning/models.py',
+)
+
+
+def verify_native_sources(root):
+    require(all(custody.digest((root / name).read_bytes()) == custody.PINS[name] for name in NATIVE_SOURCES),
+            'LOCAL_NATIVE_SOURCE_CHANGED')
+
 
 class OfflineAdapter:
     def __init__(self):
@@ -25,8 +41,7 @@ class OfflineAdapter:
 
 def qualify(value, destination):
     root = Path(__file__).resolve().parents[1]
-    require(all(custody.digest((root / name).read_bytes()) == pin for name, pin in custody.PINS.items()),
-            'LOCAL_NATIVE_SOURCE_CHANGED')
+    verify_native_sources(root)
     custody.restore(value, destination)
     files = custody.unpack(value)
     destination = Path(destination)

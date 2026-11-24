@@ -5,7 +5,7 @@ import os
 from pathlib import Path
 import re
 import sqlite3
-from contextlib import closing
+from contextlib import closing, nullcontext
 import threading
 import time
 
@@ -203,12 +203,13 @@ def prune(path, now):
             database.execute('DELETE FROM snapshots WHERE received<?', (now - RETENTION,))
 
 
-def start_retention(path):
+def start_retention(path, *, capture_gate=None):
     stopped = threading.Event()
     def run():
         while not stopped.is_set():
             try:
-                prune(path, int(time.time()))
+                with capture_gate.operation() if capture_gate is not None else nullcontext():
+                    prune(path, int(time.time()))
             except (OSError, sqlite3.Error):
                 pass
             stopped.wait(60)

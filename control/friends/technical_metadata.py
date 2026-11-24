@@ -1,5 +1,5 @@
 """Separately consented, latest-only observations; never an access authority."""
-from contextlib import closing, contextmanager
+from contextlib import closing, contextmanager, nullcontext
 import hashlib
 import json
 import os
@@ -284,12 +284,13 @@ def prune(path, now):
             expire(database, now)
 
 
-def start_retention(path):
+def start_retention(path, *, capture_gate=None):
     stopped = threading.Event()
     def run():
         while not stopped.is_set():
             try:
-                prune(path, int(time.time()))
+                with capture_gate.operation() if capture_gate is not None else nullcontext():
+                    prune(path, int(time.time()))
             except (OSError, sqlite3.Error):
                 pass
             stopped.wait(60)

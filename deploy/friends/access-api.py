@@ -9,8 +9,10 @@ from control.friends.chat import ChatAccess
 from control.friends.chat_sync import synchronize
 from control.friends.referrals import Referrals,Exhausted,RateLimited
 from control.friends.subscription import Unsupported as SubscriptionUnsupported
+from control.capture_gate import Gate,Busy,external_operation
 access=Access(ROOT/'access.db');slots=threading.BoundedSemaphore(4)
 chat_access=ChatAccess(access)
+capture_gate=Gate()
 
 def unique(pairs):
  result={}
@@ -44,6 +46,12 @@ class Handler(BaseHTTPRequestHandler):
   self.connection.settimeout(5)
   if self.path not in ('/friends/challenge','/friends/activate','/friends/restricted-readiness','/friends/restricted-readiness/challenge','/friends/restricted-readiness/ack-challenge','/friends/restricted-readiness/ack','/friends/configuration/ru','/friends/configuration/nl','/friends/gateway-configuration/nl-amsterdam-1','/friends/gateway-configuration/nl-amsterdam-2','/friends/chat/challenge','/friends/chat/register','/friends/referral/issue','/friends/referral/claim','/friends/device/status','/friends/device/subscription','/friends/device/support','/friends/device/diagnostics','/friends/device/technical-metadata/v1','/friends/notices/publish','/friends/notices/device/role','/friends/notices/device/publish','/friends/notices/device/list','/friends/notices/device/edit'):self.reply(404,{'error':'not-found'});return
   if not slots.acquire(blocking=False):self.reply(429,{'error':'busy'});return
+  try:
+   with capture_gate.operation():self.admitted_post()
+  except Busy:self.reply(503,{'error':'capture-busy'})
+  except OSError:self.reply(503,{'error':'capture-unavailable'})
+  finally:slots.release()
+ def admitted_post(self):
   phase='http_parse'
   try:
    size=int(self.headers.get('Content-Length','0'));assert 0<size<=(32768 if self.path in ('/friends/notices/publish','/friends/notices/device/publish','/friends/notices/device/list','/friends/notices/device/edit') else 8192) and self.headers.get('Content-Type','').split(';')[0]=='application/json'
@@ -118,10 +126,11 @@ class Handler(BaseHTTPRequestHandler):
     if node is not None:record=configuration_decision(access,ROOT,node,record)
     if country=='ru':command=['/usr/bin/python3','/opt/apps/family_connect/friends-awg/awg-gateway.py','register']
     else:command=['/usr/bin/ssh','-i','/opt/apps/family_connect/friends-awg/registration-key','-o','IdentitiesOnly=yes','-o','BatchMode=yes','-o','ConnectTimeout=5','-o','StrictHostKeyChecking=yes','-o','UserKnownHostsFile=/opt/apps/family_connect/friends-awg/known_hosts','root@'+host,'register']
-    reply=subprocess.run(command,input=json.dumps(record).encode(),capture_output=True,timeout=15)
-    if reply.returncode:raise RuntimeError('Gateway unavailable')
-    assigned=json.loads(reply.stdout);assert assigned['public_key']==record['public_key'] and assigned['transport']=='amneziawg-3.1'
-    result={'device':record['device'],'country':country,'address':assigned['address'],'tcp_id':record['tcp_id'],'catalog':catalog}
+    with external_operation():
+     reply=subprocess.run(command,input=json.dumps(record).encode(),capture_output=True,timeout=15)
+     if reply.returncode:raise RuntimeError('Gateway unavailable')
+     assigned=json.loads(reply.stdout);assert assigned['public_key']==record['public_key'] and assigned['transport']=='amneziawg-3.1'
+     result={'device':record['device'],'country':country,'address':assigned['address'],'tcp_id':record['tcp_id'],'catalog':catalog}
     if explicit:result['gateway_id']=target
    self.reply(200,result)
   except SubscriptionUnsupported:self.reply(501,{'error':'subscription-unsupported'})
@@ -133,17 +142,18 @@ class Handler(BaseHTTPRequestHandler):
    if self.path=='/friends/restricted-readiness/challenge' and type(error).__name__!='ChallengeUnavailable':
     logging.getLogger(__name__).warning('restricted_challenge stage=%s reason=%s',phase,'INTERNAL_DEPENDENCY_FAILURE' if phase=='handler_import' else 'INTERNAL_ERROR')
    self.reply(503,{'error':'unavailable'})
-  finally:slots.release()
 def main():
  import argparse
- global ROOT,access,chat_access
+ global ROOT,access,chat_access,capture_gate
  parser=argparse.ArgumentParser(description=__doc__)
  parser.add_argument('--root',type=Path,default=ROOT)
  parser.add_argument('--port',type=int,default=18084)
+ parser.add_argument('--capture-gate',type=Path)
  parser.add_argument('--readiness-ack',metavar='CORRELATION_ID')
  parser.add_argument('--material',type=Path)
  parser.add_argument('--gateway-routing-request',type=Path)
  args=parser.parse_args()
+ capture_gate=Gate(args.capture_gate)
  ROOT=args.root.resolve();access=Access(ROOT/'access.db');chat_access=ChatAccess(access)
  if args.gateway_routing_request is not None:
   from control.friends.gateway_routing import administer,canonical,parse,private_read,require
@@ -154,7 +164,7 @@ def main():
    request_path=args.gateway_routing_request
    require(request_path.is_absolute())
    request=parse(private_read(request_path.parent,request_path.name,8192).decode())
-   result=administer(access,ROOT,request)
+   with capture_gate.operation():result=administer(access,ROOT,request)
   except Exception:
    print(canonical(dict(result='REJECTED',cause='ROUTING_REQUEST_REJECTED')).decode());raise SystemExit(1) from None
   print(canonical(result).decode());return
@@ -165,9 +175,9 @@ def main():
   except Exception:print(json.dumps(dict(version=1,status='UNKNOWN',reason='READBACK_UNAVAILABLE')));raise SystemExit(1) from None
   return
  from control.friends.diagnostics import start_retention
- retention=start_retention(ROOT/'diagnostics.sqlite')
+ retention=start_retention(ROOT/'diagnostics.sqlite',capture_gate=capture_gate)
  from control.friends.technical_metadata import start_retention as start_metadata_retention
- metadata_retention=start_metadata_retention(ROOT/'technical-metadata.sqlite')
+ metadata_retention=start_metadata_retention(ROOT/'technical-metadata.sqlite',capture_gate=capture_gate)
  try:ThreadingHTTPServer(('127.0.0.1',args.port),Handler).serve_forever()
  finally:retention.set();metadata_retention.set()
 

@@ -21,10 +21,11 @@ def source(setup, tmp_path):
     root = tmp_path / 'source'
     root.mkdir(mode=0o700)
     repository = Path(__file__).resolve().parents[1]
+    retained = json.loads((repository / 'tests/fixtures/control_ha_worker_v1_sources.json').read_text())['files']
     for name in custody.PINS:
         target = root / name
         target.parent.mkdir(parents=True, exist_ok=True)
-        target.write_bytes((repository / name).read_bytes())
+        target.write_bytes(retained[name].encode() if name in retained else (repository / name).read_bytes())
     database = root / 'state-product/db/product.db'
     database.parent.mkdir(parents=True, mode=0o700)
     database.write_bytes(Path(setup[0].path).read_bytes())
@@ -208,3 +209,21 @@ def test_changed_preflight_file_refuses_capture(source, monkeypatch):
     with pytest.raises(Refused, match='OBSERVATION_CHANGED'):
         custody.capture(*source)
     assert signal.getitimer(signal.ITIMER_REAL) == (0.0, 0.0)
+
+
+@pytest.mark.parametrize('name', native.NATIVE_SOURCES)
+def test_changed_offline_native_source_refused(source, name):
+    native.verify_native_sources(source[0])
+    target = source[0] / name
+    target.write_bytes(target.read_bytes() + b'\n')
+    with pytest.raises(ValueError, match='LOCAL_NATIVE_SOURCE_CHANGED'):
+        native.verify_native_sources(source[0])
+
+
+@pytest.mark.parametrize('name', sorted(set(custody.PINS) - set(native.NATIVE_SOURCES)))
+def test_nonexecuted_wrappers_do_not_change_offline_native_but_still_fail_custody(source, name):
+    target = source[0] / name
+    target.write_bytes(target.read_bytes() + b'\n')
+    native.verify_native_sources(source[0])
+    with pytest.raises(ValueError):
+        custody.capture(*source)

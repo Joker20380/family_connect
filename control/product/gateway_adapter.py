@@ -12,6 +12,7 @@ import subprocess
 
 from device_identity.device import _private_directory
 from provisioning.models import GatewayCandidate
+from control.capture_gate import external_operation
 
 
 class DockerGateway:
@@ -21,8 +22,9 @@ class DockerGateway:
         self.container, self.keys, self.run = container, Path(keys).absolute(), run
 
     def _command(self, *args):
-        return self.run(['docker','exec',self.container,*args],check=True,
-                        capture_output=True,text=True,timeout=3).stdout.strip()
+        with external_operation():
+            return self.run(['docker','exec',self.container,*args],check=True,
+                            capture_output=True,text=True,timeout=3).stdout.strip()
 
     @staticmethod
     def _safe(fd):
@@ -62,6 +64,7 @@ class DockerGateway:
             try:os.unlink(temporary,dir_fd=directory)
             except FileNotFoundError:pass
 
+    @external_operation()
     def apply(self, identity, public_key, addresses, *, present, gateway):
         if not re.fullmatch('[0-9a-f]{32}',identity):raise ValueError('invalid device')
         GatewayCandidate.valid_key(public_key)

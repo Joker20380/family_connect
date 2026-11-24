@@ -36,12 +36,15 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--database', required=True)
     parser.add_argument('--gateways', required=True)
+    parser.add_argument('--capture-gate')
     args = parser.parse_args()
     stop = threading.Event()
     for signum in (signal.SIGTERM, signal.SIGINT):
         signal.signal(signum, lambda *_: stop.set())
-    command = [sys.executable, '-m', 'control.product.admin', '--database',
-               args.database, 'reconcile-peers', '--gateways', args.gateways]
+    command = [sys.executable, '-m', 'control.product.admin', '--database', args.database]
+    if args.capture_gate is not None:
+        command += ['--capture-gate', args.capture_gate]
+    command += ['reconcile-peers', '--gateways', args.gateways]
     run_loop(command, stop)
 
 

@@ -9,11 +9,13 @@ from .store import ProductStore
 from .provisioning import ProvisioningService
 from device_identity.device import _private_directory, _read_key, _create_key
 import RNS
+from control.capture_gate import Gate, GateError, Busy
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--database', type=Path, required=True)
+    parser.add_argument('--capture-gate', type=Path)
     sub = parser.add_subparsers(dest='command', required=True)
     sub.add_parser('migrate')
     entitlement = sub.add_parser('create-entitlement')
@@ -43,6 +45,18 @@ def main():
     sub.add_parser('peer-status')
     sub.add_parser('provisioning-versions').add_argument('identifier')
     args = parser.parse_args()
+    try:
+        with Gate(args.capture_gate).operation():
+            dispatch(args)
+    except Busy:
+        print(json.dumps(dict(result='CAPTURE_BUSY')))
+        raise SystemExit(75) from None
+    except GateError:
+        print(json.dumps(dict(result='CAPTURE_UNAVAILABLE')))
+        raise SystemExit(1) from None
+
+
+def dispatch(args):
     store = ProductStore(args.database)
     if args.command == 'migrate':
         store.migrate()

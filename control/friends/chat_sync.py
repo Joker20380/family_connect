@@ -4,6 +4,7 @@ import fcntl
 import ipaddress
 from pathlib import Path
 import subprocess
+from control.capture_gate import external_operation
 
 ROOT=Path('/opt/apps/family_connect/friends-access')
 
@@ -12,7 +13,8 @@ def synchronize(registry):
     require_local_registry(registry)
     with (ROOT/'chat-sync.lock').open('a') as lock:
         fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
-        return _synchronize(registry)
+        with external_operation():
+            return _synchronize(registry)
 
 
 def _synchronize(registry):

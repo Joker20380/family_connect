@@ -3,19 +3,23 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Writer-boundary preflight completed14:38–14:44UTC;62 tests PASS. Current unit/account/cron/
-cgroup observations are retained privately. RU chat-sync changes state during observation;
-NL1/NL2 are active and unchanged.24 retained Docker ExecIDs are all non-running, not proof
-that new dispatch is inhibited. No snapshot is authorized by an empty lock/process sample.
-Next selected implementation: qualify a coordinated **admission close → in-flight drain →
-overlapping capture → automatic release** boundary, with paid-watch/deny enforcement still
-running. Cover the HTTP operation lifetime, RU schedulers/operator/SSH dispatch, legacy
-Docker side effects and OWNER PG/synthetic publishers. Unknown or unsettled writers abort
-before capture. The minimum proof and rollback contract are fixed in the
-[writer-boundary report](releases/2026-11-24-control-ha-writer-boundary.md#minimum-boundary-contract).
-Do not repeat this inventory, earlier retained-state recovery, or create another lettered
-stage. Coherent capture, independent current approval/key custody and final combined
-post-ACK/stale-copy recovery remain; no HA-03 or production cutover.
+Local cooperative admission/drain source is implemented, not deployed: HTTP/routing CLI,
+two retention threads, product admin and legacy-worker child participate when explicitly
+configured. Durable pending markers prevent a false drain after process death, caught RPC
+timeout or failed readback. Separate guardian bounds drain/hold/total to5/2/7s; unknown or
+unsettled participants refuse.170 focused tests PASS,0 skips; broader307 PASS/93 optional-PG
+skips/3 old fixture failures reproduced on unchanged0e282c34. Historic custody pins unchanged.
+[Implementation and exact validation](releases/2026-11-24-control-ha-admission-drain.md).
+Next selected work: integrate RU schedulers/operator/forced-SSH and OWNER PG/synthetic
+publishers, bind effective source/argv/UID/mounts for all participants, independently settle
+external dispatch, and qualify flush latency plus a provably overlapping fleet interval.
+Keep paid-watch/deny enforcement running; current NL scope does not permit changing working
+services. No live snapshot is authorized by this local gate or an empty process/lock sample.
+Do not repeat the completed writer census/NL2 recovery or create another lettered stage.
+Coherent capture, independent current approval/key custody and final combined post-ACK/
+stale-copy recovery remain the same three partial HA-02 gates; replication PASS, no HA-03
+or production cutover. The [minimum boundary contract](releases/2026-11-24-control-ha-writer-boundary.md#minimum-boundary-contract)
+is unchanged.
 
 Actual NL2 retained-state recovery PASS14:12UTC; final unchanged-service/cleanup check
 PASS14:20UTC. Seven encrypted capsules and pinned runtime/toolkit are durably retained
