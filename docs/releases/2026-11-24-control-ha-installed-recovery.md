@@ -1,8 +1,45 @@
 # 24 November 2026 — installed recovery continuation navigation
 
 Authoritative implementation remains `/home/joker/.codex/worktrees/dad9/family_connect`
-on `feature/device-technical-metadata-20261115`, not this divergent old main.
+on `feature/device-technical-metadata-20261115`, separately from main. The earlier main
+divergence is reconciled/pushed at2ae5c512; older publication-blocker statements below are
+historical, not active instructions or a current blocker.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
+
+## Actual cold recovery source and dependencies
+
+Implementation/report `bcb005a1ef4de4d75e7abb9cc4e800a7dee44ae7` is pushed and independently
+remote-SHA verified. Execution source `8acc6bd2be51d941f6a1eda3aea6f6a3da82cca9` was published
+before the accepted12:31:38UTC run. The
+[pinned full qualification report](https://github.com/Joker20380/family_connect/blob/bcb005a1ef4de4d75e7abb9cc4e800a7dee44ae7/docs/releases/2026-11-24-control-ha-recovery-kit.md#actual-execution--123138utc)
+contains the kit/receipt hashes, all failed attempts/corrections and exact trust boundaries.
+
+- Standalone stdlib bootstrap restores419 committed source files and28 exactly locked wheels.
+  New CPython3.13 venv installation uses no package index, requires all hashes and passes
+  `pip check`;10 recovery entry modules and every dependency resolve only inside the kit.
+- Actual encrypted retained inputs authenticate:610 canonical rows with native alias/issuer/
+  referral/routing checks;207 RU/NL1/NL2 receiver decisions and82 allocator bindings with
+  duplicate/terminal-denial/lease checks, preserving NL2's sequence gap.
+- Three expired-at-capture legacy jobs retain native retry/restart/expiry behavior using
+  in-memory adapters; mailbox56 dynamic/3 static members and sequence456216 remain bound
+  to native key/bootstrap/volume data at capture time. No daemon/spool activation.
+- Network namespaces are unshared; original checkout/venv, `/app`, Docker socket, host home
+  and live volumes are not mounted. Audit hook records zero network/process dispatch.
+  Changed kit bytes and changed independent custody pins refuse in fresh namespaces.
+  All21 original custody inputs remain byte-identical; namespaces exit, no daemon is started.
+-242 focused tests PASS,0 skips, with two existing Starlette/AnyIO deprecation warnings.
+  No SSH/live service operation, installation, version/catalog/release change occurs.
+
+This closes the explicit recovery-tool source/Python-dependency availability gap. It is NOT
+bare-metal OS/tool bootstrap, proof of off-machine independent custody, current approval
+authority or a coherent fleet checkpoint: input capture times differ. The final combined
+post-ACK/stale-copy recovery gate remains open. Replication PASS and the same three partial
+HA-02 acceptance blocks remain; no new lettered stage or HA-03..05 work is selected.
+
+Rollback is an ordinary source revert plus cleanup of owned scratch only. Keep accepted and
+failed private kits/receipts and separate keys/checkpoints. Never write a lab DB to live
+services or remove original images/containers. Navigation publication does not merge HA
+implementation into main or deploy it.
 
 ## Actual OWNER image cold bootstrap
 

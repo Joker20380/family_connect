@@ -1,5 +1,16 @@
 # Текущее состояние / Current state
 
+**24 November12:31:38UTC — actual cold recovery source/dependency readback PASS.**
+Authoritative source/reportbcb005a1 is pushed and remote-SHA verified on the metadata branch;
+execution source8acc6bd2 retains419 source files and28 hash-locked wheels. A fresh image venv
+validates610 canonical rows,207 RU/NL receiver decisions/82 allocations,3 worker jobs and
+mailbox authority without network, Docker, working checkout or developer venv. Changed kit/
+custody pins refuse in fresh namespaces; originals unchanged.242 tests PASS,0 skips.
+This closes the explicit tooling/Python-dependency gap, not recovery-host OS/off-site custody,
+independent approval, coherent all-writer capture or final joint recovery. No service/version
+change, deployment or HA-03. Replication PASS; three HA-02 acceptance blocks remain partial.
+[Evidence and rollback](releases/2026-11-24-control-ha-installed-recovery.md#actual-cold-recovery-source-and-dependencies).
+
 **24 November12:06UTC — source publication reconciliation COMPLETE.**
 Merge9aac6e16e2a4b786baf2d4e7cff5ad7ae613dd4b is pushed to main and remote-SHA verified;
 the previous74-local/300-remote divergence is resolved without rewriting either history.

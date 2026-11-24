@@ -11,7 +11,16 @@ remains selected; this publication task does not advance its acceptance gates.
 [Reconciliation record](releases/2026-11-24-source-reconciliation.md).
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Current source2ea128af is pushed/remote-SHA verified. Actual OWNER image cold bootstrap passes
+Current source/reportbcb005a1 is pushed/remote-SHA verified; actual cold execution from8acc6bd2
+passes12:31:38UTC.419 committed source files/28 offline wheels support native retained
+canonical, three-node, worker and mailbox checks without original source/venv/network/Docker.
+Changed kit/custody pins refuse;242 tests PASS,0 skips. Do not repeat this completed tooling/
+Python-dependency availability check as pending. Remaining: actual approval-authority workflow,
+coherent all-writer/in-flight capture, recovery-host OS/tool prerequisites, off-machine custody
+and final combined post-ACK/stale-copy readback. Same three partial HA-02 blocks; replication
+PASS, no HA-03..05, cutover or version change.
+[Current evidence](releases/2026-11-24-control-ha-installed-recovery.md#actual-cold-recovery-source-and-dependencies).
+Earlier source2ea128af is pushed/remote-SHA verified. Actual OWNER image cold bootstrap passes
 11:43UTC from encrypted custody without Docker, registry, working source or original volumes.
 Three native runtime probes and independent authenticated readback pass;71 tests,0 skips.
 Original containers unchanged; owned processes stopped. Do not repeat retained OWNER image
