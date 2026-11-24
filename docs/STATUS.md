@@ -1,5 +1,17 @@
 # Текущее состояние / Current state
 
+**24 November — admission/drain source implemented; no live deployment.**
+HA feature commit1015ac5e is pushed and remote-SHA verified. Opt-in local gate covers
+HTTP/routing admin, two retention threads and product admin/legacy-worker child. It closes
+new admission, drains admitted work and preserves uncertainty after writer death or failed
+external completion. A separate guardian releases on EOF/death/deadline;5s drain/2s hold/
+7s total under normal kernel scheduling.170 focused tests PASS,0 skips; broader307 PASS/
+93 optional-PG skips/3 old fixture failures, reproduced unchanged on0e282c34.
+No server access, service change, capture or version bump. Extra synchronous I/O still
+needs RU load/latency qualification. Next: remaining schedulers/SSH/OWNER writers and
+effective bindings/external completion, then overlapping capture. Replication PASS;
+three HA-02 gates remain partial. [Implementation and rollback](releases/2026-11-24-control-ha-installed-recovery.md#local-admission-and-drain--source-only).
+
 **24 November14:38–14:44UTC — scoped writer preflight completed; coherent capture still open.**
 Source/tests/report0e282c34 is pushed and remote-SHA verified on the HA feature branch.
 32/9/5 RU/NL1/NL2 units, explicit account/cron/SSH dispatchers and scoped cgroup/lock

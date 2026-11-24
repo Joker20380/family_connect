@@ -6,6 +6,43 @@ divergence is reconciled/pushed at2ae5c512; older publication-blocker statements
 historical, not active instructions or a current blocker.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## Local admission and drain — source only
+
+[Authoritative implementation, tests and rollback](https://github.com/Joker20380/family_connect/blob/1015ac5e13e6ab68a7118ce8ae7bb9af08461650/docs/releases/2026-11-24-control-ha-admission-drain.md)
+is pushed and remote-SHA verified at1015ac5e13e6ab68a7118ce8ae7bb9af08461650.
+This main change updates navigation, not HA source, installed versions or deployment.
+
+The opt-in single-host/single-UID gate closes new admission, drains existing operations
+and retains fsynced uncertainty after writer death, caught RPC failure or failed remote
+readback. Unknown pending entries refuse capture; no auto-clear operation exists. HTTP
+capacity checks precede disk admission. Routing admin, both retention threads and product
+admin/legacy-worker child are integrated in source. Historical11-source custody pins are
+unchanged; offline qualification checks its8 pinned model/schema sources without executing
+the3 transport/admin wrappers. Public historical-source fixtures are hash-verified.
+
+A separate guardian has at most5s drain/2s hold/7s total with normal kernel scheduling;
+EOF, SIGKILL or alarm releases its locks. Blocked/ignored/replaced inherited alarms refuse.
+Kernel-uninterruptible I/O, process suspension or host scheduling failure remain limitations.
+Every receipt still says `capture_permitted=false`; there is no all-writer/fleet proof yet.
+Three extra synchronous flushes per successful operation require load/latency qualification
+before enabling on RU. This does not fix the original storage-stall incident.
+
+170 focused tests PASS,0 skips. Broader regression:307 passed,93 optional PostgreSQL
+contracts skipped,3 failures reproduced on isolated unchanged0e282c34: two historical
+metadata-overlay reverse-patch fixtures and the old NL chat fake lacking an access binding.
+The final focused run adds two inherited-alarm refusal cases. Existing dependency
+deprecation warnings remain. Documentation links/whitespace are checked before commit.
+
+No host connection, service action, live capture, release/tag/catalog change or package
+installation. Gate defaults off; no live rollback is necessary. Future rollback must first
+cancel capture/release its guardian and preserve uncertainty; never replace gate inodes or
+delete pending markers to force acceptance. Do not stop paid-watch or start pre-existing
+failed services. Next: remaining scheduler/SSH/OWNER participants, exact effective bindings
+and external-completion proof, then overlapping capture, independent current approval and
+off-laptop key/access custody, and final combined post-ACK/stale-copy recovery. Replication
+PASS; the other three HA-02 gates remain partial. No HA-03 or working-service deployment
+on NL is authorized by the current checks/isolated-recovery scope.
+
 ## Writer boundary observation — 14:38–14:44UTC
 
 [Authoritative source, report and boundary contract](https://github.com/Joker20380/family_connect/blob/0e282c34f16b08d55c8d3bda1a64103d6ff91cea/docs/releases/2026-11-24-control-ha-writer-boundary.md)
