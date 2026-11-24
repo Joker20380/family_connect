@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+**24 November — joint drain across separate OWNER identities qualified in isolation.**
+New same-kernel group admission coordinates per-UID guardians without widening0700/0600,
+changing service identities or opening another UID's gate. Kernel credentials, pinned
+inodes, a common clock/overlap and final held-through-completion ACKs are mandatory.
+120 focused tests PASS/0 skips. Native UID10001/1000 + two SQLite stores PASS; coordinator
+SIGKILL/SIGSTOP release observed0.288s/1.873s. Failed/expired intervals never get a receipt.
+No production launch, service/image/mount/policy/version change or RU/NL access occurred.
+Next: approved effective bindings/guardian launch and manual/SSH coverage, independent
+external settlement and real latency, then coherent capture/approval/custody/final restore.
+The per-UID joint interval is no longer an unimplemented design gap; do not repeat it.
+Replication PASS; the same three HA-02 gates remain partial.
+[Exact scope, checks and rollback](releases/2026-11-24-control-ha-joint-drain.md).
+
 **24 November — actual OWNER admission binding checked; enablement refused.**
 Read-only Docker inspection confirms the console uses host UID10001 and publisher UID1000,
 with neither configured for the capture gate. Installed images remain5ce82415/50de6f25;

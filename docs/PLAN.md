@@ -3,17 +3,21 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Local cooperative admission/drain remains source-only. Targeted installed OWNER inspection
-now observes console host UID10001 versus publisher UID1000, not root; neither configures
-the gate. Installed images remain5ce82415/50de6f25 and observed bindings match before/after,
-without any Docker exec/service change.104 focused tests PASS/0 skips. Matching samples
-are not source-loaded equivalence, namespace/inode attestation, drain or capture approval.
-[Actual bindings and exact validation](releases/2026-11-24-control-ha-owner-admission-binding.md).
-Next selected work: qualify an identity-preserving jointly drained set of OWNER gates in
-isolation, without loosening0700/0600 or changing product/token ownership; finish actual
-source/config/argv/UID/mount and manual/SSH entrypoint bindings across the existing inventory.
-Then independently settle external dispatch and qualify flush latency plus a provably
-overlapping fleet interval. Different-time drains are not a coherent boundary. Existing
+Local cooperative admission/drain remains source-only. A joint same-kernel interval now
+coordinates separate gates under the actual OWNER identity shapes10001/1000 without
+permission/ownership changes. Kernel PID/UID/GID, pinned gate inodes, common time namespace,
+overlap and final held-through-completion ACKs are required.120 focused tests PASS/0 skips;
+native two-UID/SQLite and coordinator SIGKILL/SIGSTOP qualification PASS in isolation.
+The distinct-UID joint interval is no longer an unimplemented design gap; do not repeat it.
+No live launch/configuration, source deployment, server access or version change occurred.
+[Joint interval and exact validation](releases/2026-11-24-control-ha-joint-drain.md).
+Next selected work: finish approved actual source/config/argv/UID/mount/namespace/inode
+bindings, trusted guardian launch and manual/SSH coverage across the existing inventory.
+Independently settle external dispatch and qualify real capture/flush latency plus a
+provably overlapping fleet interval. Local interval receipts still never authorize capture.
+Last [installed OWNER observation](releases/2026-11-24-control-ha-owner-admission-binding.md)
+has images5ce82415/50de6f25 and no configured gate; source-only qualification is not rollout.
+Do not loosen0700/0600 or change product/token ownership. Existing
 fixed SSH routes and direct callers without a gate remain unchanged until explicitly bound.
 OWNER direct ORM/programmatic `call_command` and asynchronous support jobs remain coverage
 gaps outside admitted entrypoints. Per-RPC admission is not a whole remote transaction fence.

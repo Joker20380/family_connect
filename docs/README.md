@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 24 November: separate-UID joint interval with kernel identity and final ACK checks;120 tests and real two-UID SQLite/death/deadline probes, no deployment](releases/2026-11-24-control-ha-joint-drain.md).
+
 [CONTROL-HA · 24 November: actual OWNER identities/configuration observed; missing gates and distinct UID bindings block enablement,104 checks, no live changes](releases/2026-11-24-control-ha-owner-admission-binding.md).
 
 [CONTROL-HA · 24 November: pinned one-shot SSH/receiver launcher and direct-node admission;300 tests, unchanged native AWG/mailbox probes, no deployment](releases/2026-11-24-control-ha-receiver-admission.md).
