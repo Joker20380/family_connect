@@ -20,7 +20,7 @@ from scripts.control_ha_maintenance_fixture import artifacts_for_maintenance
 from scripts.control_ha_online_capsule import bind_current
 from scripts.control_ha_online_fixture import native_fixture
 from scripts.control_ha_receiver_v1 import preflight_receivers
-from scripts.control_ha_recovery_bundle import parse, seal
+from scripts.control_ha_recovery_bundle import parse, seal, seal_handoff
 from scripts.control_ha_sqlite_fixture import refresh_fixture
 from scripts.referral_postgres_rehearsal import NOW
 from scripts.restricted_postgres_rehearsal import issue_proof
@@ -38,7 +38,8 @@ def candidate(current):
 def candidate_for(current):
     state = current['recovered']
     recovery_key = secrets.token_bytes(32)
-    recovery_bundle, recovery_checkpoint = seal(state.stores, state.references, state.artifacts,
+    sealer = seal_handoff if state.snapshot.handoff else seal
+    recovery_bundle, recovery_checkpoint = sealer(state.stores, state.references, state.artifacts,
         CHECKPOINT, state.bootstrap, current['anchor'], recovery_key, now=NOW)
     history_bundle, history_checkpoint = sealed(current)
     issuer = Ed25519PrivateKey.from_private_bytes(state.artifacts['issuer_material']['runtime-key'])

@@ -20,6 +20,11 @@ Closed handoff retention now passes199 import/census contracts and28 guards, nat
 PG crash/independent DB restore and the extended strict Patroni fault run. This is a
 read-only retained domain, not live handoff runtime activation; see the
 [retention evidence](releases/2026-11-24-control-ha-handoff-retention.md).
+The encrypted recovery/portable forward archive now also preserves this exact profile:
+555 focused contracts /0 skips and source-removed fresh-process49-table recovery PASS.
+Old v1 schema rules remain strict; v2 binds closed handoff rows and profile provenance.
+See [encrypted recovery evidence](releases/2026-11-24-control-ha-handoff-recovery.md).
+This closes a format integration gap, not the actual-current capture or full-DR gates.
 Next work inside HA-02: remaining writer classification and bounded barrier, actual-current
 custody with independently owner-approved trust, then independent full-state recovery.
 The03:20UTC census follow-up resolves the eight pressure-unit refusals as scoped

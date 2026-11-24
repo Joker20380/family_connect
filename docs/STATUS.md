@@ -1,5 +1,15 @@
 # Текущее состояние / Current state
 
+**24 November — encrypted handoff recovery path qualified offline.**
+The exact installed-schema profile now travels through the encrypted recovery bundle
+and independently signed portable forward archive, not only the standalone importer.
+555 focused contracts PASS /0 skips; fresh-process/source-removed49-table PG import,
+issuer/referral reconstruction, crash/current restore and stale-copy refusal pass.
+The source fixture and wrapping-key custody remain laboratory-only; actual full DR
+is not qualified. No production changes, live capture or signer registration.
+HA-02 remains IN_PROGRESS with the live-capture decision and all three actual-state
+gates open. [Evidence, boundaries and rollback](releases/2026-11-24-control-ha-handoff-recovery.md).
+
 **24 November — remaining live-capture boundary made explicit.**
 Further read-only discovery sampled3/6/5 selected root/Family Connect system accounts
 on RU/NL1/NL2: their crontabs are absent;8/9/11 system-cron files contain no literal

@@ -35,6 +35,10 @@ def fingerprint(qualified):
 
 @pytest.fixture
 def packed(candidate):
+    return packed_for(candidate)
+
+
+def packed_for(candidate):
     arguments = candidate['arguments']
     material = {name: arguments[name] for name in
                 ('recovery_bundle', 'history_bundle', 'publications', 'authorities', 'source_materials')}

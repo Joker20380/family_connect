@@ -50,10 +50,10 @@ def newcomer():
     return dict(device=device.reference, wg=device.wireguard_public_key, tcp='00000000-0000-4000-8000-000000000001')
 
 
-def artifacts_for_external(fixture):
+def artifacts_for_external(fixture, *, sqlite_preflight=preflight_sqlite):
     artifacts = artifacts_for(fixture)
-    frozen = preflight_sqlite(fixture.stores, fixture.external, fixture.expected, CHECKPOINT,
-                             fixture.bootstrap, fixture.service.anchor, now=NOW)
+    frozen = sqlite_preflight(fixture.stores, fixture.external, fixture.expected, CHECKPOINT,
+                              fixture.bootstrap, fixture.service.anchor, now=NOW)
     rows = records(frozen)
     current_key = secrets.token_bytes(32)
     aliases = pseudonyms.prepare(dict(device=[row['device'] for row in rows['devices']],

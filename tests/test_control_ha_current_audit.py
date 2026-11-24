@@ -11,12 +11,15 @@ import pytest
 from scripts import control_ha_legacy_custody as custody
 from scripts.control_ha_current_audit import audit_current, project
 from scripts.control_ha_import import ImportRejected, TABLES, digest, encoded
+from scripts.control_ha_handoff_fixture import add_closed_handoff
+from scripts.control_ha_import_fixture import CHECKPOINT
 from scripts.control_ha_maintenance_fixture import artifacts_for_maintenance
 from scripts.control_ha_online_fixture import native_fixture
 from scripts.control_ha_receiver_v1 import preflight_receivers
-from scripts.control_ha_recovery_bundle import parse
+from scripts.control_ha_recovery_bundle import parse, seal_handoff
 from scripts.control_ha_renewal_v1 import SLOTS
 from scripts.control_ha_sqlite_fixture import refresh_fixture
+from scripts.control_ha_sqlite_import import preflight_installed_sqlite, preflight_sqlite
 from scripts.control_ha_stopped_v1 import CURRENT_PURPOSE, inspect_stopped
 from scripts.referral_postgres_rehearsal import NOW
 from test_control_ha_legacy_custody import IDENTIFIER, inventory, write
@@ -53,6 +56,10 @@ class NativeServiceBarrier(SystemdBarrier):
 @pytest.fixture(scope='module')
 def native_current(tmp_path_factory):
     root = tmp_path_factory.mktemp('scheduled-native')
+    return native_current_for(root)
+
+
+def native_current_for(root, *, handoff=False):
     fixture, fleet = native_fixture(root)
     for slot, node in fleet.nodes.items():
         node.barrier = NativeServiceBarrier(node, slot, fleet.clock)
@@ -60,9 +67,16 @@ def native_current(tmp_path_factory):
     assert result['result'] == 'COMMITTED'
     fixture.service.manifest = parse(fleet.nodes['RU'].read('issuer.json')[0])
     refresh_fixture(fixture)
-    artifacts, bounded = artifacts_for_maintenance(fixture)
+    if handoff:
+        add_closed_handoff(fixture)
+    artifacts, bounded = artifacts_for_maintenance(fixture,
+        sqlite_preflight=preflight_installed_sqlite if handoff else preflight_sqlite)
     source = Source(fixture, artifacts, bounded['pending'], secrets.token_bytes(32))
-    bundle, checkpoint = capture(source)
+    if handoff:
+        bundle, checkpoint = seal_handoff(fixture.stores, fixture.external, artifacts, CHECKPOINT,
+            fixture.bootstrap, fixture.service.anchor, source.key, now=NOW)
+    else:
+        bundle, checkpoint = capture(source)
     recovered = preflight_receivers(bundle, source.key, checkpoint, fixture.service.anchor, now=NOW)
     roots = dict(coordinator=fleet.controller.root, RU=fleet.nodes['RU'].state,
                  NL1=fleet.nodes['NL'].state, NL2=fleet.nodes['NL2'].state)

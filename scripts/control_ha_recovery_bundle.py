@@ -15,10 +15,12 @@ from control.friends.access import Access
 from control.friends.referrals import Referrals
 from scripts.control_ha_import import EXTERNAL_ROLES, STORES, TABLES, MAX_BYTES
 from scripts.control_ha_import import ImportRejected, digest, encoded, require, unique
-from scripts.control_ha_sqlite_import import preflight_sqlite
+from scripts.control_ha_sqlite_import import preflight_installed_sqlite, preflight_sqlite
 
 PURPOSE = 'family-connect/ha-recovery-bundle/v1/not-for-activation'
 MAGIC = b'FC-HA-RECOVERY\x00\x01'
+HANDOFF_PURPOSE = 'family-connect/ha-recovery-bundle/v2/closed-handoff/not-for-activation'
+HANDOFF_MAGIC = b'FC-HA-RECOVERY\x00\x02'
 MAX_PLAINTEXT = 96 * 1024 * 1024
 MAX_ARTIFACT = 1024 * 1024
 MAX_ARTIFACTS = 64
@@ -118,15 +120,23 @@ def authority_check(snapshot, artifacts, bootstrap, anchor, now):
         raise ImportRejected('BUNDLE_AUTHORITY_INVALID') from None
 
 
-def validated(stores, references, artifacts, checkpoint, bootstrap, anchor, now):
+def bundle_format(version):
+    require(type(version) is int and version in (1, 2), 'BUNDLE_VERSION')
+    return (MAGIC, PURPOSE, preflight_sqlite) if version == 1 else (
+        HANDOFF_MAGIC, HANDOFF_PURPOSE, preflight_installed_sqlite)
+
+
+def validated(stores, references, artifacts, checkpoint, bootstrap, anchor, now, *, version=1):
+    _, purpose, preflight = bundle_format(version)
     artifact_inventory(artifacts)
     require(type(references) is dict and set(references) == EXTERNAL_ROLES, 'BUNDLE_REFERENCE_COVERAGE')
     for raw in references.values():
         binary(raw, MAX_ARTIFACT)
-    snapshot = preflight_sqlite(stores, references, {role: digest(raw) for role, raw in references.items()},
-                                checkpoint, bootstrap, anchor, now=now)
+    snapshot = preflight(stores, references, {role: digest(raw) for role, raw in references.items()},
+                         checkpoint, bootstrap, anchor, now=now)
+    require(version == 1 or bool(snapshot.handoff), 'BUNDLE_HANDOFF_REQUIRED')
     authority_check(snapshot, artifacts, bootstrap, anchor, now)
-    provenance = [('bundle-format', digest(PURPOSE.encode()))]
+    provenance = [('bundle-format', digest(purpose.encode()))]
     provenance.extend(('artifact:' + role + '/' + name, digest(raw)) for role, parts in sorted(artifacts.items())
                       for name, raw in sorted(parts.items()))
     snapshot = replace(snapshot, external_digests=snapshot.external_digests + tuple(provenance))
@@ -134,17 +144,26 @@ def validated(stores, references, artifacts, checkpoint, bootstrap, anchor, now)
 
 
 def seal(stores, references, artifacts, checkpoint, bootstrap, anchor, key, *, now):
+    return _seal(stores, references, artifacts, checkpoint, bootstrap, anchor, key, now=now, version=1)
+
+
+def seal_handoff(stores, references, artifacts, checkpoint, bootstrap, anchor, key, *, now):
+    return _seal(stores, references, artifacts, checkpoint, bootstrap, anchor, key, now=now, version=2)
+
+
+def _seal(stores, references, artifacts, checkpoint, bootstrap, anchor, key, *, now, version):
+    magic, purpose, _ = bundle_format(version)
     require(type(key) is bytes and len(key) == 32, 'BUNDLE_KEY_REQUIRED')
-    recovered = validated(stores, references, artifacts, checkpoint, bootstrap, anchor, now)
+    recovered = validated(stores, references, artifacts, checkpoint, bootstrap, anchor, now, version=version)
     wrap = lambda raw: base64.b64encode(raw).decode()
-    document = dict(version=1, purpose=PURPOSE, checkpoint=checkpoint,
+    document = dict(version=version, purpose=purpose, checkpoint=checkpoint,
         stores={name: wrap(raw) for name, raw in stores.items()},
         references={role: wrap(raw) for role, raw in references.items()},
         artifacts={role: {name: wrap(raw) for name, raw in parts.items()} for role, parts in artifacts.items()},
         bootstrap=wrap(bootstrap))
     plaintext = binary(encoded(document), MAX_PLAINTEXT)
     nonce = secrets.token_bytes(12)
-    bundle = MAGIC + nonce + AESGCM(key).encrypt(nonce, plaintext, MAGIC + PURPOSE.encode())
+    bundle = magic + nonce + AESGCM(key).encrypt(nonce, plaintext, magic + purpose.encode())
     return bundle, Checkpoint(checkpoint, digest(bundle), digest(anchor), recovered.snapshot.fingerprint)
 
 
@@ -157,17 +176,19 @@ def preflight_bundle(bundle, key, expected, anchor, *, now):
     require(type(anchor) is bytes and len(anchor) == 32 and digest(anchor) == expected.anchor_sha256,
             'BUNDLE_ANCHOR_MISMATCH')
     binary(bundle, MAX_PLAINTEXT + len(MAGIC) + 28)
-    require(len(bundle) > len(MAGIC) + 28 and bundle.startswith(MAGIC), 'BUNDLE_FORMAT')
+    require(len(bundle) > len(MAGIC) + 28 and bundle.startswith((MAGIC, HANDOFF_MAGIC)), 'BUNDLE_FORMAT')
     require(hmac.compare_digest(digest(bundle), expected.bundle_sha256), 'BUNDLE_CHECKPOINT_MISMATCH')
-    nonce = bundle[len(MAGIC):len(MAGIC) + 12]
+    version = 1 if bundle.startswith(MAGIC) else 2
+    magic, purpose, _ = bundle_format(version)
+    nonce = bundle[len(magic):len(magic) + 12]
     try:
-        plaintext = AESGCM(key).decrypt(nonce, bundle[len(MAGIC) + 12:], MAGIC + PURPOSE.encode())
+        plaintext = AESGCM(key).decrypt(nonce, bundle[len(magic) + 12:], magic + purpose.encode())
     except InvalidTag:
         raise ImportRejected('BUNDLE_AUTHENTICATION_FAILED') from None
     document = parse(binary(plaintext, MAX_PLAINTEXT))
     require(type(document) is dict and set(document) ==
             {'version', 'purpose', 'checkpoint', 'stores', 'references', 'artifacts', 'bootstrap'}, 'BUNDLE_FIELDS')
-    require(type(document['version']) is int and document['version'] == 1 and document['purpose'] == PURPOSE,
+    require(type(document['version']) is int and document['version'] == version and document['purpose'] == purpose,
             'BUNDLE_VERSION')
     require(document['checkpoint'] == expected.checkpoint, 'BUNDLE_CHECKPOINT_MISMATCH')
     require(type(document['stores']) is dict and set(document['stores']) == STORES, 'BUNDLE_STORE_COVERAGE')
@@ -184,6 +205,6 @@ def preflight_bundle(bundle, key, expected, anchor, *, now):
         artifacts[role] = {name: decode(raw, MAX_ARTIFACT) for name, raw in parts.items()}
     recovered = validated({name: decode(raw, MAX_BYTES) for name, raw in document['stores'].items()},
         {role: decode(raw, MAX_ARTIFACT) for role, raw in document['references'].items()}, artifacts,
-        document['checkpoint'], decode(document['bootstrap'], 65536), anchor, now)
+        document['checkpoint'], decode(document['bootstrap'], 65536), anchor, now, version=version)
     require(recovered.snapshot.fingerprint == expected.snapshot_sha256, 'BUNDLE_SNAPSHOT_MISMATCH')
     return recovered

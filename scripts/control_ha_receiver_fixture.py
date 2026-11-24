@@ -41,14 +41,14 @@ def native_gateway(root, point, *, now=NOW):
     return engine, module
 
 
-def artifacts_for_receivers(fixture):
+def artifacts_for_receivers(fixture, *, sqlite_preflight=preflight_sqlite):
     chat = ChatAccess(fixture.access)
     chat.snapshot()
     members = chat.snapshot()
     fixture.stores['registry'] = image(fixture.paths['registry'])
-    artifacts = artifacts_for_external(fixture)
-    frozen = preflight_sqlite(fixture.stores, fixture.external, fixture.expected, CHECKPOINT,
-                             fixture.bootstrap, fixture.service.anchor, now=NOW)
+    artifacts = artifacts_for_external(fixture, sqlite_preflight=sqlite_preflight)
+    frozen = sqlite_preflight(fixture.stores, fixture.external, fixture.expected, CHECKPOINT,
+                              fixture.bootstrap, fixture.service.anchor, now=NOW)
     hosts = routing_check(artifacts['routing_files'], records(frozen))
     parts, points = {}, {}
     for node in policy.NODES:

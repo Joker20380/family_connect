@@ -28,13 +28,16 @@ class BundleRehearsal(SQLiteImportRehearsal):
     def validate_bundle(self, bundle):
         return preflight_bundle(bundle, self.bundle_key, self.checkpoint, self.anchor, now=NOW)
 
+    def seal_bundle(self, fixture, artifacts):
+        return seal(fixture.stores, fixture.external, artifacts, CHECKPOINT,
+                    fixture.bootstrap, self.anchor, self.bundle_key, now=NOW)
+
     def capture_fixture(self):
         root = self.root / 'fixture'
         root.mkdir(mode=0o700)
         fixture = self.make_fixture(root)
         self.bundle_key, self.anchor = secrets.token_bytes(32), fixture.service.anchor
-        bundle, self.checkpoint = seal(fixture.stores, fixture.external, self.fixture_artifacts(fixture), CHECKPOINT,
-            fixture.bootstrap, self.anchor, self.bundle_key, now=NOW)
+        bundle, self.checkpoint = self.seal_bundle(fixture, self.fixture_artifacts(fixture))
         private_file(self.root / 'recovery.bundle', bundle)
         recovered = self.validate_bundle(bundle)
         self.bundle_summary = recovered.summary()

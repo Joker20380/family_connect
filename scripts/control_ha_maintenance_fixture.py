@@ -23,6 +23,7 @@ from scripts.control_ha_maintenance_v1 import PURPOSE
 from scripts.control_ha_receiver_fixture import artifacts_for_receivers
 from scripts.control_ha_recovery_bundle import parse
 from scripts.control_ha_rehearsal import private_file, require
+from scripts.control_ha_sqlite_import import preflight_sqlite
 from scripts.referral_postgres_rehearsal import NOW
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -246,8 +247,8 @@ def capture_container(issuer, source):
             require(cleanup.returncode == 0, 'ROOT_FIXTURE_CLEANUP_FAILED')
 
 
-def artifacts_for_maintenance(fixture):
-    artifacts = artifacts_for_receivers(fixture)
+def artifacts_for_maintenance(fixture, *, sqlite_preflight=preflight_sqlite):
+    artifacts = artifacts_for_receivers(fixture, sqlite_preflight=sqlite_preflight)
     capture = native_capture(artifacts['issuer_material'])
     artifacts['maintenance_state'] = capture['settled']
     return artifacts, capture
