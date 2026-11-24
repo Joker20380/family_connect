@@ -13,11 +13,13 @@ import sys
 import tarfile
 import time
 import uuid
+import zipfile
 
 import pytest
 
 from scripts import control_ha_node_capture as capture
 from scripts import control_ha_node_restore as recovery
+from scripts import control_ha_node_qualify as native
 
 
 @pytest.fixture
@@ -236,3 +238,41 @@ def test_restore_refuses_existing_and_nonprivate_parent(node, tmp_path):
     existing.chmod(0o755)
     with pytest.raises(ValueError, match='PRIVATE_PARENT_REQUIRED'):
         recovery.restore(capsule, key, pin, existing / 'new')
+
+
+def native_files(node):
+    files, manifest = capture.capture('RU', node)
+    archive = io.BytesIO()
+    with zipfile.ZipFile(archive, 'w') as bundle:
+        for name in ('transport_gateway.py', 'transport_policy.py'):
+            relative = 'control/friends/' + name
+            bundle.writestr(relative, (native.SOURCE / relative).read_bytes())
+    files['transport.pyz'] = archive.getvalue()
+    files['gateway.py'] = (native.SOURCE / 'deploy/friends/awg-gateway.py').read_bytes()
+    return files, manifest
+
+
+def test_native_duplicate_terminal_clocks_and_sequence_gap(node, tmp_path):
+    files, manifest = native_files(node)
+    before = deepcopy(files)
+    result = native.qualify(files, manifest, tmp_path / 'native')
+    assert files == before
+    assert result['native_commands_executed'] == 0 and result['next_allocation_id'] == 8
+    assert result['native_safety'] == dict(duplicate_preserved=2, stale_envelope_refused=0,
+        terminal_denial_preserved=1, paid_clock_checks=2, pending_denied=0)
+
+
+def test_native_expired_decisions_refuse_without_becoming_fresh(node, tmp_path):
+    files, manifest = native_files(node)
+    manifest['captured_at_ns'] += 200 * 10**9
+    result = native.qualify(files, manifest, tmp_path / 'native-expired')
+    assert result['native_safety']['stale_envelope_refused'] == 2
+    assert result['native_safety']['duplicate_preserved'] == 0
+
+
+def test_native_safety_changes_do_not_silently_use_repository_replacement(node, tmp_path):
+    files, manifest = native_files(node)
+    files['gateway.py'] = files['gateway.py'].replace(b'network[index+1]', b'network[index+2]')
+    with pytest.raises(ValueError, match='NATIVE_SAFETY_IMPLEMENTATION_CHANGED'):
+        native.qualify(files, manifest, tmp_path / 'bad')
+    assert not (tmp_path / 'bad').exists()

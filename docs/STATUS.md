@@ -1,5 +1,16 @@
 # Текущее состояние / Current state
 
+**24 November08:09:57–08:10:02UTC — actual node allocator/receiver custody PASS.**
+RU/NL1/NL2 encrypted captures restore24 files,82 allocated peers and207 cached decisions
+off-node. Local barriers40.119/36.184/5.020ms; observed service states/PIDs/counters unchanged.
+Native safety code matches installed variants:207 duplicate decisions preserve deadlines,
+12 terminal denials remain terminal and all3 paid records deny reboot/expired clocks.
+NL2 retains sequence floor8 despite only7 peers; the next offline allocation is9, not8.
+No gateway commands or production writes/restore occur.94 focused checks PASS. This closes
+the node-local custody/safety slice, not canonical/fleet synchronization, mailbox/worker,
+OWNER runtime or independently trusted full recovery. HA-02 remains IN_PROGRESS.
+[Actual evidence and rollback](releases/2026-11-24-control-ha-live-capture.md#actual-node-readback--0810utc).
+
 **24 November — installed node capture preparation (not yet live acceptance).**
 The separate receiver/allocator collector pins the two observed installed source variants,
 takes application/registration locks without waiting and a zero-wait SQLite write lock,

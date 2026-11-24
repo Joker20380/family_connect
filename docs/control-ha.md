@@ -252,6 +252,13 @@ gateway leaf/private keys и независимое off-host custody всё ещ
 | Полное восстановление | Все обязательные stores/files/ключи/checkpoints сохранены вне исходного узла; после новых подтверждённых записей выполнено изолированное восстановление актуального состояния и проверены rollback/отказ от старой копии | Восстановлены4 SQLite,8,731 внешних файлов и отдельно OWNER PG:37 retained-data tables/1,907,455 rows +3 consent floors. Source/key/profile/CRL/routing/current-history checks PASS; старый SQLite checkpoint отвергнут. Полный receiver/worker/panel-runtime recovery, единый writer fence и native-format integration ещё не квалифицированы |
 | Репликация | Стенд PostgreSQL/Patroni выдерживает потерю/возврат primary и кворума; без кворума записи запрещены, подтверждённые события не теряются (RPO0) | PASS в изолированном стенде: strict synchronous quorum, потеря/возврат primary, DCS minority/majority, запрет записи после истечения lease, блокировка без реплик; отменённый sync COMMIT не выдаёт ложный ACK. Не production/WAN qualification |
 
+Дополнение08:10UTC: фактический node-local capture/recovery завершён на RU/NL1/NL2:
+24 файла,82 peer allocation,207 cached decisions; sequence gap NL2 сохранён,
+дубликаты не продлевают lease, terminal deny не снимается. Службы не останавливались.
+Это закрывает локальные allocator/transport-receiver custody и safety, не mailbox,
+worker/panel-runtime, общий canonical/dispatcher fence или forward trust.
+[Фактические точки и границы](releases/2026-11-24-control-ha-live-capture.md#actual-node-readback--0810utc).
+
 HA-02 COMPLETE — только совместный PASS этих четырёх результатов с точными evidence
 и версией источника. По последнему запросу выбраны все четыре блока;
 остаток — **журналы/фактическое состояние, установленный capture, полное восстановление**, не ещё

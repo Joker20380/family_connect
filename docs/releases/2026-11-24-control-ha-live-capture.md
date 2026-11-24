@@ -1,5 +1,44 @@
 # 24 November 2026 — authorized bounded live capture
 
+## Actual node readback — 08:10UTC
+
+Actual collector source916894b5771a6d2a8aa6fd34107c93ef5058d9b0 was pushed before use.
+Each source has the reviewed installed pins and no allocator WAL/SHM/journal sidecars.
+Local application/registration locks and the allocator transaction cover the fixed capture
+scope together; three different timestamps are **not** an all-fleet/canonical barrier.
+
+| Node | Capture UTC | Barrier ms | Peers | Sequence floor | Next offline ID | Ciphertext SHA256 |
+| --- | --- | --- | --- | --- | --- | --- |
+| RU | 08:09:57.894312 | 40.119 | 20 | 20 | 21 | `923f31cecabb50da208b4004515dc6f945c3cf9baaac917b3f0ec86bf8ebc261` |
+| NL1 | 08:10:00.830636 | 36.184 | 55 | 55 | 56 | `29d6f8d8e71a7778249fe1a16a1b0d7d0bba00ab37e8cf2564ad3bcadd71e57c` |
+| NL2 | 08:10:02.719195 | 5.020 | 7 | 8 | 9 | `203683d0947970568416dc80d4946147a93c15700f67a2e7c2fba1d54d2ca24e` |
+
+Fresh-process authenticated restoration preserves8 files and69 cached decisions per node,
+including the real NL2 sequence gap. A second qualification uses private scratch only:
+installed Gateway.load/allowed/accept, policy.validate/successor and allocator.address ASTs
+match the repository functions before using those native consumers. Installed source itself
+is never imported/executed from the capsule. All207 duplicate accepts leave cached records
+and lease deadlines unchanged;12 actual terminal denials refuse resurrection. All3 actual
+paid-cohort records deny a changed boot, exhausted monotonic deadline and wall-clock expiry.
+No pending noncohort preparation occurs in this actual snapshot; do not claim actual coverage
+of that absent case. SQLite next-ID/address probes use memory and roll back. No engine
+command, source mutation, service start/stop, network dispatcher or production restore.
+
+Qualification source `scripts/control_ha_node_qualify.py`;94 focused checks PASS,49 new
+node tests plus45 reused inventory/four-store safety checks. Synthetic tests additionally
+exercise stale envelopes and changed native safety code. TCP/AWG configuration is exact-byte
+custody, not a live engine/traffic qualification; terminal and lease checks do not turn
+cached grants into fresh authority. Original service states/PIDs/invocations/restarts match
+before/after each capture: RU AWG failed/TCP inactive pre-existed; both NL pairs remain active;
+paid-watch remains active on all nodes. No attempt is made to disguise that RU failure.
+
+Private capsules, capture/restore/native receipts and offline/scratch files are retained in
+owner-only `control-ha/20261124-nodes-01`; wrapping keys/checkpoints remain separately in
+`control-ha-keys`. No keys, user IDs, IP bindings or raw records enter Git. Rollback is still
+release of locks/transaction, not deployment of the offline material. Installed/public
+versions stay unchanged. Mailbox, legacy worker, OWNER runtime, native composite integration,
+all-writer/dispatcher coherence and independently approved forward authority remain open.
+
 ## Installed node custody
 
 Preparation source: `scripts/control_ha_node_capture.py` and
@@ -41,7 +80,8 @@ Only a new0700 offline directory with0600 files is permitted; exact byte readbac
 installed source pins, allocator schema/sequence/IP range and receiver binding checks
 must pass. The checkpoint is operator-held custody, not independently approved forward
 authority. Rollback means automatic release on refusal; no live source is changed.
-Actual capture/readback and native behavior evidence are still pending at this checkpoint.
+This preparation was followed by the actual08:10UTC readback above; those local slices are
+no longer pending. It is not full HA-02 acceptance.
 
 ## OWNER database capture — 07:38:49UTC
 

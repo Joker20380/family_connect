@@ -3,11 +3,12 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Current node slice: qualify the pinned250ms application/registration/allocator capture and
-perform actual encrypted offline readback on RU/NL1/NL2. Preserve cached lease clocks and
-terminal decisions without activation. This is not the missing fleet/dispatcher fence;
-mailbox, legacy-worker, panel-runtime and independent forward trust remain selected gates.
-[Capture/abort plan](releases/2026-11-24-control-ha-live-capture.md#installed-node-custody).
+Node-local slice completed08:10UTC:24 restored files,82 peers,207 decisions; native duplicate,
+terminal-denial, lease-clock and next-allocation checks pass without activation.94 focused
+checks PASS; actual barriers40.119/36.184/5.020ms, observed services unchanged. Do not repeat
+this as pending receiver/allocator custody. Remaining receiver scope is mailbox and complete
+canonical/dispatcher consistency, alongside legacy-worker, panel-runtime, native integration
+and independent forward trust. [Evidence](releases/2026-11-24-control-ha-live-capture.md#actual-node-readback--0810utc).
 
 OWNER DB point07:38:49UTC now passes encrypted capture and isolated native restore:
 37 retained-data tables/1,907,455 rows,3 consent floors,39 schemas/25 sequences, no metadata
@@ -20,7 +21,7 @@ Latest actual point07:22:17UTC:8,731 external files restored from three encrypte
 bindings pass. This advances custody, not a complete writer fence or trusted full-DR gate.
 Keep the native alias shape (66 retained mappings plus3 explicit new entities) without
 inventing legacy handles; the strict old recovery adapter cannot yet import that shape.
-Remaining selected work: actual receiver/allocator/legacy-worker/OWNER recovery, installed
+Remaining selected work: mailbox/legacy-worker/OWNER-runtime recovery, installed
 format integration, full writer/queue coverage and independently approved forward checkpoint.
 Earlier external authority/history preparation: the bounded encrypted file collector and
 new-directory readback pass108 focused checks. Actual three-node collection, bracketing
