@@ -1,22 +1,23 @@
 # Текущее состояние / Current state
 
-**24 November — CONTROL-HA exact provenance gap; owner decision required.**
-Source6eb4c2f37cad8bc0c0a0ec60f7a5397f5db477c1 pushed/remote-SHA verified on the
+**24 November — CONTROL-HA forward-checkpoint contract implemented offline.**
+Owner explicitly approved development without service stops or server changes.
+Source38a3ac27c524a37631be81b88d3dff00749b72e4 pushed/remote-SHA verified on the
 metadata branch in `/home/joker/.codex/worktrees/dad9/family_connect`.
-Exact installed fcb31164 reconstructs the14-module e9fd3175 digest from the previous
-three-host observation. Native scheduled records store a derived gate, not original
-approval/controller config. Seven selected retained artifacts do not establish it;
-this is not an exhaustive backup search. Do not repeat this loop without a new source.
-Selected journal task remains IN_PROGRESS / OWNER DECISION REQUIRED: provide independent
-original custody or approve development of the recommended forward-only current-state
-checkpoint contract. Old journals remain immutable history; no retroactive consent,
-weakened signature/floor checks or old SQLite restore. Proposal only; capture/writer
-stop/deployment and the next queued block are not authorized. Same four stage2 gates.
-Documentation-only checkpoint:5 source docs/958 links PASS;175 tests belong to prior
-cc4be524, not rerun. No SSH/runtime/service/policy/version changes or fresh health claim.
+Separate domain-signed current-state contract binds encrypted recovery/full opaque
+history, source/config/issuer/publications, checkpoint/expiry and an offline-only action.
+Independent request pin and sequence/CRL floors required. Old approval remains unknown,
+old equality checks unchanged; no retroactive consent, production signer or resume API.
+Native post-renewal issuance survives source removal: isolated registry rejects consumed
+proof and accepts a fresh one.251 tests PASS /3 optional PostgreSQL skips;75 new tests
+have zero skips.5 source docs/963 local links and whitespace PASS.
+Selected task IN_PROGRESS, no longer waiting for the development decision. Actual-current
+source/publication bindings, coherent capture and full recovery still unqualified.
+Same four stage2 blocks; production still depends on RU. No queued block selected.
+No SSH/deployment/service/policy/version changes or fresh fleet-health claim.
 Console5ce82415, RU HTTP4e2df679, NL GeoIP22 November, Android126/catalog9 unchanged.
-Old main is navigation only; original work preserved.
-[Decision, evidence and rollback](releases/2026-11-24-control-ha-provenance-decision.md).
+Old main is navigation only; original work preserved, prior main push non-fast-forward.
+[Contract, tests and rollback handoff](releases/2026-11-24-control-ha-forward-checkpoint.md).
 
 **24 November — CONTROL-HA certificate-content delta checked; recovery remains BLOCKED.**
 Sourcecc4be524c6ece6e9852409fa79800978a8a44e55 pushed and independently remote-SHA

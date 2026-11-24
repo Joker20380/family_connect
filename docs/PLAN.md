@@ -181,13 +181,18 @@ paid-history or recovery authorization; strict five-table acceptance remains unc
 Source6eb4c2f3 pushed/remote-SHA verified: exact installed fcb31164 reconstruction
 matches prior14-module e9fd3175 observations. Its native record does not retain original
 approval/config, and seven selected retained artifacts do not establish that custody.
-Bounded investigation complete, not an exhaustive search or journal PASS. Selected task
-remains IN_PROGRESS / OWNER DECISION REQUIRED: a concrete independent original source,
-or approval to develop the recommended forward-only current-state checkpoint contract.
-No repeating the same search without new evidence, retroactive approval, old-row restore,
-equality bypass, production capture/writer stop/deployment or automatic next block.
-Fresh authorization would govern a new current-state checkpoint while retaining old
-immutable journals as history; other coherent-capture/recovery/floor/signature gates remain.
+Bounded investigation complete, not an exhaustive search or journal PASS. Owner has
+now approved forward-only development without server changes. Source38a3ac27 pushed/
+remote-SHA verified: separate signed offline current-state contract and75 new tests,
+independent request pin and sequence/CRL floors, exact current capsule/opaque history/
+source/config/issuer/publication bindings. Native post-renewal issuance, source-removed
+readback and isolated registry consumed/fresh-proof checks pass.251 selected tests PASS
+/3 optional PostgreSQL skips; old equality/import implementations remain unchanged.
+Same selected task IN_PROGRESS: actual-current publication/source/capture bindings,
+coherent capture and full recovery still open. Development decision is resolved, not
+historical approval. No new signer, retroactive consent, old-row restore, production
+capture/writer stop/deployment or automatic next block. No repeated provenance search.
+[Implemented contract and exact remaining gates](releases/2026-11-24-control-ha-forward-checkpoint.md).
 [Exact evidence and decision scope](releases/2026-11-24-control-ha-provenance-decision.md).
 [Certificate-content evidence and remaining gate](releases/2026-11-24-control-ha-certificate-delta.md).
 No speculative next variant, permissive flag or deployment is selected. Stage2 completion is
