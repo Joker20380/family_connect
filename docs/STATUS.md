@@ -1,5 +1,27 @@
 # Текущее состояние / Current state
 
+**24 November — CONTROL-HA: installed schemas and49-table recovery qualified in isolation.**
+Authoritative source advanced to64ba58ee110b1c2ebb7fb3f2661f6badcea10d60, pushed and
+remote-SHA verified on `feature/device-technical-metadata-20261115` in the metadata worktree.
+Read-only fleet census identified five additional handoff authority/history/floor tables;
+source7c8a5747 pins their exact22 definitions. Source63ecb859 preserves them in the same
+PG import transaction, refuses unsettled/broken/regressing state and makes retention
+read-only.199 import/census tests plus28 guards PASS /0 skips; native49-table crash,
+independent PG restore, stale-copy refusal and extended strict Patroni fault run PASS.
+Source64ba58ee extends observational coverage: all32/9/5 fleet units observed; eight
+old pressure units are transient/no main or control PID at sample, not masked units.
+Root key literal candidates1/3/2 and absent root crontabs observed. OWNER-local console,
+postgres and system_publisher are running/healthy; no queue or credential payload export.
+39 census guards PASS /0 skips. These are observations, not all-writer/traffic acceptance.
+HA-02 remains IN_PROGRESS: actual-current approval/custody, complete writer/coherent
+capture and full real off-node recovery remain open. A synthetic key is not owner consent;
+the earlier forward-only approval excluded service stops/server changes. No live barrier,
+service/container mutation, deployment, release/version change or PostgreSQL cutover.
+Current schemas are34 application tables; the laboratory PG target has49 tables including
+markers/receipts. RU dependence persists. Original dirty root work remains preserved;
+this divergent main is navigation-only, not the implementation branch.
+[Source commits, evidence, remaining work and rollback](releases/2026-11-24-control-ha-installed-recovery.md).
+
 **24 November — CONTROL-HA репликационный стенд принят; выбрано завершение всего HA-02.**
 Source9034163db7370803e1d008ed9678e3107d27cec0 pushed/remote-SHA verified on the
 metadata branch in `/home/joker/.codex/worktrees/dad9/family_connect`.

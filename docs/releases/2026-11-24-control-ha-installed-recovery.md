@@ -1,0 +1,50 @@
+# 24 November 2026 — installed recovery continuation navigation
+
+Authoritative implementation remains `/home/joker/.codex/worktrees/dad9/family_connect`
+on `feature/device-technical-metadata-20261115`, not this divergent old main.
+Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
+
+## Source and evidence
+
+- `7c8a574745360e0a0df9aa9939d46c9fd5efdd2f`: actual four-store/unit census and pinned
+  handoff schema.29 supported application tables unchanged; five extra handoff tables
+  and17 indexes/triggers match retained source.28 census tests PASS /0 skips.
+- `63ecb859213bd478286f6b460ed2f593c339a11b`: explicit closed-handoff retention in the
+  same canonical import transaction.35 application/retained tables plus14 marker/receipt
+  tables.199 tests and28 guards PASS /0 skips;49-table crash/independent PG restore,
+  old-copy refusal, full strict Patroni primary/quorum/no-sync/cancelled-COMMIT PASS.
+- `64ba58ee110b1c2ebb7fb3f2661f6badcea10d60`: exact scoped transient-unit and OWNER
+  panel/dispatcher metadata observation.39 focused checks PASS /0 skips. All32/9/5
+  fleet units observed; root key literal candidates1/3/2, root crontabs absent. Panel
+  console/postgres/system_publisher are on OWNER, not RU, all running/healthy.
+
+All three source commits were pushed by ordinary non-force pushes and their remote
+branch SHAs independently verified. Source evidence reports:
+[installed census](https://github.com/Joker20380/family_connect/blob/64ba58ee110b1c2ebb7fb3f2661f6badcea10d60/docs/releases/2026-11-24-control-ha-installed-census.md)
+and [handoff retention](https://github.com/Joker20380/family_connect/blob/63ecb859213bd478286f6b460ed2f593c339a11b/docs/releases/2026-11-24-control-ha-handoff-retention.md).
+Private receipts/keys/state are not copied into Git. See the authoritative reports
+for exact private receipt locations, source hashes, run limitations and failed attempts.
+
+## Gate and rollback boundaries
+
+HA-02 **IN_PROGRESS**. Replication passes in the isolated lab; actual-current
+authorization/journal custody, complete writer/coherent capture and full real off-node
+recovery remain mandatory. An independent PG restore with retained synthetic keys is
+not complete fleet DR. Closed history/floors are retained read-only, not silently
+discarded or reopened by a new runtime. Legacy v1 schema refusal remains intact.
+
+No live writer stop, service/container mutation, DB restore, deployment, release,
+signer registration or cutover occurred. Observational locks/SSH audit/access times
+are not a global fence. System cron/other accounts, complete SSH semantics, manual
+administration/queues and publisher ownership still need the bounded barrier review.
+The previous forward-only approval was development without server changes; no historic
+consent is fabricated from test keys or current flags. Exact current authorization
+and independent trusted pins remain separate from broad implementation permission.
+
+Console5ce82415, HTTP4e2df679, NL GeoIP22November, Android126/catalog9 and8/12/120s/
+all-three-node ACK unchanged. RU dependence persists. Rollback is owned lab cleanup
+and an ordinary reviewed source revert, never old live SQLite/floor restoration.
+
+Original four unstaged/six untracked files in this navigation checkout are preserved.
+Prior navigation push was rejected non-fast-forward; no force/reset or history rewrite.
+This report is a source/navigation checkpoint, not a release or stage2 completion.
