@@ -49,6 +49,16 @@ Readiness now uses loopback TCP, which that temporary server does not listen on.
 test pins this distinction; the original OWNER containers remain untouched and the owned
 failed-attempt resources are removed. This refusal is not a failed production restore.
 
+The next actual attempt restores the full PG archive and verifies all39 table fingerprints
+after restoring only three consent floors. Its native ingestion probe then reaches the300s
+lab deadline: two complete scans of1,907,455 rows already take220.4s at the explicit1-CPU
+lab limit; the ingestion/readback probes each require four scans. No ingestion/recovery
+PASS is claimed from this attempt. The owned probe/PG/volume are removed automatically.
+The bounded probe deadline is now900s, with all table checks,1-CPU/memory limits and
+production isolation unchanged. Regression tests require owned-probe cleanup on timeout
+in every mode. The already verified pre-ACK dump is private restart evidence, not a new
+production checkpoint; a continuation must verify its39 fingerprints before ingestion.
+
 ## Fixed remainder of stage 2
 
 The four acceptance blocks have NOT increased. Replication is PASS; three remain partial:

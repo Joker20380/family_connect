@@ -8,6 +8,8 @@ Do not merge69 canonical,50 synthetic and4 legacy identities. Verify native pane
 new owner ACK/current restore/stale refusal and unchanged unrelated tables, without dispatch.
 The fixed stage2 remainder is three partial acceptance blocks, not new lettered stages:
 inputs/trust, coherent all-writer capture and complete final recovery; replication is PASS.
+Actual baseline39-table restore passes; continue from its verified private pre-ACK dump
+after correcting the lab scan deadline. A timed-out ingestion is not an acceptance PASS.
 [Bounded execution, rollback and exact remainder](releases/2026-11-24-control-ha-owner-joint.md).
 
 Actual canonical-to-three-node integration passes09:57:21UTC:207 exact original-timestamp

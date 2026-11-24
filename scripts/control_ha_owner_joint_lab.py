@@ -14,6 +14,7 @@ from scripts.control_ha_import import encoded
 from scripts.control_ha_rehearsal import private_file, require
 
 LABEL = 'family-connect.ha-owner-joint'
+PROBE_TIMEOUT = 900
 
 
 class OwnerLab:
@@ -99,7 +100,7 @@ class OwnerLab:
                 '--mount',f'type=bind,source={destination},destination=/app/control_plane/.local,readonly',
                 '--workdir','/app/control_plane','--env','PYTHONDONTWRITEBYTECODE=1','--env',
                 'PYTHONPATH=/app:/app/control_plane','--entrypoint','python',owner.IMAGES['console'],'-B','-',
-                data=Path(__file__).with_name('control_ha_owner_joint_probe.py').read_bytes(),timeout=300)
+                data=Path(__file__).with_name('control_ha_owner_joint_probe.py').read_bytes(),timeout=PROBE_TIMEOUT)
             require(len(result)<32768,'PROBE_RESPONSE_BOUNDS')
             receipt = owner.document(result)
             private_file(destination/'receipt.json',result)

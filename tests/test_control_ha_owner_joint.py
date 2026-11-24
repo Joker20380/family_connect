@@ -2,6 +2,7 @@ import io
 import json
 import os
 import sqlite3
+import subprocess
 import tarfile
 from copy import deepcopy
 from types import SimpleNamespace
@@ -11,7 +12,7 @@ from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
 from control.friends import pseudonyms
 from scripts import control_ha_owner_joint as joint
-from scripts.control_ha_owner_joint_lab import OwnerLab, LABEL
+from scripts.control_ha_owner_joint_lab import OwnerLab, LABEL, PROBE_TIMEOUT
 from scripts import control_ha_owner_runtime as owner
 from scripts import control_ha_worker_custody as worker
 from scripts.control_ha_import import encoded,digest,import_snapshot
@@ -73,6 +74,25 @@ def test_readiness_ignores_entrypoint_temporary_unix_only_server(tmp_path,monkey
     monkeypatch.setattr('scripts.control_ha_owner_joint_lab.subprocess.run',readiness)
     with lab:assert lab.container=='owned-id'
     assert len(probes)==1
+
+
+@pytest.mark.parametrize('mode',('baseline','ingest','readback','stale'))
+def test_probe_deadline_remains_bounded_and_cleans_only_owned_container(tmp_path,mode):
+    lab=OwnerLab(tmp_path/'lab');lab.container='owned-pg';lab.owned=lambda:None
+    calls=[]
+    def docker(*arguments,**kwargs):
+        calls.append(arguments)
+        if arguments[0]=='run':
+            assert kwargs['timeout']==PROBE_TIMEOUT==900
+            raise subprocess.TimeoutExpired('private-probe',PROBE_TIMEOUT)
+        if arguments[0]=='ps':return b'owned-probe'
+        if arguments[0]=='inspect':
+            return encoded([dict(Image=owner.IMAGES['console'],Config=dict(Labels={LABEL:lab.token}))])
+        assert arguments==('rm','-f','owned-probe')
+        return b''
+    lab.docker=docker
+    with pytest.raises(subprocess.TimeoutExpired):lab.probe(dict(mode=mode),b'{}',{},mode)
+    assert calls[-1]==('rm','-f','owned-probe')
 
 
 @pytest.mark.parametrize('kind',('extra','pin','key','image','dispatch','observations','duplicate','hash','table'))

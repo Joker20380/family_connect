@@ -4,7 +4,9 @@
 Read-only census confirms69 canonical,50 synthetic and4 legacy key identities are disjoint;
 OWNER aliases/HMAC exactly bind to canonical custody. The prepared native OWNER importer
 probe uses a private network-none PG restore and fresh lab credentials, never the running
-panel or dispatchers. Actual joint execution is pending; source/image custody, coherent
+panel or dispatchers. Actual39-table baseline restore passes; native ingest reaches the
+lab-only300s deadline. The bounded deadline is corrected to900s without dropping any scan;
+final ingestion/current/stale qualification remains pending. Source/image custody, coherent
 all-writer capture and independent trust remain. [Scope and fixed remainder](releases/2026-11-24-control-ha-owner-joint.md).
 
 **24 November09:57:21UTC — actual canonical/three-receiver integration PASS.**
