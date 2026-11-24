@@ -202,6 +202,15 @@ retained sources.329 tests /0 skips; six source docs/972 links PASS. Retained fc
 compatibility uses synthetic configs, not new host evidence. Controller config, API
 binaries/dependencies, installed-process identity and coherent capture remain unqualified.
 [Current source-custody contract and acceptance boundary](releases/2026-11-24-control-ha-forward-sources.md).
+Follow-up source75ad8011 pushed/remote-SHA verified: all supported offline forward inputs
+now fit one bounded encrypted archive, retaining both inner capsules and exact public/
+source sidecars. External keys/trust/pins/time/floors remain mandatory; packing is not
+approval and does not extend expiry. Fresh-process readback after source removal and
+native portable recovery preserve exact bytes and consumed-proof refusal/fresh issuance.
+261 tests PASS /2 old optional PostgreSQL skips;59 archive tests plus the added native
+portable scenario run without skips. Six source docs/975 links and whitespace PASS.
+No full restore/off-host/RPO0 qualification, extractor, host resume or production capture.
+[Portable format, separate custody and rollback](releases/2026-11-24-control-ha-forward-archive.md).
 Same selected task IN_PROGRESS: actual-current publication/source/capture bindings,
 coherent capture and full recovery still open. Development decision is resolved, not
 historical approval. No new signer, retroactive consent, old-row restore, production

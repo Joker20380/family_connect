@@ -1,17 +1,18 @@
 # Текущее состояние / Current state
 
-**24 November — CONTROL-HA сохранённые renewal source/config bytes обязательны.**
-Source77bc5a98558933f6b4f99fe3a3e4d0783f6e8d41 pushed/remote-SHA verified on the
+**24 November — CONTROL-HA переносимый зашифрованный комплект проверен offline.**
+Source75ad8011cf32893a2f283f6f78e1d469a97ddfd1 pushed/remote-SHA verified on the
 metadata branch in `/home/joker/.codex/worktrees/dad9/family_connect`.
-Forward verification now checks exact saved configuration/renewal module bytes for
-RU/NL1/NL2 against signed hashes, node slot/role, gateway IDs and anchor. Minimum legacy14
-modules; no retained source execution. Local no-follow collection rejects unsafe paths
-and observed changes. Both-publication signature/time/floor checks remain mandatory.
-329 focused tests PASS /0 skips (sources72/checkpoint98/publications77/inventory26/audit56).
-Retained fcb31164/e9fd3175 source-removed readback passes with synthetic configs, not a
-fresh production capture. Six source docs/972 links and whitespace PASS.
-Scope excludes controller config/API binaries/dependencies/process attestation/full restore.
-Selected journal task remains IN_PROGRESS; source byte custody is not coherent capture.
+Exact signed request, both existing encrypted capsules and public/source sidecars now
+travel in one bounded AES-256-GCM archive. Keys, signer/anchor, pins, time and floors
+remain external. Packing is not approval; reading reruns all forward checks.
+Fresh-process/source-removed readback preserves exact input fingerprints. Native recovery
+through the archive retains used-proof refusal/fresh-proof issuance and strict old-baseline
+refusal.261 tests PASS /2 existing PostgreSQL skips;59 new archive cases and the added
+native portable scenario have no skips. Six source docs/975 links and whitespace PASS.
+No extractor, host resume, actual capture, full-store recovery or independent off-host
+backup acceptance. Short-lived approval is not extended; runtime attestation remains open.
+Selected journal task remains IN_PROGRESS; portability is not coherent production capture.
 До конца этапа2: доведение фактических journal/source/capture bindings и ещё три крупных
 блока — установленные схемы/writers со согласованным снимком, полное off-host recovery,
 строгая репликация/quorum/RPO0. Это не одна-две мелкие правки; календарный ETA не установлен.
@@ -19,7 +20,7 @@ No queued block selected, no SSH/deployment/writer stop/version change or fresh 
 Console5ce82415, RU HTTP4e2df679, NL GeoIP22 November, Android126/catalog9 unchanged.
 RU dependence persists; HA-03 fencing, HA-04 failover and HA-05 cutover follow HA-02.
 Old main remains navigation only; original work preserved, prior push non-fast-forward.
-[Current source, tests, remaining gates and rollback](releases/2026-11-24-control-ha-forward-sources.md).
+[Current source, tests, remaining gates and rollback](releases/2026-11-24-control-ha-forward-archive.md).
 
 **24 November — CONTROL-HA forward-checkpoint contract implemented offline.**
 Owner explicitly approved development without service stops or server changes.
