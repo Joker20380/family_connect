@@ -3,6 +3,20 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+Writer-boundary preflight completed14:38–14:44UTC;62 tests PASS. Current unit/account/cron/
+cgroup observations are retained privately. RU chat-sync changes state during observation;
+NL1/NL2 are active and unchanged.24 retained Docker ExecIDs are all non-running, not proof
+that new dispatch is inhibited. No snapshot is authorized by an empty lock/process sample.
+Next selected implementation: qualify a coordinated **admission close → in-flight drain →
+overlapping capture → automatic release** boundary, with paid-watch/deny enforcement still
+running. Cover the HTTP operation lifetime, RU schedulers/operator/SSH dispatch, legacy
+Docker side effects and OWNER PG/synthetic publishers. Unknown or unsettled writers abort
+before capture. The minimum proof and rollback contract are fixed in the
+[writer-boundary report](releases/2026-11-24-control-ha-writer-boundary.md#minimum-boundary-contract).
+Do not repeat this inventory, earlier retained-state recovery, or create another lettered
+stage. Coherent capture, independent current approval/key custody and final combined
+post-ACK/stale-copy recovery remain; no HA-03 or production cutover.
+
 Actual NL2 retained-state recovery PASS14:12UTC; final unchanged-service/cleanup check
 PASS14:20UTC. Seven encrypted capsules and pinned runtime/toolkit are durably retained
 off the laptop. Wrong-key input refuses in a fresh unit;50 focused tests PASS. Practical

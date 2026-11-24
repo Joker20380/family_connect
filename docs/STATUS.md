@@ -1,5 +1,20 @@
 # Текущее состояние / Current state
 
+**24 November14:38–14:44UTC — writer-boundary observation complete; capture still refused.**
+New read-only preflight covers32/9/5 RU/NL1/NL2 units, explicit service-account/default
+SSH dispatchers, system cron and scoped cgroup processes without taking locks or sending
+signals. NL1/NL2 units are active and unchanged during observation. RU chat-sync completes
+during the scan, demonstrating ongoing dispatch despite empty sampled application locks.
+The RU AWG failed/TCP inactive/paid-reconcile failed states predate this action and match
+the morning census; no recovery restart was attempted. Five scoped RU/OWNER containers
+are running. The pilot gateway's24 Docker ExecIDs are retained completed executions, not
+24 running commands: direct GET readback finds zero Running, but no future-dispatch fence.
+62 focused tests PASS. No capture, deployment, versions or production policies changed.
+Next is a qualified admission-and-drain boundary for HTTP, timers/CLI/SSH, external Docker
+operations and OWNER PG/synthetic publishers, not more component snapshot repetitions.
+The same three HA-02 gates remain partial; replication PASS.
+[Actual observations, minimum boundary and abort rules](releases/2026-11-24-control-ha-writer-boundary.md).
+
 **24 November14:12UTC — actual isolated recovery on NL2 PASS; cleanup verified14:20UTC.**
 Published runnerd85cccb2 restores the accepted8acc6bd2 kit on Ubuntu24.04/NL2, with no
 Docker/package installation, RU connection, host source/venv, live volume or network in

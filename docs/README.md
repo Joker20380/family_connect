@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 24 November: scoped writer/dispatcher observation, safe drain requirements and refusal of an unfenced capture](releases/2026-11-24-control-ha-writer-boundary.md).
+
 [CONTROL-HA · 24 November: actual isolated retained-state recovery on NL2 PASS; encrypted off-machine custody, wrong-key refusal, production services unchanged; coherent approval/final recovery remain](releases/2026-11-24-control-ha-recovery-kit.md#actual-nl2-recovery--1412utc).
 
 [CONTROL-HA · 24 November: actual encrypted OWNER image cold bootstrap PASS without Docker/source/registry; three native probes, authenticated native readback,71 tests, no activation](releases/2026-11-24-control-ha-image-custody.md#actual-execution--114357utc).
