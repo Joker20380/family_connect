@@ -4,6 +4,43 @@ Authoritative implementation remains `/home/joker/.codex/worktrees/dad9/family_c
 on `feature/device-technical-metadata-20261115`, not this divergent old main.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## Authorized live capture and privacy-safe restoration
+
+Owner confirmation “подтверждаю давай делай” explicitly authorizes the reviewed bounded
+live capture/temporary management-write barrier, not a production PostgreSQL switch.
+Source `e90f8f1565d42d07484f7687c1019cfd9761835c` is published and remote-SHA verified
+on the existing implementation branch. [Pinned execution report](https://github.com/Joker20380/family_connect/blob/e90f8f1565d42d07484f7687c1019cfd9761835c/docs/releases/2026-11-24-control-ha-live-capture.md)
+records the actual operation, private custody, earlier refusal and exact rollback.
+
+Actual24 November04:58:58UTC v2 capture sourceeba7a5ce obtains all four RU SQLite
+write locks without waiting and releases them in61.694ms. No application write/COMMIT,
+service stop/start/freeze or database restore occurs on production. The one-second
+kernel-alarm deadline releases locks by process exit if capture stalls; a busy store
+aborts immediately. This avoids paid-watch's12-second watchdog/transport-stop coupling.
+
+Encrypted off-RU images restore in a fresh process/new private directory on OWNER:
+4 stores/34 tables/609 rows, exact exported-image readback and closed handoff1/2/1/1/1.
+Metadata keeps only consent/replay floors; observations are empty in a newly built image,
+so old free-page payloads are not retained. The initial observation-bearing raw capsule,
+key and four offline images were removed after ephemeral qualification; their aggregate
+receipts remain. No original server data/tombstone is deleted or changed.79 focused
+capture/restore/census tests PASS /0 skips; source documentation links/whitespace PASS.
+
+Observed RU/NL1/NL2 AWG/TCP/paid-watch unit states/PIDs/invocations/restart counters remain
+unchanged; RU management HEAD returns501 before/after, proving listener reachability only.
+No pre-existing failed/inactive service is started or reported as healthy. No traffic test
+or full service recovery is inferred. Product versions/public artifacts/catalogs unchanged.
+
+HA-02 remains IN_PROGRESS: external authority/keys/history, NL receiver/mailbox, legacy
+worker and OWNER-panel coherent capture/trusted full recovery remain unqualified. The
+strict PG/Patroni laboratory replication gate remains PASS. Do not promote the four-store
+slice to full DR, production HA or stage2 completion. The capture rollback is complete:
+all locks released; never restore an old offline image over production.
+
+This navigation update preserves the four original unstaged and six untracked root files.
+The agreed implementation branch is published; previous main navigation push was rejected
+non-fast-forward. Do not reset/force-push/rewrite either branch to hide that divergence.
+
 ## Encrypted recovery follow-up
 
 Source `afe4812e7c12dfd83b22cc50659c35152208d700` is pushed and remote-SHA verified.

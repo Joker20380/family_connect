@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+**24 November04:58UTC — authorized live capture and privacy-safe off-RU restore PASS.**
+Owner confirmation removes the earlier live-capture permission blocker; no PG cutover
+is authorized. Authoritative sourcee90f8f1565d42d07484f7687c1019cfd9761835c is pushed and
+remote-SHA verified on the metadata branch. Actual four-store barrier61.694ms; encrypted
+off-RU restore34 tables/609 rows, closed handoff1/2/1/1/1 and consent/replay floors only.
+Metadata observations/free-page payloads are excluded; earlier raw observation-bearing
+temporary copies and keys were removed after qualification.79 focused tests PASS /0 skips.
+RU/NL1/NL2 observed service states/PIDs/invocations/restarts unchanged; no stop or cutover.
+HA-02 remains IN_PROGRESS: full external authority/history/receiver/mailbox/legacy-worker
+and OWNER-panel coherent recovery is still unqualified. No version or release change.
+[Current source, actual evidence and rollback](releases/2026-11-24-control-ha-installed-recovery.md#authorized-live-capture-and-privacy-safe-restoration).
+This supersedes the permission-pending statements in the historical checkpoints below.
+
 **24 November — encrypted49-table recovery source pushed.**
 Authoritative sourceafe4812e7c12dfd83b22cc50659c35152208d700 is pushed/remote-SHA verified
 on the existing metadata branch.555 focused tests /0 failures/errors/skips PASS, including

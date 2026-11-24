@@ -3,6 +3,14 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+Current sourcee90f8f15 is pushed/remote-SHA verified. Owner explicitly authorized bounded
+capture; the earlier permission-pending statements below are superseded. Actual04:58UTC
+v2 capture/restore passes:61.694ms four-store lock barrier,34 tables/609 rows, metadata
+consent/replay floors without observation payloads;79 tests PASS. No service stop/cutover.
+Continue existing external authority/history/receiver/mailbox/legacy-worker and OWNER-panel
+writer/coherent-capture/full-recovery gates; do not repeat the same permission question,
+claim full stage2 completion or start HA-03..05. Removed ephemeral raw images are not
+retained rollback state. The current encrypted v2 custody stays private outside Git.
 Latest owner request24 November selects **completion of all HA-02**, not only the
 journal slice. Current sourceafe4812e is pushed/remote-SHA verified in the metadata
 worktree, not deployed. The encrypted handoff profile now reaches the signed portable
