@@ -6,6 +6,41 @@ divergence is reconciled/pushed at2ae5c512; older publication-blocker statements
 historical, not active instructions or a current blocker.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## Normal OWNER prepared build — no installation
+
+[Authoritative build defect, image verification and rollback boundary](https://github.com/Joker20380/family_connect/blob/359fe030322037b48ad5cbb59196d65fe7e752fd/docs/releases/2026-11-24-control-ha-owner-prepared-build.md)
+is pushed/remote-SHA verified at359fe030322037b48ad5cbb59196d65fe7e752fd. Main is navigation
+only. No RU/NL access, installed container replacement, service/unit/timer/environment change,
+product version/publication/catalog/signing/release change or product database access.
+
+Normal preparation omitted control/capture_gate.py although Dockerfile copies it and manage.py
+imports it. The explicit source allowlist now includes exactly that module; no recursive control/
+state copy or new dependency. Four root regression cases cover Docker COPY completeness and
+fresh-process prepared-module admission without checkout imports.40 focused tests PASS/0 skips.
+The final root tests do not add a Django dependency to the control CI environment; real CLI
+behavior is tested separately in the image with all18 panel-lock package versions verified.
+
+The actual272-file private prepared context builds image SHA256
+4392d4b7ba7b73886e03b0449a6074aadd8c6638da029f0cda75a05586b82f3f.
+Two disposable probes at UID/GID10001 and1000 run on image Python3.13.17 with no network,
+read-only root, no capabilities, no host/product mounts and a private temporary gate. Five
+management commands invoked with --help refuse a closed gate; missing gate refuses and
+unconfigured/admitted help succeeds. Pending remains empty; ten selected image source hashes
+match the prepared manifest. These probes neither start services nor exercise product PG.
+Both test containers are removed. Before/after selected installed OWNER bindings are equal;
+installed images5ce82415/50de6f25 remain without gates. This is not a quiet capture interval.
+
+No live rollback is needed: preserve installed images/configuration/volumes and recovery access.
+The candidate does not inherit previous images' exact-command activation/revert acceptance;
+do not substitute the default Compose startup/migrations for the installed configuration.
+No private source shadow, .env, capsule, raw evidence or build output is committed. Feature
+documentation checks pass5 files/1096 targets/0 errors; main navigation3 files/705 targets/
+0 errors. Whitespace checks pass; external URLs are enumerated, not fetched.
+Next remains actual OWNER runtime/config/candidate approval and the existing RU/NL/manual/
+transport bindings/scope, followed by coherent capture and independent custody/final recovery.
+Working-NL changes remain outside permission. Earlier collector packages remain uninstalled.
+Replication PASS; same three gates partial. Do not repeat this build as a new acceptance gate.
+
 ## Actual collector binding — no installation
 
 [Authoritative source/launch binding, private candidates, tests and rollback](https://github.com/Joker20380/family_connect/blob/6be057eba4ae31e71998f2d3631b220b0d9efd0e/docs/releases/2026-11-24-control-ha-collector-binding.md)

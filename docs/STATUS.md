@@ -1,16 +1,17 @@
 # Текущее состояние / Current state
 
-**24 November UTC — actual collector roots bound; rollback-bearing candidates prepared.**
-HA source6be057eb is pushed/remote-SHA verified. Inventory runs from the separate installed
-collector-runtime, network probe from main; both still use pre-admission sources. Two pinned
-private candidates preserve dependencies and retain exact previous files for rollback.33 package
-tests PASS/0 skips; three extracted CLIs refuse closed gates and two synthetic cycles pass on
-the actual interpreter. No live dispatch, server access, source installation, unit/version change.
-Both timers remain active; selected loaded configuration/argv unchanged. [Targets and rollback](releases/2026-11-24-control-ha-installed-recovery.md#actual-collector-binding--no-installation).
-Next: remaining OWNER/RU/NL/manual/transport runtime/gate/config bindings and exact activation
-approval, then coherent interval and independent custody/final recovery. Packaging is not full
-runtime trust or permission to overwrite main. Working-NL changes remain unauthorized.
-Replication PASS; same three gates partial. Do not repeat this completed package/source slice.
+**24 November UTC — normal OWNER build-context defect repaired; no installed changes.**
+HA source359fe030 is pushed/remote-SHA verified. Preparation now includes the shared capture
+module required by Dockerfile/manage.py.40 focused tests PASS/0 skips; actual272-file context
+builds image4392d4b7. Two isolated UID10001/1000 probes pass on Python3.13.17, matching18 locked
+packages and10 selected source hashes. Installed OWNER bindings unchanged; no RU/NL access,
+deployment, service/unit/timer or product version change. Main contains navigation only.
+[Build, native probes and rollback limits](releases/2026-11-24-control-ha-installed-recovery.md#normal-owner-prepared-build--no-installation).
+Next: actual OWNER candidate/runtime/config approval and existing RU/NL/manual/transport
+bindings/scope, then coherent capture and independent custody/final recovery. Earlier collector
+packages remain uninstalled. The new image does not inherit earlier image-specific activation/
+revert acceptance. Working-NL changes remain unauthorized. Replication PASS; same three gates
+partial. Do not repeat this build, collector packaging or NL2 diagnosis as new gates.
 
 At the preceding collector-admission checkpoint:
 **24 November — standalone OWNER collector admission implemented; activation matrix recorded.**

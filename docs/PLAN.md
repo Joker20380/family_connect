@@ -11,19 +11,18 @@ remains selected; this publication task does not advance its acceptance gates.
 [Reconciliation record](releases/2026-11-24-source-reconciliation.md).
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Feature6be057eb is pushed/remote-SHA verified. Actual workstation collector launch/source mapping
-and two private rollback candidates prepared: inventory uses separate collector-runtime, probe
-main; both still use pre-admission source.33 package tests PASS/0 skips; three extracted CLIs and
-two synthetic cycles qualified on the actual interpreter, not installed Docker/OWNER imports.
-No server access, deployment, source installation, unit/configuration or version change.
-[Concrete targets, exact source deltas and rollback](releases/2026-11-24-control-ha-installed-recovery.md#actual-collector-binding--no-installation).
-Next selected work: remaining OWNER/RU/NL/manual/transport runtime/gate/config bindings and
-exact activation approval, then coherent interval and independent checkpoint/custody/recovery.
-Workstation source packaging is complete; runtime/import/config trust and actual gate activation
-remain unapproved. Preserve original source/data roots and known-hosts argv; no blind overlay of
-main or directory relocation. Direct ORM/DB/SSH/Docker bypasses remain outside the source gate;
-Docker exec does not inherit it. Do not repeat collector packaging/admission or NL2 diagnosis
-as gates. Working-NL changes are not authorized.
+Feature359fe030 is pushed/remote-SHA verified. Normal OWNER build preparation now includes
+the shared capture module required by Dockerfile/manage.py.40 tests PASS/0 skips; actual
+272-file context builds image4392d4b7 and two isolated native UID10001/1000 probes pass.
+Installed OWNER bindings unchanged; no RU/NL access, deployment or product version change.
+[Exact build, image checks and rollback boundary](releases/2026-11-24-control-ha-installed-recovery.md#normal-owner-prepared-build--no-installation).
+Next selected work: actual OWNER candidate/runtime/config approval and existing RU/NL/manual/
+transport bindings and activation scope, then coherent capture and independent custody/recovery.
+The new image is not an approved replacement; earlier activation/revert evidence is image-specific.
+Workstation collector packages remain uninstalled; preserve original source/data roots and
+known-hosts argv, no blind overlay of main or relocation. Direct ORM/DB/SSH/Docker bypasses
+remain outside the source gate; Docker exec does not inherit it. Do not repeat this build,
+collector packaging/admission or NL2 diagnosis as gates. Working-NL changes are not authorized.
 A host-wide daemon-reload may run generators/rebuild dependencies; it is not a per-service or
 authorized read-only NL diagnostic. Its disposition still belongs to the exact activation scope.
 Existing schema3 veto stays strict. No changes to working services, emergency stop, paid-watch,
@@ -37,9 +36,10 @@ Fixed cat routes are not Python receivers; no blind replacement/root-key removal
 Loaded-daemon policy and independent exact runtime/source/gate approval remain prerequisites.
 Exact-command OWNER activation/revert already passes on disposable state; its post-upgrade
 PG/SQLite writes and unknown markers survive rollback. Images5ce82415/50de6f25 remain the last
-observed installed images without gates; candidatesb62e6693/2162635c are local, not approved or
-installed. Independently approve images and exact live gate/config/mount bindings before any
-working-container replacement. No silent deployment or repeat of the completed OWNER stand.
+observed installed images without gates; candidatesb62e6693/2162635c and the normal prepared
+image4392d4b7 are local, not approved or installed. Independently approve images and exact live
+gate/config/mount bindings before any working-container replacement. No silent deployment or
+repeat of the completed OWNER stand.
 Do not widen0700/0600, change product/token ownership or treat a local receipt as approval.
 Direct ORM/programmatic commands and actual installed support/transport bindings remain coverage gaps.
 Do not reimplement completed timer/payment/renewal/OWNER/receiver source
