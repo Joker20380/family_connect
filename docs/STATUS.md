@@ -12,12 +12,12 @@ custody slices are complete; worker/panel-runtime, native composite integration,
 writer/dispatcher capture and independent trust still prevent HA-02 COMPLETE.
 [Actual evidence](releases/2026-11-24-control-ha-live-capture.md#actual-mailbox-readback--081834utc).
 
-**24 November — mailbox authority capture preparation.**
+**24 November — earlier mailbox authority capture preparation.**
 The installed NL1 membership/receiver sources match repository hashes. A separate bounded
 collector takes the existing membership lock without waiting, releases under250ms, and
 retains only9 authority/config/source files, not the message spool.52 focused checks PASS.
 No membership refresh, service stop/start, version or deployment change. Actual encrypted
-readback is the next selected mailbox check, not full HA-02 acceptance.
+readback is completed at08:18:34UTC above; this preparation is not a separate active NEXT.
 [Scope and abort plan](releases/2026-11-24-control-ha-live-capture.md#mailbox-authority-custody).
 
 **24 November08:09:57–08:10:02UTC — actual node allocator/receiver custody PASS.**
@@ -31,7 +31,7 @@ the node-local custody/safety slice, not canonical/fleet synchronization, mailbo
 OWNER runtime or independently trusted full recovery. HA-02 remains IN_PROGRESS.
 [Actual evidence and rollback](releases/2026-11-24-control-ha-live-capture.md#actual-node-readback--0810utc).
 
-**24 November — installed node capture preparation (not yet live acceptance).**
+**24 November — earlier installed node capture preparation.**
 The separate receiver/allocator collector pins the two observed installed source variants,
 takes application/registration locks without waiting and a zero-wait SQLite write lock,
 and releases everything under a250ms kernel deadline. No service stop or source write.

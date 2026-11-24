@@ -9,6 +9,10 @@ stale-floor/expiry checks pass; service identity unchanged. Do not repeat the al
 completed local receiver/allocator/mailbox custody. Remaining work: legacy-worker and
 OWNER-runtime recovery, native composite integration, coherent canonical/dispatcher capture
 and independently approved forward trust. [Evidence](releases/2026-11-24-control-ha-live-capture.md#actual-mailbox-readback--081834utc).
+Read-only legacy-worker preflight now locates the separate147,456-byte product SQLite
+database:13 tables/58 rows, including3 allocations/deployments/outbox entries; no WAL/SHM/
+journal. This is census only, not capture/recovery or proof that external Docker execs have
+finished. Keep the running worker untouched until its complete bounded plan is qualified.
 
 Node-local slice completed08:10UTC:24 restored files,82 peers,207 decisions; native duplicate,
 terminal-denial, lease-clock and next-allocation checks pass without activation.94 focused

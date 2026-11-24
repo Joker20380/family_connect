@@ -2,6 +2,14 @@
 
 ## Actual mailbox readback — 08:18:34UTC
 
+Session boundary: remaining legacy-worker read-only preflight identifies the separately
+bound product database at147,456 bytes,13 tables/58 rows, including3 peer allocations,
+3 deployments and3 outbox rows. No WAL/SHM/journal is present. The exact named Family
+Connect worker container is running; env paths, mounts and source digests are retained
+privately. No worker stop, command execution in its container, database write/copy or
+gateway action occurs. This is not recovery or an in-flight external-operation fence.
+Worker/panel-runtime and joint gates remain selected; no HA-03..05 work is started.
+
 Pinned collector source3f68de3c2052a59972944d1ee1b77fba13d5d1c7 executes the reviewed
 non-waiting membership barrier on NL1. The interval is8.170ms; the retained point is
 2026-11-24T08:18:34.967565Z. Encrypted capsule25,152 bytes,
