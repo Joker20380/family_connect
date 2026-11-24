@@ -1,5 +1,20 @@
 # Текущее состояние / Current state
 
+**24 November — OWNER replacement images and data-preserving revert qualified in isolation.**
+Exact installed console/publisher commands, users10001/1000 and working directories pass
+old image → admission candidate → old image on disposable PostgreSQL/synthetic SQLite.
+Candidate imagesb62e6693/2162635c add only the ten fixed source files; original image config,
+dependency layers and migration set remain unchanged.18:02:31–18:04:00UTC final native PASS;
+161 focused tests PASS/0 skips. Closed gates refuse both roles; failed startup reverts;
+acknowledged post-upgrade PG/SQLite writes and the unsettled-operation marker survive revert.
+The live OWNER bindings remain unchanged, images5ce82415/50de6f25 and no gate; no RU/NL access,
+deployment, policy/version/catalog changes. Candidates are built locally, not approved or installed.
+Next: remaining fleet/manual writer bindings, external settlement and real latency; independently
+approve candidate images and exact live gate/config bindings before any working-container change.
+Then coherent capture, independent current trust/custody and final combined recovery. Do not repeat
+the completed OWNER stand as a deployment or all-writer acceptance. Replication PASS; three
+HA-02 blocks partial. [Evidence and exact rollback limits](releases/2026-11-24-control-ha-owner-upgrade.md).
+
 **24 November — installed OWNER source/dispatch bindings observed; configuration alone cannot enable admission.**
 At17:38:42UTC both pinned installed images lack `control/capture_gate.py` and
 `fc_control_plane/capture.py`; six of eight present scoped files differ from the prepared

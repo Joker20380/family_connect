@@ -3,6 +3,21 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+OWNER image activation/revert is now qualified on disposable state using the exact installed
+commands, configured users and working directories. Two source-only overlay images preserve
+base runtime config/dependency layers; acknowledged PG/SQLite writes, migration set and durable
+uncertainty survive candidate → old-image revert. Final native stand PASS18:02:31–18:04:00UTC;
+161 tests PASS/0 skips. All owned test containers/volumes removed; production bindings unchanged.
+[Candidate image pins, stand and bounded rollback contract](releases/2026-11-24-control-ha-owner-upgrade.md).
+Next selected work: finish remaining fleet/manual writer bindings and external settlement/latency,
+then coherent capture, independent current approval/key custody and final combined recovery.
+Independently approve replacement images and exact live gate/config/mount bindings before any
+working-container change. The stand uses fresh state/fake credentials, not live mounts or external
+dispatch; its publisher shutdown is not a live in-flight drain qualification. No silent deployment
+or NL working-service changes. Do not rebuild the completed source observer/guardian/OWNER stand.
+Replication PASS; the same three HA-02 blocks remain partial, no HA-03 or new numbered stage.
+
+At the preceding installed-source checkpoint:
 Installed OWNER source/dispatch check now completes the scoped filesystem/config observation:
 both pinned images lack the two admission modules; six present files differ from candidate,
 only two shims match. All scoped paths are in declared read-only rootfs.17:38:42UTC stable
@@ -10,11 +25,9 @@ double observation and108 focused tests PASS/0 skips; zero Docker execs in sampl
 closed manual route. No code is executed in containers, source installed or service changed.
 Configuration-only enablement is refused; the present images do not contain this feature.
 [Actual source bindings and activation boundary](releases/2026-11-24-control-ha-owner-source-binding.md).
-Next selected work: qualify exact OWNER activation/revert with independently approved
-replacement images, separate gate mounts and preserved effective commands; finish actual
-fleet/manual writer bindings and external settlement/latency. Source preparation is allowed,
-not silent production image replacement or NL working-service changes. Then coherent capture,
-independent current approval/key custody and final combined recovery; same three partial gates.
+That checkpoint selected OWNER activation/revert qualification, now completed in isolation
+above. Candidate approval/live bindings, remaining fleet/manual writers and external settlement
+remain distinct gates; the source observation never permits replacing working images.
 
 Pinned guardian launch is now qualified in isolation: independent source/binding SHA inputs,
 sealed closed package, fixed isolated argv/environment, explicit UID/GID/groups, namespace/
