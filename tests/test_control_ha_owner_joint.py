@@ -4,6 +4,7 @@ import os
 import sqlite3
 import tarfile
 from copy import deepcopy
+from types import SimpleNamespace
 
 import pytest
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
@@ -58,6 +59,20 @@ def test_panel_lab_refuses_wrong_container_boundary(field):
 def test_probe_never_mounts_outside_private_scope(label):
     lab=OwnerLab.__new__(OwnerLab);lab.owned=lambda:None
     with pytest.raises(ValueError,match='PROBE_SCOPE'):lab.probe(dict(mode='baseline'),b'{}',{},label)
+
+
+def test_readiness_ignores_entrypoint_temporary_unix_only_server(tmp_path,monkeypatch):
+    lab=OwnerLab(tmp_path/'lab')
+    lab.docker=lambda *args,**kwargs:b'owned-id' if args[0]=='run' else b''
+    lab.owned=lambda:None
+    probes=[]
+    def readiness(arguments,**kwargs):
+        probes.append(arguments)
+        assert arguments[arguments.index('-h')+1]=='127.0.0.1'
+        return SimpleNamespace(returncode=0)
+    monkeypatch.setattr('scripts.control_ha_owner_joint_lab.subprocess.run',readiness)
+    with lab:assert lab.container=='owned-id'
+    assert len(probes)==1
 
 
 @pytest.mark.parametrize('kind',('extra','pin','key','image','dispatch','observations','duplicate','hash','table'))

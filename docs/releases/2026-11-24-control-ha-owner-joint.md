@@ -43,6 +43,12 @@ legacy-worker custody and native canonical tests). The owned network-none Postgr
 test passes empty-dump restore and removes its own container/volume. This is not the actual
 OWNER database/native-import result.
 
+The first actual attempt refuses before restoring data: `pg_isready` on the Unix socket
+can report the entrypoint's temporary init server before the requested database exists.
+Readiness now uses loopback TCP, which that temporary server does not listen on. A regression
+test pins this distinction; the original OWNER containers remain untouched and the owned
+failed-attempt resources are removed. This refusal is not a failed production restore.
+
 ## Fixed remainder of stage 2
 
 The four acceptance blocks have NOT increased. Replication is PASS; three remain partial:

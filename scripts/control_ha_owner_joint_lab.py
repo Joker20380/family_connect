@@ -57,7 +57,7 @@ class OwnerLab:
             private_file(self.root/'container.id',self.container.encode())
             for attempt in range(80):
                 result = subprocess.run(['docker','--host','unix:///var/run/docker.sock','exec',self.container,
-                    'pg_isready','-U','fc_control_plane','-d','fc_control_plane'],capture_output=True,
+                    'pg_isready','-h','127.0.0.1','-U','fc_control_plane','-d','fc_control_plane'],capture_output=True,
                     env=self.environment,timeout=5)
                 if result.returncode == 0: return self
                 time.sleep(.25)
