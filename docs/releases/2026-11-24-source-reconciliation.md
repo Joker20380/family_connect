@@ -49,8 +49,20 @@ Validation before publication:
 - Existing source/public version files from origin are preserved; no new version increment,
   release tag, catalog edit relative to origin, public installer or deployment is introduced.
 
-At this merge checkpoint, the ordinary push and remote-SHA verification remain pending.
-A passing test/source merge is not a live rollout or completion of HA-02.
+## Verified publication — 12:06UTC
+
+Merge commit `9aac6e16e2a4b786baf2d4e7cff5ad7ae613dd4b` is successfully pushed to main using
+an ordinary non-force update from `cb47bf23`. Independent `git ls-remote` readback matches
+the full local SHA; ahead/behind is0/0 and the checkout is clean at that checkpoint.
+The ten originally pending files are included in the safe checkpoint, alongside the earlier
+local session commits; no local source work is discarded to make the push succeed.
+
+The existing HA-02 branch separately remains published and verified at
+`2ea128afc147be1fc6725223f22ba2c4ddd5a0a8`. Its unaccepted implementation is not silently
+merged into main by a source-publication request. This final documentation follow-up records
+the verified merge, not another deployment. GitHub CI is not claimed PASS by these local
+checks. No release tag or `Release `-prefixed main commit is created; the public-release job
+is not requested. No version bump, server action or completion of HA-02 occurs.
 
 ## Rollback
 

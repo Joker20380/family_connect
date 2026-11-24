@@ -2,11 +2,12 @@
 
 ## Current engineering priority / Текущий critical path
 
-**Immediate owner request24 November: publish pending session changes safely.**
-Checkpoint safe local files, merge origin/main without rewriting either history, resolve
-documentation conflicts preserving current HA-02 navigation, verify affected sources/docs,
-then ordinary push and remote-SHA readback. HA-02 implementation pauses for this bounded
-publication task; no deployment or additional stage is selected.
+**Owner publication request24 November COMPLETE.**
+Safe pending files are checkpointed and both main histories merged;9aac6e16 is pushed and
+remote-SHA verified12:06UTC.47 renewal tests and44-document/741-link checks pass. No force-push,
+deployment or release; HA-02 implementation remains on its separately pushed feature branch.
+Do not treat the former old-main divergence as an active blocker. Existing HA-02 scope below
+remains selected; this publication task does not advance its acceptance gates.
 [Reconciliation record](releases/2026-11-24-source-reconciliation.md).
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**

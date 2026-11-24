@@ -1,10 +1,12 @@
 # Текущее состояние / Current state
 
-**24 November — source publication reconciliation IN_PROGRESS.**
-Owner confirms all pending local changes are session work and requests their push.
-Preserve both Git histories: old main has74 local/300 remote commits before this checkpoint.
-Ten pending files are backed up privately; new historical reports omit tester/device
-identifiers. Source-only reconciliation does not deploy, change versions or resume HA-03.
+**24 November12:06UTC — source publication reconciliation COMPLETE.**
+Merge9aac6e16e2a4b786baf2d4e7cff5ad7ae613dd4b is pushed to main and remote-SHA verified;
+the previous74-local/300-remote divergence is resolved without rewriting either history.
+Ten pending files are privately preserved and safely checkpointed; new historical reports
+omit tester/device identifiers.47 focused tests and44-document/741-link checks PASS.
+HA-02 source2ea128af remains separately pushed/verified on its feature branch. No deployment,
+new version/release/catalog publication or HA-03 activation. Current HA-02 gates below remain.
 [Scope, verification and rollback](releases/2026-11-24-source-reconciliation.md).
 
 **24 November11:43UTC — OWNER image-loss cold bootstrap PASS.**
