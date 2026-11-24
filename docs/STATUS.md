@@ -1,11 +1,13 @@
 # Текущее состояние / Current state
 
-**24 November — joint canonical/three-receiver qualification prepared.**
-109 focused real-PG tests pass without skips. The new offline integration binds all three
-authenticated capsules, compares original-timestamp decisions and verifies a laboratory
-revocation survives receiver reconstruction. Actual retained-input PG recovery is next;
-preliminary SQLite parity (207 decisions/82 peers) is not that result. No service/version
-change or coherent fleet fence. [Scope, checks and rollback](releases/2026-11-24-control-ha-joint-nodes.md).
+**24 November09:57:21UTC — actual canonical/three-receiver integration PASS.**
+All207 original-timestamp PostgreSQL decisions match RU/NL1/NL2 caches and82 allocator
+bindings, including the NL2 sequence gap. Fresh restore repeats parity; a laboratory-only
+revocation survives receiver reconstruction and post-ACK PG restore, while refreshed old
+allow, stale dump and old import are refused.109 real-PG tests PASS,0 skips. Original
+capsules/OWNER containers unchanged; owned resources removed, no service/version change.
+Next: worker/OWNER joint integration, coherent all-writer/dispatcher capture, machine-loss
+dependencies and independent trust. [Actual evidence and rollback](releases/2026-11-24-control-ha-joint-nodes.md#actual-execution--095721utc).
 
 **24 November09:37:05UTC — actual native canonical PG recovery PASS.**
 The retained610-row point imports into49 PostgreSQL tables with exact crash/fresh restore.

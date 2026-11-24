@@ -3,25 +3,26 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Current action: qualify the authenticated canonical-to-three-node integration on owned PG.
-Preparation passes109 focused real-PG tests,0 skips; exact decision parity at original times,
-allocator bindings and lab-only revocation/restart/replay checks do not renew cached authority.
-Actual-input recovery is pending; worker/OWNER joint recovery, coherent writer/dispatcher
-capture, machine-loss dependencies and independent forward trust remain open.
-[Bounded qualification and rollback](releases/2026-11-24-control-ha-joint-nodes.md).
+Actual canonical-to-three-node integration passes09:57:21UTC:207 exact original-timestamp
+decisions,82 allocator bindings, fresh PG parity, laboratory revocation preserved across
+receiver reconstruction/current PG restore and stale/old-allow refusal.109 real-PG tests,
+0 skips; no live write or cached lease renewal. Do not repeat this completed integration.
+Next selected scope: worker/OWNER joint recovery, coherent all-writer/in-flight dispatcher
+capture, machine-loss source/image dependencies and independent forward trust.
+[Actual qualification and rollback](releases/2026-11-24-control-ha-joint-nodes.md#actual-execution--095721utc).
 
 Native canonical integration now PASS09:37:05UTC: actual610 source rows,49 PG target tables,
 exact crash/current restore, new laboratory enrollment ACK preserved, stale dump/old import/
 proof replay refused.249 real-PG contracts pass without skips.66 mapped/3 new native identities
 retain their correct semantics; the old adapter and all handoff history stay unchanged.
-Next selected scope: joint native receiver/worker/OWNER integration and coherent canonical/
+At that earlier checkpoint, next scope was joint native receiver/worker/OWNER integration and coherent canonical/
 all-writer/dispatcher capture, with complete source/image custody and independent forward trust.
 Do not repeat the completed canonical-only import or label it full fleet recovery.
 [Actual evidence/rollback](releases/2026-11-24-control-ha-native-canonical.md#actual-execution--093705utc).
 OWNER runtime/synthetic custody now passes09:17:14UTC:20 files,9 tables/223 rows,24.374ms
 barrier; fresh-process exact restore and pinned native-image table/paid/alias/expiry checks.
 No network/dispatch or existing-container restart; do not repeat this as pending custody.
-Current next action within selected HA-02: native composite integration of actual installed
+At the OWNER runtime checkpoint, next action was native composite integration of actual installed
 formats. Coherent PG/synthetic/canonical/all-writer/dispatcher capture and independently
 approved forward trust remain gates; no cutover or HA-03..05 selected.
 [OWNER actual evidence](releases/2026-11-24-control-ha-live-capture.md#actual-owner-runtime-readback--091714utc).
