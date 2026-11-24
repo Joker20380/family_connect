@@ -1,5 +1,17 @@
 # Текущее состояние / Current state
 
+**24 November14:38–14:44UTC — scoped writer preflight completed; coherent capture still open.**
+Source/tests/report0e282c34 is pushed and remote-SHA verified on the HA feature branch.
+32/9/5 RU/NL1/NL2 units, explicit account/cron/SSH dispatchers and scoped cgroup/lock
+observations are checked without changing services. NL1/NL2 remain active and unchanged;
+RU chat-sync completes during observation. RU AWG failed/TCP inactive/paid-reconcile failed
+states match the morning census, not a new observation-induced outage; no restart attempted.
+Five scoped RU/OWNER containers run;24 retained Docker ExecIDs are all non-running, not
+24 pending commands. Empty samples do not fence future dispatch.62 focused tests PASS.
+Next: qualify coordinated admission close/drain/overlapping capture/automatic release,
+without stopping watchdog/deny enforcement. Same three HA-02 partial gates; no cutover.
+[Exact boundary and rollback](releases/2026-11-24-control-ha-installed-recovery.md#writer-boundary-observation--14381444utc).
+
 **24 November14:12UTC — actual isolated NL2 recovery PASS; final checks14:20UTC.**
 Source/report e353ff85 is pushed and remote-SHA verified. Publishedd85cccb2 runner restores
 the accepted toolkit and canonical/three-node/worker/mailbox state on NL2 with no Docker,

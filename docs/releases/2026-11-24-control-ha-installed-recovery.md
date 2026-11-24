@@ -6,6 +6,44 @@ divergence is reconciled/pushed at2ae5c512; older publication-blocker statements
 historical, not active instructions or a current blocker.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## Writer boundary observation — 14:38–14:44UTC
+
+[Authoritative source, report and boundary contract](https://github.com/Joker20380/family_connect/blob/0e282c34f16b08d55c8d3bda1a64103d6ff91cea/docs/releases/2026-11-24-control-ha-writer-boundary.md)
+is pushed and remote-SHA verified at0e282c34f16b08d55c8d3bda1a64103d6ff91cea.
+The implementation remains on the existing HA feature branch; this main checkpoint
+updates navigation only, without merging HA code, deployment or release changes.
+
+Actual scoped preflight:32 RU,9 NL1 and5 NL2 units; explicit service-account/default SSH
+dispatchers, account/system cron, cgroup process identities and two existing gateway lock
+inodes. No services, locks, signals, product rows or configurations are changed. NL1/NL2
+units are all active and unchanged during observation. RU chat-sync completes during the
+scan; an empty lock sample therefore cannot establish global quiescence. RU AWG failed,
+TCP inactive and paid-reconcile failed states already existed in the morning census.
+Previously inactive/failed services are not started as a supposed rollback.
+
+Separate read-only observations find all five exact RU worker/pilot-gateway and OWNER
+console/PostgreSQL/publisher containers running. All24 retained pilot Docker ExecIDs are
+`Running=false` at14:43:59UTC; no ID disappears and the sets match before/after. This is
+not24 pending commands and not a future-dispatch fence. The initial RU key-only SSH
+attempt is refused; the previously established agent-backed invocation succeeds with
+the same strict host pin. No change to credentials, SSH policy or trusted host keys.
+
+62 focused tests PASS;4 feature documents/1014 local links and whitespace checks PASS.
+The private evidence and one-off read-only drivers remain outside Git under
+`control-ha/20261124-writer-preflight-01`. The observer exits without persistent deployment,
+held locks or state to roll back. Existing encrypted custody and all evidence are retained.
+Versions/installers/catalogs are unchanged; no build, release or rollout is claimed.
+
+Next is a qualified coordinated admission close/drain/overlapping capture/automatic release
+boundary, including admitted HTTP operations, schedulers/operator/SSH dispatch, remote Docker
+side effects and OWNER PG/synthetic publishers. Watchdog and deny enforcement must continue.
+Current NL permission covers checks/isolated recovery, not silently installing a new live
+participation mechanism. Existing bounded RU capture authorization is preserved. Unknown
+writers or unsettled operations abort before capture; lost SSH must not leave writes blocked.
+Independent approval of the exact coherent checkpoint, off-laptop key/access custody and
+the final combined post-ACK/stale-copy recovery still follow. HA-02 remains IN_PROGRESS
+with the same three partial blocks and replication PASS; no automatic HA-03/cutover.
+
 ## Actual NL2 recovery — 14:12UTC
 
 [Authoritative report](https://github.com/Joker20380/family_connect/blob/e353ff856bbf5e6f50e2226030f654f17b5b9c09/docs/releases/2026-11-24-control-ha-recovery-kit.md#actual-nl2-recovery--1412utc)

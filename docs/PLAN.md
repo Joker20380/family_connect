@@ -11,6 +11,17 @@ remains selected; this publication task does not advance its acceptance gates.
 [Reconciliation record](releases/2026-11-24-source-reconciliation.md).
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+Current writer-boundary evidence is published at0e282c34 and remote-SHA verified.62 tests
+PASS; actual14:38–14:44UTC read-only RU/NL/OWNER observations are retained. Do not repeat
+the completed inventory or NL2 recovery. The next selected implementation is a qualified
+coordinated admission close → in-flight drain → overlapping capture → automatic release
+boundary across HTTP, schedulers/CLI/SSH, legacy Docker work and OWNER PG/synthetic
+publishers, with paid-watch/deny enforcement running. Unknown participants abort capture.
+No live service changes or coherent capture have occurred. Independent exact-checkpoint
+approval, off-laptop key/access custody and final combined post-ACK/stale-copy readback
+remain in the same three partial gates; no new lettered stage, HA-03 or deployment.
+[Boundary contract](releases/2026-11-24-control-ha-installed-recovery.md#writer-boundary-observation--14381444utc).
+
 Owner-confirmed NL2 isolated retained-state recovery PASS14:12UTC, final cleanup/service
 checks PASS14:20UTC; source/reporte353ff85 pushed and verified. Wrong-key refusal,50 focused
 tests and encrypted off-machine custody pass without package installation or working-service
