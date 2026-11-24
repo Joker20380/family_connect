@@ -68,10 +68,23 @@ def crl_anchor(snapshot, bootstrap, trust_anchor, now):
 
 
 def preflight_sqlite(stores, external, expected_external, checkpoint, bootstrap, trust_anchor, *, now):
+    return _preflight_sqlite(stores, external, expected_external, checkpoint, bootstrap, trust_anchor, now=now,
+                             retain_handoff=False)
+
+
+def preflight_installed_sqlite(stores, external, expected_external, checkpoint, bootstrap, trust_anchor, *, now):
+    return _preflight_sqlite(stores, external, expected_external, checkpoint, bootstrap, trust_anchor, now=now,
+                             retain_handoff=True)
+
+
+def _preflight_sqlite(stores, external, expected_external, checkpoint, bootstrap, trust_anchor, *, now, retain_handoff):
+    from scripts import control_ha_handoff_import as handoff
     require(type(stores) is dict and set(stores) == STORES, 'STORE_COVERAGE')
     manifest = json.loads(MANIFEST.read_bytes())
     require(manifest['version'] == 1 and manifest['adapter'] == ADAPTER and
             set(manifest['stores']) == STORES and set(manifest['new_empty_tables']) == NEW_EMPTY, 'ADAPTER_MANIFEST')
+    overlay = handoff.manifest() if retain_handoff else None
+    retained = ()
     converted, provenance = {}, []
     for store in sorted(STORES):
         raw = stores[store]
@@ -83,11 +96,15 @@ def preflight_sqlite(stores, external, expected_external, checkpoint, bootstrap,
                 database.execute('PRAGMA query_only=ON')
                 database.set_progress_handler(lambda: 1, 2000000)
                 require(database.execute('PRAGMA quick_check').fetchall() == [('ok',)], 'SOURCE_INTEGRITY')
-                require(definitions(database) == manifest['stores'][store], 'SOURCE_SCHEMA_UNSUPPORTED')
+                expected_schema = manifest['stores'][store] + (overlay['definitions'] if overlay and store == 'registry' else [])
+                expected_schema = sorted(expected_schema, key=lambda row: row[1])
+                require(definitions(database) == expected_schema, 'SOURCE_SCHEMA_UNSUPPORTED')
                 require(database.execute('PRAGMA user_version').fetchone() == (0,) and
                         database.execute('PRAGMA application_id').fetchone() == (0,) and
                         database.execute('PRAGMA encoding').fetchone() == ('UTF-8',), 'SOURCE_PRAGMA_UNSUPPORTED')
                 require(not database.execute('PRAGMA foreign_key_check').fetchall(), 'SOURCE_FOREIGN_KEYS')
+                if overlay and store == 'registry':
+                    retained = handoff.read(database)
                 target.execute(SOURCE_MARKER)
                 target.execute('INSERT INTO ha_import_source VALUES (?,?,?,?)', (VERSION, PURPOSE, store, checkpoint))
                 for table in TABLES:
@@ -110,7 +127,11 @@ def preflight_sqlite(stores, external, expected_external, checkpoint, bootstrap,
         provenance.append(('source:' + store, digest(raw)))
     snapshot = preflight(converted, external, expected_external, checkpoint)
     cross_store_bindings(snapshot)
+    if overlay:
+        devices = next(rows for table, rows in zip(TABLES, snapshot.rows, strict=True) if table.name == 'devices')
+        handoff.validate(retained, {row[0] for row in devices})
+        provenance.append(('closed-handoff-retention-v2', digest(encoded(overlay))))
     provenance.append(('adapter:' + ADAPTER, digest(encoded(manifest))))
     anchor = crl_anchor(snapshot, bootstrap, trust_anchor, now)
     provenance.extend((('crl-bootstrap', digest(bootstrap)), ('issuer-anchor', digest(trust_anchor))))
-    return replace(snapshot, external_digests=snapshot.external_digests + tuple(provenance), crl_anchor=anchor)
+    return replace(snapshot, external_digests=snapshot.external_digests + tuple(provenance), crl_anchor=anchor, handoff=retained)

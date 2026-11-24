@@ -33,7 +33,8 @@ TTL is20seconds. `synchronous_mode=quorum`, strict mode, ANY1 of two standbys, f
 full-page writes are mandatory; failsafe mode is disabled. No watchdog/fencing/WAN
 or production failure-domain acceptance is implied.
 
-The runner imports the existing44-table synthetic application fixture and exercises
+The runner now imports the49-table synthetic application fixture, including five retained
+closed-handoff history/floor tables, and exercises
 product contracts, then commits payment/revoke/proofs, kills the primary during an
 uncommitted transaction, checks its successor and returns the old primary. It tests
 one/two DCS member loss and restoration, blocks client COMMIT without both standbys,
@@ -47,6 +48,27 @@ DCS majority loss causes demotion within the lease window, not instantaneous net
 partition detection. The test requires no writable primary after TTL plus a bounded
 margin. No quorum-free application authority, receiver fencing or deployment is granted
 by this lab. [Evidence and remaining stage2 gates](../../docs/releases/2026-11-24-control-ha-replication.md).
+
+## Closed installed handoff retention
+
+The installed registry has five extra handoff tables and17 associated schema objects.
+The separate `preflight_installed_sqlite` adapter requires their exact pinned definitions
+and closed history, preserves every row in the same import transaction, and refuses
+missing/regressing security floors or broken generation/legacy/current bindings.
+The v1 adapter is not made permissive. These five PG tables reject all mutations,
+including TRUNCATE CASCADE; their administrative/runtime writers are not enabled.
+Source floor content is retained and checked for internal consistency, not newly
+authorized as a live signed publication. Actual capture/trust/keys remain separate gates.
+
+```sh
+python -m scripts.control_ha_handoff_rehearsal --workdir /tmp/fc-ha-handoff-new
+```
+
+The owned runner executes mandatory PostgreSQL contracts without skips, imports49
+tables, kills PG with an uncommitted write, restores to separate instances, exercises
+existing product transactions and rejects a stale restore/import after new writes.
+It retains synthetic keys in its private fixture: this is not full independent fleet
+recovery. [Exact result and boundaries](../../docs/releases/2026-11-24-control-ha-handoff-retention.md).
 
 ## Run
 

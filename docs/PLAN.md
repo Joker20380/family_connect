@@ -16,12 +16,19 @@ at02:51UTC recognizes all34 live application tables, including five owner-handof
 tables absent from the v1 importer; their22 definitions match retained migration source.
 Preserve their terminal history/security floors/current-generation binding; never drop
 them or weaken the unknown-schema rejection to make import pass.28 census checks PASS.
-Next work inside HA-02: explicit handoff recovery/import, remaining writer classification
-and bounded barrier, actual-current custody, then independent full-state recovery.
+Closed handoff retention now passes199 import/census contracts and28 guards, native49-table
+PG crash/independent DB restore and the extended strict Patroni fault run. This is a
+read-only retained domain, not live handoff runtime activation; see the
+[retention evidence](releases/2026-11-24-control-ha-handoff-retention.md).
+Next work inside HA-02: remaining writer classification and bounded barrier, actual-current
+custody with independently owner-approved trust, then independent full-state recovery.
 Eight refused legacy pressure units, unobserved cron/forced commands/panel/operator and
 offline writers, and unhealthy RU unit prestate prevent a live capture permit today.
 No live stop/restart or import activation was performed. Schema recognition alone does
 not close the installed-snapshot gate; all three remaining gates stay IN_PROGRESS.
+The prior forward-only approval was development without server changes. Live capture
+and registration/use of an actual checkpoint approval authority require their own
+bounded reviewed authorization; a generated fixture key is not owner consent.
 The chronological source checkpoints below retain their original scope and test results.
 Depends on accepted paid-v2/HMAC2/metadata runtime and owner request.
 HA-01 isolated scope COMPLETE: read-only fingerprints, real three-voter mTLS

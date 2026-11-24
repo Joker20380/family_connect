@@ -22,7 +22,7 @@ from control.friends.access import Access
 from control.friends.enrollment_postgres import PostgresEnrollment
 from scripts.control_ha_import import import_snapshot, ImportRejected
 from scripts.control_ha_rehearsal import Rehearsal as EtcdRehearsal, private_file, require
-from scripts.control_ha_sqlite_rehearsal import SQLiteImportRehearsal
+from scripts.control_ha_handoff_rehearsal import HandoffImportRehearsal
 from scripts.control_ha_sqlite_fixture import exercise_import
 from scripts.enrollment_postgres_rehearsal import Rehearsal as PostgresRehearsal, ROOT
 from scripts.paid_postgres_rehearsal import apply
@@ -211,7 +211,7 @@ class ReplicationRehearsal(PostgresRehearsal):
             wait_for(identical)
 
     def run(self):
-        fixture, frozen = SQLiteImportRehearsal.capture_fixture(self)
+        fixture, frozen = HandoffImportRehearsal.capture_fixture(self)
         original_primary = primary = self.primary()
         repository = self.repository_at(primary)
         import_snapshot(repository, frozen)

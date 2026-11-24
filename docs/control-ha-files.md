@@ -120,6 +120,12 @@ successor migration; they are not a new accepted importer schema. Retain legacy/
 operation history, security floors and generation bindings. Do not strip these tables,
 infer they are disposable from their original fixture location, or treat CLEANED as
 permission to discard anti-replay state. The old strict importer remains closed.
+The subsequent [closed-handoff retention adapter](releases/2026-11-24-control-ha-handoff-retention.md)
+preserves these rows and bindings in the canonical import transaction and makes the
+five retained PG tables immutable. It refuses unsettled histories and regressing floors;
+it is not a port/enablement of the handoff writer or a new certificate authority.
+Its synthetic49-table restore/replication PASS does not replace actual capture,
+external-secret recovery or separately established owner approval.
 
 The next all-store synthetic importer must explicitly inventory versioned tables,
 types/constraints/triggers/IDs/sequences and each external reference. Unknown tables,

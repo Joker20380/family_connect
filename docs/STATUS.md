@@ -1,5 +1,23 @@
 # Текущее состояние / Current state
 
+**24 November — closed handoff state now survives isolated import, restore and replication.**
+Following census7c8a5747, a separate strict installed-schema adapter retains all five
+handoff tables in the same PG transaction as the other stores. It refuses open operations,
+broken legacy/current/predecessor bindings, missing/regressing security floors and unknown
+DDL. The legacy v1 adapter stays strict. Retained PG history is read-only, not a resumed
+handoff runtime or an activation permit. Native-format synthetic qualification:
+199 import/census contracts plus28 runner/commit guards PASS /0 skips;49-table crash,
+independent PG restore, stale restore refusal and full strict Patroni failover/quorum/
+no-sync/cancelled-COMMIT scenario PASS. Keys remain synthetic and retained by the runner;
+this does not close actual-fleet independent recovery. Read-only RU aggregate follow-up
+found1 legacy/2 successor/1 current/1 security/1 schema rows, all operations CLEANED;
+no identity/profile/key payload exported. No server mutation, release or deploy.
+HA-02 remains IN_PROGRESS: actual-current approval/custody, full writer/barrier and
+full off-node recovery are still mandatory. Live capture and a real owner-trusted
+forward-checkpoint signing workflow are not authorized by the earlier development-only
+approval; do not manufacture either from old receipts or a self-trusted test key.
+[Qualification, rollback and exact remaining boundaries](releases/2026-11-24-control-ha-handoff-retention.md).
+
 **24 November — installed schema census identifies the missing handoff domain.**
 Read-only pinned SSH02:51:37–02:51:39UTC observed RU's four application stores and
 32/9/5 Family Connect units on RU/NL1/NL2. All29 previously supported application

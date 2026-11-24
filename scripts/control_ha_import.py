@@ -138,15 +138,24 @@ class Snapshot:
     rows: tuple = field(repr=False)
     external_digests: tuple = field(repr=False)
     crl_anchor: tuple = field(default=(), repr=False)
+    handoff: tuple = field(default=(), repr=False)
 
     @property
     def fingerprint(self):
         values = (VERSION, PURPOSE, self.checkpoint, self.rows, self.external_digests)
-        return digest(encoded(values + (self.crl_anchor,) if self.crl_anchor else values))
+        if self.crl_anchor:
+            values += (self.crl_anchor,)
+        if self.handoff:
+            values += ('closed-handoff-retention-v2', self.handoff)
+        return digest(encoded(values))
 
     @property
     def counts(self):
-        return {table.name: len(rows) for table, rows in zip(TABLES, self.rows, strict=True)}
+        result = {table.name: len(rows) for table, rows in zip(TABLES, self.rows, strict=True)}
+        if self.handoff:
+            from scripts.control_ha_handoff_import import TABLES as HANDOFF_TABLES
+            result.update({table.name: len(rows) for table, rows in zip(HANDOFF_TABLES, self.handoff, strict=True)})
+        return result
 
 
 def preflight(stores, external, expected_external, checkpoint):
@@ -284,6 +293,10 @@ def verify(database, snapshot):
     tables = {row['tablename'] for row in database.execute(
         'SELECT tablename FROM pg_tables WHERE schemaname=current_schema()')}
     extra = {'ha_import_crl_anchor'} if snapshot.crl_anchor else set()
+    if snapshot.handoff:
+        from scripts import control_ha_handoff_import as handoff
+        extra.update(table.name for table in handoff.TABLES)
+        handoff.verify(database, snapshot.handoff)
     require(tables == {table.name for table in TABLES} | MARKERS | {'ha_import_receipt'} | extra, 'TARGET_COVERAGE')
     if snapshot.crl_anchor:
         require(database.execute('SELECT * FROM ha_import_crl_anchor').fetchall() == [dict(zip(
@@ -332,6 +345,9 @@ def import_snapshot(repository, snapshot, *, fault=lambda stage: None):
                 with database.cursor() as cursor:
                     cursor.executemany(statement, rows)
                 fault(table.name)
+            if snapshot.handoff:
+                from scripts import control_ha_handoff_import as handoff
+                handoff.retain(database, snapshot.handoff, fault)
             maximum = database.execute('SELECT max(id) AS value FROM field_support_audit').fetchone()['value']
             database.execute("SELECT setval(pg_get_serial_sequence('field_support_audit','id'),%s,%s)",
                              (max(1, maximum or 0), maximum is not None))

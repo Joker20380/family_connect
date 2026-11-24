@@ -1,6 +1,8 @@
 # Documentation
 
-[CONTROL-HA · 24 November: actual installed schemas; five handoff authority tables identified, importer still refuses, no live barrier](releases/2026-11-24-control-ha-installed-census.md).
+[CONTROL-HA · 24 November: handoff history/floors retained across strict 49-table import, recovery and replication; no live capture or runtime activation](releases/2026-11-24-control-ha-handoff-retention.md).
+
+[CONTROL-HA · 24 November: actual installed schemas; five handoff authority tables identified, v1 importer refuses, no live barrier](releases/2026-11-24-control-ha-installed-census.md).
 
 [CONTROL-HA · 24 November: all HA-02 gates selected; strict PostgreSQL/Patroni replica failures and commit-cancellation protection, no production cutover](releases/2026-11-24-control-ha-replication.md).
 
