@@ -4,6 +4,33 @@ Selected task: CONTROL-HA-20261123 / HA-02, existing complete-recovery acceptanc
 Actual cold execution PASS; complete HA-02 remains IN_PROGRESS. No product version, installation, public
 artifact/catalog, gateway policy or production service change. This is not HA-03 activation.
 
+## Current host authorization and preflight
+
+Owner answers “да” to the explicit current NL1/NL2 HA-02 preflight and isolated-recovery
+question, without changes to working services. This resolves the13:50UTC ambiguity below;
+it is not a future checkpoint-content approval or production cutover permission.
+AGENTS now records the exact scope and retirement of the old Amsterdam address.
+
+Fresh strict-pinned SSH probes complete13:53:43/13:53:44UTC. Existing id_ed25519 and
+accepted known_hosts files are used, with BatchMode, IdentitiesOnly and no trust scan.
+Both are x86_64/two-CPU hosts with cgroup-v2 and successful ephemeral mount/PID/network
+namespace probes. No package installation, persistent remote file, live data read,
+restart, new user or production configuration change occurs.
+
+| Host | OS | Available RAM | Free disk | Full pressure, avg10 memory / I/O |
+| --- | --- | ---: | ---: | --- |
+| NL1 | Ubuntu26.04.1 |843923456 bytes |37511114752 bytes |1.32% /7.12% |
+| NL2 | Ubuntu24.04.5 |1539735552 bytes |38119591936 bytes |0.00% /0.00% |
+
+Both lack Docker, bubblewrap and umoci but provide Python, unshare, setpriv and systemd-run.
+Do not install dependencies into working hosts to fit the laptop harness. Select NL2 for
+testing an existing-systemd isolated, resource-limited recovery process; defer heavy work
+on NL1. All observed Family Connect services are active. NL2 server-load has11 existing
+restarts; this is a baseline, not a restart caused by these probes. Service invocation/PID
+baselines and raw preflight receipts remain private under owner custody
+`control-ha/20261124-recovery-hosts-01`. No continuous-health claim is made from one sample.
+This preflight alone is not recovery or a coherent capture and closes no full HA-02 gate.
+
 ## Next live action — host scope reconciliation
 
 24 November13:50UTC continuation checks the remaining practical prerequisites, not

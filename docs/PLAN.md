@@ -3,15 +3,14 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Next live action: reconcile the current owner-supplied host list with the actual
-NL1 185.10.158.212 / NL2 185.10.158.196 inventory. The listed186.246.45.246 is retired;
-do not probe it or silently substitute another target. Obtain confirmation of the two
-current NL targets for HA-02 preflight/isolated recovery, then check capacity/isolation
-and all-writer/in-flight coverage before choosing a capture or off-machine destination.
-No new remote availability/capacity result exists. No service-stop, transfer or capture
-is implied by this source-only review. This is an execution-scope clarification, not
-another numbered stage or independent checkpoint approval.
-[Evidence and exact continuation](releases/2026-11-24-control-ha-recovery-kit.md#next-live-action--host-scope-reconciliation).
+Owner confirms current NL1/NL2 targets for HA-02 preflight/isolated recovery without
+working-service changes. The target ambiguity is resolved; no repeated permission request.
+Actual13:53UTC strict-pinned preflight selects NL2 for bounded isolation qualification;
+NL1 currently has memory/I/O pressure. Neither host has Docker/bubblewrap/umoci; test
+existing systemd namespaces/resource limits without installing packages or stopping services.
+Then qualify off-machine recovery/custody where safe; coherent writer/in-flight capture,
+independent current approval and final combined readback remain the same acceptance gates.
+[Evidence and exact continuation](releases/2026-11-24-control-ha-recovery-kit.md#current-host-authorization-and-preflight).
 
 Actual cold source/dependency gate PASS12:31:38UTC from8acc6bd2:419 committed source files,
 28 pinned wheels and native checks on610 canonical rows,207 receiver records/82 allocations,

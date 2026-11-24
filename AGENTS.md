@@ -66,10 +66,12 @@ uncommitted work. Do not assume a build is installed or a commit is deployed. Be
 ending, update STATUS (including any unfinished work), PLAN and the dated release
 report with exact versions, tests, rollout/rollback paths and remaining checks.
 
-Authorized Family Connect gateway hosts: `185.251.89.19:/opt/apps/family_connect`
-and `186.246.45.246:/opt/apps/family_connect` (Amsterdam, explicitly authorized by
-the user on 2026-09-13; native WG pilot under `amsterdam/`).
-`186.246.51.201` is excluded. Never operate neighbouring MicroTrader services. Client
+Authorized Family Connect gateway host: `185.251.89.19:/opt/apps/family_connect`.
+Owner confirmation, 2026-11-24: current NL1 `185.10.158.212:/opt/apps/family_connect`
+and NL2 `185.10.158.196:/opt/apps/family_connect` are authorized for HA-02 checks and
+isolated recovery without changes to working services. Use existing strict SSH pins.
+`186.246.45.246` is retired; do not contact it. `186.246.51.201` remains excluded.
+This does not authorize production cutover or deployment. Never operate neighbouring MicroTrader services. Client
 private keys/profiles, product DB, backups and release signing secrets stay out of Git,
 CI and command output. Public anchors and signed catalogs may be committed.
 

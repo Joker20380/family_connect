@@ -1,5 +1,15 @@
 # Текущее состояние / Current state
 
+**24 November13:53UTC — owner confirms current NL targets; live preflight complete.**
+The owner answers “да” to scoped HA-02 checks/isolated recovery on NL1 185.10.158.212
+and NL2 185.10.158.196 without changing working services. The host-scope question below
+is resolved; do not ask again. Both strict-pinned SSH probes pass. NL2 has1.54GB available
+RAM/38.12GB free disk and zero10s memory/I/O full pressure; NL1 has0.84GB available RAM
+and nonzero pressure, so do not run recovery there now. Both have cgroup-v2 and working
+mount/PID/network namespaces, but no Docker/bubblewrap/umoci. Next: bounded native
+systemd isolation on NL2, not package installation or service stops. Three HA-02 gates
+remain partial; replication PASS. [Evidence](releases/2026-11-24-control-ha-recovery-kit.md#current-host-authorization-and-preflight).
+
 **24 November13:50UTC — HA-02 next live action needs host-scope reconciliation.**
 The current owner-supplied AGENTS host list names RU185.251.89.19 and the retired
 NL186.246.45.246. The collector and retained fleet evidence instead identify
