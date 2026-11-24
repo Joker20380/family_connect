@@ -8,8 +8,9 @@ Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment
 
 ## NL2 manager-wide reload cause — no mutation
 
-[Authoritative source diagnosis, tests, provenance, native result and next-scope limits](https://github.com/Joker20380/family_connect/blob/58a82d4788921bd6d11c0b1da4569e6a8a86b6f8/docs/releases/2026-11-24-control-ha-systemd-lifecycle.md#nl2-manager-wide-reload-cause--read-only)
-are pushed/remote-SHA verified at58a82d4788921bd6d11c0b1da4569e6a8a86b6f8. Main is navigation only.
+[Authoritative source diagnosis, tests, provenance, native result and next-scope limits](https://github.com/Joker20380/family_connect/blob/c5e404ca50ec243a0f962c1aa7d1efb279dd642c/docs/releases/2026-11-24-control-ha-systemd-lifecycle.md#nl2-manager-wide-reload-cause--read-only)
+have source58a82d4788921bd6d11c0b1da4569e6a8a86b6f8 and a report-scope clarification at
+c5e404ca50ec243a0f962c1aa7d1efb279dd642c, both pushed/remote-SHA verified. Main is navigation only.
 No RU/NL1 access, NL2 service start/stop/reload, configuration/key/environment change, product DB
 access, deployment, release tag/signing or public artifact update. All client/build/installed/
 public-installer/catalog/invitation versions remain unchanged. Existing lifecycle veto is untouched.
@@ -25,7 +26,8 @@ stops these services nor establishes a hosting problem or explains prior RU fail
 
 AWG, TCP, paid-watch and restricted-bootstrap remain active/running, with MainPID/invocation
 identities unchanged and no jobs/ControlPID around the observation. All four still report the
-warning and remain refused by the capture guard. No VPN/data-plane, continuous-quiescence,
+warning; the three-unit transport capture veto stays unchanged, while restricted-bootstrap is
+outside that helper's allowlist. No VPN/data-plane, continuous-quiescence,
 full-runtime equivalence or current whole-fleet availability claim is made.
 
 Both official Ubuntu source archives match their HTTPS-fetched descriptor's SHA256 entries.
