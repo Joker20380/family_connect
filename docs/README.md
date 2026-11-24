@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 24 November: pinned renewal admission wrapper, caught SSH uncertainty, unchanged legacy dispatch;319 checks, no deployment](releases/2026-11-24-control-ha-admission-drain.md#pinned-renewal-dispatch-continuation).
+
 [CONTROL-HA · 24 November: chat/payment scheduler and operator admission, caught prepare uncertainty, closed isolated packages;200 tests, no deployment](releases/2026-11-24-control-ha-admission-drain.md#scheduler-and-payment-dispatch-continuation).
 
 [CONTROL-HA · 24 November: opt-in local admission/drain, HTTP and worker integration, automatic release and durable uncertainty;170 focused checks, no deployment](releases/2026-11-24-control-ha-admission-drain.md).

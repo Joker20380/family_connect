@@ -4,6 +4,7 @@ from pathlib import Path
 import re
 import shlex
 import subprocess
+import sys
 import tempfile
 import time
 
@@ -54,6 +55,11 @@ class SshNode:
         self.route = parse(canonical(ssh_route(forced if self.forced else route, forced=self.forced)))
 
     def call(self, action, operation_id, payload=None):
+        capture = sys.modules.get('control.capture_gate')
+        with capture.external_operation() if capture is not None else contextlib.nullcontext():
+            return self._call(action, operation_id, payload)
+
+    def _call(self, action, operation_id, payload=None):
         require(action in ACTIONS and re.fullmatch('[a-z0-9-]{16,96}',operation_id), 'RPC_SCHEMA')
         raw = canonical(dict(schema=1,role=self.role,action=action,operation_id=operation_id,
                              expected_source_sha256=self.expected_source_sha256,payload=payload))

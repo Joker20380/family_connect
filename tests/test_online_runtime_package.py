@@ -13,6 +13,7 @@ import zipfile
 
 import pytest
 
+from control.capture_gate import initialize
 from scripts import package_online_renewal as package
 
 
@@ -100,6 +101,23 @@ def test_online_package_reproducible_without_working_checkout_imports(online_pac
                    check=True, capture_output=True)
     with pytest.raises(FileExistsError):
         package.build(archive, 'HEAD', go=Path(os.environ['FC_ONLINE_GO']), repository=source)
+
+
+def test_packaged_online_capture_wrapper_is_opt_in_and_precedes_native_reads(online_package, tmp_path):
+    _, _, _, extracted, receipt = online_package
+    gate = initialize(tmp_path / 'capture')
+    command = [sys.executable, '-I', '-B', str(extracted / 'renewal/capture_entry.py'),
+               '--manifest-sha256', receipt['manifest_sha256'], '--capture-gate', str(gate.directory),
+               '--entry', 'online', '--']
+    result = subprocess.run(command + ['--help'], cwd=tmp_path, capture_output=True, timeout=10)
+    assert result.returncode == 0 and b'--operation' in result.stdout, result.stdout + result.stderr
+    assert not list((gate.directory / 'pending').iterdir())
+    with gate.drain(.2):
+        result = subprocess.run(command + ['--config', str(tmp_path / 'absent.json'),
+                                '--operation', 'synthetic-online-capture'],
+                                cwd=tmp_path, capture_output=True, timeout=5)
+    assert result.returncode == 75 and json.loads(result.stdout)['cause'] == 'CAPTURE_BUSY'
+    assert not list((gate.directory / 'pending').iterdir())
 
 
 @pytest.mark.parametrize('opt_in', [None, 'wrong-contract', package.CONTRACT])

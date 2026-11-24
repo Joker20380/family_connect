@@ -26,9 +26,9 @@ API_MEMBERS = {
     'provisioning/__init__.py': 'a8d11b35f8be63395d505bcf0cf7774aa5c0dbffa5eee905eef911a8d3fdb905',
     'provisioning/friends_catalog.py': 'add970991089003c7b4589e8dbb135d56e63a601b5530c939f4b6ab8b964bebe',
 }
-API_ADDITIONS = ('control/friends/profile_store.py', 'control/requirements.lock', 'device_identity/requirements.lock',
+API_ADDITIONS = ('control/capture_gate.py', 'control/friends/profile_store.py', 'control/requirements.lock', 'device_identity/requirements.lock',
                  'LICENSE', 'THIRD_PARTY_NOTICES.md')
-MODULES = ('credential_renewal.py', 'expired_recovery.py', 'grant_cutover.py', 'maintenance_policy.py',
+MODULES = ('capture_entry.py', 'credential_renewal.py', 'expired_recovery.py', 'grant_cutover.py', 'maintenance_policy.py',
            'node.py', 'offline_handoff.py', 'production_controller.py', 'production_node.py',
            'production_transport.py', 'renewal_cli.py', 'renewal_health.py', 'runtime_controller.py',
            'scheduled_evaluate.py','gateway_set.py', 'online_contract.py', 'online_controller.py',

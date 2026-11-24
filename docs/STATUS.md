@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+**24 November — pinned renewal admission implemented; source only.**
+An explicit isolated-Python capsule launcher gates offline/online renewal, node CLI and
+scheduled credential/directory evaluation before native config/stdin/DB work. It verifies
+the caller's manifest pin, exact sources and API; rejects extra bytecode/source files.
+Caught SSH/ACK failures retain uncertainty across successful retry. Legacy entrypoints
+remain ungated by default.319 tests PASS/1 optional native skip/22 root-SSH cases deselected;
+separate retained-adapter set305 PASS/8 optional PG skips (overlapping counts).
+No host, service, route, watchdog, version or policy changes. Next: remaining forced-SSH/
+receiver/direct-dispatch and OWNER PG/synthetic writers, effective bindings, remote
+completion and latency, then overlapping capture/independent approval/custody/final recovery.
+Replication PASS; three HA-02 gates still partial, no HA-03 or cutover.
+[Exact scope, tests and rollback](releases/2026-11-24-control-ha-admission-drain.md#pinned-renewal-dispatch-continuation).
+
 **24 November — scheduler/payment dispatch joins opt-in admission; source only.**
 Chat-sync timer now holds the gate through support publication; paid-node reconcile holds
 it through the complete cycle; paid CLI holds it through DB commit. Caught lost/malformed

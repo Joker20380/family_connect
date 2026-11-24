@@ -65,7 +65,7 @@ def test_renewal_package_pins_every_source_and_shared_profile_module(source, tmp
         assert archive.read('control/friends/profile_store.py') == (package.ROOT / 'control/friends/profile_store.py').read_bytes()
         assert package.digest((extracted / 'api.pyz').read_bytes()) == manifest['api_sha256']
         assert {'LICENSE', 'THIRD_PARTY_NOTICES.md'} <= set(api_manifest['files'])
-    for module in ('node.py', 'runtime_controller.py', 'renewal_cli.py', 'scheduled_evaluate.py'):
+    for module in ('capture_entry.py', 'node.py', 'runtime_controller.py', 'renewal_cli.py', 'scheduled_evaluate.py'):
         result = subprocess.run([sys.executable, '-E', '-s', '-B', str(extracted / 'renewal' / module), '--help'],
                                 capture_output=True, check=True)
         assert result.stdout and not result.stderr

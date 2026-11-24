@@ -7,6 +7,109 @@ version bump, catalog/signing change, live capture or recovery acceptance occurs
 The current [writer-boundary contract](2026-11-24-control-ha-writer-boundary.md#minimum-boundary-contract)
 and four existing HA-02 acceptance gates remain authoritative.
 
+## Pinned renewal dispatch continuation
+
+This source-only continuation is based onfd378475. It adds an explicit admission wrapper
+for the existing offline renewal coordinator, online coordinator, node CLI and scheduled
+credential/directory evaluator. Native entrypoints remain unchanged and **ungated unless
+invoked through this wrapper**. No installed service, SSH route, watchdog or policy changes.
+
+`deploy/friends/restricted/maintenance/capture_entry.py` runs only with isolated Python,
+a caller-supplied SHA-256 of the exact capsule manifest, an existing gate and a fixed
+entry name. The new capsule includes this launcher in `source_files` and the shared
+`control/capture_gate.py` in its pinned API library. Both credential and online packagers
+inherit these additions; the accepted historical `API_MEMBERS` hashes remain unchanged.
+New packages require a source commit containing the new files. Existing immutable capsules
+are not rewritten; rebuilding an old source uses its own historical packager.
+
+Before importing a native entrypoint or reading its config/stdin, the launcher verifies
+the manifest pin, unbound/no-permit metadata, exact flat source inventory and every source
+hash, and the API archive hash. Symlinks, unsafe ownership/write modes, hardlinks, oversized
+files and unexpected files/bytecode caches are refused. The verified API descriptor stays
+open throughout execution; the gate must actually import from that descriptor, not a
+host checkout. This assumes a trusted interpreter/dependency environment and no concurrent
+replacement of the approved source directory; it is not an immutable-source attestation
+or a replacement for independently approved deployment hashes.
+
+Source-only invocation shape, **not an installation instruction**:
+
+```sh
+python -I -B "$CAPSULE/renewal/capture_entry.py" \
+  --manifest-sha256 "$APPROVED_MANIFEST_SHA256" --capture-gate "$GATE" \
+  --entry scheduled -- --config "$CONFIG" --ssh-key "$SSH_KEY" \
+  --known-hosts "$KNOWN_HOSTS" --gateway-routes "$ROUTES" --directory-only
+```
+
+Other fixed entries are `renewal`, `online` and `node`; arguments after `--` go unchanged
+to the existing parser. `online` requires the actual online capsule; it is refused in
+the classic capsule. No arbitrary module/shell entry, network discovery, gate initialization,
+source fallback or automatic retry is added. Native root requirements, authorization,
+maintenance approvals and existing transaction/recovery rules still apply.
+
+Admission encloses native imports, config/DB/file access, the whole coordinator sequence
+and native return. Closed admission returns redacted `CAPTURE_BUSY`/75 before native work.
+Successful `None`/0/`SystemExit(0)` settles only its own marker. Nonzero returns/exits,
+exceptions or process death retain uncertainty. This intentionally also retains a marker
+for a native read-only evaluation returning75: the wrapper does not guess from a status
+whether all external effects are settled. Removing such a marker requires independent
+reconciliation; a later successful run cannot erase it.
+
+`SshNode.call` now encloses RPC execution **and all response validation** in the current
+operation's external-uncertainty scope when the shared gate is loaded. Timeout, invalid
+reply/binding, remote rejection, failing exit or readback error remains uncertain even if
+the coordinator catches it and subsequently retries successfully. Legacy transport does
+not import, initialize or require the gate. SSH routes,120s timeout and native rollback
+semantics are unchanged; no timeout is treated as remote cancellation.
+
+### Renewal validation
+
+All runs use `/tmp/fc-control-ha-20261123/venv/bin/python -m pytest -q`.
+
+- **319 passed,1 skipped,22 deselected**: `test_capture_renewal.py`,
+  `test_package_credential_renewal.py`, `test_renewal_profile_routes.py`, `test_capture_gate.py`,
+  `test_activated_maintenance.py`, `test_multi_gateway_renewal.py`, `test_online_renewal.py`,
+  `test_serialized_renewal.py`, `test_abort_unacquired_renewal.py`,
+  `test_reconcile_unprepared_renewal.py`, `test_online_runtime_package.py` under `tests/`.
+  `FC_ONLINE_GO=/tmp/fc-ios-tools/go/bin/go` (Go1.26.1) builds the actual deterministic
+  online capsule and exercises its launcher. The one skip requires a separately pinned
+  accepted historical carrier source/native validator, not this current package.
+  The22 disposable-root/SSH-stand cases were explicitly deselected: packaged node/process,
+  controller entrypoint, online commit, NL failures, SIGKILL resume, seed-timeout and RPC-loss
+  scenarios. They are not claimed as passed; root/remote receiver qualification remains.
+- **305 passed,8 skipped**: final `test_capture_renewal.py` (including the added fresh-process
+  legacy/no-gate check), `test_control_ha_renewal_v1.py`, `test_control_ha_renewal_history.py`,
+  `test_control_ha_maintenance_v1.py`. The8 skips require the separate real PostgreSQL
+  import/recovery rehearsal. Retained-state schema/history adapters still pass their local
+  checks. Counts overlap; do not add them into a distinct-case acceptance total.
+
+New fixtures cover classic and online package execution with `-I -B`, hash/inventory/
+permissions/source-cache refusal, busy before native config/stdin, no implicit gate creation,
+normal/exception/nonzero completion, a real admitted process surviving drain timeout then
+retaining its marker on SIGKILL, caught malformed/lost/rejected SSH replies, successful
+retry and success-only cleanup. All network responses are synthetic; no live SSH occurred.
+Native renewal rollback/replay tests run unchanged. No OWNER/PG/Windows/live fleet acceptance
+is inferred. Documentation links and whitespace are checked before commit.
+
+### Renewal boundary limits and rollback
+
+This provides opt-in **entrypoint** coverage, not a fleet transaction fence. Direct calls
+to `node.dispatch`, other forced-command handlers, AWG registration, legacy restricted-sync
+and manual operator dispatch are not automatically covered. Current seven-argument SSH
+routes are deliberately not rewritten to the wrapper. Node RPCs span a multi-step remote
+transaction: gating one RPC does not prove the interval between RPCs is safe, or that a
+successfully started external service has finished its own work. Actual controller/receiver
+bindings and independent external completion remain mandatory. OWNER PostgreSQL/synthetic
+publishers remain outside this continuation. Paid-watch/deny enforcement stays running.
+
+No host access, production capture, package installation, version bump, public artifact,
+grant or signing change occurred. No installed rollback is needed. A later approved
+enablement must first qualify source/argv/UID/mount/gate-inode bindings, busy75 behavior,
+flush latency and existing watchdog budgets. To withdraw it, cancel capture and release
+its guardian before restoring original dispatch; retain all pending evidence/current
+transaction state. Do not delete markers, restore stale credentials or start previously
+failed/inactive services as rollback. Same four HA-02 gates: replication PASS; current
+independent approval, coherent capture and complete independent recovery still partial.
+
 ## Scheduler and payment dispatch continuation
 
 The next source checkpoint is based on1015ac5e. The same opt-in boundary now covers the

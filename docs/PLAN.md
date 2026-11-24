@@ -3,18 +3,20 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Local cooperative admission/drain remains source-only. In addition to HTTP/routing CLI,
-two retention threads and product admin/worker, the chat-sync and paid-reconcile timers
-and paid operator now participate when configured. Payment rollback/caught prepare failure
-retains external uncertainty; successful retry cannot clear it. Isolated deterministic
-scheduler and paid-operator packaging passes.200 focused tests PASS,0 skips; final package/
-budget set39 PASS; historical package run22 PASS/4 old source-pin fixture failures reproduced
-on unchanged1015ac5e. No historical source pins, lease/watchdog policy or deployment changed.
-[Implementation and exact validation](releases/2026-11-24-control-ha-admission-drain.md#scheduler-and-payment-dispatch-continuation).
-Next selected work: credential/restricted renewal and remaining operator/forced-SSH/receiver
-entrypoints plus OWNER PG/synthetic publishers; bind effective source/argv/UID/mounts for all
+Local cooperative admission/drain remains source-only. The pinned capsule wrapper now
+adds opt-in offline/online renewal, node CLI and scheduled credential/directory evaluation
+to the completed HTTP/retention/product-worker/chat/payment slices. It verifies exact
+sources/API before native work; caught SSH failures retain uncertainty even after retry.
+319 tests PASS/1 optional native skip/22 root-SSH cases deselected; retained-adapter set
+305 PASS/8 optional PG skips, with overlapping counts. Historical accepted API pins,
+lease/watchdog policy and native default invocation remain unchanged. No deployment.
+[Implementation and exact validation](releases/2026-11-24-control-ha-admission-drain.md#pinned-renewal-dispatch-continuation).
+Next selected work: remaining operator/forced-SSH/receiver/direct-dispatch entrypoints plus
+OWNER PG/synthetic publishers; bind effective source/argv/UID/mounts for all
 participants, independently settle external dispatch, and qualify flush latency plus a
-provably overlapping fleet interval. Do not reimplement the completed timer/payment slice.
+provably overlapping fleet interval. Per-RPC node admission is not a whole remote transaction
+fence; direct node.dispatch and existing fixed SSH routes do not invoke the wrapper yet.
+Do not reimplement the completed timer/payment/renewal-wrapper slices.
 Keep paid-watch/deny enforcement running; current NL scope does not permit changing working
 services. No live snapshot is authorized by this local gate or an empty process/lock sample.
 Do not repeat the completed writer census/NL2 recovery or create another lettered stage.
