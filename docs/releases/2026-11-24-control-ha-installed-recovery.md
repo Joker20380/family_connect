@@ -4,6 +4,31 @@ Authoritative implementation remains `/home/joker/.codex/worktrees/dad9/family_c
 on `feature/device-technical-metadata-20261115`, not this divergent old main.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## Encrypted recovery follow-up
+
+Source `afe4812e7c12dfd83b22cc50659c35152208d700` is pushed and remote-SHA verified.
+The explicit closed-handoff v2 capsule now passes through the existing signed portable
+forward archive.555 contracts PASS /0 failures/errors/skips in108.345s. An independent
+process imports49 tables after removal of its complete synthetic source directory;
+the native lifecycle reconstructs issuer/referral authority, preserves four stores and
+38 artifacts/eight roles, passes crash/current restore and refuses an older copy after
+new acknowledged writes. Existing v1 refusal and all external trust/floor checks remain.
+
+[Pinned implementation report](https://github.com/Joker20380/family_connect/blob/afe4812e7c12dfd83b22cc50659c35152208d700/docs/releases/2026-11-24-control-ha-handoff-recovery.md)
+records receipt digests, earlier failed fixture/FD-limit attempts, private evidence and
+rollback limits. Five source documentation files/989 local links pass; external URLs
+were inventoried, not HTTP-qualified. Owned lab resources were cleaned up.
+
+No live changes, release/version change or new signing authority. The current checkpoint
+permission decision remains pending; actual coherent capture and independent real-state
+recovery, including OWNER, still block HA-02 COMPLETE. Do not discard handoff tables or
+substitute v1 backups to roll back this source-only laboratory format. Previous navigation
+main commit77d5076b was rejected non-fast-forward; source publication is independent.
+The three staged navigation documents pass387 link checks. Checking the dirty working
+tree additionally encounters an existing uncommitted evening-readback anchor error;
+the owner's original four modified files and six untracked files remain byte-for-byte
+unchanged outside these separately staged navigation hunks.
+
 ## Source and evidence
 
 - `7c8a574745360e0a0df9aa9939d46c9fd5efdd2f`: actual four-store/unit census and pinned

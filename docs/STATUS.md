@@ -1,6 +1,17 @@
 # Текущее состояние / Current state
 
-**24 November — latest source and live-scope decision boundary.**
+**24 November — encrypted49-table recovery source pushed.**
+Authoritative sourceafe4812e7c12dfd83b22cc50659c35152208d700 is pushed/remote-SHA verified
+on the existing metadata branch.555 focused tests /0 failures/errors/skips PASS, including
+fresh-process import from the signed encrypted archive after removing its synthetic source.
+Issuer/referral recovery, crash/current restore and stale-copy refusal pass; actual full
+off-node DR and live capture remain unqualified. No production changes. HA-02 stays
+IN_PROGRESS; the owner decision on the limited live-capture/checkpoint path is still
+pending. [Source evidence and rollback](releases/2026-11-24-control-ha-installed-recovery.md#encrypted-recovery-follow-up).
+Previous main navigation77d5076b remains local after non-fast-forward rejection; the
+implementation branch is published and original root work is preserved.
+
+**Earlier24 November — source and live-scope decision boundary.**
 Documentation sourceb4ffddf22bcb45583648efadcdd8a89023e7d18b pushed/remote-SHA verified;
 runtime candidate remains64ba58ee, not deployed. Additional read-only account/system-cron
 and OWNER queue evidence is recorded in the authoritative report: selected account cron

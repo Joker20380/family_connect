@@ -4,8 +4,11 @@
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
 Latest owner request24 November selects **completion of all HA-02**, not only the
-journal slice. Current documentation sourceb4ffddf2 and runtime candidate64ba58ee are
-pushed/remote-SHA verified in the metadata worktree; neither is a production deployment.
+journal slice. Current sourceafe4812e is pushed/remote-SHA verified in the metadata
+worktree, not deployed. The encrypted handoff profile now reaches the signed portable
+forward archive and source-removed fresh-process49-table PG restore:555 tests /0 skips,
+native crash/current restore and stale-copy refusal PASS. Actual-current custody/live
+barrier/full production recovery remain unqualified. Earlier source results follow.
 Isolated strict replication gate PASS; handoff-preserving import/recovery now covers49
 PG tables.199 import/census tests and28 guards /0 skips plus full crash/independent DB
 restore/stale-copy refusal and extended Patroni fault run PASS. Read-only source census
