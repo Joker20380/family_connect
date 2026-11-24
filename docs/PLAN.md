@@ -11,12 +11,13 @@ remains selected; this publication task does not advance its acceptance gates.
 [Reconciliation record](releases/2026-11-24-source-reconciliation.md).
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Next live action requires reconciling the owner-supplied host list with current
-NL1 185.10.158.212 / NL2 185.10.158.196. Listed186.246.45.246 is retired; do not probe it
-or silently substitute targets. Confirm scope, then check recovery capacity/isolation
-and effective all-writer/in-flight coverage without changing working services. No new
-stage, live capacity result, checkpoint approval or completed acceptance gate.
-[Decision boundary](releases/2026-11-24-control-ha-installed-recovery.md#next-live-action--host-scope-reconciliation).
+Owner confirms current NL1/NL2 scope; do not repeat the permission question. Actual13:53UTC
+preflight selects NL2 for bounded isolated recovery; NL1 has memory/I/O pressure. The
+existing-systemd runner is prepared with50 tests, without package installation or production
+service changes. Next is actual off-machine native readback, not another laptop-only test.
+Coherent all-writer/in-flight capture, independent current approval and final recovery
+remain the same three partial blocks; replication PASS.
+[Evidence](releases/2026-11-24-control-ha-installed-recovery.md#owner-confirmation-and-current-preflight).
 
 Current source/reportbcb005a1 is pushed/remote-SHA verified; actual cold execution from8acc6bd2
 passes12:31:38UTC.419 committed source files/28 offline wheels support native retained

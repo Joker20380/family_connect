@@ -1,5 +1,14 @@
 # Текущее состояние / Current state
 
+**24 November13:53UTC — owner confirms NL scope; live prerequisite probes complete.**
+Owner “да” authorizes current NL1/NL2 HA-02 checks and isolated recovery without changes
+to working services. AGENTS is corrected; the host question below is resolved. Strict-pinned
+SSH works on both. NL2 has1.54GB available RAM/38.12GB free disk and zero10s full memory/I/O
+pressure; NL1 has0.84GB available RAM/nonzero pressure and is not selected for recovery.
+Existing namespaces/cgroup-v2 work; no Docker/bubblewrap/umoci. A bounded native systemd
+runner is prepared on the feature branch (50 tests PASS); actual recovery remains pending.
+No package installation or production-service change. [Evidence](releases/2026-11-24-control-ha-installed-recovery.md#owner-confirmation-and-current-preflight).
+
 **24 November13:50UTC — HA-02 next live action needs host-scope confirmation.**
 Current owner instructions name the retired NL186.246.45.246; collector and retained
 fleet evidence name NL1 185.10.158.212 / NL2 185.10.158.196 instead. Confirm these two

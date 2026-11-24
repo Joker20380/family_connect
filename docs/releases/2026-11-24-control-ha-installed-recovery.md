@@ -6,6 +6,32 @@ divergence is reconciled/pushed at2ae5c512; older publication-blocker statements
 historical, not active instructions or a current blocker.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## Owner confirmation and current preflight
+
+The owner answers “да” to the exact current NL1/NL2 HA-02 check/isolated-recovery request,
+without changing working services. This resolves the earlier target question, now recorded
+in AGENTS on both branches; no further permission question is needed for this same scope.
+It is not approval of a future checkpoint's content or production cutover.
+
+Strict-pinned probes complete13:53:43UTC (NL1)/13:53:44UTC (NL2). Both have two x86_64 CPUs,
+cgroup-v2 and working ephemeral mount/PID/network namespaces. NL1 Ubuntu26.04.1 has
+843923456 available memory bytes/37511114752 free disk bytes, with memory/I/O full-pressure
+avg10 at1.32%/7.12%. NL2 Ubuntu24.04.5 has1539735552 available memory bytes/38119591936 free
+disk bytes and zero full pressure. Select NL2; do not add recovery load to NL1 now.
+Both lack Docker/bubblewrap/umoci. All observed FC services are active; NL2 server-load's11
+restarts are a pre-existing baseline, not changes made by this task.
+
+Feature checkpointa9817d5251bc20b4abf1f8ae30bf70ba1c397a6d records authorization/preflight;
+d85cccb20524fd9b75ede0908ebbb47c339ad068 adds the bounded systemd runner,50 focused tests PASS.
+Both are pushed/remote-SHA verified. Actual remote recovery is not yet claimed here.
+The runner uses a private retained image, dynamic non-root identity, no network/capabilities,
+512MiB/no swap,25% CPU,32 tasks and600s runtime. Input keys/checkpoints enter over stdin into
+temporary memory, never argv or persistent input mounts. No package installation, live
+daemon restart, production rollback or new version. Stop only the exact owned transient unit
+on failure; preserve encrypted custody and existing state. The three partial HA-02 gates
+remain, not another numbered stage. Local documentation links/whitespace are checked;
+external URL reachability is not implied.
+
 ## Next live action — host scope reconciliation
 
 At24 November13:50UTC a source-only prerequisite review finds a target mismatch:
