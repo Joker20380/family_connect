@@ -1,5 +1,14 @@
 # Текущее состояние / Current state
 
+**24 November — limited live-capture scope explicitly approved.**
+Owner confirmation “подтверждаю давай делай” answers the preceding request for a bounded
+live snapshot with temporary management-write blocking, checked interruption/rollback
+plan and no production PostgreSQL switch. The previous permission blocker is removed
+for this scope, not replaced with permission for cutover or a historical approval claim.
+Fresh installed preflight and exact writer/barrier/recovery coverage are now being checked;
+no live acceptance is claimed from the authorization alone.
+[Execution boundary and evidence](releases/2026-11-24-control-ha-live-capture.md).
+
 **24 November — encrypted handoff recovery path qualified offline.**
 The exact installed-schema profile now travels through the encrypted recovery bundle
 and independently signed portable forward archive, not only the standalone importer.

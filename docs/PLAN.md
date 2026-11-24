@@ -3,6 +3,12 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+Owner now explicitly confirms the bounded live-capture request (“подтверждаю давай делай”):
+temporary management-write blocking is allowed after a concrete preflight/abort/rollback
+plan; no production PostgreSQL cutover. This supersedes the permission-pending statements
+below, not the three open technical gates. Proceed with current installed writer scope,
+safe capture and independent restore; do not request the same permission again merely
+because the runbook contains a stop step. [Current execution record](releases/2026-11-24-control-ha-live-capture.md).
 Latest owner scope24 November: “дальше. работай до завершения 2 этапа”. All four HA-02
 acceptance blocks are now selected; do not stop at another journal-only slice or start
 HA-03..05. The isolated replication gate passes with strict Patroni quorum, durable
