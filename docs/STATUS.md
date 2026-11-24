@@ -1,9 +1,21 @@
 # Текущее состояние / Current state
 
+**24 November08:43:22UTC — legacy-worker actual offline recovery PASS.**
+The41.191ms DB/enrollment barrier captures19 files,13 tables/58 rows and one persisted
+peer intent. A separately encrypted capsule restores byte-for-byte in a fresh process;
+all table counts/digests match. Native duplicate/restart/retry/expiry checks pass on a
+different offline copy: all3 captured deployments are expired, zero real gateway commands.
+Worker container/service identity is unchanged; no installed/public version change.
+RU AWG remains failed/TCP inactive; paid-watch shows pre-existing restart churn (NRestarts
+5265→5283 across preflights), so no claim of overall RU health. The successful interval
+has unchanged service samples. HA-02 still needs OWNER runtime, native composite integration,
+coherent canonical/dispatcher capture and independent trust; no external-exec fence claimed.
+[Actual point and limitations](releases/2026-11-24-control-ha-live-capture.md#actual-worker-readback--084322utc).
+
 **24 November — bounded legacy-worker custody prepared.**
 The separate product DB and persisted peer intent now have a fail-closed250ms capture,
 encrypted new-directory restore and native queue qualification without Docker dispatch.
-60 focused checks PASS. Actual capture/readback is still pending; no service or installed version change. This
+60 focused checks PASS. Actual readback is now recorded above; no service or installed version change. This
 advances the selected HA-02 legacy-worker slice, not a full external-command/fleet fence.
 [Scope, abort and rollback](releases/2026-11-24-control-ha-live-capture.md#legacy-worker-custody-plan).
 

@@ -1,5 +1,47 @@
 # 24 November 2026 — authorized bounded live capture
 
+## Actual worker readback — 08:43:22UTC
+
+Source157bb8d749cf2f52fb2fad1f4f8ca49f2dcf2733 captures the RU legacy worker at
+2026-11-24T08:43:22.072486Z with a41.191ms local DB/enrollment barrier.19 files include
+13-table/58-row v3 product DB,11 pinned source/migration files, gateway mapping/three public
+keys, worker environment/unit and one persisted unmanaged peer intent. The peer file is
+preserved, not interpreted as permission to install it. No server/private client key is read.
+Encrypted capsule275,884 bytes, SHA256
+`c7e1778cc159274ae9dd0f043962aa5bc00003a45ec9d9d1cabfaea515673eb7`;
+document SHA256`b4caa95522d9a3372f7052ca8fafe7dbfed2be39930ec3535dd48209ae1c55c9`.
+Private custody `control-ha/20261124-worker-03` and separately held key/checkpoint remain
+outside Git; no decrypted row, identity, key, peer filename or raw configuration is published.
+
+A fresh local process decrypts, validates schema/user_version/integrity/foreign keys,
+restores only into a new0700 directory with0600 files and compares every file and all13
+table count/row digests. Native pinned consumers run on a different new copy with in-memory
+adapters only. Three captured deployments are expired; duplicate/restart preserves allocations,
+versions, challenges, revocations and original lease values. Injected failure produces durable
+retry, restart before retry_at performs no adapter call, expiry produces only absent intent.
+Zero real gateway commands; the untouched restored image is rechecked afterwards.
+60 focused tests pass, including active/revoked/retry-pending synthetic cases not present in
+the expired actual snapshot. These do not prove that live Docker operations have finished.
+
+The exact worker container/image/start time/mount set/command and service invocation/PID/
+restart counter match before/after. Docker mount-array order is normalized for comparison
+without dropping any mount fields. The first attempt refused without a retained capsule
+(the intentionally generic diagnostic does not establish its cause); a subsequent preflight
+aborted on mount ordering alone. No automatic retry loop or service change occurred; the
+successful new attempt follows explicit read-only revalidation. Failed attempt records remain.
+
+RU friends-AWG remains failed and friends-TCP inactive. Paid-watch was already alternating
+active/auto-restart before capture; sampled NRestarts increases5265→5283 across preflights.
+All four service samples match during the successful short interval, but this is **not** a
+claim of healthy/stable RU. No unit is stopped/started or repaired as part of custody.
+Rollback is collector exit/lock release, never replaying old product data on RU. Installed
+worker remains0.2.1; client/public versions and gateway policy are unchanged.
+
+This closes worker-local DB/queue/persisted-intent custody, not provisioning-signer custody,
+live gateway reconstruction, external-command fencing or a coherent full-fleet recovery.
+Selected HA-02 remainder: OWNER runtime/configuration, native composite integration,
+canonical/all-writer/dispatcher coherent capture and independently approved forward trust.
+
 ## Legacy-worker custody plan
 
 Selected HA-02 scope: the separately mounted legacy product SQLite database, its durable

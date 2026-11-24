@@ -3,20 +3,22 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Immediate worker step: qualify the bounded product DB/peer-intent collector and native
-offline queue checks, then execute the already authorized bounded capture with exact
-preflight and encrypted independent readback. No Docker dispatch, worker restart or
-server-key read. [Plan and abort](releases/2026-11-24-control-ha-live-capture.md#legacy-worker-custody-plan).
+Legacy-worker DB/queue/persisted-intent recovery now passes08:43:22UTC:19 files,13 tables/
+58 rows,41.191ms barrier, native duplicate/restart/retry/expiry checks without dispatch.
+Do not repeat this completed slice. Remaining critical path: OWNER runtime/configuration,
+native composite integration, coherent canonical/all-writer/dispatcher capture and independently
+approved forward trust. An earlier timed-out Docker exec is not fenced by this capture.
+[Evidence](releases/2026-11-24-control-ha-live-capture.md#actual-worker-readback--084322utc).
 Mailbox authority slice completed08:18:34UTC:9 files,8.170ms lock, sequence456216,
 56 dynamic/3 static members. Independent readback, node key/bootstrap/marker and native
 stale-floor/expiry checks pass; service identity unchanged. Do not repeat the already
-completed local receiver/allocator/mailbox custody. Remaining work: legacy-worker and
+completed local receiver/allocator/mailbox custody. At that point remaining work included legacy-worker and
 OWNER-runtime recovery, native composite integration, coherent canonical/dispatcher capture
 and independently approved forward trust. [Evidence](releases/2026-11-24-control-ha-live-capture.md#actual-mailbox-readback--081834utc).
-Read-only legacy-worker preflight now locates the separate147,456-byte product SQLite
+Earlier read-only legacy-worker preflight located the separate147,456-byte product SQLite
 database:13 tables/58 rows, including3 allocations/deployments/outbox entries; no WAL/SHM/
-journal. This is census only, not capture/recovery or proof that external Docker execs have
-finished. Keep the running worker untouched until its complete bounded plan is qualified.
+journal. That census alone was not recovery or proof that external Docker execs have
+finished. The bounded worker-local recovery is now complete above; the live worker stays untouched.
 
 Node-local slice completed08:10UTC:24 restored files,82 peers,207 decisions; native duplicate,
 terminal-denial, lease-clock and next-allocation checks pass without activation.94 focused
