@@ -3,6 +3,18 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+Pinned guardian launch is now qualified in isolation: independent source/binding SHA inputs,
+sealed closed package, fixed isolated argv/environment, explicit UID/GID/groups, namespace/
+map/runtime/inode checks and bounded startup with owned-child cleanup. Root import from an
+ordinary mutable checkout refuses; the stdlib bootstrap verifies bytes before importing.
+179 tests PASS/0 skips and actual UID10001/1000 root-bootstrap stand PASS. No deployment,
+working-service change, host access or version change. The launcher does not manufacture
+approval or prove installed writer participation. Do not repeat this launch implementation.
+[Launch contract and remaining gate](releases/2026-11-24-control-ha-guardian-launch.md).
+Next selected work: actual workload/source/config/argv/mount bindings and manual/SSH bypass
+coverage, independent external completion and measured capture/flush latency; then coherent
+fleet capture, independently approved current trust/custody and final combined recovery.
+
 Local cooperative admission/drain remains source-only. A joint same-kernel interval now
 coordinates separate gates under the actual OWNER identity shapes10001/1000 without
 permission/ownership changes. Kernel PID/UID/GID, pinned gate inodes, common time namespace,
@@ -11,8 +23,9 @@ native two-UID/SQLite and coordinator SIGKILL/SIGSTOP qualification PASS in isol
 The distinct-UID joint interval is no longer an unimplemented design gap; do not repeat it.
 No live launch/configuration, source deployment, server access or version change occurred.
 [Joint interval and exact validation](releases/2026-11-24-control-ha-joint-drain.md).
-Next selected work: finish approved actual source/config/argv/UID/mount/namespace/inode
-bindings, trusted guardian launch and manual/SSH coverage across the existing inventory.
+At the joint-interval checkpoint, approved actual source/config/argv/UID/mount/namespace/inode
+bindings, trusted guardian launch and manual/SSH coverage remained; launch is now implemented
+above, while actual workload binding and coverage are still pending across the existing inventory.
 Independently settle external dispatch and qualify real capture/flush latency plus a
 provably overlapping fleet interval. Local interval receipts still never authorize capture.
 Last [installed OWNER observation](releases/2026-11-24-control-ha-owner-admission-binding.md)

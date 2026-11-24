@@ -1,5 +1,19 @@
 # Текущее состояние / Current state
 
+**24 November — pinned guardian launch qualified in isolation; not installed.**
+Closed sealed-source launch now supplies the separate-UID joint interval with actual
+owned child processes, fixed argv/environment, verified namespace/map/runtime/gate pins
+and kernel-credential READY checks. A stdlib bootstrap verifies source before importing;
+root use refuses ordinary checkout imports. Failed/partial launches reap only owned children.
+179 focused tests PASS/0 skips; real UID10001/1000 root-bootstrap and sealed-launch stand PASS.
+No production gate, service/image/config/mount/SSH/policy/version change or RU/NL access.
+Next: independently approve actual workload/source/config/argv/mount bindings and close
+manual/SSH bypass coverage; settle external work and qualify real flush/capture latency,
+then coherent fleet capture, independent approval/key custody and final recovery.
+Do not reimplement joint drain or its pinned launch. Installed gate enablement remains absent.
+Replication PASS; the same three HA-02 blocks remain partial, no HA-03/cutover.
+[Contract, evidence and rollback](releases/2026-11-24-control-ha-guardian-launch.md).
+
 **24 November — joint drain across separate OWNER identities qualified in isolation.**
 New same-kernel group admission coordinates per-UID guardians without widening0700/0600,
 changing service identities or opening another UID's gate. Kernel credentials, pinned

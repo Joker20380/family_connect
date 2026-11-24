@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 24 November: pinned sealed-source guardian launch, trusted bootstrap and owned-child cleanup;179 tests and actual two-UID root stand, no deployment](releases/2026-11-24-control-ha-guardian-launch.md).
+
 [CONTROL-HA · 24 November: separate-UID joint interval with kernel identity and final ACK checks;120 tests and real two-UID SQLite/death/deadline probes, no deployment](releases/2026-11-24-control-ha-joint-drain.md).
 
 [CONTROL-HA · 24 November: actual OWNER identities/configuration observed; missing gates and distinct UID bindings block enablement,104 checks, no live changes](releases/2026-11-24-control-ha-owner-admission-binding.md).
