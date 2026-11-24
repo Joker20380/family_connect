@@ -3,6 +3,14 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+Next within the existing complete-recovery block: execute the prepared cold source/dependency
+kit against retained canonical, RU/NL1/NL2, worker and mailbox capsules.239 focused checks
+PASS; actual cold evidence is still pending. Do not count a venv/import-only check as the
+native retained-data result. The source kit has no credentials or production state; custody
+inputs and their independent keys/checkpoints remain private. Root-main publication is now
+reconciled at2ae5c512, not an active blocker or a deployment.
+[Qualification gate and remaining boundaries](releases/2026-11-24-control-ha-recovery-kit.md).
+
 OWNER image-loss cold bootstrap passes11:43:57UTC: all three exact images recovered from
 encrypted custody, native Python/Django/crypto/libpq probes and PG17.11 restart/dump/restore
 without Docker, registry, working source or original state. Native fresh-process authenticated

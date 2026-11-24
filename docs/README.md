@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 24 November: pinned offline recovery source/wheel kit prepared;239 checks, actual canonical/fleet cold run pending, no activation](releases/2026-11-24-control-ha-recovery-kit.md).
+
 [CONTROL-HA · 24 November: actual encrypted OWNER image cold bootstrap PASS without Docker/source/registry; three native probes, authenticated native readback,71 tests, no activation](releases/2026-11-24-control-ha-image-custody.md#actual-execution--114357utc).
 
 [CONTROL-HA · 24 November: actual canonical/OWNER/legacy joint qualification PASS;69 devices/4 events,39-table post-ACK restore and stale refusal,103 real-PG tests; three acceptance blocks remain partial](releases/2026-11-24-control-ha-owner-joint.md#actual-execution--111032utc).
