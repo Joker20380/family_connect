@@ -3,12 +3,14 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Current native integration action: qualify the retained actual canonical point and native
-alias/admission/PEM-key formats on a disposable PG target. Actual in-memory preflight passes
-610 rows,66 mapped/3 explicit new devices; preserve old adapter strictness and handoff history.
-249 tests and49-table fixture recovery pass. Next gate is actual crash/current/stale restore
-after a laboratory ACK, not production activation.
-[Plan/rollback](releases/2026-11-24-control-ha-native-canonical.md).
+Native canonical integration now PASS09:37:05UTC: actual610 source rows,49 PG target tables,
+exact crash/current restore, new laboratory enrollment ACK preserved, stale dump/old import/
+proof replay refused.249 real-PG contracts pass without skips.66 mapped/3 new native identities
+retain their correct semantics; the old adapter and all handoff history stay unchanged.
+Next selected scope: joint native receiver/worker/OWNER integration and coherent canonical/
+all-writer/dispatcher capture, with complete source/image custody and independent forward trust.
+Do not repeat the completed canonical-only import or label it full fleet recovery.
+[Actual evidence/rollback](releases/2026-11-24-control-ha-native-canonical.md#actual-execution--093705utc).
 OWNER runtime/synthetic custody now passes09:17:14UTC:20 files,9 tables/223 rows,24.374ms
 barrier; fresh-process exact restore and pinned native-image table/paid/alias/expiry checks.
 No network/dispatch or existing-container restart; do not repeat this as pending custody.

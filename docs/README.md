@@ -1,6 +1,6 @@
 # Documentation
 
-[CONTROL-HA · 24 November: installed native canonical preflight and isolated PG recovery scope; no fleet fence or activation](releases/2026-11-24-control-ha-native-canonical.md).
+[CONTROL-HA · 24 November: actual610-row canonical import and49-table PG crash/current/stale recovery PASS; 249 tests, no fleet fence or activation](releases/2026-11-24-control-ha-native-canonical.md).
 
 [CONTROL-HA · 24 November: encrypted handoff recovery and signed portable archive; 555 checks, source-removed49-table recovery, no live capture or full-DR acceptance](releases/2026-11-24-control-ha-handoff-recovery.md).
 

@@ -276,6 +276,11 @@ duplicate checks без Docker dispatch). Это не fence для ранее з
 coherent PG/synthetic/canonical/all-writer/dispatcher capture и independent trust,
 не повторный локальный сбор receiver/worker/OWNER runtime.
 [OWNER evidence](releases/2026-11-24-control-ha-live-capture.md#actual-owner-runtime-readback--091714utc).
+Дополнение09:37:05UTC: actual canonical native integration PASS —610 исходных строк,
+49 PG-таблиц, crash/fresh restore и отказ от stale dump/старого импорта после нового
+лабораторного ACK;249 real-PG tests без skips. Native66 mapped/3 new identities,
+admission/PEM/referral/routing и handoff сохранены. Это не общий fleet/dispatcher fence.
+[Canonical evidence](releases/2026-11-24-control-ha-native-canonical.md#actual-execution--093705utc).
 HA-02 остаётся IN_PROGRESS. По последнему запросу выбраны все четыре блока;
 остаток — **журналы/фактическое состояние, установленный capture, полное восстановление**, не ещё
 одна-две небольшие правки. Дата окончания не установлена: она зависит от реальных

@@ -1,10 +1,20 @@
 # Текущее состояние / Current state
 
+**24 November09:37:05UTC — actual native canonical PG recovery PASS.**
+The retained610-row point imports into49 PostgreSQL tables with exact crash/fresh restore.
+Native alias/key/admission/referral/sender/routing checks preserve the installed formats;
+the old adapter remains strict. A new laboratory enrollment ACK survives fresh restore;
+the stale dump, old import and consumed-proof replay are refused.249 focused real-PG tests
+PASS,0 failures/skips. Owned lab containers/volumes removed; original OWNER containers and
+live services are untouched. This closes canonical native-format integration, not complete
+receiver/worker/OWNER integration, coherent all-writer/dispatcher capture or independent trust.
+No version/deployment change. [Actual checks and rollback](releases/2026-11-24-control-ha-native-canonical.md#actual-execution--093705utc).
+
 **24 November — installed native canonical integration prepared.**
 Actual retained610-row preflight passes native alias handling (66 mapped/3 new devices),
 PEM issuer/referral bindings, v2 admission, sender and routing without changing input bytes.
 The old all-mapped adapter remains strict.249 focused tests and49-table fixture recovery
-pass. Next is actual isolated PG import/crash/restore/new-ACK/stale-refusal qualification,
+pass. Actual isolated PG qualification subsequently passes09:37:05UTC above,
 not a live target or coherent fleet acceptance.
 [Scope and rollback](releases/2026-11-24-control-ha-native-canonical.md).
 
