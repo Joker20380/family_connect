@@ -24,6 +24,7 @@ from scripts.control_ha_sqlite_fixture import refresh_fixture
 from scripts.referral_postgres_rehearsal import NOW
 from scripts.restricted_postgres_rehearsal import issue_proof
 from test_control_ha_current_audit import NativeServiceBarrier, current, native_current, rewrite, sealed
+from test_control_ha_forward_sources import materials_for
 from test_control_ha_legacy_custody import write
 from test_control_ha_renewal_v1 import OPERATION
 
@@ -39,11 +40,11 @@ def candidate_for(current):
     recovery_bundle, recovery_checkpoint = seal(state.stores, state.references, state.artifacts,
         CHECKPOINT, state.bootstrap, current['anchor'], recovery_key, now=NOW)
     history_bundle, history_checkpoint = sealed(current)
-    sources = {node: dict(runtime_sha256=digest(b'runtime'), configuration_sha256=digest(node.encode()))
-               for node in forward.NODES}
     issuer = Ed25519PrivateKey.from_private_bytes(state.artifacts['issuer_material']['runtime-key'])
     plan = parse((current['roots']['coordinator'] / 'plan.json').read_bytes())
     gateway_ids = plan['gateway_ids']
+    source_materials = materials_for(current['anchor'], gateway_ids)
+    sources, _ = forward.source_custody.inspect(source_materials)
     authorities = current.get('authorities', {
         'NL': encoded(plan['candidate']['authority']), 'NL2': encoded(plan['secondary']['candidate']['authority'])})
     floors = {node: restricted.delegation(parse(raw), current['anchor'], NOW)[0]['sequence']
@@ -60,7 +61,7 @@ def candidate_for(current):
         arguments=dict(minimum_sequence=1, minimum_crl=number, now=NOW, recovery_bundle=recovery_bundle, recovery_key=recovery_key,
             history_bundle=history_bundle, history_key=current['key'], anchor=current['anchor'],
             sources=sources, publications=dict(current['publications']), gateway_ids=gateway_ids,
-            authorities=authorities, minimum_authority_sequences=floors))
+            authorities=authorities, minimum_authority_sequences=floors, source_materials=source_materials))
 
 
 def verify(candidate, **overrides):
@@ -93,6 +94,7 @@ def test_source_removed_readback_preserves_all_bytes_without_history_authority(c
     assert qualified.history.trees == before.trees
     assert qualified.authorities == candidate['arguments']['authorities']
     assert qualified.publications == candidate['arguments']['publications']
+    assert qualified.source_materials == candidate['arguments']['source_materials']
     summary = qualified.summary()
     assert summary['result'] == 'FORWARD_CHECKPOINT_OFFLINE_QUALIFIED'
     assert summary['activation'] == 'FORBIDDEN'
@@ -100,6 +102,8 @@ def test_source_removed_readback_preserves_all_bytes_without_history_authority(c
     assert summary['capture_consistency'] == summary['full_recovery'] == 'NOT_QUALIFIED'
     assert summary['publication_semantics'] == 'BOTH_GATEWAYS_CHECKED_OFFLINE'
     assert summary['live_publication'] == 'NOT_ATTESTED'
+    assert summary['source_identity'] == 'RENEWAL_BYTES_VERIFIED_OFFLINE'
+    assert summary['installed_source'] == 'NOT_ATTESTED'
     assert not hasattr(qualified, 'snapshot')
     assert 'runtime-key' not in repr(qualified)
 
@@ -254,6 +258,52 @@ def test_each_actual_source_identity_must_match(candidate, node, field):
     sources[node][field] = '0' * 64
     with pytest.raises(ImportRejected, match='FORWARD_SOURCE_MISMATCH'):
         verify(candidate, sources=sources)
+
+
+def test_hashes_without_source_material_cannot_qualify(candidate):
+    with pytest.raises(ImportRejected, match='FORWARD_SOURCE_MATERIAL_COVERAGE'):
+        verify(candidate, source_materials={})
+
+
+@pytest.mark.parametrize('node', sorted(forward.NODES))
+@pytest.mark.parametrize('kind', ['module', 'configuration', 'reauthorized-wrong-node'])
+def test_source_bytes_and_node_scope_are_checked_in_full_checkpoint(candidate, node, kind):
+    materials = candidate['arguments']['source_materials']
+    if kind == 'module':
+        materials[node]['files']['node.py'] += b'\n'
+    elif kind == 'configuration':
+        materials[node]['configuration'] += b'\n'
+    else:
+        configuration = parse(materials[node]['configuration'])
+        configuration['gateway_slot'] = 'other'
+        materials[node]['configuration'] = encoded(configuration)
+        identities, _ = forward.source_custody.inspect(materials)
+        candidate['arguments']['sources'] = identities
+        authorize(candidate, lambda document: document.update(sources=identities))
+    with pytest.raises(ImportRejected, match='FORWARD_SOURCE_(FILE_HASH|BYTES_MISMATCH|NODE_BINDING)'):
+        verify(candidate)
+
+
+def test_source_pin_cannot_be_replaced_by_caller_claim(candidate):
+    identities = deepcopy(candidate['arguments']['sources'])
+    identities['RU']['runtime_sha256'] = '0' * 64
+    candidate['arguments']['sources'] = identities
+    authorize(candidate, lambda document: document.update(sources=identities))
+    with pytest.raises(ImportRejected, match='FORWARD_SOURCE_BYTES_MISMATCH'):
+        verify(candidate)
+
+
+def test_source_material_cannot_change_after_verification(candidate, monkeypatch):
+    approved = deepcopy(candidate['arguments']['source_materials'])
+    original = forward.preflight_maintenance
+    def preflight(*args, **kwargs):
+        candidate['arguments']['source_materials']['RU']['files']['node.py'] = b'changed'
+        candidate['arguments']['source_materials']['NL1']['configuration'] = b'changed'
+        return original(*args, **kwargs)
+    monkeypatch.setattr(forward, 'preflight_maintenance', preflight)
+    qualified = verify(candidate)
+    assert qualified.source_materials == approved
+    assert '/not-followed' not in repr(qualified)
 
 
 @pytest.mark.parametrize('field', ['recovery_bundle', 'history_bundle', 'recovery_key', 'history_key', 'anchor'])

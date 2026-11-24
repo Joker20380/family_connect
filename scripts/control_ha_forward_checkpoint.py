@@ -8,6 +8,7 @@ from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey,
 
 from control.friends import restricted
 from scripts import control_ha_legacy_custody as custody
+from scripts import control_ha_forward_sources as source_custody
 from scripts.control_ha_import import ImportRejected, digest, encoded, require
 from scripts.control_ha_maintenance_v1 import integer, preflight_maintenance
 from scripts.control_ha_recovery_bundle import Checkpoint, parse
@@ -29,6 +30,7 @@ class QualifiedCheckpoint:
     history: object = field(repr=False)
     publications: dict = field(repr=False)
     authorities: dict = field(repr=False)
+    source_materials: dict = field(repr=False)
     request_sha256: str
     sequence: int
 
@@ -36,7 +38,8 @@ class QualifiedCheckpoint:
         return dict(result='FORWARD_CHECKPOINT_OFFLINE_QUALIFIED', request_sha256=self.request_sha256,
             sequence=self.sequence, stores=len(self.current.stores), history='OPAQUE_NOT_EXECUTABLE',
             original_approval='NOT_ESTABLISHED_NOT_REQUIRED_FOR_THIS_CONTRACT',
-            authorization_scope=ACTION, source_identity='CALLER_BOUND_NOT_ATTESTED',
+            authorization_scope=ACTION, source_identity='RENEWAL_BYTES_VERIFIED_OFFLINE',
+            installed_source='NOT_ATTESTED', source_scope='RENEWAL_MODULES_AND_NODE_CONFIGURATION_ONLY',
             capture_consistency='NOT_QUALIFIED', publication_semantics='BOTH_GATEWAYS_CHECKED_OFFLINE',
             live_publication='NOT_ATTESTED', gateway_leaf_keys='NOT_QUALIFIED',
             durable_replay_floor='EXTERNAL_REQUIRED', full_recovery='NOT_QUALIFIED',
@@ -170,7 +173,7 @@ def pending_markers(preserved):
 
 def verify(request, signature, trusted_key, expected_request_sha256, *, minimum_sequence, minimum_crl, now,
            recovery_bundle, recovery_key, history_bundle, history_key, anchor, sources, publications,
-           gateway_ids, authorities, minimum_authority_sequences):
+           gateway_ids, authorities, minimum_authority_sequences, source_materials):
     try:
         document = checked_request(request)
         require(hexadecimal(expected_request_sha256) and digest(request) == expected_request_sha256,
@@ -188,6 +191,7 @@ def verify(request, signature, trusted_key, expected_request_sha256, *, minimum_
         require(document['sources'] == sources, 'FORWARD_SOURCE_MISMATCH')
         require(document['publications'] == publication_hashes(publications), 'FORWARD_PUBLICATION_MISMATCH')
         require(document['gateways'] == gateway_bindings(gateway_ids, authorities), 'FORWARD_GATEWAY_MISMATCH')
+        source_materials = source_custody.verify(source_materials, document['sources'], anchor=anchor, gateway_ids=gateway_ids)
         recovered = preflight_maintenance(recovery_bundle, recovery_key, Checkpoint(**document['recovery']),
                                          anchor, now=now)
         issuer = recovered.artifacts['issuer_material']
@@ -199,7 +203,7 @@ def verify(request, signature, trusted_key, expected_request_sha256, *, minimum_
                            captured_at=document['captured_at'], now=now)
         preserved = custody.inspect(history_bundle, history_key, custody.CustodyCheckpoint(**document['history']))
         pending_markers(preserved)
-        return QualifiedCheckpoint(recovered, preserved, dict(publications), dict(authorities),
+        return QualifiedCheckpoint(recovered, preserved, dict(publications), dict(authorities), source_materials,
                                    expected_request_sha256, document['sequence'])
     except ImportRejected:
         raise

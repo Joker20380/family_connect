@@ -1,5 +1,23 @@
 # Текущее состояние / Current state
 
+**24 November — CONTROL-HA forward checkpoint requires actual renewal source bytes.**
+The selected journal/current-state verifier now requires saved node configuration and
+every declared renewal module for RU/NL1/NL2, not just caller-supplied hashes. Exact
+configuration/file/aggregate hashes, minimum legacy14-module coverage, node slot/role,
+gateway identities and trust anchor are checked before recovery preflight. Copied byte
+maps survive caller mutation; no retained source is imported/executed. A bounded local
+no-follow collector reads only explicit configuration/runtime paths and rechecks metadata.
+329 focused tests PASS /0 skips: sources72, checkpoint98, publications77, inventory26,
+strict current audit56. Exact retained fcb31164/e9fd3175 source passes source-removed
+readback with synthetic node configs; not a new production capture or health check.
+Source scope is renewal modules/node config only: controller config, API/gateway binaries,
+dependencies, installed-process attestation and full recovery are NOT qualified.
+Selected task IN_PROGRESS; actual authorization/source/capture bindings and coherent
+current recovery remain open. Same four stage2 gates, no next queued block selected.
+No SSH/server/service/version/policy change or real signing. Console5ce82415, RU HTTP4e2df679,
+NL GeoIP22 November, Android126/catalog9 unchanged. RU dependence persists.
+[Source contract, test results, limits and rollback](releases/2026-11-24-control-ha-forward-sources.md).
+
 **24 November — CONTROL-HA both forward-checkpoint publications checked offline.**
 The selected journal/current-state contract now requires both gateway identities and
 exact root-signed delegation hashes in the fresh authorization. Both publications are

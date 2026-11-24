@@ -1,5 +1,9 @@
 # 24 November 2026 — both forward-checkpoint publications
 
+Historical source checkpointb105033d. The subsequent
+[source-custody checkpoint](2026-11-24-control-ha-forward-sources.md) also requires saved
+renewal source/config bytes. Results below describe this earlier publication-only change.
+
 ## Scope and result
 
 Continuation of the selected CONTROL-HA-20261123 journal/current-state task from

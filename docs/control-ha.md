@@ -210,10 +210,18 @@ offline-проверку **обеих** публикаций: подписанн
 native directory validation на момент capture и проверки, общий CA/family/revision
 и независимые floors последовательностей допуска. Свежее согласие не разрешает
 перепутанный узел, просрочку или откат допуска; старый неполный request отвергается.
+Теперь также обязательны сохранённые bytes node config и всех объявленных renewal
+модулей RU/NL1/NL2: проверяются каждый hash, aggregate, slot/role, gateway IDs и anchor.
+Один переданный вызывающим кодом hash больше не даёт source qualification. Локальный
+сборщик не выполняет исходники и не следует путям из config; symlink/hardlink/FIFO,
+лишние `.py` и наблюдаемая смена файлов отвергаются. Это узкая source-custody проверка,
+не проверка полного runtime: controller config, API/binaries, зависимости и фактически
+запущенный процесс не покрыты. Сохранённый fcb31164 проверен с synthetic configs.
 Coherent capture, реальное происхождение source/config/живых публикаций, полный набор
 gateway leaf/private keys и независимое off-host custody всё ещё не квалифицированы.
 Следующий блок автоматически не выбран; maintenance/cutover требуют отдельного scope.
-[Актуальное продолжение и тесты](releases/2026-11-24-control-ha-forward-publications.md).
+[Актуальный source checkpoint и тесты](releases/2026-11-24-control-ha-forward-sources.md).
+[Предыдущая квалификация публикаций](releases/2026-11-24-control-ha-forward-publications.md).
 [Исходный контракт](releases/2026-11-24-control-ha-forward-checkpoint.md).
 [Предшествующие доказательства](releases/2026-11-24-control-ha-provenance-decision.md).
 

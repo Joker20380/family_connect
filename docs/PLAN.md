@@ -290,6 +290,16 @@ This is not a new phase/letter or installed-source attestation.
 Final local qualification:219passed,0skipped (forward checkpoint86, publication
 semantics77, unchanged current-audit regression56); no production acceptance claimed.
 [Publication contract, tests and remaining work](releases/2026-11-24-control-ha-forward-publications.md).
+Further continuation in the same selected contract: verification now requires saved
+renewal source/config bytes for all three nodes, recomputes every file/aggregate/config
+hash and binds node slot/role, gateway identities and anchor. Minimum legacy14-module
+coverage; all additional declared modules must also be present. Local no-follow collection
+and source-removed readback do not execute retained code or follow paths inside config.
+329 focused tests PASS /0 skips (sources72/checkpoint98/publications77/inventory26/current
+audit56); exact retained fcb31164/e9fd3175 compatibility uses synthetic configs, not live
+inputs. Controller configuration/API binaries/dependencies/process attestation are outside
+this source scope. No CLI, server collection, new real authorization or import added.
+[Source material qualification and next acceptance boundary](releases/2026-11-24-control-ha-forward-sources.md).
 Remaining selected gate: independently established actual source/capture/publication
 bindings, qualified coherent capture and current-state recovery. Known
 synthetic schemas/bounded-maintenance adapters are not installed-schema acceptance.
