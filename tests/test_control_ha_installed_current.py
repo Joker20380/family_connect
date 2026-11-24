@@ -1,3 +1,4 @@
+import base64
 import json
 from pathlib import Path
 import shutil
@@ -38,12 +39,17 @@ def installed(native_current, tmp_path, monkeypatch):
     runtime = tmp_path / 'runtime'
     write(runtime / 'node.py', b'NOT_EXECUTABLE_RUNTIME_SENTINEL')
     sources = {'node.py': probe.sha((runtime / 'node.py').read_bytes())}
+    anchor_path = tmp_path / 'anchor.pub'
+    write(anchor_path, base64.b64encode(anchor) + b'\n')
     configurations = {}
     for slot in probe.UNITS:
         live = tmp_path / ('live-' + slot)
         config = dict(role='RU' if slot == 'RU' else 'NL', gateway_slot=slot, live=str(live), state=str(roots[slot]),
+            anchor=str(anchor_path), anchor_sha256=probe.sha(anchor),
+            admission_mode='all_activated',
             service_units=list(probe.UNITS[slot]), source_files=sources, source_sha256=probe.sha(probe.canonical(sources)))
         if slot == 'RU':
+            write(live / 'admission.json', dict(version=2, eligibility='all_activated'))
             write(live / 'issuer.json', plan['candidate']['authority'])
             write(live / 'gateways/nl-amsterdam-2/issuer.json', plan['secondary']['candidate']['authority'])
             write(live / 'revocations.pem', plan['candidate']['crl'].encode())
@@ -70,7 +76,9 @@ def installed(native_current, tmp_path, monkeypatch):
         config_path = tmp_path / ('config-' + slot + '.json')
         write(config_path, config)
         configurations[slot] = config_path
-        record['before'][slot]['policy'] = dict(node_config=probe.sha(config_path.read_bytes()))
+        record['before'][slot]['policy'] = dict(node_config=probe.sha(config_path.read_bytes()), anchor=probe.sha(anchor_path.read_bytes()))
+        if slot == 'RU':
+            record['before'][slot]['policy']['admission'] = probe.sha((live / 'admission.json').read_bytes())
         archive = roots[slot] / 'archive' / operation
         before = json.loads((archive / 'services-before.json').read_bytes())
         write(archive / 'services-before.json', {new: before[old] for old, new in zip(FIXTURE_UNITS[slot], probe.UNITS[slot])})
@@ -102,6 +110,8 @@ def test_current_observations_never_authorize_recovery(installed):
     assert all(result['node_config_matches_record'].values()) and all(result['directory_matches_ru'].values())
     assert all(value['equals_current_plan'] for value in fleet['RU']['database'].values())
     assert all(value['added_rows'] == value['removed_rows'] == 0 for value in fleet['RU']['database'].values())
+    assert fleet['RU']['certificate_delta']['recovery'] == 'BLOCKED'
+    assert fleet['RU']['certificate_delta']['activation'] == 'FORBIDDEN'
     assert all(all(value['current_material'].values()) for value in fleet.values())
     assert all(value['equals_committed_publication'] for value in fleet['RU']['directories'].values())
     assert result['recovery'] == 'BLOCKED' and result['activation'] == 'FORBIDDEN' and not result['snapshot_barrier']
@@ -129,6 +139,23 @@ def test_later_database_state_is_reported_not_repaired(installed, table):
     assert not result['database'][table]['equals_current_plan']
     assert result['recovery'] == 'BLOCKED' and Path(config['database']).read_bytes() == before
     assert 'PRIVATE_NEW_ROW' not in json.dumps(result)
+    if table != 'restricted_certificates':
+        assert result['certificate_delta']['result'] == 'CERTIFICATE_DELTA_REFUSED'
+
+
+@pytest.mark.parametrize('content', [b'INVALID_PRIVATE_ANCHOR', base64.b64encode(b'0' * 32) + b'\n', b''])
+def test_current_anchor_is_bound_to_config_and_journal(installed, content):
+    config = json.loads(installed['configs']['RU'].read_bytes())
+    write(Path(config['anchor']), content)
+    with pytest.raises((ValueError, Refused)):
+        observe(installed)
+
+
+def test_current_admission_cannot_enable_missing_grant_fallback(installed):
+    config = json.loads(installed['configs']['RU'].read_bytes())
+    write(Path(config['live']) / 'admission.json', dict(devices=[]))
+    with pytest.raises(Refused, match='CURRENT_ADMISSION_BINDING'):
+        observe(installed)
 
 
 @pytest.mark.parametrize('kind', ['pending', 'archive_hash', 'fenced', 'unknown_file', 'source', 'units', 'symlink',

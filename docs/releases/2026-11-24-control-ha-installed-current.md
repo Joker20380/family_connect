@@ -16,6 +16,10 @@ to an existing interpreter with `-I -B`; it was not installed and no production 
 was imported. Only fixed Family Connect `systemctl show` calls and read-only file/SQL
 observations ran. No service/timer/configuration/DB update or state restoration occurred.
 
+Follow-up: [certificate-content verification at00:34UTC](2026-11-24-control-ha-certificate-delta.md)
+adds a bound admission-policy/cryptographic diagnostic. This report's earlier observation,
+source hashes and112-test receipt remain historical evidence, not the follow-up results.
+
 ## Actual evidence
 
 | Check | Observed result |

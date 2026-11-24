@@ -1,5 +1,26 @@
 # Текущее состояние / Current state
 
+**24 November — CONTROL-HA post-renewal certificate content checked; recovery still BLOCKED.**
+Read-only RU/NL1/NL2 observation00:34:17–00:34:20UTC: same COMMITTED plan,
+matching config/unit/material/publication bindings; RU API and both NL bootstrap
+services active/running, NRestarts0. No end-to-end traffic/failover qualification.
+Four DB projections still match. The three removed baseline certificates are expired;
+the one added certificate passes installed-anchor/delegation/CA/CRL signatures,
+device/key/revision/expiry and observed admission-policy checks. Native all_activated
+mode does not require a persisted grant; observed policy bytes/mode are bound to the
+current transaction/config, never inferred from a missing row. An initial legacy-only
+diagnostic refused this case; native issuance and negative tests now cover both modes.
+Result is CERTIFICATE_CONTENT_COMPATIBLE_NOT_AUTHORIZED, not proof of the consumed
+challenge or historical paid entitlement. Strict five-table recovery equality is
+unchanged; no baseline/DB/journal is rewritten.175 focused tests PASS /0 skips.
+Same selected journal/current-operation task remains IN_PROGRESS: original schedule
+approval/controller custody and coherent current-state capture/recovery bindings are
+unqualified. Stage2 remains partial across the same four exit blocks; no new stage,
+completion percentage or credible calendar ETA. RU dependency remains.
+No deployment/service/policy/version changes; console5ce82415, RU HTTP4e2df679,
+NL GeoIP22 November, Android126/catalog9 and8/12/120s/all-three-node ACK unchanged.
+[Certificate-content evidence, exact limits and rollback](releases/2026-11-24-control-ha-certificate-delta.md).
+
 **24 November — CONTROL-HA actual current inputs observed; concrete post-renewal DB gap.**
 Read-only RU/NL1/NL2 observation00:13:07–00:13:10UTC: same current COMMITTED plan;
 366/366/172 ledgers preserved; all three installed node config hashes match the current

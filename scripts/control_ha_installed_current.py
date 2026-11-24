@@ -1,5 +1,6 @@
 """Read-only installed-current observations, never recovery or historical approval."""
 import argparse
+import base64
 from collections import Counter
 import json
 import os
@@ -70,7 +71,7 @@ def systemd(unit):
     return values
 
 
-def database_projection(reader, path, plan):
+def database_projection(reader, path, plan, anchor, captured_at, admission):
     from cryptography import x509
     expected = dict(plan['grant_plan']['before'])
     require(set(expected) == set(COLUMNS), 'DATABASE_SCOPE')
@@ -98,7 +99,7 @@ def database_projection(reader, path, plan):
         connection.set_progress_handler(lambda: time.monotonic() > deadline, 1000)
         version = connection.execute('PRAGMA data_version').fetchone()[0]
         connection.execute('BEGIN')
-        result, total = {}, 0
+        result, records, total = {}, {}, 0
         for table, columns in COLUMNS.items():
             observed = tuple(row[1] for row in connection.execute('PRAGMA table_info("' + table + '")'))
             require(set(observed) == set(columns), 'DATABASE_COLUMNS')
@@ -112,6 +113,7 @@ def database_projection(reader, path, plan):
                 require(total <= 16 * 1024 * 1024, 'DATABASE_READ_LIMIT')
                 current.append(item)
             raw = canonical(sorted(current, key=canonical))
+            records[table] = current
             result[table] = dict(rows=len(current), equals_current_plan=raw == canonical(sorted(expected[table], key=canonical)),
                                  **row_difference(current, expected[table]))
             if table == 'restricted_certificates':
@@ -120,7 +122,12 @@ def database_projection(reader, path, plan):
         require(connection.execute('PRAGMA data_version').fetchone()[0] == version, 'DATABASE_CHANGED')
     finally:
         connection.close()
-    return result
+    from scripts.control_ha_certificate_delta import DeltaRefused, inspect_delta
+    try:
+        delta = inspect_delta(plan, records, anchor, captured_at=captured_at, admission=admission)
+    except DeltaRefused as error:
+        delta = dict(result='CERTIFICATE_DELTA_REFUSED', reason=str(error), recovery='BLOCKED', activation='FORBIDDEN')
+    return result, delta
 
 
 def current_archive(reader, root, operation_hash):
@@ -234,7 +241,17 @@ def collect(config_path, runtime, *, operation_hash=None, controller_path=None):
         activation='FORBIDDEN', recovery='BLOCKED', started_at=started)
     if provenance is not None:
         result['provenance'] = provenance
-        result['database'] = database_projection(reader, config['database'], plan)
+        anchor_raw = reader.raw(Path(config['anchor']))
+        anchor = base64.b64decode(anchor_raw.strip(), validate=True)
+        require(len(anchor) == 32 and sha(anchor) == config['anchor_sha256']
+                and sha(anchor_raw) == record['before']['RU']['policy']['anchor'], 'CURRENT_ANCHOR_BINDING')
+        from scripts.control_ha_certificate_delta import admission_mode
+        admission_raw = reader.raw(Path(config['live']) / 'admission.json')
+        admission = parse(admission_raw)
+        require(sha(admission_raw) == record['before']['RU']['policy']['admission']
+                and admission_mode(admission) == config.get('admission_mode', 'legacy')
+                == record['before']['RU']['admission_mode'], 'CURRENT_ADMISSION_BINDING')
+        result['database'], result['certificate_delta'] = database_projection(reader, config['database'], plan, anchor, started, admission)
     reader.verify()
     result.update(observation='NO_OBSERVED_FILE_CHANGE', finished_at=int(time.time()), bytes_read=reader.bytes_read)
     return result

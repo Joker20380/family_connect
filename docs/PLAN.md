@@ -256,9 +256,20 @@ three now-expired baseline certificates replaced by one later-issued certificate
 The other four projections match. Do not restore old rows or treat normal-looking
 pruning/issuance as independently authenticated. Original controller approval is not
 retained in the transaction; present flag and unbound source capsule do not replace it.
-Continue this same task with a bounded post-renewal current-state contract and trusted
-provenance: preserve immutable baseline, independently qualify subsequent certificate
-changes and require coherent current capture. No permissive equality bypass. A recorded
+24 November00:34:17–00:34:20UTC: bounded post-renewal certificate-content diagnostic
+now verifies the three expired removals and one added signed certificate against the
+observed anchor/delegation/CA/CRL, device key/revision/time and bound admission policy.
+Native all_activated semantics allow an activated/invited device without a persisted
+grant; config/transaction/policy binding is mandatory, not a missing-row fallback.
+Four non-certificate tables remain exact.175 focused tests PASS /0 skips:
+59 delta +34 collector +26 inventory +56 strict current-audit regressions.
+This closes content compatibility for the observed certificate delta only:
+challenge proof and historical paid entitlement are not reconstructed; original
+approval and coherent capture/recovery authorization remain unqualified.
+[Content diagnostic and actual observation](releases/2026-11-24-control-ha-certificate-delta.md).
+Continue this same task with trusted provenance and coherent post-renewal current-state
+binding; preserve the immutable baseline and qualify a separate current-state snapshot,
+not replacement old rows or retroactive consent. No permissive equality bypass. A recorded
 schedule result and a start intent are not original approval or service liveness.
 The actual observation is not end-to-end traffic validation or recovery acceptance;
 do not invent approval, add a permissive switch or select another hypothetical variant.
