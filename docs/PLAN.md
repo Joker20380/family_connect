@@ -3,6 +3,19 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+Installed OWNER source/dispatch check now completes the scoped filesystem/config observation:
+both pinned images lack the two admission modules; six present files differ from candidate,
+only two shims match. All scoped paths are in declared read-only rootfs.17:38:42UTC stable
+double observation and108 focused tests PASS/0 skips; zero Docker execs in sample is not a
+closed manual route. No code is executed in containers, source installed or service changed.
+Configuration-only enablement is refused; the present images do not contain this feature.
+[Actual source bindings and activation boundary](releases/2026-11-24-control-ha-owner-source-binding.md).
+Next selected work: qualify exact OWNER activation/revert with independently approved
+replacement images, separate gate mounts and preserved effective commands; finish actual
+fleet/manual writer bindings and external settlement/latency. Source preparation is allowed,
+not silent production image replacement or NL working-service changes. Then coherent capture,
+independent current approval/key custody and final combined recovery; same three partial gates.
+
 Pinned guardian launch is now qualified in isolation: independent source/binding SHA inputs,
 sealed closed package, fixed isolated argv/environment, explicit UID/GID/groups, namespace/
 map/runtime/inode checks and bounded startup with owned-child cleanup. Root import from an
@@ -11,9 +24,10 @@ ordinary mutable checkout refuses; the stdlib bootstrap verifies bytes before im
 working-service change, host access or version change. The launcher does not manufacture
 approval or prove installed writer participation. Do not repeat this launch implementation.
 [Launch contract and remaining gate](releases/2026-11-24-control-ha-guardian-launch.md).
-Next selected work: actual workload/source/config/argv/mount bindings and manual/SSH bypass
-coverage, independent external completion and measured capture/flush latency; then coherent
-fleet capture, independently approved current trust/custody and final combined recovery.
+At the launcher checkpoint actual workload/source/config/argv/mount and manual/SSH binding
+remained; the scoped OWNER observation is now above. It does not approve activation or prove
+loaded bytes. Independent external completion/latency, coherent fleet capture, current
+approval/key custody and final combined recovery remain pending.
 
 Local cooperative admission/drain remains source-only. A joint same-kernel interval now
 coordinates separate gates under the actual OWNER identity shapes10001/1000 without

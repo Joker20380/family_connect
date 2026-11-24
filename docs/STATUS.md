@@ -1,5 +1,19 @@
 # Текущее состояние / Current state
 
+**24 November — installed OWNER source/dispatch bindings observed; configuration alone cannot enable admission.**
+At17:38:42UTC both pinned installed images lack `control/capture_gate.py` and
+`fc_control_plane/capture.py`; six of eight present scoped files differ from the prepared
+candidate. WSGI/publisher command shims alone match. All ten paths resolve to declared
+read-only container rootfs, not overriding mounts; neither service configures the gate.
+Two source/config observations agree;108 focused tests PASS/0 skips. Only Docker GETs,
+no exec/source import, locks, service changes, RU/NL access or version/deployment changes.
+No retained/manual Docker exec appears in the sample, which does not close future dispatch.
+Next: bind and qualify actual OWNER activation/revert with approved replacement images,
+separate gates and preserved effective commands; finish remaining fleet/manual bindings and
+external settlement/latency before coherent capture, independent approval/custody/final restore.
+Do not repeat this missing-source observation as readiness. Replication PASS; three HA-02
+blocks partial. [Exact findings and decision](releases/2026-11-24-control-ha-owner-source-binding.md).
+
 **24 November — pinned guardian launch qualified in isolation; not installed.**
 Closed sealed-source launch now supplies the separate-UID joint interval with actual
 owned child processes, fixed argv/environment, verified namespace/map/runtime/gate pins
