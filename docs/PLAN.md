@@ -11,18 +11,19 @@ remains selected; this publication task does not advance its acceptance gates.
 [Reconciliation record](releases/2026-11-24-source-reconciliation.md).
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Feature359fe030 is pushed/remote-SHA verified. Normal OWNER build preparation now includes
-the shared capture module required by Dockerfile/manage.py.40 tests PASS/0 skips; actual
-272-file context builds image4392d4b7 and two isolated native UID10001/1000 probes pass.
-Installed OWNER bindings unchanged; no RU/NL access, deployment or product version change.
-[Exact build, image checks and rollback boundary](releases/2026-11-24-control-ha-installed-recovery.md#normal-owner-prepared-build--no-installation).
-Next selected work: actual OWNER candidate/runtime/config approval and existing RU/NL/manual/
-transport bindings and activation scope, then coherent capture and independent custody/recovery.
-The new image is not an approved replacement; earlier activation/revert evidence is image-specific.
-Workstation collector packages remain uninstalled; preserve original source/data roots and
-known-hosts argv, no blind overlay of main or relocation. Direct ORM/DB/SSH/Docker bypasses
-remain outside the source gate; Docker exec does not inherit it. Do not repeat this build,
-collector packaging/admission or NL2 diagnosis as gates. Working-NL changes are not authorized.
+Featureaf74e749 is pushed/remote-SHA verified. Actual OWNER configuration delta is materialized
+privately and verified:23:28:37UTC unchanged running/config bindings; only image, gate assignment
+and separate bind may differ. Named volume and private rollback prestate preserved.159 tests
+PASS/0 skips,64 new cases; offline verification writes nothing. No installation/version change.
+[Exact proposal and rollback boundary](releases/2026-11-24-control-ha-installed-recovery.md#exact-owner-configuration-proposal--no-installation).
+Prior overlaysb62e6693/2162635c preserve base config/layers; normal-build4392d4b7 is refused for
+this minimal-delta route. Next: independent candidate/config acceptance, actual durable gate/
+namespace/guardian bindings and existing-work settlement, remaining RU/NL/manual/transport
+coverage, then approved coherent interval and independent custody/recovery. This is not an
+executable recreation payload; no gate paths created. Workstation packages remain uninstalled;
+preserve original source/data roots and known-hosts argv. Direct ORM/DB/SSH/Docker bypasses
+remain outside admission. Do not repeat completed config-plan/build/collector/NL2 slices as
+gates. Working-NL changes remain outside permission.
 A host-wide daemon-reload may run generators/rebuild dependencies; it is not a per-service or
 authorized read-only NL diagnostic. Its disposition still belongs to the exact activation scope.
 Existing schema3 veto stays strict. No changes to working services, emergency stop, paid-watch,

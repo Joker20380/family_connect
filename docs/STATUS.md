@@ -1,17 +1,18 @@
 # Текущее состояние / Current state
 
-**24 November UTC — normal OWNER build-context defect repaired; no installed changes.**
-HA source359fe030 is pushed/remote-SHA verified. Preparation now includes the shared capture
-module required by Dockerfile/manage.py.40 focused tests PASS/0 skips; actual272-file context
-builds image4392d4b7. Two isolated UID10001/1000 probes pass on Python3.13.17, matching18 locked
-packages and10 selected source hashes. Installed OWNER bindings unchanged; no RU/NL access,
-deployment, service/unit/timer or product version change. Main contains navigation only.
-[Build, native probes and rollback limits](releases/2026-11-24-control-ha-installed-recovery.md#normal-owner-prepared-build--no-installation).
-Next: actual OWNER candidate/runtime/config approval and existing RU/NL/manual/transport
-bindings/scope, then coherent capture and independent custody/final recovery. Earlier collector
-packages remain uninstalled. The new image does not inherit earlier image-specific activation/
-revert acceptance. Working-NL changes remain unauthorized. Replication PASS; same three gates
-partial. Do not repeat this build, collector packaging or NL2 diagnosis as new gates.
+**24 November UTC — exact private OWNER configuration/rollback proposal verified.**
+HA sourceaf74e749 is pushed/remote-SHA verified. Actual23:28:37UTC container/config/identity
+bindings are unchanged. Only role image, gate assignment and separate gate bind may differ;
+all other configuration and original rollback prestate are preserved, including the named volume.
+159 focused tests PASS/0 skips,64 new cases. Retained plan verifies offline at23:30:34UTC.
+It is not executable, approved or installed. Normal-build4392d4b7 is refused as a minimal overlay;
+prior role overlaysb62e6693/2162635c preserve base config/layers. No service/RU/NL/version change.
+[Exact plan, hashes and rollback boundary](releases/2026-11-24-control-ha-installed-recovery.md#exact-owner-configuration-proposal--no-installation).
+Next: independent candidate/config acceptance, actual durable gate/namespace/guardian bindings
+and existing-work settlement, remaining RU/NL/manual/transport coverage, then approved coherent
+capture and independent custody/final recovery. No gate paths are created; old network IDs are
+evidence, not recreation instructions. Working-NL changes remain outside scope. Replication PASS;
+same three gates partial. Do not repeat the completed config-plan/build/collector/NL2 slices.
 
 At the preceding collector-admission checkpoint:
 **24 November — standalone OWNER collector admission implemented; activation matrix recorded.**

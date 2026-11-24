@@ -6,6 +6,46 @@ divergence is reconciled/pushed at2ae5c512; older publication-blocker statements
 historical, not active instructions or a current blocker.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## Exact OWNER configuration proposal — no installation
+
+[Authoritative private plan, checksums, verification and rollback](https://github.com/Joker20380/family_connect/blob/af74e749fb5d020806ab29e22ce920db30919f8e/docs/releases/2026-11-24-control-ha-owner-activation-plan.md)
+is pushed/remote-SHA verified ataf74e749fb5d020806ab29e22ce920db30919f8e. Main is navigation only.
+No RU/NL access, working-container exec/restart, image build, service/unit/timer/policy change,
+database access, gate-directory creation, product version/catalog/tag/signing or release change.
+
+At23:28:36.972–23:28:37.182UTC the two fixed OWNER container/configuration bindings match
+before/after observation, with process UID/GID10001 for console and1000 for publisher. Exact
+existing images and the earlier role overlays are inspected, not run. A private offline plan
+now materializes the allowed delta: role image, one gate environment assignment and a separate
+gate bind. All other configuration and original rollback prestate remain exact, including
+token values, startup, named volume, networks, ports, security, health/restart/resource settings.
+The console's named volume is matched to its resolved name/destination, not converted to a path.
+
+The retained role candidatesb62e6693/2162635c preserve their respective baseline config/layers.
+The separately rebuilt4392d4b7 is refused with IMAGE_LAYERS_CHANGED as a minimal overlay. Its
+earlier successful build remains valid, not permission to substitute it for qualified overlays.
+No candidate is approved or deployed here. Proposed gates remain separate for the two UIDs;
+no permission widening or product/token ownership change. Actual inode/namespace/mount bindings
+and existing publication/support/manual completion are not inferred from this proposal.
+
+The artifact is not a Compose/Docker create payload. Full old NetworkSettings identifiers are
+retained as observation evidence, not instructions to reuse endpoint/sandbox IDs. Only hashes
+and safe role metadata leave private0600 files in an owner-only0700 directory. The offline CLI
+refuses unpinned/unsafe inputs, unreviewed delta and overwrite; --verify performs no writes.
+At23:30:34UTC it verifies the saved plan unchanged, not a new live observation.
+
+159 focused tests PASS/0 skips,64 new cases; feature documentation5 files/1096 targets/0 errors.
+Main navigation3 files/706 targets/0 errors; whitespace clean, external URLs not fetched.
+Initial actual planning refused an unhandled named-volume input before output/dispatch; the
+resolved binding check and regressions address it without changing that working volume.
+No prior native stand is rerun. Private inputs/configuration/proposal/evidence stay out of Git.
+For rollback, retain the exact old image/config while keeping current PG/SQLite data and unknown
+markers. No live rollback is needed. Next remains independent candidate/config acceptance,
+actual durable gate/namespace/guardian binding and existing-work settlement, remaining RU/NL/
+manual/transport coverage, then approved coherent capture and independent custody/final recovery.
+Working-NL changes remain unauthorized. Replication PASS; same three gates partial. Do not
+repeat this completed configuration-plan slice as a new acceptance stage.
+
 ## Normal OWNER prepared build — no installation
 
 [Authoritative build defect, image verification and rollback boundary](https://github.com/Joker20380/family_connect/blob/359fe030322037b48ad5cbb59196d65fe7e752fd/docs/releases/2026-11-24-control-ha-owner-prepared-build.md)
