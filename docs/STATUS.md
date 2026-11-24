@@ -1,5 +1,15 @@
 # Текущее состояние / Current state
 
+**24 November11:10UTC — actual canonical/OWNER/legacy joint qualification PASS.**
+Source7b2fd1e1a42ac17b12f7b8709fca430a217dcf4a is pushed and remote-SHA verified.
+The native panel accepts69 devices/4 paid events;39-table post-ACK restore, duplicate
+handling, conflict/generation refusal and pre-ACK stale-copy refusal pass.50 synthetic
+and4 legacy identities stay separate; no external dispatch.103 real-PG tests,0 skips.
+Original OWNER containers/capsules unchanged; owned lab resources removed, no live/version
+change. Stage2 still has three partial acceptance blocks: independent current trust,
+coherent all-writer capture and complete machine-loss/final recovery; replication is PASS.
+[Exact evidence and rollback](releases/2026-11-24-control-ha-installed-recovery.md#actual-canonicalownerlegacy-integration).
+
 **24 November09:57UTC — actual canonical/three-node integration PASS.**
 Source0ea7dbd54f16e5cecf12b81d0ea32a35afc9d2a7 is pushed and remote-SHA verified.
 207 original-timestamp PostgreSQL decisions match all RU/NL1/NL2 caches and82 allocator

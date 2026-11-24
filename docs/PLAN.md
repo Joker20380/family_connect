@@ -3,7 +3,16 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Current source0ea7dbd5 is pushed/remote-SHA verified. Actual canonical/three-node integration
+Current source7b2fd1e1 is pushed/remote-SHA verified. Actual canonical/OWNER/legacy integration
+passes11:10UTC:69 devices/4 paid events,39-table post-ACK restore and pre-ACK refusal;
+103 real-PG tests,0 skips. Production untouched; synthetic/legacy identities stay separate.
+Do not repeat this completed panel-projection integration as pending or treat it as every
+OWNER writer. Three fixed acceptance blocks remain partial: actual independent trust,
+coherent all-writer/in-flight dispatcher capture and complete machine-loss/final recovery.
+Replication is PASS; no HA-03..05 or cutover. Remaining source/image dependencies and
+the final coherent independently approved recovery remain inside the selected HA-02 scope.
+[Current evidence](releases/2026-11-24-control-ha-installed-recovery.md#actual-canonicalownerlegacy-integration).
+Earlier source0ea7dbd5 is pushed/remote-SHA verified. Actual canonical/three-node integration
 passes09:57UTC:207 decisions/82 peers, fresh PG parity, lab revocation recovery and stale/old
 allow refusal;109 real-PG tests,0 skips. Production untouched. Next selected work remains
 worker/OWNER joint integration, coherent all-writer/in-flight dispatcher capture, machine-loss

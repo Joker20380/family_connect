@@ -4,6 +4,39 @@ Authoritative implementation remains `/home/joker/.codex/worktrees/dad9/family_c
 on `feature/device-technical-metadata-20261115`, not this divergent old main.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## Actual canonical/OWNER/legacy integration
+
+Implementation `7b2fd1e1a42ac17b12f7b8709fca430a217dcf4a` is pushed and remote-SHA verified;
+execution source `8b4198033a3062160d5e0263517bbc68f076a50b` was published before the final run.
+[Pinned joint OWNER report](https://github.com/Joker20380/family_connect/blob/7b2fd1e1a42ac17b12f7b8709fca430a217dcf4a/docs/releases/2026-11-24-control-ha-owner-joint.md#actual-execution--111032utc)
+contains provenance/dump/receipt hashes, tests, earlier refused attempts and rollback boundaries.
+
+- At11:10:32UTC, native panel ingestion accepts69 canonical devices/4 paid events on an
+  isolated39-table OWNER PG restore.1,907,455 retained source rows and3 consent floors are
+  checked; no technical observations/GeoIP return. Only snapshot/audit tables change.
+- Duplicate ingestion is unchanged; wrong alias generation/conflicting history are refused.
+  Fresh post-ACK restore preserves all39 table fingerprints and repeats native checks.
+  The pre-ACK dump is distinguished and refused against independently retained LAB readback.
+- 50 synthetic and4 legacy identities are disjoint from canonical, not merged. Native legacy
+  restart/retry/duplicate/expiry qualification runs only on a separate private copy and
+  refuses3 expired deployments, without gateway commands or new authority.
+- 103 focused real-PG tests pass,0 failures/errors/skips. Native probes have a bounded900s
+  deadline for full-row hashing on the1-CPU lab; no table checks are dropped. Original OWNER
+  containers/capsules remain unchanged; all owned probes/PG/volumes are removed. No SSH,
+  live write, installed/public/invitation version, deployment or server-policy change.
+
+HA-02 remains IN_PROGRESS: three partial acceptance blocks, not additional lettered stages.
+Remaining: actual approval-authority/owner-signing workflow and independently trusted current
+checkpoint; coherent all-writer/in-flight dispatcher capture; complete machine-loss source/
+image dependencies and final combined restore. Replication is PASS. These historical snapshots
+are not one coherent capture, and this panel-projection pass does not qualify every OWNER
+writer. No evidence-backed calendar ETA or production switch is claimed.
+
+Rollback requires no production action. Preserve original encrypted capsules and separately
+retained keys/checkpoints; never restore a lab dump onto production. Source rollback uses a
+normal revert. Old-main navigation stays separate from published implementation; do not
+force-push its divergent history or stage the owner's unrelated changes.
+
 ## Actual canonical/three-node integration
 
 Implementation `0ea7dbd54f16e5cecf12b81d0ea32a35afc9d2a7` is pushed and remote-SHA verified;
