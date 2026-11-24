@@ -1,5 +1,13 @@
 # Текущее состояние / Current state
 
+**24 November — installed native canonical integration prepared.**
+Actual retained610-row preflight passes native alias handling (66 mapped/3 new devices),
+PEM issuer/referral bindings, v2 admission, sender and routing without changing input bytes.
+The old all-mapped adapter remains strict.249 focused tests and49-table fixture recovery
+pass. Next is actual isolated PG import/crash/restore/new-ACK/stale-refusal qualification,
+not a live target or coherent fleet acceptance.
+[Scope and rollback](releases/2026-11-24-control-ha-native-canonical.md).
+
 **24 November09:17:14UTC — actual OWNER runtime/synthetic recovery PASS.**
 The24.374ms local seed/SQLite barrier retains20 exact runtime files and9 tables/223 rows.
 Fresh-process authenticated restore matches every file; the pinned native console image
