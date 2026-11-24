@@ -3,6 +3,20 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+Standalone OWNER collector admission is implemented: complete inventory/probe cycles, manual
+inventory writes, Docker import/fallback uncertainty and local finalization.117 tests PASS/0
+skips,29 new cases including killed collectors and a late native synthetic commit. Source only;
+no server access, installed source/config, image, unit or version change.
+[Joint activation matrix, exact limitations and rollback](releases/2026-11-24-control-ha-collector-admission.md#joint-activation-proposal--not-executable-authorization).
+Next selected work: fill and approve the actual workstation/OWNER/RU/NL runtime/gate bindings
+and manual/transport participation decision in that proposal; then activate only within the
+approved scope, measure one coherent interval and complete independent approval/custody/recovery.
+Host-side collector gating is not container admission; arbitrary direct ORM/DB/SSH/Docker writes
+remain outside it. Working-NL changes are not authorized. Preserve paid-watch/deny enforcement
+and strict lifecycle veto. Replication PASS; same three gates partial, no new stage/ETA. Do not
+reimplement collector admission or repeat the completed reload diagnosis as additional gates.
+
+At the preceding lifecycle checkpoint:
 NL2 reload-cause diagnosis is complete: reviewed Ubuntu255.4-1ubuntu8.18 source and the fileless
 -.slice witness at22:23:59UTC identify the manager-wide unit_file_state_outdated condition.
 36 filesystem candidates absent, matching manager mount/root view; all four scoped NL2 services

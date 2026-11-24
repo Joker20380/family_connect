@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 24 November: standalone OWNER collector cycles admitted;117 tests, caught/late import uncertainty retained, joint activation matrix and rollback; no installation](releases/2026-11-24-control-ha-collector-admission.md).
+
 [CONTROL-HA · 24 November: lifecycle veto and native queued-stop proof; NL2 reload warning traced to manager-wide state,44 diagnosis tests, no reload/activation](releases/2026-11-24-control-ha-systemd-lifecycle.md#nl2-manager-wide-reload-cause--read-only).
 
 [CONTROL-HA · 24 November: AWG cleanup cannot skip owned-engine termination after network errors;17 new cases,170 selected checks including isolated PostgreSQL, legacy packaging limits and no deployment](releases/2026-11-24-control-ha-awg-cleanup.md).

@@ -1,5 +1,19 @@
 # Текущее состояние / Current state
 
+**24 November — standalone OWNER collectors admitted in source; activation proposal recorded.**
+Inventory/network-probe cycles now hold the optional gate through collection, Docker imports,
+fallbacks and local completion. Caught timeout, killed collector and late external commit retain
+uncertainty; a later successful cycle cannot erase it. Manual inventory collection is admitted
+before key/snapshot writes.117 focused tests PASS/0 skips,29 new cases; native synthetic SQLite/
+process fixtures are not installed OWNER PostgreSQL acceptance. No RU/NL access, deployment,
+image build, unit/environment or version change. [Source, activation matrix and rollback](releases/2026-11-24-control-ha-collector-admission.md).
+Next: exact workstation/OWNER/RU/NL gate/runtime bindings and the manual/transport participation
+decision from that proposal, then approved joint capture and independent custody/final recovery.
+Working-NL changes are not authorized; Docker exec does not inherit the host gate automatically.
+Replication PASS; the same three HA-02 gates partial. Do not repeat this collector source slice
+or the completed NL2 diagnosis as a new acceptance gate. No new stage or calendar estimate.
+
+At the preceding lifecycle checkpoint:
 **24 November — NL2 reload warning traced to the manager-wide flag; no reload.**
 At22:23:59.926–22:23:59.980UTC the built-in -.slice has NeedDaemonReload=true despite no fragment,
 source, aliases or drop-ins;36 possible filesystem entries are absent in the manager's own mount/

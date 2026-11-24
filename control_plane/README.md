@@ -1,5 +1,20 @@
 # CONTROL-PLANE · русская локальная панель и наблюдаемость
 
+## HA-02 · допуск отдельных сборщиков, только исходники
+
+`monitor_inventory.py`, `probe_network.py` и ручной `collect_inventory.py` поддерживают
+необязательный `FC_CONTROL_CAPTURE_GATE`. Закрытый допуск возвращает код75 до создания
+локальных файлов/запуска сбора; неверный gate — код1. Полный цикл остаётся участником до
+завершения импорта, fallback и локальной очистки/квитанции. Таймаут клиента Docker не
+доказывает отмену импорта: незавершённость сохраняется и после успешного повтора.
+Дублирующий запуск с занятым локальным cycle-lock остаётся обычным пропуском.
+
+Это не установленное изменение. Не включать gate без утверждённой привязки пользователя,
+источников, unit/environment и guardian. Переменная на хосте автоматически не передаётся
+через `docker compose exec`; контейнерный writer должен участвовать отдельно. Без переменной
+поведение прежнее. Прямые ORM/SQL/SSH/Docker-записи не становятся защищёнными автоматически.
+[Матрица подключения, проверки, ограничения и откат](../docs/releases/2026-11-24-control-ha-collector-admission.md).
+
 ## Technical metadata · server path deployed; public Android release pending
 
 The accepted minimal metadata/HMAC-aware server and panel are installed. Corrected

@@ -13,6 +13,8 @@ import subprocess
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from control.friends.pseudonyms import seal
+from control_plane.collector_admission import run_cli
+from control_plane.fc_control_plane.capture import operation
 
 if __package__:
     from .apps.console.collector import ACTIVE_SOURCES, SOURCES
@@ -54,6 +56,11 @@ def main():
     parser.add_argument('source', choices=HOSTS)
     parser.add_argument('--known-hosts', type=Path, help='Существующий файл проверенных SSH host pins; доверие не добавляется автоматически')
     args = parser.parse_args()
+    collect(args, parser)
+
+
+@operation()
+def collect(args, parser):
     try:
         command = ssh_command(args.source, args.known_hosts)
     except ValueError:
@@ -130,4 +137,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    raise SystemExit(run_cli(main))
