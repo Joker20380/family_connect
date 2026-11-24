@@ -195,6 +195,13 @@ Mandatory gateway bindings tighten the unpublished contract, not a new phase or 
 to execute old archives. Caller map mutation cannot replace already pinned public bytes.
 219 tests /0 skips (checkpoint86/publications77/current audit56); six docs/970 links PASS.
 [Latest qualification and fixed stage2 remainder](releases/2026-11-24-control-ha-forward-publications.md).
+Follow-up source77bc5a98 pushed/remote-SHA verified: exact saved renewal/config bytes
+are mandatory for all three nodes; recomputed file/aggregate/config hashes and node/trust
+bindings replace hash-only claims. Bounded local no-follow collection never executes
+retained sources.329 tests /0 skips; six source docs/972 links PASS. Retained fcb31164
+compatibility uses synthetic configs, not new host evidence. Controller config, API
+binaries/dependencies, installed-process identity and coherent capture remain unqualified.
+[Current source-custody contract and acceptance boundary](releases/2026-11-24-control-ha-forward-sources.md).
 Same selected task IN_PROGRESS: actual-current publication/source/capture bindings,
 coherent capture and full recovery still open. Development decision is resolved, not
 historical approval. No new signer, retroactive consent, old-row restore, production

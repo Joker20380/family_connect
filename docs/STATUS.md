@@ -1,14 +1,17 @@
 # Текущее состояние / Current state
 
-**24 November — CONTROL-HA обе публикации текущего checkpoint проверяются offline.**
-Sourceb105033d2d49586a30e69c573a4a19756e4d3ef2 pushed/remote-SHA verified on the
+**24 November — CONTROL-HA сохранённые renewal source/config bytes обязательны.**
+Source77bc5a98558933f6b4f99fe3a3e4d0783f6e8d41 pushed/remote-SHA verified on the
 metadata branch in `/home/joker/.codex/worktrees/dad9/family_connect`.
-Fresh authorization now requires distinct NL/NL2 identities and exact signed authority
-hashes. Both directories/delegations pass native scope/time checks at capture and
-verification; shared CA/family/revision and independent per-node sequence floors required.
-Old request shape refuses; no production signer, source attestation or live recovery PASS.
-219 focused tests PASS /0 skips (checkpoint86, publications77, unchanged current audit56).
-Six source docs/970 links and whitespace PASS. Selected journal task remains IN_PROGRESS.
+Forward verification now checks exact saved configuration/renewal module bytes for
+RU/NL1/NL2 against signed hashes, node slot/role, gateway IDs and anchor. Minimum legacy14
+modules; no retained source execution. Local no-follow collection rejects unsafe paths
+and observed changes. Both-publication signature/time/floor checks remain mandatory.
+329 focused tests PASS /0 skips (sources72/checkpoint98/publications77/inventory26/audit56).
+Retained fcb31164/e9fd3175 source-removed readback passes with synthetic configs, not a
+fresh production capture. Six source docs/972 links and whitespace PASS.
+Scope excludes controller config/API binaries/dependencies/process attestation/full restore.
+Selected journal task remains IN_PROGRESS; source byte custody is not coherent capture.
 До конца этапа2: доведение фактических journal/source/capture bindings и ещё три крупных
 блока — установленные схемы/writers со согласованным снимком, полное off-host recovery,
 строгая репликация/quorum/RPO0. Это не одна-две мелкие правки; календарный ETA не установлен.
@@ -16,7 +19,7 @@ No queued block selected, no SSH/deployment/writer stop/version change or fresh 
 Console5ce82415, RU HTTP4e2df679, NL GeoIP22 November, Android126/catalog9 unchanged.
 RU dependence persists; HA-03 fencing, HA-04 failover and HA-05 cutover follow HA-02.
 Old main remains navigation only; original work preserved, prior push non-fast-forward.
-[Current source, tests, remaining gates and rollback](releases/2026-11-24-control-ha-forward-publications.md).
+[Current source, tests, remaining gates and rollback](releases/2026-11-24-control-ha-forward-sources.md).
 
 **24 November — CONTROL-HA forward-checkpoint contract implemented offline.**
 Owner explicitly approved development without service stops or server changes.
