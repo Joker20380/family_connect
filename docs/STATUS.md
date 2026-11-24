@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+**24 November — open renewal transactions now block source-level capture admission.**
+HA source1f494b5f is pushed/remote-SHA verified. Read-only NL1/NL2 profile source/config/helper
+closure binds14 renewal modules each and their API. A successful RPC can leave an ACQUIRED
+journal; opt-in guardian schema2 now pins config/state/native lock, refuses that state and holds
+the native lock through final ACK/deadline.264 tests PASS/0 skips. Exact installed lock/acquire
+code passes the isolated root+UID993 stand19:36:58UTC, on synthetic state/config, not live helpers.
+Both journals appear idle19:38:13UTC; no live lock acquired, no coherent-capture permit inferred.
+No deployment/service/SSH/key/version change; guardian2c37bdb7 is local/unapproved/uninstalled.
+Next: actual runtime/sudo/unit bindings, remaining AWG/mailbox/support external completion and
+bounded manual-write coordination, then approved activation/latency/capture and final recovery.
+Do not repeat this source-chain/lock stand. Replication PASS; three HA-02 gates partial.
+[Implementation and exact limits](releases/2026-11-24-control-ha-installed-recovery.md#native-renewal-settlement--successful-rpc-is-not-completion).
+
 **24 November — restricted-profile wrapper admission implemented; isolated stand PASS.**
 HA source9830aab8 is pushed/remote-SHA verified. Actual NL1/NL2 wrapper/archive pins are
 observed read-only. New opt-in `profile-launcher` preserves wrapper guards, Python path,

@@ -6,6 +6,53 @@ divergence is reconciled/pushed at2ae5c512; older publication-blocker statements
 historical, not active instructions or a current blocker.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## Native renewal settlement — successful RPC is not completion
+
+[Authoritative source and report](https://github.com/Joker20380/family_connect/blob/1f494b5f831df5de224e4bcc51b407bd88eaa60a/docs/releases/2026-11-24-control-ha-renewal-settlement.md)
+is pushed/remote-SHA verified at1f494b5f831df5de224e4bcc51b407bd88eaa60a. Main is navigation
+only. No production deployment, service/SSH/key/policy change or version/catalog change.
+
+Read-only observation follows both installed profile wrappers through snapshot configs, pinned
+locators/helpers and14 renewal modules per node to the common pinned API archive. Each snapshot's
+25 manifest members match;18 files equal its retained commit. Production profiles, keys and DBs
+are not read; fixed configs/source remain private. At19:38:13UTC both renewal state directories
+have only native lock/completed ledger/archive, no open owner or residual entries, in equal
+repeated observations. No lock is taken on a working node; this is not a capture interval.
+
+The actual native acquire code returns successfully while an ACQUIRED transaction remains on
+disk. The old per-RPC gate can drain in that state. New `capture_renewal.RenewalState` and opt-in
+guardian schema2 reject owner/residual entries, pin config/state/lock identities and hold the
+existing native operation lock through the joint interval/final ACK. No lock creation, journal
+cleanup, permission repair, service restart or arbitrary dispatch is added. Existing watchdog
+deadlines release native locks on guardian death/EOF/expiry. Root settlement guardians require
+explicit schema2 binding and the existing trusted root-coordinator/source/runtime checks.
+
+**264 tests PASS/0 skips**, Python3.14.4. **Native stand PASS19:36:37–19:36:58UTC**:
+retained installed `credential_renewal.py`/`production_transport.py` from both nodes, synthetic
+config/state, root+UID993 participants. Reproduces successful-but-open RPC refusal; actual native
+lock is busy through the interval and released afterward/on deadline. Uses disposable image
+5ce82415, Python3.13.17/cryptography46.0.7, no network/live mounts/Docker socket, read-only rootfs.
+All owned containers removed. First stand failure from missing isolated KILL capability and
+initial observer atime refusal are retained; no working-service permissions changed.
+
+Local guardian capsule `2c37bdb7d0a62b593b4c8b80fdd77b234240d89c0dd464d3ea51aa486fa21fde` is
+not independently approved or installed. Exact installed runtime/site packages, real sudo/helper/
+systemd execution and full cross-store capture are not qualified by this native-lock stand.
+Historical archive integrity and full native transaction cleanup are not claimed tested here.
+Feature docs:4 files/1048 local-link targets/0 errors; no HTTP artifact verification implied.
+
+Private evidence: `~/.local/share/family-connect/control-ha/20261124-profile-closure-8vf9etma/`;
+successful `native-i7_b2t2z/` receipt SHA
+`9526f5a83f25d93f1c7ca0f3a45b056d2b32b96e7d35deb33d1b7e9094a94dfe`.
+No installed rollback needed. Future revert changes only approved guardian bindings; preserve
+all product/journal history and recovery SSH. Schema1 revert invalidates this settlement proof.
+Never delete owners/pending markers to force PASS; keep paid-watch and existing failed states.
+
+Next: actual Python/site-package/sudo/unit binding, other AWG/mailbox/support external completion,
+bounded manual-write coordination; approved activation and actual latency/overlap/coherent capture;
+independent current checkpoint/key custody and final combined recovery. Do not repeat this source
+closure/native-lock stand. Replication PASS; the same three HA-02 gates partial. No new stage.
+
 ## Profile wrapper admission — isolated binding
 
 [Authoritative source and report](https://github.com/Joker20380/family_connect/blob/9830aab8086158da92828a09ec51032725620005/docs/releases/2026-11-24-control-ha-profile-launcher.md)

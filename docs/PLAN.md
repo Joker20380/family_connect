@@ -11,19 +11,21 @@ remains selected; this publication task does not advance its acceptance gates.
 [Reconciliation record](releases/2026-11-24-source-reconciliation.md).
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Feature9830aab8 is pushed/remote-SHA verified. Installed Python entry sources and both profile
-wrapper/archive pins are resolved read-only. New `profile-launcher` preserves existing native
-guards/runtime path/environment/cwd and holds admission through sealed archive re-exec and exit.
-186 tests PASS/0 skips; exact wrapper bytes under UID979/993 pass the isolated18:50:08–18:50:12UTC
-stand. Synthetic payloads/Python3.13.15 do not qualify installed package/config/helper behavior.
-No working-service/SSH/key/version changes or deployment. Candidate capsule4e9ab90f is local.
-[Bound wrapper chain and exact limits](releases/2026-11-24-control-ha-installed-recovery.md#profile-wrapper-admission--isolated-binding).
-Next selected work: close actual dependency/config/helper and external-completion coverage for
-the resolved routes; establish the bounded manual product-write/deployment pause without losing
-recovery SSH, then qualify real capture/flush latency and overlap. Do not repeat the SSH census
-or this wrapper bridge/stand. Shared fixed cat routes are not Python receivers; no blind route
-replacement or root-key removal. Loaded-daemon policy and independently approved runtime/source/
-gate bindings remain required before activation, not inferred from this isolated result.
+Feature1f494b5f is pushed/remote-SHA verified. Profile source/config/helper closure is observed
+read-only, including14 pinned renewal modules per node and common API. New opt-in guardian schema2
+refuses successful RPCs whose renewal journal remains open, and holds the existing native lock
+through the interval/final ACK.264 tests PASS/0 skips; exact installed lock/acquire code passes the
+root+UID993 isolated19:36:58UTC stand. Synthetic state/config, not full live helper/systemd execution.
+Both journals appear idle19:38:13UTC without live lock acquisition. No production deployment or
+working-service/SSH/key/version change. Candidate guardian2c37bdb7 is local/unapproved/uninstalled;
+receiver4e9ab90f and installed OWNER images are unchanged. Schema1 is not a settlement assertion.
+[Native transaction gap and remaining boundary](releases/2026-11-24-control-ha-installed-recovery.md#native-renewal-settlement--successful-rpc-is-not-completion).
+Next selected work: actual Python/site-package/sudo/unit binding, remaining AWG/mailbox/support
+external completion and bounded manual product-write/deployment coordination; then independently
+approved runtime/source/gate activation, real latency/overlap and coherent capture. Do not repeat
+the source-chain/lock stand, SSH census or wrapper bridge. Never delete transaction journals to
+make capture pass. Fixed cat routes are not Python receivers; no blind replacement/root-key removal.
+Loaded-daemon policy and independent exact runtime/source/gate approval remain prerequisites.
 Exact-command OWNER activation/revert already passes on disposable state; its post-upgrade
 PG/SQLite writes and unknown markers survive rollback. Images5ce82415/50de6f25 remain the last
 observed installed images without gates; candidatesb62e6693/2162635c are local, not approved or
@@ -36,7 +38,7 @@ slices or repeat inventory/NL2 recovery. Keep paid-watch running; current NL sco
 permission. Independent current approval, coherent capture, off-laptop key/access custody
 and final combined recovery remain the same three partial HA-02 gates; replication PASS,
 no new lettered stage, HA-03 or cutover.
-[Implementation and next boundary](releases/2026-11-24-control-ha-installed-recovery.md#profile-wrapper-admission--isolated-binding).
+[Implementation and next boundary](releases/2026-11-24-control-ha-installed-recovery.md#native-renewal-settlement--successful-rpc-is-not-completion).
 
 Owner-confirmed NL2 isolated retained-state recovery PASS14:12UTC, final cleanup/service
 checks PASS14:20UTC; source/reporte353ff85 pushed and verified. Wrong-key refusal,50 focused
