@@ -3,6 +3,24 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+Actual profile Python/sudo/unit observation is now recorded at20:13:20–20:13:23UTC. Both
+configured NL restricted-bootstrap units are active/running; effective sudo permits only each
+pinned zero-argument helper as root. Python is3.14.4/UID979 on NL1 and3.12.3/UID993 on NL2.
+NL2 verifies534 site files/five dependency RECORDs; NL1 strict inventory refuses one root-only
+0700 bytecode-cache directory. Do not chmod production or silently weaken the inventory policy.
+NL1 has13 drop-ins and a loaded ExecStopPost; NL2's NeedDaemonReload=yes remains unexplained,
+not proof of a changed loaded command. Unit source/properties are pinned privately; no reload,
+helper dispatch, service/deployment/version change.135 focused tests PASS/0 skips.
+[Actual runtime/sudo/unit evidence and limits](releases/2026-11-24-control-ha-profile-runtime.md).
+Next selected work: resolve the exact bytecode-cache qualification and loaded/disk-unit limits,
+complete helper/systemd/environment/stop-post and AWG/mailbox/support external settlement,
+then bounded manual-write coordination and independently approved activation/real latency/overlap.
+Do not repeat the completed SSH, wrapper, source-chain, native-lock or runtime/sudo/unit census.
+No service stop/reload is justified merely to make an observation green. Independent current
+approval/checkpoint/key custody and final combined recovery remain required; replication PASS,
+the same three HA-02 gates partial, no HA-03/cutover or working-NL deployment.
+
+At the preceding renewal-settlement checkpoint:
 The successful-RPC/open-renewal-transaction gap is now reproduced with both retained NL
 implementations and guarded in source. New opt-in guardian schema2 binds config SHA and native
 state/operation.lock identities, refuses owner/residual entries and holds the native lock through

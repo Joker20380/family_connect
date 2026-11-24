@@ -1,5 +1,19 @@
 # Текущее состояние / Current state
 
+**24 November — actual profile Python/sudo/systemd bindings observed; no activation.**
+20:13:20–20:13:23UTC NL1/NL2 scoped read-only check: Python3.14.4/3.12.3 under UID979/993;
+both configured restricted-bootstrap units loaded/active/running, no pending unit job.
+Both effective sudo listings allow only the pinned zero-argument renewal helper as root.
+NL2's534-file site inventory and five dependency RECORDs verify; no site hooks/package imports
+executed. NL1 strict inventory refuses root-only0700 `cryptography/__pycache__`; this is a
+qualification limitation, not proof the service is broken. NL1 has13 unit drop-ins/ExecStopPost;
+NL2 reports NeedDaemonReload=yes, not by itself proof of changed command bytes. No chmod,
+daemon-reload, helper dispatch, service/policy/deployment/version change.135 focused tests PASS.
+Next: resolve these exact runtime/unit qualification limits and external completion (including
+NL1 stop-post/environment bindings and AWG/mailbox/support), not repeat the completed census.
+Then approved gate activation/real interval and current independent approval/custody/recovery.
+Replication PASS; three HA-02 gates partial. [Evidence and rollback](releases/2026-11-24-control-ha-profile-runtime.md).
+
 **24 November — renewal transaction settlement guarded, not inferred from SSH success.**
 Observed NL1/NL2 snapshot→config→helper→14 renewal-module/API bindings read-only. Each snapshot's
 25 manifest members match;18 files equal its retained commit. Both native journals have no owner
