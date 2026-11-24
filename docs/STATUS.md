@@ -1,5 +1,22 @@
 # Текущее состояние / Current state
 
+**24 November — CONTROL-HA portable encrypted forward-checkpoint inputs qualified offline.**
+A bounded AES-256-GCM archive now carries the exact signed request/signature, existing
+encrypted recovery/history capsules, both publications/delegations and all retained
+renewal source/config bytes. Decryption keys, trusted signer/anchor, request/ciphertext
+pins, sequence/CRL/authority floors and verification time remain external, never supplied
+by the archive. Packing is not approval; reading reruns the existing forward verifier.
+Fresh-process/source-removed readback preserves all input fingerprints. Native post-renewal
+certificate/consumed-proof recovery also passes through the archive: old proof refuses,
+fresh proof succeeds in an isolated registry, old-baseline equality still refuses.
+261 tests PASS /2 existing optional PostgreSQL skips;59 archive tests and the additional
+portable native scenario all run without skips. No full DR, off-host custody or RPO0 claim.
+Selected journal task IN_PROGRESS; actual capture/authorization/source attestation,
+installed schemas/writers, full independent recovery and strict replication remain open.
+No SSH, server/writer/policy/version change, real signing or next queued task.
+Console5ce82415, RU HTTP4e2df679, NL GeoIP22 November, Android126/catalog9 unchanged.
+RU dependence persists. [Format, custody requirements, tests and rollback](releases/2026-11-24-control-ha-forward-archive.md).
+
 **24 November — CONTROL-HA forward checkpoint requires actual renewal source bytes.**
 The selected journal/current-state verifier now requires saved node configuration and
 every declared renewal module for RU/NL1/NL2, not just caller-supplied hashes. Exact

@@ -1,5 +1,10 @@
 # 24 November 2026 — forward-checkpoint renewal source custody
 
+Historical source checkpoint77bc5a98. The subsequent
+[portable archive](2026-11-24-control-ha-forward-archive.md) encrypts the complete forward
+input set, including these source/config sidecars. Limits/results below belong to this
+earlier in-memory source-custody change; full production recovery is still unqualified.
+
 ## Scope and result
 
 Continues the selected CONTROL-HA-20261123 journal/current-state task from sourceb105033d,

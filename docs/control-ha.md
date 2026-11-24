@@ -217,10 +217,18 @@ native directory validation на момент capture и проверки, об�
 лишние `.py` и наблюдаемая смена файлов отвергаются. Это узкая source-custody проверка,
 не проверка полного runtime: controller config, API/binaries, зависимости и фактически
 запущенный процесс не покрыты. Сохранённый fcb31164 проверен с synthetic configs.
+Переносимый AES-256-GCM комплект объединяет точный подписанный request, обе уже
+зашифрованные капсулы и public/source sidecars; ключи, trusted signer/anchor, pins,
+время проверки и floors остаются снаружи. Чтение в новом процессе после удаления
+исходников сверяет все bytes и повторяет forward-проверки. Native post-renewal тест
+сохраняет отказ использованного proof и свежую выдачу. Упаковка не является approval:
+срок действия не продлевается, никаких extract/import/resume-команд нет. Это ещё не
+независимый off-host backup или долгосрочный production recovery.
 Coherent capture, реальное происхождение source/config/живых публикаций, полный набор
 gateway leaf/private keys и независимое off-host custody всё ещё не квалифицированы.
 Следующий блок автоматически не выбран; maintenance/cutover требуют отдельного scope.
-[Актуальный source checkpoint и тесты](releases/2026-11-24-control-ha-forward-sources.md).
+[Актуальный переносимый комплект и тесты](releases/2026-11-24-control-ha-forward-archive.md).
+[Квалификация source custody](releases/2026-11-24-control-ha-forward-sources.md).
 [Предыдущая квалификация публикаций](releases/2026-11-24-control-ha-forward-publications.md).
 [Исходный контракт](releases/2026-11-24-control-ha-forward-checkpoint.md).
 [Предшествующие доказательства](releases/2026-11-24-control-ha-provenance-decision.md).

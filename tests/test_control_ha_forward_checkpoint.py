@@ -12,6 +12,7 @@ from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from control.friends import restricted, restricted_admin
 from control.friends.access import Access, EnrollmentTransaction
 from scripts import control_ha_forward_checkpoint as forward
+from scripts import control_ha_forward_archive as archive
 from scripts import control_ha_legacy_custody as custody
 from scripts.control_ha_import import ImportRejected, digest, encoded
 from scripts.control_ha_import_fixture import CHECKPOINT
@@ -64,9 +65,19 @@ def candidate_for(current):
             authorities=authorities, minimum_authority_sequences=floors, source_materials=source_materials))
 
 
-def verify(candidate, **overrides):
-    return forward.verify(candidate['request'], candidate['signature'], candidate['trusted_key'],
-                          candidate['expected_request_sha256'], **dict(candidate['arguments'], **overrides))
+def verify(candidate, *, portable=False, **overrides):
+    arguments = dict(candidate['arguments'], **overrides)
+    if not portable:
+        return forward.verify(candidate['request'], candidate['signature'], candidate['trusted_key'],
+                              candidate['expected_request_sha256'], **arguments)
+    material = {name: arguments[name] for name in
+                ('recovery_bundle', 'history_bundle', 'publications', 'authorities', 'source_materials')}
+    key = secrets.token_bytes(32)
+    bundle, checksum = archive.seal(candidate['request'], candidate['signature'], key, **material)
+    external = {name: arguments[name] for name in ('minimum_sequence', 'minimum_crl',
+                'minimum_authority_sequences', 'now', 'recovery_key', 'history_key', 'anchor')}
+    return archive.verify(bundle, key, checksum, trusted_key=candidate['trusted_key'],
+                          expected_request_sha256=candidate['expected_request_sha256'], **external)
 
 
 def authorize(candidate, change):
@@ -129,7 +140,8 @@ def test_post_renewal_native_write_binds_fresh_state_not_old_baseline(candidate)
         bind_current(qualified.current, plan, candidate['arguments']['publications']['NL'])
 
 
-def test_native_post_renewal_certificate_and_consumed_proof_survive_source_removal(tmp_path):
+@pytest.mark.parametrize('portable', [False, True])
+def test_native_post_renewal_certificate_and_consumed_proof_survive_source_removal(tmp_path, portable):
     root = tmp_path / 'source'
     root.mkdir(mode=0o700)
     fixture, fleet = native_fixture(root)
@@ -156,7 +168,7 @@ def test_native_post_renewal_certificate_and_consumed_proof_survive_source_remov
     plan = parse((fleet.controller.root / 'plan.json').read_bytes())
     candidate = candidate_for(current)
     shutil.rmtree(root)
-    qualified = verify(candidate)
+    qualified = verify(candidate, portable=portable)
     assert qualified.current.stores == fixture.stores
     assert qualified.current.artifacts == artifacts
     with pytest.raises(ImportRejected, match='ONLINE_CAPSULE_DATABASE_MISMATCH'):

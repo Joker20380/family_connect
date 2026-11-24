@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 24 November: portable encrypted forward-checkpoint inputs; fresh-process/source-removed readback, external keys/trust/floors, no activation or production backup acceptance](releases/2026-11-24-control-ha-forward-archive.md).
+
 [CONTROL-HA · 24 November: forward checkpoint checks retained renewal source/config bytes for all three nodes; bounded local collection, no source execution or live acceptance](releases/2026-11-24-control-ha-forward-sources.md).
 
 [CONTROL-HA · 24 November: both current publications checked against signed gateway delegations, expiry and independent sequence floors; offline only, fixed four-block stage2 remainder](releases/2026-11-24-control-ha-forward-publications.md).

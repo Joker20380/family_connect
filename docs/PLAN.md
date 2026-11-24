@@ -300,6 +300,16 @@ audit56); exact retained fcb31164/e9fd3175 compatibility uses synthetic configs,
 inputs. Controller configuration/API binaries/dependencies/process attestation are outside
 this source scope. No CLI, server collection, new real authorization or import added.
 [Source material qualification and next acceptance boundary](releases/2026-11-24-control-ha-forward-sources.md).
+Continuation of the same offline input contract: a bounded encrypted forward archive
+now retains both existing encrypted capsules, exact signed request/signature and all
+public/source sidecars. Keys, trusted authority/anchor, pins and replay floors stay
+external. Fresh-process/source-removed byte-fingerprint readback and native post-renewal
+consumed-proof refusal/fresh-proof issuance pass through the archive; no extraction,
+host resume, full-store importer, persistent trust registry or long-lived approval added.
+261 selected tests PASS /2 old optional PostgreSQL skips; all59 new archive tests plus
+the added native portable scenario run without skips. Packing itself does not qualify
+a request; the existing verifier still enforces signatures, expiry and external floors.
+[Portable input format and its explicit limits](releases/2026-11-24-control-ha-forward-archive.md).
 Remaining selected gate: independently established actual source/capture/publication
 bindings, qualified coherent capture and current-state recovery. Known
 synthetic schemas/bounded-maintenance adapters are not installed-schema acceptance.
