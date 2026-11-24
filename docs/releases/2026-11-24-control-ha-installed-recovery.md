@@ -6,6 +6,49 @@ divergence is reconciled/pushed at2ae5c512; older publication-blocker statements
 historical, not active instructions or a current blocker.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## Support worker admission — source only
+
+[Authoritative source, tests, completion map and rollback](https://github.com/Joker20380/family_connect/blob/a6e8a019b626fdc3ee09fca08e86e8d9d777d021/docs/releases/2026-11-24-control-ha-support-admission.md)
+are pushed/remote-SHA verified ata6e8a019b626fdc3ee09fca08e86e8d9d777d021. Main remains
+navigation only. No RU/NL connection or production store/key access, service/unit/image/environment
+change, deployment, client/catalog/invitation version or signing operation occurred.
+
+The panel's guarded IPC success previously covered queue acceptance, not the asynchronous worker.
+Worker source now accepts optional `--capture-gate` and admits store/owner initialization, binding
+refresh, requests/enqueue, notifications/outbox expiry, periodic scheduling and each background
+mailbox exchange through transport close. Nested work retains one marker through SQLite commit.
+Busy admission refuses before work; delivery uses its existing transient retry behavior. Failed
+exchange/cleanup, caught nested error or process death retains uncertainty. A successful later
+operation cannot erase earlier pending. Closed package includes the helper and shared gate;
+without the flag existing behavior remains unchanged. Different UIDs need separate approved gates.
+
+**123 tests PASS/0 skips**,12.08s, Python3.14.4, including20 new cases. All17 package versions
+match provisioning/messenger lock pins. Tests cover real encrypted SQLite commits, Unix IPC,
+blocked cleanup, background retry, inode replacement, swallowed failure and an owned subprocess
+killed inside exchange. Synthetic adapters/stores are used: no assertion that the installed
+Reticulum threads, remote effects or all manual/raw-store/collector writes have settled.
+The existing bounded reader joins and actual startup/shutdown bindings remain activation concerns.
+Feature documentation:4 files/1058 link targets/zero errors; main navigation:3 files/692 targets/
+zero errors; whitespace clean. No private state,
+keys, source capsules or built artifacts are committed; external URLs are not release verification.
+
+**Completion criteria remain fixed:** replication PASS in isolation; current inputs/trust partial;
+coherent all-writer capture partial; independent custody/final combined recovery partial. No new
+lettered stage. The authoritative table states the exact evidence still required for each gate.
+Prior1–2 and2–4 day estimates were withdrawn as unsupported, not extended again. Source pushes
+and test totals are not percentage completion or an installed rollout.
+
+Next: native helper/environment/stop-post and AWG/mailbox/support completion/runtime binding,
+collector/manual coverage, concrete approved joint activation/capture proposal and actual coherent
+interval, then independently approved current inputs, off-laptop key/access custody and final
+post-ACK/stale-copy recovery. Do not repeat this source-admission slice as a new gate. Existing
+bounded management-write-capture permission stands; working-NL deployment remains outside scope.
+
+Rollback: no live rollback is needed. Omit/revert source-only worker/kit changes. A future approved
+activation must retain prior kit/argv and gate evidence, abort capture before rollback and preserve
+all pending markers for reconciliation. Never restore databases, delete markers or weaken SSH/
+ownership merely to obtain a passing capture. Earlier sections below are checkpoint history.
+
 ## Cache and selected unit qualification — supplementary proof
 
 [Authoritative source, tests and report](https://github.com/Joker20380/family_connect/blob/63f5abad225347eed167c3f5cd84f57b854de029/docs/releases/2026-11-24-control-ha-runtime-qualification.md)

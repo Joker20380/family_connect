@@ -1,5 +1,19 @@
 # Текущее состояние / Current state
 
+**24 November — asynchronous support-worker admission implemented in source; not deployed.**
+HA sourcea6e8a019 is pushed/remote-SHA verified. Panel IPC success no longer serves as the only
+source-level boundary: opt-in worker gate covers initialization, requests/bindings/enqueue,
+notification/outbox mutations, periodic scheduling and background exchange through close.
+Caught failures/process death retain pending; retry cannot erase it. Closed source kit includes
+the helper/shared gate.123 tests PASS/0 skips,20 new cases;17 locked package versions match.
+No RU/NL access, working-service, key, deployment or version change. Native tests use synthetic
+state/transport, not installed-runtime acceptance. Next: native helper/environment/stop-post and
+AWG/mailbox/support completion/bindings, collector/manual coverage and the approved joint
+activation/capture proposal; then coherent interval and independent approval/custody/recovery.
+Replication PASS; three existing HA-02 gates partial. Fixed completion map documents the remainder;
+unsupported1–2/2–4 day estimates are withdrawn, not a new rolling deadline.
+[Implementation, limits, completion map and rollback](releases/2026-11-24-control-ha-installed-recovery.md#support-worker-admission--source-only).
+
 **24 November — NL1 cache experiment and NL2 selected-setting comparison complete; no activation.**
 HA source63f5abad is pushed/remote-SHA verified. Four retained NL1 caches match source without
 execution; actual Python3.14.4 UID979/root stand20:32:29UTC proves source fallback versus cache

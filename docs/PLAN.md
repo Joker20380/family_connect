@@ -11,20 +11,20 @@ remains selected; this publication task does not advance its acceptance gates.
 [Reconciliation record](releases/2026-11-24-source-reconciliation.md).
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Feature63f5abad is pushed/remote-SHA verified. Four NL1 caches match source without execution;
-actual pinned Python3.14.4 UID979/root synthetic stand20:32:29UTC proves source fallback versus
-cache use, with owned-directory cleanup and unchanged runtime pins. Strict NL1 inventory refusal
-is unchanged, not bypassed. NL2's14 selected loaded/disk settings match and no applicable disk
-drop-ins are found. NeedDaemonReload=yes remains unexplained; no full Unit/environment/lifecycle
-equivalence or permission to reload follows.190 tests PASS/0 skips plus native stand PASS.
-No working-service/SSH/key/deployment/version change. Local guardian2c37bdb7, receiver4e9ab90f
-and OWNER candidates remain unapproved/uninstalled.
-[Targeted findings and current boundary](releases/2026-11-24-control-ha-installed-recovery.md#cache-and-selected-unit-qualification--supplementary-proof).
-Next selected work: full helper/runtime/environment/stop-post and AWG/mailbox/support external
-completion, retaining strict inventory/reload-marker limits; bounded manual product-write coordination;
-then independently approved runtime/source/gate activation and real latency/overlap/coherent capture.
-Do not repeat the cache stand/selected-setting comparison, runtime/sudo/unit census, source-chain/
-lock stand, SSH census or wrapper bridge as new acceptance work.
+Featurea6e8a019 is pushed/remote-SHA verified. Opt-in support-worker source now guards store/owner
+initialization, requests/bindings/enqueue, notifications/outbox expiry, periodic scheduling and each
+background exchange through close. Failure/death retains uncertainty; success cannot clear older
+pending. Closed kit includes the gate/helper.123 tests PASS/0 skips;20 new cases,17 package pins.
+No RU/NL access, service/unit/deployment/version change; actual installed support/runtime cleanup
+is not qualified by synthetic transport tests. Existing local candidates remain unapproved/uninstalled.
+[Worker integration and fixed completion map](releases/2026-11-24-control-ha-installed-recovery.md#support-worker-admission--source-only).
+Next selected work: native helper/environment/stop-post and AWG/mailbox/support completion/runtime
+bindings, collector/manual coverage, concrete independently approved joint activation/capture
+proposal and real coherent interval, then independent current approval/custody/final recovery.
+Keep strict NL1 inventory refusal and unexplained NL2 reload marker visible; no bypass/reload.
+Do not repeat support source admission, cache stand/comparison, runtime/sudo/unit census,
+source-chain/lock stand, SSH census or wrapper bridge as new acceptance work. Original four
+acceptance gates are fixed; prior1–2/2–4 day estimates are withdrawn, not a rolling deadline.
 Never delete transaction journals or chmod/reload working services merely to make checks pass.
 Fixed cat routes are not Python receivers; no blind replacement/root-key removal.
 Loaded-daemon policy and independent exact runtime/source/gate approval remain prerequisites.
@@ -34,13 +34,13 @@ observed installed images without gates; candidatesb62e6693/2162635c are local, 
 installed. Independently approve images and exact live gate/config/mount bindings before any
 working-container replacement. No silent deployment or repeat of the completed OWNER stand.
 Do not widen0700/0600, change product/token ownership or treat a local receipt as approval.
-Direct ORM/programmatic commands and asynchronous remote support remain coverage gaps.
+Direct ORM/programmatic commands and actual installed support/transport bindings remain coverage gaps.
 Do not reimplement completed timer/payment/renewal/OWNER/receiver source
 slices or repeat inventory/NL2 recovery. Keep paid-watch running; current NL scope is not working-service deployment
 permission. Independent current approval, coherent capture, off-laptop key/access custody
 and final combined recovery remain the same three partial HA-02 gates; replication PASS,
 no new lettered stage, HA-03 or cutover.
-[Implementation and next boundary](releases/2026-11-24-control-ha-installed-recovery.md#cache-and-selected-unit-qualification--supplementary-proof).
+[Implementation and next boundary](releases/2026-11-24-control-ha-installed-recovery.md#support-worker-admission--source-only).
 
 Owner-confirmed NL2 isolated retained-state recovery PASS14:12UTC, final cleanup/service
 checks PASS14:20UTC; source/reporte353ff85 pushed and verified. Wrong-key refusal,50 focused
