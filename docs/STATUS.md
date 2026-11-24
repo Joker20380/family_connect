@@ -1,5 +1,15 @@
 # Текущее состояние / Current state
 
+**24 November11:43UTC — OWNER image-loss cold bootstrap PASS.**
+Source2ea128afc147be1fc6725223f22ba2c4ddd5a0a8 is pushed and remote-SHA verified.
+Three exact images recover from encrypted custody without Docker/registry/working source;
+native console/publisher dependencies and PG17.11 synthetic restart/restore pass. Independent
+native authenticated readback passes11:45UTC.71 tests,0 skips. Original containers unchanged;
+owned processes stopped, no version/service change. This closes retained OWNER image
+availability, not bare-metal/off-site/full-state recovery. The same three HA-02 acceptance
+blocks remain partial: current trust, coherent capture and complete recovery; replication PASS.
+[Evidence, prerequisites and rollback](releases/2026-11-24-control-ha-installed-recovery.md#actual-owner-image-cold-bootstrap).
+
 **24 November11:10UTC — actual canonical/OWNER/legacy joint qualification PASS.**
 Source7b2fd1e1a42ac17b12f7b8709fca430a217dcf4a is pushed and remote-SHA verified.
 The native panel accepts69 devices/4 paid events;39-table post-ACK restore, duplicate

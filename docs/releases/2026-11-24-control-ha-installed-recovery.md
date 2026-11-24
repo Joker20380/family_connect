@@ -4,6 +4,35 @@ Authoritative implementation remains `/home/joker/.codex/worktrees/dad9/family_c
 on `feature/device-technical-metadata-20261115`, not this divergent old main.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## Actual OWNER image cold bootstrap
+
+Implementation `2ea128afc147be1fc6725223f22ba2c4ddd5a0a8` is pushed and remote-SHA verified;
+execution source `56559e414b655ed90e7c9c0e28cdd9d58c278515` was published before the accepted run.
+[Pinned image-custody report](https://github.com/Joker20380/family_connect/blob/2ea128afc147be1fc6725223f22ba2c4ddd5a0a8/docs/releases/2026-11-24-control-ha-image-custody.md#actual-execution--114357utc)
+records the archive/capsule/receipt hashes, native versions, failed attempts and rollback.
+
+- At11:43:57UTC all three exact linux/amd64 OWNER images recover from an encrypted private
+  archive containing59 blobs,48 unique layers/65 references, a pinned offline extractor and
+  two bootstrap sources. Key/checkpoint are separate; no private bytes are committed.
+- Native console/publisher dependency probes and PG17.11 synthetic restart/dump/restore pass
+  without Docker, registry, working source, original volumes or production entrypoints.
+  Python3.13.17/Django5.2.18/psycopg3.3.6/libpq180006 checks report zero dispatch.
+- At11:45:32UTC the restored image's own Python verifies/decrypts all four files in a fresh
+  contained process with separately supplied key/pins and exact byte readback.71 focused
+  tests pass,0 skips. At11:46:10UTC original OWNER container identities/start times/config/
+  image roots/mounts remain unchanged; all owned processes are stopped. No SSH/live service,
+  version, deployment, catalog or policy change occurs.
+
+This closes availability of retained OWNER image bytes independently of the working Docker
+daemon, not recovery from bare metal or loss of this laptop. Explicit host toolchain and
+off-machine custody requirements remain. The same three HA-02 blocks remain partial:
+actual current trust/approval workflow, coherent all-writer/in-flight capture, and complete
+final recovery with acknowledged-state/stale-copy checks. Replication PASS; no HA-03..05.
+
+Rollback requires no production action. Keep encrypted capsules and separate keys/checkpoints;
+remove only owned temporary resources. Source rollback is an ordinary revert. Preserve the
+owner's unrelated changes and do not force-push divergent old main to publish navigation.
+
 ## Actual canonical/OWNER/legacy integration
 
 Implementation `7b2fd1e1a42ac17b12f7b8709fca430a217dcf4a` is pushed and remote-SHA verified;

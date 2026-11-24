@@ -3,7 +3,15 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Current source7b2fd1e1 is pushed/remote-SHA verified. Actual canonical/OWNER/legacy integration
+Current source2ea128af is pushed/remote-SHA verified. Actual OWNER image cold bootstrap passes
+11:43UTC from encrypted custody without Docker, registry, working source or original volumes.
+Three native runtime probes and independent authenticated readback pass;71 tests,0 skips.
+Original containers unchanged; owned processes stopped. Do not repeat retained OWNER image
+availability as pending. Recovery-host/fleet dependency coverage and independent custody,
+coherent all-writer/dispatcher capture, actual approval workflow and final combined recovery
+remain in the same three partial HA-02 blocks. Replication PASS; no HA-03 or live cutover.
+[Current evidence](releases/2026-11-24-control-ha-installed-recovery.md#actual-owner-image-cold-bootstrap).
+Earlier source7b2fd1e1 is pushed/remote-SHA verified. Actual canonical/OWNER/legacy integration
 passes11:10UTC:69 devices/4 paid events,39-table post-ACK restore and pre-ACK refusal;
 103 real-PG tests,0 skips. Production untouched; synthetic/legacy identities stay separate.
 Do not repeat this completed panel-projection integration as pending or treat it as every
