@@ -141,8 +141,9 @@ The flag itself neither stops the services nor diagnoses RU's earlier outages or
 AWG, TCP, paid-watch and restricted-bootstrap are active/running immediately around the final
 observation, with no current job, ControlPID=0 and unchanged MainPID/invocation identities. This
 is not a VPN/data-plane test or a whole-fleet/current-time availability guarantee. All four still
-report NeedDaemonReload=yes. The existing capture lifecycle veto is **unchanged** and still refuses
-them; the new classifier never grants capture, changes a baseline or suppresses the warning.
+report NeedDaemonReload=yes. The existing three-unit transport lifecycle veto is **unchanged**;
+restricted-bootstrap is outside that helper's unit allowlist. The new classifier never grants
+capture, changes a baseline or suppresses the warning.
 
 ### Source review and validation
 
