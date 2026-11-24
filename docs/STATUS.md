@@ -1,16 +1,17 @@
 # Текущее состояние / Current state
 
-**24 November — AWG cleanup failure no longer skips owned-engine teardown; source only.**
-HA source444a51cb is pushed/remote-SHA verified. Every teardown stage is attempted despite
-network errors; failed graceful stop attempts kill/reap and still reports failure. Signal setup
-is inside the cleanup scope. Three regressions reproduced before the fix;17 new cases include
-real owned Python children and pending retained after failure/retry.169 focused PASS/1 skip;
-the exact skipped PostgreSQL case separately PASS on owned17.11, container cleanup verified.
-Four unrelated legacy packaging failures are documented; historical pins/guards are unchanged.
-No RU/NL access, working-service/deployment/version change. Paid-watch and asynchronous emergency
-stop remain unchanged. Next: installed AWG/systemd job/cgroup completion and gate/runtime bindings,
-collector/manual coverage, approved joint interval and independent approval/custody/final recovery.
-Replication PASS; three HA-02 gates partial. [Evidence, limits and rollback](releases/2026-11-24-control-ha-installed-recovery.md#awg-owned-engine-teardown--source-only).
+**24 November — systemd lifecycle veto qualified; no activation.**
+HA source3110aa0a is pushed/remote-SHA verified. Opt-in schema3 refuses guardian ACK for queued
+jobs, control processes, changed unit/process-tree identity and NeedDaemonReload.223 focused
+tests PASS/0 skips,43 new cases, including actual local user-systemd child/stop-post/ACK cases.
+An asynchronous stop returning zero or MainPID becoming zero is not completion. Unchanged
+running service passes; observations still do not fence uncooperative writers or permit capture.
+Read-only22:06UTC: AWG/TCP/paid-watch active/running on both NL hosts; NL1 snapshots stable,
+NL2 all three units refuse on NeedDaemonReload=yes. No reload, service/deployment/version change.
+Installed gateway differs from candidate; earlier cleanup is not asserted to be deployed.
+Next: diagnose NL2 loaded/disk mismatch read-only, finish writer/lifecycle/collector/manual
+bindings and explicit activation proposal, then approved joint interval and independent custody/
+final recovery. Replication PASS; three HA-02 gates partial. [Evidence and rollback](releases/2026-11-24-control-ha-installed-recovery.md#systemd-lifecycle-veto--no-activation).
 
 **24 November — selected NL service environments match; diagnostic hook tested in isolation.**
 HA sourced76df5cf is pushed/remote-SHA verified. Read-only21:35:59–21:36:00UTC checks match three

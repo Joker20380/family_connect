@@ -6,6 +6,57 @@ divergence is reconciled/pushed at2ae5c512; older publication-blocker statements
 historical, not active instructions or a current blocker.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## Systemd lifecycle veto — no activation
+
+[Authoritative implementation, native tests, installed observations and rollback](https://github.com/Joker20380/family_connect/blob/3110aa0ab7feffc6e2d24e7dbb3be0afa8527b72/docs/releases/2026-11-24-control-ha-systemd-lifecycle.md)
+are pushed/remote-SHA verified at3110aa0ab7feffc6e2d24e7dbb3be0afa8527b72. Main remains navigation
+only. No RU access, production service dispatch/start/stop/reload, unit/key/environment change,
+product database access, deployment, signing, release tag or public artifact update. Client/build/
+installed/public-installer/catalog/invitation versions remain unchanged. Native lifecycle tests
+use only random owned local user-systemd services, never gateway or neighbouring services.
+
+Schema3 bindings add an optional approved unit/invocation/recursive process-tree snapshot veto.
+Before DRAINED and HELD the guardian refuses queued jobs, nonzero ControlPID, lifecycle/cgroup/
+PID/executable drift, failure results and NeedDaemonReload. Source closure includes the new helper;
+old schemas remain compatible without implicit activation. Bus calls are read-only with bounded
+queries and a0.75s shared verification budget; existing drain/hold/watchdog limits are unchanged.
+This is not a systemd admission lock, all-writer fence or proof of idle workers/network settlement.
+Endpoint matching cannot exclude all transient writes. Local receipt still says capture is not
+permitted. Emergency asynchronous stop and paid-watch behavior remain unchanged.
+
+**223 focused tests PASS/0 skips /27.35s**,43 new cases;27 installed lockfile package versions match.
+Actual systemd259.5/Python3.14.4 tests show: unchanged running service passes; zero-exit asynchronous
+stop still leaves an owned child and cannot obtain final guardian ACK; MainPID=0 during stop-post
+still leaves ControlPID/job and is not completion. Disposable units and owned children are gone.
+Existing gate/guardian/renewal settlement tests pass. An initial wrong test filename collected no
+tests; the corrected full selection is documented. Prior unrelated legacy packaging/announcement
+failures and GUI limits remain separate; no historical pins were weakened. Feature documentation:
+4 files/1069 link targets/zero errors; whitespace PASS. No external artifact verification implied.
+Main navigation:3 files/699 link targets/zero errors; whitespace PASS.
+
+Read-only NL1 observation22:06:44.576–22:06:45.031UTC and NL2 observation22:06:45.783–22:06:45.911UTC
+find AWG/TCP/paid-watch active/running, Result=success, no current Job and ControlPID=0 on both.
+NL1's two snapshots per unit match; NL2 refuses all three because NeedDaemonReload=yes. Both
+expose KillMode=control-group/TimeoutStopUSec=5s. No reload or installed teardown experiment is
+performed. The reload flag's underlying cause remains unresolved; it does not explain earlier
+RU failures by itself. This is not a data-plane, whole-fleet or present-time availability claim.
+Installed gateway source on both hosts hashes69f32dbfdf0db5f57fb598d58935b5f2b098e53d0c0e2ac24517ad299ced26bf,
+not the candidatebe41604367998baf159f50c799cda35b7a00e3b76ab85c1737b32a17f8ce8402. Source fixes are
+not silently reported as installed. Exact observer/capsule hashes and private evidence location
+are in the authoritative report; no state, raw command lines or binaries are committed.
+
+Next: diagnose NL2 loaded/disk mismatch read-only, finish actual writer/lifecycle/collector/manual
+bindings and the explicit candidate/rollback/activation proposal, then approved coherent interval
+and independent current-input approval/custody/final recovery. Replication PASS in isolation;
+the same three HA-02 gates remain partial. No new stage, percentage or unsupported calendar estimate.
+Do not repeat queued-stop/stop-post or owned-child cleanup as additional gates. Working-NL
+activation remains outside current scope; never stop paid-watch or bypass the veto for a green result.
+
+Rollback: none on production because nothing is activated. Revert source/configuration before
+future approved build if needed; for an activated candidate abort capture first, keep pending
+markers/private evidence and restore the explicitly approved prior package/binding. Do not erase
+uncertainty, regenerate approval digests opportunistically or change product state/emergency SSH.
+
 ## AWG owned-engine teardown — source only
 
 [Authoritative fix, regression cases, evidence and rollback](https://github.com/Joker20380/family_connect/blob/444a51cb0c738ec0733ef67704b661aed188ed41/docs/releases/2026-11-24-control-ha-awg-cleanup.md)

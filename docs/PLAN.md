@@ -11,20 +11,20 @@ remains selected; this publication task does not advance its acceptance gates.
 [Reconciliation record](releases/2026-11-24-source-reconciliation.md).
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Feature444a51cb is pushed/remote-SHA verified. AWG network cleanup errors no longer skip
-owned-engine termination/reap or later interface deletion. Failed graceful stop attempts kill/
-bounded reap and still raises; signal setup failure is covered.17 new cases include real owned
-Python children and pending retained through retry.169 focused PASS/1 skip; that exact PostgreSQL
-case separately PASS on owned17.11, container removed. Four earlier legacy package failures
-remain, with no input-pin/guard changes. No RU/NL access, working-service, deployment or version
-change. Emergency `--no-block` stop and paid-watch policy are unchanged; no installed admission.
-[Source fix, tests, limitations and rollback](releases/2026-11-24-control-ha-installed-recovery.md#awg-owned-engine-teardown--source-only).
-Next selected work: installed AWG/systemd queued-job/cgroup completion and gate/runtime bindings,
-collector/manual coverage and concrete independently approved joint activation/capture proposal;
-actual coherent interval and independent current-input approval/custody/final recovery follow.
-Owned-child exit does not prove kernel/network/cgroup settlement. Replication PASS; the same three
-gates partial, not a new stage or calendar estimate. Working-NL deployment remains outside scope.
-Keep strict NL1 inventory refusal and unexplained NL2 reload marker visible; no bypass/reload.
+Feature3110aa0a is pushed/remote-SHA verified. Optional schema3 lifecycle veto checks approved
+running unit/process-tree identity before guardian DRAINED/HELD; queued jobs, control processes,
+drift and NeedDaemonReload refuse ACK.223 focused PASS/0 skips,43 new cases, with real local
+user-systemd asynchronous stop/stop-post qualification. Existing schemas and gate limits stay.
+[Source, tests, observations and rollback](releases/2026-11-24-control-ha-installed-recovery.md#systemd-lifecycle-veto--no-activation).
+Read-only22:06UTC: both NL transport sets active/running. NL1 observations stable; NL2 all three
+units refuse on NeedDaemonReload=yes. Installed gateway differs from candidate; nothing deployed.
+Next selected work: read-only NL2 loaded/disk diagnosis, actual writer/lifecycle/collector/manual
+bindings and explicit joint activation proposal, then coherent interval and independent current
+inputs/custody/final recovery. Do not repeat completed queued-stop/owned-child qualification as new
+gates. Lifecycle observations veto unsafe receipts but do not fence uncooperative writers.
+Emergency `--no-block`, paid-watch and working services unchanged; no reload or version change.
+Replication PASS; three original gates partial, no new stage/ETA. Working-NL deployment remains
+outside scope; existing inventory, packaging and announcement limits are not silently cleared.
 Do not repeat AWG owned-child cleanup, environment/hook checks, reader cleanup, support admission, cache/runtime census,
 source-chain/lock stand, SSH census or wrapper bridge as new acceptance work. Original four
 acceptance gates are fixed; prior1–2/2–4 day estimates are withdrawn, not a rolling deadline.
