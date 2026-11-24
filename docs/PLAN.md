@@ -8,6 +8,9 @@ pass closed graph/layer checks;69 focused tests pass. Encrypted offline packagin
 standalone cold bootstrap are prepared, not yet qualified on the actual archive. Next execute
 the restored probes with no Docker/source/production mounts. This is inside the existing
 complete-recovery block, not another stage or permission to begin HA-03.
+First actual cold attempt refuses before native execution on absent resolver metadata;
+synthetic namespace files correct this without host DNS access.70 focused tests pass;
+rerun from a newly pinned capsule, preserving the first attempt as failed evidence.
 [Preparation, prerequisites and rollback](releases/2026-11-24-control-ha-image-custody.md).
 
 Actual canonical/OWNER/legacy joint qualification passes11:10:32UTC: native ingestion of69

@@ -170,12 +170,24 @@ def test_restore_refuses_symlink_parent(capsule, tmp_path):
 
 @pytest.mark.parametrize('role', ('console', 'postgres', 'system_publisher'))
 def test_cold_probe_has_no_host_runtime_docker_or_source_mount(role):
-    command = cold.native_command(Path('/private/rootfs'), Path('/private/scratch'), role)
+    command = cold.native_command(Path('/private/rootfs'), Path('/private/scratch'), role, Path('/private/synthetic-passwd'))
     assert all(flag in command for flag in ('--unshare-all', '--die-with-parent', '--new-session', '--clearenv', '--cap-drop'))
     assert command[command.index('--ro-bind')+1:command.index('--ro-bind')+3] == ['/private/rootfs', '/']
     assert command[command.index('--bind')+1:command.index('--bind')+3] == ['/private/scratch', '/tmp/fc-work']
     assert all(value not in command for value in ('/var/run/docker.sock', '/home', '/usr', '--share-net'))
     assert not any('entrypoint.sh' in value or 'gunicorn' in value for value in command)
+    position = command.index('/etc/passwd')
+    assert command[position-2:position] == ['--ro-bind', '/private/synthetic-passwd']
+
+
+def test_extractor_uses_only_synthetic_network_configuration():
+    command = cold.extract_command(Path('/private/umoci'), Path('/private/oci'), Path('/private/bundle'), Path('/private/empty-etc'))
+    assert '--unshare-all' in command and '--share-net' not in command
+    position = command.index('/etc')
+    assert command[position-2:position] == ['--ro-bind', '/private/empty-etc']
+    assert command.count('--bind') == 1
+    assert command[command.index('--bind')+1:command.index('--bind')+3] == ['/private/bundle', '/bundle']
+    assert '/etc/resolv.conf' not in command and '/var/run/docker.sock' not in command
 
 
 def test_bootstrap_deadline_reports_no_private_command(monkeypatch, tmp_path):

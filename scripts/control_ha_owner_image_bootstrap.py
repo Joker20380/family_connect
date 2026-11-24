@@ -78,10 +78,17 @@ def namespace():
             '--cap-drop', 'ALL']
 
 
-def native_command(rootfs, work, role):
+def extract_command(binary, layout, bundle, empty_etc):
+    return namespace() + ['--ro-bind', '/usr', '/usr', '--symlink', 'usr/lib', '/lib', '--symlink', 'usr/lib64', '/lib64',
+        '--symlink', 'usr/bin', '/bin', '--ro-bind', str(empty_etc), '/etc', '--ro-bind', str(binary), '/umoci',
+        '--ro-bind', str(layout), '/oci', '--bind', str(bundle), '/bundle', '--tmpfs', '/tmp', '--proc', '/proc',
+        '--dev', '/dev', '--setenv', 'PATH', '/usr/bin:/bin', '/umoci', 'unpack', '--rootless', '--image', '/oci:ha-offline', '/bundle/image']
+
+
+def native_command(rootfs, work, role, identity):
     images.require(role in images.IMAGES, 'COLD_ROLE')
     command = namespace() + ['--ro-bind', str(rootfs), '/', '--tmpfs', '/tmp', '--bind', str(work), '/tmp/fc-work',
-        '--proc', '/proc', '--dev', '/dev', '--setenv', 'PATH', '/usr/local/bin:/usr/bin:/bin',
+        '--ro-bind', str(identity), '/etc/passwd', '--proc', '/proc', '--dev', '/dev', '--setenv', 'PATH', '/usr/local/bin:/usr/bin:/bin',
         '--setenv', 'HOME', '/tmp/fc-work', '--setenv', 'LC_ALL', 'C']
     if role == 'postgres':
         return command + ['--chdir', '/tmp/fc-work', '/bin/sh', '-c', POSTGRES_PROBE]
@@ -106,6 +113,12 @@ def bootstrap(source, destination):
     run(['/usr/bin/dpkg-deb', '-x', str(source / 'umoci.deb'), str(tool)], destination, 'unpack-tool')
     binary = tool / 'usr/bin/umoci'
     images.require(images.digest(binary.read_bytes()) == images.TOOL_BINARY_SHA, 'TOOL_BINARY_PIN')
+    empty_etc = destination / 'empty-etc'
+    empty_etc.mkdir(mode=0o700)
+    for name in ('resolv.conf', 'hosts', 'hostname'):
+        images.private_file(empty_etc / name, b'')
+    identity = destination / 'synthetic-passwd'
+    images.private_file(identity, f'recovery:x:{os.getuid()}:{os.getgid()}:offline probe:/tmp/fc-work:/bin/sh\n'.encode())
     receipts = {}
     for role, value in checked['roles'].items():
         role_root = destination / role
@@ -130,12 +143,8 @@ def bootstrap(source, destination):
             images.private_file(normalized_path, normalized_raw)
         images.private_file(layout / 'index.json', images.encoded(dict(schemaVersion=2, manifests=[selected])))
         images.private_file(layout / 'oci-layout', images.encoded(dict(imageLayoutVersion='1.0.0')))
-        command = namespace() + ['--ro-bind', '/usr', '/usr', '--symlink', 'usr/lib', '/lib', '--symlink', 'usr/lib64', '/lib64',
-            '--symlink', 'usr/bin', '/bin', '--ro-bind', str(binary), '/umoci', '--ro-bind', str(layout), '/oci',
-            '--bind', str(bundle), '/bundle', '--tmpfs', '/tmp', '--proc', '/proc', '--dev', '/dev',
-            '--setenv', 'PATH', '/usr/bin:/bin', '/umoci', 'unpack', '--rootless', '--image', '/oci:ha-offline', '/bundle/image']
-        run(command, role_root, 'unpack-image')
-        output = run(native_command(bundle / 'image/rootfs', work, role), role_root, 'native-probe')
+        run(extract_command(binary, layout, bundle, empty_etc), role_root, 'unpack-image')
+        output = run(native_command(bundle / 'image/rootfs', work, role, identity), role_root, 'native-probe')
         if role == 'postgres':
             lines = output.decode().splitlines()
             images.require(len(lines) == 2 and lines[0] == 'POSTGRES_COLD_RESTORE_PASS' and

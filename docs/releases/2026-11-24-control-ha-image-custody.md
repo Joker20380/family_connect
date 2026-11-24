@@ -46,6 +46,14 @@ Preparation checks:69 tests PASS,0 skips, covering custody tampering/framing/pat
 strict role/platform pins, extraction boundaries and the existing OWNER runtime contract.
 Actual encrypted handoff/cold execution is pending; no cold result is inferred from unit tests.
 
+The first actual encrypted handoff restores all four files exactly, but umoci refuses before
+native execution: its rootless config needs `/etc/resolv.conf` mount metadata in the empty
+namespace. Original OWNER containers are unchanged. The correction provides empty synthetic
+resolver/hosts/hostname files, never host DNS configuration; native probes also get a fresh
+synthetic passwd entry for the caller's nonroot UID, not the host account database.70 focused
+tests pass. Preserve the failed capsule/receipt; the corrected cold run needs a new external
+source/ciphertext checkpoint and is still pending at this correction checkpoint.
+
 ## Prerequisites and fixed remainder
 
 Recovery host requirements remain explicit: Linux amd64, working unprivileged user/PID/network
