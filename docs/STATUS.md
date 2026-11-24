@@ -1,19 +1,20 @@
 # Текущее состояние / Current state
 
-**24 November UTC — OWNER build-context defect fixed; actual image qualified in isolation.**
-The normal preparation omitted control/capture_gate.py although Dockerfile and manage.py need
-it. Four new regressions reproduce the missing-file/import failures; the explicit allowlist now
-includes that file without broadening private-state access.40 focused tests PASS/0 skips.
-The actual272-file prepared context builds image4392d4b7; two networkless/read-only disposable
-probes at UID10001/1000 pass on Python3.13.17, with18 locked packages and10 selected source hashes
-matching. Installed OWNER container/config bindings remain unchanged; no replacement or RU/NL
-access. [Build proof, limitations and rollback](releases/2026-11-24-control-ha-owner-prepared-build.md).
-Earlier [collector launch bindings and rollback packages](releases/2026-11-24-control-ha-collector-binding.md)
-remain valid observations, not installations. Next: actual OWNER candidate/runtime/config approval
-and the existing RU/NL/manual/transport bindings, then approved coherent capture and independent
-custody/final recovery. This image does not inherit the earlier activation/revert acceptance;
-working-NL changes remain unauthorized. Replication PASS; same three gates partial. Do not
-repeat the completed build, collector packaging or NL2 diagnosis as new gates.
+**24 November UTC — exact private OWNER configuration proposal prepared and verified.**
+At23:28:36.972–23:28:37.182UTC the actual two container/config/identity bindings are unchanged.
+The offline plan permits only role image plus one gate environment assignment and separate bind;
+all other configuration and rollback prestate are retained exactly. Named volume binding is
+preserved, not converted to a host directory.159 focused tests PASS/0 skips,64 new cases.
+The retained plan verifies offline at23:30:34UTC; it is not executable, approved or installed.
+Existing overlaysb62e6693/2162635c satisfy original image config/layer preservation; normal-build
+image4392d4b7 is correctly refused as that minimal overlay. No service/RU/NL/version change.
+[Exact proposal, hashes and rollback limits](releases/2026-11-24-control-ha-owner-activation-plan.md).
+Next: independent candidate/config acceptance and actual durable gate/namespace/guardian bindings,
+settlement of existing OWNER work and remaining RU/NL/manual/transport coverage, then approved
+coherent capture and independent custody/final recovery. No gate paths were created; network
+endpoint snapshots are evidence, not recreation instructions. Working-NL changes remain outside
+scope. Replication PASS; same three gates partial. Do not repeat completed config-plan, build,
+collector packaging or NL2 diagnosis slices as new gates.
 
 At the preceding collector-admission checkpoint:
 **24 November — standalone OWNER collectors admitted in source; activation proposal recorded.**

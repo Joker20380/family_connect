@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 24 November UTC: exact private OWNER configuration/rollback proposal;159 tests, current bindings preserved, no deployment](releases/2026-11-24-control-ha-owner-activation-plan.md).
+
 [CONTROL-HA · 24 November UTC: normal OWNER build context repaired;40 tests and two isolated UID image probes, no installed changes](releases/2026-11-24-control-ha-owner-prepared-build.md).
 
 [CONTROL-HA · 24 November: actual split collector roots identified; two pinned source candidates with rollback preimages,33 package tests, no timer/source installation](releases/2026-11-24-control-ha-collector-binding.md).

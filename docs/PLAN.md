@@ -3,18 +3,19 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Normal OWNER preparation now includes the shared capture module required by Dockerfile/manage.py;
-previously the prepared context could neither satisfy COPY nor import the management entrypoint.
-40 focused tests PASS/0 skips; actual272-file context builds image4392d4b7 and two isolated native
-UID10001/1000 probes pass. Installed OWNER bindings unchanged; no deployment or version change.
-[Exact build, image checks and rollback boundary](releases/2026-11-24-control-ha-owner-prepared-build.md).
-Next selected work: actual OWNER candidate/runtime/config approval and the existing RU/NL/manual/
-transport bindings and activation scope, then coherent interval and independent custody/recovery.
-The image is not an approved replacement; earlier activation/revert evidence is image-specific.
-[Workstation rollback packages](releases/2026-11-24-control-ha-collector-binding.md) remain uninstalled;
-preserve original source/data roots and known-hosts override. No blind overlay or relocation.
-Working-NL changes remain outside permission. Replication PASS; same three gates partial.
-Do not repeat the completed build, collector packaging/admission or NL2 diagnosis as gates.
+Actual OWNER configuration delta is now materialized privately, not just described:23:28:37UTC
+same running identities/configuration; only image, gate assignment and separate gate bind may
+change. Original private configuration/rollback and named-volume bindings are preserved.159 tests
+PASS/0 skips,64 new cases; retained plan verifies without writes. No installation/version change.
+[Exact proposal, verification and rollback](releases/2026-11-24-control-ha-owner-activation-plan.md).
+The prior role overlaysb62e6693/2162635c meet config/layer preservation. Normal-build4392d4b7 does
+not preserve the original layer prefix and is refused for this minimal-delta route; its build
+proof remains valid, not deployment approval. Next: independent candidate/config acceptance,
+actual durable gate/namespace/guardian bindings and existing-work settlement, remaining RU/NL/
+manual/transport coverage, then approved coherent interval and independent custody/recovery.
+No executable recreation payload or gate directories are produced. Workstation packages remain
+uninstalled; working-NL changes outside permission. Replication PASS; same three gates partial.
+Do not repeat completed config-plan/build/collector/NL2-diagnosis slices as new gates.
 
 At the preceding collector-admission checkpoint:
 Standalone OWNER collector admission is implemented: complete inventory/probe cycles, manual

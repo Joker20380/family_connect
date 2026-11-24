@@ -20,6 +20,20 @@ network probe — основной checkout. Оба пока без устано
 поведение прежнее. Прямые ORM/SQL/SSH/Docker-записи не становятся защищёнными автоматически.
 [Матрица подключения, проверки, ограничения и откат](../docs/releases/2026-11-24-control-ha-collector-admission.md).
 
+## HA-02 · приватный план конфигурации OWNER, без установки
+
+`python -m scripts.control_ha_owner_activation_plan` строит и повторно проверяет приватный
+план по закреплённым SHA256 входам. Разрешённая разница: точный образ роли, одна переменная
+gate и отдельный bind. Команды запуска, токены, существующие тома, настройки сети, защиты,
+healthcheck и restart остаются прежними. Именованный том не заменяется каталогом хоста.
+Вывод в терминал содержит только квитанцию; конфигурация и исходное состояние для отката
+остаются в файле0600 внутри каталога0700. `--verify` ничего не записывает.
+
+План не является Compose/Docker create payload, разрешением на замену контейнеров или
+доказательством завершения операций. Gate-каталоги не создаются. Старые runtime network IDs
+сохраняются как свидетельство исходного состояния, а не параметры пересоздания контейнера.
+[Фактический план, проверка и границы отката](../docs/releases/2026-11-24-control-ha-owner-activation-plan.md).
+
 ## Technical metadata · server path deployed; public Android release pending
 
 The accepted minimal metadata/HMAC-aware server and panel are installed. Corrected
