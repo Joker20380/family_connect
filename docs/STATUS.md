@@ -1,5 +1,21 @@
 # Текущее состояние / Current state
 
+**24 November — CONTROL-HA certificate-content delta checked; recovery remains BLOCKED.**
+Sourcecc4be524c6ece6e9852409fa79800978a8a44e55 pushed and independently remote-SHA
+verified on the metadata branch in `/home/joker/.codex/worktrees/dad9/family_connect`.
+Read-only fleet observation00:34:17–00:34:20UTC: RU API/both NL bootstrap active,
+current configs/material/publications match. Three removed baseline certificates are
+expired; one added certificate passes cryptographic/device/revision/time/CRL checks.
+Native all_activated policy, bound to recorded/current policy/config, permits an
+activated device without a persisted grant. No missing-row fallback or equality bypass.
+175 tests /0 skips and six source docs/966 links PASS. Consumed challenge, historical
+paid entitlement, original schedule approval and coherent current recovery are not
+established. Same selected journal task remains IN_PROGRESS, four stage2 blocks unchanged.
+No deployment/service/policy/DB/version change. Console5ce82415, RU HTTP4e2df679,
+NL GeoIP22 November, Android126/catalog9 and8/12/120s/all-three-node ACK unchanged.
+Old main remains navigation only; original work preserved.
+[Evidence, next gate and rollback](releases/2026-11-24-control-ha-certificate-delta.md).
+
 **24 November — CONTROL-HA actual current evidence; post-renewal DB binding still open.**
 Source1ecfda710e6f1142204a8a8a926a81ed8b0dd71d pushed/remote-SHA verified on the
 metadata branch in `/home/joker/.codex/worktrees/dad9/family_connect`.

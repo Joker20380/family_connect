@@ -173,9 +173,15 @@ actual fleet observation now binds installed configs/unit order to the current o
 observes active RU API/both NL bootstrap and matching issuer/material/publications.
 Four DB projections match, but certificates advanced after renewal: three expired
 baseline rows absent, one later-issued row present.112 focused tests /0 skips PASS.
-Continue the same task with a bounded post-renewal current-state contract and trusted
-original provenance; retain immutable baseline, independently qualify later certificate
-changes and coherent capture. Never restore old rows or add an equality bypass.
+Sourcecc4be524 pushed/remote-SHA verified:00:34:17–00:34:20UTC certificate-content
+diagnostic confirms three expired removals/one signed addition, bound current
+all_activated admission semantics and four unchanged DB projections.175 focused tests
+/0 skips and six source docs/966 links PASS. Content compatibility is not consumed-proof,
+paid-history or recovery authorization; strict five-table acceptance remains unchanged.
+Continue the same task with trusted original provenance and a coherent post-renewal
+current-state snapshot/recovery binding. Retain immutable baseline; never restore old
+rows, invent past approval or add an equality bypass.
+[Certificate-content evidence and remaining gate](releases/2026-11-24-control-ha-certificate-delta.md).
 No speculative next variant, permissive flag or deployment is selected. Stage2 completion is
 the joint PASS of four fixed blocks: journals (partial), schemas/writer barrier,
 full off-host/current-state recovery and strict replication/RPO0 (other three open).
