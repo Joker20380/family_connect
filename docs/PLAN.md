@@ -9,6 +9,10 @@ plan; no production PostgreSQL cutover. This supersedes the permission-pending s
 below, not the three open technical gates. Proceed with current installed writer scope,
 safe capture and independent restore; do not request the same permission again merely
 because the runbook contains a stop step. [Current execution record](releases/2026-11-24-control-ha-live-capture.md).
+First bounded operation: one-second zero-wait simultaneous RU four-store SQLite lock/capture,
+with automatic lock release and no paid-watch/VPN stop. Installed watchdog coupling rules
+out a generic stop-all barrier. Then qualify actual rows off-node while completing external
+file/forced-command/OWNER writer coverage; four-store capture alone does not close that gate.
 Latest owner scope24 November: “дальше. работай до завершения 2 этапа”. All four HA-02
 acceptance blocks are now selected; do not stop at another journal-only slice or start
 HA-03..05. The isolated replication gate passes with strict Patroni quorum, durable

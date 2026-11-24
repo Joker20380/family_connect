@@ -9,6 +9,12 @@ Fresh installed preflight and exact writer/barrier/recovery coverage are now bei
 no live acceptance is claimed from the authorization alone.
 [Execution boundary and evidence](releases/2026-11-24-control-ha-live-capture.md).
 
+Live preflight identifies a transport watchdog coupling: stopping/freezing paid-watch or
+holding registration locks too long can stop VPN transports. Neither action is taken.
+A separate one-second/zero-wait four-SQLite-store capture preserves rows without stopping
+services; its manifest explicitly excludes external files, fleet barrier and full DR.
+This is the next reviewed operation, not HA-02 acceptance or a production backend change.
+
 **24 November — encrypted handoff recovery path qualified offline.**
 The exact installed-schema profile now travels through the encrypted recovery bundle
 and independently signed portable forward archive, not only the standalone importer.
