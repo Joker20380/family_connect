@@ -1,5 +1,25 @@
 # 24 November 2026 — authorized bounded live capture
 
+## Mailbox authority custody
+
+Preparation: `scripts/control_ha_mailbox_custody.py` reuses the private external-file capsule
+and new-directory restore. All three installed source hashes (accept_membership, membership,
+server) match the repository; the service is active.52 focused checks PASS (10 new mailbox,
+42 existing file-custody cases): identity/bootstrap/volume mismatches, expired/duplicate
+members, unexpected source/scope, non-waiting contention and kernel deadline release.
+
+Reviewed plan: pin sources before acquiring the existing `.members.lock` with LOCK_NB;
+the250ms kernel SIGALRM bounds the entire lock/capture interval. Capture only nine named
+files: settings/bootstrap/members/node.identity, volume marker/RNS configuration and three
+source files. Verify source/file observations before release. Any contention, missing/link/
+changed source or invalid authority refuses; no retry loop, service stop or source write.
+The receiver continues running; the bounded lock excludes the reviewed forced membership
+writer, not arbitrary administrators or the RU chat dispatcher. No expired membership is
+refreshed, sequence floor reset or private message spool read/restored. Network listener,
+mounted runtime-volume reconstruction and delivery behavior are not qualified by this step.
+Rollback is descriptor release; all retained bytes remain off-node in private encrypted custody.
+Actual execution/readback is pending at this preparation checkpoint; HA-02 remains open.
+
 ## Actual node readback — 08:10UTC
 
 Actual collector source916894b5771a6d2a8aa6fd34107c93ef5058d9b0 was pushed before use.

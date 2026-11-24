@@ -1,5 +1,13 @@
 # Текущее состояние / Current state
 
+**24 November — mailbox authority capture preparation.**
+The installed NL1 membership/receiver sources match repository hashes. A separate bounded
+collector takes the existing membership lock without waiting, releases under250ms, and
+retains only9 authority/config/source files, not the message spool.52 focused checks PASS.
+No membership refresh, service stop/start, version or deployment change. Actual encrypted
+readback is the next selected mailbox check, not full HA-02 acceptance.
+[Scope and abort plan](releases/2026-11-24-control-ha-live-capture.md#mailbox-authority-custody).
+
 **24 November08:09:57–08:10:02UTC — actual node allocator/receiver custody PASS.**
 RU/NL1/NL2 encrypted captures restore24 files,82 allocated peers and207 cached decisions
 off-node. Local barriers40.119/36.184/5.020ms; observed service states/PIDs/counters unchanged.

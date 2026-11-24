@@ -3,6 +3,11 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+Mailbox authority capture is now prepared:9 fixed files, pinned installed sources,250ms
+non-waiting membership lock and52 focused checks PASS. Perform private encrypted readback
+and native replay-floor/expiry checks; do not restore the spool or activate the mailbox.
+[Scope](releases/2026-11-24-control-ha-live-capture.md#mailbox-authority-custody).
+
 Node-local slice completed08:10UTC:24 restored files,82 peers,207 decisions; native duplicate,
 terminal-denial, lease-clock and next-allocation checks pass without activation.94 focused
 checks PASS; actual barriers40.119/36.184/5.020ms, observed services unchanged. Do not repeat
