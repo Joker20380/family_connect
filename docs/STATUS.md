@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+**24 November — remaining SSH command bindings observed; manual dispatch is not fenced.**
+18:18:48–18:18:51UTC read-only RU/NL1/NL2 observations cover14 explicit accounts and four
+named source contexts, twice. On-disk default sshd projections have no ForceCommand;
+root has2/1/1 configured keys without per-key commands. Both restricted-account commands
+are now included. No raw keys/commands exported, no SSH/product changes or forced dispatch.
+112 tests PASS/0 skips. This is on-disk policy, not loaded-daemon attestation or login testing;
+NL password-policy flags do not prove usable passwords. All capture permits remain false.
+Next: exact installed receiver-source bindings, an explicit bounded manual-write/deployment
+pause retaining recovery SSH, independent external settlement and real flush/capture latency.
+Do not remove owner keys or repeat this census as writer closure. OWNER candidates remain
+local/unapproved/uninstalled; no version/deployment change. Replication PASS, three HA-02
+blocks partial. [Observed routes, limits and completion gate](releases/2026-11-24-control-ha-ssh-binding.md).
+
 **24 November — OWNER replacement images and data-preserving revert qualified in isolation.**
 Exact installed console/publisher commands, users10001/1000 and working directories pass
 old image → admission candidate → old image on disposable PostgreSQL/synthetic SQLite.

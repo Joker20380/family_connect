@@ -3,6 +3,20 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+The remaining SSH key/policy projection is now observed on RU/NL1/NL2 at18:18:48–18:18:51UTC:
+14 accounts, four named contexts, two equal samples; root has2/1/1 keys without per-key
+commands and no on-disk ForceCommand overrides them. Both restricted-account commands are
+included.112 focused tests PASS/0 skips, no service/SSH/key edits or forced-command dispatch.
+Loaded-daemon policy and exact installed receiver sources remain unattested; this is not a fence.
+[Actual SSH bindings and operational decision](releases/2026-11-24-control-ha-ssh-binding.md).
+Next selected work: bind those installed receiver sources to the existing launcher and establish
+the explicit bounded manual product-write/deployment pause without removing recovery SSH;
+independently settle external work and qualify real latency before the overlapping capture.
+Do not repeat the scoped SSH observation or invent a root-key removal requirement. Independent
+candidate/config approval, current checkpoint/key custody and final recovery remain required.
+Replication PASS; the same three HA-02 gates remain partial. No working-service deployment.
+
+At the preceding OWNER image checkpoint:
 OWNER image activation/revert is now qualified on disposable state using the exact installed
 commands, configured users and working directories. Two source-only overlay images preserve
 base runtime config/dependency layers; acknowledged PG/SQLite writes, migration set and durable

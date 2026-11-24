@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 24 November: read-only RU/NL1/NL2 SSH policy/key bindings, explicit unfenced root routes and bounded manual-write prerequisite;112 tests, no SSH/service changes](releases/2026-11-24-control-ha-ssh-binding.md).
+
 [CONTROL-HA · 24 November: two source-only OWNER image candidates, exact-command isolated activation/revert, PG/SQLite post-upgrade writes preserved;161 tests, no production deployment](releases/2026-11-24-control-ha-owner-upgrade.md).
 
 [CONTROL-HA · 24 November: installed OWNER source/dispatch binding, missing admission modules and exact candidate mismatch;108 tests, GET-only observation, no enablement](releases/2026-11-24-control-ha-owner-source-binding.md).
