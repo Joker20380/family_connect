@@ -1,13 +1,16 @@
 # Текущее состояние / Current state
 
-**24 November — canonical/OWNER/legacy joint qualification prepared.**
-Read-only census confirms69 canonical,50 synthetic and4 legacy key identities are disjoint;
-OWNER aliases/HMAC exactly bind to canonical custody. The prepared native OWNER importer
-probe uses a private network-none PG restore and fresh lab credentials, never the running
-panel or dispatchers. Actual39-table baseline restore passes; native ingest reaches the
-lab-only300s deadline. The bounded deadline is corrected to900s without dropping any scan;
-final ingestion/current/stale qualification remains pending. Source/image custody, coherent
-all-writer capture and independent trust remain. [Scope and fixed remainder](releases/2026-11-24-control-ha-owner-joint.md).
+**24 November11:10:32UTC — actual canonical/OWNER/legacy joint qualification PASS.**
+The native panel accepts69 canonical devices/4 paid events on an isolated restore of its
+39-table database (1,907,455 retained source rows +3 consent floors). Only snapshot/audit
+tables change. Duplicate ingestion is unchanged; conflicting history/wrong alias generation
+are refused. Fresh post-ACK restore preserves every table fingerprint; the pre-ACK copy is
+refused against the LAB readback.50 synthetic and4 legacy identities remain separate;
+native legacy retry/expiry checks pass without dispatch.103 focused real-PG tests PASS,
+0 skips. Owned resources removed; original OWNER containers, capsules and versions unchanged.
+HA-02 still has three partial acceptance blocks: current trust, coherent all-writer capture
+and complete machine-loss/final recovery. Replication is PASS, not production activation.
+[Actual evidence, rollback and fixed remainder](releases/2026-11-24-control-ha-owner-joint.md#actual-execution--111032utc).
 
 **24 November09:57:21UTC — actual canonical/three-receiver integration PASS.**
 All207 original-timestamp PostgreSQL decisions match RU/NL1/NL2 caches and82 allocator
@@ -15,7 +18,7 @@ bindings, including the NL2 sequence gap. Fresh restore repeats parity; a labora
 revocation survives receiver reconstruction and post-ACK PG restore, while refreshed old
 allow, stale dump and old import are refused.109 real-PG tests PASS,0 skips. Original
 capsules/OWNER containers unchanged; owned resources removed, no service/version change.
-Next: worker/OWNER joint integration, coherent all-writer/dispatcher capture, machine-loss
+At that checkpoint, next scope was worker/OWNER joint integration, coherent all-writer/dispatcher capture, machine-loss
 dependencies and independent trust. [Actual evidence and rollback](releases/2026-11-24-control-ha-joint-nodes.md#actual-execution--095721utc).
 
 **24 November09:37:05UTC — actual native canonical PG recovery PASS.**

@@ -244,11 +244,20 @@ gateway leaf/private keys и независимое off-host custody всё ещ
 новыми буквенными этапами: current inputs/trust, coherent capture и complete recovery.
 [Совместная OWNER/legacy проверка и фиксированный остаток](releases/2026-11-24-control-ha-owner-joint.md#fixed-remainder-of-stage-2).
 
+Совместная canonical/OWNER/legacy проверка PASS11:10:32UTC: штатный importer панели
+принимает69 устройств/4 события на изолированной39-табличной БД; повтор ничего не меняет,
+конфликт истории/неверная alias generation отвергнуты. Новый ACK переживает восстановление
+со сверкой всех39 таблиц; pre-ACK копия распознаётся и отвергается по LAB readback.
+50 synthetic и4 legacy identities не смешиваются с canonical; worker retry/expiry PASS
+без dispatch.103 real-PG tests,0 skips; рабочие контейнеры/версии не менялись.
+Это закрывает совместную проверку проекции панели, не всех OWNER writers или весь HA-02.
+[Фактические evidence и rollback](releases/2026-11-24-control-ha-owner-joint.md#actual-execution--111032utc).
+
 Совместная проверка canonical PostgreSQL → три receiver/allocator PASS09:57:21UTC:
 207 совпавших решений/82 peer bindings, сохранённый sequence gap, лабораторный revoke
 после нового ACK переживает restore; old allow/stale dump отвергнуты.109 real-PG tests,
-0 skips. Это не общий writer fence и не продление leases. Открыты worker/OWNER integration,
-coherent capture, machine-loss dependencies и independent trust.
+0 skips. Это не общий writer fence и не продление leases. После совместной OWNER проверки
+открыты coherent capture, machine-loss dependencies и independent trust.
 [Фактические результаты и rollback](releases/2026-11-24-control-ha-joint-nodes.md#actual-execution--095721utc).
 
 На24 ноября календарный срок не подтверждён: журнальный блок, установленный capture
@@ -260,8 +269,8 @@ coherent capture, machine-loss dependencies и independent trust.
 | Блок | Условие закрытия | Состояние |
 | --- | --- | --- |
 | Журналы | Проверены фактические текущие inputs и основание доверия: исходное разрешение для старого пути либо отдельное явное разрешение на новый текущий checkpoint; legacy bytes сохранены без исполнения/выдуманной истории | Частично: opaque custody, signed forward contract и семантика обеих публикаций проверены offline; фактические authorization/source/capture bindings и coherent current-state recovery ещё не приняты |
-| Схемы и writers | Сверены установленные схемы и все реальные writers/CLI/timers; получен согласованный cross-store снимок с проверяемым барьером, без смешанных писателей | Новый RU SQLite barrier52.099ms:34 таблицы/610 строк;9,660 стабильных file/directory observations трёх узлов охватывают эту точку. Metadata — consent/replay floors без наблюдений. Это не полный writer fence; receiver/worker/OWNER coverage открыто |
-| Полное восстановление | Все обязательные stores/files/ключи/checkpoints сохранены вне исходного узла; после новых подтверждённых записей выполнено изолированное восстановление актуального состояния и проверены rollback/отказ от старой копии | Восстановлены4 SQLite,8,731 внешних файлов и отдельно OWNER PG:37 retained-data tables/1,907,455 rows +3 consent floors. Source/key/profile/CRL/routing/current-history checks PASS; старый SQLite checkpoint отвергнут. Полный receiver/worker/panel-runtime recovery, единый writer fence и native-format integration ещё не квалифицированы |
+| Схемы и writers | Сверены установленные схемы и все реальные writers/CLI/timers; получен согласованный cross-store снимок с проверяемым барьером, без смешанных писателей | Локальные canonical/node/mailbox/worker/OWNER runtime барьеры и native-format integration проверены; OWNER PG отдельно восстановлен.34 canonical source tables/610 строк,69/50/4 раздельных identity namespaces, metadata только consent/replay floors. Разные точки времени не заменяют единый all-writer/in-flight dispatcher fence; manual/forced-command/OWNER writer coverage и согласованная PG/synthetic/canonical capture остаются открыты |
+| Полное восстановление | Все обязательные stores/files/ключи/checkpoints сохранены вне исходного узла; после новых подтверждённых записей выполнено изолированное восстановление актуального состояния и проверены rollback/отказ от старой копии | Native49-table canonical и three-node parity/revoke recovery PASS; node/mailbox/legacy-worker/OWNER runtime custody PASS. Совместный native OWNER importer принимает69 устройств/4 события; новый ACK сохранён при39-table restore, pre-ACK копия отвергнута;1,907,455 source rows и3 consent floors проверены. Полный machine-loss source/image/dependency комплект и единый финальный restore из согласованного независимо одобренного checkpoint ещё не квалифицированы |
 | Репликация | Стенд PostgreSQL/Patroni выдерживает потерю/возврат primary и кворума; без кворума записи запрещены, подтверждённые события не теряются (RPO0) | PASS в изолированном стенде: strict synchronous quorum, потеря/возврат primary, DCS minority/majority, запрет записи после истечения lease, блокировка без реплик; отменённый sync COMMIT не выдаёт ложный ACK. Не production/WAN qualification |
 
 Дополнение08:10UTC: фактический node-local capture/recovery завершён на RU/NL1/NL2:

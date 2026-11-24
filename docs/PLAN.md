@@ -3,20 +3,22 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Current action: canonical/OWNER/legacy joint qualification on isolated restored copies.
-Do not merge69 canonical,50 synthetic and4 legacy identities. Verify native panel ingestion,
-new owner ACK/current restore/stale refusal and unchanged unrelated tables, without dispatch.
+Actual canonical/OWNER/legacy joint qualification passes11:10:32UTC: native ingestion of69
+devices/4 paid events, exact39-table post-ACK restore, duplicate/conflict/generation checks
+and stale-copy refusal.50 synthetic and4 legacy identities stay separate; native worker
+retry/expiry checks pass without dispatch.103 focused real-PG tests,0 skips. Production untouched.
+Do not repeat this completed panel-projection integration as pending recovery or treat it as
+qualification of every OWNER writer. Remaining selected scope: machine-loss source/image
+dependencies, coherent all-writer/in-flight dispatcher capture and independently approved trust.
 The fixed stage2 remainder is three partial acceptance blocks, not new lettered stages:
 inputs/trust, coherent all-writer capture and complete final recovery; replication is PASS.
-Actual baseline39-table restore passes; continue from its verified private pre-ACK dump
-after correcting the lab scan deadline. A timed-out ingestion is not an acceptance PASS.
-[Bounded execution, rollback and exact remainder](releases/2026-11-24-control-ha-owner-joint.md).
+[Actual execution, rollback and exact remainder](releases/2026-11-24-control-ha-owner-joint.md#actual-execution--111032utc).
 
 Actual canonical-to-three-node integration passes09:57:21UTC:207 exact original-timestamp
 decisions,82 allocator bindings, fresh PG parity, laboratory revocation preserved across
 receiver reconstruction/current PG restore and stale/old-allow refusal.109 real-PG tests,
 0 skips; no live write or cached lease renewal. Do not repeat this completed integration.
-Next selected scope: worker/OWNER joint recovery, coherent all-writer/in-flight dispatcher
+At that checkpoint, next scope was worker/OWNER joint recovery, coherent all-writer/in-flight dispatcher
 capture, machine-loss source/image dependencies and independent forward trust.
 [Actual qualification and rollback](releases/2026-11-24-control-ha-joint-nodes.md#actual-execution--095721utc).
 
