@@ -11,20 +11,21 @@ remains selected; this publication task does not advance its acceptance gates.
 [Reconciliation record](releases/2026-11-24-source-reconciliation.md).
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Opt-in local admission/drain implemented on the HA feature branch at1015ac5e, pushed and
-remote-SHA verified. HTTP/routing admin, two retention threads and product admin/worker
-child participate; durable uncertainty prevents false drain after death or external error.
-Separate bounded guardian releases its own locks on EOF/death/deadline.170 focused tests
-PASS,0 skips; broad regression307 PASS/93 optional-PG skips/3 baseline-reproduced failures.
-No live deployment or capture. Next selected work: schedulers/operator/forced-SSH and OWNER
-PG/synthetic publisher integration, effective source/argv/UID/mount bindings, independent
-external-completion proof and flush-latency qualification before an overlapping fleet
-capture. Keep paid-watch/deny enforcement running; current NL scope is not working-service
-deployment permission. Do not repeat the completed inventory/NL2 recovery or add a lettered
-stage. Independent exact-checkpoint approval, coherent capture, off-laptop key/access custody
-and final combined post-ACK/stale-copy recovery remain in the same three partial HA-02 gates;
-replication PASS, no HA-03 or cutover.
-[Implementation and boundary contract](releases/2026-11-24-control-ha-installed-recovery.md#local-admission-and-drain--source-only).
+Opt-in admission/drain source is now atfd378475 on the existing HA feature branch, pushed
+and remote-SHA verified. In addition to HTTP/routing/retention/product-worker, chat-sync
+and paid-reconcile timers plus paid CLI participate. Caught prepare failures retain
+uncertainty across DB rollback and successful retry. Closed isolated packaging passes;
+200 tests PASS,0 skips; final package/budget set39 PASS. Historical package run22 PASS/
+4 baseline-reproduced source-pin failures, not weakened. No deployment/live capture.
+Next selected work: remaining credential/restricted renewal, operator/forced-SSH/receiver
+entrypoints and OWNER PG/synthetic publishers; effective source/argv/UID/mount bindings,
+independent external completion and load/flush-latency qualification before overlapping
+fleet capture. Do not reimplement the completed timer/payment slice or repeat inventory/NL2
+recovery. Keep paid-watch running; current NL scope is not working-service deployment
+permission. Independent current approval, coherent capture, off-laptop key/access custody
+and final combined recovery remain the same three partial HA-02 gates; replication PASS,
+no new lettered stage, HA-03 or cutover.
+[Implementation and boundary contract](releases/2026-11-24-control-ha-installed-recovery.md#scheduler-and-payment-admission--source-only).
 
 Owner-confirmed NL2 isolated retained-state recovery PASS14:12UTC, final cleanup/service
 checks PASS14:20UTC; source/reporte353ff85 pushed and verified. Wrong-key refusal,50 focused

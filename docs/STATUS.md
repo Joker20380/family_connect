@@ -1,5 +1,17 @@
 # Текущее состояние / Current state
 
+**24 November — scheduler/payment admission implemented; no live changes.**
+HA sourcefd378475 is pushed and remote-SHA verified. Chat-sync holds admission through
+support publication; paid-reconcile through the node cycle; paid CLI through DB commit.
+Lost/malformed prepare ACKs retain uncertainty even after canonical rollback or successful
+retry. Closed deterministic scheduler archives and paid-operator inclusion are tested under
+isolated Python.200 focused tests PASS,0 skips; final package/budget set39 PASS. Additional
+historical packaging22 PASS/4 failures, all reproduced on unchanged1015ac5e; pins preserved.
+No hosts, services/watchdogs, live payments, versions or catalogs changed. Next: remaining
+credential/restricted renewal, operator/SSH/receiver and OWNER writers; effective bindings,
+external completion and load qualification before coherent capture. Replication PASS;
+three HA-02 gates remain partial. [Exact scope and rollback](releases/2026-11-24-control-ha-installed-recovery.md#scheduler-and-payment-admission--source-only).
+
 **24 November — admission/drain source implemented; no live deployment.**
 HA feature commit1015ac5e is pushed and remote-SHA verified. Opt-in local gate covers
 HTTP/routing admin, two retention threads and product admin/legacy-worker child. It closes

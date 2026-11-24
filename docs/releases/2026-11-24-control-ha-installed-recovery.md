@@ -6,6 +6,45 @@ divergence is reconciled/pushed at2ae5c512; older publication-blocker statements
 historical, not active instructions or a current blocker.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## Scheduler and payment admission — source only
+
+[Authoritative source and continuation report](https://github.com/Joker20380/family_connect/blob/fd37847563e99c53eab2012aeeee74ceed137254/docs/releases/2026-11-24-control-ha-admission-drain.md#scheduler-and-payment-dispatch-continuation)
+is pushed and remote-SHA verified atfd37847563e99c53eab2012aeeee74ceed137254. Main updates
+navigation only; HA source stays on the existing feature branch, not merged or deployed.
+
+Chat-sync now acquires optional admission before registry work and retains it through
+mailbox ACK plus support publication. Paid reconcile gates the whole cycle; paid CLI gates
+connection/transaction/commit. Closed admission returns75 before DB/network work. No-flag
+behavior remains legacy; read-only paid `policy` intentionally stays outside the gate.
+Caught timeout/invalid ACK during node preparation retains a durable uncertainty marker
+even when the canonical transaction rolls back. A successful later retry cannot erase it.
+Strict reconciliation ACK parsing rejects duplicate fields, wrong node and boolean schema.
+
+New deterministic chat/reconcile source archives execute under isolated Python without a
+host source fallback. The paid-operator source manifest includes the gate. Existing exact
+historical overlay/package pins remain unchanged; these are new source-only archives, not
+replacement installed releases. Enabled gates stay Linux/single-UID/local-filesystem only;
+disabled-gate/context imports do not eagerly require POSIX `fcntl`.
+
+Validation:200 focused/package/regression tests PASS,0 skips. Additional historical package/
+budget run22 PASS/4 failures; all4 reproduce on isolated unchanged1015ac5e (old transport
+overlay, diagnostics, lifecycle and v2 package source-pin fixtures). Final focused/package/
+budget run39 PASS,0 skips; counts overlap and must not be summed as distinct cases. No
+PostgreSQL/OWNER, Windows or live fleet acceptance is claimed. Links/whitespace checked.
+
+No host access, service/unit/watchdog changes, live payment or grant writes, version/catalog
+changes or deployment. Existing8s operation/12s watchdog/120s lease limits are unchanged.
+No installed rollback is necessary. Any future removal of the opt-in flag first cancels
+capture and releases its guardian, preserving uncertainty and current ledger; never delete
+markers or restore stale payment data. Qualify busy75 timer behavior and extra flush latency
+before enabling, without silently suppressing genuine service failures.
+
+Next: remaining credential/restricted renewal, operator/forced-SSH/receiver entrypoints,
+OWNER PG/synthetic publishers, exact effective bindings and independent external completion,
+then overlapping capture, current independent approval/custody and final combined recovery.
+Replication PASS; the other three HA-02 gates remain partial. Current NL checks/recovery
+scope still does not authorize changes to working services. No HA-03 or cutover.
+
 ## Local admission and drain — source only
 
 [Authoritative implementation, tests and rollback](https://github.com/Joker20380/family_connect/blob/1015ac5e13e6ab68a7118ce8ae7bb9af08461650/docs/releases/2026-11-24-control-ha-admission-drain.md)
