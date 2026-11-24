@@ -1,0 +1,6 @@
+FROM postgres@sha256:18cfe3ef5e6815560c98237d6216d1e5119702fb0f3894c8785dd58b8bbe5d73
+RUN apk add --no-cache python3 py3-pip && python3 -m venv /opt/patroni
+COPY patroni-rehearsal.lock /tmp/patroni-rehearsal.lock
+RUN /opt/patroni/bin/pip install --no-cache-dir -r /tmp/patroni-rehearsal.lock && /opt/patroni/bin/pip check
+LABEL family-connect.ha-replication-image="isolated-only-v1"
+ENTRYPOINT ["/bin/sh", "-c", "chown -R postgres:postgres /tmp/lab && exec gosu postgres /opt/patroni/bin/patroni /tmp/lab/config.json"]

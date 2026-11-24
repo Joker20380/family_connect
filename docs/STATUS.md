@@ -1,5 +1,24 @@
 # Текущее состояние / Current state
 
+**24 November — owner selects completion of all HA-02 gates; replication rehearsal passes.**
+The request “дальше. работай до завершения 2 этапа” extends the selected scope beyond
+the journal slice to all four existing stage2 gates. It does not select HA-03..05 or
+authorize silent production cutover. PostgreSQL17.11/Patroni4.1.5 with three mTLS etcd3.7.4
+voters now passes isolated primary loss/return, DCS majority loss/return and loss of both
+synchronous standbys. Exact44-table acknowledged state, paid revoke, consumed proofs and
+CRL/consent floors survive; no writes after DCS lease expiry, no false synchronous ACK.
+A real cancellation defect was reproduced: PG emits WARNING01000 after local commit,
+and unguarded psycopg reports success. The canonical PG connection now reports an
+uncertain outcome on any COMMIT warning, closes, and requires original-operation readback.
+28 focused guards and905 SQLite/PostgreSQL contracts PASS /0 skips; two complete
+replication fault runs PASS. Exact receipts are recorded in
+the [replication report](releases/2026-11-24-control-ha-replication.md).
+HA-02 remains IN_PROGRESS: actual-current authorization/custody, installed schemas/all
+writers/coherent capture and independent full recovery remain open. No SSH, service stop,
+server policy change, release or deployment. Console5ce82415, RU HTTP4e2df679,
+NL GeoIP22 November, Android126/catalog9 and8/12/120s/all-three-node ACK unchanged.
+Production still depends on RU; local one-host rehearsal is not independent failure domains.
+
 **24 November — CONTROL-HA portable encrypted forward-checkpoint inputs qualified offline.**
 A bounded AES-256-GCM archive now carries the exact signed request/signature, existing
 encrypted recovery/history capsules, both publications/delegations and all retained

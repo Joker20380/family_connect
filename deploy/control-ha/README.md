@@ -3,7 +3,50 @@
 This first stage tests a real etcd quorum and a read-only evidence format. It does
 not replicate the Friends database, elect a product writer, issue permissions,
 restart gateways, change endpoints or remove the RU dependency. The candidate
-PostgreSQL/Patroni migration is a separate, unfinished stage.
+PostgreSQL/Patroni production migration is a separate, unfinished stage. The isolated
+replication runner below now qualifies that part of HA-02, not production activation.
+
+## Strict PostgreSQL/Patroni replication rehearsal
+
+Use the existing dedicated control/identity/PostgreSQL environment and pinned etcd
+binary. Build the disposable image from this directory; do not publish or install it:
+
+```sh
+docker build -f deploy/control-ha/Dockerfile.patroni-rehearsal -t fc-ha-patroni-rehearsal:4.1.5 deploy/control-ha
+image=$(docker image inspect --format '{{.Id}}' fc-ha-patroni-rehearsal:4.1.5)
+python -m pytest -q tests/test_postgres_durability.py tests/test_control_ha_replication_rehearsal.py tests/test_enrollment_rehearsal.py
+python -m scripts.control_ha_replication_rehearsal --image "$image" --etcd /tmp/etcd-v3.7.4-linux-amd64/etcd --workdir /tmp/fc-ha-replication-new
+```
+
+Only a content-addressed local image with the isolated label is accepted. PostgreSQL
+base digest and all Python package versions are pinned; Alpine package versions/image
+digest must be retained with each qualification. This is not a reproducible public
+release or a runtime install. Upstream dependency notices remain in the image.
+
+Three owned containers use loopback-only host-network PostgreSQL/REST ports and three
+owned mTLS etcd children. Temporary secrets/configs/data/logs stay private outside Git.
+Every kill/start/remove checks the exact per-run/per-node label, including recovery of
+an ID after a lost Docker response. Cleanup never targets other services/containers.
+The effective DCS configuration and both quorum voter roles must converge **before**
+application writes; streaming connections alone are insufficient. Patroni's minimum
+TTL is20seconds. `synchronous_mode=quorum`, strict mode, ANY1 of two standbys, fsync and
+full-page writes are mandatory; failsafe mode is disabled. No watchdog/fencing/WAN
+or production failure-domain acceptance is implied.
+
+The runner imports the existing44-table synthetic application fixture and exercises
+product contracts, then commits payment/revoke/proofs, kills the primary during an
+uncommitted transaction, checks its successor and returns the old primary. It tests
+one/two DCS member loss and restoration, blocks client COMMIT without both standbys,
+and explicitly cancels that wait. SQL WARNING01000 can mean **local commit without
+confirmed replication**. The canonical PG connection treats any warning during COMMIT
+as an uncertain outcome, never successful application ACK; it closes the connection.
+Read back the original operation after recovery; do not assume rollback or mint a new
+idempotency ID. Consumed proof replay and stale pre-write import remain refused.
+
+DCS majority loss causes demotion within the lease window, not instantaneous network
+partition detection. The test requires no writable primary after TTL plus a bounded
+margin. No quorum-free application authority, receiver fencing or deployment is granted
+by this lab. [Evidence and remaining stage2 gates](../../docs/releases/2026-11-24-control-ha-replication.md).
 
 ## Run
 

@@ -3,6 +3,15 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+Latest owner scope24 November: “дальше. работай до завершения 2 этапа”. All four HA-02
+acceptance blocks are now selected; do not stop at another journal-only slice or start
+HA-03..05. The isolated replication gate passes with strict Patroni quorum, durable
+product writes, primary loss/return, DCS lease expiry, no-sync blocking and canceled-sync
+uncertainty. Actual-current authorization/custody, installed schema/writer census and
+coherent capture, complete independent recovery still block HA-02 COMPLETE. Live writer
+stops/capture require the scoped barrier and abort plan; no cutover is implied.
+[Current gate evidence and rollback](releases/2026-11-24-control-ha-replication.md).
+The chronological source checkpoints below retain their original scope and test results.
 Depends on accepted paid-v2/HMAC2/metadata runtime and owner request.
 HA-01 isolated scope COMPLETE: read-only fingerprints, real three-voter mTLS
 rehearsal, leader loss, no-quorum refusal and direct recovery;61 tests PASS,
@@ -240,7 +249,7 @@ off-host custody rollout or writer-barrier qualification.
 Implementation0ec3e5c9 pushed/remote-SHA verified; old-main navigation470e8eb9
 stays local after non-fast-forward rejection againstcb47bf23. Original work preserved;
 no force push, reconciliation or deployment performed.
-SELECTED / IN_PROGRESS within the journal block: forward-only current-state checkpoint
+Previous journal-only selection, before the all-HA-02 request above: forward-only current-state checkpoint
 development, now explicitly authorized without server changes. Existing scheduled-operation
 audits still require native three-node receipts, original gate provenance and exact
 five-table renewal equality. The new contract uses a separate fresh authorization and
@@ -310,10 +319,10 @@ host resume, full-store importer, persistent trust registry or long-lived approv
 the added native portable scenario run without skips. Packing itself does not qualify
 a request; the existing verifier still enforces signatures, expiry and external floors.
 [Portable input format and its explicit limits](releases/2026-11-24-control-ha-forward-archive.md).
-Remaining selected gate: independently established actual source/capture/publication
+Remaining journal gate: independently established actual source/capture/publication
 bindings, qualified coherent capture and current-state recovery. Known
 synthetic schemas/bounded-maintenance adapters are not installed-schema acceptance.
-No next queued block is started; all four stage2 exit blocks still apply.
+The latest owner request selects all four stage2 exit blocks; HA-03..05 remain queued.
 [Implemented contract, tests and precise limits](releases/2026-11-24-control-ha-forward-checkpoint.md).
 [Prior decision evidence](releases/2026-11-24-control-ha-provenance-decision.md).
 Preserve current-state data and the immutable baseline; no old rows or retroactive
@@ -326,17 +335,18 @@ do not invent approval, add a permissive switch or select another hypothetical v
 [Previous synthetic checkpoint](releases/2026-11-24-control-ha-current-audit.md).
 56 new tests /0 skips,111 stopped regressions /15 PostgreSQL skips and45 custody
 regressions /0 skips PASS; no new PostgreSQL/import/recovery acceptance is claimed.
-No deployment or further queued block is selected. T alone
+No production deployment is selected. T alone
 still refuses nonempty renewal ledgers; V is an explicit combined format/gate;
 authenticated pending/unknown operations, path/owner bindings and floors must
 not be reset or re-signed to bypass checks. This checkpoint does not qualify relocation.
-The journal block is partially closed, not complete; the other three blocks remain.
+The journal block remains partial. The isolated replication gate now passes; installed
+schemas/writer barrier and independent full recovery remain open.
 The four-block [stage2 exit checklist](control-ha.md#когда-заканчивается-этап-2)
 is the completion criterion, not A–V counts or passing-test totals. No measured ETA
 exists before the remaining integration gates are qualified; do not promise one more slice.
-Then separately qualify installed schemas/live writer barrier,
-all-store shadow/full backup/recovery and strict
-PostgreSQL/Patroni replication/RPO0. Preserve safe abort before cutover;
+Continue the selected installed schemas/live writer barrier and
+all-store shadow/full backup/recovery gates. Retain the strict isolated
+PostgreSQL/Patroni replication/RPO0 receipt. Preserve safe abort before cutover;
 after new writes require fencing and current-state recovery, never old SQLite.
 HA-03 fenced authority, HA-04 API/client failover and HA-05 shadow/cutover
 follow mandatory gates; distributed CRL publication requires HA-03 fencing.

@@ -98,9 +98,9 @@ class PostgresEnrollment:
         self.membership_exchange = membership_exchange
 
     def connect(self):
-        import psycopg
+        from .postgres_durability import DurableConnection
         from psycopg.rows import dict_row
-        return psycopg.connect(host='127.0.0.1', hostaddr='127.0.0.1', port=self.port,
+        return DurableConnection.connect(host='127.0.0.1', hostaddr='127.0.0.1', port=self.port,
             dbname='fc_ha_synthetic', user='fc_ha_synthetic', password=self.password,
             connect_timeout=3, sslmode='disable', options='-c search_path=pg_catalog', row_factory=dict_row)
 

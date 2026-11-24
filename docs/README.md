@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 24 November: all HA-02 gates selected; strict PostgreSQL/Patroni replica failures and commit-cancellation protection, no production cutover](releases/2026-11-24-control-ha-replication.md).
+
 [CONTROL-HA · 24 November: portable encrypted forward-checkpoint inputs; fresh-process/source-removed readback, external keys/trust/floors, no activation or production backup acceptance](releases/2026-11-24-control-ha-forward-archive.md).
 
 [CONTROL-HA · 24 November: forward checkpoint checks retained renewal source/config bytes for all three nodes; bounded local collection, no source execution or live acceptance](releases/2026-11-24-control-ha-forward-sources.md).

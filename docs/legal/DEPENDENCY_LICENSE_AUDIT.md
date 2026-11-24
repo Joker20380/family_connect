@@ -1,5 +1,16 @@
 # Dependency and repository licensing audit — 2026-09-25
 
+## Isolated PostgreSQL/Patroni rehearsal — 2026-11-24
+
+The disposable, unpublished HA-02 image adds Patroni4.1.5 and python-etcd0.4.5
+(MIT; upstream distribution metadata/license retained). It uses the already accepted
+PostgreSQL17.11 base (PostgreSQL License), etcd3.7.4 (Apache-2.0) and psycopg3.3.9
+(LGPL-3.0). No upstream source is vendored or copied into product code. Full Python
+versions are pinned in `deploy/control-ha/patroni-rehearsal.lock`; the image retains
+installed distribution notices and Alpine package metadata. This is isolated dependency
+qualification, not approval to redistribute a new server/client artifact or a complete
+audit of every base-image package. No release/signing key or product data enters it.
+
 ## Technical metadata GeoIP candidate — 2026-11-15
 
 Server-only `maxminddb==3.2.0` is Apache-2.0 (installed distribution METADATA and
