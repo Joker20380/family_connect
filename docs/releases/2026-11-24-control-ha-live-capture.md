@@ -1,5 +1,31 @@
 # 24 November 2026 — authorized bounded live capture
 
+## External-file custody
+
+The next bounded operation uses `scripts/control_ha_file_custody.py`: an explicit private
+per-host plan, restricted Family Connect roots, exact selected files and only renewal history,
+profile-operation or routing trees. No broad project/home/key-directory backup. Database and
+technical-metadata paths are rejected. Runtime issuer/profile keys belong in encrypted owner
+custody, never Git, CI, terminal output or the PostgreSQL canonical DB; offline release keys
+are outside this operation. Legacy journal bytes remain opaque, not fabricated approvals.
+
+Collection is read-only/no service stops. The collector rejects links, special files, path
+overlap, oversized/deep/changed trees and keeps original byte digests and metadata. A later
+file witness checks inode/ctime/mtime/size/mode plus directory membership observations, so
+changes including same-byte rewrites are refused. Bracketing the SQLite point with these
+observations is useful evidence, **not** proof that every external writer is fenced or that
+an already incomplete multi-file transaction is valid. Pending operations and semantic
+key/profile/DB bindings still need separate checks.
+
+AES-256-GCM and an external owner-held ciphertext/document checkpoint reject changed/stale
+capsules; fresh-process offline readback restores exact bytes with0700 directories/0600 files
+only in a new destination. It never replaces live paths, executes saved source, adopts original
+root ownership, enables credentials or resets replay floors. Abort leaves the live system
+untouched; a partial offline directory is not acceptance and cannot be overwritten on retry.
+This work belongs to the existing capture/history/full-recovery gates, not a new stage.
+108 focused tests PASS/0 skips (42 new file-custody guards,
+26 installed-inventory and40 SQLite capture/restore checks). No production/version change.
+
 ## Authorization and scope
 
 Owner response: “подтверждаю давай делай”, explicitly answering the request for a limited

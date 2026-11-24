@@ -1,5 +1,13 @@
 # Текущее состояние / Current state
 
+**24 November — external-file capture/readback guard ready; actual capture next.**
+The scoped collector retains exact authority/profile/source and opaque history bytes,
+rejects database/metadata paths, symlinks, hardlinks, unknown trees and changed observations.
+AES-GCM custody uses separate owner-held key/checkpoint; offline restore creates only a new
+private directory, never applies original ownership or starts services.108 focused checks PASS.
+An unchanged file witness is not a writer fence or HA-02 acceptance. Installed/public versions
+are unchanged. [Scope and rollback](releases/2026-11-24-control-ha-live-capture.md#external-file-custody).
+
 **24 November04:58:58UTC — privacy-safe actual v2 capture and restore PASS.**
 Retained off-RU encrypted snapshot fromeba7a5ce:61.694ms simultaneous four-store barrier;
 fresh-process restoration4 stores/34 tables/609 rows and handoff1/2/1/1/1. Metadata keeps

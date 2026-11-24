@@ -3,6 +3,11 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+External authority/history continuation: the bounded encrypted file collector and new-directory
+readback pass108 focused checks. Next execute the reviewed actual three-node file plans,
+bracket a fresh RU SQLite point with unchanged file witnesses, and verify retained source/key
+bindings offline. This observation is not a fleet writer fence; receiver/OWNER/legacy-worker
+coverage and independently approved current trust remain required, not waived by file custody.
 Current retained actual snapshot:04:58:58UTC, v2 sourceeba7a5ce,61.694ms barrier,
 4 stores/34 tables/609 rows restored off-RU; metadata consent floors only, no observations.
 No observed service changes. The remaining critical path is still external authority/history,
