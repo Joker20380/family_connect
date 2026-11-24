@@ -5,6 +5,7 @@ import json
 import os
 from pathlib import Path
 import subprocess
+import sys
 import tarfile
 
 import pytest
@@ -194,3 +195,16 @@ def test_bootstrap_deadline_reports_no_private_command(monkeypatch, tmp_path):
     def timeout(*args, **kwargs): raise subprocess.TimeoutExpired('private', 240)
     monkeypatch.setattr(cold.subprocess, 'run', timeout)
     with pytest.raises(ValueError, match='^COLD_BOOTSTRAP_DEADLINE$'): cold.run(['private'], tmp_path, 'fixture')
+
+
+def test_native_probe_uses_ephemeral_valid_synthetic_credentials():
+    prefix = cold.PYTHON_PROBE.split('import django\n')[0]
+    check = '''
+assert len(os.environ['DJANGO_SECRET_KEY']) >= 48 and not os.environ['DJANGO_SECRET_KEY'].startswith('REPLACE_')
+assert len(os.environ['POSTGRES_PASSWORD']) >= 20 and not os.environ['POSTGRES_PASSWORD'].startswith('REPLACE_')
+assert os.environ['DJANGO_SECRET_KEY'] != os.environ['POSTGRES_PASSWORD']
+assert not blocked
+'''
+    process = subprocess.run([sys.executable, '-I', '-c', prefix + check], capture_output=True, timeout=10)
+    assert process.returncode == 0 and process.stdout == b''
+    assert prefix.count('os.urandom(32).hex()') == 2

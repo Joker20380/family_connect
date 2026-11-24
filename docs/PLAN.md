@@ -11,6 +11,8 @@ complete-recovery block, not another stage or permission to begin HA-03.
 First actual cold attempt refuses before native execution on absent resolver metadata;
 synthetic namespace files correct this without host DNS access.70 focused tests pass;
 rerun from a newly pinned capsule, preserving the first attempt as failed evidence.
+The second attempt reaches native Django and refuses too-short LAB credentials; fresh random
+values satisfy the unchanged policy.71 tests pass; repeat the corrected cold run, not live services.
 [Preparation, prerequisites and rollback](releases/2026-11-24-control-ha-image-custody.md).
 
 Actual canonical/OWNER/legacy joint qualification passes11:10:32UTC: native ingestion of69

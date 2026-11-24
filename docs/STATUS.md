@@ -11,6 +11,9 @@ PASS is claimed yet. All versions/services unchanged; the same three HA-02 block
 First actual cold attempt safely refuses: umoci expects resolver mount metadata in its empty
 namespace. Use empty synthetic resolver/hosts files, never host DNS; the native nonroot probe
 also gets a synthetic passwd entry, not host identity data.70 focused tests now pass.
+Second attempt unpacks successfully and correctly refuses too-short test credentials under
+native Django policy. Use fresh random64-character LAB values; do not weaken native settings.
+71 focused tests pass; the corrected actual cold run remains pending.
 [Scope, prerequisites and rollback](releases/2026-11-24-control-ha-image-custody.md).
 
 **24 November11:10:32UTC — actual canonical/OWNER/legacy joint qualification PASS.**

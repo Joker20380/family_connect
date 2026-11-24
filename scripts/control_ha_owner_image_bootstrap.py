@@ -1,4 +1,4 @@
-"""Cold OWNER dependency checks from restored blobs; no Docker, host source or service start."""
+"""Cold OWNER dependency checks; no Docker, host source or production service start."""
 import json
 import os
 from pathlib import Path
@@ -21,7 +21,7 @@ def audit(event,args):
 sys.addaudithook(audit)
 ctypes.util.find_library=lambda name:'libc.so.6' if name=='c' else None
 os.environ.update(DJANGO_SETTINGS_MODULE='fc_control_plane.settings',CONTROL_PLANE_MODE='synthetic',
-    DJANGO_SECRET_KEY='offline-image-probe-not-production',POSTGRES_PASSWORD='offline-not-production',FC_SUPPORT_SOCKET='')
+    DJANGO_SECRET_KEY=os.urandom(32).hex(),POSTGRES_PASSWORD=os.urandom(32).hex(),FC_SUPPORT_SOCKET='')
 import django
 django.setup()
 from apps.console import subscriptions,system_publisher

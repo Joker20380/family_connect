@@ -54,6 +54,12 @@ synthetic passwd entry for the caller's nonroot UID, not the host account databa
 tests pass. Preserve the failed capsule/receipt; the corrected cold run needs a new external
 source/ciphertext checkpoint and is still pending at this correction checkpoint.
 
+The second actual attempt unpacks the console image successfully. Its native Django setup
+refuses the too-short synthetic credentials, as required by the installed settings. Replace
+only probe credentials with fresh random64-character values; do not weaken application
+validation or use original secrets.71 focused tests pass, including an isolated credential
+preflight. The second capsule remains failed evidence; original OWNER containers are unchanged.
+
 ## Prerequisites and fixed remainder
 
 Recovery host requirements remain explicit: Linux amd64, working unprivileged user/PID/network
