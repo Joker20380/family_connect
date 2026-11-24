@@ -1,17 +1,17 @@
 # Текущее состояние / Current state
 
-**24 November — systemd lifecycle veto qualified; no activation.**
-HA source3110aa0a is pushed/remote-SHA verified. Opt-in schema3 refuses guardian ACK for queued
-jobs, control processes, changed unit/process-tree identity and NeedDaemonReload.223 focused
-tests PASS/0 skips,43 new cases, including actual local user-systemd child/stop-post/ACK cases.
-An asynchronous stop returning zero or MainPID becoming zero is not completion. Unchanged
-running service passes; observations still do not fence uncooperative writers or permit capture.
-Read-only22:06UTC: AWG/TCP/paid-watch active/running on both NL hosts; NL1 snapshots stable,
-NL2 all three units refuse on NeedDaemonReload=yes. No reload, service/deployment/version change.
-Installed gateway differs from candidate; earlier cleanup is not asserted to be deployed.
-Next: diagnose NL2 loaded/disk mismatch read-only, finish writer/lifecycle/collector/manual
-bindings and explicit activation proposal, then approved joint interval and independent custody/
-final recovery. Replication PASS; three HA-02 gates partial. [Evidence and rollback](releases/2026-11-24-control-ha-installed-recovery.md#systemd-lifecycle-veto--no-activation).
+**24 November — NL2 manager-wide reload cause established; no reload.**
+HA source58a82d47 is pushed/remote-SHA verified. Reviewed Ubuntu255.4-1ubuntu8.18 logic and the
+fileless -.slice witness identify the manager-wide unit_file_state_outdated flag at22:23:59UTC.
+36 candidates are absent in the same manager mount/root view. This corrects the earlier unproven
+inference that specific AWG/TCP files differ; full unit/runtime equivalence is still unapproved.
+The past triggering operation is unknown, not a new acceptance gate. Four scoped NL2 services
+active/running with unchanged identities/no jobs around the observation.44 diagnosis tests PASS/
+0 skips. No RU/NL1 access, reload, working-service/deployment/version change or veto relaxation.
+Next: actual writer/lifecycle/collector/manual bindings and explicit joint activation proposal,
+including approved disposition of the host-wide flag, then coherent interval and independent
+custody/recovery. Diagnosis complete; no repeat census as a new gate. Replication PASS; three
+HA-02 gates partial. [Cause, limits and safe next scope](releases/2026-11-24-control-ha-installed-recovery.md#nl2-manager-wide-reload-cause--no-mutation).
 
 **24 November — selected NL service environments match; diagnostic hook tested in isolation.**
 HA sourced76df5cf is pushed/remote-SHA verified. Read-only21:35:59–21:36:00UTC checks match three

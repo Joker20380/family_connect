@@ -11,20 +11,19 @@ remains selected; this publication task does not advance its acceptance gates.
 [Reconciliation record](releases/2026-11-24-source-reconciliation.md).
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Feature3110aa0a is pushed/remote-SHA verified. Optional schema3 lifecycle veto checks approved
-running unit/process-tree identity before guardian DRAINED/HELD; queued jobs, control processes,
-drift and NeedDaemonReload refuse ACK.223 focused PASS/0 skips,43 new cases, with real local
-user-systemd asynchronous stop/stop-post qualification. Existing schemas and gate limits stay.
-[Source, tests, observations and rollback](releases/2026-11-24-control-ha-installed-recovery.md#systemd-lifecycle-veto--no-activation).
-Read-only22:06UTC: both NL transport sets active/running. NL1 observations stable; NL2 all three
-units refuse on NeedDaemonReload=yes. Installed gateway differs from candidate; nothing deployed.
-Next selected work: read-only NL2 loaded/disk diagnosis, actual writer/lifecycle/collector/manual
-bindings and explicit joint activation proposal, then coherent interval and independent current
-inputs/custody/final recovery. Do not repeat completed queued-stop/owned-child qualification as new
-gates. Lifecycle observations veto unsafe receipts but do not fence uncooperative writers.
-Emergency `--no-block`, paid-watch and working services unchanged; no reload or version change.
-Replication PASS; three original gates partial, no new stage/ETA. Working-NL deployment remains
-outside scope; existing inventory, packaging and announcement limits are not silently cleared.
+Feature58a82d47 is pushed/remote-SHA verified. NL2 reload-cause diagnosis complete: reviewed
+Ubuntu255.4-1ubuntu8.18 source and the fileless -.slice witness identify the manager-wide outdated
+flag, not a proven per-service content mismatch.44 tests PASS/0 skips; final22:23:59UTC observation
+keeps four scoped NL2 services active/running with unchanged identities/no jobs. No reload or
+source/runtime/gate activation. [Evidence and next scope](releases/2026-11-24-control-ha-installed-recovery.md#nl2-manager-wide-reload-cause--no-mutation).
+Next selected work: actual writer/lifecycle/collector/manual admission bindings and explicit joint
+activation proposal including disposition of the host-wide flag, then coherent interval and
+independent current-input approval/custody/final recovery. Do not trace the unattributed historical
+trigger or repeat the sentinel/census as a new gate. A host-wide daemon-reload may run generators
+and rebuild dependencies; it is neither per-service nor an authorized read-only NL diagnostic.
+Existing schema3 veto stays strict. No changes to working services, emergency stop, paid-watch,
+recovery access or versions. Replication PASS; the same three gates partial, no new stage/ETA.
+Installed admission and legacy inventory/package/announcement limits are not silently cleared.
 Do not repeat AWG owned-child cleanup, environment/hook checks, reader cleanup, support admission, cache/runtime census,
 source-chain/lock stand, SSH census or wrapper bridge as new acceptance work. Original four
 acceptance gates are fixed; prior1–2/2–4 day estimates are withdrawn, not a rolling deadline.

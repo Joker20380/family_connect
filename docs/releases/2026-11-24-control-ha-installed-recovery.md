@@ -6,6 +6,55 @@ divergence is reconciled/pushed at2ae5c512; older publication-blocker statements
 historical, not active instructions or a current blocker.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## NL2 manager-wide reload cause — no mutation
+
+[Authoritative source diagnosis, tests, provenance, native result and next-scope limits](https://github.com/Joker20380/family_connect/blob/58a82d4788921bd6d11c0b1da4569e6a8a86b6f8/docs/releases/2026-11-24-control-ha-systemd-lifecycle.md#nl2-manager-wide-reload-cause--read-only)
+are pushed/remote-SHA verified at58a82d4788921bd6d11c0b1da4569e6a8a86b6f8. Main is navigation only.
+No RU/NL1 access, NL2 service start/stop/reload, configuration/key/environment change, product DB
+access, deployment, release tag/signing or public artifact update. All client/build/installed/
+public-installer/catalog/invitation versions remain unchanged. Existing lifecycle veto is untouched.
+
+At22:23:59.926–22:23:59.980UTC the built-in -.slice has NeedDaemonReload=true with no fragment,
+source, aliases or loaded drop-ins. Twice, all36 possible fragment/drop-in candidates are absent
+across the12 manager lookup paths, including dangling symlinks; observer and PID1 mount/root
+views match. Reviewed255.4-1ubuntu8.18 logic therefore identifies the manager-wide
+unit_file_state_outdated condition. This corrects the earlier unproven "per-unit loaded/disk
+mismatch" interpretation; it does not prove that every service file matches its loaded state.
+The past triggering operation/actor/time remain unattributed, not a new gate. This flag neither
+stops these services nor establishes a hosting problem or explains prior RU failures.
+
+AWG, TCP, paid-watch and restricted-bootstrap remain active/running, with MainPID/invocation
+identities unchanged and no jobs/ControlPID around the observation. All four still report the
+warning and remain refused by the capture guard. No VPN/data-plane, continuous-quiescence,
+full-runtime equivalence or current whole-fleet availability claim is made.
+
+Both official Ubuntu source archives match their HTTPS-fetched descriptor's SHA256 entries.
+Seven relevant patches from the85-entry series were applied locally to six selected files;
+the global first branch and drop-in lookup behavior were reviewed. No upstream source is executed
+or added to Git; DSC GPG verification/reproducible binary attestation is not claimed. Exact
+archive/function/observer/manager binary hashes and private evidence are in the linked report.
+The final diagnostic refuses unreviewed versions/ambiguous or changed evidence and never grants
+capture. Initial unsupported-property/leading-dash discovery failures were read-only and corrected.
+
+**44 focused tests PASS/0 skips /0.20s**, Python3.14.4 using the existing pinned control environment.
+Feature documentation:4 files/1070 link targets/zero errors; whitespace PASS. No full recovery or
+previously accepted guardian suite rerun is claimed. Raw scoped unit dumps, source archives,
+private receipts and intermediate evidence stay outside Git; no neighbouring service is operated.
+Main navigation:3 files/700 link targets/zero errors; whitespace PASS.
+
+The diagnostic subtask is complete. Next: actual writer/lifecycle/collector/manual bindings and
+the exact joint activation/capture proposal, including the host-wide flag's approved disposition,
+then coherent interval and independent current-input approval/custody/final recovery. Replication
+PASS; three fixed HA-02 gates partial. No new stage, percentage, deadline or repeated census gate.
+A daemon-reload is host-wide, may run generators/rebuild dependencies and is outside present
+read-only NL scope. It must not be used to make this check green or applied blindly over unknown
+on-disk changes. The report specifies prerequisites, abort conditions and the absence of a generic
+"undo reload"; this host-level operation is **not ready for execution** from this checkpoint.
+
+Rollback now: no production mutation to undo. Removing/reverting the diagnostic source does not
+change the installed services or capture veto. A future authorized reload/activation would need
+approved prior bytes, scope and recovery access; abort capture and preserve uncertainty first.
+
 ## Systemd lifecycle veto — no activation
 
 [Authoritative implementation, native tests, installed observations and rollback](https://github.com/Joker20380/family_connect/blob/3110aa0ab7feffc6e2d24e7dbb3be0afa8527b72/docs/releases/2026-11-24-control-ha-systemd-lifecycle.md)
