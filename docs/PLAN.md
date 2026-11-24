@@ -3,6 +3,11 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+OWNER DB point07:38:49UTC now passes encrypted capture and isolated native restore:
+37 retained-data tables/1,907,455 rows,3 consent floors,39 schemas/25 sequences, no metadata
+observations. All table row-hashes match; owned test resources removed, existing containers
+unchanged. Remaining OWNER scope is runtime/configuration/secret custody and dispatcher/fleet
+consistency, not repeating the already passed DB slice. HA-02 remains IN_PROGRESS.
 Latest actual point07:22:17UTC:8,731 external files restored from three encrypted capsules;
 9,660 unchanged file/directory observations bracket the52.099ms RU SQLite snapshot,
 34 tables/610 rows restored. Source/API, issuer/profile key/CRL, routing and current archive

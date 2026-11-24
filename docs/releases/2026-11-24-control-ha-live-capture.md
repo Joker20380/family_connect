@@ -1,5 +1,69 @@
 # 24 November 2026 — authorized bounded live capture
 
+## OWNER database capture — 07:38:49UTC
+
+The three existing OWNER containers are pinned by exact ID, Compose project
+`fc-control-plane-0` and image; no other Docker application is selected. The source
+PostgreSQL image remains `sha256:18cfe3ef5e6815560c98237d6216d1e5119702fb0f3894c8785dd58b8bbe5d73`.
+Read-only size preflight finds1,389,696,691 bytes,39 public tables and25 sequences.
+The initial128MiB small-database bound refuses before backup. The reviewed larger operation
+uses a2GiB source/512MiB compressed archive bound,12.3GiB available disk, per-statement120s,
+1s lock wait,180s idle-transaction expiry and120s dump timeout. It never stops panel writers.
+
+A repeatable-read, read-only transaction exports one PostgreSQL snapshot. The native
+`pg_dump --format=custom --compress=6 --no-owner --no-acl --snapshot=...` and logical-row
+fingerprints use that same snapshot. Each retained row is hashed as canonical PostgreSQL
+JSONB with SHA256, and each table hashes its sorted multiset of row hashes plus a separate
+row count. The source transaction closes after86.920s. It is a coherent **panel database**
+point, not simultaneous with the earlier fleet capture or a fence on external dispatchers.
+
+Both `public.console_technicalmetadata` and `public.console_technicalmetadatasource` row
+data are excluded from the dump. A separate projection selects only pseudonym, consent
+epoch, sequence, consent status and received timestamp from the same snapshot:3 floors.
+No observations or GeoIP enter the capsule. Retained ordinary data:37 tables/1,907,455 rows;
+native schema for all39 tables and sequence definitions/state remain in the dump.
+
+The owner-held AES-256-GCM capsule is51,312,677 bytes. Ciphertext SHA256:
+`28bbb64de3907a1cf1949f1d20a04c63c3dcee94c0aef68cebf58611d5e240d1`;
+authenticated archive SHA256:
+`d957f6a34742963e0f8f9152f29b250036dd76747984e0454da95136c386037d`.
+Private custody is `control-ha/20261124-owner-03`; key and checkpoint are separate owner
+files in `control-ha-keys`. No plaintext dump is retained. Capsule layout is nine-byte
+`FCOWNER1\0`,12-byte nonce and AES-GCM ciphertext/tag; AAD is
+`family-connect/owner-postgres-custody/v1/floors-only/no-dispatch`. Decrypted tar contains
+exactly `database.dump`, `floors.json`, `manifest.json`; never extract uncontrolled paths.
+
+Two earlier read-only attempts close without a capsule: one fingerprint SQL parenthesis
+error and one line-oriented parser refusal of multiline `json_agg`. The corrected query
+uses compact `jsonb_agg`; failed-attempt receipts remain. Neither failure changes source
+rows or disables any service. This is not a new product release or installed backend.
+
+Fresh-process restoration authenticates the independent checkpoint and exact three-member
+archive before using the dump. A unique labelled PostgreSQL container uses the same image,
+`--network none`, no published ports, read-only root filesystem, UID/GID70, dropped
+capabilities/no-new-privileges,1 CPU/512MiB and a new uniquely labelled disposable volume.
+There is no Docker socket, source database volume, panel application or dispatcher mount.
+The archive TOC confirms both technical-metadata TABLE DATA sections are absent.
+
+Native `pg_restore --exit-on-error --single-transaction --no-owner --no-acl` succeeds.
+Only the3 consent floors are inserted into the otherwise empty metadata table, with empty
+`observations` and `geoip`; the source-status projection stays empty. Result:39 tables,
+25 sequences, all37 retained table counts and SHA256 row multisets match, all3 floor
+records match, zero nonempty observation/GeoIP rows and zero stale source-status rows.
+The test does not replay operator intent or start a production panel. Sequence count is
+verified; no new dispatch/sequence activation is inferred from that count.
+
+The exact owned container/image/name/label and volume label are checked before removal.
+Both are removed; subsequent label queries find zero remaining containers/volumes.
+Original console/PostgreSQL/publisher IDs/images/status/start times match their preflight.
+Rollback requires no production action. Never replace the running panel DB with this
+offline point or restore metadata observations from an older backup.
+
+This qualifies actual **OWNER database** custody/readback, not complete panel deployment
+recovery: runtime environment/configuration/HMAC/collector custody and consistency with
+external dispatchers/fleet remain open. The point is separate from07:22 fleet evidence.
+HA-02 is not complete and production remains on its existing backends.
+
 ## Actual three-node file readback — 07:22:17UTC
 
 Executed source `16c94824d49a3140f3a151729d78dc4db54fd7ed`, all108 focused tests pass.

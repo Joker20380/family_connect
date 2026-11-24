@@ -1,5 +1,15 @@
 # Текущее состояние / Current state
 
+**24 November07:38:49UTC — actual OWNER panel database restore PASS.**
+One exported read-only PostgreSQL snapshot retains37 ordinary tables/1,907,455 rows and
+3 metadata consent floors; observation/GeoIP and source-projection rows are excluded.
+An isolated same-image PostgreSQL container (no network/ports/app dispatcher) restores39
+tables/25 sequences; every retained table's row count/SHA256 multiset and all3 floors match.
+The encrypted capsule is retained; temporary container and volume are removed. Original
+console/PostgreSQL/publisher IDs/images/start times remain unchanged. No version/cutover.
+This closes the panel DB slice, not its deployment secrets/queues-to-fleet consistency or
+full HA-02 recovery. [Evidence and rollback](releases/2026-11-24-control-ha-live-capture.md#owner-database-capture--073849utc).
+
 **24 November07:22:17UTC — actual external authority/history retained and restored.**
 Three encrypted node capsules preserve8,731 files/62,193,541 bytes plus929 directories;
 fresh-process private offline readback matches every file.9,660 unchanged inode/ctime/directory
