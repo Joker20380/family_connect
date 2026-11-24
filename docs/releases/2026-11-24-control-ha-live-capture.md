@@ -574,6 +574,53 @@ Only the owner should access them. Use the authenticated offline-restore tool ag
 new private directory; never copy these files into production. This v2 checkpoint
 supersedes the removed ephemeral v1 material, but not the remaining whole-fleet gates.
 
+## OWNER runtime custody plan
+
+Prepared24 November, not yet an actual recovery result.76 focused OWNER/inventory/SQLite
+tests pass,0 failures/skips;614 documentation links pass. Native fixture image probe passes
+9 tables/101 fixture rows, zero dispatch (not the actual223-row store). Scripts
+`control_ha_owner_collect.py`, `control_ha_owner_capture.py`, `control_ha_owner_runtime.py`
+and `control_ha_owner_qualify.py` implement a separate closed format, never weakening the
+earlier file-custody allowlist. The console, PostgreSQL and publisher image IDs are pinned
+individually; console and publisher images differ. Retain exact environment values, not
+fresh secrets. Twenty files: synthetic SQLite, mounted panel aliases, three-container
+configuration, private origins, two environment files, three collector-source descriptors,
+HMAC key, collector aliases, mounted publisher token and eight effective Compose inputs.
+Descriptors retain source pins, not the referenced archives/images themselves: this slice
+is not a complete machine-loss bootstrap. Existing image availability remains a dependency.
+
+Preflight compares the three running container IDs/images/configuration/mounts/start times
+to the inspected baseline. Only the fixed label-declared Compose paths and explicitly
+listed host files are read; no recursive state/log/socket/observation capture. Resolve the
+known project-path aliases once, reject links/hardlinks at resolved reads, verify file
+inode/time/size witnesses before/after and compare host token to the actual publisher bind.
+Container metadata and all secret values stay private; no resolved Compose output is printed.
+
+Barrier order: existing `seed.lock` exclusive/no-wait, then synthetic SQLite
+`BEGIN IMMEDIATE` with zero timeout; no statements change rows. Require rollback journal,
+no sidecars, exact9-table schema/fixture and bounded file size. A kernel SIGALRM kills the
+capture at250ms, releasing descriptors/SQLite locks; normal exit rolls back. Serialization
+and alias read are inside this barrier; encryption/output are outside. DB readers continue.
+Any busy lock, changed witness/container, extra schema, deadline or key/alias mismatch
+aborts; no automatic retry or stop/start/freeze, default Compose command, seed/migration or
+publisher invocation. These local locks do not fence PG or an external publisher request.
+
+Custody uses AES-256-GCM with purpose-bound authentication and separate owner-only key plus
+exact ciphertext/document checkpoint. Fresh-process restore refuses stale/damaged/wrong-key
+capsules and existing destinations; every restored file is0600 under a new0700 directory.
+Rollback is closing the bounded reader/releasing locks and discarding only its newly owned
+offline resources. Never copy the restored files into the installed application.
+
+Native probe uses the exact console image, network-none/read-only root, capabilities dropped,
+nonroot owner UID and only the NEW read-only restore mount. It bypasses default startup,
+blocks socket/subprocess/PG connection attempts and checks native fixture/table/paid-projection
+readback, aliases/HMAC, publisher credential parsing WITHOUT `.request`, and paid expiry.
+The import-only libc resolver uses pinned-image `libc.so.6` instead of spawning `ldconfig`;
+authority/expiry code is unchanged. The first fixture probe correctly refused that subprocess;
+the explicit resolver now lets the native fixture pass with zero dispatch. No real source DB
+or original Docker volume is mounted. Cleanup may remove only its uniquely labelled probe
+container. This qualifies runtime custody, not dispatcher recovery or HA-02 COMPLETE.
+
 ## Remaining HA-02 gates
 
 The actual four-store capture/restore slice passes, but HA-02 is **IN_PROGRESS**. It does

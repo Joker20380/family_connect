@@ -1,5 +1,14 @@
 # Текущее состояние / Current state
 
+**24 November — bounded OWNER runtime custody prepared.**
+The closed20-file scope preserves exact runtime inputs/credentials and the9-table synthetic
+store, separately from the already restored PG point. Zero-wait seed/SQLite locks have a250ms
+kernel deadline; any drift/contention aborts without service changes. Authenticated offline
+restore only creates a new private directory. Native image qualification uses network-none,
+read-only mounts/root, nonroot and no publisher/PG connections. Fixture image checks pass;
+actual capture/readback is still pending, not HA-02 acceptance or a coherent PG pair.
+[Scope and abort/rollback](releases/2026-11-24-control-ha-live-capture.md#owner-runtime-custody-plan).
+
 **24 November — OWNER runtime follow-up is read-only census, not recovery.**
 Existing three container IDs/images/start times match the earlier panel DB point. Effective
 Compose inputs, two environment files, HMAC/aliases and publisher-token locations are

@@ -3,6 +3,12 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+Selected next action: execute the prepared closed20-file OWNER runtime/synthetic capture,
+then authenticated fresh-process restore and native isolated-image readback. Retain exact
+credentials privately; never start default Compose/publisher or touch original volumes in
+the probe. Abort on drift/busy/deadline; no live restore. The PG pair, native composite,
+canonical/dispatcher coherence and independent trust remain required afterwards.
+[OWNER capture plan](releases/2026-11-24-control-ha-live-capture.md#owner-runtime-custody-plan).
 Legacy-worker DB/queue/persisted-intent recovery now passes08:43:22UTC:19 files,13 tables/
 58 rows,41.191ms barrier, native duplicate/restart/retry/expiry checks without dispatch.
 Do not repeat this completed slice. Remaining critical path: OWNER runtime/configuration,
