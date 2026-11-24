@@ -11,16 +11,17 @@ remains selected; this publication task does not advance its acceptance gates.
 [Reconciliation record](releases/2026-11-24-source-reconciliation.md).
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Feature4758969f is pushed/remote-SHA verified. Identity-preserving joint drain now holds
-separate OWNER-shaped UID10001/1000 gates in one confirmed local interval. Kernel peer
-identity, gate inode/clock pins, overlap and final held-through-completion ACKs are mandatory.
-120 tests PASS/0 skips; real two-UID/SQLite and coordinator death/stop probes PASS in isolation.
-This mechanism is no longer an unimplemented design gap; do not repeat its qualification.
+Feature7a6d77cf is pushed/remote-SHA verified. The separate-UID joint interval now has a
+pinned launcher and stdlib bootstrap: sealed closed-source bytes, explicit UID/GID/groups,
+fixed isolated argv/environment, runtime/namespace/map/gate pins and owned-child cleanup.
+179 tests PASS/0 skips; real UID10001/1000 root-bootstrap stand PASS in isolation. Root
+imports from ordinary checkouts refuse. Neither launch nor joint interval is an unimplemented
+design gap now; do not repeat their implementation or treat the fixture as production approval.
 No working service/configuration, server access, deployment or version change occurred.
 Last installed OWNER reference remains5ce82415/50de6f25 with no configured capture gate.
-[Joint interval and rollback](releases/2026-11-24-control-ha-installed-recovery.md#joint-owner-drain--isolated-qualification).
-Next selected work: approved actual source/config/argv/UID/mount/namespace/inode bindings,
-trusted guardian launch and manual/SSH coverage; independent external completion and
+[Pinned launch and rollback](releases/2026-11-24-control-ha-installed-recovery.md#pinned-guardian-launch--isolated-qualification).
+Next selected work: approved actual workload/source/config/argv/UID/mount bindings and
+manual/SSH coverage; independent external completion and
 real capture/flush-latency qualification before overlapping all-store/fleet capture.
 Do not widen0700/0600, change product/token ownership or treat a local receipt as approval.
 Direct ORM/programmatic commands and asynchronous remote support remain coverage gaps.
@@ -29,7 +30,7 @@ slices or repeat inventory/NL2 recovery. Keep paid-watch running; current NL sco
 permission. Independent current approval, coherent capture, off-laptop key/access custody
 and final combined recovery remain the same three partial HA-02 gates; replication PASS,
 no new lettered stage, HA-03 or cutover.
-[Implementation and next boundary](releases/2026-11-24-control-ha-installed-recovery.md#joint-owner-drain--isolated-qualification).
+[Implementation and next boundary](releases/2026-11-24-control-ha-installed-recovery.md#pinned-guardian-launch--isolated-qualification).
 
 Owner-confirmed NL2 isolated retained-state recovery PASS14:12UTC, final cleanup/service
 checks PASS14:20UTC; source/reporte353ff85 pushed and verified. Wrong-key refusal,50 focused

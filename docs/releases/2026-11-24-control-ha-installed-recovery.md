@@ -6,6 +6,48 @@ divergence is reconciled/pushed at2ae5c512; older publication-blocker statements
 historical, not active instructions or a current blocker.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## Pinned guardian launch — isolated qualification
+
+[Authoritative source and report](https://github.com/Joker20380/family_connect/blob/7a6d77cf0bb10c5d5d1c34e00b8c850b34dff5f4/docs/releases/2026-11-24-control-ha-guardian-launch.md)
+is pushed/remote-SHA verified at7a6d77cf0bb10c5d5d1c34e00b8c850b34dff5f4. Main updates
+navigation only; implementation remains on the existing feature branch, not installed.
+
+`control/capture_launch.py` launches real owned guardians for the separate-UID joint
+interval. Explicit independently pinned binding/source inputs select exact UID/GID/groups,
+runtime executable, namespaces/maps and gate inodes. Source/request memfds are sealed;
+children use fixed isolated Python argv/environment with privilege drop before exec.
+Readiness is authenticated by kernel PID/UID/GID; partial/failed startup and body failure
+close channels and reap only owned children. No gate initialization or permission widening.
+
+`scripts/control_ha_guardian_probe.py` is a stdlib-only bootstrap that verifies source bytes
+before importing and confirms only a local interval. Root use requires all admission imports
+from the same sealed approved package; an ordinary mutable checkout import refuses.
+The bootstrap and interpreter/stdlib remain prior trusted inputs; this is not self-approval,
+full runtime attestation or proof that actual installed writers participate. Do not run
+privileged worktree code as a substitute for an independently verified trusted entrypoint.
+Successful receipts still say `capture_permitted=false` and `all_writers_qualified=false`.
+
+179 focused tests PASS/0 skips (59 launch/bootstrap,47 group,31 gate,42 OWNER preflight).
+Final17:29:37–17:29:42UTC native stand PASS: real UID10001/1000 guardians and writers,
+sealed root imports/standalone probe, source-path replacement safety, wrong-gate refusal,
+preserved0700/0600 ownership and reaped children. Cached Python3.13 image pinned to
+d98cc29d; no network, writable root, product/secret/DB/Docker socket mounts. All owned
+labelled test containers are removed. Initial fixture-only permission failures are retained
+separately, not counted as accepted runs. Four feature docs/1035 local-link targets PASS.
+Private evidence stays outside Git; full source pins and limitations are in the feature report.
+
+No production service/image/config/mount/SSH route/policy/version or public catalog changes;
+no RU/NL access. Last observed installed OWNER images5ce82415/50de6f25 still reference the
+ungated runtime, not this source. There is no production rollback. Failed isolated work
+closes owned channels/processes and discards unaccepted copies; never erase pending markers
+or start previously failed units. Source push does not authorize production deployment.
+
+Local trusted guardian launch is now implemented and qualified. Next approve actual workload
+source/config/argv/mount bindings and manual/SSH coverage, independently settle external work
+and measure real capture/flush latency. Then qualify coherent all-store/fleet capture,
+independent current trust/off-laptop key/access custody and final current/post-ACK/stale
+recovery. Same three partial HA-02 blocks, replication PASS; no new stage or HA-03/cutover.
+
 ## Joint OWNER drain — isolated qualification
 
 [Authoritative source and report](https://github.com/Joker20380/family_connect/blob/4758969f836b3467210996b2b70d689accb926cb/docs/releases/2026-11-24-control-ha-joint-drain.md)

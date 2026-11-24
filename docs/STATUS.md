@@ -1,5 +1,17 @@
 # Текущее состояние / Current state
 
+**24 November — pinned guardian launch qualified in isolation; no deployment.**
+HA source7a6d77cf is pushed and remote-SHA verified. Separate-UID guardians now launch
+from sealed approved bytes with fixed argv/environment, exact identity/namespace/map/
+runtime/gate checks and owned-child cleanup. A stdlib bootstrap verifies before importing;
+root launch refuses ordinary checkout imports.179 tests PASS/0 skips; real UID10001/1000
+root-bootstrap stand PASS17:29:37–17:29:42UTC. No production service/config/mount/policy/
+version change or RU/NL access. Actual installed workloads still have no configured gate.
+Next: approve actual workload bindings/manual coverage, settle external work and qualify
+real latency, then coherent fleet capture/independent trust/custody/final recovery.
+Do not rebuild joint drain or its pinned launch. Replication PASS; three HA-02 blocks partial.
+[Evidence, limits and rollback](releases/2026-11-24-control-ha-installed-recovery.md#pinned-guardian-launch--isolated-qualification).
+
 **24 November — separate-UID joint drain qualified in isolation; no deployment.**
 HA source4758969f is pushed and remote-SHA verified. Separate guardians jointly hold
 per-UID gates without widening0700/0600 or changing service identities. Kernel credentials,
