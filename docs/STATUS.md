@@ -1,5 +1,17 @@
 # Текущее состояние / Current state
 
+**24 November14:12UTC — actual isolated NL2 recovery PASS; final checks14:20UTC.**
+Source/report e353ff85 is pushed and remote-SHA verified. Publishedd85cccb2 runner restores
+the accepted toolkit and canonical/three-node/worker/mailbox state on NL2 with no Docker,
+package installation, RU connection, live volume or recovery-process network. All native
+results exactly match retained readback; wrong-key input refuses in a fresh isolated unit.
+Five production-service states/PIDs/invocations/restart counters and21 original custody
+inputs are unchanged; zero recovery units remain. Seven encrypted capsules, pinned runtime/
+toolkit and runner source are retained on NL2; no persistent custody keys.50 focused tests PASS.
+Practical host/tool availability is no longer pending. Independent off-laptop key/access
+custody, coherent capture/approval and final complete recovery remain; no HA-03/cutover.
+[Actual evidence and rollback](releases/2026-11-24-control-ha-installed-recovery.md#actual-nl2-recovery--1412utc).
+
 **24 November13:53UTC — owner confirms NL scope; live prerequisite probes complete.**
 Owner “да” authorizes current NL1/NL2 HA-02 checks and isolated recovery without changes
 to working services. AGENTS is corrected; the host question below is resolved. Strict-pinned

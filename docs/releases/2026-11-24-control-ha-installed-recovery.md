@@ -6,6 +6,43 @@ divergence is reconciled/pushed at2ae5c512; older publication-blocker statements
 historical, not active instructions or a current blocker.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## Actual NL2 recovery — 14:12UTC
+
+[Authoritative report](https://github.com/Joker20380/family_connect/blob/e353ff856bbf5e6f50e2226030f654f17b5b9c09/docs/releases/2026-11-24-control-ha-recovery-kit.md#actual-nl2-recovery--1412utc)
+is pushed and remote-SHA verified ate353ff856bbf5e6f50e2226030f654f17b5b9c09. Actual runner
+d85cccb2 was published before execution; toolkit source remains8acc6bd2. Readback saved
+14:12:14UTC after native completion; final service/cleanup verification14:20:09UTC.
+
+- Independent NL2 Ubuntu24.04 execution:419 recovered sources,28 locked wheels and10 native
+  entry modules. Canonical610 rows, all207 receiver decisions/82 allocations, worker and
+  mailbox results equal the accepted retained readback exactly. No network/dispatch in
+  recovery, no RU access, original checkout/venv, live volumes, Docker or package installation.
+- Actual systemd limits/namespaces verified:512MiB/no swap,25% CPU,32 tasks,600s deadline,
+  DynamicUser, no capabilities, private network with loopback only and private read-only
+  runtime. A fresh wrong-key unit is refused; both qualification units are collected.
+- Seven encrypted capsules plus runtime/toolkit/bootstrap/pins form an11-file142031569-byte
+  transport. Independent NL2 SHA256 readback and directory fsync pass. Published3550-byte
+  systemd runner source is separately retained/read back/fsynced, not a Git-network dependency.
+  Custody keys/checkpoints enter on stdin into temporary memory, not persistent key files.
+- Final readback preserves all five production-service states/PIDs/invocations/restart
+  counters and all21 original owner-held inputs. Zero active recovery units remain.
+  Failed encrypted-directory permission and wrong exception-expectation attempts are
+  documented in the full report; no weakening of the private parent or root recovery bypass.
+
+50 focused tests PASS;4 feature documents/1018 local links and whitespace checks PASS.
+Prior242 local tests are not claimed as newly run. Raw evidence remains private under
+`control-ha/20261124-recovery-hosts-01`; ciphertext/runtime custody is in the isolated NL2
+`/opt/apps/family_connect/ha-recovery/20261124-host-01` directory. No new version/release,
+production configuration change or persistent daemon. All temporary processes are gone;
+future rollback stops only the exact owned unit and preserves encrypted custody/evidence.
+
+Practical independent-host/tool availability is now qualified, not bare-metal OS reinstall
+or complete disaster recovery. Remaining: coherent all-writer/in-flight capture, independently
+approved current checkpoint, off-laptop recovery-key/access custody and final combined
+OWNER-PG/post-ACK/stale-copy readback. Current capsules have different capture times and
+remote ciphertext alone cannot recover after losing the only key/access holder. Same three
+partial HA-02 blocks; replication PASS, no automatic HA-03 or production cutover.
+
 ## Owner confirmation and current preflight
 
 The owner answers “да” to the exact current NL1/NL2 HA-02 check/isolated-recovery request,

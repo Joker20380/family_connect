@@ -11,20 +11,22 @@ remains selected; this publication task does not advance its acceptance gates.
 [Reconciliation record](releases/2026-11-24-source-reconciliation.md).
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Owner confirms current NL1/NL2 scope; do not repeat the permission question. Actual13:53UTC
-preflight selects NL2 for bounded isolated recovery; NL1 has memory/I/O pressure. The
-existing-systemd runner is prepared with50 tests, without package installation or production
-service changes. Next is actual off-machine native readback, not another laptop-only test.
-Coherent all-writer/in-flight capture, independent current approval and final recovery
-remain the same three partial blocks; replication PASS.
-[Evidence](releases/2026-11-24-control-ha-installed-recovery.md#owner-confirmation-and-current-preflight).
+Owner-confirmed NL2 isolated retained-state recovery PASS14:12UTC, final cleanup/service
+checks PASS14:20UTC; source/reporte353ff85 pushed and verified. Wrong-key refusal,50 focused
+tests and encrypted off-machine custody pass without package installation or working-service
+changes. Practical NL2 host/tool availability is no longer pending; do not repeat it.
+Next critical path: coherent all-writer/in-flight capture and independent current approval.
+Remaining full-recovery scope: independent off-laptop key/access custody and final combined
+OWNER-PG/post-ACK/stale-copy recovery from that coherent point. Same three partial blocks;
+replication PASS, no HA-03/cutover. Do not ask again for the confirmed NL1/NL2 host scope.
+[Evidence](releases/2026-11-24-control-ha-installed-recovery.md#actual-nl2-recovery--1412utc).
 
 Current source/reportbcb005a1 is pushed/remote-SHA verified; actual cold execution from8acc6bd2
 passes12:31:38UTC.419 committed source files/28 offline wheels support native retained
 canonical, three-node, worker and mailbox checks without original source/venv/network/Docker.
 Changed kit/custody pins refuse;242 tests PASS,0 skips. Do not repeat this completed tooling/
 Python-dependency availability check as pending. Remaining: actual approval-authority workflow,
-coherent all-writer/in-flight capture, recovery-host OS/tool prerequisites, off-machine custody
+coherent all-writer/in-flight capture, independent off-laptop key/access custody
 and final combined post-ACK/stale-copy readback. Same three partial HA-02 blocks; replication
 PASS, no HA-03..05, cutover or version change.
 [Current evidence](releases/2026-11-24-control-ha-installed-recovery.md#actual-cold-recovery-source-and-dependencies).
