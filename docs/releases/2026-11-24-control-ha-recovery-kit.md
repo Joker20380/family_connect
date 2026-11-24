@@ -68,6 +68,13 @@ no runtime PASS is inferred from tests. Private artifacts are retained under the
 
 ## Remaining acceptance and rollback
 
+First actual attempt from source7222367599efb5da5195ad7eeb0c91c178a2e191 authenticates
+the kit but bubblewrap refuses before any image program executes: `/work` cannot be created
+on the read-only image root. The correction places every new input/work mountpoint beneath
+the private `/tmp` tmpfs and adds a command-topology regression test. The failed attempt and
+its checkpoint remain private evidence, not an overwritten success. Corrected cold execution
+is pending; no production action or rollback is involved.
+
 The fixed four HA-02 gates remain: replication PASS in isolation; current independent
 approval/trust, coherent all-writer/in-flight capture and final complete recovery are partial.
 Still required: recovery-host OS/tool availability, off-machine independent custody, actual

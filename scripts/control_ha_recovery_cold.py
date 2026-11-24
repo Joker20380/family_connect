@@ -10,24 +10,24 @@ CUSTODY_FILES = tuple(role + suffix for role in ('stores', 'RU', 'node-RU', 'nod
                      for suffix in ('.aesgcm', '.key', '.checkpoint.json'))
 SHELL = '''set -eu
 umask 077
-/usr/local/bin/python -I /kit-bootstrap.py /kit.tar /kit-checkpoint.json /work/restored > /work/restore.json
-/usr/local/bin/python -I -m venv /work/venv
-/work/venv/bin/python -I -m pip --isolated --disable-pip-version-check install --no-cache-dir --no-index --find-links /work/restored/wheels --require-hashes --only-binary=:all: -r /work/restored/requirements-hashed.txt > /work/install.log 2>&1
-/work/venv/bin/python -I -m pip --isolated --disable-pip-version-check check > /work/check.log 2>&1
-mkdir -m 700 /work/probes
-PYTHONPATH=/work/restored/source /work/venv/bin/python -B -m scripts.control_ha_recovery_probe /custody /work/probes
+/usr/local/bin/python -I /tmp/fc-kit-bootstrap.py /tmp/fc-kit.tar /tmp/fc-kit-checkpoint.json /tmp/fc-work/restored > /tmp/fc-work/restore.json
+/usr/local/bin/python -I -m venv /tmp/fc-work/venv
+/tmp/fc-work/venv/bin/python -I -m pip --isolated --disable-pip-version-check install --no-cache-dir --no-index --find-links /tmp/fc-work/restored/wheels --require-hashes --only-binary=:all: -r /tmp/fc-work/restored/requirements-hashed.txt > /tmp/fc-work/install.log 2>&1
+/tmp/fc-work/venv/bin/python -I -m pip --isolated --disable-pip-version-check check > /tmp/fc-work/check.log 2>&1
+mkdir -m 700 /tmp/fc-work/probes
+PYTHONPATH=/tmp/fc-work/restored/source /tmp/fc-work/venv/bin/python -B -m scripts.control_ha_recovery_probe /tmp/fc-custody /tmp/fc-work/probes
 '''
 
 
 def command(rootfs, work, archive, checkpoint, bootstrap, custody):
     return ['/usr/bin/bwrap', '--unshare-all', '--die-with-parent', '--new-session', '--clearenv',
         '--cap-drop', 'ALL', '--ro-bind', str(rootfs), '/', '--tmpfs', '/app', '--tmpfs', '/tmp',
-        '--bind', str(work), '/work', '--ro-bind', str(archive), '/kit.tar',
-        '--ro-bind', str(checkpoint), '/kit-checkpoint.json', '--ro-bind', str(bootstrap), '/kit-bootstrap.py',
-        '--ro-bind', str(custody), '/custody', '--proc', '/proc', '--dev', '/dev',
-        '--setenv', 'PATH', '/usr/local/bin:/usr/bin:/bin', '--setenv', 'HOME', '/work',
+        '--bind', str(work), '/tmp/fc-work', '--ro-bind', str(archive), '/tmp/fc-kit.tar',
+        '--ro-bind', str(checkpoint), '/tmp/fc-kit-checkpoint.json', '--ro-bind', str(bootstrap), '/tmp/fc-kit-bootstrap.py',
+        '--ro-bind', str(custody), '/tmp/fc-custody', '--proc', '/proc', '--dev', '/dev',
+        '--setenv', 'PATH', '/usr/local/bin:/usr/bin:/bin', '--setenv', 'HOME', '/tmp/fc-work',
         '--setenv', 'LC_ALL', 'C', '--setenv', 'PYTHONDONTWRITEBYTECODE', '1',
-        '--chdir', '/work', '/bin/sh', '-c', SHELL]
+        '--chdir', '/tmp/fc-work', '/bin/sh', '-c', SHELL]
 
 
 def private_input(path):

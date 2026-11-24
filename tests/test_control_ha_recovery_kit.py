@@ -167,10 +167,19 @@ def test_cold_execution_is_offline_and_uses_only_explicit_restored_inputs():
     arguments = cold.command('/retained/rootfs', '/owned/work', '/input/kit', '/pins/checkpoint', '/pins/bootstrap', '/input/custody')
     assert '--unshare-all' in arguments and '--clearenv' in arguments and '--cap-drop' in arguments
     assert '--no-index' in cold.SHELL and '--require-hashes' in cold.SHELL and '--only-binary=:all:' in cold.SHELL
-    assert 'PYTHONPATH=/work/restored/source' in cold.SHELL and '-m venv' in cold.SHELL
+    assert 'PYTHONPATH=/tmp/fc-work/restored/source' in cold.SHELL and '-m venv' in cold.SHELL
     assert not any(name in arguments for name in ('/home', '/run', '/var/run/docker.sock', str(Path.cwd())))
     assert len(cold.CUSTODY_FILES) == 21
     assert 'node-NL2.aesgcm' in cold.CUSTODY_FILES and 'worker.checkpoint.json' in cold.CUSTODY_FILES
+
+
+def test_new_mountpoints_live_under_writable_tmpfs_not_readonly_image_root():
+    arguments = cold.command('/retained/rootfs', '/owned/work', '/input/kit', '/pins/checkpoint', '/pins/bootstrap', '/input/custody')
+    destinations = [arguments[index + 2] for index, value in enumerate(arguments) if value in ('--bind', '--ro-bind')]
+    assert destinations[0] == '/'
+    assert all(path.startswith('/tmp/') for path in destinations[1:])
+    assert arguments.index('--tmpfs') < arguments.index('--bind')
+    assert arguments[arguments.index('--chdir') + 1] == '/tmp/fc-work'
 
 
 def test_required_entry_modules_exist_in_selected_source():

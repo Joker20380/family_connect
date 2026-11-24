@@ -10,6 +10,8 @@ native retained-data result. The source kit has no credentials or production sta
 inputs and their independent keys/checkpoints remain private. Root-main publication is now
 reconciled at2ae5c512, not an active blocker or a deployment.
 [Qualification gate and remaining boundaries](releases/2026-11-24-control-ha-recovery-kit.md).
+First cold attempt refused at namespace construction, before source execution. New input/work
+mountpoints are corrected to private tmpfs paths; retry with a new kit checkpoint/destination.
 
 OWNER image-loss cold bootstrap passes11:43:57UTC: all three exact images recovered from
 encrypted custody, native Python/Django/crypto/libpq probes and PG17.11 restart/dump/restore

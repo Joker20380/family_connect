@@ -8,6 +8,9 @@ are authenticated before native checks, with network/process dispatch denied.239
 tests PASS,0 skips; this is preparation, not a cold-run or HA-02 acceptance result.
 The old root-main publication divergence was reconciled/pushed at2ae5c512; it is no longer
 a blocker. HA source remains on the separate metadata branch, not deployed or merged to main.
+First actual attempt refuses before execution: the retained image root is read-only and has
+no `/work` mountpoint. All new mounts now live under the private `/tmp` tmpfs; a regression
+check covers the command topology. The failed receipt is preserved; corrected cold run pending.
 [Scope, execution gate and rollback](releases/2026-11-24-control-ha-recovery-kit.md).
 
 **24 November11:43:57UTC — actual OWNER image-loss cold bootstrap PASS.**
