@@ -4,6 +4,39 @@ Authoritative implementation remains `/home/joker/.codex/worktrees/dad9/family_c
 on `feature/device-technical-metadata-20261115`, not this divergent old main.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## Actual node and mailbox authority
+
+Current implementation `1d014f71342b6d7b904f45052955a1d22cd6a16c` is pushed and remote-SHA
+verified on the agreed implementation branch. [Pinned execution/rollback report](https://github.com/Joker20380/family_connect/blob/1d014f71342b6d7b904f45052955a1d22cd6a16c/docs/releases/2026-11-24-control-ha-live-capture.md)
+contains exact source pins, capture times, ciphertext hashes, refusal boundaries and tests.
+
+- RU/NL1/NL2 local application/registration/SQLite barriers last40.119/36.184/5.020ms.
+  Fresh-process encrypted restore preserves24 exact files,82 peers and207 cached decisions.
+  Native consumers preserve207 duplicate deadlines and12 terminal denials; all3 paid-cohort
+  records deny reboot or exhausted clocks. NL2 sequence floor8 survives its7-peer gap;
+  the next offline allocation is9. No lease refresh or gateway command is executed.
+- NL1 mailbox authority capture takes8.170ms. Nine restored files preserve node identity,
+  bootstrap/destination, runtime marker, sequence456216 and56 dynamic/3 static members.
+  Native replay checks reject duplicate/lower sequence; expiry removes dynamic access
+  without losing the floor. The older retained RU sender key matches, not a common fence.
+- Combined focused suite146 PASS /0 failures/errors/skips. Private capsules/keys/checkpoints
+  and native readback receipts stay outside Git. No service stop/start, production restore,
+  message-spool replay, mounted-volume reconstruction, version or public artifact change.
+- Observed unit states/PIDs/invocations/restarts remain unchanged. NL AWG/TCP are active;
+  RU AWG failed/TCP inactive pre-existed. This task does not claim RU transport repair or
+  traffic-health qualification. Rollback requires no production action; never copy offline
+  credentials or cached grants into live services as fresh authority.
+
+HA-02 is still IN_PROGRESS. Local allocator/receiver/mailbox custody is completed; remaining
+work is legacy-worker and OWNER-runtime recovery, native composite import, coherent all-writer/
+dispatcher capture and independently approved forward trust. The worker read-only census
+finds147,456 bytes,13 tables/58 rows and3 allocation/deployment/outbox entries; no worker
+recovery or external-operation fence is claimed. No new stage or deployment is selected.
+
+The source branch is published; this divergent old-main navigation is separate and its
+ordinary push may still be rejected. Preserve the original four modified and six untracked
+files; do not reset, rewrite published history or force-push.
+
 ## Actual external files and OWNER database
 
 Current implementation `246e160bbae3eb861be68858a901faf089c98780` is pushed and remote-SHA

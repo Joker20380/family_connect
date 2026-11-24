@@ -3,13 +3,21 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Current source246e160b is pushed/remote-SHA verified. Actual three-node file custody/readback
+Current source1d014f71 is pushed/remote-SHA verified. Actual node-local allocator/receiver
+and mailbox custody/readback now pass:33 files,82 peer allocations,207 cached decisions,
+mailbox sequence456216. Native lease/deny/replay/expiry checks and146 focused tests PASS;
+no service start/stop, production restore or version change. Local barriers5.020–40.119ms.
+Next remains legacy-worker and OWNER runtime/configuration custody, native composite import,
+complete writer/dispatcher coherence and independent forward trust. Worker census identifies
+13 tables/58 rows only, not its recovery or an in-flight execution fence. Do not repeat
+completed node/mailbox slices or start HA-03..05. [Evidence and rollback](releases/2026-11-24-control-ha-installed-recovery.md#actual-node-and-mailbox-authority).
+Earlier source246e160b is pushed/remote-SHA verified. Actual three-node file custody/readback
 passes8,731 files and key/profile/source/history checks, with unchanged observations around
 the52.099ms SQLite point (34 tables/610 rows). Separate OWNER DB native restore passes
 37 retained-data tables/1,907,455 rows plus3 consent floors, without metadata observations.
 All owned lab resources are removed;108 focused source checks PASS. No live backend change.
-Next remains receiver/allocator/legacy-worker, panel runtime/configuration custody, native
-format integration, full writer/dispatcher coverage and independently approved forward trust.
+At that earlier checkpoint, receiver/allocator/mailbox custody was pending; the08:10/08:18
+results above close those local slices, not the remaining joint HA-02 gates.
 Do not repeat completed DB/file slices as pending gates; HA-02 is not complete.
 Earlier sourcee90f8f15 is pushed/remote-SHA verified. Owner explicitly authorized bounded
 capture; the earlier permission-pending statements below are superseded. Actual04:58UTC

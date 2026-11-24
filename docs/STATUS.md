@@ -1,5 +1,20 @@
 # Текущее состояние / Current state
 
+**24 November08:10/08:18UTC — node and mailbox authority recovery PASS.**
+Authoritative source1d014f71342b6d7b904f45052955a1d22cd6a16c is pushed/remote-SHA verified.
+Actual RU/NL1/NL2 encrypted readback restores24 files,82 peer allocations and207 receiver
+decisions; native duplicate/terminal-denial/lease-clock checks pass. NL2 sequence floor8
+is retained despite7 peers; the next offline allocation is9. Barriers40.119/36.184/5.020ms.
+NL1 mailbox restores9 authority files, sequence456216 and56 dynamic/3 static members after
+an8.170ms lock; node key/bootstrap/marker, replay-floor and expiry checks pass. No service
+stop/start, production restore, spool replay, version/cutover or public release.146 focused
+tests PASS. Observed states/PIDs/counters are unchanged: NL AWG/TCP stay active; RU AWG
+failed/TCP inactive already before this operation. That failure is not presented as fixed.
+HA-02 remains IN_PROGRESS: legacy-worker/panel-runtime, native composite integration,
+coherent writer/dispatcher capture and independent forward trust remain. Worker census
+finds13 tables/58 rows, not a restored worker. Do not repeat completed node/mailbox slices.
+[Current source/evidence/rollback](releases/2026-11-24-control-ha-installed-recovery.md#actual-node-and-mailbox-authority).
+
 **24 November07:22/07:38UTC — actual external files and OWNER database restored.**
 Authoritative source246e160bbae3eb861be68858a901faf089c98780 is pushed and remote-SHA
 verified on the implementation branch. Three encrypted capsules restore8,731 exact files
