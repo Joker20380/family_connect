@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+**24 November — installed OWNER sources bound; configuration-only admission enablement refused.**
+HA sourcef7859b1e is pushed and remote-SHA verified.17:38:42UTC GET-only inspection confirms
+both installed images lack the two admission modules; six of eight present scoped files
+differ from candidate, only two shims match. All ten paths resolve to declared read-only
+rootfs; neither service configures a gate. Source/config observations agree;108 tests PASS.
+No sampled retained Docker exec, but future manual dispatch remains open. No source import,
+exec, lock, service/image/policy/version change, RU/NL access or deployment occurred.
+Next: qualify exact OWNER image/gate activation and revert against these bindings, then
+remaining fleet/manual coverage, external settlement/latency, coherent capture and final
+independently approved recovery. Do not merely set the gate environment variable or repeat
+this observation as readiness. Replication PASS; three HA-02 blocks remain partial.
+[Decision, evidence and rollback](releases/2026-11-24-control-ha-installed-recovery.md#installed-owner-sources--read-only-binding).
+
 **24 November — pinned guardian launch qualified in isolation; no deployment.**
 HA source7a6d77cf is pushed and remote-SHA verified. Separate-UID guardians now launch
 from sealed approved bytes with fixed argv/environment, exact identity/namespace/map/

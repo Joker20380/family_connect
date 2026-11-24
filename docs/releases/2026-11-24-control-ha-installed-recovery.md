@@ -6,6 +6,53 @@ divergence is reconciled/pushed at2ae5c512; older publication-blocker statements
 historical, not active instructions or a current blocker.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## Installed OWNER sources — read-only binding
+
+[Authoritative source and report](https://github.com/Joker20380/family_connect/blob/f7859b1ee8dfea087d457bf8b785f4203569387d/docs/releases/2026-11-24-control-ha-owner-source-binding.md)
+is pushed/remote-SHA verified atf7859b1ee8dfea087d457bf8b785f4203569387d. Main changes
+navigation only; source remains on the existing feature branch, not deployed.
+
+At17:38:42.056560–17:38:42.164965UTC the two installed OWNER containers are inspected through
+Docker GETs only. Each of ten fixed source paths is observed twice; container/image/start/
+restart/configuration/argv/environment/mount/working-directory/ExecID bindings agree before
+and after. The accepted sample needs44 GETs, no container exec, imported source, lock,
+product-data/key/profile read or working-service operation. Image pins remain5ce82415 and
+50de6f25, not a newly built candidate.
+
+Both lack `/app/control/capture_gate.py` and
+`/app/control_plane/fc_control_plane/capture.py`. Of eight present files, six differ from
+the prepared candidate: manage.py/settings/middleware/backend/support/system_publisher.
+Only WSGI and the publisher management-command shim match. All scoped paths resolve to
+declared read-only rootfs, with no mount override; no gate is configured. Configured console
+argv mentions migrations/collectstatic/gunicorn, publisher argv mentions a management-command
+loop. These are redacted lexical observations, not permission to execute startup operations.
+Do not substitute the repository's default Compose startup/seed command.
+
+Both sampled retained ExecID lists are empty. This does not fence future Docker exec,
+direct ORM/manual commands or outstanding external jobs. Filesystem hashes and mount
+configuration do not attest loaded code or physical namespace/inode bindings. Every result
+continues to deny capture/all-writer acceptance and independent approval remains required.
+
+**Configuration-only enablement cannot supply missing application hooks.** Next qualify exact
+OWNER activation/revert with approved replacement images, separately owned gates and preserved
+effective commands/users/token bindings. Current permission is not silent image replacement
+or NL working-service changes. The completed observer/launcher must not become a recurring
+substitute for that integration and the remaining fleet/manual/external-settlement gates.
+
+108 focused tests PASS/0 skips (66 new source/dispatcher,42 admission-preflight). They cover
+GET scope, exact image/exec ownership, changed bindings, redaction, bounded tar/JSON parsing,
+no extraction/source execution and refusal on unexpected/missing/error inputs. Four feature
+docs/1039 local-link targets and whitespace checks PASS. Private observation/source pins,
+tests and initial generic refusal are retained outside Git; no cause is invented for the
+unclassified first refusal. Only the later retained complete observation is accepted.
+
+No installed service/image/config/mount/SSH/policy/version/catalog changes or RU/NL access.
+There is no production rollback: stop the observer on failure, retain evidence and do not
+restart failed units, remove pending markers or restore databases. Then finish real
+activation qualification, fleet/manual coverage, external settlement and latency, coherent
+all-store capture, independent approval/key/access custody and final combined recovery.
+Replication PASS; the same three HA-02 gates remain partial, no HA-03/cutover or new stage.
+
 ## Pinned guardian launch — isolated qualification
 
 [Authoritative source and report](https://github.com/Joker20380/family_connect/blob/7a6d77cf0bb10c5d5d1c34e00b8c850b34dff5f4/docs/releases/2026-11-24-control-ha-guardian-launch.md)
