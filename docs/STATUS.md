@@ -1,18 +1,19 @@
 # Текущее состояние / Current state
 
-**24 November UTC — exact private OWNER configuration/rollback proposal verified.**
-HA sourceaf74e749 is pushed/remote-SHA verified. Actual23:28:37UTC container/config/identity
-bindings are unchanged. Only role image, gate assignment and separate gate bind may differ;
-all other configuration and original rollback prestate are preserved, including the named volume.
-159 focused tests PASS/0 skips,64 new cases. Retained plan verifies offline at23:30:34UTC.
-It is not executable, approved or installed. Normal-build4392d4b7 is refused as a minimal overlay;
-prior role overlaysb62e6693/2162635c preserve base config/layers. No service/RU/NL/version change.
-[Exact plan, hashes and rollback boundary](releases/2026-11-24-control-ha-installed-recovery.md#exact-owner-configuration-proposal--no-installation).
-Next: independent candidate/config acceptance, actual durable gate/namespace/guardian bindings
-and existing-work settlement, remaining RU/NL/manual/transport coverage, then approved coherent
-capture and independent custody/final recovery. No gate paths are created; old network IDs are
-evidence, not recreation instructions. Working-NL changes remain outside scope. Replication PASS;
-same three gates partial. Do not repeat the completed config-plan/build/collector/NL2 slices.
+**24 November UTC — OWNER gate integration passes across separate container namespaces.**
+HA sourcefa05f0da is pushed/remote-SHA verified. At23:50:26–23:50:41UTC the existing candidate
+images use private ext4 bind gates as10001/1000. Guardians see the same four inodes; active work
+delays drain, both writers refuse inside the interval and resume after release. Recreating a
+container retains uncertainty and prevents a later drain despite a successful intervening write.
+182 tests PASS/0 skips,46 new cases; all owned test containers removed. Installed OWNER bindings
+unchanged; no RU/NL, working gate, service, image build or version change.
+[Cross-container proof and limits](releases/2026-11-24-control-ha-installed-recovery.md#owner-cross-container-gates--isolated-integration).
+This is not installed binding approval: the current account cannot read working console /proc
+namespaces; no permission widening or privileged host-PID helper attempted. The private proposal
+remains uninstalled. Next: independently accepted actual OWNER runtime/config/gate setup and
+existing-work settlement, remaining RU/NL/manual/transport coverage, then approved coherent
+capture and independent custody/recovery. Working-NL changes remain outside scope. Replication
+PASS; same three gates partial. Do not repeat accepted cross-mount/config/build/collector/NL2 slices.
 
 At the preceding collector-admission checkpoint:
 **24 November — standalone OWNER collector admission implemented; activation matrix recorded.**

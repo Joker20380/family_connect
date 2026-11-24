@@ -6,6 +6,40 @@ divergence is reconciled/pushed at2ae5c512; older publication-blocker statements
 historical, not active instructions or a current blocker.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## OWNER cross-container gates — isolated integration
+
+[Authoritative fixture, evidence and limits](https://github.com/Joker20380/family_connect/blob/fa05f0da63c2d6a8abfd767ea4c6d52c64fe023c/docs/releases/2026-11-24-control-ha-owner-cross-mount.md)
+is pushed/remote-SHA verified atfa05f0da63c2d6a8abfd767ea4c6d52c64fe023c. Main is navigation only.
+At23:50:26.584566–23:50:41.502811UTC candidate imagesb62e6693/2162635c run gate-only probes as
+10001/1000, with separate mount/PID namespaces and ext4 bind gates. No product state, database,
+token or network is mounted. The separate guardian runtime is pinned tod98cc29d. All four inode
+pairs, owner/modes, source, mappings and namespace relationships match. Docker's primary-only
+supplementary groups are explicit; guardians have none. No permission widening or DAC override.
+
+An active operation delays drain; both candidates refuse writes inside the joint interval and
+work after release. The measured3.745843ms assertion interval is not a full-copy latency test.
+A deliberately terminated disposable writer leaves one marker; a new container sees the same
+inodes/marker, and another successful write cannot make the next drain pass. All labelled test
+containers and guardian children are removed. Private fixture directories/markers stay local.
+No installed container, timer, source/configuration, image tag, version, RU/NL or policy change.
+Installed OWNER binding SHA is unchanged before/after:
+`d7dc99f12e6bed339423ab51009937f836124068dee6536a16ddbf07d97b2307`.
+Native receipt SHA:`39389b25b7bbbe583e998895f8d05cdb711f1957c2694a808b6098f43afcddea`.
+
+182 focused tests PASS/0 skips/14.67s,46 new cases. Feature documentation:4 files/1079 link
+targets/zero errors; whitespace clean. Failed fixture attempts and cleanup are recorded in the
+authoritative report, not counted as accepted production work. No old activation/database stand
+is repeated. There is no production rollback; retain original images and private configuration
+proposal, and never erase uncertainty markers or restore stale product state to make tests pass.
+
+Installed approval remains open: the current account cannot read working console namespaces,
+and noninteractive sudo is unavailable. No permission change or privileged host-PID helper was
+attempted. Independent candidate/config/runtime acceptance and authorized actual gate/guardian
+setup, existing-work settlement, remaining RU/NL/manual/transport coverage, approved coherent
+capture and independent custody/final recovery remain. Working-NL changes are outside current
+scope. Replication PASS; same three gates partial. Do not repeat this stand as a new gate or
+infer production approval from its self-generated fixture binding. No HA-03 or new ETA.
+
 ## Exact OWNER configuration proposal — no installation
 
 [Authoritative private plan, checksums, verification and rollback](https://github.com/Joker20380/family_connect/blob/af74e749fb5d020806ab29e22ce920db30919f8e/docs/releases/2026-11-24-control-ha-owner-activation-plan.md)
