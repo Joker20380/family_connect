@@ -6,6 +6,51 @@ divergence is reconciled/pushed at2ae5c512; older publication-blocker statements
 historical, not active instructions or a current blocker.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## Cache and selected unit qualification — supplementary proof
+
+[Authoritative source, tests and report](https://github.com/Joker20380/family_connect/blob/63f5abad225347eed167c3f5cd84f57b854de029/docs/releases/2026-11-24-control-ha-runtime-qualification.md)
+are pushed/remote-SHA verified at63f5abad225347eed167c3f5cd84f57b854de029. Main remains navigation
+only. No working-service deployment, live cache chmod, service restart/reload, package/helper
+execution, SSH/key/policy or client/catalog/signature change. Local candidates remain uninstalled.
+
+NL1's four retained cryptography caches match readable source without executing either. The new
+offline validator checks headers, hashes and recursive code fields, including stack size and
+qualified name that Python code-object equality alone ignores. At20:32:29UTC, the installed
+pinned Python3.14.4 executes only a synthetic module under UID979/root: inaccessible root-only
+cache causes source fallback for UID979; root reads the synthetic cache. Cache bytes remain
+unchanged, the owned temporary directory is removed and interpreter pins match before/after.
+This resolves the narrow cache-failure suspicion, not full application runtime acceptance. The
+old strict inventory refusal is intentionally unchanged; no permission to bypass it is inferred.
+
+NL2's14 selected loaded/disk Service settings match at20:22:57UTC. At20:24:36UTC a scoped search
+of the manager's12 UnitPath entries finds no applicable drop-in directory/configuration. The unit
+is active/running, NRestarts=0, NeedDaemonReload=yes; ActiveEnterTimestamp20:21:50UTC differs
+from the preceding census, without a service action here or an established restart cause.
+The marker's exact cause remains unknown. Full Unit/default/dependency/environment equivalence
+is not tested, and environment contents remain unread. No global daemon reload is justified.
+An initial GetUnit read failure and successful read-only retry are retained without invented cause.
+
+**190 tests PASS/0 skips**,8.54s, Python3.14.4;55 new offline checks plus135 existing runtime/launcher
+tests. Actual native stand PASS is additional evidence. Final retained-receipt validation passes.
+Feature documentation:4 files/1056 local-link targets/zero errors; main navigation:3 files/690
+link targets/zero errors; whitespace clean. External
+links are not asserted HTTP-verified public release artifacts. Private source/config receipts stay
+outside Git,0700 directories/0600 files. Native stand receipt SHA-256:
+`bf3e80e92296a58b2e00f30e48ab0dcd37ddf51950ba3c3afff0e8a2dbf77f3b`;
+NL2 scoped drop-in search: `8b46b5a2908f0596719f63b622af0ce09c93bec23b67debc3d6a6c8f78fd73c3`.
+The authoritative report retains the other sanitized hashes and precise observation timestamps.
+
+Rollback: temporary stand files are already removed. The new offline utility is source-only and
+can be omitted/reverted without restoring databases, deleting journals, reloading systemd or
+altering emergency SSH. Existing strict inventory/admission policies are unchanged.
+
+Next: full helper/runtime/environment/stop-post and AWG/mailbox/support external settlement,
+bounded manual-write coordination, independently approved runtime/source/gate activation and real
+drain/overlap/coherent capture, independent current approval/custody/final combined recovery.
+Keep the strict NL1 inventory and unexplained NL2 marker visible in activation proposals; do not
+repeat this experiment/comparison as another gate. Replication PASS; three HA-02 gates partial.
+The following sections are preceding checkpoints, not simultaneous active next tasks.
+
 ## Profile runtime bindings — observed limits
 
 [Authoritative source and report](https://github.com/Joker20380/family_connect/blob/413d48b99cc217b180efe51a1caa92d60cf9ad1a/docs/releases/2026-11-24-control-ha-profile-runtime.md)

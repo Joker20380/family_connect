@@ -11,20 +11,20 @@ remains selected; this publication task does not advance its acceptance gates.
 [Reconciliation record](releases/2026-11-24-source-reconciliation.md).
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Feature413d48b9 is pushed/remote-SHA verified. Actual Python/sudo/systemd bindings observed
-20:13:20–20:13:23UTC: both configured restricted-bootstrap services active/running; one pinned
-zero-argument root helper allowed per sudo listing. NL1 Python3.14.4/UID979; NL2 Python3.12.3/UID993.
-NL2's534 site files/five dependency RECORDs and17 external script pins verify; NL1's strict
-inventory refuses an inaccessible root-only0700 cryptography bytecode cache, not a proven service
-failure. NL1 has13 unit drop-ins/ExecStopPost; NL2 NeedDaemonReload=yes needs explanation before
-qualification, not an automatic reload.135 tests PASS/0 skips. No package imports, chmod,
-helper dispatch, service/SSH/key/version change or production deployment. Local guardian2c37bdb7,
-receiver4e9ab90f and OWNER candidates remain unapproved/uninstalled.
-[Observed runtime limits and current boundary](releases/2026-11-24-control-ha-installed-recovery.md#profile-runtime-bindings--observed-limits).
-Next selected work: exact runtime/cache and loaded/disk-unit qualification, full helper/environment/
-stop-post and AWG/mailbox/support external completion, bounded manual product-write coordination;
+Feature63f5abad is pushed/remote-SHA verified. Four NL1 caches match source without execution;
+actual pinned Python3.14.4 UID979/root synthetic stand20:32:29UTC proves source fallback versus
+cache use, with owned-directory cleanup and unchanged runtime pins. Strict NL1 inventory refusal
+is unchanged, not bypassed. NL2's14 selected loaded/disk settings match and no applicable disk
+drop-ins are found. NeedDaemonReload=yes remains unexplained; no full Unit/environment/lifecycle
+equivalence or permission to reload follows.190 tests PASS/0 skips plus native stand PASS.
+No working-service/SSH/key/deployment/version change. Local guardian2c37bdb7, receiver4e9ab90f
+and OWNER candidates remain unapproved/uninstalled.
+[Targeted findings and current boundary](releases/2026-11-24-control-ha-installed-recovery.md#cache-and-selected-unit-qualification--supplementary-proof).
+Next selected work: full helper/runtime/environment/stop-post and AWG/mailbox/support external
+completion, retaining strict inventory/reload-marker limits; bounded manual product-write coordination;
 then independently approved runtime/source/gate activation and real latency/overlap/coherent capture.
-Do not repeat the runtime/sudo/unit census, source-chain/lock stand, SSH census or wrapper bridge.
+Do not repeat the cache stand/selected-setting comparison, runtime/sudo/unit census, source-chain/
+lock stand, SSH census or wrapper bridge as new acceptance work.
 Never delete transaction journals or chmod/reload working services merely to make checks pass.
 Fixed cat routes are not Python receivers; no blind replacement/root-key removal.
 Loaded-daemon policy and independent exact runtime/source/gate approval remain prerequisites.
@@ -40,7 +40,7 @@ slices or repeat inventory/NL2 recovery. Keep paid-watch running; current NL sco
 permission. Independent current approval, coherent capture, off-laptop key/access custody
 and final combined recovery remain the same three partial HA-02 gates; replication PASS,
 no new lettered stage, HA-03 or cutover.
-[Implementation and next boundary](releases/2026-11-24-control-ha-installed-recovery.md#profile-runtime-bindings--observed-limits).
+[Implementation and next boundary](releases/2026-11-24-control-ha-installed-recovery.md#cache-and-selected-unit-qualification--supplementary-proof).
 
 Owner-confirmed NL2 isolated retained-state recovery PASS14:12UTC, final cleanup/service
 checks PASS14:20UTC; source/reporte353ff85 pushed and verified. Wrong-key refusal,50 focused

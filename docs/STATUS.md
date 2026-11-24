@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+**24 November — NL1 cache experiment and NL2 selected-setting comparison complete; no activation.**
+HA source63f5abad is pushed/remote-SHA verified. Four retained NL1 caches match source without
+execution; actual Python3.14.4 UID979/root stand20:32:29UTC proves source fallback versus cache
+reads. Temporary fixture removed, interpreter pins unchanged, no live cache chmod. NL2's14
+selected loaded/disk settings match; no applicable disk drop-ins found. NeedDaemonReload=yes
+persists, exact cause unknown. The old strict NL1 inventory refusal is unchanged; neither finding
+is full runtime acceptance.190 tests PASS/0 skips plus native stand PASS. No working-service,
+deployment or version change. Next: full helper/runtime/environment/stop-post and remaining
+AWG/mailbox/support settlement, bounded manual-write coordination, approved activation/real
+coherent interval and independent approval/custody/final recovery. Replication PASS; three HA-02
+gates partial. Earlier entries are checkpoint history, not simultaneous active NEXTs.
+[Evidence, limits and rollback](releases/2026-11-24-control-ha-installed-recovery.md#cache-and-selected-unit-qualification--supplementary-proof).
+
 **24 November — actual NL profile runtime/sudo/unit bindings observed; services unchanged.**
 HA source413d48b9 is pushed/remote-SHA verified. At20:13:20–20:13:23UTC both configured
 restricted-bootstrap units are loaded/active/running. Actual Python3.14.4/UID979 on NL1,
