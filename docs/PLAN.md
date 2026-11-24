@@ -3,15 +3,17 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Mailbox authority capture is now prepared:9 fixed files, pinned installed sources,250ms
-non-waiting membership lock and52 focused checks PASS. Perform private encrypted readback
-and native replay-floor/expiry checks; do not restore the spool or activate the mailbox.
-[Scope](releases/2026-11-24-control-ha-live-capture.md#mailbox-authority-custody).
+Mailbox authority slice completed08:18:34UTC:9 files,8.170ms lock, sequence456216,
+56 dynamic/3 static members. Independent readback, node key/bootstrap/marker and native
+stale-floor/expiry checks pass; service identity unchanged. Do not repeat the already
+completed local receiver/allocator/mailbox custody. Remaining work: legacy-worker and
+OWNER-runtime recovery, native composite integration, coherent canonical/dispatcher capture
+and independently approved forward trust. [Evidence](releases/2026-11-24-control-ha-live-capture.md#actual-mailbox-readback--081834utc).
 
 Node-local slice completed08:10UTC:24 restored files,82 peers,207 decisions; native duplicate,
 terminal-denial, lease-clock and next-allocation checks pass without activation.94 focused
 checks PASS; actual barriers40.119/36.184/5.020ms, observed services unchanged. Do not repeat
-this as pending receiver/allocator custody. Remaining receiver scope is mailbox and complete
+this as pending receiver/allocator custody. Remaining receiver scope is complete
 canonical/dispatcher consistency, alongside legacy-worker, panel-runtime, native integration
 and independent forward trust. [Evidence](releases/2026-11-24-control-ha-live-capture.md#actual-node-readback--0810utc).
 
@@ -26,7 +28,7 @@ Latest actual point07:22:17UTC:8,731 external files restored from three encrypte
 bindings pass. This advances custody, not a complete writer fence or trusted full-DR gate.
 Keep the native alias shape (66 retained mappings plus3 explicit new entities) without
 inventing legacy handles; the strict old recovery adapter cannot yet import that shape.
-Remaining selected work: mailbox/legacy-worker/OWNER-runtime recovery, installed
+Remaining selected work: legacy-worker/OWNER-runtime recovery, installed
 format integration, full writer/queue coverage and independently approved forward checkpoint.
 Earlier external authority/history preparation: the bounded encrypted file collector and
 new-directory readback pass108 focused checks. Actual three-node collection, bracketing

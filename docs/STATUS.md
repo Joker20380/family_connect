@@ -1,5 +1,17 @@
 # Текущее состояние / Current state
 
+**24 November08:18:34UTC — actual NL1 mailbox authority restore PASS.**
+Nine encrypted authority/source/configuration files restore off-node after an8.170ms
+membership-writer lock. The node key, bootstrap/destination and volume marker bind; native
+replay checks refuse equal/lower sequence456216 and expiry removes all56 dynamic members
+without resetting the floor. Three static members remain a separate configured allowlist.
+The retained RU sender key matches (different capture point, not a dispatcher fence).
+Service states/PID/invocation/restarts are unchanged. No spool read, message replay, runtime
+volume mount, service activation or version change. The local receiver/allocator/mailbox
+custody slices are complete; worker/panel-runtime, native composite integration, coherent
+writer/dispatcher capture and independent trust still prevent HA-02 COMPLETE.
+[Actual evidence](releases/2026-11-24-control-ha-live-capture.md#actual-mailbox-readback--081834utc).
+
 **24 November — mailbox authority capture preparation.**
 The installed NL1 membership/receiver sources match repository hashes. A separate bounded
 collector takes the existing membership lock without waiting, releases under250ms, and

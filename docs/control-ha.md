@@ -259,6 +259,12 @@ gateway leaf/private keys и независимое off-host custody всё ещ
 worker/panel-runtime, общий canonical/dispatcher fence или forward trust.
 [Фактические точки и границы](releases/2026-11-24-control-ha-live-capture.md#actual-node-readback--0810utc).
 
+Дополнение08:18:34UTC: mailbox authority также восстановлена вне NL1:9 файлов,
+sequence456216,56 dynamic/3 static members,8.170ms lock; ключ/marker/bootstrap,
+запрет replay и истечение dynamic membership проверены. Spool и runtime volume не
+восстанавливались; общий dispatcher fence этим не доказан.
+[Readback и границы](releases/2026-11-24-control-ha-live-capture.md#actual-mailbox-readback--081834utc).
+
 HA-02 COMPLETE — только совместный PASS этих четырёх результатов с точными evidence
 и версией источника. По последнему запросу выбраны все четыре блока;
 остаток — **журналы/фактическое состояние, установленный capture, полное восстановление**, не ещё

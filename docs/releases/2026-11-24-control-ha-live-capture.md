@@ -1,5 +1,34 @@
 # 24 November 2026 — authorized bounded live capture
 
+## Actual mailbox readback — 08:18:34UTC
+
+Pinned collector source3f68de3c2052a59972944d1ee1b77fba13d5d1c7 executes the reviewed
+non-waiting membership barrier on NL1. The interval is8.170ms; the retained point is
+2026-11-24T08:18:34.967565Z. Encrypted capsule25,152 bytes,
+SHA256`f5d5b7fd87f9a917d2c082920b1b5888fd32be03093aae660ced0739ab866bec`;
+document SHA256`918507999b9f07dd79b14ebe33c1c19203ee581ca79a0ae4d1e5407c35e8bae1`.
+The separate owner-held key/checkpoint and private `control-ha/20261124-mailbox-01`
+directory retain capture/readback receipts and the offline files; none enter Git.
+
+Fresh-process authenticated readback restores all9 exact files. Native identity validation
+matches the node key, public bootstrap/destination, runtime-volume marker and56 dynamic/
+3 static members. Membership sequence456216 is retained. The existing offline native
+replay harness refuses duplicate/lower sequence before any service command; a valid
+simulated incoming expiry does not bypass the saved floor. At the captured snapshot's
+expiry, native Membership returns no dynamic keys and keeps the original bytes/floor.
+Static configured members are a distinct allowlist, not claims of expiring dynamic access.
+The independently retained07:22 RU chat-node configuration matches the mailbox endpoint/key;
+this different-time comparison does not establish dispatcher/canonical snapshot coherence.
+
+The existing NL1 mailbox service remains active with unchanged PID/invocation/restart
+counter. No source file is mutated and no service command, message spool read/restore,
+message replay or runtime volume mount occurs.52 focused tests PASS from the preparation;
+actual native consumer checks are additional evidence, not synthetic test-count inflation.
+No installed/public version or production backend changes. Rollback needs no restart:
+the source lock is released and only new owner-side files remain. Local mailbox authority
+custody is complete; full HA-02 still needs worker/panel-runtime, composite native import,
+complete writer/dispatcher coherence and independently trusted forward authorization.
+
 ## Mailbox authority custody
 
 Preparation: `scripts/control_ha_mailbox_custody.py` reuses the private external-file capsule
@@ -18,7 +47,8 @@ writer, not arbitrary administrators or the RU chat dispatcher. No expired membe
 refreshed, sequence floor reset or private message spool read/restored. Network listener,
 mounted runtime-volume reconstruction and delivery behavior are not qualified by this step.
 Rollback is descriptor release; all retained bytes remain off-node in private encrypted custody.
-Actual execution/readback is pending at this preparation checkpoint; HA-02 remains open.
+This preparation was followed by the actual08:18:34UTC execution/readback above; that
+local authority slice is no longer pending. HA-02 remains open for the listed joint gates.
 
 ## Actual node readback — 08:10UTC
 
