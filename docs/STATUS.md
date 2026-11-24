@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+**24 November08:43UTC — legacy-worker recovery PASS; OWNER runtime census recorded.**
+Authoritative source37230214f7d54a511dbb84b3449cc9de7d309de8 is pushed/remote-SHA verified.
+Encrypted fresh-process recovery restores19 files,13 tables/58 rows and one persisted peer
+intent after a41.191ms barrier. Native retry/restart/expiry checks preserve all12 non-outbox
+tables on a separate copy; no Docker gateway commands, worker restart or version change.
+206 regression tests PASS;612 source documentation links/0 errors. RU AWG/TCP remain
+failed/inactive; paid-watch restart churn was observed before capture, not repaired here.
+OWNER follow-up locates its effective configuration/HMAC/aliases/token and a separate
+9-table/223-row synthetic SQLite store; this is census, not another recovery PASS.
+HA-02 remains IN_PROGRESS: OWNER runtime/synthetic custody, native composite integration,
+coherent all-writer/dispatcher capture and independent trust. Completed local worker/node/
+mailbox/PG slices are not repeated as pending. [Evidence and rollback](releases/2026-11-24-control-ha-installed-recovery.md#actual-worker-and-owner-runtime-census).
+
 **24 November08:10/08:18UTC — node and mailbox authority recovery PASS.**
 Authoritative source1d014f71342b6d7b904f45052955a1d22cd6a16c is pushed/remote-SHA verified.
 Actual RU/NL1/NL2 encrypted readback restores24 files,82 peer allocations and207 receiver

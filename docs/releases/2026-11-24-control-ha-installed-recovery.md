@@ -4,6 +4,36 @@ Authoritative implementation remains `/home/joker/.codex/worktrees/dad9/family_c
 on `feature/device-technical-metadata-20261115`, not this divergent old main.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## Actual worker and OWNER runtime census
+
+Current implementation `37230214f7d54a511dbb84b3449cc9de7d309de8` is pushed and remote-SHA
+verified. [Pinned actual worker report and OWNER census](https://github.com/Joker20380/family_connect/blob/37230214f7d54a511dbb84b3449cc9de7d309de8/docs/releases/2026-11-24-control-ha-live-capture.md)
+records the bounded plan, refusals, successful capture, hashes, exact checks and remaining scope.
+
+- At08:43:22UTC, legacy product DB/enrollment locks release after41.191ms. Encrypted custody
+  preserves19 files,13 tables/58 rows and one persisted unmanaged peer intent; server/client
+  private keys are not read. Key/checkpoint and private raw evidence remain outside Git.
+- Fresh-process/new-directory restore matches every byte/table digest. Native consumers on
+  a different copy preserve all12 non-outbox tables; duplicate/restart retains authority,
+  failures stay durable retries and all3 actual expired deployments deny installation.
+  Zero real gateway commands, worker restart, version or policy changes.
+- Worker container/image/start/mount set/command and service invocation/PID/counters match.
+  RU friends-AWG remains failed/TCP inactive. Paid-watch's pre-existing restart churn was
+  observed separately; unchanged samples during the successful interval do not mean RU is healthy.
+- OWNER read-only census locates effective Compose/environment/HMAC/alias/publisher-token
+  inputs and its separate synthetic registry:9 tables/223 rows, including50 synthetic devices
+  and7 paid events. Original3 OWNER container identities remain unchanged. No OWNER runtime
+  capsule, paired PG/synthetic recovery, default startup, publisher or migration is claimed.
+- Combined source regression206 tests/0 failures/0 skips;612 documentation links/0 errors.
+  Actual qualification receipts and failed attempt records are retained privately.
+
+HA-02 stays IN_PROGRESS. Remaining: OWNER runtime/synthetic custody, native composite
+integration, coherent canonical/all-writer/dispatcher snapshot and independent approved trust.
+The successful worker-local point is not an external Docker-exec fence. Rollback needs no
+production action; never overwrite live authority with old offline data. No HA-03..05 selected.
+The source branch is published. Old-main navigation remains separate: its prior ordinary
+push was non-fast-forward; do not force-push, reset or include the owner's original dirty files.
+
 ## Actual node and mailbox authority
 
 Current implementation `1d014f71342b6d7b904f45052955a1d22cd6a16c` is pushed and remote-SHA

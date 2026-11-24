@@ -3,13 +3,21 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Current source1d014f71 is pushed/remote-SHA verified. Actual node-local allocator/receiver
+Current source37230214 is pushed/remote-SHA verified. Actual legacy-worker DB/queue/persisted
+intent is restored:19 files,13 tables/58 rows;41.191ms bounded barrier and native replay/
+retry/restart/expiry checks, without Docker dispatch.206 combined tests PASS. OWNER runtime
+preflight identifies exact configuration/HMAC/aliases/token plus a separate synthetic SQLite
+store (9 tables/223 rows), not covered by its already restored PG database. Next: bounded
+OWNER runtime/synthetic capture and native readback, then native composite integration,
+coherent all-writer/dispatcher capture and independent forward trust. No HA-03..05 or live
+cutover. [Current evidence](releases/2026-11-24-control-ha-installed-recovery.md#actual-worker-and-owner-runtime-census).
+Earlier source1d014f71 is pushed/remote-SHA verified. Actual node-local allocator/receiver
 and mailbox custody/readback now pass:33 files,82 peer allocations,207 cached decisions,
 mailbox sequence456216. Native lease/deny/replay/expiry checks and146 focused tests PASS;
 no service start/stop, production restore or version change. Local barriers5.020–40.119ms.
-Next remains legacy-worker and OWNER runtime/configuration custody, native composite import,
+At that point remaining work included legacy-worker and OWNER runtime/configuration custody, native composite import,
 complete writer/dispatcher coherence and independent forward trust. Worker census identifies
-13 tables/58 rows only, not its recovery or an in-flight execution fence. Do not repeat
+13 tables/58 rows only; worker recovery now passes above, not an in-flight execution fence. Do not repeat
 completed node/mailbox slices or start HA-03..05. [Evidence and rollback](releases/2026-11-24-control-ha-installed-recovery.md#actual-node-and-mailbox-authority).
 Earlier source246e160b is pushed/remote-SHA verified. Actual three-node file custody/readback
 passes8,731 files and key/profile/source/history checks, with unchanged observations around
