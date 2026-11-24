@@ -240,11 +240,11 @@ off-host custody rollout or writer-barrier qualification.
 Implementation0ec3e5c9 pushed/remote-SHA verified; old-main navigation470e8eb9
 stays local after non-fast-forward rejection againstcb47bf23. Original work preserved;
 no force push, reconciliation or deployment performed.
-SELECTED / IN_PROGRESS within the journal block: semantic validation of the actual installed
-completed scheduled/service-bearing current operation, separately from opaque history.
-Gate: native current operation/three-node service receipts, original gate provenance,
-current issuer/both publications/five-table DB binding and refusal of pending/unknown
-or stale inputs; never replay historical approvals or resume a host. Content-audit
+SELECTED / IN_PROGRESS within the journal block: forward-only current-state checkpoint
+development, now explicitly authorized without server changes. Existing scheduled-operation
+audits still require native three-node receipts, original gate provenance and exact
+five-table renewal equality. The new contract uses a separate fresh authorization and
+exact current-state binding, never retroactive approval or historical replay/resume. Content-audit
 implementation and native synthetic qualification are complete, not the selected gate:
 it retains full unequal ledgers/opaque history and checks native scheduled service
 archives/current bindings, but always reports recovery BLOCKED. Original gate/configuration
@@ -271,16 +271,24 @@ approval and coherent capture/recovery authorization remain unqualified.
 14-module e9fd3175 digest. Its native scheduled record stores a derived decision, not
 original controller config/approval; seven selected retained artifacts do not establish
 that custody. Bounded investigation complete, not an exhaustive search or journal PASS.
-SELECTED task remains IN_PROGRESS / OWNER DECISION REQUIRED. Do not keep rechecking
-the same evidence or generate another diagnostic variant. Choose an independent original
-approval source, or explicitly approve development of the recommended forward-only
-current-state checkpoint contract. This changes the proposed trust basis, not history:
-new current authorization, preserved immutable/opaque old journals, coherent fresh
-capture and existing cryptographic/floor/recovery gates. No implemented bypass or
-production capture, writer stop, deployment or new stage is authorized by this proposal.
-[Decision and proposed acceptance boundary](releases/2026-11-24-control-ha-provenance-decision.md).
-Until that decision, preserve current-state data and the immutable baseline; no old rows
-or retroactive consent. No permissive equality bypass. A recorded
+Owner has now explicitly accepted route2 development, not production capture or writer
+stops. The separate forward-checkpoint request/verification API is implemented with
+domain-separated Ed25519 authorization, independent request pin, sequence/CRL floors,
+exact capsule/source/config/publication/issuer binding, full opaque custody and refusal
+of observed pending current markers. Old semantic adapters remain strict and unchanged.
+Native synthetic post-renewal issuance and isolated source-removed registry replay/fresh
+proof checks qualify this bounded contract only.251 tests PASS /3 optional PostgreSQL
+skips:75 new +56 unchanged current-audit +45 custody +75 bounded-maintenance.
+The75 new tests have no skips. No signing CLI, production signer,
+live collector, importer/resume API or permissive old-equality switch was added.
+Remaining selected gate: independently established current source/capture bindings and
+publication semantics, qualified coherent capture and current-state recovery. Known
+synthetic schemas/bounded-maintenance adapters are not installed-schema acceptance.
+No next queued block is started; all four stage2 exit blocks still apply.
+[Implemented contract, tests and precise limits](releases/2026-11-24-control-ha-forward-checkpoint.md).
+[Prior decision evidence](releases/2026-11-24-control-ha-provenance-decision.md).
+Preserve current-state data and the immutable baseline; no old rows or retroactive
+consent. No permissive equality bypass. A recorded
 schedule result and a start intent are not original approval or service liveness.
 The actual observation is not end-to-end traffic validation or recovery acceptance;
 do not invent approval, add a permissive switch or select another hypothetical variant.

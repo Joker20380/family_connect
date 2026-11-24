@@ -1,6 +1,8 @@
 # Documentation
 
-[CONTROL-HA · 24 November: exact installed code did not retain original schedule approval; bounded investigation complete, forward-only current-checkpoint decision required](releases/2026-11-24-control-ha-provenance-decision.md).
+[CONTROL-HA · 24 November: owner-approved forward-checkpoint development; separate signed offline contract, immutable history, source-removed current-state checks; no server changes](releases/2026-11-24-control-ha-forward-checkpoint.md).
+
+[CONTROL-HA · 24 November: prior provenance investigation and proposed decision, subsequently approved for development only](releases/2026-11-24-control-ha-provenance-decision.md).
 
 [CONTROL-HA · 24 November: cryptographic post-renewal certificate-content check with bound all_activated policy; actual fleet observation, no recovery authorization](releases/2026-11-24-control-ha-certificate-delta.md).
 
