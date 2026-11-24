@@ -6,6 +6,48 @@ divergence is reconciled/pushed at2ae5c512; older publication-blocker statements
 historical, not active instructions or a current blocker.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## Receiver admission — source only
+
+[Authoritative source and report](https://github.com/Joker20380/family_connect/blob/4dcfdb7250d63c74ddde7e7a3fc4b5b3cafbc246/docs/releases/2026-11-24-control-ha-receiver-admission.md)
+is pushed and remote-SHA verified at4dcfdb7250d63c74ddde7e7a3fc4b5b3cafbc246. Main updates
+navigation only; HA source is not merged into main or deployed.
+
+The stdlib-only launcher supports fixed one-shot AWG registration, mailbox membership,
+canonical snapshot/renewal RPC and fleet-agent receiver shapes. A private0600 binding,
+explicit approved hash, exact SSH original command and native/library hashes are checked
+before execution. Verified bytes run from sealed Linux memfds under isolated Python;
+modifying the original artifact after verification cannot replace those bytes. Native
+authorization and protocol streams remain unchanged; no arbitrary arguments/shell, timer,
+paid-watch, installation/recovery action or automatic retry is added.
+
+The parent holds admission through child exit, including reply flushing, not merely an ACK.
+Busy returns75 before spawn/stdin. Nonzero exit, broken reply or native/parent death leaves
+pending; a continuing child or later successful invocation cannot remove it. Parent death
+does not prove cancellation of a remote/helper operation. Direct `node.dispatch` also
+supports an explicit gate and records caught failures in the surrounding admitted operation.
+Old native archives/routes remain unchanged; new node bytes require new source-bound pins.
+
+Validation:300 passed,1 accepted-native/toolchain skip,1 explicit deselection; the latter
+is an old chat-sync fake-registry AttributeError reproduced on unchanged e225db60.22
+root-only profile-snapshot cases refused the initial non-root setup and remain unqualified;
+they are not counted as PASS. Details and exact commands are in the authoritative report.
+Actual unchanged AWG/mailbox sources also pass a network-disabled, read-only-rootfs
+Python3.13.17 container probe with simulated AWG/Xray/systemctl. It checks busy-before-write,
+idempotent registration, membership replay, and partial TCP-file write with SQLite rollback:
+uncertainty correctly blocks capture. Only owned containers are created/removed; private
+bindings/state/logs are excluded from Git. The tested launcher is built, not installed or
+publicly distributed; no client/invitation-page/catalog version changes.
+
+Rollback: no live change to undo. For future withdrawal, cancel capture and release its
+guardian before restoring the prior approved invocation; preserve pending and current
+state, never restore a stale DB or infer orphan cancellation. Keep paid-watch running.
+Gate UID/mount compatibility and every native config/import/helper/executable binding
+still need qualification; an entry hash alone does not establish the whole runtime.
+Current NL scope does not permit changes to working services. Next remains effective
+all-participant participation/bypass control, external completion/latency, overlapping
+capture with independent approval/key custody, and combined current/post-ACK/stale-copy
+recovery. Replication PASS; the same three HA-02 gates remain partial. No HA-03/cutover.
+
 ## OWNER admission — source only
 
 [Authoritative source and continuation report](https://github.com/Joker20380/family_connect/blob/e225db603e595e8e86a15579f622f4a2d75c7ec7/docs/releases/2026-11-24-control-ha-admission-drain.md#owner-panel-and-publisher-continuation)

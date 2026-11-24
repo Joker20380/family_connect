@@ -11,24 +11,26 @@ remains selected; this publication task does not advance its acceptance gates.
 [Reconciliation record](releases/2026-11-24-source-reconciliation.md).
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Opt-in admission/drain source is now ate225db60 on the existing HA feature branch, pushed
-and remote-SHA verified. OWNER request/session writes, management CLI, synthetic registry,
-system publisher/queue commit and support IPC join the HTTP/retention/worker/chat/payment/
-renewal slices. Caught failures, HTTP500, unsupported streaming and death retain uncertainty.
-Full panel suite350 PASS/0 skips on disposable real PostgreSQL; core gate31 PASS; local
-Python3.13 Docker build/runtime probes PASS. Default is off; no deployment or live capture.
-[OWNER scope and rollback](releases/2026-11-24-control-ha-installed-recovery.md#owner-admission--source-only).
-Next selected work: remaining operator/forced-SSH/receiver/direct-dispatch
-entrypoints; effective source/argv/UID/mount bindings for all participants,
+Opt-in admission/drain source is now at4dcfdb72 on the existing HA feature branch, pushed
+and remote-SHA verified. Fixed AWG/mailbox/snapshot/fleet-agent receiver commands now have
+a sealed-source parent launcher; direct renewal dispatch supports the gate and retains
+caught uncertainty. Parent death is not child cancellation; an ACK is not process exit.
+Final regression300 PASS/1 accepted-native skip/1 reproduced pre-existing failure deselected;
+native AWG/mailbox isolated probes PASS with simulated engines.22 separate root-only
+snapshot cases are not qualified. Existing native artifacts/SSH routes remain unchanged;
+no deployment, live capture or version change.
+[Receiver scope and rollback](releases/2026-11-24-control-ha-installed-recovery.md#receiver-admission--source-only).
+Next selected work: effective installed participation, remaining manual entrypoints/bypasses
+and approved source/config/argv/UID/mount bindings for all participants;
 independent external completion and load/flush-latency qualification before overlapping
 fleet capture. Direct ORM/programmatic commands outside admitted entrypoints and asynchronous
 remote support completion are not newly fenced; console/publisher UID compatibility still
-requires qualification. Do not reimplement completed timer/payment/renewal/OWNER source
+requires qualification. Do not reimplement completed timer/payment/renewal/OWNER/receiver source
 slices or repeat inventory/NL2 recovery. Keep paid-watch running; current NL scope is not working-service deployment
 permission. Independent current approval, coherent capture, off-laptop key/access custody
 and final combined recovery remain the same three partial HA-02 gates; replication PASS,
 no new lettered stage, HA-03 or cutover.
-[Implementation and boundary contract](releases/2026-11-24-control-ha-installed-recovery.md#owner-admission--source-only).
+[Implementation and boundary contract](releases/2026-11-24-control-ha-installed-recovery.md#receiver-admission--source-only).
 
 Owner-confirmed NL2 isolated retained-state recovery PASS14:12UTC, final cleanup/service
 checks PASS14:20UTC; source/reporte353ff85 pushed and verified. Wrong-key refusal,50 focused

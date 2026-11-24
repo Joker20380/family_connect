@@ -1,5 +1,19 @@
 # Текущее состояние / Current state
 
+**24 November — pinned SSH/receiver admission implemented; no live changes.**
+HA source4dcfdb72 is pushed and remote-SHA verified. An explicit sealed-source launcher
+holds admission across AWG/mailbox/snapshot/fleet-agent native child lifetime; early ACK
+or parent death does not falsely settle the operation. Direct renewal dispatch supports
+the gate and retains caught failures. Existing native artifacts/SSH routes stay unchanged.
+Final regression300 PASS/1 accepted-native skip/1 reproduced pre-existing failure
+deselected;22 separate root-only snapshot cases remain unqualified. Unchanged native
+AWG/mailbox probes PASS in an isolated container with simulated engine commands,
+including partial file write/DB rollback. No hosts, services, policies or versions changed.
+Next: effective installed participation/bypasses, approved source/config/UID/mount binding,
+external completion/latency and coherent capture/independent approval/final recovery.
+Replication PASS; the same three HA-02 gates remain partial.
+[Exact checks, limitations and rollback](releases/2026-11-24-control-ha-installed-recovery.md#receiver-admission--source-only).
+
 **24 November — OWNER admission implemented; no live changes.**
 HA sourcee225db60 is pushed and remote-SHA verified. Opt-in OWNER admission now encloses
 dynamic Django requests/session saves, management commands, synthetic registry writes,
@@ -7,7 +21,7 @@ system-message publication/PG queue commit and support IPC. Caught failures/proc
 retain uncertainty; closed admission refuses before work. Default remains off.
 Full panel suite350 PASS/0 skips on disposable real PostgreSQL; core gate31 PASS;
 local Python3.13 Docker build/runtime probes PASS, including wrong-UID refusal.
-No host, installed image, Compose/mount, service, policy or version changes. Next: remaining
+No host, installed image, Compose/mount, service, policy or version changes. Remaining at that checkpoint:
 forced-SSH/receiver/direct dispatch, effective bindings/UIDs, external completion/latency,
 overlapping capture and independent approval/custody/final recovery. Replication PASS;
 the same three HA-02 gates remain partial. Do not repeat completed OWNER source/NL2 checks.
