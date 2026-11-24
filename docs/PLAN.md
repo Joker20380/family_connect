@@ -3,6 +3,19 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+Actual workstation collector launch/source mapping and private rollback candidates are prepared:
+inventory uses the separate collector-runtime, probe main; both still run pre-admission sources.
+No installation/environment/unit change.33 package tests PASS/0 skips; three extracted CLI gates
+and two synthetic cycles qualified on the actual interpreter, not live Docker/OWNER imports.
+[Concrete targets, source deltas and rollback](releases/2026-11-24-control-ha-collector-binding.md).
+Next selected work: remaining OWNER/RU/NL/manual/transport runtime/gate/config bindings and exact
+activation approval, then one coherent interval and independent approval/custody/final recovery.
+Workstation source packaging is complete; runtime/import/config trust and actual gate activation
+are not inferred from it. Preserve both source/data roots and known-hosts override; no blind
+overlay of main or relocation. Working-NL changes remain outside permission. Replication PASS;
+same three gates partial. Do not repeat collector packaging/admission or NL2 diagnosis as gates.
+
+At the preceding collector-admission checkpoint:
 Standalone OWNER collector admission is implemented: complete inventory/probe cycles, manual
 inventory writes, Docker import/fallback uncertainty and local finalization.117 tests PASS/0
 skips,29 new cases including killed collectors and a late native synthetic commit. Source only;

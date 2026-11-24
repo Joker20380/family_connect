@@ -1,5 +1,19 @@
 # Текущее состояние / Current state
 
+**24 November — actual collector launch roots bound; two rollback-bearing candidates prepared.**
+Inventory runs from its separate installed collector-runtime; network probe runs from main.
+Both observed entrypoints are pre-admission bytes, shared helpers absent; source push has not
+activated them. Both user timers remain active, loaded argv/selected configuration unchanged.
+Two private candidates preserve dependencies and contain exact rollback preimages;33 new package
+tests PASS/0 skips. Three extracted CLIs refuse closed gates; two isolated synthetic cycles pass
+on the actual interpreter. No live dispatch/installation, server access, unit/version change.
+[Actual targets, source hashes, activation limits and rollback](releases/2026-11-24-control-ha-collector-binding.md).
+Next: remaining OWNER/RU/NL/manual/transport runtime/gate/config bindings and exact activation
+approval, then coherent interval and independent custody/final recovery. Source packages are not
+full runtime trust or installation permission; working-NL changes remain unauthorized. Replication
+PASS; same three gates partial. Do not repeat this source binding/package slice as a new gate.
+
+At the preceding collector-admission checkpoint:
 **24 November — standalone OWNER collectors admitted in source; activation proposal recorded.**
 Inventory/network-probe cycles now hold the optional gate through collection, Docker imports,
 fallbacks and local completion. Caught timeout, killed collector and late external commit retain
