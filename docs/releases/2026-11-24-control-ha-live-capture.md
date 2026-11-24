@@ -144,6 +144,32 @@ enabled/revoked floor preservation, replay/re-enable refusal and observation-bea
 rejection. The next actual durable capture must use this v2 source and a fresh key/checkpoint;
 the previous successful ephemeral receipt is not a current retained-backup claim.
 
+## Retained v2 capture and restore — 04:58:58UTC
+
+Source `eba7a5ce87cb9b6d45ac649d31ba63793371b8a8` is remotely verified on the agreed
+branch before capture. The actual v2 barrier takes **61.694ms**, below its one-second
+deadline; the fully locked image-read interval is15.921ms. The four exported images
+total589824 bytes, including the freshly built12288-byte consent-floor-only metadata store.
+The encrypted capsule is604197 bytes, SHA256
+`ec2e84182a07acd739262113dfa63b4d17c4a9480b1a838046d4c392b01c028e`;
+archive SHA256 `f01682b5a794fc5cc61d11c0dd51ca54faea0439f5ad841d0332f8c222689da4`.
+New key and checkpoint remain separate owner-only files outside Git/CI.
+
+Independent fresh-process local restore passes **4 stores /34 tables /609 rows**, exact
+export-image readback, all five handoff tables1/2/1/1/1 and zero metadata observation
+payloads. The registry changes legitimately between the two captures; no row is rolled
+back or edited to match the earlier607-row image. Metadata byte equality refers only to
+the privacy-projected export, never to the original live file. Sources remain untouched.
+RU/NL1/NL2 unit state/PID/invocation/restart-counter comparisons are unchanged again;
+RU management HEAD remains501 before/after. No stop/start/freeze occurs.
+
+The retained private custody directory is
+`~/.local/share/family-connect/control-ha/20261124-live-capture-03/`;
+its separate key/checkpoint are under `~/.local/share/family-connect/control-ha-keys/`.
+Only the owner should access them. Use the authenticated offline-restore tool against a
+new private directory; never copy these files into production. This v2 checkpoint
+supersedes the removed ephemeral v1 material, but not the remaining whole-fleet gates.
+
 ## Remaining HA-02 gates
 
 The actual four-store capture/restore slice passes, but HA-02 is **IN_PROGRESS**. It does

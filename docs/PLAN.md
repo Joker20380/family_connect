@@ -3,10 +3,14 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+Current retained actual snapshot:04:58:58UTC, v2 sourceeba7a5ce,61.694ms barrier,
+4 stores/34 tables/609 rows restored off-RU; metadata consent floors only, no observations.
+No observed service changes. The remaining critical path is still external authority/history,
+NL receiver/mailbox/legacy-worker and OWNER-panel coherent capture/trusted recovery.
 Privacy boundary: initial raw metadata capsule is discarded after ephemeral qualification.
 Use only v2 consent-floor-only metadata images for retained backups; preserve epochs,
 sequences/digests/revocations, never archive/replay observations.79 tests PASS. Fresh v2
-capture/restore is next; do not count the removed raw capsule as retained rollback state.
+capture/restore passes; do not count the removed raw capsule as retained rollback state.
 Actual04:45UTC four-store capture and new-directory off-RU restore PASS:41.79ms bounded
 barrier,34 tables/607 rows preserved, no observed service state change;76 tests PASS /0 skips.
 This closes the raw four-store slice, not external-file/fleet/OWNER writer coverage or full

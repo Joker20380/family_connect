@@ -1,12 +1,21 @@
 # Текущее состояние / Current state
 
+**24 November04:58:58UTC — privacy-safe actual v2 capture and restore PASS.**
+Retained off-RU encrypted snapshot fromeba7a5ce:61.694ms simultaneous four-store barrier;
+fresh-process restoration4 stores/34 tables/609 rows and handoff1/2/1/1/1. Metadata keeps
+consent/replay floors only, zero observations or old free-page payloads.79 focused tests
+PASS /0 skips. RU/NL1/NL2 observed service states/PIDs/invocations/restart counters unchanged;
+RU management listener responds before/after. No service stop, version change or cutover.
+Actual full fleet/file/OWNER recovery remains unqualified; HA-02 is still IN_PROGRESS.
+[Current retained checkpoint and privacy correction](releases/2026-11-24-control-ha-live-capture.md#retained-v2-capture-and-restore--045858utc).
+
 **24 November04:57UTC — durable capture corrected for metadata privacy.**
 The initial observation-bearing four-store capsule/key/offline images are removed after
 ephemeral qualification; their receipts remain, but they are not a retained backup.
 The v2 tool preserves metadata consent/replay floors with empty observations in a newly
 built image, leaving the live source untouched; old payload/free-page bytes cannot enter
 durable custody. The restorer refuses raw v1/nonempty metadata.79 focused tests PASS.
-Fresh v2 capture is next; full fleet recovery and HA-02 completion remain unqualified.
+The later v2 result above supersedes this preparation; full fleet recovery remains unqualified.
 
 **24 November04:45UTC — actual capture and off-RU restore PASS (bounded scope).**
 Four RU application SQLite stores are captured under simultaneous zero-wait write locks;
