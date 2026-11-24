@@ -48,3 +48,24 @@ and an ordinary reviewed source revert, never old live SQLite/floor restoration.
 Original four unstaged/six untracked files in this navigation checkout are preserved.
 Prior navigation push was rejected non-fast-forward; no force/reset or history rewrite.
 This report is a source/navigation checkpoint, not a release or stage2 completion.
+
+## Latest read-only follow-up and decision
+
+Documentation commit `b4ffddf22bcb45583648efadcdd8a89023e7d18b` is pushed and remote-SHA
+verified on the authoritative branch. Runtime candidate remains64ba58ee, not deployed.
+Selected3/6/5 root/Family Connect system accounts have no crontabs;8/9/11 sampled
+system-cron files have no literal Family Connect root references. NL1 family-restricted
+adds one SSH command candidate. This is bounded lexical evidence, not all-writer coverage.
+OWNER read-only PG queries observe39 tables/283 columns,7 APPLIED operator requests,
+0 fleet deployment operations and1 published system message. No private row payload
+or credentials exported. Separate transactions are not a coherent snapshot/queue fence.
+
+Actual live capture/new current-checkpoint scope needs an explicit owner decision before
+crossing the earlier development-only/no-server-change boundary. The complete writer
+list, interruption/abort qualification and full real off-node recovery remain technical
+work; do not claim permission alone closes HA-02. No new signer, live operation or
+production cutover was performed. All owned laboratory containers have been cleaned.
+
+The preceding navigation commit9c6520b6 was retained locally after ordinary main push
+failed non-fast-forward. No force/reset/rebase or merge was attempted. Source pushes
+are successful; navigation publication is not. Original dirty root files remain intact.

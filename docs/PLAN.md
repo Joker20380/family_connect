@@ -4,7 +4,8 @@
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
 Latest owner request24 November selects **completion of all HA-02**, not only the
-journal slice. Current source64ba58ee pushed/remote-SHA verified in the metadata worktree.
+journal slice. Current documentation sourceb4ffddf2 and runtime candidate64ba58ee are
+pushed/remote-SHA verified in the metadata worktree; neither is a production deployment.
 Isolated strict replication gate PASS; handoff-preserving import/recovery now covers49
 PG tables.199 import/census tests and28 guards /0 skips plus full crash/independent DB
 restore/stale-copy refusal and extended Patroni fault run PASS. Read-only source census
@@ -15,6 +16,10 @@ Remaining selected criteria: actual-current authorization/history custody; insta
 schemas/all writers/coherent capture; independent complete recovery. Next: remaining
 writer/queue/system-account coverage and bounded barrier design, real forward-checkpoint
 approval/custody, full recoverable inputs. No service stops or production cutover implied.
+Bounded additional account/system-cron and OWNER queue readback is retained; not a fence.
+An explicit live-scope decision is needed before crossing the prior development-only
+no-service-stop/no-server-change boundary. HA-02 is not complete; approval alone does
+not close the remaining technical capture/recovery gates.
 HA-03..05 remain unselected. Earlier chronological checkpoints below retain historical
 scope/results; their old journal-only selection/four-open-block counts are superseded.
 [Current all-stage2 scope, evidence and rollback](releases/2026-11-24-control-ha-replication.md).

@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+**24 November — latest source and live-scope decision boundary.**
+Documentation sourceb4ffddf22bcb45583648efadcdd8a89023e7d18b pushed/remote-SHA verified;
+runtime candidate remains64ba58ee, not deployed. Additional read-only account/system-cron
+and OWNER queue evidence is recorded in the authoritative report: selected account cron
+absent, no literal Family Connect references in8/9/11 sampled system-cron files; OWNER
+schema39 tables,7 APPLIED operator requests,0 fleet operations,1 published message.
+These are bounded observations, not a fence. Explicit owner decision is needed before
+crossing the earlier no-service-stop/no-server-change boundary for a qualified live
+capture/new current checkpoint. All HA-02 remains selected and IN_PROGRESS; barrier
+and full real off-node recovery are still technical gates. No signer or live permit
+was invented, and no server mutation occurred. Main navigation commit9c6520b6 was
+rejected non-fast-forward; source branch is pushed, original root work preserved.
+
 **24 November — CONTROL-HA: installed schemas and49-table recovery qualified in isolation.**
 Authoritative source advanced to64ba58ee110b1c2ebb7fb3f2661f6badcea10d60, pushed and
 remote-SHA verified on `feature/device-technical-metadata-20261115` in the metadata worktree.
