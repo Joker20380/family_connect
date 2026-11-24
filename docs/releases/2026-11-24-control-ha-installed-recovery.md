@@ -6,6 +6,45 @@ divergence is reconciled/pushed at2ae5c512; older publication-blocker statements
 historical, not active instructions or a current blocker.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## Pinned renewal admission — source only
+
+[Authoritative source and continuation report](https://github.com/Joker20380/family_connect/blob/d8aabdcf2ac688b21a63269326242cc3463c023a/docs/releases/2026-11-24-control-ha-admission-drain.md#pinned-renewal-dispatch-continuation)
+is pushed and remote-SHA verified atd8aabdcf2ac688b21a63269326242cc3463c023a. Main updates
+navigation only; HA source remains on the existing feature branch, not merged or deployed.
+
+The explicit isolated-Python launcher verifies the caller's capsule manifest checksum,
+every source and the API archive before entering native renewal/controller/node/scheduled
+credential-directory code. It rejects unsafe files and extra source/bytecode caches, loads
+the gate from the verified open API descriptor, and holds admission through native completion.
+Closed admission returns75 before native config/stdin/DB work. Nonzero completion, exception
+or process death retains uncertainty. Caught SSH timeout/rejection/bad ACK or readback failure
+also retains uncertainty even if a later retry succeeds. There is no automatic marker reset.
+Native legacy dispatch remains unchanged unless explicitly wrapped; root/maintenance
+authorization and transaction/recovery rules are not bypassed. Accepted historical API
+hashes remain unchanged; new source packages do not overwrite old immutable capsules.
+
+Validation:319 passed,1 optional accepted-native-validator skip,22 disposable-root/SSH cases
+explicitly deselected. Actual classic and online packages execute with isolated Python;
+Go1.26.1 builds the online package. Separate final retained-adapter checks:305 passed,
+8 optional real-PostgreSQL rehearsal skips. Counts overlap. Tests use synthetic local
+state/RPC responses; real process death/drain refusal is exercised. Source links/whitespace
+are checked. No full root-SSH/OWNER/PG/fleet acceptance is claimed by these runs.
+
+No host access, installed service/route/watchdog/policy change, live credential write,
+version/catalog/release or capture occurs. No installed rollback is necessary. Future
+withdrawal must cancel capture and release the guardian before restoring original dispatch,
+retaining pending markers and current transaction state; never restore stale credentials or
+start previously failed units. Existing transport/watchdog/lease budgets are unchanged.
+
+Remaining selected work: forced-command/direct-dispatch receivers, other manual writers
+and OWNER PostgreSQL/synthetic publishers; effective source/argv/UID/mount/gate bindings,
+independent external completion and latency qualification, then overlapping fleet capture.
+Per-node RPC admission is not a whole remote transaction fence; existing SSH routes do not
+yet invoke the wrapper and a successful service start is not proof of external completion.
+Current independent approval/key-access custody and final combined post-ACK/stale-copy
+recovery remain open. Replication PASS; the other three HA-02 gates remain partial.
+Current NL scope still does not authorize changes to working services. No HA-03/cutover.
+
 ## Scheduler and payment admission — source only
 
 [Authoritative source and continuation report](https://github.com/Joker20380/family_connect/blob/fd37847563e99c53eab2012aeeee74ceed137254/docs/releases/2026-11-24-control-ha-admission-drain.md#scheduler-and-payment-dispatch-continuation)

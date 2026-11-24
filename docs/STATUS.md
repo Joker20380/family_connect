@@ -1,5 +1,17 @@
 # Текущее состояние / Current state
 
+**24 November — pinned renewal admission implemented; no live changes.**
+HA sourced8aabdcf is pushed and remote-SHA verified. An explicit isolated-Python capsule
+launcher gates offline/online renewal, node CLI and scheduled credential/directory work;
+it verifies exact sources/API before native execution. Caught SSH failures remain uncertain
+after successful retry. Legacy invocation stays ungated; existing SSH routes are unchanged.
+319 tests PASS/1 optional native skip/22 root-SSH cases deselected; retained-adapter set
+305 PASS/8 optional PG skips (overlap, not summed). No hosts, services, policies or versions
+changed. Next: remaining forced-SSH/direct receivers and OWNER writers, effective bindings,
+remote completion/latency, coherent capture and independent approval/custody/final recovery.
+Replication PASS; three HA-02 gates remain partial.
+[Exact scope and rollback](releases/2026-11-24-control-ha-installed-recovery.md#pinned-renewal-admission--source-only).
+
 **24 November — scheduler/payment admission implemented; no live changes.**
 HA sourcefd378475 is pushed and remote-SHA verified. Chat-sync holds admission through
 support publication; paid-reconcile through the node cycle; paid CLI through DB commit.

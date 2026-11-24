@@ -11,13 +11,15 @@ remains selected; this publication task does not advance its acceptance gates.
 [Reconciliation record](releases/2026-11-24-source-reconciliation.md).
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Opt-in admission/drain source is now atfd378475 on the existing HA feature branch, pushed
-and remote-SHA verified. In addition to HTTP/routing/retention/product-worker, chat-sync
-and paid-reconcile timers plus paid CLI participate. Caught prepare failures retain
-uncertainty across DB rollback and successful retry. Closed isolated packaging passes;
-200 tests PASS,0 skips; final package/budget set39 PASS. Historical package run22 PASS/
-4 baseline-reproduced source-pin failures, not weakened. No deployment/live capture.
-Next selected work: remaining credential/restricted renewal, operator/forced-SSH/receiver
+Opt-in admission/drain source is now atd8aabdcf on the existing HA feature branch, pushed
+and remote-SHA verified. The pinned capsule launcher adds offline/online renewal, node CLI
+and scheduled credential/directory evaluation to the earlier HTTP/retention/worker/chat/payment
+slices. Caught SSH failures retain uncertainty after successful retry. Exact source/API
+checks precede native work; default legacy entrypoints and fixed SSH routes are unchanged.
+319 tests PASS/1 optional native skip/22 root-SSH cases deselected; retained-adapter set
+305 PASS/8 optional PG skips (overlapping counts). No deployment or live capture.
+[Renewal scope and rollback](releases/2026-11-24-control-ha-installed-recovery.md#pinned-renewal-admission--source-only).
+Next selected work: remaining operator/forced-SSH/receiver/direct-dispatch
 entrypoints and OWNER PG/synthetic publishers; effective source/argv/UID/mount bindings,
 independent external completion and load/flush-latency qualification before overlapping
 fleet capture. Do not reimplement the completed timer/payment slice or repeat inventory/NL2
