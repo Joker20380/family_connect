@@ -1,0 +1,15 @@
+{
+  "schema": 1,
+  "reference": "control-ha-mailbox-cleanup",
+  "status": "source-only",
+  "base_commit": "a6e8a019b626fdc3ee09fca08e86e8d9d777d021",
+  "reason": "Fail closed on unfinished routed-reader cleanup; attempt all teardown steps without hiding failures or falling back. Original accepted Android106, subscription119 and support1 sources remain unchanged. No client release or installed-runtime acceptance.",
+  "patch": "clients/shared/control-ha-mailbox.patch",
+  "patch_sha256": "8a400a7cfe188b5173ddc5093182b3c0896ae8be2986e2734f7f3d96461d9038",
+  "modules": {
+    "messenger/routed.py": {
+      "before_sha256": "21ce1899e9e6362ed88b310d642cbd6ee956373f82d83c316d95bb60f57c4163",
+      "sha256": "292fa339f148431798b9b7dfa248e39593f544216ae5cb5546e1edec62e9f5bf"
+    }
+  }
+}

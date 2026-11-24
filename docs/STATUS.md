@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+**24 November — routed mailbox cleanup is now fail-closed; source only.**
+A timed reader join no longer counts as completion: a live reader or cleanup exception raises
+terminal `cleanup_incomplete`, attempts remaining cleanup and preserves the support gate marker.
+Real local TCP/RNS relay and recipient-storage ACK pass; injected native reader/detach failures
+preserve committed work and refuse capture even after retry. Native Unix reader/setup cleanup also
+passes.153 focused tests PASS/0 skips,16 new cases;19 provenance checks PASS, one pre-existing
+announcement-pin mismatch remains. Linux package import PASS with system GI/pinned dependencies;
+not GUI/device acceptance. Accepted client hashes stay unchanged via an explicit source-only delta.
+No RU/NL access, deployment or version change. Next: remaining native helper/environment/stop-post,
+AWG/runtime/collector/manual bindings and the concrete joint activation/capture proposal, then
+coherent capture and independent approval/custody/final recovery. Replication PASS; three gates
+partial, no new stage or ETA. [Evidence, known test limit and rollback](releases/2026-11-24-control-ha-mailbox-cleanup.md).
+
 **24 November — support worker now has opt-in source admission; no deployment.**
 Panel IPC completion was not asynchronous worker completion. Worker source now gates store/
 owner initialization, requests/bindings/enqueue, notifications/expiry, periodic scheduling and

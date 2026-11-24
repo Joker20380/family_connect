@@ -3,6 +3,21 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+Routed mailbox cleanup now verifies reader termination after the existing bounded join and
+attempts all cleanup steps on error. Unfinished/failed cleanup is terminal, never route fallback
+or success; support admission retains pending through later retries. Real local TCP/RNS exchange,
+recipient-storage ACK and native Unix cleanup are qualified in isolation, not on installed hosts.
+153 focused tests PASS/0 skips;16 new cases.19 provenance checks PASS; one existing announcement
+pin mismatch remains separately documented. Linux package import PASS using system GI plus the
+pinned dependencies; no GUI/device release acceptance. Original accepted client hashes unchanged.
+[Source delta, exact native proof and rollback](releases/2026-11-24-control-ha-mailbox-cleanup.md).
+Next: remaining helper/environment/stop-post, AWG and runtime/collector/manual bindings; concrete
+joint activation/capture proposal, real coherent interval and independent approval/custody/final
+recovery. Do not repeat the completed reader-cleanup or support-admission slice as a new gate.
+Replication PASS; the same three gates partial. Working-NL deployment remains outside current
+scope; no RU/NL connection, installed change, version change, new stage or calendar estimate.
+
+At the preceding support-admission checkpoint:
 Support-worker opt-in admission is implemented in source: requests/initialization, bindings,
 enqueue/outbox expiry, notifications, periodic scheduling and background exchange through close.
 Caught failure/death retains uncertainty; later success cannot erase pending. Closed package

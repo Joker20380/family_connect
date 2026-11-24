@@ -10,10 +10,14 @@ import time
 from types import SimpleNamespace
 
 import pytest
+import RNS
+from RNS.Interfaces.TCPInterface import TCPClientInterface
 
 from control.capture_gate import Busy, CURRENT, GateError, initialize
 from messenger.delivery import DeliveryController
 from messenger.mailbox import ExchangeResult, MailboxError
+from messenger.routed import RoutedMailbox
+from messenger.tests.test_offline import Peer
 from messenger.tests.test_support import queued, support
 from provisioning import support_worker as worker
 
@@ -39,6 +43,110 @@ def mailbox_for(owner, snapshot, tmp_path):
     path.write_text(json.dumps(snapshot))
     path.chmod(0o600)
     return worker.SupportMailbox(owner, path, None)
+
+
+@pytest.fixture
+def native_mailbox(gated_support, tmp_path, chat_runtime):
+    owner, clients, snapshot = gated_support
+    allowed = tmp_path / 'allowed.json'
+    allowed.write_text(json.dumps([owner.chat.public.hex(), clients[0].profile()['public']]))
+    with socket.socket() as probe:
+        probe.bind(('127.0.0.1', 0))
+        port = probe.getsockname()[1]
+    node = Peer('budget-node', tmp_path / 'node', port, script='closed_peer.py', extra=[str(allowed)])
+    baseline = list(RNS.Transport.interfaces)
+    try:
+        snapshot = dict(snapshot, sequence=snapshot['sequence'] + 1, node=dict(snapshot['node'],
+            port=port, public_key=node.info['public']))
+        mailbox = mailbox_for(owner, snapshot, tmp_path)
+        mailbox.runtime = chat_runtime
+        yield mailbox, node, clients[0], snapshot
+    finally:
+        node.close()
+        assert list(RNS.Transport.interfaces) == baseline
+
+
+def test_native_support_exchange_settles_reader_before_gate_and_recipient_ack(native_mailbox, monkeypatch):
+    mailbox, node, client, snapshot = native_mailbox
+    owner = mailbox.owner
+    request, ident = queued(owner, client)
+    finished = []
+    original = RoutedMailbox._finish_reader
+
+    def finish(reader):
+        assert CURRENT.get() is not None and len(pending(owner.capture_gate)) == 1
+        original(reader)
+        assert not reader.is_alive()
+        finished.append(reader)
+
+    with monkeypatch.context() as patch:
+        patch.setattr(RoutedMailbox, '_finish_reader', staticmethod(finish))
+        assert mailbox.exchange(timeout=20).relayed == 1
+    assert len(finished) == 1 and not pending(owner.capture_gate)
+    assert node.call('stats')['count'] == 1
+    assert owner.history('1' * 64)['messages'][0]['status'] == 'relayed'
+    with owner.capture_gate.drain(.2):
+        with pytest.raises(MailboxError, match='^busy$'):
+            mailbox.exchange()
+    receiver = worker.SystemMailbox(client._chat, snapshot['node'], mailbox.runtime)
+    try:
+        assert receiver.exchange(timeout=20).received.stored == 1
+    finally:
+        receiver.close()
+    assert mailbox.exchange(timeout=20).received.stored == 1
+    assert owner.history('1' * 64)['messages'][0]['status'] == 'recipient_stored'
+    assert owner.send(**request)['id'] == ident
+    assert not pending(owner.capture_gate)
+
+
+@pytest.mark.parametrize('failure', ['stalled_reader', 'detach'])
+def test_native_cleanup_failure_retains_committed_work_and_refuses_capture(native_mailbox, monkeypatch, failure):
+    mailbox, node, client, snapshot = native_mailbox
+    owner = mailbox.owner
+    request, ident = queued(owner, client)
+    release = threading.Event()
+    readers = []
+    original_read = TCPClientInterface.read_loop
+    original_detach = TCPClientInterface.detach
+
+    def stalled_reader(interface):
+        readers.append(threading.current_thread())
+        original_read(interface)
+        release.wait()
+
+    def failed_detach(interface):
+        original_detach(interface)
+        raise OSError('synthetic private cleanup detail')
+
+    try:
+        with monkeypatch.context() as patch:
+            if failure == 'stalled_reader':
+                patch.setattr(TCPClientInterface, 'read_loop', stalled_reader)
+            else:
+                patch.setattr(TCPClientInterface, 'detach', failed_detach)
+            with pytest.raises(MailboxError, match='^cleanup_incomplete$'):
+                mailbox.exchange(timeout=20)
+        retained = pending(owner.capture_gate)
+        assert len(retained) == 1
+        assert node.call('stats')['count'] == 1
+        assert owner.history('1' * 64)['messages'][0]['status'] == 'relayed'
+        if failure == 'stalled_reader':
+            assert len(readers) == 1 and readers[0].is_alive()
+        with pytest.raises(GateError, match='UNSETTLED_OPERATION'):
+            with owner.capture_gate.drain(.2):
+                pytest.fail('reader/cleanup failure is not settlement')
+    finally:
+        release.set()
+        for reader in readers:
+            reader.join(2)
+            assert not reader.is_alive()
+    assert mailbox.exchange(timeout=20).relayed == 0
+    assert owner.send(**request)['id'] == ident
+    assert pending(owner.capture_gate) == retained
+    assert node.call('stats')['count'] == 1
+    with pytest.raises(GateError, match='UNSETTLED_OPERATION'):
+        with owner.capture_gate.drain(.2):
+            pytest.fail('later success cannot settle an earlier cleanup failure')
 
 
 @pytest.mark.parametrize('operation', ['update', 'send', 'enqueue', 'invoke', 'outbox', 'ingest', 'dispatch', 'refresh', 'close'])

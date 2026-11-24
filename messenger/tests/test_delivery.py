@@ -66,6 +66,7 @@ def test_transient_retries_are_finite_and_preserve_backoff(code):
 
 
 @pytest.mark.parametrize('failure,code', [(MailboxError('access_denied'), 'access_denied'),
+    (MailboxError('cleanup_incomplete'), 'exchange_failed'),
     (MailboxError('invalid_response'), 'invalid_response'), (OSError('private text/path'), 'exchange_failed')])
 def test_permanent_and_storage_failures_wait_for_an_event(failure, code):
     mailbox = Exchange([failure, result()])
