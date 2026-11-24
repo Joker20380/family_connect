@@ -59,6 +59,12 @@ Admission and gateway catalog4 remain unchanged; canary stays PAUSED.
 
 
 
+26 October addendum / дополнение: server P1 group now includes requested tester in
+addition to the original owner and two testers (four total). Same signed106 file,
+package, signer and checksum; no new APK or public publication. Target's actual
+upgrade/P1 connection remains unverified. Серверное разрешение не подтверждает
+фактическое подключение нового тестера. [Receipt](../releases/2026-10-26-p1-four-members.md).
+
 **SIGNED_APK_READY=YES; PRIVATE_FIELD_READY=YES** for the confirmed three existing
 devices only. No public release or automatic sending.23 October: actual105 readback
 preserved first, Wi-Fi/VPN off, active consent but full JSON unavailable. Finished

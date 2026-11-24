@@ -2,6 +2,13 @@
 
 ## Current engineering priority / Текущий critical path
 
+**Immediate owner request24 November: publish pending session changes safely.**
+Checkpoint safe local files, merge origin/main without rewriting either history, resolve
+documentation conflicts preserving current HA-02 navigation, verify affected sources/docs,
+then ordinary push and remote-SHA readback. HA-02 implementation pauses for this bounded
+publication task; no deployment or additional stage is selected.
+[Reconciliation record](releases/2026-11-24-source-reconciliation.md).
+
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
 Current source2ea128af is pushed/remote-SHA verified. Actual OWNER image cold bootstrap passes
 11:43UTC from encrypted custody without Docker, registry, working source or original volumes.
@@ -1962,6 +1969,10 @@ Only complete server and owner gates permit NL_REPLACEMENT_LIVE.
 [Current evidence and rollback](releases/2026-10-30-nl-gateway-replacement.md).
 Earlier provider/network observations below are retained context, not the restoration path.
 
+Read-only ops27.10 evening: NL IO stalls recur (IO-wait peak84%, PSI some
+avg10=14.17); separate diagnosis pending, no automatic repair/restart. P1 group4
+intact, NL6 recent AWG devices, registry54. Main engineering gate unchanged.
+
 **ANDROID-CONTROLLED-BETA — единственный текущий critical path (owner decision27.10).**
 **Historical canary pause/availability diagnosis — superseded by1 November gates above.**
 At this earlier checkpoint the owner authorized availability restoration, not canary resumption.
@@ -2255,6 +2266,42 @@ Terminal scripts не запускать, paid schema не удалять. Read-
 ### Предыдущие priority/ops records — исторические, не активные NEXT
 
 Ни один сохранённый ниже Linux NEXT не переопределяет owner decision27.10.
+
+Ops27.10:4-member P1/binary verified intact; NL8 recent AWG devices,54 registry
+records. Follow up NL intermittent IO stalls and legacy RU Docker worker health
+without automatic restarts. Target106/P1 use remains unobserved; no new deployment
+needed based on this check. [Receipt](releases/2026-10-27-vpn-health.md).
+
+P1 expansion26.10 DONE in requested server scope: max4, exact original3 plus
+requested tester, one authorized restart, loaded binary/policy/TLS verified. No client
+rebuild/identity/entitlement reset. Remaining external observation: target106/P1
+negotiation; not a reason for another deployment. Earlier pending cap3 notes are
+historical. [Receipt/rollback](releases/2026-10-26-p1-four-members.md).
+
+Explicit P1 follow-up: preserve owner+2 existing testers, add requested third
+tester only after tested gateway4-member support and coordinated shared restart.
+Current hard cap3 prevents configuration-only addition; no production write yet.
+
+requested tester narrow follow-up: no MESH grant mutation needed (already eligible).
+Existing shared signed106 verified; private file handoff is distinct from new
+release/publication and from proof of target in-place upgrade. No P1 group change.
+
+requested tester26.10: BLOCKED before production by installed-signer and identity-
+preservation evidence gates. Target-specific trusted package/signer/channel and
+upgrade-state evidence required to resume; stale support version alone insufficient.
+Do not re-enroll, grant extra rights, reset data or publish speculative migration.
+[Read-only findings](releases/2026-10-26-negv-seamless-upgrade.md).
+
+Ops snapshot25.10 supersedes24.10 counts:54 registered/50 non-revoked,
+NL5 recent AWG clients, RU0; legacy Docker worker unhealthy remains unresolved.
+No automatic restarts/deployment. MESH/legacy counts and authenticated end-to-end
+acceptance not performed. [Read-only report](releases/2026-10-25-vpn-health.md).
+
+Отдельный ops follow-up24.10: read-only VPN check завершён,53 registered/49
+non-revoked; NL8 recent AWG clients, RU0. Разобрать legacy Docker worker unhealthy
+и таймауты чтения journal без перезапуска; MESH/legacy pilot users отдельно не
+подсчитаны. Это не смена engineering priority и не разрешение на deployment.
+[Срез](releases/2026-10-24-vpn-health.md).
 
 **Текущий bounded task — L04.2; R3 PARTIAL / PACKAGE_GATE_FAILED (environment harness finalization).**
 R2 FINAL PARTIAL / READINESS_CAUSE_UNRESOLVED accepted; original typed fetch

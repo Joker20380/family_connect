@@ -1,0 +1,82 @@
+--- a/roombroker/speed_policy_linux.go
++++ b/roombroker/speed_policy_linux.go
+@@ -27,7 +27,7 @@
+ 	if err != nil || len(decoded) != 16 {
+ 		return sessionprofile.P0, Code("speed_profile_configuration")
+ 	}
+-	targets, err := muxOperatorValueLimit("speed-targets", 99)
++	targets, err := muxOperatorValueLimit("speed-targets", 132)
+ 	if err != nil {
+ 		return sessionprofile.P0, err
+ 	}
+@@ -37,7 +37,7 @@
+ 			return sessionprofile.P0, Code("speed_profile_configuration")
+ 		}
+ 		members := strings.Split(targets, "\n")
+-		if len(members) > 3 {
++		if len(members) > 4 {
+ 			return sessionprofile.P0, Code("speed_profile_configuration")
+ 		}
+ 		selected = make(map[string]bool, len(members))
+--- a/roombroker/speed_group_test.go
++++ b/roombroker/speed_group_test.go
+@@ -23,7 +23,7 @@
+ 		test.Fatal(err)
+ 	}
+ 	test.Setenv("FC_DIAGNOSTIC_CONTROL_DIR", directory)
+-	identities := make([]Identity, 4)
++	identities := make([]Identity, 5)
+ 	for index := range identities {
+ 		identities[index].PublicKey[0] = byte(index + 1)
+ 	}
+@@ -45,7 +45,7 @@
+ 	put("speed-targets", group+"\n")
+ 	for index, identity := range identities {
+ 		expected := sessionprofile.P1
+-		if index == 3 {
++		if index >= 3 {
+ 			expected = sessionprofile.P0
+ 		}
+ 		actual, err := speedPolicy(identity)
+@@ -73,6 +73,30 @@
+ 	}
+ }
+ 
++func TestSpeedGroupExactFourAndUnselectedIdentity(test *testing.T) {
++	_, identities, put := groupFixture(test)
++	members := make([]string, 4)
++	for index := range members {
++		members[index] = groupTarget(identities[index])
++	}
++	for _, suffix := range []string{"", "\n"} {
++		put("speed-targets", strings.Join(members, "\n")+suffix)
++		for index, identity := range identities {
++			expected := sessionprofile.P1
++			if index == 4 {
++				expected = sessionprofile.P0
++			}
++			actual, err := speedPolicy(identity)
++			if err != nil || actual != expected {
++				test.Fatal(index, actual, err)
++			}
++			if lifecyclePolicy(identity) != (index == 0) {
++				test.Fatal("diagnostic scope expanded", index)
++			}
++		}
++	}
++}
++
+ func TestSpeedGroupInvalidFailsClosed(test *testing.T) {
+ 	_, identities, put := groupFixture(test)
+ 	owner, tester, other := groupTarget(identities[0]), groupTarget(identities[1]), groupTarget(identities[2])
+@@ -80,8 +104,8 @@
+ 		"wildcard": "*", "bad_hex": owner + "\n" + strings.Repeat("z", 32),
+ 		"duplicate": owner + "\n" + owner, "missing_owner": tester + "\n" + other,
+ 		"uppercase": strings.ToUpper(owner), "blank_row": owner + "\n\n" + tester,
+-		"four_members": strings.Join([]string{owner, tester, other, groupTarget(identities[3])}, "\n"),
+-		"oversize":     strings.Repeat("a", 100), "comma_list": owner + "," + tester,
++		"five_members": strings.Join([]string{owner, tester, other, groupTarget(identities[3]), groupTarget(identities[4])}, "\n"),
++		"oversize":     strings.Repeat("a", 133), "comma_list": owner + "," + tester,
+ 	}
+ 	for name, value := range cases {
+ 		test.Run(name, func(test *testing.T) {

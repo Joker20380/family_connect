@@ -59,6 +59,17 @@ Admission and gateway catalog4 remain unchanged; canary stays PAUSED.
 
 ## Current status / Статус
 
+###26 October / P1 group expanded to four
+
+RU: серверный P1 разрешён прежним трём identity и requested tester. Лимит gateway
+увеличен с3 до4; один согласованный restart, TLS/readback PASS. Общий подписанный
+106 APK и его checksum неизменны; новая специальная сборка не нужна. Это серверное
+разрешение P1, не подтверждение обновления84→106 или фактического P1 у нового тестера.
+EN: P1 now admits the original three identities plus requested tester. Gateway limit4,
+one approved restart and post-deployment checks passed. The shared signed106 APK
+is unchanged; target installation and negotiated P1 remain unobserved.
+[Exact deployment and rollback](../releases/2026-10-26-p1-four-members.md).
+
 ###23 October / closed group READY — актуальная передача
 
 RU: **PRIVATE_FIELD_READY** для FC-4D8Q-REEG + FC-ZMVK-MM7C + FC-YHQB-9VJN.

@@ -1,5 +1,12 @@
 # Текущее состояние / Current state
 
+**24 November — source publication reconciliation IN_PROGRESS.**
+Owner confirms all pending local changes are session work and requests their push.
+Preserve both Git histories: old main has74 local/300 remote commits before this checkpoint.
+Ten pending files are backed up privately; new historical reports omit tester/device
+identifiers. Source-only reconciliation does not deploy, change versions or resume HA-03.
+[Scope, verification and rollback](releases/2026-11-24-source-reconciliation.md).
+
 **24 November11:43UTC — OWNER image-loss cold bootstrap PASS.**
 Source2ea128afc147be1fc6725223f22ba2c4ddd5a0a8 is pushed and remote-SHA verified.
 Three exact images recover from encrypted custody without Docker/registry/working source;
@@ -2620,6 +2627,14 @@ No further gateway-catalog publication. Not NL_REPLACEMENT_LIVE until all owner 
 
 [Same-operation report and remaining gates](releases/2026-10-30-nl-gateway-replacement.md).
 
+Ops27.10 evening17:36UTC:54 registered/50 non-revoked/4 revoked. Friends AWG
+NL6 recent3min/7 recent15min/19 recent24h, RU0; NL5s TX7.711/RX0.257Mbps.
+P1 binary/group4 unchanged, target present; target last report still84/17.10.
+Main services active, HTTPS200; legacy RU Docker worker unhealthy. NL IO-wait
+again44/84/28%, PSI some avg10=14.17/full10.20: recurrent storage stalls, cause
+unverified. No operational changes; CONTROL-PLANE-2 gate unchanged.
+[Evening readback](releases/2026-10-27-vpn-health.md#evening-readback-1736utc).
+
 ## Current critical path — ANDROID-CONTROLLED-BETA
 
 **Historical canary pause/availability diagnosis — superseded by1 November gates above.**
@@ -2951,6 +2966,64 @@ Local console не разрешает production connection/deploy/enrollment/с
 
 Записи ниже сохранены, включая прежние Linux NEXT и ops observations; текущие
 priority/status определены owner decision выше. Они не разрешают продолжение Linux.
+
+VPN read-only27.10,08:34UTC:54 registered/50 non-revoked/4 revoked; Friends AWG
+NL46 configured/8 recent3min/9 recent15min/20 recent24h, RU12/0/0/1.
+NL5s TX0.025/RX0.019Mbps. Main services active, HTTPS status200. Loaded gateway
+96754942…fe367 and four-member P1 policydd3718ef…a9e81f preserved; target present.
+requested tester last support observation still84/17.10, not evidence of current106.
+NL IO-wait spikes26–87%, follow-up seven samples0%; IO PSI avg60 some6.55/full5.31.
+Legacy RU Docker worker unhealthy remains. No mutations/restarts/version changes.
+[Snapshot and limits](releases/2026-10-27-vpn-health.md).
+
+P1 four-member expansion26.10 **DEPLOYED / server policy verified**: owner+two
+existing testers preserved, requested tester added by canonical signing-key hash.
+NL gateway96754942…fe367 replaces exacta515539a…3c85; one approved restart
+17:43:11UTC, active/PID1244097/NRestarts0. Four-member policydd3718ef…a9e81f;
+P2/pacing/diagnostic scope unchanged. Five-package race PASS; post-restart TLS,
+materials and RU/NL directory publication PASS. Receipt-formatting failure after
+successful start reconciled from durable records; no second deploy/restart.
+Android106 unchanged; target's actual106/P1 connection not observed. Earlier
+cap3/pending statements below are superseded, full seamless-upgrade gate separate.
+[Deployment, tests and rollback](releases/2026-10-26-p1-four-members.md).
+
+requested tester P1 request: user means3 testers plus owner,4 total. Current NL
+a515 gateway caps speed-targets at3 total; existing3-member P1 policy intact.
+No fourth-member write attempted (would fail closed). Gateway update/restart and
+bounded group expansion remain pending. Earlier relative-path absence was a
+diagnostic lookup error, corrected against process cwd; no policy loss observed.
+
+requested tester follow-up26.10: requested MESH access already effective under
+v2 all_activated, fresh unique/non-revoked readback; server writes0. Shared private
+106 APK hash/signature/package verified locally; ready file identified in target
+report. Not sent/installed/published; target84→106 preservation remains unverified.
+
+requested tester seamless upgrade26.10: **BLOCKED**, production untouched. RU
+authoritative lookup uniquely binds Android device (identifier retained privately); last signed
+support observation17.10 12:42:49UTC reports0.1.18-research84-ui60-4-batch1/code84.
+Device/invite not revoked, runtime admission v2 all_activated, chat binding present.
+No target diagnostic snapshot; installed package/signer/channel/store preservation
+not attested. Shared code84 artifact evidence is not this device's APK attestation.
+User stop rule applies: unknown installed signer / unproved identity preservation.
+No client patch, backend correction, build, signing or publication; root cause not
+established. [Target report](releases/2026-10-26-negv-seamless-upgrade.md).
+
+VPN read-only25.10,17:15–17:17UTC:54 registered/50 non-revoked/4 revoked;
+Friends AWG NL46 configured/5 recent3min/6 recent15min, RU11/0/0.
+NL5s TX0.056/RX0.029Mbps. Both Friends AWG/TCP and NL bootstrap active,
+HTTPS status200. Legacy Docker worker remains unhealthy, host worker active.
+NL initial41% IO-wait spike did not recur in5 follow-up samples; RU CPU burst
+62–63% fell to6–7% in final samples. No service/version changes by this check.
+[Current ops snapshot](releases/2026-10-25-vpn-health.md); engineering gates unchanged.
+
+Операционный read-only срез VPN24.10,21:26UTC и последующие короткие замеры:
+Friends registry53 устройства/49 non-revoked/4 revoked. AWG RU11 configured/0
+recent handshakes; NL45 configured/8 under3min/9 under15min. NL5s RX0.873,
+TX34.606Mbps. Friends AWG/TCP обоих серверов и NL bootstrap active; HTTPS status200.
+Legacy Docker peer-worker остаётся unhealthy (refused/timeout probes), host worker
+active. Journal error checks ограничены таймаутами: отсутствие ошибок не доказано.
+Версии/конфигурации/службы не менялись; текущий engineering review gate сохранён.
+[Отчёт и ограничения](releases/2026-10-24-vpn-health.md).
 
 **L04.2 — R3 PARTIAL / PACKAGE_GATE_FAILED (environment harness finalization).**
 R2 FINAL PARTIAL / READINESS_CAUSE_UNRESOLVED accepted: diagnostic collapse
