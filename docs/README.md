@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 24 November: AWG cleanup cannot skip owned-engine termination after network errors;17 new cases,170 selected checks including isolated PostgreSQL, legacy packaging limits and no deployment](releases/2026-11-24-control-ha-awg-cleanup.md).
+
 [CONTROL-HA · 24 November: NL selected service environments match, exact NL1 diagnostic stop-post isolated qualification and silent-error limit;162 tests, no service changes](releases/2026-11-24-control-ha-service-environment.md).
 
 [CONTROL-HA · 24 November: fail-closed mailbox reader cleanup, real local RNS/ACK and failure qualification;153 focused tests, explicit source delta and unchanged acceptance gates, no deployment](releases/2026-11-24-control-ha-mailbox-cleanup.md).

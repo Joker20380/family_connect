@@ -4,7 +4,7 @@ run: service lifetime; register: forced SSH command, one bounded JSON request.
 No private key/config/traffic is printed. Existing gateways are never modified.
 """
 import base64,fcntl,re,uuid,ipaddress,json,os,signal,sqlite3,subprocess,sys,time
-from contextlib import contextmanager
+from contextlib import contextmanager,ExitStack
 from pathlib import Path
 ROOT=Path('/opt/apps/family_connect/friends-awg')
 IFACE='fcopen31'
@@ -114,6 +114,24 @@ def register():
    raise
   print(json.dumps({'public_key':key,'address':assigned,'transport':'amneziawg-3.1'}))
 
+def stop_engine(process,*,grace_seconds=10,kill_seconds=2):
+ try:
+  if process.poll() is None:process.terminate()
+  process.wait(timeout=grace_seconds)
+ except BaseException:
+  try:
+   if process.poll() is None:process.kill()
+  finally:process.wait(timeout=kill_seconds)
+  raise
+
+def cleanup(process,rules):
+ with ExitStack() as actions:
+  actions.callback(command,['ip','link','del',IFACE],False)
+  actions.callback(stop_engine,process)
+  actions.callback(command,['iptables','-X','FCFRIENDS31'],False)
+  actions.callback(command,['iptables','-F','FCFRIENDS31'],False)
+  for rule in rules:actions.callback(command,[('-D' if part in ('-A','-I') else part) for part in rule],False)
+
 def run():
  assert Path('/proc/sys/net/ipv4/ip_forward').read_text().strip()=='1','Existing gateway forwarding required'
  config=settings();network=config['network'];external=config['external']
@@ -124,8 +142,8 @@ def run():
  process=subprocess.Popen([str(ROOT/'amneziawg-go'),'-f',IFACE],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env={**os.environ,'GOMAXPROCS':'2'})
  rules=[]
  def stop(*args):raise KeyboardInterrupt()
- signal.signal(signal.SIGTERM,stop)
  try:
+  signal.signal(signal.SIGTERM,stop)
   for _ in range(100):
    if command(['ip','link','show',IFACE],False)==0:break
    if process.poll() is not None:raise RuntimeError('Engine failed')
@@ -148,11 +166,7 @@ def run():
   process.wait()
   raise RuntimeError('Engine exited')
  except KeyboardInterrupt:pass
- finally:
-  for rule in reversed(rules):command([('-D' if part in ('-A','-I') else part) for part in rule],False)
-  command(['iptables','-F','FCFRIENDS31'],False);command(['iptables','-X','FCFRIENDS31'],False)
-  if process.poll() is None:process.terminate();process.wait(timeout=10)
-  command(['ip','link','del',IFACE],False)
+ finally:cleanup(process,rules)
 
 if __name__=='__main__':
  assert os.geteuid()==0;os.umask(0o077)
