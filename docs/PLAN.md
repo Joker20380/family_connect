@@ -3,16 +3,18 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Local cooperative admission/drain source is implemented, not deployed: HTTP/routing CLI,
-two retention threads, product admin and legacy-worker child participate when explicitly
-configured. Durable pending markers prevent a false drain after process death, caught RPC
-timeout or failed readback. Separate guardian bounds drain/hold/total to5/2/7s; unknown or
-unsettled participants refuse.170 focused tests PASS,0 skips; broader307 PASS/93 optional-PG
-skips/3 old fixture failures reproduced on unchanged0e282c34. Historic custody pins unchanged.
-[Implementation and exact validation](releases/2026-11-24-control-ha-admission-drain.md).
-Next selected work: integrate RU schedulers/operator/forced-SSH and OWNER PG/synthetic
-publishers, bind effective source/argv/UID/mounts for all participants, independently settle
-external dispatch, and qualify flush latency plus a provably overlapping fleet interval.
+Local cooperative admission/drain remains source-only. In addition to HTTP/routing CLI,
+two retention threads and product admin/worker, the chat-sync and paid-reconcile timers
+and paid operator now participate when configured. Payment rollback/caught prepare failure
+retains external uncertainty; successful retry cannot clear it. Isolated deterministic
+scheduler and paid-operator packaging passes.200 focused tests PASS,0 skips; final package/
+budget set39 PASS; historical package run22 PASS/4 old source-pin fixture failures reproduced
+on unchanged1015ac5e. No historical source pins, lease/watchdog policy or deployment changed.
+[Implementation and exact validation](releases/2026-11-24-control-ha-admission-drain.md#scheduler-and-payment-dispatch-continuation).
+Next selected work: credential/restricted renewal and remaining operator/forced-SSH/receiver
+entrypoints plus OWNER PG/synthetic publishers; bind effective source/argv/UID/mounts for all
+participants, independently settle external dispatch, and qualify flush latency plus a
+provably overlapping fleet interval. Do not reimplement the completed timer/payment slice.
 Keep paid-watch/deny enforcement running; current NL scope does not permit changing working
 services. No live snapshot is authorized by this local gate or an empty process/lock sample.
 Do not repeat the completed writer census/NL2 recovery or create another lettered stage.

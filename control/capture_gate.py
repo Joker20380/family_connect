@@ -1,7 +1,6 @@
 """Opt-in, single-host admission/drain locks with durable ambiguous-operation markers."""
 from contextlib import contextmanager, ExitStack
 from contextvars import ContextVar
-import fcntl
 import math
 import os
 from pathlib import Path
@@ -115,6 +114,7 @@ class Gate:
         if self.directory is None:
             yield operation
             return
+        import fcntl
         with self.opened() as descriptors:
             try:
                 fcntl.flock(descriptors['admission.lock'], fcntl.LOCK_SH | fcntl.LOCK_NB)
@@ -149,6 +149,7 @@ class Gate:
 
     @contextmanager
     def drain(self, timeout):
+        import fcntl
         require(type(timeout) in (int, float) and math.isfinite(timeout) and 0 < timeout <= 5,
                 'DRAIN_DEADLINE')
         require(CURRENT.get() is None, 'DRAIN_INSIDE_OPERATION')

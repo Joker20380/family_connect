@@ -1,4 +1,5 @@
 [
+  "control/capture_gate.py",
   "control/friends/__init__.py",
   "control/friends/access.py",
   "control/friends/support_ids.py",

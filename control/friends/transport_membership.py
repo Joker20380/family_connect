@@ -6,6 +6,7 @@ import re
 import subprocess
 
 from . import paid_beta, transport_policy as policy
+from control.capture_gate import external_operation
 
 
 def unique(pairs):
@@ -24,13 +25,14 @@ def prepare_nodes(database, device, token, now, exchange):
         for node in policy.NODES:
             request = dict(operation='prepare', token=token,
                 paid=policy.read_snapshot(database, node, now, device=device))
-            reply = exchange(node, request)
-            if type(reply) is not bytes or len(reply) > 1024:
-                raise ValueError('INVALID_PREPARATION_ACK')
-            acknowledgement = json.loads(reply.decode('utf-8'), object_pairs_hook=unique)
-            if (type(acknowledgement) is not dict or type(acknowledgement.get('schema')) is not int
-                    or acknowledgement != dict(schema=1, node=node, result='prepared', token=token)):
-                raise ValueError('INVALID_PREPARATION_ACK')
+            with external_operation():
+                reply = exchange(node, request)
+                if type(reply) is not bytes or len(reply) > 1024:
+                    raise ValueError('INVALID_PREPARATION_ACK')
+                acknowledgement = json.loads(reply.decode('utf-8'), object_pairs_hook=unique)
+                if (type(acknowledgement) is not dict or type(acknowledgement.get('schema')) is not int
+                        or acknowledgement != dict(schema=1, node=node, result='prepared', token=token)):
+                    raise ValueError('INVALID_PREPARATION_ACK')
     except (OSError, ValueError, subprocess.SubprocessError) as error:
         raise paid_beta.PaidBetaError('TRANSPORT_PREPARATION_REQUIRED') from error
 

@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 24 November: chat/payment scheduler and operator admission, caught prepare uncertainty, closed isolated packages;200 tests, no deployment](releases/2026-11-24-control-ha-admission-drain.md#scheduler-and-payment-dispatch-continuation).
+
 [CONTROL-HA · 24 November: opt-in local admission/drain, HTTP and worker integration, automatic release and durable uncertainty;170 focused checks, no deployment](releases/2026-11-24-control-ha-admission-drain.md).
 
 [CONTROL-HA · 24 November: scoped writer/dispatcher observation, safe drain requirements and refusal of an unfenced capture](releases/2026-11-24-control-ha-writer-boundary.md).

@@ -8,6 +8,7 @@ import time
 import zipimport
 
 from . import paid_beta
+from control.capture_gate import Busy, Gate
 
 
 class OperatorParser(argparse.ArgumentParser):
@@ -29,6 +30,7 @@ def provenance():
 def main(argv=None):
     parser = OperatorParser(description=__doc__, prog='paid-beta')
     parser.add_argument('--db', type=Path)
+    parser.add_argument('--capture-gate', type=Path)
     commands = parser.add_subparsers(dest='action', required=True)
     commands.add_parser('policy', help='Read release descriptors and executable provenance without opening a registry')
     commands.add_parser('migrate')
@@ -51,7 +53,7 @@ def main(argv=None):
             print(json.dumps(provenance(), sort_keys=True, allow_nan=False))
             return 0
         paid_beta.require(args.db is not None, 'INVALID_ARGUMENTS')
-        with paid_beta.connection(args.db, write=args.action != 'status') as database:
+        with Gate(args.capture_gate).operation(), paid_beta.connection(args.db, write=args.action != 'status') as database:
             now = int(time.time())
             if args.action == 'migrate':
                 paid_beta.migrate(database)
@@ -69,6 +71,9 @@ def main(argv=None):
                     'payment' if args.action == 'activate' else args.action, args.event_id, args.reference, now=now, **values)
         print(json.dumps(result, sort_keys=True, allow_nan=False))
         return 0
+    except Busy:
+        print(json.dumps(dict(schema=1, result='REJECTED', reason='CAPTURE_BUSY')))
+        return 75
     except paid_beta.PaidBetaError as error:
         print(json.dumps(dict(schema=1, result='REJECTED', reason=str(error))))
         return 2

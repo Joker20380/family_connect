@@ -7,6 +7,97 @@ version bump, catalog/signing change, live capture or recovery acceptance occurs
 The current [writer-boundary contract](2026-11-24-control-ha-writer-boundary.md#minimum-boundary-contract)
 and four existing HA-02 acceptance gates remain authoritative.
 
+## Scheduler and payment dispatch continuation
+
+The next source checkpoint is based on1015ac5e. The same opt-in boundary now covers the
+standalone chat-sync timer, paid-node reconciliation timer and paid operator CLI, not just
+HTTP and the legacy product worker. No server is contacted and no service/unit/forced-SSH
+configuration, live grant, payment record, installed version or catalog is changed.
+
+- `deploy/friends/chat-sync.py --capture-gate PATH` acquires admission before constructing
+  Access and holds it through mailbox acknowledgement **and** support-file publication.
+  Busy returns75 before registry/network work; other errors return1 and retain uncertainty.
+- `control.friends.transport_reconcile --capture-gate PATH` encloses the complete node
+  cycle, including command-file reads and snapshot generation. Busy returns75 before I/O;
+  unavailable configured state fails closed. Remote call **and ACK validation** run inside
+  the uncertainty scope even though the existing cycle catches errors and continues to
+  other nodes. Duplicate ACK fields, boolean schema, wrong node, oversize or invalid JSON
+  cannot count as success. Existing12s per-node timeout and partial-cycle return code remain.
+- `control.friends.paid_beta_admin --capture-gate PATH` encloses registry connection,
+  transaction and commit for mutations/status; busy returns75 before opening the DB.
+  Existing errors keep the original redacted responses. The `policy` action intentionally
+  remains read-only and ungated, without opening a registry or gate directory.
+- `transport_membership.prepare_nodes` retains uncertainty for each external prepare/ACK.
+  A failed/lost ACK can leave a prepared node even when the canonical payment transaction
+  rolls back and the caller catches the error. Such an error now refuses capture. A later
+  successful ordinary retry does not erase that old marker or substitute for independent
+  external reconciliation. Membership token/idempotency, eligibility, ledger and expiry
+  semantics are unchanged.
+
+The optional flag must be configured by the operator on each actual dispatcher; direct
+library calls do not silently acquire a global gate. Old no-flag invocations remain legacy
+behavior. Watchdogs, gateway run/preflight paths and denial enforcement are **not gated or
+stopped**. The8s gateway operation/12s watchdog budgets and120s transport lease are unchanged.
+This does not yet integrate credential-renewal/restricted-sync, arbitrary operator/SSH
+entrypoints, receiver-side mutations or OWNER PG/synthetic/publisher containers.
+
+### Closed scheduler packaging
+
+`python -m scripts.package_capture_dispatchers --dispatcher chat-sync --output NEW.pyz`
+and `--dispatcher paid-reconcile` create deterministic new source-only archives from the
+current closed HTTP runtime manifest, adding only the selected entrypoint and no runtime
+state. They refuse replacement of an existing output. They are **not overlays** over an
+installed archive and do not weaken historical exact-source package pins. Tests execute
+them with `python -I -B` from a temporary directory; the bundled chat module does not insert
+the installed `/opt/.../app` into `sys.path`. Existing operator/restricted source manifests
+include `control/capture_gate.py`, so the paid operator does not depend on a host checkout.
+External Python dependencies still use the existing control/identity locks; this is not an
+OS/dependency deployment kit. Archive bytes stay in temporary test directories, not Git.
+
+The disabled gate and external uncertainty context no longer eagerly import POSIX `fcntl`.
+This preserves pure-module/no-flag import behavior when that optional platform module is
+unavailable; enabled locks remain Linux-only. It is not Windows runtime acceptance.
+
+### Continuation validation and rollback
+
+Using `/tmp/fc-control-ha-20261123/venv/bin/python -m pytest -q`:
+
+- **200 passed,0 skips**: `test_capture_dispatchers.py`, `test_capture_gate.py`,
+  `test_capture_gate_integration.py`, `test_transport_membership.py`,
+  `test_transport_enforcement.py`, `test_transport_http.py`, `test_paid_beta.py`,
+  `test_paid_beta_cli.py`, `test_paid_beta_http.py`, `test_support_package.py`,
+  `test_restricted_runtime.py` (all under `tests/`).
+- Additional historical/package/budget run: **22 passed,4 failed,0 skips** across
+  `test_paid_policy_package.py`, `test_transport_package.py`, `test_transport_budget.py`
+  and `test_transport_command_budget.py`. All4 failures reproduce on an isolated unchanged
+  archive of1015ac5e with read-only access to existing Git objects: the closed transport
+  overlay fixture and historical RU diagnostics/lifecycle/v2 recovery package fixtures.
+  Existing `UNRELATED_PAID_DELTA` / `POLICY_CHANGE_FORBIDDEN` source-pin rejections remain;
+  historical pins are not weakened and these old packages are not qualified or deployed.
+- Final focused/package/budget run after review: **39 passed,0 skips** across
+  `test_capture_dispatchers.py`, `test_paid_policy_package.py`, `test_transport_budget.py`
+  and `test_transport_command_budget.py`. This overlaps the other runs; do not sum them
+  into a distinct-case acceptance count.
+
+Fixtures exercise DB rollback with retained external uncertainty, success/retry, real
+dispatcher death and guardian timeout without killing active work, isolated packaging and
+policy readback for the accepted release descriptors. Gateway/SSH/payment interactions
+use synthetic local fixtures, not live hosts. No PostgreSQL/OWNER or Windows gate is claimed.
+Documentation links/whitespace are checked before commit.
+
+No installed rollback is needed. Before any later enablement, qualify all effective
+argv/source/gate-inode/UID/mount bindings, load/flush latency and timer handling of busy75.
+Do not automatically add a systemd success override or suppress genuine failures. Removing
+the flag is allowed only after cancelling capture and releasing its guardian, while
+preserving uncertainty evidence. Never delete markers or restore an older ledger as rollback.
+Current NL permission still excludes changes to working services.
+
+Next within the same HA-02 gate: remaining credential/restricted renewal and operator/SSH
+dispatchers, receiver-side bindings and independent external completion, plus OWNER
+PG/synthetic publishers, before an overlapping fleet capture. Independent current approval,
+off-laptop key/access custody and final combined recovery remain. Replication PASS; the
+other three acceptance gates remain partial, with no new lettered stage or HA-03 cutover.
+
 ## Implemented boundary
 
 `control/capture_gate.py` provides an opt-in, Linux, **single-host/single-UID cooperative**

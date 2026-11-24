@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+**24 November — scheduler/payment dispatch joins opt-in admission; source only.**
+Chat-sync timer now holds the gate through support publication; paid-node reconcile holds
+it through the complete cycle; paid CLI holds it through DB commit. Caught lost/malformed
+prepare ACKs preserve uncertainty even after payment rollback or a later successful retry.
+Closed reproducible chat/reconcile archives and paid-operator inclusion pass isolated CLI
+checks. No installed services/units/watchdogs, live records, versions or hosts changed.
+200 focused/regression tests PASS,0 skips; final package/budget set39 PASS. Additional
+historical packaging22 PASS/4 failures; all4 reproduce on unchanged1015ac5e, pins preserved.
+Next: credential/restricted renewal and remaining operator/SSH/receiver participation,
+OWNER PG/synthetic publishers and effective source/argv/UID/mount/load qualification before
+overlapping capture. Independent current approval/custody/final recovery remain. Same three
+partial HA-02 gates; replication PASS. [Scope, tests and rollback](releases/2026-11-24-control-ha-admission-drain.md#scheduler-and-payment-dispatch-continuation).
+
 **24 November — local admission/drain implemented and tested; not deployed.**
 Opt-in gate now covers Friends HTTP/routing administration, both retention threads and
 the product admin/legacy-worker child. It closes new admission, drains admitted operations,
