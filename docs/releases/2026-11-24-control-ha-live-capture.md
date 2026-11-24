@@ -75,7 +75,7 @@ locked before the first image, each busy-store abort, a killed/stalled capture r
 locks, uncheckpointed WAL commits, unchanged source DB/WAL bytes, unsafe/hot-journal refusal,
 no output before success and alarm ownership. No production capture result is inferred.
 
-## Executed capture and off-node four-store restore
+## Initial ephemeral capture and off-node four-store restore
 
 At **24 November04:45:16UTC**, the pinned SSH capture executes source
 `084530ce30862a5353c99ada36e3b22704dcddec`. Acquisition/serialization/rollback/close take
@@ -84,11 +84,11 @@ interval containing all four image reads is approximately7.816ms. All transactio
 rolled back and connections closed before transmission. Four images total598016 bytes
 and retain34 installed tables. No timer, service, forced command, profile or issuer changes.
 
-The604197-byte encrypted capsule is retained on OWNER, outside Git, not on RU.
+The604197-byte encrypted capsule was temporarily retained on OWNER, outside Git, not on RU.
 Its SHA256 is `b2e867323b73c53a6450f0ebe11a7b6955b82e4de103819ba90be891dc2527f2`;
 the archive SHA256 is `d1b4f0274ed6dc0896abd9bdda5776be4cf69028c8f54a7044152b4b5d1454db`.
-AES256-GCM key and expected checkpoint are in a separate owner-only local custody
-directory; the key is never logged or committed. This is off-RU retention, **not yet an
+AES256-GCM key and expected checkpoint were in a separate owner-only local custody
+directory; the key was never logged or committed. This was off-RU retention, **not an
 independent external custodian or a signed whole-fleet forward checkpoint**.
 
 `scripts/control_ha_live_sqlite_restore.py` checks the external checkpoint, ciphertext
@@ -110,12 +110,39 @@ disguised as healthy. NL service state stays unchanged; no data-plane stop is pe
 An earlier read-only probe fails because it shadows an HTTP module name. It aborts
 **before capture or any DB lock**; its failure receipt is retained. The corrected probe
 precedes the single successful live capture. All capsule/key/evidence/restored files
-remain private local state outside Git/CI.
+stayed outside Git/CI. The raw observation-bearing copies are subsequently removed below.
 
 Rollback is already complete: transactions closed, locks released; no live DB restore,
 version rollback or service restart is necessary. Source tools may be left unused.
 Do not copy offline restored files over production. Installed/public versions, downloads,
 catalogs and backend choices remain unchanged.
+
+## Metadata privacy correction before durable custody
+
+The applicable [panel/metadata retention runbook](../../control_plane/README.md) forbids
+long-lived observation backups and restoring old panel projections. The initial raw image
+contains3 nonempty metadata payloads. It is therefore **not retained as a durable backup**:
+after its offline byte/schema qualification, the exact original encrypted capsule, its key,
+all four offline restored images and the unused key from the aborted probe are removed
+with hash/ownership/no-link checks on24 November04:57:26UTC (7 files). Receipts/checkpoints
+remain; live files, consent state and source tombstones are untouched. File deletion is not
+claimed as physical secure erasure. No raw observation copy is committed or distributed.
+
+The corrected capture uses purpose/ciphertext v2 and a freshly built metadata database.
+It selects only device, consent epoch, sequence, request digest, enabled and received;
+`payload` is always `{}`. It never serializes the original metadata database, so deleted
+payload fragments/free pages cannot leak into the retained image. Other store images remain
+exact; metadata schema, row coverage and consent/replay floors are retained, not rewritten
+on production. Existing replay cannot repopulate observations; a revoked epoch cannot become
+enabled by a later sequence in that same epoch. Fresh consent-fenced data must populate
+observations after recovery. The restorer refuses v1 and any v2 image carrying nonempty
+payloads, even when the archive/hash/tag authenticate successfully. This is an explicit
+privacy projection, **not an exact original metadata byte copy**.
+
+79 capture/restore/census tests PASS /0 skips, including privacy removal, unchanged source,
+enabled/revoked floor preservation, replay/re-enable refusal and observation-bearing archive
+rejection. The next actual durable capture must use this v2 source and a fresh key/checkpoint;
+the previous successful ephemeral receipt is not a current retained-backup claim.
 
 ## Remaining HA-02 gates
 

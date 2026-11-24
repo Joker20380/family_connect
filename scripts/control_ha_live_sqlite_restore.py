@@ -25,8 +25,8 @@ from scripts import control_ha_live_sqlite as live
 from scripts.control_ha_import import MAX_ROWS, unique
 from scripts.control_ha_sqlite_import import MANIFEST, definitions
 
-MAGIC = b'FCLIVE4\x00\x01'
-AAD = b'family-connect/live-four-store-custody/v1/not-for-activation'
+MAGIC = b'FCLIVE4\x00\x02'
+AAD = b'family-connect/live-four-store-custody/v2/consent-floors/not-for-activation'
 LIMIT = 4 * live.LIMIT + 65536
 
 
@@ -70,8 +70,8 @@ def unpack(ciphertext, key, checkpoint):
     manifest = document(files.pop('manifest.json'))
     require(type(manifest) is dict and set(manifest) == {'purpose', 'common_locked_at_ns',
             'captured_at_ns', 'barrier_seconds', 'deadline_seconds', 'stores',
-            'external_files_captured', 'fleet_barrier', 'full_recovery'}, 'MANIFEST_SHAPE')
-    require(manifest['purpose'] == live.PURPOSE and
+            'external_files_captured', 'fleet_barrier', 'full_recovery', 'metadata_projection'}, 'MANIFEST_SHAPE')
+    require(manifest['purpose'] == live.PURPOSE and manifest['metadata_projection'] == 'consent-floors-only' and
             all(manifest[name] is False for name in ('external_files_captured', 'fleet_barrier', 'full_recovery')),
             'CAPTURE_SCOPE')
     require(type(manifest['barrier_seconds']) in (int, float) and
@@ -116,6 +116,9 @@ def validate(images, manifest):
             counts[name] = {table: database.execute('SELECT count(*) FROM "' + table + '"').fetchone()[0]
                             for table in tables}
             require(all(value <= MAX_ROWS for value in counts[name].values()), 'ROW_BOUNDS')
+            if name == 'metadata':
+                require(database.execute("SELECT count(*) FROM device_metadata WHERE payload!='{}'").fetchone() == (0,),
+                        'METADATA_OBSERVATIONS_FORBIDDEN')
             if name == 'registry':
                 handoff.validate(handoff.read(database),
                                  {row[0] for row in database.execute('SELECT device FROM devices')})

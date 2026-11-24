@@ -3,6 +3,10 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+Privacy boundary: initial raw metadata capsule is discarded after ephemeral qualification.
+Use only v2 consent-floor-only metadata images for retained backups; preserve epochs,
+sequences/digests/revocations, never archive/replay observations.79 tests PASS. Fresh v2
+capture/restore is next; do not count the removed raw capsule as retained rollback state.
 Actual04:45UTC four-store capture and new-directory off-RU restore PASS:41.79ms bounded
 barrier,34 tables/607 rows preserved, no observed service state change;76 tests PASS /0 skips.
 This closes the raw four-store slice, not external-file/fleet/OWNER writer coverage or full

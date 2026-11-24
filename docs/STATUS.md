@@ -1,5 +1,13 @@
 # Текущее состояние / Current state
 
+**24 November04:57UTC — durable capture corrected for metadata privacy.**
+The initial observation-bearing four-store capsule/key/offline images are removed after
+ephemeral qualification; their receipts remain, but they are not a retained backup.
+The v2 tool preserves metadata consent/replay floors with empty observations in a newly
+built image, leaving the live source untouched; old payload/free-page bytes cannot enter
+durable custody. The restorer refuses raw v1/nonempty metadata.79 focused tests PASS.
+Fresh v2 capture is next; full fleet recovery and HA-02 completion remain unqualified.
+
 **24 November04:45UTC — actual capture and off-RU restore PASS (bounded scope).**
 Four RU application SQLite stores are captured under simultaneous zero-wait write locks;
 the barrier lasts41.79ms and releases automatically. OWNER restores the encrypted images

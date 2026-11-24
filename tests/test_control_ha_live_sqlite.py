@@ -17,8 +17,13 @@ from scripts import control_ha_live_sqlite as live
 def stores(tmp_path):
     for name in live.STORES.values():
         with closing(sqlite3.connect(tmp_path / name)) as connection:
-            connection.execute('CREATE TABLE sample(value TEXT)')
-            connection.execute("INSERT INTO sample VALUES ('private-identity')")
+            if name == live.STORES['metadata']:
+                connection.execute(live.METADATA_SQL)
+                connection.execute("INSERT INTO device_metadata VALUES ('device',3,4,?,0,100,?)",
+                                   ('a' * 64, 'private-observation-must-not-be-archived'))
+            else:
+                connection.execute('CREATE TABLE sample(value TEXT)')
+                connection.execute("INSERT INTO sample VALUES ('private-identity')")
             connection.commit()
     return tmp_path
 
@@ -39,7 +44,11 @@ def test_capture_all_images_unchanged_source_and_released_locks(stores):
         assert manifest['stores'][store]['sha256'] == hashlib.sha256(images[store]).hexdigest()
         with closing(sqlite3.connect(':memory:')) as restored:
             restored.deserialize(images[store])
-            assert restored.execute('SELECT value FROM sample').fetchall() == [('private-identity',)]
+            if store == 'metadata':
+                assert restored.execute('SELECT * FROM device_metadata').fetchall() == [('device', 3, 4, 'a' * 64, 0, 100, '{}')]
+                assert b'private-observation' not in images[store]
+            else:
+                assert restored.execute('SELECT value FROM sample').fetchall() == [('private-identity',)]
         with closing(sqlite3.connect(stores / name, timeout=0)) as writer:
             writer.execute('BEGIN IMMEDIATE')
             writer.rollback()
@@ -176,3 +185,26 @@ def test_preexisting_alarm_is_not_overwritten(stores):
         assert signal.getitimer(signal.ITIMER_REAL)[0] > 20
     finally:
         signal.setitimer(signal.ITIMER_REAL, 0)
+
+
+@pytest.mark.parametrize('enabled', [0, 1])
+def test_metadata_projection_preserves_floor_and_replay_does_not_restore_observations(stores, enabled):
+    from control.friends import technical_metadata
+    with closing(sqlite3.connect(stores / live.STORES['metadata'])) as database:
+        database.execute('UPDATE device_metadata SET enabled=?', (enabled,))
+        database.commit()
+    images, manifest = live.capture(stores)
+    assert manifest['metadata_projection'] == 'consent-floors-only'
+    with closing(sqlite3.connect(':memory:')) as restored:
+        restored.deserialize(images['metadata'])
+        transaction = technical_metadata.MetadataTransaction(restored)
+        previous = transaction.previous('device')
+        assert previous['enabled'] == enabled and previous['payload'] == '{}'
+        report = dict(consent_epoch=3, sequence=4, operation='sample' if enabled else 'revoke',
+                      report_id='00000000000000030000000000000004', observations={})
+        technical_metadata.record(transaction, 'device', report, 'a' * 64, 200)
+        assert transaction.previous('device') == previous
+        if not enabled:
+            report.update(sequence=5, operation='sample')
+            with pytest.raises(technical_metadata.Rejected):
+                technical_metadata.record(transaction, 'device', report, 'b' * 64, 200)

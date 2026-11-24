@@ -25,6 +25,9 @@ def fixture(tmp_path):
     root = tmp_path / 'source'
     root.mkdir(mode=0o700)
     source = closed_handoff_fixture(root)
+    with closing(sqlite3.connect(':memory:')) as database:
+        database.deserialize(source.stores['metadata'])
+        source.stores['metadata'] = live.metadata_image(database)
     records = {}
     for name, raw in source.stores.items():
         with closing(sqlite3.connect(':memory:')) as database:
@@ -34,6 +37,7 @@ def fixture(tmp_path):
     manifest = dict(purpose=live.PURPOSE, common_locked_at_ns=1, captured_at_ns=2,
                     barrier_seconds=.01, deadline_seconds=1.0, stores=records,
                     external_files_captured=False, fleet_barrier=False, full_recovery=False)
+    manifest['metadata_projection'] = 'consent-floors-only'
     return source.stores, manifest
 
 
@@ -103,6 +107,18 @@ def test_unknown_schema_refuses_before_writing(fixture, tmp_path):
         images['registry'] = database.serialize()
     manifest['stores']['registry'].update(bytes=len(images['registry']), sha256=recovery.digest(images['registry']))
     with pytest.raises(ValueError, match='SOURCE_SCHEMA_UNSUPPORTED'):
+        recovery.restore(*seal(live.archive(images, manifest)), tmp_path / 'restored')
+
+
+def test_authenticated_capsule_cannot_reintroduce_metadata_observations(fixture, tmp_path):
+    images, manifest = fixture
+    with closing(sqlite3.connect(':memory:')) as database:
+        database.deserialize(images['metadata'])
+        database.execute("UPDATE device_metadata SET payload=?", ('{"private":"observation"}',))
+        database.commit()
+        images['metadata'] = database.serialize()
+    manifest['stores']['metadata'].update(bytes=len(images['metadata']), sha256=recovery.digest(images['metadata']))
+    with pytest.raises(ValueError, match='METADATA_OBSERVATIONS_FORBIDDEN'):
         recovery.restore(*seal(live.archive(images, manifest)), tmp_path / 'restored')
 
 

@@ -23,7 +23,11 @@ STORES = {'registry': 'access.db', 'diagnostics': 'diagnostics.sqlite',
           'notices': 'notices.sqlite', 'metadata': 'technical-metadata.sqlite'}
 LIMIT = 8 * 1024 * 1024
 SECONDS = 1.0
-PURPOSE = 'family-connect/four-live-sqlite-stores/v1/not-for-activation'
+PURPOSE = 'family-connect/four-live-sqlite-stores/v2/consent-floors/not-for-activation'
+METADATA_SQL = '''CREATE TABLE device_metadata(
+            device TEXT PRIMARY KEY, epoch INTEGER NOT NULL, sequence INTEGER NOT NULL,
+            digest TEXT NOT NULL, enabled INTEGER NOT NULL, received INTEGER NOT NULL,
+            payload TEXT NOT NULL)'''
 
 
 def require(condition, code):
@@ -68,6 +72,20 @@ def source_check(root):
     return selected
 
 
+def metadata_image(connection):
+    definitions = connection.execute('SELECT type,name,tbl_name,sql FROM sqlite_master ORDER BY name').fetchall()
+    require(definitions == [('table', 'device_metadata', 'device_metadata', METADATA_SQL),
+                            ('index', 'sqlite_autoindex_device_metadata_1', 'device_metadata', None)],
+            'METADATA_SCHEMA_UNSUPPORTED')
+    rows = connection.execute('SELECT device,epoch,sequence,digest,enabled,received FROM device_metadata').fetchmany(5001)
+    require(len(rows) <= 5000, 'METADATA_ROW_BOUNDS')
+    with closing(sqlite3.connect(':memory:')) as target:
+        target.execute(METADATA_SQL)
+        target.executemany("INSERT INTO device_metadata VALUES (?,?,?,?,?,?,'{}')", rows)
+        target.commit()
+        return target.serialize()
+
+
 def capture(root=ROOT):
     selected = source_check(root)
     require(signal.getsignal(signal.SIGALRM) == signal.SIG_DFL and
@@ -92,7 +110,7 @@ def capture(root=ROOT):
                 require(connection.execute('PRAGMA page_count').fetchone()[0] *
                         connection.execute('PRAGMA page_size').fetchone()[0] <= LIMIT,
                         'DATABASE_TOO_LARGE')
-                image = connection.serialize()
+                image = metadata_image(connection) if store == 'metadata' else connection.serialize()
                 require(len(image) <= LIMIT and image[:16] == b'SQLite format 3\x00' and
                         image[18:20] in (b'\x01\x01', b'\x02\x02'), 'INVALID_IMAGE')
                 images[store] = image[:18] + b'\x01\x01' + image[20:]
@@ -115,6 +133,7 @@ def capture(root=ROOT):
     return images, dict(purpose=PURPOSE, common_locked_at_ns=common_at,
                        captured_at_ns=captured_at, barrier_seconds=elapsed,
                        deadline_seconds=SECONDS, stores=records,
+                       metadata_projection='consent-floors-only',
                        external_files_captured=False, fleet_barrier=False, full_recovery=False)
 
 
