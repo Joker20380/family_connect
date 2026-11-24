@@ -1,12 +1,72 @@
+import hashlib
 import importlib.util
 import json
 import os
 from pathlib import Path
+import shlex
+import shutil
 import stat
+import subprocess
+import sys
 
 import pytest
 
 from control_plane import prepare_local
+from control.capture_gate import initialize
+
+
+@pytest.fixture
+def prepared_context(tmp_path, monkeypatch):
+    repository = tmp_path / 'source'
+    for source in prepare_local.source_paths() + [prepare_local.BASE / 'Dockerfile']:
+        destination = repository / source.relative_to(prepare_local.REPOSITORY)
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(source, destination)
+    monkeypatch.setattr(prepare_local, 'REPOSITORY', repository)
+    monkeypatch.setattr(prepare_local, 'BASE', repository / 'control_plane')
+    prepare_local.prepare()
+    return prepare_local.BASE / '.local/build-context'
+
+
+def test_prepared_context_satisfies_every_docker_copy(prepared_context):
+    for instruction in (prepared_context / 'Dockerfile').read_text().splitlines():
+        if not instruction.startswith('COPY '):
+            continue
+        for source in shlex.split(instruction)[1:-1]:
+            assert list(prepared_context.glob(source)), f'Missing Docker COPY source: {source}'
+    manifest = json.loads((prepared_context / 'source-manifest.json').read_text())
+    for name, digest in manifest.items():
+        assert hashlib.sha256((prepared_context / name).read_bytes()).hexdigest() == digest
+    assert not (prepared_context / 'control_plane/.env').exists()
+
+
+@pytest.mark.parametrize('state', ['closed', 'missing', 'unconfigured'])
+def test_prepared_admission_module_without_checkout_imports(prepared_context, tmp_path, state):
+    gate = initialize(tmp_path / 'gate')
+    environment = {'PATH': os.environ['PATH'],
+                   'PYTHONPATH': os.pathsep.join((str(prepared_context), str(prepared_context / 'control_plane')))}
+    if state != 'unconfigured':
+        environment['FC_CONTROL_CAPTURE_GATE'] = str(gate.directory if state == 'closed' else tmp_path / 'absent')
+    probe = '''import sys
+from pathlib import Path
+from control.capture_gate import Busy, GateError
+from fc_control_plane import capture
+assert Path(capture.__file__).is_relative_to(Path(sys.argv[1]))
+try:
+    with capture.operation():
+        print('ADMITTED')
+except Busy:
+    raise SystemExit(75)
+except GateError:
+    raise SystemExit(1)
+'''
+    with gate.drain(.1):
+        result = subprocess.run([sys.executable, '-B', '-c', probe, str(prepared_context)],
+                                env=environment, cwd=tmp_path, capture_output=True, timeout=10)
+    assert result.returncode == {'closed': 75, 'missing': 1, 'unconfigured': 0}[state], result.stderr
+    assert result.stdout == (b'ADMITTED\n' if state == 'unconfigured' else b'')
+    assert not result.stderr
+    assert not list((gate.directory / 'pending').iterdir())
 
 
 def test_local_panel_services_have_restart_policy():

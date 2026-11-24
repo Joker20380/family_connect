@@ -13,6 +13,7 @@ REPOSITORY = BASE.parent
 
 def source_paths():
     paths = [BASE / name for name in ('manage.py', 'pyproject.toml', 'requirements.lock')]
+    paths.append(REPOSITORY / 'control/capture_gate.py')
     for directory in ('fc_control_plane', 'apps', 'tests'):
         paths.extend((BASE / directory).rglob('*.py'))
     paths.extend((BASE / 'templates').rglob('*.html'))

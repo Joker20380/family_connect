@@ -1,17 +1,19 @@
 # Текущее состояние / Current state
 
-**24 November — actual collector launch roots bound; two rollback-bearing candidates prepared.**
-Inventory runs from its separate installed collector-runtime; network probe runs from main.
-Both observed entrypoints are pre-admission bytes, shared helpers absent; source push has not
-activated them. Both user timers remain active, loaded argv/selected configuration unchanged.
-Two private candidates preserve dependencies and contain exact rollback preimages;33 new package
-tests PASS/0 skips. Three extracted CLIs refuse closed gates; two isolated synthetic cycles pass
-on the actual interpreter. No live dispatch/installation, server access, unit/version change.
-[Actual targets, source hashes, activation limits and rollback](releases/2026-11-24-control-ha-collector-binding.md).
-Next: remaining OWNER/RU/NL/manual/transport runtime/gate/config bindings and exact activation
-approval, then coherent interval and independent custody/final recovery. Source packages are not
-full runtime trust or installation permission; working-NL changes remain unauthorized. Replication
-PASS; same three gates partial. Do not repeat this source binding/package slice as a new gate.
+**24 November UTC — OWNER build-context defect fixed; actual image qualified in isolation.**
+The normal preparation omitted control/capture_gate.py although Dockerfile and manage.py need
+it. Four new regressions reproduce the missing-file/import failures; the explicit allowlist now
+includes that file without broadening private-state access.40 focused tests PASS/0 skips.
+The actual272-file prepared context builds image4392d4b7; two networkless/read-only disposable
+probes at UID10001/1000 pass on Python3.13.17, with18 locked packages and10 selected source hashes
+matching. Installed OWNER container/config bindings remain unchanged; no replacement or RU/NL
+access. [Build proof, limitations and rollback](releases/2026-11-24-control-ha-owner-prepared-build.md).
+Earlier [collector launch bindings and rollback packages](releases/2026-11-24-control-ha-collector-binding.md)
+remain valid observations, not installations. Next: actual OWNER candidate/runtime/config approval
+and the existing RU/NL/manual/transport bindings, then approved coherent capture and independent
+custody/final recovery. This image does not inherit the earlier activation/revert acceptance;
+working-NL changes remain unauthorized. Replication PASS; same three gates partial. Do not
+repeat the completed build, collector packaging or NL2 diagnosis as new gates.
 
 At the preceding collector-admission checkpoint:
 **24 November — standalone OWNER collectors admitted in source; activation proposal recorded.**

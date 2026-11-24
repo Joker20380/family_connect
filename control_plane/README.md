@@ -466,7 +466,11 @@ separate operator-only read-only collector described below does.
 
 The allowlisted build context includes the fleet Python runtime, public inventories,
 templates, pinned dependency lock and reviewed operator patch required by the Dockerfile.
-It does not traverse fleet state, private capsules or binaries.
+It also explicitly includes `control/capture_gate.py`, required by the OWNER admission
+entrypoints; copying only `control/friends/*.py` leaves the prepared image unbuildable.
+It does not traverse fleet state, private capsules or binaries. Preparation/building does
+not enable admission or replace installed containers. See the [prepared-image check and
+activation boundary](../docs/releases/2026-11-24-control-ha-owner-prepared-build.md).
 
 Only the console's HTTP port is published, on **127.0.0.1**. PostgreSQL has no
 published port and uses an internal Docker network. The console additionally uses

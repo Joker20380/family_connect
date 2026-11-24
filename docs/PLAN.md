@@ -3,17 +3,18 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Actual workstation collector launch/source mapping and private rollback candidates are prepared:
-inventory uses the separate collector-runtime, probe main; both still run pre-admission sources.
-No installation/environment/unit change.33 package tests PASS/0 skips; three extracted CLI gates
-and two synthetic cycles qualified on the actual interpreter, not live Docker/OWNER imports.
-[Concrete targets, source deltas and rollback](releases/2026-11-24-control-ha-collector-binding.md).
-Next selected work: remaining OWNER/RU/NL/manual/transport runtime/gate/config bindings and exact
-activation approval, then one coherent interval and independent approval/custody/final recovery.
-Workstation source packaging is complete; runtime/import/config trust and actual gate activation
-are not inferred from it. Preserve both source/data roots and known-hosts override; no blind
-overlay of main or relocation. Working-NL changes remain outside permission. Replication PASS;
-same three gates partial. Do not repeat collector packaging/admission or NL2 diagnosis as gates.
+Normal OWNER preparation now includes the shared capture module required by Dockerfile/manage.py;
+previously the prepared context could neither satisfy COPY nor import the management entrypoint.
+40 focused tests PASS/0 skips; actual272-file context builds image4392d4b7 and two isolated native
+UID10001/1000 probes pass. Installed OWNER bindings unchanged; no deployment or version change.
+[Exact build, image checks and rollback boundary](releases/2026-11-24-control-ha-owner-prepared-build.md).
+Next selected work: actual OWNER candidate/runtime/config approval and the existing RU/NL/manual/
+transport bindings and activation scope, then coherent interval and independent custody/recovery.
+The image is not an approved replacement; earlier activation/revert evidence is image-specific.
+[Workstation rollback packages](releases/2026-11-24-control-ha-collector-binding.md) remain uninstalled;
+preserve original source/data roots and known-hosts override. No blind overlay or relocation.
+Working-NL changes remain outside permission. Replication PASS; same three gates partial.
+Do not repeat the completed build, collector packaging/admission or NL2 diagnosis as gates.
 
 At the preceding collector-admission checkpoint:
 Standalone OWNER collector admission is implemented: complete inventory/probe cycles, manual
