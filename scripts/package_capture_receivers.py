@@ -6,11 +6,12 @@ from pathlib import Path
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCES = ('control/capture_gate.py', 'control/capture_receiver.py')
+SOURCES = ('control/capture_gate.py', 'control/capture_receiver.py', 'control/capture_profile.py',
+           'scripts/build_profile_snapshot_launcher.py')
 
 
 def build(output, source=ROOT):
-    contents = {'control/': b'', '__main__.py':
+    contents = {'control/': b'', 'scripts/': b'', '__main__.py':
                 b'from control.capture_receiver import main\nraise SystemExit(main())\n'}
     for name in SOURCES:
         path = source / name

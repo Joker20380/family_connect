@@ -19,11 +19,24 @@ ENTRIES = {
     'awg-register': ('register', 'script', ('register',), True),
     'mailbox-membership': ('chat-sync', 'script', (), False),
     'profile-snapshot': ('restricted-sync', 'archive', (), False),
+    'profile-launcher': ('restricted-sync', 'profile-launcher', (), False),
     'fleet-agent': ('fleet-v1', 'script', (), False),
 }
 BOOTSTRAP = '''import json, os, runpy, sys, types
-descriptor, spelling, kind, arguments, libraries = json.loads(sys.argv[1])
-sys.path[:0] = ['/proc/self/fd/' + str(item) for item in libraries]
+descriptor, spelling, kind, arguments, libraries, profile_command = json.loads(sys.argv[1])
+if kind == 'profile-launcher':
+    native_exec = os.execve
+    def snapshot_exec(executable, argv, environment):
+        expected_environment = {'PATH': '/usr/bin:/bin', 'LANG': 'C',
+                                'SSH_ORIGINAL_COMMAND': 'restricted-sync'}
+        if (executable != profile_command[0] or argv != profile_command or
+                environment != expected_environment or os.getcwd() != '/'):
+            raise ValueError('CAPTURE_PROFILE_EXEC')
+        os.set_inheritable(libraries[0], True)
+        native_exec(executable, [*argv[:-1], '/proc/self/fd/' + str(libraries[0])], environment)
+    os.execve = snapshot_exec
+else:
+    sys.path[:0] = ['/proc/self/fd/' + str(item) for item in libraries]
 sys.argv = [spelling, *arguments]
 if kind == 'archive':
     runpy.run_path('/proc/self/fd/' + str(descriptor), run_name='__main__')
@@ -124,14 +137,18 @@ def load(stack, path, digest):
         descriptor, _ = pinned(stack, library['path'], library['sha256'], 32 * 1024 * 1024)
         archive(descriptor)
         libraries.append(descriptor)
-    return gate, (entry, binding['entry_path'], form, arguments, libraries)
+    profile_command = None
+    if form == 'profile-launcher':
+        from .capture_profile import command
+        profile_command = command(native, binding['libraries'], sys.executable)
+    return gate, (entry, binding['entry_path'], form, arguments, libraries, profile_command)
 
 
 def run(gate, invocation):
-    entry, spelling, form, arguments, libraries = invocation
+    entry, spelling, form, arguments, libraries, profile_command = invocation
     with gate.operation():
         process = subprocess.Popen([sys.executable, '-I', '-B', '-c', BOOTSTRAP,
-                                    json.dumps((entry, spelling, form, arguments, libraries))],
+                                    json.dumps((entry, spelling, form, arguments, libraries, profile_command))],
                                    pass_fds=(entry, *libraries))
         outcome = process.wait()
         if outcome != 0:

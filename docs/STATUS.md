@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+**24 November — installed restricted-profile wrapper chain bound and qualified in isolation.**
+New opt-in receiver kind preserves the exact NL1/NL2 wrapper guards, Python path, flags,
+clean environment and cwd, while sealing both wrapper and snapshot archive. Admission lasts
+through re-exec/final exit; parent death/broken replies retain pending.186 tests PASS/0 skips;
+actual wrapper bytes under UID979/993 pass the isolated18:50:08–18:50:12UTC stand, with
+synthetic archives and Python3.13.15, not installed runtime dependencies/profile data.
+Installed wrapper/archive source pins observed read-only; no SSH/key/service/config deployment.
+Next: actual dependency/config/helper closure and external settlement for resolved routes,
+bounded manual-write coordination, then real latency/overlap and independent approval/recovery.
+Do not repeat the SSH census or wrapper stand. Candidate capsule4e9ab90f remains local,
+unapproved and uninstalled. Replication PASS; three HA-02 gates partial.
+[Source bindings, qualification limits and rollback](releases/2026-11-24-control-ha-profile-launcher.md).
+
 **24 November — remaining SSH command bindings observed; manual dispatch is not fenced.**
 18:18:48–18:18:51UTC read-only RU/NL1/NL2 observations cover14 explicit accounts and four
 named source contexts, twice. On-disk default sshd projections have no ForceCommand;

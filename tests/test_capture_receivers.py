@@ -13,6 +13,7 @@ import pytest
 from control import capture_receiver as receiver
 from control.capture_gate import Busy, GateError
 from scripts.package_capture_receivers import build
+from scripts.build_profile_snapshot_launcher import expected_argv, render_argv
 from test_capture_gate import gate, pending, line
 
 
@@ -22,10 +23,16 @@ def digest(raw):
 
 def write_binding(root, gate, body, *, kind='awg-register', libraries=()):
     entry = root / 'native.py'
-    if kind == 'profile-snapshot':
+    if kind in ('profile-snapshot', 'profile-launcher'):
         entry = root / 'native.pyz'
         with zipfile.ZipFile(entry, 'w') as bundle:
             bundle.writestr('__main__.py', body)
+        entry.chmod(0o600)
+        if kind == 'profile-launcher':
+            libraries = [dict(path=str(entry), sha256=digest(entry.read_bytes()))]
+            wrapper = render_argv(expected_argv(sys.executable, str(entry)), read_only=False)
+            entry = root / 'snapshot-launcher'
+            entry.write_bytes(wrapper)
     else:
         entry.write_text(body)
     entry.chmod(0o600)
@@ -63,7 +70,8 @@ def test_closed_deterministic_archive(launcher, tmp_path):
     assert launcher.read_bytes() == other.read_bytes()
     with zipfile.ZipFile(launcher) as bundle:
         assert set(bundle.namelist()) == {'control/', 'control/capture_gate.py',
-                                         'control/capture_receiver.py', '__main__.py'}
+            'control/capture_receiver.py', 'control/capture_profile.py', 'scripts/',
+            'scripts/build_profile_snapshot_launcher.py', '__main__.py'}
     with pytest.raises(FileExistsError):
         build(launcher)
 
@@ -180,9 +188,10 @@ def test_sealed_entry_and_library_are_used_after_originals_change(gate, tmp_path
     assert capfd.readouterr().out == 'PINNED\n' and not pending(gate)
 
 
-def test_ack_does_not_settle_before_native_process_exit(launcher, gate, tmp_path):
-    binding = write_binding(tmp_path, gate, 'print("ACK", flush=True)\ninput()\n')
-    process = subprocess.Popen(invocation(launcher, binding), env=environment(), stdin=subprocess.PIPE,
+@pytest.mark.parametrize('kind', ['awg-register', 'profile-launcher'])
+def test_ack_does_not_settle_before_native_process_exit(launcher, gate, tmp_path, kind):
+    binding = write_binding(tmp_path, gate, 'print("ACK", flush=True)\ninput()\n', kind=kind)
+    process = subprocess.Popen(invocation(launcher, binding), env=environment(kind), stdin=subprocess.PIPE,
                                stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     try:
         assert line(process).strip() == 'ACK'
@@ -197,9 +206,10 @@ def test_ack_does_not_settle_before_native_process_exit(launcher, gate, tmp_path
         process.communicate(timeout=5)
 
 
-def test_broken_reply_pipe_keeps_pending(launcher, gate, tmp_path):
-    binding = write_binding(tmp_path, gate, 'print("READY", flush=True)\ninput()\nprint("ACK", flush=True)\n')
-    process = subprocess.Popen(invocation(launcher, binding), env=environment(), stdin=subprocess.PIPE,
+@pytest.mark.parametrize('kind', ['awg-register', 'profile-launcher'])
+def test_broken_reply_pipe_keeps_pending(launcher, gate, tmp_path, kind):
+    binding = write_binding(tmp_path, gate, 'print("READY", flush=True)\ninput()\nprint("ACK", flush=True)\n', kind=kind)
+    process = subprocess.Popen(invocation(launcher, binding), env=environment(kind), stdin=subprocess.PIPE,
                                stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True)
     try:
         assert line(process).strip() == 'READY'
@@ -215,10 +225,11 @@ def test_broken_reply_pipe_keeps_pending(launcher, gate, tmp_path):
         process.stdin.close()
 
 
-def test_parent_death_does_not_imply_native_cancellation(launcher, gate, tmp_path):
+@pytest.mark.parametrize('kind', ['awg-register', 'profile-launcher'])
+def test_parent_death_does_not_imply_native_cancellation(launcher, gate, tmp_path, kind):
     binding = write_binding(tmp_path, gate,
-        'import os, sys\nprint("CHILD", os.getpid(), flush=True)\ninput()\nprint("NATIVE_FINISHED", flush=True)\n')
-    process = subprocess.Popen(invocation(launcher, binding), env=environment(), stdin=subprocess.PIPE,
+        'import os, sys\nprint("CHILD", os.getpid(), flush=True)\ninput()\nprint("NATIVE_FINISHED", flush=True)\n', kind=kind)
+    process = subprocess.Popen(invocation(launcher, binding), env=environment(kind), stdin=subprocess.PIPE,
                                stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, start_new_session=True)
     try:
         assert line(process).startswith('CHILD ')

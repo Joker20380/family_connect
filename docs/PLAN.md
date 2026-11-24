@@ -3,18 +3,19 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-The remaining SSH key/policy projection is now observed on RU/NL1/NL2 at18:18:48–18:18:51UTC:
-14 accounts, four named contexts, two equal samples; root has2/1/1 keys without per-key
-commands and no on-disk ForceCommand overrides them. Both restricted-account commands are
-included.112 focused tests PASS/0 skips, no service/SSH/key edits or forced-command dispatch.
-Loaded-daemon policy and exact installed receiver sources remain unattested; this is not a fence.
-[Actual SSH bindings and operational decision](releases/2026-11-24-control-ha-ssh-binding.md).
-Next selected work: bind those installed receiver sources to the existing launcher and establish
-the explicit bounded manual product-write/deployment pause without removing recovery SSH;
-independently settle external work and qualify real latency before the overlapping capture.
-Do not repeat the scoped SSH observation or invent a root-key removal requirement. Independent
-candidate/config approval, current checkpoint/key custody and final recovery remain required.
-Replication PASS; the same three HA-02 gates remain partial. No working-service deployment.
+Installed forced-command entry sources are now resolved; the NL profile routes use generated
+wrappers, not bare snapshot archives. New `profile-launcher` receiver binding preserves their
+guards/runtime path/environment/cwd and seals the wrapper→archive exec transition.186 tests PASS;
+actual wrapper bytes under UID979/993 pass the isolated18:50:08–18:50:12UTC stand. Its archives
+are synthetic and Python3.13.15 is not installed-runtime qualification. No production deployment.
+[Actual bindings, source change and exact remaining gate](releases/2026-11-24-control-ha-profile-launcher.md).
+Next selected work: close actual dependency/config/helper and external-completion coverage for
+these resolved routes, coordinate the bounded manual product-write/deployment pause, and qualify
+real latency/overlap. Runtime/source/gate and OWNER image/live-config approval remain mandatory
+before activation; keep recovery SSH and paid-watch. Do not repeat the SSH census or this wrapper
+bridge/stand. Shared NL cat routes are not Python receivers; no blind forced-command replacement.
+Independent current checkpoint/key custody and final combined recovery remain required.
+Replication PASS; the same three HA-02 gates remain partial. Current NL scope excludes service deployment.
 
 At the preceding OWNER image checkpoint:
 OWNER image activation/revert is now qualified on disposable state using the exact installed
