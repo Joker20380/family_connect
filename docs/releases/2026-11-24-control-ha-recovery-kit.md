@@ -4,6 +4,42 @@ Selected task: CONTROL-HA-20261123 / HA-02, existing complete-recovery acceptanc
 Actual cold execution PASS; complete HA-02 remains IN_PROGRESS. No product version, installation, public
 artifact/catalog, gateway policy or production service change. This is not HA-03 activation.
 
+## Next live action — host scope reconciliation
+
+24 November13:50UTC continuation checks the remaining practical prerequisites, not
+another source/dependency rehearsal. Current owner-supplied `AGENTS.md` names
+RU185.251.89.19 and NL186.246.45.246 as authorized gateways, excluding186.246.51.201.
+The [collector](../../control_plane/apps/console/collector.py) and
+[retained fleet inventory](2026-11-24-control-ha-installed-inventory.md#actual-installed-paths-and-source)
+identify NL1 185.10.158.212 and NL2 185.10.158.196 and explicitly retire186.246.45.246.
+[Earlier NL1 health](2026-11-13-amsterdam1-health.md) and
+[NL2 admission authorization](2026-11-02-second-nl-ordinary.md#authorization-and-trust)
+are historical evidence, not a silent amendment of the current instruction.
+
+Ask the owner to confirm these two current NL targets for scoped HA-02 prerequisite
+checks and isolated recovery without changes to working services. Until reconciled,
+do not contact the retired address or substitute the current hosts. No SSH, remote
+health/capacity check, custody transfer, new key trust, service stop or installation
+occurred in this review. Their current availability and recovery suitability are
+NOT_CHECKED, not failed. No claim that a new VPS or hosting change is necessary.
+
+After confirmation, use existing strict SSH pins for a read-only capacity/tool/isolation
+and effective-writer preflight. Select a bounded isolated recovery destination only if
+it does not expose live volumes, activate credentials/dispatchers or threaten production
+capacity. Separately reconcile all writer/queue entrypoints across the same fleet before
+a coherent capture. The [writer checklist](../control-ha-files.md#writer-freeze-and-activation-checklist)
+is not a stop-services recipe: preserve paid-watch8s/12s budgets and leases, and abort
+before interruption if coverage or a disconnect-safe rollback guard is unavailable.
+Host permission is not approval of the content of a future signed checkpoint.
+
+Same remainder: independent trust, coherent all-writer/in-flight capture and complete
+off-machine/final recovery are partial; isolated replication PASS. This review closes
+none of those gates and introduces no new substage. Existing actual test results below
+are unchanged, not rerun or promoted to whole-system acceptance. Documentation checks
+cover local links and whitespace only; external URLs are not HTTP-verified. No version,
+release, deployment or production rollback is involved; revert only this documentation
+if the target decision changes, preserving all prior private custody and evidence.
+
 ## Actual execution — 12:31:38UTC
 
 Source8acc6bd2be51d941f6a1eda3aea6f6a3da82cca9 was committed, pushed and independently

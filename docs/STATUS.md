@@ -1,5 +1,16 @@
 # Текущее состояние / Current state
 
+**24 November13:50UTC — HA-02 next live action needs host-scope reconciliation.**
+The current owner-supplied AGENTS host list names RU185.251.89.19 and the retired
+NL186.246.45.246. The collector and retained fleet evidence instead identify
+NL1 185.10.158.212 and NL2 185.10.158.196. Earlier reports record work on those hosts,
+but do not silently resolve the current instruction mismatch. Request confirmation
+of these two targets for HA-02 preflight and isolated recovery, without changing live
+services. Do not contact the retired/excluded addresses or claim the current NL hosts
+unavailable: no new SSH, capacity check, transfer or service operation has occurred.
+Replication remains PASS; the same three acceptance blocks remain partial. No new
+substage or completed recovery gate. [Decision and bounded next action](releases/2026-11-24-control-ha-recovery-kit.md#next-live-action--host-scope-reconciliation).
+
 **24 November12:31:38UTC — actual canonical/fleet cold source and dependency readback PASS.**
 Committed source8acc6bd2 recovers419 source files and all28 hash-locked wheels in a new
 Python3.13 venv inside the retained image, without network, Docker, original checkout or
