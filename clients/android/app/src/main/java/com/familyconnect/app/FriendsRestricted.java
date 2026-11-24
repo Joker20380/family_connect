@@ -21,6 +21,7 @@ final class FriendsRestricted {
         volatile String refresh="NOT_ATTEMPTED";
         volatile boolean denied;
         volatile OwnerPrewarmReceipt observation;
+        volatile ReadinessFetchTrace trace;
     }
     private static final Scope primary=new Scope(),secondary=new Scope();
     private static Scope scope(String gateway){return RestrictedGateway.PRIMARY.equals(RestrictedGateway.target(gateway))?primary:secondary;}
@@ -85,24 +86,31 @@ final class FriendsRestricted {
             byte[] selected=null;
             OwnerPrewarmReceipt receipt=new OwnerPrewarmReceipt();
             ReadinessFetchTrace trace=new ReadinessFetchTrace(receipt,startedConnection,System.currentTimeMillis());
+            current.trace=trace;
             ReadinessProduct product=null;
             try(ProvisioningTestGate.Permit permit=ProvisioningTestGate.enter(context);
                     ControlIdentity identity=new FriendsIdentityVault(context).load()){
                 RestrictedCache cache=cache(context,identity,gateway);
                 product=new ReadinessProduct(cache,new ReadinessReceiptStore(context,gateway),BuildConfig.VERSION_NAME,BuildConfig.VERSION_CODE);
+                boolean coldProvisioning=false;
+                if(ProvisioningCarrier.configured(context,gateway))synchronized(RestrictedVault.LOCK){byte[] usable=cache.usable(System.currentTimeMillis()/1000);coldProvisioning=usable==null;if(usable!=null)Arrays.fill(usable,(byte)0);}
                 if(!permit.blocked()&&current.reconciled.compareAndSet(false,true)){
                     ReadinessImportResult restored;OwnerPrewarmReceipt previous;
                     synchronized(RestrictedVault.LOCK){restored=product.restart(System.currentTimeMillis()/1000);previous=cache.context();}
                     Diagnostics.readinessResult(context,restored.code());
                     if(previous==null)product.record(restored);
+                    else if(coldProvisioning)product.deferAcknowledgement(restored);
                     else product.publish(restored,payload->new FriendsAccessAndroid(context,android.os.SystemClock.elapsedRealtime()+15000).readinessAck(identity,payload,gateway));
                 }
                 if(!permit.blocked())synchronized(RestrictedVault.LOCK){if(!cache.attempt(System.currentTimeMillis()/1000,required))return;}
                 attempted=true;
                 current.refresh="IN_PROGRESS";
                 current.observation=receipt;ReadinessImportResult result;
+                long fetchDeadline=android.os.SystemClock.elapsedRealtime()+30000;
+                trace.budget(fetchDeadline-android.os.SystemClock.elapsedRealtime());
+                FriendsAccessAndroid fetch=new FriendsAccessAndroid(context,fetchDeadline,trace);
                 RestrictedBootstrap.Selection startup=RestrictedBootstrap.refresh(cache,product,receipt,
-                    ()->{permit.requireAvailable();return new FriendsAccessAndroid(context,android.os.SystemClock.elapsedRealtime()+30000,trace).restrictedReadiness(identity,receipt,gateway);},
+                    ()->{permit.requireAvailable();return fetch.restrictedReadiness(identity,receipt,gateway);},
                     RestrictedVault.LOCK,()->System.currentTimeMillis()/1000);
                 result=startup.result;selected=startup.response;current.refresh=startup.status;
                 synchronized(RestrictedVault.LOCK){trace.cache(cache.diagnostic(System.currentTimeMillis()/1000));}
@@ -113,6 +121,7 @@ final class FriendsRestricted {
                 else if(result.code()==ReadinessImportResult.Code.READY)current.denied=false;
                 Diagnostics.readinessResult(context,result.code());
                 if(permit.blocked())product.record(result);
+                else if(fetch.usedProvisioning())product.deferAcknowledgement(result);
                 else product.publish(result,payload->new FriendsAccessAndroid(context,android.os.SystemClock.elapsedRealtime()+15000).readinessAck(identity,payload,gateway));
             }catch(Exception | LinkageError failure){availabilityFailure=false;if(selected!=null){Arrays.fill(selected,(byte)0);selected=null;}current.refresh="UNAVAILABLE";
                 trace.failed(failure);trace.complete(ReadinessImportResult.Code.INTERNAL_ERROR,false,false,System.currentTimeMillis());Diagnostics.readinessFetch(context,trace);

@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "commit": "efc13f1c7f2750cb7640dd2b8b90aed15c92c6e3",
+  "paths": [
+    "carrier",
+    "clients/mesh",
+    "scripts/build_desktop_mesh.py",
+    "scripts/verify_desktop_reference.py",
+    "clients/shared/android106-reference.json",
+    "clients/shared/android106-chat.json",
+    "clients/shared/desktop-readiness106.json",
+    "clients/android/app/src/main/assets/rns-relay.json",
+    "clients/rns/fc_rns_transport.py"
+  ],
+  "closure_sha256": "2d4e1380efa25109e1f0ea2e17f8971d1e8a8f127c56b313742ee8819696e933",
+  "native_source_digest": "f0e48d7cd3bd68a02759a5ff29967492ab170e171942d502864f0e03a07c23fe"
+}

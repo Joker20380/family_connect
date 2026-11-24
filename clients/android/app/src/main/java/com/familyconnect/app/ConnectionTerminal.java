@@ -10,18 +10,25 @@ final class ConnectionTerminal {
         final long attempt;
         final List<Stage> lines;
         final boolean finished,success;
-        Snapshot(long attempt,List<Stage> lines,boolean finished,boolean success) {
+        final long failureAt;
+        final Stage failureStage;
+        Snapshot(long attempt,List<Stage> lines,boolean finished,boolean success,long failureAt,Stage failureStage) {
             this.attempt=attempt;this.lines=List.copyOf(lines);this.finished=finished;this.success=success;
+            this.failureAt=failureAt;this.failureStage=failureStage;
         }
     }
     private long attempt;
     private final List<Stage> lines=new ArrayList<>();
     private boolean finished,success;
+    private boolean technicalEnabled;
+    private long failureAt;
+    private Stage failureStage;
+    synchronized void observeTechnical(boolean enabled){technicalEnabled=enabled;if(!enabled){failureAt=0;failureStage=null;}}
     synchronized long begin(Stage stage){++attempt;lines.clear();finished=false;success=false;append(stage);return attempt;}
     synchronized void add(long token,Stage stage){if(token==attempt&&!finished)append(stage);}
-    synchronized void end(long token,Stage stage,boolean ready){if(token!=attempt||finished)return;append(stage);finished=true;success=ready;}
+    synchronized void end(long token,Stage stage,boolean ready){if(token!=attempt||finished)return;append(stage);finished=true;success=ready;if(technicalEnabled&&!ready){failureAt=System.currentTimeMillis();failureStage=stage;}}
     private void append(Stage stage){if(!lines.isEmpty()&&lines.get(lines.size()-1)==stage)return;if(lines.size()==12)lines.remove(0);lines.add(stage);}
-    synchronized Snapshot snapshot(){return new Snapshot(attempt,lines,finished,success);}
+    synchronized Snapshot snapshot(){return new Snapshot(attempt,lines,finished,success,failureAt,failureStage);}
     static int homePane(String vpnState,Snapshot vpn){
         if("on".equals(vpnState)||"off".equals(vpnState)||"failed".equals(vpnState)||"cleanup-required".equals(vpnState))return 0;
         return vpn.attempt>0?1:0;

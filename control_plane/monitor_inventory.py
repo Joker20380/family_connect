@@ -8,6 +8,9 @@ import os
 from pathlib import Path
 import subprocess
 import sys
+import time
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from control.friends.pseudonyms import unseal
 
 if __package__:
     from .apps.console.collector import ACTIVE_SOURCES
@@ -16,6 +19,7 @@ else:
 
 BASE = Path(__file__).resolve().parent
 SOURCES = ACTIVE_SOURCES
+MAX_TECHNICAL_METADATA_BYTES = 64 * 1024 * 1024
 
 
 def instant():
@@ -34,6 +38,8 @@ def cycle(base=BASE, run=subprocess.run, known_hosts=None):
         for source in SOURCES:
             result = dict(source=source, attempted_at=instant(), status='FAILED', error='COLLECTION_FAILED')
             snapshot = None
+            import_started = None
+            subscriptions = source == 'gateway-ru' and (local / 'subscriptions-source.json').exists()
             try:
                 command = [sys.executable, str(base / 'collect_inventory.py')]
                 if known_hosts is not None:
@@ -48,23 +54,63 @@ def cycle(base=BASE, run=subprocess.run, known_hosts=None):
                 if not snapshot.is_file() or snapshot.stat().st_size > 4 * 1024 * 1024:
                     raise ValueError('Invalid snapshot file')
                 raw = snapshot.read_bytes()
-                document = json.loads(raw)
+                document = unseal(json.loads(raw), 'inventory')
                 if document.get('source') != source or document.get('scope') != 'production':
                     raise ValueError('Invalid snapshot scope')
                 result['error'] = 'IMPORT_FAILED'
+                import_started = time.monotonic()
                 run(['docker', 'compose', '-f', str(base / 'compose.yaml'), '--env-file', str(base / '.env'),
-                    'exec', '-T', 'console', 'python', 'manage.py', 'import_inventory'],
+                    'exec', '-T', 'console', 'python', 'manage.py', 'import_inventory'] +
+                    (['--subscription-attempt'] if subscriptions else []),
                     input=raw, capture_output=True, check=True, timeout=60)
                 result.update(status='IMPORTED', error=None, observed_at=document['observed_at'],
                     registry_status=document['registry_status'], sha256=hashlib.sha256(raw).hexdigest())
             except (OSError, ValueError, KeyError, subprocess.SubprocessError):
-                pass
+                failure_started = time.monotonic() if import_started is None else import_started
+                remaining = 60 if import_started is None else 60 - (time.monotonic() - import_started)
+                if subscriptions and remaining > 0:
+                    try:
+                        run(['docker', 'compose', '-f', str(base / 'compose.yaml'), '--env-file', str(base / '.env'),
+                            'exec', '-T', 'console', 'python', 'manage.py', 'import_subscriptions',
+                            '--failure', result['error'].lower()],
+                            capture_output=True, check=True, timeout=remaining)
+                    except (OSError, subprocess.SubprocessError):
+                        pass
+                remaining = 60 - (time.monotonic() - failure_started)
+                if remaining > 0:
+                    try:
+                        run(['docker', 'compose', '-f', str(base / 'compose.yaml'), '--env-file', str(base / '.env'),
+                            'exec', '-T', 'console', 'python', 'manage.py', 'transport_failure',
+                            '--source', source, '--failure', result['error'].lower()],
+                            capture_output=True, check=True, timeout=remaining)
+                    except (OSError, subprocess.SubprocessError):
+                        pass
             finally:
                 if snapshot is not None:
                     snapshot.unlink(missing_ok=True)
             results.append(result)
+        metadata_status = 'NOT_CONFIGURED'
+        if (local / 'technical-metadata-source.json').exists():
+            metadata_command = ['docker', 'compose', '-f', str(base / 'compose.yaml'), '--env-file', str(base / '.env'),
+                'exec', '-T', 'console', 'python', 'manage.py', 'import_technical_metadata']
+            try:
+                command = [sys.executable, str(base / 'collect_technical_metadata.py')]
+                if known_hosts is not None:
+                    command += ['--known-hosts', str(known_hosts)]
+                response = run(command, capture_output=True, check=True, timeout=50)
+                if len(response.stdout) > MAX_TECHNICAL_METADATA_BYTES:
+                    raise ValueError('Metadata bound exceeded')
+                run(metadata_command, input=response.stdout, capture_output=True, check=True, timeout=30)
+                metadata_status = 'IMPORTED'
+            except (OSError, ValueError, subprocess.SubprocessError):
+                metadata_status = 'UNAVAILABLE'
+                try:
+                    run(metadata_command + ['--unavailable'], capture_output=True, check=True, timeout=30)
+                except (OSError, subprocess.SubprocessError):
+                    metadata_status = 'IMPORT_UNAVAILABLE'
         receipt = dict(schema=1, completed_at=instant(), production_writes=0, sources=results,
-            limitations=['Client telemetry NOT_COLLECTED', 'Local workstation must stay awake',
+            technical_metadata=metadata_status,
+            limitations=['Technical metadata ' + metadata_status, 'Local workstation must stay awake',
                 'SSH credential is administrative; commands are read-only, credential is not read-only'])
         temporary = local / 'monitor-latest.tmp'
         descriptor = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_TRUNC | os.O_NOFOLLOW, 0o600)

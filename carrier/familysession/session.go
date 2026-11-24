@@ -258,6 +258,14 @@ type Session struct {
 	trace        *sessiontrace.Recorder
 }
 
+func ReliableConnection(ctx context.Context, endpoint PacketEndpoint) (net.Conn, error) {
+	reliable, err := reliablestream.New(ctx, endpoint, reliablestream.DefaultConfig())
+	if err != nil {
+		return nil, err
+	}
+	return bridge(ctx, reliable), nil
+}
+
 func (session *Session) ClaimTCP(server bool) error {
 	session.claimMu.Lock()
 	defer session.claimMu.Unlock()

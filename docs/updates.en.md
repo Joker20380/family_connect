@@ -1,5 +1,15 @@
 # Client updates
 
+**13 November — current Android0.1.18-beta125/code125, catalog8.**
+Use Settings → Check for updates → Install125, or the invitation link.
+The update is optional: minimum_supported_version1, mandatory_after0; no silent
+installation, data clearing or VPN entitlement grant. The verified catalog expires
+11 February2027 at14:20:11UTC. Future changes require a higher sequence; old7 cannot
+roll back already accepted8. The APK retains its original signing certificate.
+[Public APK, hashes and recovery](releases/2026-11-13-android125-publication.md).
+
+Dated notes below are historical; beta60/sequence1 are not the current release.
+
 Desktop parity106 development note (23 October): the full Linux bundle now includes
 an independent user-session chat owner. The six-file legacy updater is unchanged and
 cannot yet deliver the full new runtime. Before a candidate release, implement and

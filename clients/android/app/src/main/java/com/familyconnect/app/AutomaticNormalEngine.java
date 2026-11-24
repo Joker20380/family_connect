@@ -19,6 +19,10 @@ final class AutomaticNormalEngine implements TunnelEngine {
     AutomaticNormalEngine(Context context,AutomaticVpnOwner owner,Transport transport) {
         this.context=context;this.owner=owner;this.transport=transport;
     }
+    public String probeDns(String query,int budgetMillis){
+        if(tcp>0)return NativeTcp.tcpDns(tcp,query,budgetMillis);
+        return awg>=0?NativeTcp.awgDns(awg,source,query,budgetMillis):null;
+    }
     public void up(String raw) throws Exception {
         String profile=ProfileValidator.validate(raw,transport);
         NativeTcp.load(context);

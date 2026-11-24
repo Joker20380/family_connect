@@ -26,10 +26,31 @@ expired-unprepared renewal must be checked against the merged remote source befo
 
 ## Verification and outcome
 
-At this preparation checkpoint, merge and push are pending. Targeted Markdown link/whitespace
-checks and patch syntax validation precede the checkpoint; affected renewal tests and final
-merge review follow integration. A passing test is not a live rollout. Update this section
-with exact outcomes before the reconciled source is published.
+Local pending files are safely committed as `1f4e00b0`. A normal merge of fetched remote
+main preserves both histories. Only STATUS and PLAN conflict: their respective added
+checkpoint streams are both retained, with remote historical tasks explicitly separated
+from current HA-02 navigation. Every remote STATUS/PLAN line is retained. Three obsolete
+local Android NOT_STARTED/dependency lines are superseded by the already-published remote
+Android status, not silently discarded implementation work.
+
+The merged source retains the three local renewal modules/tests byte-for-byte and all other
+remote source. The net addition relative to remote is50 safe files, predominantly historical
+documentation and the unapplied P1 patch, not674 newly authored code changes. The larger merge
+diff is the already-published remote work being brought into the old local checkout.
+
+Validation before publication:
+
+-47 focused renewal tests PASS,0 skips, in2.86s: expired-unprepared completion, ordinary
+  unprepared reconciliation and unacquired abort. No live hosts/services are used.
+-44 changed Markdown documents/741 links PASS; the newly retained October evening anchor
+  is corrected. Whitespace and historical patch syntax checks pass.
+- Outgoing local history and staged changes pass private-key/token pattern checks. Raw
+  historical originals remain private; only sanitized reports/source are added.
+- Existing source/public version files from origin are preserved; no new version increment,
+  release tag, catalog edit relative to origin, public installer or deployment is introduced.
+
+At this merge checkpoint, the ordinary push and remote-SHA verification remain pending.
+A passing test/source merge is not a live rollout or completion of HA-02.
 
 ## Rollback
 

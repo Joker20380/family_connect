@@ -1,0 +1,25 @@
+[Unit]
+Description=Read committed subscription events for the official support owner
+After=network-online.target family-connect-support.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=root
+WorkingDirectory=/opt/family-connect-support/app
+EnvironmentFile=/etc/family-connect-support-bindings/source.env
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/opt/family-connect-support/venv/bin/python -m provisioning.subscription_collector --host ${SUPPORT_REGISTRY_HOST} --key /etc/family-connect-support-bindings/readonly.key --known-hosts /etc/family-connect-support-bindings/known_hosts --socket /run/family-connect-support/worker.sock --output /var/lib/fc-support-bindings/subscriptions.json
+ReadWritePaths=/var/lib/fc-support-bindings
+UMask=0077
+TimeoutStartSec=25
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectSystem=strict
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6

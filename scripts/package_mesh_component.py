@@ -13,6 +13,7 @@ import zipfile
 
 from scripts.package_system_python import collect
 from scripts.build_desktop_mesh import sources as native_sources
+from scripts.stage_linux_native import verify as accepted_native_sources, reference as native_reference
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -75,13 +76,13 @@ def normal_payload(awg, tcp):
     return payload
 
 
-def assemble(native, relay, destination, awg, tcp):
+def assemble(native, relay, destination, awg, tcp, *, native_source=None):
     if destination.exists():
         raise ValueError('Use a fresh delivery directory')
     build = json.loads((native / 'build.json').read_bytes())
     sources = json.loads((native / 'source-inventory.json').read_bytes())
     if (build.get('build_tags') != [] or
-            sources != native_sources(ROOT / 'clients/mesh') or
+            sources != (accepted_native_sources(native_source) if native_source is not None else native_sources(ROOT / 'clients/mesh')) or
             digest(json.dumps(sources, sort_keys=True, separators=(',', ':')).encode()) != build['source_digest']):
         raise ValueError('Standard native source inventory required')
     binary = (native / 'fc-mesh').read_bytes()
@@ -186,6 +187,9 @@ def assemble(native, relay, destination, awg, tcp):
     record = dict(file=archive.name, sha256=digest(archive.read_bytes()), size=archive.stat().st_size,
                   source_digest=build['source_digest'], build_id=manifest['build_id'], installed=False, published=False, runtime_acceptance='NOT_RUN',
                   complete_desktop_installer=False, signature='none', archive_verified=True)
+    if native_source is not None:
+        record['native_source_commit'] = native_reference()['commit']
+        record['native_binary_sha256'] = digest(binary)
     (destination / 'delivery.json').write_text(json.dumps(record, indent=2) + '\n')
     print(json.dumps(record, indent=2))
 
@@ -197,8 +201,10 @@ def main():
     parser.add_argument('--out', type=Path, required=True)
     parser.add_argument('--awg', type=Path, required=True)
     parser.add_argument('--tcp', type=Path, required=True)
+    parser.add_argument('--native-source', type=Path)
     args = parser.parse_args()
-    assemble(args.native.resolve(), args.rns.resolve(), args.out.resolve(), args.awg.resolve(), args.tcp.resolve())
+    assemble(args.native.resolve(), args.rns.resolve(), args.out.resolve(), args.awg.resolve(), args.tcp.resolve(),
+             native_source=args.native_source.resolve() if args.native_source else None)
 
 
 if __name__ == '__main__':

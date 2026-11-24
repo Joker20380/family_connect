@@ -17,6 +17,18 @@ import (
 
 var ErrDenied = errors.New("underlay socket denied")
 
+type deniedCause struct{ cause error }
+
+func (failure *deniedCause) Error() string   { return ErrDenied.Error() }
+func (failure *deniedCause) Unwrap() []error { return []error{ErrDenied, failure.cause} }
+
+func preserveDenied(err error) error {
+	if err == nil {
+		return ErrDenied
+	}
+	return &deniedCause{cause: err}
+}
+
 type Network struct {
 	*stdnet.Net
 	ctx         context.Context
@@ -54,7 +66,7 @@ func New(ctx context.Context, resolverAddress string, protect func(int) bool) (*
 func (network *Network) RouteIPv4() (net.IP, error) {
 	connection, err := network.Dial("udp4", network.routeTarget)
 	if err != nil {
-		return nil, ErrDenied
+		return nil, preserveDenied(err)
 	}
 	defer connection.Close()
 	local, ok := connection.LocalAddr().(*net.UDPAddr)
@@ -170,7 +182,7 @@ func (network *Network) ResolveIPAddr(protocol, address string) (*net.IPAddr, er
 	defer cancel()
 	addresses, err := network.resolver.LookupIP(ctx, "ip4", address)
 	if err != nil || len(addresses) == 0 {
-		return nil, ErrDenied
+		return nil, preserveDenied(err)
 	}
 	return &net.IPAddr{IP: addresses[0]}, nil
 }

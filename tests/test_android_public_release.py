@@ -3,6 +3,8 @@ import hashlib
 import importlib.util
 import json
 import re
+import shutil
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -26,14 +28,32 @@ def test_android_changes_do_not_start_desktop_suites():
     assert not any(platforms(['docs/STATUS.md']).values())
 
 
-def test_android118_candidate_keeps_provisioning_disabled_and_requires_native_provenance():
+def test_android126_candidate_keeps_test_seam_disabled_and_requires_native_provenance():
     gradle = (ROOT / 'clients/android/app/build.gradle').read_text()
-    assert 'versionCode 118' in gradle and "versionName '0.1.18-beta118'" in gradle
+    assert 'versionCode 126' in gradle and "versionName '0.1.18-beta126'" in gradle
     assert "withBuildType('friends')) { builder -> builder.minSdk = 27 }" in gradle
     assert "buildConfigField 'boolean', 'PROVISIONING_TEST_SEAM', 'false'" in gradle
     assert 'src/provisioningResearch' not in gradle
     assert 'verifyFriendsRestrictedInputs' in gradle
     assert '--check-generated' in gradle
+    assert 'file(restrictedDirectory).absolutePath' in gradle
+    assert '--native-source-commit' in gradle
+
+
+def test_android120_field_entry_matches_canonical_nl1_not_retired_gateway():
+    from control_plane.apps.console.collector import SOURCES
+    manifest = json.loads((ROOT / 'deploy/friends/restricted/cold-provision-deployment.json').read_text())
+    binding = manifest['binding']
+    assert manifest['node'] == binding['logical_gateway'] == 'nl-amsterdam-1'
+    assert manifest['entry_host'] == SOURCES[manifest['node']]['host'] == '185.10.158.212'
+    assert manifest['entry_host'] != binding['retired_host_not_an_alias'] == '186.246.45.246'
+    assert SOURCES['gateway-nl']['host'] is None
+    assert manifest['entry_host'] != SOURCES['nl-amsterdam-2']['host']
+    receipt = json.loads((ROOT / binding['evidence']).read_text())
+    assert receipt['catalogs'][0]['sha256'] == binding['routing_catalog_sha256']
+    assert receipt['catalogs'][2]['sha256'] == binding['routing_forward_rollback_sha256']
+    assert receipt['fresh_live_verification'] == 'NOT_RUN'
+    assert 'never copy a key' in binding['identity_rule']
 
 
 def test_signaling_read_classes_match_without_changing_legacy_recovery():
@@ -50,28 +70,36 @@ def test_signaling_read_classes_match_without_changing_legacy_recovery():
         '5fc3a518a74c1e05de1d99216ee9196e400fad3338994b8150caaa207cb75a00')
 
 
-def test_public_invitation_offers_qualified_android113_and_audio_source():
+def test_public_invitation_offers_qualified_android126_and_corresponding_sources():
     landing = (ROOT / 'deploy/friends/invite/index.html').read_text()
     android = next(line for line in landing.splitlines() if line.lstrip().startswith('android:{'))
-    assert 'Beta113 · Android 8.1+ · ARM64 · MESH' in android
-    assert '/downloads/FamilyConnect-Test-0.1.18-beta113.apk' in android
-    assert '/downloads/FamilyConnect-Android-0.1.18-beta113-audio-source.tar.gz' in android
+    assert 'Beta126 · Android 8.1+ · ARM64 · MESH' in android
+    assert '/downloads/FamilyConnect-Test-0.1.18-beta126.apk' in android
+    assert '/downloads/FamilyConnect-Android-0.1.18-beta126-source.tar.gz' in android
+    assert '/downloads/FamilyConnect-Android-0.1.18-beta126-audio-source.tar.gz' in android
     assert 'beta60' not in android
 
 
-def test_public_android113_catalog_is_signed_sdk_bound_and_remains_optional():
-    envelope = json.loads((ROOT / 'updates/android-friends-v2.json').read_bytes())
+@pytest.mark.parametrize('path,sequence,code,size,digest', [
+    ('tests/fixtures/android_updates/public125-v2.json', 8, 125, 50470304,
+     'f1c5bf578a5ca1e8e864a60fa9ab33249807e22c4552b5da984d126720e5740c'),
+    ('updates/android-friends-v2.json', 9, 126, 50478496,
+     '4f288cbb107ac46c8c99ec0e274f57a5e1e8164796796781c4a2c275b57e2134'),
+])
+def test_public_android_catalogs_are_signed_sdk_bound_and_remain_optional(path, sequence, code, size, digest):
+    envelope = json.loads((ROOT / path).read_bytes())
     payload = base64.b64decode(envelope['payload'], validate=True)
     anchor = base64.b64decode((ROOT / 'clients/desktop/update.pub').read_text().strip(), validate=True)
     Ed25519PublicKey.from_public_bytes(anchor).verify(
         base64.b64decode(envelope['signature'], validate=True), b'family-connect/android-update/v1\0' + payload)
     catalog = json.loads(payload)
-    assert catalog['sequence'] == 7 and catalog['min_sdk'] == 27
-    assert catalog['version_code'] == 113 and catalog['version'] == '0.1.18-beta113'
+    assert catalog['sequence'] == sequence and catalog['min_sdk'] == 27
+    assert catalog['version_code'] == code and catalog['version'] == f'0.1.18-beta{code}'
     assert catalog['minimum_supported_version'] == 1 and catalog['mandatory_after'] == 0
-    assert catalog['size'] == 50273696
-    assert catalog['sha256'] == '6078d0610272c5eb1b8008d330f9e646163b90b89df180b4bd56fd8ae4edc094'
-    assert catalog['url'] == 'https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta113.apk'
+    assert catalog['size'] == size
+    assert catalog['sha256'] == digest
+    assert catalog['url'] == f'https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta{code}.apk'
+    assert catalog['signer_fingerprint'] == '67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a'
     assert 0 < catalog['expires_at'] - catalog['issued_at'] <= 90 * 86400
 
 
@@ -177,7 +205,22 @@ def test_ui_runner_offline_wait_is_bounded(monkeypatch):
         helper.ready_emulator()
 
 
-def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main():
+def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main(tmp_path):
+    patch = ROOT / 'tests/fixtures/device_technical_metadata/beta125-to126.patch'
+    assert hashlib.sha256(patch.read_bytes()).hexdigest() == 'd465e822bf098ac678f36ed4c964299d50f91634302d14b643ff6286f6df2d5e'
+    metadata_overlay = {
+        'ConnectionTerminal.java': '008f6aa25ff16fec0e49746dfe74a884e6db3b0ef47f2a804d739196478eb17a',
+        'FriendsAccessAndroid.java': '97e21b93387a9a48616d291e6ab3fcce7f24eb1f72643776a7e6a29d8cc7ab39',
+    }
+    restored = {}
+    for filename, digest in metadata_overlay.items():
+        name = 'clients/android/app/src/main/java/com/familyconnect/app/' + filename
+        assert hashlib.sha256((ROOT / name).read_bytes()).hexdigest() == digest
+        destination = tmp_path / name
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(ROOT / name, destination)
+        restored[name] = destination
+    subprocess.run(['git', 'apply', '--reverse', str(patch)], cwd=tmp_path, check=True, capture_output=True)
     reference = json.loads((ROOT / 'clients/shared/android106-reference.json').read_text())
     reviewed_ui109 = {
         'ConnectionTerminal.java': '6aedb6c35dd9119d9005e5e6f328ef7b7c23eb1d9e0e6f2e007a34ce0913d582',
@@ -217,22 +260,96 @@ def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main():
         'DiagnosticRing.java': 'd6f0f8888164384c2c07627a283a00a9e2383e1488a177816b4f1352f92d0c68',
         'RestrictedTrace.java': '34a50256ffd04d98cb29274be2c5b800a18a7756c47f5da4568e3bc5a5418561',
     }
+    reviewed_subscription_beta119 = {
+        'ChatActivity.java': '4a1e7a28cc374aef5d72664237a2c4dff8cd8d078aff760a1e996646bfb75a0d',
+        'ChatLocalAndroid.java': 'd5a01e8137b10b577b7e84e35980b64f0a2f42739bd588a74b868ac5388ecf15',
+        'ChatNotifications.java': '75f7b6e2a188df6e87a084afddb6238707927c1567a93abac1b0f2ba2ed64f42',
+        'ChatRuntime.java': '4568fd78a2b63ab764b1d11d38976238abf7984f9063676d8167f05bc124b32b',
+        'FriendsAccessAndroid.java': '98563acb61287b7272adf3f74d3d9705b2d37c192420ce5bae63f51dcc638a24',
+    }
+    reviewed_inherited_renewal_beta119 = {
+        'FriendsRestricted.java': '8c8228f2188f0bc09348586ce4c9bf0585ab51c4c7894f3d1cf4faacd641f70a',
+        'NativeRestricted.java': 'bcf81d360910e4348133dffa13901701e2cf4461b26c1f21b5b4d872b2d2a867',
+        'RestrictedTunnelEngine.java': 'b8cb9725620a1086dfafa907b3edb5126282cc9e500bd990e3a162cb71b795c3',
+    }
+    reviewed_cold_candidate_9bf02724 = {
+        'ChatNetworkAndroid.java': '181fa6d969786cf46aac0840abb35d2e7da1b1ecf65951f7e215ca8e307ce9cf',
+        'ConnectivityOrchestrator.java': '93b6d8c322ad95ef74594aab2ce30a1b2fea02d54d2ac06b4a3308fe3664224e',
+        'DiagnosticRing.java': '5c9db0e90368bfd642446f735d856ae2960026ba6fc48ce41ffbd4e72c32ea61',
+        'FriendsAccessAndroid.java': '8c26c43dec6210318911785231c673546dce98505e642cedb0326e0d8b5f6642',
+        'FriendsRestricted.java': '985bd6739c38c28537112dead9217f0cf1471a5c51433c51cbc5b17c1415cce8',
+        'NativeRestricted.java': '4b79103dd6e67039d95eae83af0bcc3df30f298f0d92221fc53f5c97bdc75939',
+        'ReadinessBootstrapRoute.java': 'b1f21dfb01d7a79cef793d898b8b58c99b324c75c53d745c47b370f679bbe5ef',
+        'ReadinessFetchTrace.java': 'c91f00af4852bdc9cee839cf7db4a798ac387781d8d9d36a5f730c37e8915cc8',
+        'ReadinessProduct.java': '3f63c57c4b543df769a96a72599f3380ba8fb32af4c5ddede6b21b6e36ae7074',
+        'RestrictedTunnelEngine.java': 'b331aa8c3678fdaf12a0552239cd3e6927c23028b95493b741d96faf23c80740',
+    }
+    reviewed_consolidated_beta121 = {
+        'FriendsAccessAndroid.java': 'f4eb3235f067d91e66109e8d18e8a7c9986b42d6b92cd6b0d4e2661c6c54f3e7',
+    }
+    reviewed_app_vpn_beta122 = {
+        'AutomaticConnection.java': 'f393817ca84ccc444203d4bfad9be7943fef65c7351981c2dc32ebc8b88f6a48',
+        'AutomaticNormalEngine.java': '360cfbe0399ed03d5cf1b56525cb712b84a688f6efd7aa5b6cab6073a56f1484',
+        'AutomaticVpnOwner.java': '64d120873786b263ce04eb62b8fcbfd093f6c7affe5363ea07b8090cd034c712',
+        'NativeRestricted.java': 'c86f49e49dbf8b01d3b67a949665952c6c7cfd784d89bb8d85bb38a044cc4cd6',
+        'NativeTcp.java': 'fc9b01ee9b735e9fbc0ec2768eba0724e07b2ebfed0fff621a1facd2a02c3657',
+        'RestrictedTunnelEngine.java': 'd506c0bc2b95cd6e34aedb2e05b91a8350613d5b4de9a5cf869a8c236cbc8a6d',
+        'TcpTunnelEngine.java': '1615e4646de0b68d5b3f470f57fa20149c8a9f5e1dfa1afe512739f44faa655d',
+        'TunnelEngine.java': 'f1c16279b1ea466b5d0a76ad249f50c91e544c0a5abcfaa4bcdc24957b20bd4e',
+        'VpnHealth.java': '01e7b553c995958dd1e882fbc929bdfff3d7ff805bb0ac69738d579b1f6646aa',
+    }
+    reviewed_app_vpn_recovery_beta123 = {
+        'MainActivity.java': 'ae04b97387cd9f67ce6e80bd01c31b411168e538c1c3a60a4516ab715aa0e4ad',
+        'ControlOperations.java': 'bfa026bd45010ce410a8ed5e82240d72a36f73ce4311835bc8e72d9d608d6626',
+    }
+    reviewed_support_candidate_beta124 = {
+        'ChatActivity.java': '80b89cfcdc9e6f095bf074f76cc929be5d686573f4828074de40daad594331a5',
+        'ChatLocalAndroid.java': '96e1ce4463a0476dd610779c9f52818dcc77b6359dea105303ae96782277a414',
+        'ChatRuntime.java': '93e0e57e3365a77e7722ed1a476422e61fd480836875a820fdb79ed82f74b3f4',
+        'FriendsAccessAndroid.java': 'e21901751a49b8fece4d210878382781c0e44814896412e67d70050ff1391b5d',
+    }
+    reviewed_support_candidate_beta125 = {
+        'FriendsAccessAndroid.java': 'ccc24fb4d9236773227e1e26a9ae812812ab47f1c455a2f97b0ba5830c60259a',
+    }
     reviewed_handlers = {**reviewed_ui109, **reviewed_gateway_selection, **reviewed_android81,
                          **reviewed_gateway_readiness, **reviewed_slow_link_recovery,
-                         **reviewed_idle_ack_recovery, **reviewed_signaling_read_diagnostics}
+                         **reviewed_idle_ack_recovery, **reviewed_signaling_read_diagnostics,
+                         **reviewed_subscription_beta119, **reviewed_inherited_renewal_beta119,
+                         **reviewed_cold_candidate_9bf02724, **reviewed_consolidated_beta121,
+                         **reviewed_app_vpn_beta122, **reviewed_app_vpn_recovery_beta123,
+                         **reviewed_support_candidate_beta124, **reviewed_support_candidate_beta125}
     reviewed_resources = {
         'clients/android/app/src/main/res/values-ru/strings.xml': '89b334900a7febe2e50bfe06d593673961c320704a16ead76c09d9baa22ea279',
         'clients/android/app/src/main/res/values/strings.xml': '85e40c0044eaec9ebe8fb6f77d0a026ddc6bead90fb044237abd23b305fd2c39',
         'clients/android/app/src/main/res/values-ru/exit_radio.xml': 'bb5198a35cf336c3b364bb5ecd65285a948614a4f60b3d1434cec0e7d9b7608b',
         'clients/android/app/src/main/res/values/exit_radio.xml': 'f0147662d5ca508fba482cca46906a2198b2f7f4ae72d692a61631123ad07404',
     }
+    reviewed_subscription_resources_beta119 = {
+        'clients/android/app/src/main/res/values-ru/strings.xml': '120dfc00876e5603eb04edc3422023f6daf113744e3f112fa79136e9587af30e',
+        'clients/android/app/src/main/res/values/strings.xml': 'e5db89007bb81fe8a7a78632eb8bd29ef2d1a35ca7f85970e8cc709f289e3b23',
+    }
+    reviewed_app_vpn_resources_beta122 = {
+        'clients/android/app/src/main/res/values-ru/strings.xml': '77c9a48fbd500c1bfa80b1efb895e8a1976a621d53668b9a57d47c650f3f17c7',
+        'clients/android/app/src/main/res/values/strings.xml': 'b9fe19d231f4dd80526178826b2213f602f6286ba480ca9fc9deb5874d691711',
+    }
+    reviewed_app_vpn_catalog_resources_beta123 = {
+        'clients/android/app/src/main/res/values-ru/strings.xml': '025b8c5f82d87a54693660e288515e9e012d9da8c7b5876c5d0f1effe19f61fe',
+        'clients/android/app/src/main/res/values/strings.xml': '5db570467d29199a7b6f93a7911494a0093269c6601cbc6b46c61f5871372303',
+    }
+    reviewed_support_resources_beta124 = {
+        'clients/android/app/src/main/res/values-ru/strings.xml': '8c0837cbf6c56fcc0917f4db3ff89a4f90726abc604b7fe58d4d909c606038fc',
+        'clients/android/app/src/main/res/values/strings.xml': '42b13c1ef5351aaed6e8323f634e341b72ea34b5a588e9313b8b38d2b4da6288',
+    }
+    reviewed_resources = {**reviewed_resources, **reviewed_subscription_resources_beta119,
+                          **reviewed_app_vpn_resources_beta122, **reviewed_app_vpn_catalog_resources_beta123,
+                          **reviewed_support_resources_beta124}
     changes = {'clients/android/app/src/main/java/com/familyconnect/app/FriendsActivity.java',
                'clients/android/app/src/main/java/com/familyconnect/app/ConnectionService.java',
                'clients/android/app/src/main/java/com/familyconnect/app/ChatAudio.java'}
     for name, expected in reference['android_ui_and_handlers'].items():
         if name not in changes:
             reviewed = reviewed_resources.get(name, reviewed_handlers.get(Path(name).name, expected))
-            assert hashlib.sha256((ROOT / name).read_bytes()).hexdigest() == reviewed, name
+            assert hashlib.sha256(restored.get(name, ROOT / name).read_bytes()).hexdigest() == reviewed, name
 
 
 def test_accepted_jni_startup_observation_helper_is_in_public_source():
@@ -290,7 +407,7 @@ def test_runtime_consent_harness_targets_system_button_and_checks_quiet_notifica
 def test_runtime_consent_requires_awake_unlocked_emulator_without_bypassing_dialog():
     harness = (ROOT / 'clients/android/app/src/androidTest/java/com/familyconnect/app/AwgRuntimeTest.java').read_text()
     consent = harness.split('void revokeThroughSystemDialog()', 1)[1].split('void quietNotification()', 1)[0]
-    assert consent.index('shell("input keyevent 224")') < consent.index('shell("am start -W -n ')
+    assert consent.index('shell("input keyevent 224")') < consent.index('consentCommand("am start -W -n ')
     assert 'shell("wm dismiss-keyguard")' in consent
     assert 'assertTrue("System VPN consent requires an interactive display",power.isInteractive())' in consent
     assert 'assertFalse("System VPN consent blocked by keyguard",keyguard.isKeyguardLocked())' in consent
@@ -303,6 +420,21 @@ def test_runtime_consent_requires_awake_unlocked_emulator_without_bypassing_dial
     assert 'VpnService.prepare(this)' in activity and 'startActivityForResult(permission,1)' in activity
     runner = (ROOT / 'pilot/android-awg/run.py').read_text()
     assert "'logcat','-d','-b','main','-b','system','-b','crash','-t','2000'" in runner
+
+
+def test_consent_diagnostics_are_bounded_and_do_not_dump_view_text_or_material():
+    harness = (ROOT / 'clients/android/app/src/androidTest/java/com/familyconnect/app/AwgRuntimeTest.java').read_text()
+    consent = harness.split('void revokeThroughSystemDialog()', 1)[1].split('void quietNotification()', 1)[0]
+    assert 'captured.size()<16384' in consent and 'packages.size()<8' in consent
+    assert 'root.getText()' not in consent and 'getContentDescription()' not in consent
+    assert 'appops get ' in consent and 'ACTIVATE_VPN allow' not in consent
+    activity = (ROOT / 'clients/android/app/src/androidTest/java/com/familyconnect/app/RevokeVpnActivity.java').read_text()
+    assert 'prepare_requires_confirmation=' in activity and 'activity_result request=' in activity
+    runner = (ROOT / 'pilot/android-awg/run.py').read_text()
+    assert "'FCConsent:I','*:S'" in runner and 'result.stdout[-65536:]' in runner
+    assert runner.index('peer.kill()') < runner.index("'FCConsent:I'")
+    diagnostics = (ROOT / '.github/workflows/clients.yml').read_text().split('name: FamilyConnect-Android-runtime-diagnostics', 1)[1].split('- uses:', 1)[0]
+    assert 'android-consent.log' in diagnostics
 
 
 def test_runtime_ui_checks_match_retained_async_and_scroll_contracts():

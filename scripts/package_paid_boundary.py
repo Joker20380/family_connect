@@ -119,6 +119,7 @@ def build(output, ref='HEAD'):
     for name in ('deploy/friends/access-api.py', 'control/friends/support_admin.py',
                  'control/friends/restricted_admin.py', 'control/requirements.lock',
                  'device_identity/requirements.lock', 'scripts/friends_http_acceptance.py',
+                 'control/geoip-requirements.lock', 'scripts/update_geoip.py',
                  'control_plane/apps/console/collector.py', 'LICENSE', 'THIRD_PARTY_NOTICES.md',
                  'deploy/friends/restricted/served-baseline.json',
                  'clients/android/app/src/main/assets/control-licenses/Reticulum.txt',
@@ -126,6 +127,9 @@ def build(output, ref='HEAD'):
         sources[name] = committed(ref, name)
     templates = {contract + name: committed(ref, contract + name) for name in
                  ('http-runtime.conf', 'access.conf', 'nginx-location.conf')}
+    for name in ('gateway-selection-location.conf', 'subscription-location.conf', 'technical-metadata-location.conf'):
+        location = 'deploy/friends/' + name
+        templates[location] = committed(ref, location)
     with tempfile.TemporaryDirectory() as directory:
         temporary = Path(directory)
         source = temporary / 'source'

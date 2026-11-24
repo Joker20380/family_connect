@@ -32,7 +32,7 @@ RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
 CapabilityBoundingSet=
 ReadWritePaths=/opt/apps/family_connect/mailbox-pilot/state
 Environment=TMPDIR=/opt/apps/family_connect/mailbox-pilot/state/tmp
-MemoryMax=192M
+MemoryMax=512M
 TasksMax=64
 CPUQuota=25%
 LimitNOFILE=256

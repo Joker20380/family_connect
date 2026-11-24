@@ -46,7 +46,11 @@ def test_only_existing_service_owns_automatic_tuns():
     assert '.addRoute("0.0.0.0",0).addRoute("::",0)' in owner
     assert '.allowBypass(' not in owner and '.addDisallowedApplication(' not in owner
     replace = owner.split('ParcelFileDescriptor replace', 1)[1]
-    assert replace.index('builder.establish()') < replace.index('previous.close()')
+    assert replace.index('applications.establish(builder)') < replace.index('previous.close()')
+    policy = source('AppVpnAndroid')
+    assert 'builder.addAllowedApplication(name)' in policy
+    assert 'else builder.addDisallowedApplication(name)' in policy
+    assert '.allowBypass(' not in policy
     engine = source('AutomaticNormalEngine')
     assert 'new GoBackend(' not in engine and 'GoBackend.awgTurnOn' in engine
     assert 'ParcelFileDescriptor.dup' in engine and '.protect(socket4)' in engine
@@ -184,7 +188,7 @@ def test_restricted_loss_uses_typed_cause_before_cleanup_and_revalidates_access(
     bootstrap = source('RestrictedBootstrap')
     assert 'return cache.usable(now);' in bootstrap
     assert 'result.code()!=ReadinessImportResult.Code.READY' in bootstrap
-    assert 'try{checkAccess();handle=NativeRestricted.beginReady(' in startup
+    assert 'try{checkAccess();startupStage="NATIVE_BEGIN_READY";handle=NativeRestricted.beginReady(' in startup
     assert 'while ((phase=NativeRestricted.state(handle))==0' in startup
     assert '!authorizationDenied()' in startup
     assert 'if(denied||phase==5)return Failure.AUTH' in source('RestrictedRecovery')

@@ -1,5 +1,10 @@
 # Android controlled beta — manual paid entitlement (Beta-0)
 
+**Актуальная эксплуатация:** [каноническая RU-инструкция](operators/subscriptions.ru.md).
+Датированные rollout/cohort/payment числа ниже — исторические receipts, не текущие
+наблюдения. Непустой registry требует paid-aware backup; прежняя empty-cohort
+процедура без явного флага для него запрещена. Baseline108 не меняется от установки119.
+
 **1 November — READY_FOR_BETA109_OWNER_UPDATE.** Beta109/code109 is published;
 Android update sequence4 and invitation109 verified over HTTPS. Full matrix41289980872/
 source600ae52, offline signer,16K alignment and exact bytes PASS. The repair keeps country/

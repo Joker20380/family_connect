@@ -1,0 +1,202 @@
+{
+  "result": "SOURCE_GATE_PASS_ANDROID_PREFLIGHT_BLOCKED",
+  "source": "070b8087ed494876c550f50befc64ffc7f197193",
+  "branch": "feature/android-cold-provisioning-20261106",
+  "original_checkpoint": "9765c5ca5f028492e052753968fc85dcfff0697e",
+  "previous_runtime_source": "047da1debd1fe0877224d495c54867daeee72a3b",
+  "new_provider_connects": 0,
+  "new_rooms": 0,
+  "oauth_read": false,
+  "root_transport_cause": "NOT_ESTABLISHED",
+  "diagnostic_loss_fixed": "SOURCE_HOST_JNI_RACE_ONLY",
+  "android_jni_test": "NOT_RUN_THERMAL_PREFLIGHT",
+  "cold_runtime": "NOT_RUN",
+  "bundle": "NOT_RUN",
+  "ready": "NOT_RUN",
+  "dns": "NOT_RUN",
+  "https": "NOT_RUN",
+  "egress": "NOT_RUN",
+  "candidate_deadline_ms": 200000,
+  "readiness_budget_ms": 30000,
+  "native": {
+    "xray_revision": "d2758a023cd7f4174a5a5fa4ff66e487d4342ba0",
+    "gvisor_version": "v0.0.0-20260122175437-89a5d21be8f0",
+    "patch_sha256": "770f8f359faf0630a271f103bcd31033eb46d30aeb531b5933c15058c624b420",
+    "binary_sha256": "af52aeb8af7c5c782a8c1a659f271e0505e4a49a84a9a774b3f97404a86d1e04",
+    "diagnostic_only": false,
+    "owner_diagnostic_fault_schema": 0,
+    "metadata_schema": 2,
+    "source_revision": "070b8087ed494876c550f50befc64ffc7f197193",
+    "source_tree": "e224446f83f2d1853695b05fed93db7645baeaf1",
+    "abi": "x86_64",
+    "provider": "telemost",
+    "build_tags": [],
+    "builder_sha256": "b290d1545a1bbb7e0d39bbcc8766950a9abf741e89ebdbc82f2270c9b550304b"
+  },
+  "prebuild": {
+    "version_code": 118,
+    "version_name": "0.1.18-beta118",
+    "abi": "x86_64",
+    "apk_sha256": "19a9b85f2a69d801dbd3d5c808725b5d1541c1966d2bf28a90fa3f1601cbc7a7",
+    "test_apk_sha256": "3f4965c8195bc23b7a7795992e4f775f706307e61c455fd6934b0cb387f0eed5",
+    "exports": {
+      "source": "070b8087ed494876c550f50befc64ffc7f197193",
+      "abi": "x86_64",
+      "sha256": "af52aeb8af7c5c782a8c1a659f271e0505e4a49a84a9a774b3f97404a86d1e04",
+      "exports": [
+        "Java_com_familyconnect_app_NativeRestricted_provisionBegin",
+        "Java_com_familyconnect_app_NativeRestricted_provisionPost",
+        "Java_com_familyconnect_app_NativeRestricted_provisionClose",
+        "fcProvisionBegin",
+        "fcProvisionPost",
+        "fcProvisionClose",
+        "fcProvisionProtect"
+      ]
+    },
+    "fresh_runtime_locator": false,
+    "placeholder_assets_only": true,
+    "installed_on_user_devices": false,
+    "publicly_distributed": false
+  },
+  "source_checks": {
+    "host-jni-final/receipt.json": "59d2c6f34c8e4fea78a982ff1f086900e54410c37b75f7aa7bafdfbf6b301e4d",
+    "host-jni-final/check-2.log": "dd1b93b724aa7d16af55bb91868d19b848f1e71ffbcba0dbe898961140e2ef47",
+    "jvm-final/receipt.json": "e0c48b6fe2e2faf25c68e63c486aa740559edaa36db1d765fc2aa083bf1e9715",
+    "jvm-final/check-1.log": "828c5fe7ec1230ea31e6f4cd807cb8c766c2cb305d98233467e2fc4d2e29e230",
+    "jvm-final/check-3.log": "bd8f60f24582ed7acaac4b3ca8220ee5ebc8c21f1e6dcc03de86a7f961feb3a7",
+    "pipeline-2/receipt.json": "200ac55af5df14e1ce05b9a3733dbeb0075b2c974ade23fa74676be531a9559c",
+    "go-race-final.log": "18e4b3f38bb14d8a7c7aa41a460a1f097e16a820431d7c8cde7d04a5b290effb",
+    "lease-race-final.log": "41d3b0296dcbebe38ccbf1dc0df10104458db3bdec559a72852b61b0a91a754c",
+    "preserved-fails.json": "8b4501cf10e7564e9992771087b4c9747e951c7d425dbf817b5c07cd7736961c"
+  },
+  "preserved_fail_artifacts": {
+    "state-client-build/cold-provisioning-followup-20261106/apk-1/artifact-receipt.json": "2f3896f4d6b28d2c69aa063e7653be527cf345a934650224cf97727427a601bc",
+    "state-client-build/cold-provisioning-followup-20261106/apk-1/android/app/outputs/apk/friends/app-friends.apk": "be6a260316b263c6836e398ced7fde1f7cdf3ba54a0078748a812a696b042821",
+    "state-client-build/cold-provisioning-followup-20261106/apk-1/android/app/outputs/apk/androidTest/friends/app-friends-androidTest.apk": "e7c10fde3243fb5b277b252c01213f157a00fc8091c103ec5f2c945e0e7349fa",
+    "state-client-build/cold-provisioning-followup-20261106/apk-1/test-java/com/familyconnect/app/ColdProvisionRuntimeTest.java": "56e8d41f9b585660798c7d8ccfb088316301f3346d5428f48c94ae38f96f4643",
+    "state-client-build/cold-provisioning-followup-20261106/apk-1/cold.init.gradle": "916611e2f618d4ffb19c3b854b756edbae7d3f751d12876e9a57cc1e0d826706",
+    "state-client-build/cold-provisioning-followup-20261106/local-auth/stand.go": "c9893373ef6c79e693be8d8110a915e871c7a49769b3f8457c0ade34bd39456a",
+    "state-client-build/cold-provisioning-followup-20261106/local-auth/stand": "e85edbbd8d77d11961da9a880bf40d2fdcbd1b4959e3a8256a321055052997a0",
+    "state-client-build/cold-provisioning-followup-20261106/local-auth/run_android.py": "725d6e0a95456e4f31fea128adeb41e8ad285b8c0957d027f2f885d299e7cb97",
+    "state-client-build/cold-provisioning-followup-20261106/local-auth/final_apk.py": "578b62c46e9d18e4d8a8db5e723e9a1ea05eed70f41d83327a3dd9e7e1e9525c",
+    "state-client-build/cold-provisioning-followup-20261106/local-auth/server-events-x11.log": "f308d574918c5062ea66f4677efce46215fa86cdbe662f434d9edbf796cd69bc",
+    "state-client-build/cold-provisioning-followup-20261106/android-api27-two/instrumentation.log": "acbac13af2f374eff9023fece1ca7bd91590474909a8c040e2b16f14f75df84e",
+    "state-client-build/cold-provisioning-followup-20261106/android-api27-two/receipt.json": "9df5f756a0895295e6abf8280d152a0575da103464388cd7e96a7c472d16fdee",
+    "state-client-build/cold-provisioning-runtime-20261106/apk-1/android/app/outputs/apk/friends/app-friends.apk": "7e51b3742a262baa5f9b9ea7d4ce97c619f4c7dcbb7c7c0efcb5c09b252f40c1",
+    "state-client-build/cold-provisioning-runtime-20261106/apk-1/android/app/outputs/apk/androidTest/friends/app-friends-androidTest.apk": "229d9ff621d714e6fdd6138b7e4823dfef008451d61a562cf061dd576209a2fa",
+    "state-client-build/cold-provisioning-runtime-20261106/native-x86-1/jniLibs/x86_64/libfc_restricted.so": "4e27ff231380c129a55f3e6221595d0d431ae183bc66868a74ce306a4d157f99",
+    "state-client-build/cold-provisioning-runtime-20261106/android-api27-two/instrumentation.log": "b10f9d543689f19f3af6141e999820f773ec6ee6e9d23d282b3b88f401b2d0a3",
+    "state-client-build/cold-provisioning-runtime-20261106/android-api27-two/receipt.json": "6105165c3a1ea65c24f9cd9c275cd5c193b409200e88c6321b1e5f66327cb172",
+    "state-client-build/cold-provisioning-runtime-20261106/apk-1/artifact-receipt.json": "7adc1b38816cca061a3d7f736dc35cf88105bc135e536a35f748ae21b8c2753c",
+    "state-client-build/cold-provisioning-runtime-20261106/apk-1/test-java/com/familyconnect/app/ColdProvisionRuntimeTest.java": "952790bb4137c3d5f55c19474b84a8072d4b69fa0c563ed6fbc5911ad13fc590"
+  },
+  "preflights": [
+    {
+      "result": "FAIL_PREFLIGHT",
+      "api": 27,
+      "peak_cpu_c": 81.0,
+      "peak_gpu_c": 66,
+      "owned_emulator_stopped": true,
+      "cause": "USERDATA_DISK_SPACE",
+      "path": "state-client-build/cold-native-diagnostic-20261106/runtime/android-api27-offline",
+      "receipt_sha256": "3b612c62805a0601b9a7ba6a9e4ce5189d7df4f0b4700430926a9443065ecb91",
+      "emulator_log_sha256": "a20d39a7e02e86706e54a22f74afd189e62dfb9bedb4d25bcfc775574f230408",
+      "connect_attempted": false
+    },
+    {
+      "result": "FAIL_PREFLIGHT",
+      "api": 27,
+      "peak_cpu_c": 74.0,
+      "peak_gpu_c": 59,
+      "owned_emulator_stopped": true,
+      "cause": "USERDATA_DISK_SPACE",
+      "path": "state-client-build/cold-native-diagnostic-20261106/runtime/android-api27-offline-2",
+      "receipt_sha256": "00d798def2b11bb74b4276f73464f331e53ffd54ad14aef52b140b5fecaa394a",
+      "emulator_log_sha256": "dd57c754df1efc836f91fa341381b46fd7588c57a0f0cf1365e4fd96e0e78ef2",
+      "connect_attempted": false
+    },
+    {
+      "result": "FAIL_PREFLIGHT",
+      "api": 27,
+      "peak_cpu_c": 76.0,
+      "peak_gpu_c": 59,
+      "owned_emulator_stopped": true,
+      "cause": "USERDATA_DISK_SPACE",
+      "path": "state-client-build/cold-native-diagnostic-20261106/runtime/android-api27-offline-3",
+      "receipt_sha256": "fcaf4a6b31ca20e1e2a11f26ae82d3cab4eb7018e1fcd6719d59497ff8982e5d",
+      "emulator_log_sha256": "5c4588a17617454e6a586a6bf51334a9ffbdcefb74068a98fd814842d763767c",
+      "connect_attempted": false
+    },
+    {
+      "result": "FAIL_PREFLIGHT",
+      "api": 27,
+      "renderer": "GLES: Google (NVIDIA Corporation), Android Emulator OpenGL ES Translator (NVIDIA GeForce GTX 1650 Ti/PCIe/SSE2), OpenGL ES 3.1 (4.5.0 NVIDIA 580.178.04)",
+      "peak_cpu_c": 85.0,
+      "peak_gpu_c": 64,
+      "host_safety_abort": true,
+      "owned_emulator_stopped": true,
+      "cause": "HOST_CPU_THERMAL_STOP",
+      "path": "state-client-build/cold-native-diagnostic-20261106/runtime/android-api27-offline-4",
+      "receipt_sha256": "65f1b8ce1081c0c2fca8796d53d59bd68091013614c070d40cd38f3ddbeaefb7",
+      "emulator_log_sha256": "a648456037f9cbc7616a4f22c8ca9c89b6cb5cff67a1a19abb3d9bbfe28f5d95",
+      "connect_attempted": false
+    },
+    {
+      "result": "FAIL_PREFLIGHT",
+      "api": 27,
+      "renderer": "GLES: Google (NVIDIA Corporation), Android Emulator OpenGL ES Translator (NVIDIA GeForce GTX 1650 Ti/PCIe/SSE2), OpenGL ES 3.1 (4.5.0 NVIDIA 580.178.04)",
+      "peak_cpu_c": 88.0,
+      "peak_gpu_c": 64,
+      "host_safety_abort": true,
+      "owned_emulator_stopped": true,
+      "apks": {
+        "friends/app-friends.apk": "19a9b85f2a69d801dbd3d5c808725b5d1541c1966d2bf28a90fa3f1601cbc7a7",
+        "androidTest/friends/app-friends-androidTest.apk": "3f4965c8195bc23b7a7795992e4f775f706307e61c455fd6934b0cb387f0eed5"
+      },
+      "cause": "HOST_CPU_THERMAL_STOP",
+      "path": "state-client-build/cold-native-diagnostic-20261106/runtime/android-api27-offline-5",
+      "receipt_sha256": "e7a4ca2b4897a9d0637e9d2c610b5d317fd029c7966cc167feac6bdcdd6f001a",
+      "emulator_log_sha256": "1b825af860985e29519551ec5b6cfcd7305a700d6ba1e75a07f107043ff6c3a9",
+      "connect_attempted": false
+    }
+  ],
+  "cleanup": {
+    "owned_emulators_stopped": true,
+    "shared_emulator_lock_free": true,
+    "new_authority_started": false,
+    "new_credential_process_started": false,
+    "new_carrier_worker_started": false,
+    "temporary_secret_file_created": false,
+    "previous_room_deletion": "NOT_VERIFIED",
+    "host_network_changed": false,
+    "production_changed": false,
+    "g4_changed": false,
+    "other_processes_changed": false
+  },
+  "original_fail_receipts": {
+    "2026-11-06-cold-provisioning-live-attempt.json": "b97a513b43cfcababf1dd4bf08be19d960dbb3d67014d36ebfab3e6b62373a20",
+    "2026-11-06-cold-provisioning-followup.json": "3ef83e83c34fd7e795f699d25b09a9811e2ed1da450678b859d54ba5c62a5294"
+  },
+  "post_build_followup": {
+    "scope": "typed underlay route/DNS preservation and post-TLS cancellation stage",
+    "files_sha256": {
+      "carrier/underlay/network.go": "68c8e7ab32c011fcde09825f361563d347556ff1e31f51135878cc45b92edd54",
+      "carrier/underlay/cause_test.go": "1303b1396627097f2621143ead328dbed6d6561f5e7c70b240f0a04339026c50",
+      "carrier/coldprovision/diagnostic.go": "daae17743fe13ffd4a1e87060c98472ded87b79e699430b46286cca18ee6c2ff",
+      "pilot/android-restricted/native/provision_lease.go": "6b9aa135d1f322ba6e9f3bb790b5520c6a8024ce855458d1f0e9c626d1474302",
+      "pilot/android-restricted/native/provision_lease_test.go": "b9095962d7cd3c8938033080721e7b5f34b7e7f4a50630f137715d79229fabcd"
+    },
+    "checks_sha256": {
+      "underlay-race-final.log": "9f83d3759dca40ebe208b31d44071531627b59899939f79bae57ab8a74de97e0",
+      "lease-race-source2.log": "41d3b0296dcbebe38ccbf1dc0df10104458db3bdec559a72852b61b0a91a754c",
+      "host-jni-source2/receipt.json": "d56c093584f8b8374642280034fb55e235735de9bdee0adfb877f0bf43c7ea5e",
+      "host-jni-source2/check-2.log": "f3a196003abf9f5a99a223eed05cf5eeca2dc49f165d5394117c8beb3806b2ea"
+    },
+    "result": "OFFLINE_HOST_JNI_AND_RACE_PASS",
+    "built_into_android_jni": false,
+    "android_or_telemost_runtime_verified": false,
+    "next_required": "rebuild latest source, provider-free Android JNI, fresh cold materials, one authorized Connect"
+  },
+  "provisioning_network_runtime": "NOT_OBSERVED_NO_NEW_CONNECT; actual pinned-network snapshot implemented; no inference from preceding RNS label",
+  "source_role": "built intermediate; post_build_followup hashes identify additional source in this checkpoint"
+}

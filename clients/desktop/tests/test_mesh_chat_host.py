@@ -17,6 +17,7 @@ from mesh_chat import ChatError
 from mesh_chat_host import Binding, Host
 from provisioning import chat_bridge_protocol as wire
 from provisioning.chat_bridge import ChatBridge
+from resource_audit import boundary
 
 PUBLIC = bytes(range(64))
 DEVICE = hashlib.sha256(PUBLIC).hexdigest()[:32]
@@ -94,7 +95,8 @@ class Lane:
 
 
 @pytest.fixture
-def bridge(tmp_path):
+def bridge(tmp_path, request):
+    boundary(request, 'bridge-setup')
     tmp_path.chmod(0o700)
     lane = Lane()
     start = dict(readiness={'device': DEVICE}, identity='private-synthetic-test-key', anchor='synthetic-anchor', resolver='1.1.1.1:53', underlying_index=2)
@@ -103,7 +105,9 @@ def bridge(tmp_path):
     host = Host(tmp_path / 'chat.sock', os.getuid(), lambda: binding)
     host.start()
     client = ChatBridge(DEVICE, _paths=[host.endpoint], _root_uid=os.geteuid())
+    boundary(request, 'bridge-ready')
     yield client, host, binding, lane
+    boundary(request, 'bridge-teardown')
     client.close()
     binding.close()
     host.close()
@@ -112,6 +116,7 @@ def bridge(tmp_path):
     assert not lane.leases and not lane.streams
     assert not host.active and not host.thread.is_alive()
     assert not host.endpoint.exists()
+    boundary(request, 'bridge-released')
 
 
 def test_authenticated_api_keeps_private_material_inside_parent(bridge):

@@ -27,6 +27,11 @@ def test_cli_utc_commands_and_private_receipts(registry, monkeypatch, capsys):
     assert invoke(*base)[1]['event']['new_state'] == 'active'
     assert invoke(*base)[1]['duplicate']
     assert invoke('status', '--support-id', support)[1]['effective_state'] == 'active'
+    extension = [value.replace('event-cli-0001', 'event-cli-extend').replace('2027-01-16T08:00:00Z',
+        '2027-01-16T09:00:00Z') for value in base]
+    assert invoke(*extension)[1]['event']['event_type'] == 'payment'
+    assert invoke(*extension)[1]['duplicate']
+    assert invoke('status', '--support-id', support)[1]['subscription']['version'] == 2
     assert invoke('grace', '--support-id', support, '--event-id', 'event-cli-0002', '--reference', 'private-reference',
                   '--grace-until', '2027-01-17T08:00:00Z')[1]['event']['new_state'] == 'grace'
     for action in ('expire', 'revoke'):

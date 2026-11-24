@@ -1,10 +1,42 @@
 # Privacy notes
 
 These are technical observations about the pilot, not a complete commercial privacy policy.
-Retention rules, a public operator contact and a formal policy remain to be established.
+General retention rules outside the explicit technical-information limits below,
+a public operator contact and a formal policy remain to be established.
 Check [STATUS](STATUS.md) for the actual deployed versions.
 
 ## On the device
+
+Public Android126 technical information uses new, separate,
+explicit opt-in, off by default; old seven-day diagnostics consent is not reused.
+When enabled it collects model/OS/app, network type, available SIM and registered-network names,
+radio category, actual VPN/session/gateway, limited error/readiness and approximate
+IP-derived country/region/city/ASN. No phone number, GPS coordinates, IMEI, serial,
+advertising ID, SSID/BSSID, cell ID, contacts, installed-app lists, sites, traffic,
+messages, keys or tokens are added to this telemetry. Existing split tunnelling is
+unchanged. It is support information, never identity/payment/access authority.
+Radio detail uses Android33+ normal READ_BASIC_PHONE_STATE (no runtime permission
+prompt); older Android or unavailable telephony exposes an explicit reason instead.
+No READ_PHONE_STATE dangerous permission is added or requested.
+Consent lasts until disabled. Hardware and dynamic observations expire independently
+within seven days; no location history. Off stops new collection/upload; the server
+deletes the payload on receipt of the revoke. Offline revocation is shown as pending.
+Minimal consent/sequence tombstones last for the device lifetime to prevent delayed
+resurrection; they contain no device/network/geographic payload. The current metadata
+database and panel projection must not enter indefinite backups or append-only logs.
+The compatible server/collector/panel path and public126 are deployed; installed
+opt-in/revoke/deletion acceptance passes. Previous125 downloads/admissions remain.
+[Public release and bounded acceptance](releases/2026-11-16-android126-publication.md).
+The first geographic source is only a recent RU/AWG
+peer endpoint joined through the authenticated device's canonical AWG key. NL/TCP
+and MESH have no qualified direct-IP source here: show unavailable or an older
+suitable observation with its own age. Ordinary HTTP/VPN-exit/relay addresses do
+not establish the client's city. Local DB-IP Lite supplies network geography/ASN,
+not GPS, retail ISP certainty or proof of a person's physical location; an upstream
+third-party VPN can affect even a qualified peer observation. No raw IP/coordinates
+are retained in the metadata projection, logs or history. DB-IP attribution remains
+visible beside results; database version and SHA256 describe local integrity, not
+a vendor signature. Missing/stale GeoIP does not block VPN, payments or support.
 
 Android protects saved VPN profiles with Android Keystore-backed storage. The messenger
 has a separate identity and encrypted local storage; its Android key handling is in

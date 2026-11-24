@@ -1,0 +1,1036 @@
+{
+  "schema": 2,
+  "decision": "NO_GO",
+  "baseline": "41ada7cf8bb7f02a4b201987edb8eed439c31ad9",
+  "scope": "isolated diagnostic only; no production use",
+  "source_sha256": {
+    "scripts/ru_attribution_recorder.py": "5857ff8240dd06cd193446bb4f2d48ab6b368621e8bee83ee0f9aa19f854106e",
+    "scripts/ru_attribution_program.py": "5a74e8c0770f842cc9f8c834c3a1bce0f4b57c67ad622d11fd21e49e21baa578",
+    "scripts/ru_attribution_contract.py": "abd882a5e5f1d276640a1b1ca95b0c2924bb33cecd5378ab68a5d87b18b01a27",
+    "scripts/ru_attribution_lab_v2.py": "4cfb29bd86f10f8545e3e874fc136da463b48e6a9865daa5106f1c2f0af84ed3",
+    "scripts/ru_attribution_vm.py": "45e0951b8ac43a42a0b64bf7b830edf91df2fd3eadd3ca0327d132e32a30485c",
+    "tests/test_ru_attribution_recorder.py": "ac73fe4a87561ba00ddd56b851f512042337c190a223ffa01b6e8679a5b23a80",
+    "tests/test_ru_attribution_contract.py": "c327dcefb864889049e658ead2142f7c8a0ab5dff2f6470fce49be23f6d6dac4"
+  },
+  "generated_trace_sha256": "f198340aeb37c2951643e66aa3cc25c124346badc3f47292840cc372cf6bf147",
+  "environment": {
+    "kernel": "7.0.0-30-generic",
+    "kernel_package": "7.0.0-30.30",
+    "kernel_sha256": "04d6998810b8e0a9b8b3676524bfca2e895f44c5da2626c963368d7204c6e0da",
+    "btf_sha256": "d7fca84d2c3f476afbeb2e37ddba3093eaac0af39b07b0cd1b61c11fdc1c89fb",
+    "image_sha256": "56b6a2825d0d1361ad2db43a89442c8d28917a6328ec2e560aa3149671e7c882",
+    "bpftrace": "0.25.0-1ubuntu1",
+    "bpftrace_sha256": "1d6b5e1d4716d4f746c38d6e8e9c2b2bd4f97123c23435ad006ea639d974fc48",
+    "page_size": 4096,
+    "clock_ticks": 100,
+    "cpus": 2,
+    "guest_mib": 1536,
+    "test_disk_mib": 128,
+    "ringbuf_bytes": 32768,
+    "diagnostic_cpu_percent": 10,
+    "diagnostic_memory_mib": 256,
+    "swap": 0,
+    "tasks": 24
+  },
+  "runs": [
+    {
+      "run": "vm25",
+      "mode": "burst_admission",
+      "log_sha256": "1ad1ec2038488c63fbae187e498eba63973ab86d20a9b05398af875f45bc3204",
+      "capture_sha256": "f297c7e57996af40d42f079984b4eb1d6cf94a80ea6df1242faf1c4af1d5ef0b",
+      "capture_bytes": 66757,
+      "gate": {
+        "errors": {
+          "prefix_gap_duplicate_or_tail": 2,
+          "producer_transport_parser_retention": 19,
+          "workload_probe_pair": 48,
+          "extra_or_unpaired_phase": 1,
+          "stderr_bytes": 53
+        },
+        "observations": {
+          "single_free": 40,
+          "flush_data_completed_pending_logical_end": 16,
+          "completed_reset": 30,
+          "logical_flush_completion_not_service": 16,
+          "requests_open_at_fence": 2
+        },
+        "ledger": 64,
+        "enter": 17,
+        "exit": 16,
+        "paired": 16,
+        "producer_fsync": 128,
+        "parsed": 475,
+        "retained": 475,
+        "evicted": 0,
+        "allocations": 72,
+        "reused_addresses": 2,
+        "reused_allocated_addresses": 0,
+        "completed_new_requests": 72,
+        "window_complete": false,
+        "phase_complete": false,
+        "lifecycle_valid": false,
+        "pass_gate": false
+      },
+      "admission": {
+        "stream": false,
+        "probe_controls": true,
+        "partial_kernel_control": false,
+        "first_failure": true,
+        "drain": true,
+        "resources": true,
+        "burst": true,
+        "serialization": true
+      },
+      "per_cpu": [
+        {
+          "cpu": 0,
+          "hits": 1147,
+          "attempted": 1147,
+          "parsed": 231,
+          "first_sequence": 1,
+          "last_sequence": 1147
+        },
+        {
+          "cpu": 1,
+          "hits": 724,
+          "attempted": 724,
+          "parsed": 242,
+          "first_sequence": 1,
+          "last_sequence": 724
+        }
+      ],
+      "producer_by_cpu_kind": [
+        {
+          "cpu": 0,
+          "kind": 1,
+          "hits": 7,
+          "attempted": 7
+        },
+        {
+          "cpu": 0,
+          "kind": 2,
+          "hits": 12,
+          "attempted": 12
+        },
+        {
+          "cpu": 0,
+          "kind": 3,
+          "hits": 7,
+          "attempted": 7
+        },
+        {
+          "cpu": 0,
+          "kind": 6,
+          "hits": 4,
+          "attempted": 4
+        },
+        {
+          "cpu": 0,
+          "kind": 7,
+          "hits": 4,
+          "attempted": 4
+        },
+        {
+          "cpu": 0,
+          "kind": 8,
+          "hits": 2,
+          "attempted": 2
+        },
+        {
+          "cpu": 0,
+          "kind": 9,
+          "hits": 2,
+          "attempted": 2
+        },
+        {
+          "cpu": 0,
+          "kind": 10,
+          "hits": 2,
+          "attempted": 2
+        },
+        {
+          "cpu": 0,
+          "kind": 11,
+          "hits": 58,
+          "attempted": 58
+        },
+        {
+          "cpu": 0,
+          "kind": 12,
+          "hits": 233,
+          "attempted": 233
+        },
+        {
+          "cpu": 0,
+          "kind": 14,
+          "hits": 291,
+          "attempted": 291
+        },
+        {
+          "cpu": 0,
+          "kind": 16,
+          "hits": 232,
+          "attempted": 232
+        },
+        {
+          "cpu": 0,
+          "kind": 24,
+          "hits": 1,
+          "attempted": 1
+        },
+        {
+          "cpu": 0,
+          "kind": 25,
+          "hits": 1,
+          "attempted": 1
+        },
+        {
+          "cpu": 0,
+          "kind": 26,
+          "hits": 233,
+          "attempted": 233
+        },
+        {
+          "cpu": 0,
+          "kind": 28,
+          "hits": 58,
+          "attempted": 58
+        },
+        {
+          "cpu": 1,
+          "kind": 1,
+          "hits": 92,
+          "attempted": 92
+        },
+        {
+          "cpu": 1,
+          "kind": 2,
+          "hits": 87,
+          "attempted": 87
+        },
+        {
+          "cpu": 1,
+          "kind": 3,
+          "hits": 92,
+          "attempted": 92
+        },
+        {
+          "cpu": 1,
+          "kind": 6,
+          "hits": 60,
+          "attempted": 60
+        },
+        {
+          "cpu": 1,
+          "kind": 7,
+          "hits": 60,
+          "attempted": 60
+        },
+        {
+          "cpu": 1,
+          "kind": 8,
+          "hits": 31,
+          "attempted": 31
+        },
+        {
+          "cpu": 1,
+          "kind": 9,
+          "hits": 31,
+          "attempted": 31
+        },
+        {
+          "cpu": 1,
+          "kind": 10,
+          "hits": 32,
+          "attempted": 32
+        },
+        {
+          "cpu": 1,
+          "kind": 11,
+          "hits": 6,
+          "attempted": 6
+        },
+        {
+          "cpu": 1,
+          "kind": 12,
+          "hits": 55,
+          "attempted": 55
+        },
+        {
+          "cpu": 1,
+          "kind": 14,
+          "hits": 61,
+          "attempted": 61
+        },
+        {
+          "cpu": 1,
+          "kind": 16,
+          "hits": 54,
+          "attempted": 54
+        },
+        {
+          "cpu": 1,
+          "kind": 24,
+          "hits": 1,
+          "attempted": 1
+        },
+        {
+          "cpu": 1,
+          "kind": 25,
+          "hits": 1,
+          "attempted": 1
+        },
+        {
+          "cpu": 1,
+          "kind": 26,
+          "hits": 55,
+          "attempted": 55
+        },
+        {
+          "cpu": 1,
+          "kind": 28,
+          "hits": 6,
+          "attempted": 6
+        }
+      ],
+      "parsed_by_cpu_kind": [
+        {
+          "cpu": 0,
+          "kind": 1,
+          "count": 7
+        },
+        {
+          "cpu": 0,
+          "kind": 2,
+          "count": 8
+        },
+        {
+          "cpu": 0,
+          "kind": 3,
+          "count": 7
+        },
+        {
+          "cpu": 0,
+          "kind": 6,
+          "count": 4
+        },
+        {
+          "cpu": 0,
+          "kind": 7,
+          "count": 4
+        },
+        {
+          "cpu": 0,
+          "kind": 8,
+          "count": 2
+        },
+        {
+          "cpu": 0,
+          "kind": 9,
+          "count": 2
+        },
+        {
+          "cpu": 0,
+          "kind": 10,
+          "count": 2
+        },
+        {
+          "cpu": 0,
+          "kind": 11,
+          "count": 10
+        },
+        {
+          "cpu": 0,
+          "kind": 12,
+          "count": 41
+        },
+        {
+          "cpu": 0,
+          "kind": 14,
+          "count": 51
+        },
+        {
+          "cpu": 0,
+          "kind": 16,
+          "count": 40
+        },
+        {
+          "cpu": 0,
+          "kind": 24,
+          "count": 1
+        },
+        {
+          "cpu": 0,
+          "kind": 25,
+          "count": 1
+        },
+        {
+          "cpu": 0,
+          "kind": 26,
+          "count": 41
+        },
+        {
+          "cpu": 0,
+          "kind": 28,
+          "count": 10
+        },
+        {
+          "cpu": 1,
+          "kind": 1,
+          "count": 18
+        },
+        {
+          "cpu": 1,
+          "kind": 2,
+          "count": 18
+        },
+        {
+          "cpu": 1,
+          "kind": 3,
+          "count": 19
+        },
+        {
+          "cpu": 1,
+          "kind": 6,
+          "count": 13
+        },
+        {
+          "cpu": 1,
+          "kind": 7,
+          "count": 12
+        },
+        {
+          "cpu": 1,
+          "kind": 8,
+          "count": 6
+        },
+        {
+          "cpu": 1,
+          "kind": 9,
+          "count": 6
+        },
+        {
+          "cpu": 1,
+          "kind": 10,
+          "count": 7
+        },
+        {
+          "cpu": 1,
+          "kind": 11,
+          "count": 6
+        },
+        {
+          "cpu": 1,
+          "kind": 12,
+          "count": 31
+        },
+        {
+          "cpu": 1,
+          "kind": 14,
+          "count": 37
+        },
+        {
+          "cpu": 1,
+          "kind": 16,
+          "count": 30
+        },
+        {
+          "cpu": 1,
+          "kind": 20,
+          "count": 1
+        },
+        {
+          "cpu": 1,
+          "kind": 21,
+          "count": 1
+        },
+        {
+          "cpu": 1,
+          "kind": 24,
+          "count": 1
+        },
+        {
+          "cpu": 1,
+          "kind": 25,
+          "count": 1
+        },
+        {
+          "cpu": 1,
+          "kind": 26,
+          "count": 31
+        },
+        {
+          "cpu": 1,
+          "kind": 28,
+          "count": 6
+        }
+      ],
+      "wire_records": 475,
+      "stdout_bytes": 31598,
+      "invalid": 0,
+      "evicted": 0,
+      "accounting_overflow": 0,
+      "guard_violations": [],
+      "failure_unchanged": true,
+      "failure_budget_seconds": 1e-09,
+      "drain": {
+        "drain_complete": true,
+        "eof": true,
+        "end_marker": true,
+        "forced": false,
+        "child_returncode": 0,
+        "partial_line_bytes": 0
+      },
+      "timing_seconds": {
+        "elapsed": 30.710843811999997,
+        "stop_elapsed": 1.2991671690000004,
+        "batch_count": 512,
+        "batch_cpu_max": 0.005142198000000042,
+        "batch_wall_max": 0.14843604100000007,
+        "processing_cpu": 0.09038791800000029,
+        "reduction": {
+          "cpu": 0.0026779779999999698,
+          "wall": 0.1829001070000018
+        },
+        "audit_cost": {
+          "cpu": 0.0012359160000000036,
+          "wall": 0.0012398020000006227
+        },
+        "save_cost": {
+          "cpu": 0.0011238729999999975,
+          "wall": 0.0011278329999981906
+        }
+      },
+      "diagnostic_cgroup": {
+        "cpu.stat": {
+          "usage_usec": 3042297,
+          "user_usec": 2553296,
+          "system_usec": 489001,
+          "nice_usec": 0,
+          "core_sched.force_idle_usec": 0,
+          "nr_periods": 308,
+          "nr_throttled": 301,
+          "throttled_usec": 28244542,
+          "nr_bursts": 0,
+          "burst_usec": 0
+        },
+        "memory.peak": 70619136,
+        "memory.events": {
+          "low": 0,
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0,
+          "oom_group_kill": 0,
+          "sock_throttled": 0
+        },
+        "pids.peak": 3
+      },
+      "stderr_bytes": 83,
+      "known_warning_bytes": 30,
+      "ledger_span_seconds": 0.06317468,
+      "window_begin_ns": 32455936206,
+      "window_end_ns": 32558770829
+    },
+    {
+      "run": "vm26",
+      "mode": "paced_lifecycle",
+      "log_sha256": "b04d0d836c87c70c88ddaaa1af7ab75ad98612c2ad9d8420165349f1996da63d",
+      "capture_sha256": "ff4270b6f26498ba986230c0ce246da00feca87a4fcfba7e00d6f1fddae5ad26",
+      "capture_bytes": 216788,
+      "gate": {
+        "errors": {},
+        "observations": {
+          "single_free": 160,
+          "flush_data_completed_pending_logical_end": 64,
+          "completed_reset": 126,
+          "logical_flush_completion_not_service": 64,
+          "requests_open_at_fence": 2
+        },
+        "ledger": 64,
+        "enter": 64,
+        "exit": 64,
+        "paired": 64,
+        "producer_fsync": 128,
+        "parsed": 1916,
+        "retained": 1916,
+        "evicted": 0,
+        "allocations": 288,
+        "reused_addresses": 34,
+        "reused_allocated_addresses": 32,
+        "completed_new_requests": 288,
+        "window_complete": true,
+        "phase_complete": true,
+        "lifecycle_valid": true,
+        "pass_gate": true
+      },
+      "admission": {
+        "stream": true,
+        "probe_controls": true,
+        "partial_kernel_control": false,
+        "first_failure": true,
+        "drain": true,
+        "resources": true,
+        "burst": false,
+        "serialization": true
+      },
+      "per_cpu": [
+        {
+          "cpu": 0,
+          "hits": 820,
+          "attempted": 820,
+          "parsed": 820,
+          "first_sequence": 1,
+          "last_sequence": 820
+        },
+        {
+          "cpu": 1,
+          "hits": 1094,
+          "attempted": 1094,
+          "parsed": 1094,
+          "first_sequence": 1,
+          "last_sequence": 1094
+        }
+      ],
+      "producer_by_cpu_kind": [
+        {
+          "cpu": 0,
+          "kind": 1,
+          "hits": 59,
+          "attempted": 59
+        },
+        {
+          "cpu": 0,
+          "kind": 2,
+          "hits": 54,
+          "attempted": 54
+        },
+        {
+          "cpu": 0,
+          "kind": 3,
+          "hits": 59,
+          "attempted": 59
+        },
+        {
+          "cpu": 0,
+          "kind": 6,
+          "hits": 33,
+          "attempted": 33
+        },
+        {
+          "cpu": 0,
+          "kind": 7,
+          "hits": 33,
+          "attempted": 33
+        },
+        {
+          "cpu": 0,
+          "kind": 8,
+          "hits": 17,
+          "attempted": 17
+        },
+        {
+          "cpu": 0,
+          "kind": 9,
+          "hits": 17,
+          "attempted": 17
+        },
+        {
+          "cpu": 0,
+          "kind": 10,
+          "hits": 16,
+          "attempted": 16
+        },
+        {
+          "cpu": 0,
+          "kind": 11,
+          "hits": 25,
+          "attempted": 25
+        },
+        {
+          "cpu": 0,
+          "kind": 12,
+          "hits": 114,
+          "attempted": 114
+        },
+        {
+          "cpu": 0,
+          "kind": 14,
+          "hits": 139,
+          "attempted": 139
+        },
+        {
+          "cpu": 0,
+          "kind": 16,
+          "hits": 113,
+          "attempted": 113
+        },
+        {
+          "cpu": 0,
+          "kind": 24,
+          "hits": 1,
+          "attempted": 1
+        },
+        {
+          "cpu": 0,
+          "kind": 25,
+          "hits": 1,
+          "attempted": 1
+        },
+        {
+          "cpu": 0,
+          "kind": 26,
+          "hits": 114,
+          "attempted": 114
+        },
+        {
+          "cpu": 0,
+          "kind": 28,
+          "hits": 25,
+          "attempted": 25
+        },
+        {
+          "cpu": 1,
+          "kind": 1,
+          "hits": 56,
+          "attempted": 56
+        },
+        {
+          "cpu": 1,
+          "kind": 2,
+          "hits": 56,
+          "attempted": 56
+        },
+        {
+          "cpu": 1,
+          "kind": 3,
+          "hits": 56,
+          "attempted": 56
+        },
+        {
+          "cpu": 1,
+          "kind": 6,
+          "hits": 31,
+          "attempted": 31
+        },
+        {
+          "cpu": 1,
+          "kind": 7,
+          "hits": 31,
+          "attempted": 31
+        },
+        {
+          "cpu": 1,
+          "kind": 8,
+          "hits": 16,
+          "attempted": 16
+        },
+        {
+          "cpu": 1,
+          "kind": 9,
+          "hits": 16,
+          "attempted": 16
+        },
+        {
+          "cpu": 1,
+          "kind": 10,
+          "hits": 18,
+          "attempted": 18
+        },
+        {
+          "cpu": 1,
+          "kind": 11,
+          "hits": 39,
+          "attempted": 39
+        },
+        {
+          "cpu": 1,
+          "kind": 12,
+          "hits": 174,
+          "attempted": 174
+        },
+        {
+          "cpu": 1,
+          "kind": 14,
+          "hits": 213,
+          "attempted": 213
+        },
+        {
+          "cpu": 1,
+          "kind": 16,
+          "hits": 173,
+          "attempted": 173
+        },
+        {
+          "cpu": 1,
+          "kind": 24,
+          "hits": 1,
+          "attempted": 1
+        },
+        {
+          "cpu": 1,
+          "kind": 25,
+          "hits": 1,
+          "attempted": 1
+        },
+        {
+          "cpu": 1,
+          "kind": 26,
+          "hits": 174,
+          "attempted": 174
+        },
+        {
+          "cpu": 1,
+          "kind": 28,
+          "hits": 39,
+          "attempted": 39
+        }
+      ],
+      "parsed_by_cpu_kind": [
+        {
+          "cpu": 0,
+          "kind": 1,
+          "count": 59
+        },
+        {
+          "cpu": 0,
+          "kind": 2,
+          "count": 54
+        },
+        {
+          "cpu": 0,
+          "kind": 3,
+          "count": 59
+        },
+        {
+          "cpu": 0,
+          "kind": 6,
+          "count": 33
+        },
+        {
+          "cpu": 0,
+          "kind": 7,
+          "count": 33
+        },
+        {
+          "cpu": 0,
+          "kind": 8,
+          "count": 17
+        },
+        {
+          "cpu": 0,
+          "kind": 9,
+          "count": 17
+        },
+        {
+          "cpu": 0,
+          "kind": 10,
+          "count": 16
+        },
+        {
+          "cpu": 0,
+          "kind": 11,
+          "count": 25
+        },
+        {
+          "cpu": 0,
+          "kind": 12,
+          "count": 114
+        },
+        {
+          "cpu": 0,
+          "kind": 14,
+          "count": 139
+        },
+        {
+          "cpu": 0,
+          "kind": 16,
+          "count": 113
+        },
+        {
+          "cpu": 0,
+          "kind": 24,
+          "count": 1
+        },
+        {
+          "cpu": 0,
+          "kind": 25,
+          "count": 1
+        },
+        {
+          "cpu": 0,
+          "kind": 26,
+          "count": 114
+        },
+        {
+          "cpu": 0,
+          "kind": 28,
+          "count": 25
+        },
+        {
+          "cpu": 1,
+          "kind": 1,
+          "count": 56
+        },
+        {
+          "cpu": 1,
+          "kind": 2,
+          "count": 56
+        },
+        {
+          "cpu": 1,
+          "kind": 3,
+          "count": 56
+        },
+        {
+          "cpu": 1,
+          "kind": 6,
+          "count": 31
+        },
+        {
+          "cpu": 1,
+          "kind": 7,
+          "count": 31
+        },
+        {
+          "cpu": 1,
+          "kind": 8,
+          "count": 16
+        },
+        {
+          "cpu": 1,
+          "kind": 9,
+          "count": 16
+        },
+        {
+          "cpu": 1,
+          "kind": 10,
+          "count": 18
+        },
+        {
+          "cpu": 1,
+          "kind": 11,
+          "count": 39
+        },
+        {
+          "cpu": 1,
+          "kind": 12,
+          "count": 174
+        },
+        {
+          "cpu": 1,
+          "kind": 14,
+          "count": 213
+        },
+        {
+          "cpu": 1,
+          "kind": 16,
+          "count": 173
+        },
+        {
+          "cpu": 1,
+          "kind": 20,
+          "count": 1
+        },
+        {
+          "cpu": 1,
+          "kind": 21,
+          "count": 1
+        },
+        {
+          "cpu": 1,
+          "kind": 24,
+          "count": 1
+        },
+        {
+          "cpu": 1,
+          "kind": 25,
+          "count": 1
+        },
+        {
+          "cpu": 1,
+          "kind": 26,
+          "count": 174
+        },
+        {
+          "cpu": 1,
+          "kind": 28,
+          "count": 39
+        }
+      ],
+      "wire_records": 1916,
+      "stdout_bytes": 126831,
+      "invalid": 0,
+      "evicted": 0,
+      "accounting_overflow": 0,
+      "guard_violations": [],
+      "failure_unchanged": true,
+      "failure_budget_seconds": 1e-09,
+      "drain": {
+        "drain_complete": true,
+        "eof": true,
+        "end_marker": true,
+        "forced": false,
+        "child_returncode": 0,
+        "partial_line_bytes": 0
+      },
+      "timing_seconds": {
+        "elapsed": 29.851101604,
+        "stop_elapsed": 1.7011428729999984,
+        "batch_count": 702,
+        "batch_cpu_max": 0.001704171000000032,
+        "batch_wall_max": 0.1433473739999993,
+        "processing_cpu": 0.11507796199999956,
+        "reduction": {
+          "cpu": 0.029790874999999994,
+          "wall": 0.3080756789999981
+        },
+        "audit_cost": {
+          "cpu": 0.013304828000000046,
+          "wall": 0.1026362680000048
+        },
+        "save_cost": {
+          "cpu": 0.006281606999999967,
+          "wall": 0.09665465400000528
+        }
+      },
+      "diagnostic_cgroup": {
+        "cpu.stat": {
+          "usage_usec": 2742155,
+          "user_usec": 2253939,
+          "system_usec": 488215,
+          "nice_usec": 0,
+          "core_sched.force_idle_usec": 0,
+          "nr_periods": 301,
+          "nr_throttled": 262,
+          "throttled_usec": 24199674,
+          "nr_bursts": 0,
+          "burst_usec": 0
+        },
+        "memory.peak": 70565888,
+        "memory.events": {
+          "low": 0,
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0,
+          "oom_group_kill": 0,
+          "sock_throttled": 0
+        },
+        "pids.peak": 3
+      },
+      "stderr_bytes": 30,
+      "known_warning_bytes": 30,
+      "ledger_span_seconds": 3.087656199,
+      "window_begin_ns": 27652122771,
+      "window_end_ns": 30952351813
+    }
+  ],
+  "checks": {
+    "scoped_passed": 73,
+    "collected": 6247,
+    "hosted": "NOT_CLAIMED"
+  },
+  "remaining_kernel_matrix": "NOT_RUN after original burst admission failed",
+  "overhead": "NOT_QUALIFIED: incomplete original burst and unmatched serial cache conditions"
+}

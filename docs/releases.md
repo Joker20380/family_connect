@@ -1,5 +1,36 @@
 # Release distribution / Выпуски
 
+**16 November — Android0.1.18-beta126/code126 PUBLIC, optional catalog9.**
+Consented device/network/VPN information reaches the real production card; only
+RU/AWG currently qualifies IP geography. Installed preservation/revoke, full public
+HTTPS APK/source/audio, signer, Range/resume, invitations/CSP and discovery pass.
+Exact paid-v2 keeps108/119/123/125; old assets/data/HMAC2 remain. No forced installation.
+[Exact release files, limitations and recovery](releases/2026-11-16-android126-publication.md).
+
+**13 November — Android0.1.18-beta125/code125 is PUBLIC, optional catalog8.**
+The exact qualified APK already installed on the owner phone is now the default
+invitation/updater release. Full verified-HTTPS APK/audio-source readback, original
+signer, catalog signature, both invitation paths/CSP and retained113 downloads PASS.
+No rebuild, phone operation, forced install or new VPN entitlement. Desktop versions
+are unchanged. [Publication and rollback receipt](releases/2026-11-13-android125-publication.md).
+
+Earlier dated entries are historical checkpoints, not the current public version.
+
+**8 November — beta121 consolidated candidate, not distributed or installed.**
+Unsigned ARM64 Friends prebuild combines subscription UI119/current main and cold120;
+new source/native inventory, no bundled locator. Owner120 and public updater remain
+unchanged. [Candidate and corrected field preparation](releases/2026-11-08-android-consolidated.md).
+The120 handoff-ready entry below is historical; its owner locator has expired.
+
+**7 November — beta120 controlled field-operation preparation READY, not distributed.**
+Client builds42385799106/55525859 Android API27/API35/native/release payload accepted;
+downloaded ARM64 prebuild9eae8668 and reproducible corrected NL1 package3c0487eb pinned.
+Fresh locator, final signature and private handoff remain one separately authorized
+operation after live preflight and recipient/channel readiness. No public120, updater,
+production or phone change;113/catalog7 and118 remain intact. Not whole-repository CI green.
+[Exact receipt](releases/2026-11-07-beta120-release-qualification.json) ·
+[Preparation history and handoff boundary](releases/2026-11-07-cold-field-delivery.md).
+
 **5 November — active-session renewal integration candidate; NOT a release.**
 Android/native owner, gateway lease and broker-monitor generation integration is implemented.
 Real TLS/mux/TCP/DNS/verified-HTTPS continuity, negative/cleanup race,66 scoped JVM cases,
@@ -313,7 +344,7 @@ Python3.14's implicit-directory imports must not hide a broken isolated archive.
 The [client workflow](../.github/workflows/clients.yml) defines platform builds and
 release conditions. CI artifacts do not by themselves establish a release. Validate native
 UI/runtime and downloaded artifacts before signing/publishing. Windows cross-build alone
-is insufficient. The current public releases are Android0.1.18-beta113, Linux0.2.11 and Windows0.2.16; see [current Android delivery](releases/2026-11-04-android113-server-picker.md#publication-and-readback) and [desktop delivery](releases/2026-11-02-gateway-selection.md). The [FIELD report](releases/2026-10-03-field1-release-final.md), [desktop cross-platform report](releases/2026-09-26-server-list-crossplatform.ru.md) and [Windows0.2.14 report](releases/2026-09-24-windows0214-installer.ru.md) are historical evidence.
+is insufficient. The current public releases are Android0.1.18-beta126, Linux0.2.11 and Windows0.2.16; see [current Android delivery](releases/2026-11-16-android126-publication.md) and [desktop delivery](releases/2026-11-02-gateway-selection.md). The [FIELD report](releases/2026-10-03-field1-release-final.md), [desktop cross-platform report](releases/2026-09-26-server-list-crossplatform.ru.md) and [Windows0.2.14 report](releases/2026-09-24-windows0214-installer.ru.md) are historical evidence.
 
 Desktop catalogs use offline signing with increasing sequence numbers. Keep keys out of
 CI and servers; never replace an existing version/tag with different binaries.

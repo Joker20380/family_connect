@@ -12,6 +12,8 @@ import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
 import androidx.test.runner.lifecycle.Stage;
 import java.io.FileInputStream;
 import java.lang.reflect.Field;
+import java.util.concurrent.Callable;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -29,6 +31,15 @@ public class InvitationRuntimeTest {
         try(ParcelFileDescriptor fd=ins.getUiAutomation().executeShellCommand(command);
             FileInputStream in=new FileInputStream(fd.getFileDescriptor())){while(in.read()!=-1){}}
         ins.waitForIdleSync();
+    }
+    private void awaitIntent(Callable<Boolean> delivered){
+        AtomicBoolean ready=new AtomicBoolean();
+        long deadline=SystemClock.elapsedRealtime()+10000;
+        while(!ready.get()&&SystemClock.elapsedRealtime()<deadline){
+            ins.runOnMainSync(()->{try{ready.set(delivered.call());}catch(Exception failure){throw new AssertionError(failure);}});
+            if(!ready.get())SystemClock.sleep(50);
+        }
+        assertTrue("Implicit intent was not consumed by the existing activity",ready.get());
     }
     @Test public void browsableLinksReuseActivityAndRejectMalformedToken()throws Exception{
         Context context=ins.getTargetContext();String pkg=context.getPackageName();
@@ -50,9 +61,12 @@ public class InvitationRuntimeTest {
                 Intent intent=new Intent(Intent.ACTION_VIEW,Uri.parse(uri)).addCategory(Intent.CATEGORY_BROWSABLE).setPackage(pkg);
                 assertNotNull(intent.resolveActivity(context.getPackageManager()));
                 shell("am start -W -a android.intent.action.VIEW -c android.intent.category.BROWSABLE -p "+pkg+" -d "+uri);
+                awaitIntent(()->token.equals(pending.get(activity))&&activity.getIntent().getData()==null);
                 ins.runOnMainSync(()->{try{assertSame(activity,current());assertEquals(token,pending.get(activity));assertNull(activity.getIntent().getData());}catch(ReflectiveOperationException e){throw new AssertionError(e);}});
             }
             shell("am start -W -a android.intent.action.VIEW -p "+pkg+" -d familyconnect://invite/invalid");
+            Field detail=FriendsActivity.class.getDeclaredField("detail");detail.setAccessible(true);
+            awaitIntent(()->activity.getString(R.string.friends_invite_rejected).contentEquals(((android.widget.TextView)detail.get(activity)).getText())&&activity.getIntent().getData()==null);
             ins.runOnMainSync(()->{try{assertSame(activity,current());assertEquals(new String(new char[64]).replace('\0','b'),pending.get(activity));}catch(ReflectiveOperationException e){throw new AssertionError(e);}});
         }finally{
             ins.runOnMainSync(()->{try{pending.set(activity,"");busy.setBoolean(activity,false);activity.navigate(0);}catch(ReflectiveOperationException e){throw new AssertionError(e);}});

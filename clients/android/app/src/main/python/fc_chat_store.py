@@ -52,7 +52,8 @@ class Session:
                           'mark_inbox': ('ids', 'flag'), 'rename_contact': ('address', 'name'), 'service_events': (),
                           'edit_message': ('address','message_id','text'), 'queue_audio': ('address','audio'), 'audio': ('message_id',),
                           'queue_radio': ('address','audio','mode','confirmed'),
-                          'import_events': ('feed',), 'mark_events': ('ids', 'flag')}
+                          'import_events': ('feed',), 'mark_events': ('ids', 'flag'),
+                          'subscription_status': ('device',)}
             if operation not in signatures or type(data) is not dict or set(data) != set(signatures[operation]):
                 raise LocalError('invalid_input')
             if operation == 'preview_contact':
@@ -70,6 +71,11 @@ class Session:
         except Exception:
             code = 'store_unavailable'
         return json.dumps(dict(ok=False, error=code), separators=(',', ':'))
+
+    def accept_subscription(self, raw, device):
+        if self.local is None:
+            raise LocalError('closed')
+        return json.dumps(self.local.accept_subscription_response(raw, device), ensure_ascii=False, separators=(',', ':'))
 
     def configure_delivery(self, host, port, public_hex, callbacks, expires=None):
         if self.local is None:
@@ -95,6 +101,12 @@ class Session:
         if self.local is None:
             raise LocalError('closed')
         self.local._chat.pin_service_publisher(bytes.fromhex(public_hex))
+
+    def accept_support(self, payload, device):
+        from messenger.support import accept
+        if self.local is None:
+            raise LocalError('closed')
+        accept(self.local._store, json.loads(payload, object_pairs_hook=_object), device, self.local.profile()['public'])
 
     def enrollment_proof(self, device, challenge):
         if self.local is None:

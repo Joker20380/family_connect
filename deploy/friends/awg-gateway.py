@@ -4,19 +4,38 @@ run: service lifetime; register: forced SSH command, one bounded JSON request.
 No private key/config/traffic is printed. Existing gateways are never modified.
 """
 import base64,fcntl,re,uuid,ipaddress,json,os,signal,sqlite3,subprocess,sys,time
+from contextlib import contextmanager
 from pathlib import Path
 ROOT=Path('/opt/apps/family_connect/friends-awg')
 IFACE='fcopen31'
 
 def command(args,check=True):
- r=subprocess.run(args,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
- if check and r.returncode:raise RuntimeError('AWG gateway operation failed')
- return r.returncode
+ try:
+  if 'control.friends.transport_gateway' in sys.modules:
+   sys.modules['control.friends.transport_gateway'].execute(args)
+  else:
+   with subprocess.Popen(args,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,start_new_session=True) as process:
+    try:process.wait(timeout=8)
+    except BaseException:os.killpg(process.pid,signal.SIGKILL);process.wait();raise
+    if process.returncode:raise subprocess.CalledProcessError(process.returncode,args)
+  return 0
+ except subprocess.CalledProcessError as error:
+  if check:raise
+  return error.returncode
+
+@contextmanager
+def registration(engine):
+ if engine is not None:
+  with engine.serialized(failure_mode='register'):yield
+ else:
+  with (ROOT/'registration.lock').open('a') as lock:
+   fcntl.flock(lock,fcntl.LOCK_EX);yield
 
 def settings():return json.loads((ROOT/'settings.json').read_text())
 
 def database():
- db=sqlite3.connect(ROOT/'peers.db',timeout=10);db.execute('PRAGMA synchronous=FULL')
+ module=sys.modules.get('control.friends.transport_gateway')
+ db=sqlite3.connect(ROOT/'peers.db',timeout=module.remaining() if module else 8);db.execute('PRAGMA synchronous=FULL')
  db.execute('CREATE TABLE IF NOT EXISTS peers (id INTEGER PRIMARY KEY AUTOINCREMENT, public TEXT UNIQUE NOT NULL)')
  os.chmod(ROOT/'peers.db',0o600);return db
 
@@ -25,6 +44,14 @@ def address(index):
  return str(network[index+1])+'/32'
 
 def add_peer(public,assigned):command([str(ROOT/'awg'),'set',IFACE,'peer',public,'allowed-ips',assigned])
+
+def paid_engine():
+ if not (ROOT/'transport-enforcement.json').exists() and not (ROOT/'transport-enforcement.json').is_symlink():return None
+ archive=ROOT/'paid-transport.pyz'
+ assert archive.is_file() and not archive.is_symlink() and archive.stat().st_uid==0 and not archive.stat().st_mode&0o022
+ if str(archive) not in sys.path:sys.path.insert(0,str(archive))
+ from control.friends.transport_gateway import Gateway
+ return Gateway(sys.modules[__name__])
 
 def tcp_user(device,ident):
  tcp=ROOT.parent/'friends-tcp';path=tcp/'server.json'
@@ -43,28 +70,58 @@ def tcp_user(device,ident):
  temporary=tcp/'user-request.json';fd=os.open(temporary,os.O_WRONLY|os.O_CREAT|os.O_TRUNC,0o600)
  with os.fdopen(fd,'w') as f:json.dump(payload,f)
  command([str(tcp/'xray'),'api','adu','--server=127.0.0.1:18085',str(temporary)],False)
- result=subprocess.run([str(tcp/'xray'),'api','inbounduser','--server=127.0.0.1:18085','-tag=friends','-email='+email],capture_output=True,text=True)
+ result=subprocess.run([str(tcp/'xray'),'api','inbounduser','--server=127.0.0.1:18085','-tag=friends','-email='+email],capture_output=True,text=True,timeout=8)
  assert result.returncode==0 and ident in result.stdout and email in result.stdout,'TCP user not confirmed'
  temporary.unlink()
 
 def register():
- raw=sys.stdin.buffer.read(1025);assert len(raw)<=1024
- request=json.loads(raw);assert set(request)=={'public_key','tcp_id','device'}
+ raw=sys.stdin.buffer.read(8000001);assert len(raw)<=8000000
+ request=json.loads(raw)
+ engine=paid_engine()
+ if engine is not None and request.get('operation') in ('reconcile','prepare'):
+  preparing=request['operation']=='prepare'
+  assert set(request)==({'operation','paid','token'} if preparing else {'operation','paid'})
+  with registration(engine):
+   with engine.lock():
+    if preparing:engine.prepare(request['paid'],request['token'])
+    else:engine.accept(request['paid'])
+   try:engine.apply_serialized()
+   except BaseException as error:
+    if not engine.observation_mode:engine.fail_closed(error,'register')
+    raise
+  reply={'schema':1,'node':engine.node,'result':'prepared' if preparing else 'applied'}
+  if preparing:reply['token']=request['token']
+  print(json.dumps(reply));return
+ assert set(request)==({'public_key','tcp_id','device','paid'} if engine is not None else {'public_key','tcp_id','device'})
  ident=request['tcp_id'];device=request['device'];assert str(uuid.UUID(ident))==ident and re.fullmatch('[0-9a-f]{32}',device)
  key=request['public_key'];decoded=base64.b64decode(key,validate=True);assert len(decoded)==32 and any(decoded) and base64.b64encode(decoded).decode()==key
- with (ROOT/'registration.lock').open('a') as lock:
-  fcntl.flock(lock,fcntl.LOCK_EX)
+ with registration(engine):
+  if engine is not None:
+   assert len(request['paid']['decisions'])==1
+   decision=request['paid']['decisions'][0]
+   assert all(decision[name]==request[name] for name in ('device','public_key','tcp_id'))
+   with engine.lock():state=engine.accept(request['paid'])
+   assert engine.allowed(state['records'][device]),'Transport access denied'
   with database() as db:
    db.execute('BEGIN IMMEDIATE');row=db.execute('SELECT id FROM peers WHERE public=?',(key,)).fetchone()
    if row is None:
     index=db.execute('INSERT INTO peers(public) VALUES (?)',(key,)).lastrowid
    else:index=row[0]
-   assigned=address(index);add_peer(key,assigned);tcp_user(device,ident)
-  print(json.dumps({'public_key':key,'address':assigned,'transport':'amneziawg-3.1'}))
+   assigned=address(index)
+   if engine is None:add_peer(key,assigned);tcp_user(device,ident)
+  try:
+   if engine is not None:engine.apply_serialized()
+  except BaseException as error:
+   if engine is not None and not engine.observation_mode:engine.fail_closed(error,'register')
+   raise
+ print(json.dumps({'public_key':key,'address':assigned,'transport':'amneziawg-3.1'}))
 
 def run():
  assert Path('/proc/sys/net/ipv4/ip_forward').read_text().strip()=='1','Existing gateway forwarding required'
  config=settings();network=config['network'];external=config['external']
+ engine=paid_engine()
+ if engine is not None:
+  engine.load();assert '[Peer]' not in (ROOT/'server.conf').read_text(),'Peer bindings must come from the retained registry'
  assert external.replace('-','').replace('_','').isalnum()
  process=subprocess.Popen([str(ROOT/'amneziawg-go'),'-f',IFACE],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,env={**os.environ,'GOMAXPROCS':'2'})
  rules=[]
@@ -77,8 +134,10 @@ def run():
    time.sleep(.05)
   command([str(ROOT/'awg'),'setconf',IFACE,str(ROOT/'server.conf')])
   command(['ip','address','add',config['address'],'dev',IFACE]);command(['ip','link','set','dev',IFACE,'mtu','1280','up'])
-  with database() as db:
-   for index,public in db.execute('SELECT id,public FROM peers'):add_peer(public,address(index))
+  with (engine.lock() if engine is not None else registration(None)):
+   with database() as db:
+    for index,public in db.execute('SELECT id,public FROM peers'):
+     if engine is None or engine.peer_allowed(public):add_peer(public,address(index))
   command(['iptables','-N','FCFRIENDS31'],False)
   command(['iptables','-F','FCFRIENDS31'])
   for blocked in ['0.0.0.0/8','10.0.0.0/8','127.0.0.0/8','169.254.0.0/16','172.16.0.0/12','192.168.0.0/16','224.0.0.0/4']:
@@ -102,5 +161,19 @@ if __name__=='__main__':
  try:
   if sys.argv[1:] == ['run']:run()
   elif sys.argv[1:] == ['register']:register()
+  elif sys.argv[1:] == ['paid-preflight']:
+   engine=paid_engine();assert engine is not None
+   engine.apply(starting=True)
+  elif sys.argv[1:] == ['paid-recover']:
+   engine=paid_engine();assert engine is not None
+   engine.recover()
+  elif sys.argv[1:] == ['paid-watch']:
+   assert paid_engine() is not None
+   from control.friends.transport_gateway import watch
+   watch(sys.modules[__name__])
   else:raise ValueError('Unknown operation')
- except Exception:print('Open AWG service unavailable',file=sys.stderr);sys.exit(1)
+ except Exception as error:
+  module=sys.modules.get('control.friends.transport_gateway')
+  if module is not None:module.report_failure(error,'watch' if sys.argv[1:] == ['paid-watch'] else sys.argv[1] if len(sys.argv)==2 else 'unknown',ROOT)
+  else:print(json.dumps(dict(gateway_failure=dict(reason='ENTRY_FAILURE',pid=os.getpid()))),file=sys.stderr,flush=True)
+  print('Open AWG service unavailable',file=sys.stderr);sys.exit(1)

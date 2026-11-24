@@ -1,6 +1,5 @@
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import contextmanager
-import os
 from queue import Queue
 import socket
 import threading
@@ -12,15 +11,16 @@ import pytest
 from test_mesh_chat_host import bridge, body
 from test_mesh_chat_service import service
 from provisioning import chat_bridge_protocol as wire
+from resource_audit import ResourceAudit
 
 
 @pytest.fixture(autouse=True)
-def no_public_resource_leaks():
+def no_public_resource_leaks(request):
     before = {thread for thread in threading.enumerate() if thread.name.startswith('fc-chat-')}
-    descriptors = len(os.listdir('/proc/self/fd'))
-    yield
+    with ResourceAudit() as audit:
+        request.node._public_resource_audit = audit
+        yield
     assert {thread for thread in threading.enumerate() if thread.name.startswith('fc-chat-')} == before
-    assert len(os.listdir('/proc/self/fd')) == descriptors
 
 
 @pytest.fixture(params=['probe', 'prepare'])

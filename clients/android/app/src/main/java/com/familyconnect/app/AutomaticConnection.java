@@ -31,12 +31,17 @@ final class AutomaticConnection implements TunnelEngine,ConnectivityOrchestrator
     private boolean ownerOpen;
     private final boolean debug;
     private final boolean restrictedOnly;
+    private final boolean applicationUsesVpn;
     AutomaticConnection(Context context,String country,Consumer<ConnectivityOrchestrator.Event> changed) {
         this(context,country,false,changed);
     }
     AutomaticConnection(Context context,String country,boolean restrictedOnly,Consumer<ConnectivityOrchestrator.Event> changed) {
+        this(context,country,restrictedOnly,changed,new AppVpnAndroid(context,AppVpnPolicy.all()));
+    }
+    AutomaticConnection(Context context,String country,boolean restrictedOnly,Consumer<ConnectivityOrchestrator.Event> changed,AppVpnAndroid applications) {
         this.restrictedOnly=restrictedOnly;
-        this.context=context;this.country=country;this.changed=changed;owner=new AutomaticVpnOwner(context);
+        applicationUsesVpn=applications.routesOwnUid();
+        this.context=context;this.country=country;this.changed=changed;owner=new AutomaticVpnOwner(context,applications);
         debug=(context.getApplicationInfo().flags&android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE)!=0;
     }
     public void up(String preferred) {
@@ -87,7 +92,7 @@ final class AutomaticConnection implements TunnelEngine,ConnectivityOrchestrator
             Transport transport=Transport.parse(id);
             AutomaticNormalEngine normal=new AutomaticNormalEngine(context,owner,transport);
             candidate=normal;normal.up(profiles.get(transport));ConnectionService.vpnSource=normal.source;
-            health=new VpnHealth(context);
+            health=new VpnHealth(context,applicationUsesVpn?null:normal::probeDns);
             while(true) {
                 orchestrator.check(deadline);
                 boolean good=health.check(normal.source,deadline);Diagnostics.dns(context,good);
@@ -96,7 +101,7 @@ final class AutomaticConnection implements TunnelEngine,ConnectivityOrchestrator
             }
         }
         orchestrator.check(deadline);unhealthy=0;nextHealth=0;restrictedHealth=new RestrictedHealthPolicy();
-        if(health==null)health=new VpnHealth(context);
+        if(health==null)health=new VpnHealth(context,applicationUsesVpn?null:candidate::probeDns);
     }
     void interrupt(ConnectivityOrchestrator.Failure reason) {
         if(reason==ConnectivityOrchestrator.Failure.AUTH)ConnectionService.forgetRequest(context);

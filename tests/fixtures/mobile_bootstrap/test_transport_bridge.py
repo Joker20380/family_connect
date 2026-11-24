@@ -1,11 +1,13 @@
 """Exercise exact old/new Python boundary with synthetic failures, no production sockets."""
 import base64
 import importlib.util
+from importlib.machinery import SourceFileLoader
 from pathlib import Path
 import sys
 import types
 import unittest
 from unittest.mock import patch
+from scripts.ci_android_fixture import source as accepted_source
 
 ROOT = Path(__file__).resolve().parents[3]
 RELATIVE = 'clients/android/app/src/main/python/fc_rns_transport.py'
@@ -17,7 +19,8 @@ def load(source, name):
     interface = types.ModuleType('RNS.Interfaces.TCPInterface')
     interface.TCPClientInterface = object
     with patch.dict(sys.modules, {'RNS':rns, 'RNS.Interfaces':types.ModuleType('RNS.Interfaces'), 'RNS.Interfaces.TCPInterface':interface}):
-        spec = importlib.util.spec_from_file_location(name, source / RELATIVE)
+        path = source if source.is_file() else source / RELATIVE
+        spec = importlib.util.spec_from_loader(name, SourceFileLoader(name, str(path)))
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
     module.initialize = lambda directory: None
@@ -26,8 +29,8 @@ def load(source, name):
 
 class TransportBridgeTest(unittest.TestCase):
     def setUp(self):
-        self.current = load(ROOT/'state-client-build/mobile-bootstrap-20261020/android-source','candidate')
-        self.baseline = load(ROOT/'state-client-build/mux-profile-20261020/android-source','baseline')
+        self.current = load(accepted_source('bridge96'), 'candidate')
+        self.baseline = load(accepted_source('bridge95'), 'baseline')
         self.callbacks = types.SimpleNamespace(bindSocket=lambda descriptor:True,cancelled=lambda:False)
         self.args = ('unused','127.0.0.1',1,base64.b64encode(bytes(64)).decode(),self.callbacks)
 

@@ -3,7 +3,6 @@ package familysession
 import (
 	"context"
 	"encoding/binary"
-	"time"
 )
 
 const BatchMessageHeaderSize = 12
@@ -29,16 +28,12 @@ func (session *Session) SendBatchContext(ctx context.Context, payloads [][]byte)
 		}
 		size += BatchMessageHeaderSize + len(payload)
 	}
-	if !valid || !time.Now().Before(session.expiry) || ctx.Err() != nil {
+	if !valid || !session.beginSecurityIO(ctx, true) {
 		session.traceStop(ctx, "FAMILY_CONTRACT")
 		session.stream.stop()
 		return ErrRejected
 	}
-	deadline := session.expiry
-	if bound, ok := ctx.Deadline(); ok {
-		deadline = minTime(deadline, bound)
-	}
-	session.connection.SetWriteDeadline(deadline)
+	defer session.endSecurityIO(true)
 	stop := context.AfterFunc(ctx, func() { session.traceStop(ctx, "FAMILY_CONTEXT"); session.stream.stop() })
 	defer stop()
 	message := make([]byte, size)

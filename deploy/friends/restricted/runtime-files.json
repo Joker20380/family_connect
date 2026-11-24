@@ -5,6 +5,8 @@
   "control/friends/restricted.py",
   "control/friends/paid_beta.py",
   "control/friends/paid_beta_admin.py",
+  "control/friends/transport_policy.py",
+  "control/friends/transport_membership.py",
   "control/friends/readiness_receipts.py",
   "control/friends/restricted_admin.py",
   "control/friends/restricted_sync.py",

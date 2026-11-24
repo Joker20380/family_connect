@@ -21,6 +21,15 @@ public class ReadinessProductTest {
     }
     static RestrictedCache cache(Memory memory){return new RestrictedCache(memory,raw->true);}
     static ReadinessProduct product(RestrictedCache cache,Memory receipts){return new ReadinessProduct(cache,receipts,"0.1.18-canary55-receipt",55,()->0);}
+    @Test public void deferredAckIsDurablePendingAndDoesNotClaimServerReceipt()throws Exception{
+        Memory vault=new Memory(),receipts=new Memory();RestrictedCache cache=cache(vault);ReadinessProduct product=product(cache,receipts);
+        ReadinessImportResult result=product.imported(response(1000,2000),new OwnerPrewarmReceipt(),1100);
+        product.deferAcknowledgement(result);
+        assertTrue(product.durable);assertEquals("ACK_PENDING",product.delivery);
+        assertEquals("ACK_PENDING",ControlJson.parse(receipts.read()).getAsJsonObject().get("ack_state").getAsString());
+        assertNotNull(cache.usable());
+        product.publish(result,payload->{});assertEquals("ACK_RECEIVED",product.delivery);
+    }
     @Test public void readyOnlyAfterReadbackAndSameOrchestratorPredicate()throws Exception{
         Memory vault=new Memory(),receipts=new Memory();RestrictedCache cache=cache(vault);ReadinessProduct product=product(cache,receipts);
         OwnerPrewarmReceipt attempt=new OwnerPrewarmReceipt();ReadinessImportResult result=product.imported(response(1000,2000),attempt,1100);

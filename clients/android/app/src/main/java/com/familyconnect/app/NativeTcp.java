@@ -5,4 +5,6 @@ final class NativeTcp {
     static native long start(int tunFd,String profile,VpnService protector);
     static native boolean stop(long handle);
     static native int connections(long handle);
+    static native String tcpDns(long handle,String query,int budgetMillis);
+    static native String awgDns(int handle,String source,String query,int budgetMillis);
 }

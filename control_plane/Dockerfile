@@ -16,4 +16,4 @@ RUN useradd --uid 10001 --create-home console && mkdir -p /app/control_plane/.lo
 USER console
 WORKDIR /app/control_plane
 EXPOSE 8000
-CMD ["gunicorn", "fc_control_plane.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "2"]
+CMD ["gunicorn", "fc_control_plane.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "2", "--access-logformat", "%(m)s %(U)s %(s)s %(D)s"]

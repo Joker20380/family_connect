@@ -41,6 +41,8 @@ public class AutoRuntimeTest {
   assertTrue(android.os.Build.FINGERPRINT.contains("generic")||android.os.Build.MODEL.contains("sdk"));helper.clean();
   helper.shell("appops set "+context.getPackageName()+" ACTIVATE_VPN allow");helper.shell("pm grant "+context.getPackageName()+" android.permission.POST_NOTIFICATIONS");
   Activity activity=InstrumentationRegistry.getInstrumentation().startActivitySync(new Intent(context,MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+  android.content.SharedPreferences connectivity=context.getSharedPreferences("connectivity",Context.MODE_PRIVATE);
+  String previousHint=connectivity.getString("normal_hint",null);connectivity.edit().remove("normal_hint").commit();
   ProfileStore wg=new ProfileStore(context,Transport.WG),awg=new ProfileStore(context,Transport.AWG),tcp=new ProfileStore(context,Transport.TCP);
   Throwable primary=null;
   try{
@@ -51,13 +53,24 @@ public class AutoRuntimeTest {
    context.getSharedPreferences("connectivity",Context.MODE_PRIVATE).edit().remove("normal_hint").commit();
    start();on("wg");helper.traffic(Transport.WG);stop();
    control("all-down");start();failed();assertNotNull(new VpnHealth(context).find("10.79.0.2"));stop();
-   start();Thread.sleep(1500);long cancelledAt=System.currentTimeMillis();stop();assertTrue("Cancel exceeded socket timeout budget",System.currentTimeMillis()-cancelledAt<5000);Thread.sleep(3000);assertEquals("off",ConnectionService.status);helper.clean();
+   start();Thread.sleep(1500);long cancelledAt=System.currentTimeMillis();
+   java.util.concurrent.atomic.AtomicBoolean cancelled=new java.util.concurrent.atomic.AtomicBoolean();
+   java.util.concurrent.atomic.AtomicReference<String> blocked=new java.util.concurrent.atomic.AtomicReference<>("");
+   Thread diagnostic=new Thread(()->{try{Thread.sleep(2000);if(!cancelled.get()){
+    StringBuilder frames=new StringBuilder();
+    for(var entry:Thread.getAllStackTraces().entrySet())if(entry.getKey().getName().equals("main")||entry.getKey().getName().equals("fc-vpn-worker")){
+     frames.append(entry.getKey().getName()).append(':');for(StackTraceElement frame:entry.getValue())frames.append('\n').append(frame);
+    }blocked.set(frames.toString());
+   }}catch(InterruptedException ignored){}});diagnostic.setDaemon(true);diagnostic.start();
+   try{stop();}finally{cancelled.set(true);diagnostic.interrupt();}
+   long cancelElapsed=System.currentTimeMillis()-cancelledAt;
+   assertTrue("Cancel exceeded socket timeout budget: "+cancelElapsed+"ms\n"+blocked.get(),cancelElapsed<5000);Thread.sleep(3000);assertEquals("off",ConnectionService.status);helper.clean();
    control("up");wg.clear();start();on("awg");try{wg.save(ProfileValidator.validate(AwgRuntimeTest.profile(Transport.WG)));fail("Active VPN must reject profile edits");}catch(java.io.IOException expected){}helper.shell("appops set "+context.getPackageName()+" ACTIVATE_VPN deny");helper.revokeThroughSystemDialog();failed();stop();assertNotNull(VpnService.prepare(context));wg.save(ProfileValidator.validate(AwgRuntimeTest.profile(Transport.WG)));
    assertTrue(wg.exists());assertTrue(awg.exists());assertTrue(tcp.exists());
    android.util.Log.i("FamilyConnect","AUTO PASS: blocked WG to AWG, live AWG loss to TCP, WG priority, missing WG, exhaustion, in-flight cancel, system revoke; 12 UDP, 6 REALITY HTTP, 1 OS DNS; 5 cleanup scenarios");
   }catch(Throwable failure){primary=failure;throw failure;}
   finally{
-   TcpTrafficDiagnostics.cleanup(primary,()->control("up"),()->{stop();wg.clear();awg.clear();tcp.clear();},()->InstrumentationRegistry.getInstrumentation().runOnMainSync(activity::finish));
+   TcpTrafficDiagnostics.cleanup(primary,()->control("up"),()->{stop();wg.clear();awg.clear();tcp.clear();},()->{connectivity.edit().putString("normal_hint",previousHint).commit();},()->InstrumentationRegistry.getInstrumentation().runOnMainSync(activity::finish));
   }
  }
 }

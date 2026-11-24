@@ -45,3 +45,52 @@ and new96 READY/device proof are pending; server-row equality is not that proof.
 One targeted tester cellular Connect+diagnostic export is useful only after that
 ordinary same-key update; FIELD_PASS stays NOT_RUN until actual evidence arrives.
 No new API, invitation, root enrollment, gateway restart, speed test or public push.
+
+## beta113: both direct bootstrap paths unavailable
+
+`check_blocked_paths.py` is a short, offline source-flow check of shipped113
+(`d2882cde4c50b15085b925007c04c48f4de61bf0`), not a candidate APK or Android runtime.
+Use the existing immutable113 source snapshot and cached JDK/dependencies:
+
+```sh
+python3 tests/fixtures/mobile_bootstrap/check_blocked_paths.py \
+  --source-root state-client-build/beta113-field16/source \
+  --tools /path/to/existing/resume-tools \
+  --output state-client-build/beta113-field16/blocked-paths-new
+```
+
+The output directory must not exist; previous logs/receipts are never overwritten.
+The runner pins the actual FriendsAccessAndroid, ChatCarrier, readiness route/protocol,
+cache/bootstrap and release-disabled provisioning gate to113. Other Java dependencies
+come from that snapshot, not current application source. Cached tools must contain
+`jdk/bin/{java,javac}` and Gson2.13.2/JUnit4.13.2/Hamcrest1.3/BouncyCastle1.85.2 jars
+under `gradle-home/caches/modules-2/files-2.1`; nothing is downloaded.
+
+`blocked_paths/` replaces only Android/platform, storage/native and I/O seams:
+HTTPS output throws a synthetic timeout; the RNS opener throws typed Unavailable.
+Actual entrypoint code selects the fallback and subsequent failure. No real network,
+device, keys, server registration, VPN or Telemost room is used. Generated identity
+keys are test-only memory. The release provisioning gate remains disabled.
+The modeled ConnectionService is off: the existing HTTPS_VPN branch requires an
+already healthy VPN and is not an independent cold-start route under test here.
+
+Seven cases distinguish uncached bootstrap, validated-cache fresh Connect versus
+recovery, expired cache, activation, registration with/without invitation, and the
+cache dependency of the actual service-only ChatCarrier entrypoint. The positive
+cache case models an already validated bundle with controlled time: it does **not**
+claim signature verification, encrypted Android storage or end-to-end connectivity.
+The separate existing native113 checks cover real synthetic signatures/bindings:
+
+```sh
+cd state-client-build/beta113-field16/source/carrier
+GOMAXPROCS=2 GOMEMLIMIT=384MiB GOTOOLCHAIN=local GOPROXY=off GOSUMDB=off \
+  GOCACHE="$TOOLS/go-cache" GOMODCACHE="$TOOLS/go-mod" \
+  timeout 90s nice -n 10 "$TOOLS/go/bin/go" test -p 1 ./wholedevice \
+  -run '^(TestCachedBootstrapCryptoDeadlinesAndRevocation|TestProductionDeliveryToExistingFamilyMaterial|TestProductionDeliveryRejectsBindingTrustExpiryBounds)$' \
+  -count=1 -timeout=30s
+```
+
+Set `TOOLS` to the same existing absolute tools directory. These tests do not prove
+Android networking, a real cryptographic-deadline crossing, or Telemost reachability.
+See the [incident continuation](../../../docs/releases/2026-11-06-beta113-field16-bootstrap.md#dual-direct-path-failure)
+for retained PASS/FAIL evidence and the exact missing product transition.

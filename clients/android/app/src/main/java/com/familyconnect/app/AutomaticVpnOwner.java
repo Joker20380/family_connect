@@ -17,7 +17,9 @@ final class AutomaticVpnOwner {
     private TcpVpnService service;
     private ParcelFileDescriptor tun;
     private String resolver;
-    AutomaticVpnOwner(Context context) { this.context=context; }
+    private final AppVpnAndroid applications;
+    AutomaticVpnOwner(Context context) { this(context,new AppVpnAndroid(context,AppVpnPolicy.all())); }
+    AutomaticVpnOwner(Context context,AppVpnAndroid applications) { this.context=context;this.applications=applications; }
     void open(Runnable revoked) throws Exception {
         if(service!=null)throw new IllegalStateException("Owner already open");
         if(VpnService.prepare(context)!=null)throw new ConnectivityOrchestrator.Rejected(ConnectivityOrchestrator.Failure.AUTH);
@@ -55,7 +57,7 @@ final class AutomaticVpnOwner {
             .addRoute("0.0.0.0",0).addRoute("::",0).addDnsServer("10.79.0.1").setBlocking(false);
     }
     ParcelFileDescriptor replace(VpnService.Builder builder) throws Exception {
-        ParcelFileDescriptor next=builder.establish();
+        ParcelFileDescriptor next=applications.establish(builder);
         if(next==null)throw new ConnectivityOrchestrator.Rejected(ConnectivityOrchestrator.Failure.AUTH);
         ParcelFileDescriptor previous=tun;tun=next;Diagnostics.vpn(context,true);
         if(previous!=null)previous.close();

@@ -1,0 +1,261 @@
+{
+  "status": "LOCAL_DELIVERY_PREPARATION_COMPLETE_NOT_A_SIGNED_FIELD_APK",
+  "accepted_F": {
+    "checkpoint": "867ba7f7bc2869f41468c12495a2e929e4dc3f33",
+    "application": "9bf02724deacf1c5e4293bea1bfdc6fc4f7fcacc",
+    "native_source": "6eb61a9faa659b6b07ac16bf9f4bac46a41cd2a7",
+    "harness": "252c87e367e59cdad1b29f8245d2db618125ad40",
+    "x86_64_jni_sha256": "17119f000407ec1d7ccdf8d33acabe423f3cf20e32b6f8af839d209aa3360c59",
+    "repeated": false
+  },
+  "application": {
+    "source_commit": "08d7e416be2bbd9067e207d92fa9900df63f4812",
+    "version": "0.1.18-beta120",
+    "version_code": 120,
+    "package": "com.familyconnect.app.friends",
+    "apk_sha256": "269a9219f093d7afbc487ba41a9115036842ebba22633879d79a794350fca967",
+    "size": 50367849,
+    "unsigned": true,
+    "restricted_native": {
+      "xray_revision": "d2758a023cd7f4174a5a5fa4ff66e487d4342ba0",
+      "gvisor_version": "v0.0.0-20260122175437-89a5d21be8f0",
+      "patch_sha256": "770f8f359faf0630a271f103bcd31033eb46d30aeb531b5933c15058c624b420",
+      "binary_sha256": "773d760dc8f5a7894ed7008b5f6c30b830bd663f66a8935d470f5262ebc50d26",
+      "diagnostic_only": false,
+      "owner_diagnostic_fault_schema": 0,
+      "metadata_schema": 2,
+      "source_revision": "6eb61a9faa659b6b07ac16bf9f4bac46a41cd2a7",
+      "source_tree": "478392e43bd3e71f04f2a3bd880c40a51e38d2e9",
+      "abi": "arm64-v8a",
+      "provider": "telemost",
+      "build_tags": [],
+      "builder_sha256": "250865439b0a131f3c75233045187b38c79645ab987956e61846b511d976be85"
+    },
+    "android_only": true
+  },
+  "native": {
+    "sha256": "773d760dc8f5a7894ed7008b5f6c30b830bd663f66a8935d470f5262ebc50d26",
+    "abi": "arm64-v8a",
+    "elf": "ELF64 AArch64 DYN",
+    "ndk_api": 26,
+    "exports": [
+      "JNI_OnLoad",
+      "Java_com_familyconnect_app_NativeRestricted_attach",
+      "Java_com_familyconnect_app_NativeRestricted_begin",
+      "Java_com_familyconnect_app_NativeRestricted_beginReady",
+      "Java_com_familyconnect_app_NativeRestricted_chatAcquire",
+      "Java_com_familyconnect_app_NativeRestricted_chatOpen",
+      "Java_com_familyconnect_app_NativeRestricted_chatRelease",
+      "Java_com_familyconnect_app_NativeRestricted_chatRequest",
+      "Java_com_familyconnect_app_NativeRestricted_chatState",
+      "Java_com_familyconnect_app_NativeRestricted_provisionBegin",
+      "Java_com_familyconnect_app_NativeRestricted_provisionClose",
+      "Java_com_familyconnect_app_NativeRestricted_provisionPost",
+      "Java_com_familyconnect_app_NativeRestricted_readiness",
+      "Java_com_familyconnect_app_NativeRestricted_renew",
+      "Java_com_familyconnect_app_NativeRestricted_state",
+      "Java_com_familyconnect_app_NativeRestricted_stats",
+      "Java_com_familyconnect_app_NativeRestricted_stop",
+      "Java_com_familyconnect_app_NativeRestricted_validateDelivery",
+      "Java_com_familyconnect_app_NativeRestricted_validationCode",
+      "Java_com_familyconnect_app_OwnerFaultReceiver_control",
+      "fcProvisionBegin",
+      "fcProvisionClose",
+      "fcProvisionPost",
+      "fcProvisionProtect"
+    ],
+    "expected_jni_exports": 19,
+    "all_jni_exports_present": true,
+    "load_alignment": "0x4000"
+  },
+  "toolchain": {
+    "native_go": "go1.26.0 linux/amd64",
+    "ndk": "28.2.13676358",
+    "managed_jdk": "17",
+    "gradle": "8.11.1",
+    "chaquopy_build_python": "3.10.19",
+    "python_archive_sha256": "c0b09b744293f2aad85b1ef84544f8a7ba383675b29d1f7efd1e96bb9984399f"
+  },
+  "upgrade": {
+    "package_id_equal": true,
+    "min_api": 27,
+    "api28_supported": true,
+    "previous_code": 113,
+    "candidate_code": 120,
+    "signature_required": "67a90d1bfcd5a2c0666f0cff1b0ac5e43aaa661ca1196f89e879aa39fe20848a",
+    "actual_in_place_install": "NOT_RUN_NO_USER_PHONE_AUTHORIZATION",
+    "data_clear_or_new_identity": "NOT_PERFORMED",
+    "existing_identity_and_storage_source_changed_in_delivery": false
+  },
+  "public_trust_anchor_sha256": "d0ae60e61af6ac5018428aaad89e362ec0f75d7468633a26c22906356228d281",
+  "prebuild_security": {
+    "synthetic_authority_assets": false,
+    "test_identity_or_private_key_assets": false,
+    "locator_assets": [],
+    "debuggable": false,
+    "qualification_build_tags": [],
+    "provisioning_test_seam": false,
+    "same_anchor_as_trusted_beta113": true,
+    "data_or_identity_reset": false
+  },
+  "version_reservation": {
+    "reserved": 120,
+    "abandoned_unsigned_draft": 119,
+    "reason": "119 already used on independent subscription-paid branch; that branch was not changed",
+    "public118_unchanged": true
+  },
+  "server": {
+    "source": "7398858d2b404104e486e56411e78a9e1e15ad78",
+    "target": [
+      "linux",
+      "amd64",
+      "0"
+    ],
+    "source_clean": true,
+    "artifacts": {
+      "cold-provision-entry@.service": "19500d37067d3c217807e826bfe5a7cf05d897de6a3635898f8a3131d1cc6811",
+      "identity.lock": "8133533475c48477f7ccf6d65a5c426a2511ceea61f6539c1667b3a6900a77be",
+      "HANDOFF.md": "0761b348bdcb0657a4cd429c444c214d91d6adcb40901102e8708637c896a5db",
+      "cold-provision-locator.pyz": "08b0ed4a8e982f7aa54a64b0630dce68a19399c492ee30fbb8d43ff4016d97a2",
+      "control.lock": "5adccf995e9634be711ae3167229cca0d2751b493c3a041dd68c745ec44ad94a",
+      "prepare_cold_field_apk.py": "675376000cfde5571275a8f735e4f5bc720d17c6fc7ccfce48e4b789067d3b12",
+      "cold-provision-entry": "c7ed0b15b38fc3f215ef23f8a8687076ed5e73ade1c099d6ffc2d69ca3a8a96c",
+      "deployment.json": "9b78c2a50f9add2a6257b15f9d33d9e6f4b9202e404cc8a45ec5244fedecabe6"
+    },
+    "two_builds_byte_equal": true,
+    "files": 9,
+    "archive_sha256": "26ccddba2e0eafc635c6138f5109debae8c5b96347de6a0c90561373c2131fdd",
+    "archive_bytes": 16906240,
+    "manifest_sha256": "c5c010804b7f383507af3dfd8dc8017d3a52af8380f1113b5e9d21d96cd0fe3e",
+    "deployed": false,
+    "real_entry_readiness": "NOT_CHECKED_NOT_AUTHORIZED"
+  },
+  "checks": {
+    "native_builder_packet_race_count3": "PASS",
+    "friends_unit_cases": 433,
+    "friends_unit_failed": 0,
+    "friends_unit_final_variant": "120; 433 passed, 0 failed/errors/skipped; Android sources equal APK source08d7e41 at check9f194fd",
+    "final_selected_source_checks": "54 passed, no skips",
+    "friends_lint_errors": 0,
+    "friends_lint_warnings": 57,
+    "apk_package_native_python_alignment": "PASS",
+    "selector_instructions_unchanged_by_annotation": true,
+    "server_closed_issuer_handlers_lifecycle": "PASS disposable; Go lifecycle under race; existing validator accepts issued bundle; invalid proof denied",
+    "new_server_https_tests_race": 2,
+    "existing_adapter_framing_tests_race": 2,
+    "finalizer_tests": {
+      "passed": 4,
+      "skipped": 0,
+      "real_sdk_zipalign": true,
+      "fixture_output_destroyed": true
+    },
+    "selected_package_release_checks": {
+      "passed_initial": 80,
+      "failed_initial": 1,
+      "deselected_windows": 1,
+      "initial_failure": "stale exact-string assertion omitted already accepted NATIVE_BEGIN_READY diagnostic assignment; access check remained before native begin",
+      "targeted_contract_after_fix": {
+        "passed": 17,
+        "skipped": 0
+      }
+    },
+    "full_client_release_ci": "NOT_RUN_NOT_CLAIMED; existing complete-CI gate remains before actual vault signing, not replaced by local build or F",
+    "arm64_device_runtime": "NOT_RUN; no phone access or new AVD"
+  },
+  "preservation": {
+    "original_fails": {
+      "count": 19,
+      "manifest_sha256": "8b4501cf10e7564e9992771087b4c9747e951c7d425dbf817b5c07cd7736961c",
+      "all_unchanged": true
+    },
+    "cold-connect-a": {
+      "artifact_count": 14,
+      "all_unchanged": true,
+      "report_sha256": "a3a7de9992df547c26d94d6ecd34a99d6366bcbebd5c6e46bc1fe7c798edfc8c"
+    },
+    "cold-connect-b": {
+      "artifact_count": 11,
+      "all_unchanged": true,
+      "report_sha256": "232876493c6a9148bfa29ea6901d26c90d4b9d5f7fe84973a4cf49b948a16e77"
+    },
+    "cold-connect-c": {
+      "artifact_count": 9,
+      "all_unchanged": true,
+      "report_sha256": "2cd90ec5051989cdc404f14065b6b9ac9326e65a2f5b39007ccb40f4997fae42"
+    },
+    "cold-connect-d": {
+      "artifact_count": 12,
+      "all_unchanged": true,
+      "report_sha256": "3bac48108a1def4c6e9c205889c9c5c022fa61dc4e2ab665f766fd9954c72f80"
+    },
+    "cold-connect-e": {
+      "artifact_count": 18,
+      "all_unchanged": true,
+      "report_sha256": "0b16dc9ba0d80ff2c5837da05f99af0de2f0750675122e86416e491e0276d794"
+    },
+    "cold-api28-cellular": {
+      "artifact_count": 19,
+      "all_unchanged": true,
+      "report_sha256": "e270fc362206ffc944c8d838c67806516316adcb96903879cfe971c9eaa8a3f2"
+    },
+    "F_jni_unchanged": true,
+    "beta113_storage_manifest_unchanged": {
+      "clients/android/app/src/main/java/com/familyconnect/app/FriendsIdentityVault.java": "5a99173963eb04be4e3e302d563795075eccc75c35caa1c565175dbe0817a7e9",
+      "clients/android/app/src/main/java/com/familyconnect/app/FriendsConfigurationVault.java": "4d76d775ddf03fd6892e66152f75629ee4825d618de37d613255f60cb94d5fec",
+      "clients/android/app/src/main/java/com/familyconnect/app/RestrictedVault.java": "160fff98281d78fd769c88fbcdd8ffce5e05a64e6e4c0e28e0165d45bee1f432",
+      "clients/android/app/src/main/java/com/familyconnect/app/ControlIdentityVault.java": "12a0c21fa049794ca41fd4fc2dc9c79dca717fde0ca521e9eb78487aa1bc674a",
+      "clients/android/app/src/main/java/com/familyconnect/app/ControlJournalVault.java": "0683f305c0ed09cf36a05b1c28bac9bd123685b83f619efe4aabedc55bfc8393",
+      "clients/android/app/src/main/java/com/familyconnect/app/ChatKeyVault.java": "620c8527ebba2519944c3106052b29d2a75070c55355a5bb096325cf0ae6559f",
+      "clients/android/app/src/main/java/com/familyconnect/app/ControlEnrollmentVault.java": "7f79adbf5f1be3589617128da733762d4c6c6f7353b7cdf1eae46c7d5d8e6cdb",
+      "clients/android/app/src/main/java/com/familyconnect/app/RadioSettings.java": "dcda8f1f9e8e326642e738323f93b51e197623b08470fb977d3dc9ddec46c022",
+      "clients/android/app/src/main/AndroidManifest.xml": "e3f1c252317cdeed7caaddccdc49b0cc7608227d06b855b2e7be8bf4f705e797"
+    }
+  },
+  "E_counters": "two DNS timeouts/two ProtocolErrors remain unclassified; F is not their claimed fix",
+  "remaining": [
+    "existing release-CI acceptance before real signing; no broad historical suite rerun in this preparation",
+    "authorized live NL entry and current RU trust/admission/backend readback",
+    "fresh real issuer-signed bound locator; no TTL extension",
+    "only then asset-only packaging, existing vault signature, exact final bytes and private handoff",
+    "in-place physical API28 cellular attempt; no data wipe, classify warm cache honestly"
+  ],
+  "single_authorization_boundary": "stage/start only bounded NL1 cold entry plus RU one-shot locator, finalize/sign and privately hand candidate to the original registered user after release gates; no public publication or automatic phone install",
+  "cleanup": {
+    "new_AVDs": 0,
+    "real_provider_rooms": 0,
+    "OAuth_access": false,
+    "production_writes": false,
+    "phone_operations": false,
+    "temporary_test_containers": "completed --rm; HTTP threads joined; tmpfs synthetic material destroyed",
+    "background_test_processes": "none left",
+    "provider_room_deletion": "NOT_CLAIMED"
+  },
+  "local_evidence_root": "state-client-build/cold-field-delivery-20261107",
+  "artifact_sha256": {
+    "apk/build.log": "55f33e537c94cf187afae85a159c0bce0ea321af58665b81f6eb76fb9359f77c",
+    "apk/package-check.log": "48323de0dcd44a78b33de5386e2b1e53f888f3181ae37c8ffc0e04bc129b4b36",
+    "apk/119-preliminary-not-for-delivery.apk": "d3d412023bed43ed35bf76255c3ece4690f4d9fb115ce54a8156b509050aa1e7",
+    "apk/unit-120-final.log": "0d39ef179eee3720c57d73377e621fa121ef95e6f481ea8647837c1844940246",
+    "final-source-checks.log": "a42c9b6d3f214394fcc711ecac759c1b7b7ae38b4ad8f720b1f3b0be46a85b07",
+    "native-arm64/assets/restricted-build.json": "e5f7e532ab9dc8bad56f47dd63946edf57578bfc809a7104016d19f8a3496d98",
+    "native-exports.txt": "67e63c0b4697cea6a97f77c9e39884e272bed2dc7dcb5e64a461de0037aaf746",
+    "native-build.log": "481c3c983dd9b4b9de9ffd9861b2e4ab48a1f99369071235beda00a43f50cdf6",
+    "accepted-apk-120/verification.json": "487d409a21d78c58f59847c6c495343f1dbca6d23982bce4f0d74b56ecbd950e",
+    "accepted-apk-120/normal-native.json": "b31e83ada626af402ca554274997d2cb6c35b646646b0bec8098828eed0f004f",
+    "accepted-apk-120/audio-build.json": "078d8f09212558c06d31b5d37b68e5f600c4347eaf3de681d494a0182f6921bf",
+    "apk/build-2.log": "f7a76b19891c506dfcb9d3b8b82cecc14cf297fe211636a3c524c5468af411bb",
+    "apk/build-3.log": "731ec9402de3537d4a9ac3c21bdc30ad9b81e86d255d7938de715d9e0cc65da5",
+    "apk/build-4.log": "a36d7f120f4559fb8e21d89e383f1c9977e53b69684dff38892d08faa240ee4b",
+    "apk/package-check-120.log": "932184b55c87c30fee588956d948bbf6a0eb706a55fba14434f3552a3d0e31fc",
+    "apk/selector-before-instructions.txt": "e124f6298214dec15f46bd096d0224bfc9fd773411b388814d626fd1639abf16",
+    "apk/selector-after-instructions.txt": "e124f6298214dec15f46bd096d0224bfc9fd773411b388814d626fd1639abf16",
+    "server-7398858/manifest.json": "c5c010804b7f383507af3dfd8dc8017d3a52af8380f1113b5e9d21d96cd0fe3e",
+    "server-reproducibility.json": "e8de54f8a799cdb794646760b7ca85f2955868a18c4af331375aefed0c83a824",
+    "server-boundary-race.log": "93d7101170bb78663249a549e03a089919181da4124b23592a8a22cefbe77d83",
+    "final-package-gates.log": "1553994a866b93bb8f05bc07cf7c5075f82aa2e2df1cc581769de97c6bd58129",
+    "orchestrator-package-contract.log": "7b58711a0cd9206183408ff980a12d4ff24244c6a8b6816024a4374005fd4c6d",
+    "finalizer-offline-tests.log": "09127636e90d8465f82f790a66934e5f3da05c1cc55460b533816b1c2c46dc8b",
+    "preservation-and-upgrade.json": "c4e5c9dd8507f292856a25d6cf60c7db6e912d2292599454fc940de72001179d",
+    "field-artifact-audit-final.json": "5c90ddb63cc4468a0c168554ffa4d170ab3835e5ff830b37367ba89fba846457"
+  }
+}

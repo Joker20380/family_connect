@@ -35,7 +35,7 @@ func (s *Session) dialWebSocket(ctx context.Context) error {
 		_ = resp.Body.Close()
 	}
 	if err != nil {
-		return errors.New("telemost: signaling connection failed")
+		return connectionFailure("SIGNAL_CONNECT", "SIGNAL_TRANSPORT", 0, err)
 	}
 	conn.SetReadLimit(wsReadLimit)
 	conn.SetPongHandler(func(string) error {

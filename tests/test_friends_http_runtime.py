@@ -97,13 +97,15 @@ def running(runtime):
         process.communicate(timeout=5)
 
 
-def nginx_sections():
+def nginx_sections(*, extensions=True):
     source = (ROOT / 'deploy/friends/install-access.py').read_text()
     ordinary = source[source.index('        location ~ ^/friends/'):source.index("\n'''", source.index('        location ~ ^/friends/'))]
-    old = 'referral/(issue|claim)|device/(status|support|diagnostics)|notices/publish)'
+    old = 'referral/(issue|claim)|device/(status|subscription|support|diagnostics)|notices/publish)'
     assert ordinary.count(old) == 1
-    ordinary = ordinary.replace(old, 'referral/(issue|claim)|device/(status|support|diagnostics)|notices/(publish|device/(role|publish|list|edit)))')
-    ordinary += (ROOT / 'deploy/friends/gateway-selection-location.conf').read_text()
+    ordinary = ordinary.replace(old, 'referral/(issue|claim)|device/(status|subscription|support|diagnostics)|notices/(publish|device/(role|publish|list|edit)))')
+    if extensions:
+        ordinary += (ROOT / 'deploy/friends/gateway-selection-location.conf').read_text()
+        ordinary += (ROOT / 'deploy/friends/subscription-location.conf').read_text()
     tree = ast.parse((ROOT / 'deploy/server-load/publish.py').read_text())
     status = next(ast.literal_eval(node.value) for node in tree.body
                   if isinstance(node, ast.Assign) and node.targets[0].id == 'section')
@@ -146,6 +148,74 @@ def test_online_diagnostic_route_binds_proof_to_safe_report(runtime):
         assert request(runtime['backend'], '/friends/device/diagnostics', body={})[0] == 403
 
 
+def test_technical_metadata_versioned_route_and_revoke(runtime):
+    from test_technical_metadata import report
+    with running(runtime):
+        device = runtime['canary']
+        for sequence, operation in ((1, 'sample'), (2, 'revoke')):
+            raw = json.dumps(report(sequence=sequence, operation=operation))
+            status, body = request(runtime['backend'], '/friends/challenge', body=dict(
+                public_identity=device.public_identity, wireguard_public_key=device.wireguard_public_key,
+                purpose='technical-metadata-v1:' + hashlib.sha256(raw.encode()).hexdigest(), invitation=''))
+            assert status == 200
+            signed = device.prove_transport_key(json.loads(body)['challenge'])
+            status, body = request(runtime['backend'], '/friends/device/technical-metadata/v1',
+                                   body=dict(proof=signed, report=raw))
+            assert status == 200
+            assert json.loads(body)['consent'] == ('enabled' if operation == 'sample' else 'revoked')
+        assert request(runtime['backend'], '/friends/device/technical-metadata/v1', body={})[0] == 403
+
+
+def test_metadata_tls_ingress_and_spoofed_ip_never_become_report_data(runtime):
+    import ssl
+    from test_technical_metadata import report
+    from control.friends.technical_metadata import read_all
+    with running(runtime), ingress(runtime, True, tls=True) as frontend:
+        context = ssl.create_default_context(cafile=str(runtime['https_anchor']))
+        def post(path, payload):
+            connection = http.client.HTTPSConnection('127.0.0.1', frontend, context=context, timeout=4)
+            connection.request('POST', path, json.dumps(payload), headers={'Content-Type': 'application/json',
+                'X-Forwarded-For': '1.1.1.1', 'Forwarded': 'for=1.1.1.1', 'X-FC-Ingress-Peer': '1.1.1.1'})
+            response = connection.getresponse(); raw = response.read(); connection.close()
+            assert response.status == 200
+            return json.loads(raw)
+        device = runtime['canary']; raw = json.dumps(report())
+        challenge = post('/friends/challenge', dict(public_identity=device.public_identity,
+            wireguard_public_key=device.wireguard_public_key,
+            purpose='technical-metadata-v1:' + hashlib.sha256(raw.encode()).hexdigest(), invitation=''))
+        reply = post('/friends/device/technical-metadata/v1', dict(report=raw, proof=device.prove_transport_key(challenge['challenge'])))
+        assert reply['consent'] == 'enabled'
+        records = read_all(runtime['state'] / 'technical-metadata.sqlite', int(time.time()))
+        assert records[0]['device'] == device.reference
+        assert '1.1.1.1' not in json.dumps(records)
+        assert 'geoip' not in records[0]
+
+
+def test_metadata_nginx_overwrites_peer_and_drops_forwarding_chain(runtime):
+    from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+    import threading
+    observed = []
+    class Capture(BaseHTTPRequestHandler):
+        def do_POST(self):
+            observed.append(dict(peer=self.headers.get('X-FC-Ingress-Peer'), xff=self.headers.get('X-Forwarded-For'),
+                                 forwarded=self.headers.get('Forwarded')))
+            self.rfile.read(int(self.headers.get('Content-Length', 0)))
+            self.send_response(200); self.send_header('Content-Length', '2'); self.end_headers(); self.wfile.write(b'{}')
+        def log_message(self, *args):
+            pass
+    server = ThreadingHTTPServer(('127.0.0.1', runtime['backend']), Capture)
+    worker = threading.Thread(target=server.serve_forever, daemon=True); worker.start()
+    try:
+        with ingress(runtime, True) as frontend:
+            connection = http.client.HTTPConnection('127.0.0.1', frontend, timeout=4)
+            connection.request('POST', '/friends/device/technical-metadata/v1', '{}', headers={
+                'X-FC-Ingress-Peer': '1.1.1.1', 'X-Forwarded-For': '1.1.1.1, 8.8.8.8', 'Forwarded': 'for=8.8.8.8'})
+            reply = connection.getresponse(); assert reply.status == 200; reply.read(); connection.close()
+    finally:
+        server.shutdown(); server.server_close(); worker.join(3)
+    assert observed == [dict(peer='127.0.0.1', xff=None, forwarded=None)]
+
+
 @contextlib.contextmanager
 def ingress(runtime, enabled, tls=False):
     executable = os.environ.get('FC_TEST_NGINX')
@@ -175,8 +245,10 @@ def ingress(runtime, enabled, tls=False):
         tls_config = ' ssl;ssl_certificate ' + str(certificate_path) + ';ssl_certificate_key ' + str(private_path)
     ordinary, status = nginx_sections()
     location = (ROOT / 'deploy/friends/restricted/nginx-location.conf').read_text() if enabled else ''
-    server = status.replace('/etc/fc/server-load/snapshot.json', str(snapshot)) + location + ordinary
+    metadata = (ROOT / 'deploy/friends/technical-metadata-location.conf').read_text()
+    server = status.replace('/etc/fc/server-load/snapshot.json', str(snapshot)) + location + ordinary + metadata
     server = server.replace('127.0.0.1:18084', '127.0.0.1:' + str(runtime['backend']))
+    server = server.replace('127.0.0.1:18086', '127.0.0.1:' + str(runtime['backend']))
     config = work / 'nginx.conf'
     config.write_text('pid ' + str(work / 'nginx.pid') + ';\nerror_log ' + str(work / 'errors.log') + ';\n'
                       'events {}\nhttp { access_log off; client_body_temp_path ' + str(work / 'body') + ';'

@@ -99,7 +99,9 @@ class Worker:
 
 
 @pytest.fixture
-def service(tmp_path):
+def service(tmp_path, request):
+    from resource_audit import boundary
+    boundary(request, 'service-setup')
     materials, workers, gates = Materials(), [], []
     network = dict(index=2, name='synthetic-underlay', addresses=['192.0.2.1'])
     def worker(gate):
@@ -117,7 +119,9 @@ def service(tmp_path):
     bridge = ChatBridge(DEVICE, _paths=[], _root_uid=os.getuid())
     bridge.service_path = host.endpoint
     bridge.configure(material)
+    boundary(request, 'service-ready')
     yield SimpleNamespace(owner=owner, host=host, bridge=bridge, materials=materials, workers=workers, gates=gates, network=network)
+    boundary(request, 'service-teardown')
     bridge.close()
     owner.cancel.set()
     host.close()
@@ -130,6 +134,7 @@ def service(tmp_path):
     for value in workers:
         for peer in value.chat.peers:
             peer.close()
+    boundary(request, 'service-released')
 
 
 def test_service_api_and_real_mailbox_fd_without_packet_owner(service):

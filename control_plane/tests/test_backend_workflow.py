@@ -28,7 +28,11 @@ def counts():
 def test_real_postgresql_and_no_subscription_models(console):
     assert connection.vendor == 'postgresql'
     names = connection.introspection.table_names()
-    assert not any('subscription' in name or name == 'paid_beta_events' for name in names)
+    assert {name for name in names if 'subscription' in name or name == 'paid_beta_events'} == {
+        'console_subscriptionsnapshot', 'console_subscriptioneventobservation'}
+    with connection.cursor() as cursor:
+        columns = {column.name for column in connection.introspection.get_table_description(cursor, 'console_subscriptionsnapshot')}
+    assert columns == {'id', 'observed_at', 'imported_at', 'digest', 'status', 'runtime_sha256', 'devices', 'history'}
     assert len(backend.members()) == DeviceProjection.objects.count() == 50
     assert counts() == (0, 0)
 
@@ -261,3 +265,19 @@ def test_concurrent_execute_keeps_one_backend_event(console, operation):
         results = list(pool.map(lambda _: run(), range(2)))
     assert 'APPLIED' in results and set(results) <= {'APPLIED', 'IN_FLIGHT'}
     assert counts() == (1, 1)
+
+
+def test_policy_expansion_preserves_demo108_metadata_and_registry(console):
+    from django.core.management import call_command
+    from apps.console.models import ReleaseMetadata
+
+    before_registry = backend.checked_path().read_bytes()
+    before_metadata = list(ReleaseMetadata.objects.values())
+    assert [item.version_code for item in paid_beta.PAID_ANDROID_RELEASES] == [108, 119, 123, 125, 126]
+    call_command('seed_demo', verbosity=0)
+    assert backend.checked_path().read_bytes() == before_registry
+    assert list(ReleaseMetadata.objects.values()) == before_metadata
+    release = ReleaseMetadata.objects.get(version_name='0.1.18-beta108')
+    assert release.version_code == 108 and release.size == 56212840
+    assert release.sha256 == '144b158fe4c07dd19a67683887558cf88a0202b937d135a9924698ffc11b4fdf'
+    assert not ReleaseMetadata.objects.filter(version_code__in=[119, 123, 125, 126]).exists()

@@ -39,7 +39,7 @@ def test_strict_import_is_isolated_idempotent_and_read_only(console, client):
     assert backend.checked_path().read_bytes() == before
     client.force_login(console)
     page = client.get('/inventory/' + 'a' * 64 + '/')
-    assert page.status_code == 200 and 'История наблюдений' in page.content.decode()
+    assert page.status_code == 200 and 'События и наблюдения' in page.content.decode()
     for model, key in [('inventorysnapshot', first.pk), ('inventorydevice', first.devices.first().pk),
         ('serverobservation', first.server.pk), ('technicalsample', 1), ('operationswitch', 1)]:
         assert client.get(f'/admin/console/{model}/add/').status_code == 403
@@ -80,7 +80,7 @@ def test_strict_json(raw):
         inventory.strict_load(raw)
 
 
-def test_collector_queries_no_keys_no_aliases_no_writes(console):
+def test_collector_queries_no_keys_and_explicit_support_metadata_no_writes(console):
     path = backend.checked_path()
     before = path.read_bytes()
     rows = collector.registry_rows(path, b's' * 32)
@@ -90,8 +90,10 @@ def test_collector_queries_no_keys_no_aliases_no_writes(console):
     with backend.registry() as database:
         canonical = database.execute('SELECT device FROM devices LIMIT 1').fetchone()[0]
         alias = backend.selector(database, canonical)
-    assert canonical not in json.dumps(rows) and alias not in json.dumps(rows)
-    assert set(rows[0]) == {'pseudonym', 'activated', 'revoked', 'version_code', 'version_source', 'last_seen'}
+    assert canonical not in json.dumps(rows)
+    assert alias in [row['metadata']['support_id'] for row in rows]
+    assert set(rows[0]) == {'pseudonym', 'activated', 'revoked', 'version_code', 'version_source', 'last_seen', 'metadata'}
+    assert set(rows[0]['metadata']) == {'platform', 'app_version', 'support_id', 'observed_at'}
 
 
 def test_collector_missing_database_does_not_create(tmp_path):
@@ -126,7 +128,7 @@ def test_observability_authentication_and_russian(console, client, path):
     assert result.status_code == 200 and result['Cache-Control'] == 'no-store'
     if path != '/telemetry.json':
         text = result.content.decode()
-        assert 'lang="ru"' in text and 'Наблюдаемость' in text
+        assert 'lang="ru"' in text and 'Источники и архив' in text
 
 
 def test_missing_telemetry_is_null_not_zero_and_demo_is_separate(console, client):
@@ -193,7 +195,7 @@ def test_two_nodes_are_isolated_and_legacy_history_cannot_fill_missing_node(cons
     assert 'Амстердам 1' in text and 'Амстердам 2' in text
     assert 'Нет данных. Доступность и нулевая нагрузка не подтверждены.' in text
     assert 'Архивный узел' in client.get('/servers/gateway-nl/').content.decode()
-    assert len(client.get('/servers/nl-amsterdam-2/').context['snapshots']) == 0
+    assert client.get('/servers/nl-amsterdam-2/').context['server']['snapshot'] is None
     second = deepcopy(first)
     second['source'] = 'nl-amsterdam-2'
     second['server']['load_1m'] = 0.75

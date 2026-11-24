@@ -8,6 +8,7 @@ import java.util.concurrent.*;
 public final class ConnectionService extends Service {
     static volatile String status="off",activeTransport="wg",requestedTransport="wg";
     static volatile boolean failed=false;
+    static volatile int failureMessage=R.string.failed;
     static volatile String healthStatus="off",vpnSource=null;
     static volatile long sessionId=0;
     static volatile String controlOutcome;
@@ -15,6 +16,10 @@ public final class ConnectionService extends Service {
     private static final java.util.concurrent.atomic.AtomicLong sessionCounter=new java.util.concurrent.atomic.AtomicLong();
     private final Object operationOwner=new Object();
     private TunnelEngine engine;
+    private AppVpnAndroid applications;
+    static volatile AppVpnPolicy activeApplications;
+    static volatile String observedGateway="UNKNOWN";
+    private String connectionGateway;
     private volatile AutomaticConnection automaticConnection;
     private final ScheduledExecutorService rnsWorker=Executors.newSingleThreadScheduledExecutor();
     private volatile ControlRnsAndroid rnsCarrier;
@@ -37,19 +42,34 @@ public final class ConnectionService extends Service {
     private volatile VpnHealth health;
     private ScheduledFuture<?> pending;
     private String source;
+    @Override public void onCreate(){super.onCreate();ControlOperations.APP.beginAttempt(operationOwner);TechnicalMetadataUpload.start(this);}
+    private void unclaimedOff(){ControlOperations.APP.unclaimed(operationOwner,()->{status="off";});}
+    private void rejectPolicy(){
+        ControlOperations.APP.unclaimed(operationOwner,()->{
+            failed=true;failureMessage=R.string.app_vpn_invalid;status="off";forgetRequest(this);
+        });
+        android.widget.Toast.makeText(this,R.string.app_vpn_invalid,android.widget.Toast.LENGTH_LONG).show();
+        stopSelf();
+    }
     static void forgetRequest(android.content.Context context){context.getSharedPreferences("connection-request",MODE_PRIVATE).edit().putBoolean("requested",false).commit();}
     private int restartMode(){return getSharedPreferences("connection-request",MODE_PRIVATE).getBoolean("requested",false)?START_STICKY:START_NOT_STICKY;}
     private Intent resumeRequest(){
         android.content.SharedPreferences saved=getSharedPreferences("connection-request",MODE_PRIVATE);
         String transport=saved.getString("transport",null);
         if(!ConnectionResume.allowed(saved.getBoolean("requested",false),VpnService.prepare(this)==null,transport)){forgetRequest(this);return null;}
-        return new Intent(this,ConnectionService.class).setAction("connect").putExtra("transport",transport).putExtra("country",saved.getString("country",null));
+        return new Intent(this,ConnectionService.class).setAction("connect").putExtra("transport",transport).putExtra("country",saved.getString("country",null)).putExtra("resume-app-policy",true);
     }
     @Override public int onStartCommand(Intent incomingIntent,int flags,int startId){
         final Intent intent=incomingIntent==null?resumeRequest():incomingIntent;
         if(intent==null){stopSelf();return START_NOT_STICKY;}
         startForeground(1,notification());
-        if("disconnect".equals(intent.getAction())){forgetRequest(this);if(!started){stopSelf();return START_NOT_STICKY;}cancel();worker.execute(()->owned(this::stopConnection));return START_NOT_STICKY;}
+        if("disconnect".equals(intent.getAction())){
+            interruptWork();
+            if(!claimed)ControlOperations.APP.unclaimed(operationOwner,()->{forgetRequest(this);status="off";});
+            if(!started){stopSelf();return START_NOT_STICKY;}
+            worker.execute(()->{if(claimed)owned(()->{forgetRequest(this);cancel();stopConnection();});else{unclaimedOff();main.post(this::stopSelf);}});
+            return START_NOT_STICKY;
+        }
         final boolean sync=intent!=null&&"sync-control".equals(intent.getAction());
         final boolean intake=intent!=null&&"apply-control".equals(intent.getAction());
         final boolean selection=intent!=null&&"select-gateway".equals(intent.getAction());
@@ -65,27 +85,40 @@ public final class ConnectionService extends Service {
             return START_NOT_STICKY;
         }
         if(started||stopping||closing){if(intake||sync||selection)reportControl("BUSY");return restartMode();}
-        final String priorStatus=status;
+        final boolean connectRequested="connect".equals(intent.getAction());
+        try{
+            AppVpnPolicy policy=!connectRequested?AppVpnPolicy.all():intent.getBooleanExtra("resume-app-policy",false)
+                ?AppVpnStore.decode(getSharedPreferences("connection-request",MODE_PRIVATE).getString("app-policy",null))
+                :new AppVpnStore(this).read();
+            applications=new AppVpnAndroid(this,policy);
+        }catch(IllegalArgumentException|ClassCastException invalid){
+            rejectPolicy();return START_NOT_STICKY;
+        }
         byte[] received=null;
         if(intake){try{received=ControlIntake.copy(intent.getByteArrayExtra("envelope"));}
             catch(Exception invalid){reportControl("FAILED");stopSelf();return START_NOT_STICKY;}}
         final byte[] incoming=received;
-        started=true;status="connecting";failed=false;
-        String id=intent==null?"auto":intent.getStringExtra("transport");requestedTransport=id==null?"auto":id;
-        automatic="auto".equals(requestedTransport)||"telemost".equals(requestedTransport);
-        terminalAttempt=ConnectionTerminal.VPN.begin(ConnectionTerminal.Stage.PREPARING);
-        final boolean connectRequested=intent!=null&&"connect".equals(intent.getAction());
-        if(connectRequested){
-            boolean retain=ConnectionResume.allowed(true,true,requestedTransport);
-            if(!getSharedPreferences("connection-request",MODE_PRIVATE).edit().putBoolean("requested",retain)
-                .putString("transport",requestedTransport).putString("country",intent.getStringExtra("country")).commit()){
-                failed=true;status="failed";forgetRequest(this);stopSelf();return START_NOT_STICKY;
-            }
-        }
+        started=true;
         worker.execute(()->{
+            if(stopping||closing)return;
             try{ControlOperations.APP.claim(operationOwner);claimed=true;}
-            catch(Exception busy){if(intake||selection)reportControl("BUSY");main.post(()->{status=priorStatus;stopSelf();});return;}
+            catch(Exception busy){if(intake||selection)reportControl("BUSY");main.post(this::stopSelf);return;}
             owned(()->{
+                if(stopping||closing){stopConnection();return;}
+                status="connecting";failed=false;failureMessage=R.string.failed;
+                String id=intent.getStringExtra("transport");requestedTransport=id==null?"auto":id;
+                connectionGateway=intent.getStringExtra("country");observedGateway="UNKNOWN";
+                automatic="auto".equals(requestedTransport)||"telemost".equals(requestedTransport);
+                terminalAttempt=ConnectionTerminal.VPN.begin(ConnectionTerminal.Stage.PREPARING);
+                if(connectRequested){
+                    boolean retain=ConnectionResume.allowed(true,true,requestedTransport);
+                    if(!getSharedPreferences("connection-request",MODE_PRIVATE).edit().putBoolean("requested",retain)
+                        .putString("app-policy",AppVpnStore.encode(applications.policy))
+                        .putString("transport",requestedTransport).putString("country",intent.getStringExtra("country")).commit()){
+                        failed=true;forgetRequest(this);cancel();stopConnection();return;
+                    }
+                    activeApplications=applications.policy;
+                }
                 try{
                     if(selection){reportControl(controlNow(null,false,false,gateway));}
                     else if(sync){
@@ -148,12 +181,15 @@ public final class ConnectionService extends Service {
         try{ControlOperations.APP.session(operationOwner,action);}
         catch(ControlOperations.Stale ignored){/* Late callback belongs to a released service. */}
     }
-    private void cancel(){ConnectionTerminal.VPN.end(terminalAttempt,failed?ConnectionTerminal.Stage.FAILED:ConnectionTerminal.Stage.CANCELLED,false);AutomaticConnection connection=automaticConnection;if(connection!=null)connection.interrupt(ConnectivityOrchestrator.Failure.CANCELLED);rnsEnabled=false;ControlRnsAndroid transport=rnsCarrier;if(transport!=null)transport.cancel();stopping=true;status="disconnecting";healthStatus="off";VpnHealth h=health;if(h!=null)h.cancel();ControlTrafficHealth c=controlHealth;if(c!=null)c.cancel();}
+    private void interruptWork(){stopping=true;AutomaticConnection connection=automaticConnection;if(connection!=null)connection.interrupt(ConnectivityOrchestrator.Failure.CANCELLED);rnsEnabled=false;ControlRnsAndroid transport=rnsCarrier;if(transport!=null)transport.cancel();VpnHealth h=health;if(h!=null)h.cancel();ControlTrafficHealth c=controlHealth;if(c!=null)c.cancel();}
+    private void cancel(){interruptWork();ConnectionTerminal.VPN.end(terminalAttempt,failed?ConnectionTerminal.Stage.FAILED:ConnectionTerminal.Stage.CANCELLED,false);status="disconnecting";healthStatus="off";}
     private void schedule(Runnable action,int seconds){if(!stopping&&!closing)pending=worker.schedule(()->owned(action),seconds,TimeUnit.SECONDS);}
     private boolean cleanup(){
         managedExpiry=0;Runnable lease=leaseTask;if(lease!=null){main.removeCallbacks(lease);leaseTask=null;}ControlTrafficHealth c=controlHealth;if(c!=null)c.cancel();
         ++generation;sessionId=sessionCounter.incrementAndGet();vpnSource=null;healthStatus="off";if(pending!=null)pending.cancel(false);if(health!=null){health.cancel();health=null;}
-        try{if(engine!=null){engine.down();engine=null;}automaticConnection=null;return true;}
+        try{if(engine!=null){engine.down();engine=null;}automaticConnection=null;
+            if((closing||stopping)&&applications!=null&&activeApplications==applications.policy)activeApplications=null;
+            return true;}
         catch(Exception|LinkageError e){failed=true;stopping=true;status="cleanup-required";main.post(this::notifyState);return false;}
     }
     private void startAutomatic(String country){
@@ -167,7 +203,7 @@ public final class ConnectionService extends Service {
             }
             if("restoration_attempted".equals(event.name)){sessionId=sessionCounter.incrementAndGet();vpnSource=null;}
             switch(event.state){
-                case CONNECTED:status="on";healthStatus="ok";break;
+                case CONNECTED:observedGateway=TechnicalMetadataSnapshot.gateway(country);status="on";healthStatus="ok";break;
                 case RESTORING:status="restoring";healthStatus="checking";break;
                 case FAILED:status="failed";healthStatus="unavailable";failed=true;forgetRequest(this);break;
                 case DISCONNECTED:status="disconnecting";healthStatus="off";break;
@@ -175,7 +211,7 @@ public final class ConnectionService extends Service {
                 default:status="connecting";healthStatus="checking";
             }
             main.post(this::notifyState);
-        });
+        },applications);
         automaticConnection=connection;engine=connection;
         if(stopping||closing)connection.interrupt(ConnectivityOrchestrator.Failure.CANCELLED);
         connection.up(getSharedPreferences("connectivity",MODE_PRIVATE).getString("preferred",null));
@@ -194,10 +230,11 @@ public final class ConnectionService extends Service {
         activeTransport=type.id;status="connecting";main.post(this::notifyState);
         source=type==Transport.TCP?"10.79.0.2":org.amnezia.awg.config.Config.parse(new java.io.ByteArrayInputStream(profile.getBytes(java.nio.charset.StandardCharsets.UTF_8))).getInterface().getAddresses().stream().filter(a->a.getAddress() instanceof java.net.Inet4Address).findFirst().orElseThrow(()->new IllegalArgumentException("IPv4 required")).getAddress().getHostAddress();
         final long token=++generation;sessionId=sessionCounter.incrementAndGet();vpnSource=source;healthStatus="checking";
-        engine=TunnelEngine.create(this,type,up->{if(!up&&token==generation&&!stopping&&!closing){cancel();worker.execute(()->owned(this::stopConnection));}});
+        engine=TunnelEngine.create(this,type,up->{if(!up&&token==generation&&!stopping&&!closing){cancel();worker.execute(()->owned(this::stopConnection));}},applications);
         engine.up(profile);
+        observedGateway=TechnicalMetadataSnapshot.gateway(connectionGateway);
         if(stopping||closing){stopConnection();return;}
-        health=new VpnHealth(this);if(!controlApplying)schedule(()->probe(token),1);
+        health=new VpnHealth(this,applications.routesOwnUid()?null:engine::probeDns);if(!controlApplying)schedule(()->probe(token),1);
         if(!automatic&&!controlApplying){status="on";ConnectionTerminal.VPN.end(terminalAttempt,ConnectionTerminal.Stage.VPN_READY,true);main.post(this::notifyState);}
     }
     private void startRestricted(String control)throws Exception{
@@ -205,7 +242,7 @@ public final class ConnectionService extends Service {
         final long token=++generation;sessionId=sessionCounter.incrementAndGet();activeTransport="restricted";
         RestrictedTunnelEngine restricted=new RestrictedTunnelEngine(this,()->stopping||closing,up->{
             if(!up&&token==generation&&!stopping&&!closing){cancel();worker.execute(()->owned(this::stopConnection));}
-        });
+        },applications);
         engine=restricted;
         boolean refresh="restricted-refresh".equals(requestedTransport);
         if(refresh&&(control==null||!control.startsWith("https://")))throw new IllegalArgumentException("Preparation endpoint required");
@@ -331,9 +368,15 @@ public final class ConnectionService extends Service {
             .setContentText(automatic?getString(status.equals("on")?R.string.on:status.equals("restoring")?R.string.restoring:status.equals("failed")?R.string.unable_connect:R.string.connecting):activeTransport.toUpperCase(java.util.Locale.ROOT)+" · "+getString(status.equals("on")?(healthStatus.equals("unavailable")?R.string.health_unavailable:R.string.on):R.string.connecting)).setContentIntent(open)
             .setOngoing(true).setOnlyAlertOnce(true).addAction(new Notification.Action.Builder(null,getString(R.string.disconnect),stop).build()).build();
     }
-    private void notifyState(){if(!closing)getSystemService(NotificationManager.class).notify(1,notification());}
+    private void notifyState(){TechnicalMetadataUpload.changed(this);if(!closing)getSystemService(NotificationManager.class).notify(1,notification());}
     @Override public void onDestroy(){
-        closing=true;rnsEnabled=false;ControlRnsAndroid transport=rnsCarrier;if(transport!=null)transport.cancel();rnsWorker.shutdownNow();if(claimed)cancel();else stopping=true;worker.execute(()->owned(()->{if(cleanup()){ControlOperations.APP.release(operationOwner);claimed=false;status="off";}}));worker.shutdown();stopForeground(STOP_FOREGROUND_REMOVE);super.onDestroy();
+        closing=true;rnsEnabled=false;ControlRnsAndroid transport=rnsCarrier;if(transport!=null)transport.cancel();rnsWorker.shutdownNow();
+        interruptWork();
+        worker.execute(()->{
+            if(claimed)owned(()->{cancel();if(cleanup()){ControlOperations.APP.release(operationOwner);claimed=false;status="off";}});
+            else unclaimedOff();
+        });
+        worker.shutdown();stopForeground(STOP_FOREGROUND_REMOVE);super.onDestroy();
     }
     @Override public IBinder onBind(Intent intent){return null;}
 }

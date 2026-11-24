@@ -547,6 +547,21 @@ Its25-entry `sha256.json` also pins ingress, both HTTP drop-ins, lockfiles and t
 receipt harness. Recheck bytes against current source and after transfer; never
 rebuild silently and deploy an untested replacement. Venv must match both lockfiles.
 
+**Subscription integration6 November:** current canonical HTTP builds also include
+`control/friends/subscription.py`, the dedicated Friends proof purpose and the handler;
+`subscription-location.conf` is shipped beside the archive. The bundle produced above
+is historical, not evidence that a newly built artifact was deployed. On an existing
+HTTPS ingress preserve all current locations/drop-ins and use the packaged exact
+subscription location with the **actual accepted upstream port** (the template uses
+18084; the accepted subscription runtime currently uses18086). Do not run the
+first-install script on an existing deployment or overwrite its configuration.
+Do not remove the live subscription location when replacing a code artifact.
+The paid-boundary source capsule passes both gateway-selection and subscription
+templates to the canonical HTTP builder; it does not install ingress configuration.
+Use `tests/test_subscription_package.py` for real isolated packaged HTTP/proof/decoder/
+encrypted-store checks, with `FC_TEST_NGINX` for the real local ingress test. No restart
+is needed merely to verify a package. See the [integration report](../../../docs/releases/2026-11-06-subscription-integration-1.md).
+
 Only after separate explicit attempt #4 authorization, fresh live backups/JIT
 authority and NL READY/UTC-Z/RU isolated sync check/live sync/negative checks PASS:
 

@@ -1,0 +1,26 @@
+name: Subscription notification route
+on:
+  push:
+    paths: ['control/friends/subscription_events.py', 'provisioning/subscription_*.py', 'provisioning/support_worker.py', 'provisioning/support_bindings.py', 'messenger/**', 'deploy/support-chat/**', 'deploy/friends/support-bindings-read.py', 'scripts/package_support_chat.py', '.github/workflows/subscription-notifications.yml']
+  pull_request:
+    paths: ['control/friends/subscription_events.py', 'provisioning/subscription_*.py', 'provisioning/support_worker.py', 'provisioning/support_bindings.py', 'messenger/**', 'deploy/support-chat/**', 'deploy/friends/support-bindings-read.py', 'scripts/package_support_chat.py', '.github/workflows/subscription-notifications.yml']
+permissions:
+  contents: read
+jobs:
+  isolated-route:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m pip install -r control/requirements.lock -r provisioning/requirements.lock -r device_identity/requirements.lock
+      - run: python -m pip install --no-deps --require-hashes -r messenger/requirements.lock
+      - run: python -m pytest -q messenger/tests tests/test_support_binding.py tests/test_support_collector.py tests/test_support_package.py tests/test_support_upgrade.py --tb=short
+      - run: python -m scripts.package_support_chat --output artifacts/support-chat-kit
+      - uses: actions/upload-artifact@v4
+        with:
+          name: subscription-support-kit
+          path: artifacts/support-chat-kit.tar.gz
+          if-no-files-found: error

@@ -1,0 +1,504 @@
+{
+  "result": "THERMAL_LIMIT_AFTER_ANDROID_READY_REDUCED_LOAD",
+  "documentation_checkpoint": "f7073e6d1c414e725c7ac222095caa309021942c",
+  "product_source": "6eb61a9faa659b6b07ac16bf9f4bac46a41cd2a7",
+  "source_tree": "478392e43bd3e71f04f2a3bd880c40a51e38d2e9",
+  "branch": "feature/android-cold-provisioning-20261106",
+  "product_delta_after_source": false,
+  "native_sha256": "17119f000407ec1d7ccdf8d33acabe423f3cf20e32b6f8af839d209aa3360c59",
+  "abi": "x86_64",
+  "android_api": 27,
+  "native_rebuilt": false,
+  "accepted_android_jni_gate": "PASS_RETAINED_NOT_REPEATED",
+  "host_jvm_race_suites_repeated": false,
+  "immutable": {
+    "source": "6eb61a9faa659b6b07ac16bf9f4bac46a41cd2a7",
+    "documentation_checkpoint": "f7073e6d1c414e725c7ac222095caa309021942c",
+    "native_rebuilt": false,
+    "accepted_android_gate_repeated": false,
+    "retained": {
+      "native-x86-1/jniLibs/x86_64/libfc_restricted.so": "17119f000407ec1d7ccdf8d33acabe423f3cf20e32b6f8af839d209aa3360c59",
+      "offline-artifacts/app-friends.apk": "405f739958676a887bd2e74d4af522cab2fa9de14188bed731c1b0db0b310cbb",
+      "offline-artifacts/app-friends-androidTest.apk": "3f4965c8195bc23b7a7795992e4f775f706307e61c455fd6934b0cb387f0eed5"
+    },
+    "stand_sha256": "7a6a5f458160bf0eadac6a8708a702c433155cf9f8d825afb2ff982207fa3d6a",
+    "verifier_sha256": "e767362d3da3fba9fba31a4a940e8699bd9c56aed489f0488b1960c276ddb7d1",
+    "own_test_signer_only": true,
+    "host_egress_digest_not_android_proof": true,
+    "reuses_owned_avd": true
+  },
+  "pre_avd_preflight_count": 1,
+  "avd_start_count": 1,
+  "reboot_between_stages": false,
+  "existing_owned_userdata_reused": true,
+  "gpu_mode": "host",
+  "acceleration": "on / KVM",
+  "renderer": "GLES: Google (NVIDIA Corporation), Android Emulator OpenGL ES Translator (NVIDIA GeForce GTX 1650 Ti/PCIe/SSE2), OpenGL ES 3.1 (4.5.0 NVIDIA 580.178.04)",
+  "guards": {
+    "cpu_c_stop_at": 85,
+    "gpu_c_stop_at": 80,
+    "emulator_lifetime_seconds": 180,
+    "memory_min_kib": 4194304,
+    "avd_disk_min_mib": 7372,
+    "cpu_quota_percent": 100,
+    "unchanged": true
+  },
+  "cold_no_test_package_no_vpn": true,
+  "guest_clock_converged_without_adjustment": true,
+  "last_clock_observation": {
+    "host_before": 1794001644.7808053,
+    "host_after": 1794001644.8100526,
+    "guest": 1794001644
+  },
+  "oauth_started": false,
+  "authority_or_workers_started": false,
+  "new_rooms": 0,
+  "new_identity_or_locator": false,
+  "new_final_apk": false,
+  "install": false,
+  "guest_block_rules_applied": false,
+  "connect_attempted": false,
+  "authorized_connects_consumed": 0,
+  "candidate_budget_ms": 200000,
+  "readiness_budget_ms": 30000,
+  "new_live_go_carrier_tls_challenge": "NOT_RUN",
+  "native_live_cause": "UNKNOWN_NOT_A_PROVISIONING_ATTEMPT",
+  "bundle_ready_dns_verified_https_egress": "NOT_RUN",
+  "primary_failure": {
+    "type": "AssertionError",
+    "code": "THERMAL_PREFLIGHT",
+    "stage": "ANDROID_READY_NO_VPN_BEFORE_ROOMS",
+    "source": "existing stage-boundary thermal assertion, not background-watch abort",
+    "elapsed_since_initial_preflight_seconds": 41.74,
+    "snapshot": {
+      "stage": "ANDROID_READY_NO_VPN_BEFORE_ROOMS",
+      "unix_time": 1794001645.9150944,
+      "sample_interval_seconds": 1.069,
+      "temperatures": [
+        {
+          "sensor": "hwmon2/temp6_input",
+          "driver": "coretemp",
+          "label": "Core 4",
+          "celsius": 66.0
+        },
+        {
+          "sensor": "hwmon2/temp3_input",
+          "driver": "coretemp",
+          "label": "Core 1",
+          "celsius": 62.0
+        },
+        {
+          "sensor": "hwmon2/temp7_input",
+          "driver": "coretemp",
+          "label": "Core 5",
+          "celsius": 75.0
+        },
+        {
+          "sensor": "hwmon2/temp4_input",
+          "driver": "coretemp",
+          "label": "Core 2",
+          "celsius": 94.0
+        },
+        {
+          "sensor": "hwmon2/temp1_input",
+          "driver": "coretemp",
+          "label": "Package id 0",
+          "celsius": 94.0
+        },
+        {
+          "sensor": "hwmon2/temp5_input",
+          "driver": "coretemp",
+          "label": "Core 3",
+          "celsius": 66.0
+        },
+        {
+          "sensor": "hwmon2/temp2_input",
+          "driver": "coretemp",
+          "label": "Core 0",
+          "celsius": 69.0
+        }
+      ],
+      "gpu_sensor": "NVIDIA temperature.gpu",
+      "gpu_celsius": 53,
+      "memory_kib": {
+        "MemTotal": 32074740,
+        "MemAvailable": 16279992,
+        "SwapFree": 3770472
+      },
+      "cpu_percent_one_core_100": {
+        "other": 58.01,
+        "runner": 1.87,
+        "emulator": 2.81
+      },
+      "processes": [
+        {
+          "pid": 19485,
+          "name": "firefox-bin",
+          "cpu_percent": 21.51,
+          "role": "other"
+        },
+        {
+          "pid": 16284,
+          "name": "ptyxis",
+          "cpu_percent": 12.16,
+          "role": "other"
+        },
+        {
+          "pid": 1399144,
+          "name": "codex",
+          "cpu_percent": 6.55,
+          "role": "other"
+        },
+        {
+          "pid": 2757576,
+          "name": "codex",
+          "cpu_percent": 6.55,
+          "role": "other"
+        },
+        {
+          "pid": 13381,
+          "name": "gnome-shell",
+          "cpu_percent": 3.74,
+          "role": "other"
+        },
+        {
+          "pid": 2088,
+          "name": "containerd",
+          "cpu_percent": 2.81,
+          "role": "other"
+        },
+        {
+          "pid": 3079674,
+          "name": "qemu-system-x86",
+          "cpu_percent": 2.81,
+          "role": "emulator"
+        },
+        {
+          "pid": 4372,
+          "name": "dockerd",
+          "cpu_percent": 1.87,
+          "role": "other"
+        },
+        {
+          "pid": 3079619,
+          "name": "python3",
+          "cpu_percent": 1.87,
+          "role": "runner"
+        },
+        {
+          "pid": 55,
+          "name": "ksoftirqd?6",
+          "cpu_percent": 0.94,
+          "role": "other"
+        },
+        {
+          "pid": 2749699,
+          "name": "kworker?u48?1-events_unbound",
+          "cpu_percent": 0.94,
+          "role": "other"
+        },
+        {
+          "pid": 3040541,
+          "name": "kworker?2?1-i915-unordered",
+          "cpu_percent": 0.94,
+          "role": "other"
+        },
+        {
+          "pid": 1,
+          "name": "systemd",
+          "cpu_percent": 0.0,
+          "role": "other"
+        },
+        {
+          "pid": 2,
+          "name": "kthreadd",
+          "cpu_percent": 0.0,
+          "role": "other"
+        },
+        {
+          "pid": 3,
+          "name": "pool_workqueue_release",
+          "cpu_percent": 0.0,
+          "role": "other"
+        },
+        {
+          "pid": 4,
+          "name": "kworker?R-rcu_gp",
+          "cpu_percent": 0.0,
+          "role": "other"
+        },
+        {
+          "pid": 5,
+          "name": "kworker?R-sync_wq",
+          "cpu_percent": 0.0,
+          "role": "other"
+        },
+        {
+          "pid": 6,
+          "name": "kworker?R-kvfree_rcu_reclaim",
+          "cpu_percent": 0.0,
+          "role": "other"
+        },
+        {
+          "pid": 7,
+          "name": "kworker?R-slub_flushwq",
+          "cpu_percent": 0.0,
+          "role": "other"
+        },
+        {
+          "pid": 8,
+          "name": "kworker?R-netns",
+          "cpu_percent": 0.0,
+          "role": "other"
+        }
+      ]
+    }
+  },
+  "before_avd": {
+    "stage": "IMMUTABLE_COMPONENTS_READY",
+    "unix_time": 1794001604.1749651,
+    "sample_interval_seconds": 1.042,
+    "temperatures": [
+      {
+        "sensor": "hwmon2/temp6_input",
+        "driver": "coretemp",
+        "label": "Core 4",
+        "celsius": 56.0
+      },
+      {
+        "sensor": "hwmon2/temp3_input",
+        "driver": "coretemp",
+        "label": "Core 1",
+        "celsius": 55.0
+      },
+      {
+        "sensor": "hwmon2/temp7_input",
+        "driver": "coretemp",
+        "label": "Core 5",
+        "celsius": 58.0
+      },
+      {
+        "sensor": "hwmon2/temp4_input",
+        "driver": "coretemp",
+        "label": "Core 2",
+        "celsius": 56.0
+      },
+      {
+        "sensor": "hwmon2/temp1_input",
+        "driver": "coretemp",
+        "label": "Package id 0",
+        "celsius": 58.0
+      },
+      {
+        "sensor": "hwmon2/temp5_input",
+        "driver": "coretemp",
+        "label": "Core 3",
+        "celsius": 55.0
+      },
+      {
+        "sensor": "hwmon2/temp2_input",
+        "driver": "coretemp",
+        "label": "Core 0",
+        "celsius": 58.0
+      }
+    ],
+    "gpu_sensor": "NVIDIA temperature.gpu",
+    "gpu_celsius": 52,
+    "memory_kib": {
+      "MemTotal": 32074740,
+      "MemAvailable": 17637796,
+      "SwapFree": 3770452
+    },
+    "cpu_percent_one_core_100": {
+      "other": 74.88,
+      "runner": 3.84
+    },
+    "processes": [
+      {
+        "pid": 16284,
+        "name": "ptyxis",
+        "cpu_percent": 22.08,
+        "role": "other"
+      },
+      {
+        "pid": 2757576,
+        "name": "codex",
+        "cpu_percent": 18.24,
+        "role": "other"
+      },
+      {
+        "pid": 1399144,
+        "name": "codex",
+        "cpu_percent": 15.36,
+        "role": "other"
+      },
+      {
+        "pid": 13381,
+        "name": "gnome-shell",
+        "cpu_percent": 7.68,
+        "role": "other"
+      },
+      {
+        "pid": 235765,
+        "name": "python3",
+        "cpu_percent": 4.8,
+        "role": "other"
+      },
+      {
+        "pid": 3079619,
+        "name": "python3",
+        "cpu_percent": 3.84,
+        "role": "runner"
+      },
+      {
+        "pid": 19485,
+        "name": "firefox-bin",
+        "cpu_percent": 1.92,
+        "role": "other"
+      },
+      {
+        "pid": 4372,
+        "name": "dockerd",
+        "cpu_percent": 0.96,
+        "role": "other"
+      },
+      {
+        "pid": 14321,
+        "name": "xdg-desktop-por",
+        "cpu_percent": 0.96,
+        "role": "other"
+      },
+      {
+        "pid": 47341,
+        "name": "Isolated Web Co",
+        "cpu_percent": 0.96,
+        "role": "other"
+      },
+      {
+        "pid": 1809470,
+        "name": "adb",
+        "cpu_percent": 0.96,
+        "role": "other"
+      },
+      {
+        "pid": 3038838,
+        "name": "kworker?4?2-events",
+        "cpu_percent": 0.96,
+        "role": "other"
+      },
+      {
+        "pid": 1,
+        "name": "systemd",
+        "cpu_percent": 0.0,
+        "role": "other"
+      },
+      {
+        "pid": 2,
+        "name": "kthreadd",
+        "cpu_percent": 0.0,
+        "role": "other"
+      },
+      {
+        "pid": 3,
+        "name": "pool_workqueue_release",
+        "cpu_percent": 0.0,
+        "role": "other"
+      },
+      {
+        "pid": 4,
+        "name": "kworker?R-rcu_gp",
+        "cpu_percent": 0.0,
+        "role": "other"
+      },
+      {
+        "pid": 5,
+        "name": "kworker?R-sync_wq",
+        "cpu_percent": 0.0,
+        "role": "other"
+      },
+      {
+        "pid": 6,
+        "name": "kworker?R-kvfree_rcu_reclaim",
+        "cpu_percent": 0.0,
+        "role": "other"
+      },
+      {
+        "pid": 7,
+        "name": "kworker?R-slub_flushwq",
+        "cpu_percent": 0.0,
+        "role": "other"
+      },
+      {
+        "pid": 8,
+        "name": "kworker?R-netns",
+        "cpu_percent": 0.0,
+        "role": "other"
+      }
+    ]
+  },
+  "background_watch_peak_cpu_c_not_whole_run_peak": 66.0,
+  "stage_audit_peak_cpu_c": 94.0,
+  "process_causal_attribution": "Not established: paired 1.069-second sample has QEMU 2.81%, other processes 58.01%; no own compiler/authority/workers. A sensor limit violation is measured, not an exclusive heat source.",
+  "worker_coload_tested": false,
+  "cleanup": {
+    "owned_pids_gone": {
+      "3079619": true,
+      "3079674": true
+    },
+    "remaining_emulator_pids": [],
+    "shared_lock_free": true,
+    "own_authority_absent": true,
+    "provider_rooms_created": 0,
+    "oauth_started": false,
+    "new_apk_created": false,
+    "instrumentation_started": false,
+    "native_rebuilt": false,
+    "old_fail_artifact_count": 19
+  },
+  "prior_provider_room_deletion": "NOT_VERIFIED",
+  "automatic_retry": false,
+  "next_execution_decision": "Owner decision on environment migration; do not repeat this host/AVD cycle.",
+  "local_evidence_root": "state-client-build/cold-native-diagnostic-20261106/reduced-load-runtime",
+  "artifact_sha256": {
+    "immutable.json": "e85f141d6e4773d7c9cef890159aa315dba7579a6d95bab19500bf4f0ac8b79f",
+    "resources.jsonl": "b05cbc52f04d694dc3973c194761341697de09eaf8cc3f9b6d6ef330b8a8c3c0",
+    "runner.log": "1dcae36be4c05c7a989f02f50b3528702033a3b871ae8dc6c1f933b945de7718",
+    "receipt.json": "ea5c79db04cd5a0c6e1c681991c8b4c2dff6874e8aad427623af6effe2acb79b",
+    "cleanup.json": "54876147bf51aa4603922360e24bbc70a8636181dfe5a845c2d82258a04fab3e",
+    "emulator.log": "b4102b8af350d787bbab7fe7b19daa347d841ed4e4f2096622b4a04f468ed9d4",
+    "renderer.txt": "8bbd990a2d9ffa6c9bb4820eaac82b454ec85b5460a6eb445ff4481dd3147c81",
+    "connectivity-before-workers.txt": "11bd08b4286b4bf566e51d0194606eff9de1de8e0baaf7476d6d352363eec970",
+    "local-auth/run_android.py": "d705a82285cfef1269c01840ba0cd77fe51a72c7e6197bed7b5e9cb38cfb68b6",
+    "local-auth/emulator_guard.py": "e4beb91db4305e9635d1a2c23ae17d7d5efa79d0e228e97416597260d8b29340",
+    "local-auth/pack_assets.py": "64f85ab54ada803e94118dadba55ecae3fdc7c34dac0f0e5f57c38efa33e30e9",
+    "local-auth/stand": "7a6a5f458160bf0eadac6a8708a702c433155cf9f8d825afb2ff982207fa3d6a",
+    "local-auth/stand.go": "8687623fb7bdf7d6e33c608150d5ea2fb510c40b1337a34089df153bcfefe67d",
+    "local-auth/verify_locator": "e767362d3da3fba9fba31a4a940e8699bd9c56aed489f0488b1960c276ddb7d1",
+    "local-auth/verify_locator.go": "e9ee3376c0251fa31edd4bd3fcd872c8c2135122e372b20ad6eed066457c55eb",
+    "local-auth/vault_to_runtime.py": "6e9c3487f8d02e9d8b02c1ae55eb4cfdd20d11a54eeb50a75cbeed6580c25817",
+    "local-auth/runtime_receiver.py": "a0068d6e81b009cc8cccc5e815c66ab19eb25ce267dcba1db0e79253fba8cd0f"
+  },
+  "preserved_evidence": {
+    "docs/releases/2026-11-06-cold-native-android-check.json": {
+      "sha256": "d897789f205564cfa26b17774672b049283500de6b28fbeee699f9bd33da6df7",
+      "artifact_count": 30,
+      "unchanged": true
+    },
+    "docs/releases/2026-11-06-cold-ordered-runtime.json": {
+      "sha256": "ccc3e56531beab7c3a6335b1569c36878b8dcb46b5755be7a774513983be13f6",
+      "artifact_count": 17,
+      "unchanged": true
+    },
+    "docs/releases/2026-11-06-cold-provisioning-live-attempt.json": {
+      "sha256": "b97a513b43cfcababf1dd4bf08be19d960dbb3d67014d36ebfab3e6b62373a20",
+      "unchanged_since_checkpoint": true
+    },
+    "docs/releases/2026-11-06-cold-provisioning-followup.json": {
+      "sha256": "3ef83e83c34fd7e795f699d25b09a9811e2ed1da450678b859d54ba5c62a5294",
+      "unchanged_since_checkpoint": true
+    }
+  },
+  "preserved_fail_artifact_manifest_sha256": "8b4501cf10e7564e9992771087b4c9747e951c7d425dbf817b5c07cd7736961c",
+  "preserved_fail_artifact_count": 19,
+  "public_artifacts_versions_catalogs_production_changed": false
+}

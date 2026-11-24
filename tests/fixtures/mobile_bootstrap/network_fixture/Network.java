@@ -5,6 +5,7 @@ public class Network {
     public int opened,bound;
     public final long generation;
     public Runnable beforeOpen=()->{};
+    public java.io.IOException bindFailure;
     public Network(long generation){this.generation=generation;}
     public long getNetworkHandle(){return generation;}
     public java.net.URLConnection openConnection(java.net.URL url)throws java.io.IOException{
@@ -14,6 +15,7 @@ public class Network {
         return url.openConnection();
     }
     public void bindSocket(java.io.FileDescriptor descriptor)throws java.io.IOException{
+        if(bindFailure!=null)throw bindFailure;
         if(!alive)throw new java.io.IOException("lost network");bound++;
     }
 }

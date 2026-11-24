@@ -56,8 +56,12 @@ def test_owner_package_rejects_drift(tmp_path, defect):
 def test_source_set_isolation():
     gradle = (ROOT / 'clients/android/app/build.gradle').read_text()
     assert "fcOwnerRestrictedDirectory" in gradle
-    assert "sourceSets { friends { jniLibs.srcDir '../restricted-generated/jniLibs'" in gradle
+    assert "def restrictedDirectory = providers.gradleProperty('fcRestrictedDirectory').getOrElse('../restricted-generated')" in gradle
+    assert 'sourceSets { friends { jniLibs.srcDir "${restrictedDirectory}/jniLibs"; assets.srcDir "${restrictedDirectory}/assets" } }' in gradle
+    assert "def ownerRestrictedDirectory = providers.gradleProperty('fcOwnerRestrictedDirectory').getOrElse('../owner-restricted-generated')" in gradle
     assert "sourceSets { ownerDiagnostic {" in gradle
+    assert 'jniLibs.srcDir "${ownerRestrictedDirectory}/jniLibs"' in gradle
+    assert 'assets.srcDir "${ownerRestrictedDirectory}/assets"' in gradle
     owner_manifest = ROOT / 'clients/android/app/src/ownerDiagnostic/AndroidManifest.xml'
     assert 'android.permission.DUMP' in owner_manifest.read_text()
     for manifest in (ROOT / 'clients/android/app/src').glob('*/AndroidManifest.xml'):

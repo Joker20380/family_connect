@@ -1,5 +1,75 @@
 # Documentation
 
+[iOS development handoff — resumed stage, verified unsigned artifacts and exact CI boundary](releases/2026-11-17-ios-development-handoff.md#owner-resumption--17-november1115utc)
+
+[iOS PR41 final d02fce99 acceptance](https://github.com/Joker20380/family_connect/pull/41#issuecomment-6935466490)
+· [unsigned packet bridge and retained receipts](releases/2026-11-17-ios-mesh-bridge.md)
+
+[RU · 17 November:9.54s state-file sync caused protective stop; recovery is not a durable fix](releases/2026-11-17-ru-storage-stall.md).
+
+[iOS MESH unsigned packet bridge — candidate and exact evidence](releases/2026-11-17-ios-mesh-bridge.md)
+· [Build, ABI and next-device gates](../clients/ios/README.md).
+
+[RU · 17 November00:02UTC: availability restored on accepted bytes; initiating cause remains open](releases/2026-11-17-ru-recovery.md).
+
+[Android126 · PUBLIC: technical metadata, optional catalog9, exact APK/source/audio and acceptance](releases/2026-11-16-android126-publication.md).
+
+[RU · 16 November evening: verified watchdog cascade, fresh guarded recovery; initiating stall still open](releases/2026-11-16-ru-recurrence.md#watchdog-cascade-and-guarded-recovery--16-november-evening).
+
+[Technical metadata · 16 November17:41UTC: device restoration and CI pass; publication held by new RU outage](releases/2026-11-15-device-technical-metadata.md#restoration-ci-and-pre-publication-stop--16-november1741utc).
+[Minimal deployment and data-preserving recovery](operators/technical-metadata-release.md).
+
+[RU · 16 ноября16:08UTC: повторно восстановлен на текущих принятых байтах; причина открыта](releases/2026-11-16-ru-recurrence.md#authorized-recovery--16-november1608utc).
+[RU · 15 ноября: предыдущее восстановление и проверка продления допуска](releases/2026-11-15-ru-recurrence.md).
+
+[HMAC · 15 ноября: generation2 переключено; сохранность и отдельная деградация RU](releases/2026-11-15-hmac-generation2-cutover.md).
+[Порядок и восстановление](operators/hmac-generation.md). Это не выпуск метаданных или beta126.
+
+[RU · 14 ноября: attribution задержек persistence и ограниченный сбор](releases/2026-11-14-ru-persistence-pressure.md).
+[RU · first-failure v2: NO_GO, проверяемые потери burst](releases/2026-11-14-ru-attribution-v2-qualification.md);
+[исторический кандидат PR34: NO_GO](releases/2026-11-14-ru-first-failure-qualification.md).
+
+[Android125 · 13 ноября: публичный APK, обе страницы приглашения и подписанный каталог8](releases/2026-11-13-android125-publication.md).
+
+[Amsterdam1 · 13 ноября: проверка служб, продления допуска и доступности без изменений сервера](releases/2026-11-13-amsterdam1-health.md).
+
+[RU · 13 ноября: повторный сбой записи состояния, восстановление и открытая причина задержек](releases/2026-11-13-ru-recurrence.md).
+
+[Системные сообщения · 11 ноября: форма панели и безопасная очередь публикации](releases/2026-11-11-system-messages.md).
+[Инструкция оператора](operators/system-messages.ru.md) · [Operator guide](operators/system-messages.en.md).
+
+[Android125 · 12 ноября: адресный обмен подтверждён; туннель выключен по подтверждению владельца](releases/2026-11-12-android125-owner-install.md).
+[SUPPORT-CHAT-1 · 11 ноября: beta125, адресный канал и точный статус ввода](releases/2026-11-11-support-chat-125.md).
+[Инструкция переписки](operators/support-chat.ru.md) · [Support chat guide](operators/support-chat.en.md).
+
+[10 ноября: доступность локальной панели после перезапуска Docker](releases/2026-11-10-panel-availability.md).
+
+[Объектная операторская панель · 8 ноября](releases/2026-11-08-control-panel-reference.md):
+единые карточки устройств/серверов, связанные события и реальные Linux/AWG графики.
+[Локальный адрес, источники и ограничения](../control_plane/README.md).
+
+Датированные checkpoints ниже сохранены как история; текущая задача и результат —
+в [STATUS](STATUS.md), [PLAN](PLAN.md) и итоговом receipt соответствующего PR.
+
+[Android consolidated beta121 — candidate and corrected field preparation](releases/2026-11-08-android-consolidated.md).
+
+**7 November — [Подписки: ежедневная эксплуатация](operators/subscriptions.ru.md).**
+[Авторизованное восстановление RU и согласованная поставка node-fix](releases/2026-11-07-subscription-ru-recovery.md):
+v2 внедрён частично, RU после watchdog остановлен/masked, NL получают свежие leases.
+Финальный установленный статус определяется recovery receipt, не исходниками main.
+Каноническая RU-инструкция, реальная read-only витрина локальной панели,
+backup непустого registry и [выбранная политика108/119](releases/2026-11-07-subscription-paid-119.md).
+Ограниченный профиль v2 выбран владельцем; прежняя MESH cert/CRL-граница сохраняется.
+[Наблюдения и проверки](releases/2026-11-07-subscription-operations.md).
+PR1/PR2 закрыты merge9d05c0f/5197563; прежняя Android-матрица не открывается заново.
+
+**7 November — [bounded ARM64 cold field kit](releases/2026-11-07-cold-field-delivery.md).**
+READY_FOR_CONTROLLED_FIELD_OPERATION: exact Android CI42385799106/source55525859,
+unsigned ARM64 APK9eae8668 and corrected NL1 server3c0487eb. No final locator/signature,
+production change, delivery or phone PASS. F keeps its original accepted emulator scope.
+[Exact release receipt](releases/2026-11-07-beta120-release-qualification.json).
+[Operator handoff procedure](../deploy/friends/restricted/COLD_FIELD_DELIVERY.md).
+
 **Current5 November — [active-session renewal integration](releases/2026-11-05-mesh-renewal-integration.md).**
 Source/runtime integration followsd4de324; real TLS/mux/TCP/DNS/HTTPS and negative gates pass,
 with66 scoped JVM cases and five targeted checks on each API27/API35. The inherited bootstrap

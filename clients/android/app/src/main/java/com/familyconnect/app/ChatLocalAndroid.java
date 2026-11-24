@@ -92,6 +92,15 @@ final class ChatLocalAndroid implements AutoCloseable {
         }
     }
 
+    JsonObject acceptSubscription(JsonObject response,String device)throws ChatException {
+        requireWorker();
+        synchronized(LOCK){
+            if(session==null||active!=this)throw new ChatException("closed");
+            try{return JsonParser.parseString(session.callAttr("accept_subscription",response.toString(),device).toString()).getAsJsonObject();}
+            catch(Exception invalid){throw new ChatException("invalid_subscription");}
+        }
+    }
+
     // Platform enrollment must supply a trusted mailbox anchor, never contact-card JSON.
     JsonObject enrollmentProof(String device, String challenge) throws ChatException {
         requireWorker();
@@ -120,6 +129,15 @@ final class ChatLocalAndroid implements AutoCloseable {
             if (session == null) throw new ChatException("closed");
             try { session.callAttr("configure_delivery", host, port, publicHex, carrier, expires); }
             catch (Exception failure) { throw new ChatException("delivery_unavailable"); }
+        }
+    }
+
+    void acceptSupport(JsonObject configuration, String device) throws ChatException {
+        requireWorker();
+        synchronized (LOCK) {
+            if (session == null) throw new ChatException("closed");
+            try { session.callAttr("accept_support", configuration.toString(), device); }
+            catch (Exception failure) { throw new ChatException("support_unavailable"); }
         }
     }
 

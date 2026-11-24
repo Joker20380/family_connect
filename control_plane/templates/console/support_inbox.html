@@ -1,0 +1,4 @@
+{% extends 'console/base.html' %}{% block title %}Входящие обращения{% endblock %}{% block content %}
+<h1>Входящие обращения</h1>{% if error %}<p role="alert" class="notice error-notice">{{ error }}</p>{% endif %}
+<section class="panel"><ul>{% for thread in threads %}<li><a href="{% url 'console:support_history' thread.pseudonym %}"><code>{{ thread.pseudonym }}</code></a> · Ответов: {{ thread.incoming }}</li>
+{% empty %}<li>Сохранённых обращений нет.</li>{% endfor %}</ul></section>{% endblock %}

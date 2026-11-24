@@ -1,5 +1,134 @@
 # CONTROL-PLANE · русская локальная панель и наблюдаемость
 
+## Technical metadata · server path deployed; public Android release pending
+
+The accepted minimal metadata/HMAC-aware server and panel are installed. Corrected
+beta126 is on the authorized test device, not publicly released; exact paid126 is
+staged, not loaded. Follow the current release receipt below, not the historical
+source-preparation status. Do not redeploy this repository's demo Compose over the
+live alias-aware panel or treat a server deployment as installed-client acceptance.
+
+Migrations0014/0015 store only the latest consented observations/GeoIP by full HMAC; these never
+enter InventorySnapshot, audit details or dated collector files. External
+`collect_technical_metadata.py` uses private `.local/technical-metadata-source.json`
+with exact `python`, `archive`, `archive_sha256` of the accepted serving HTTP archive
+and the existing `inventory-hmac.key`. Pipe transient bytes to
+`manage.py import_technical_metadata`; never redirect them to retained files/logs.
+The monitor enables this independent path only when that config exists; errors call
+`import_technical_metadata --unavailable`, which still prunes expired data. Keep this
+cleanup running if collection is disabled. Do not back up the observations table or
+new metadata SQLite payloads into indefinite archives. Preserve consent tombstones.
+No SSH credentials or production registry are mounted in the web container.
+Metadata-only transient export/import is bounded at64MiB for the5000-device store;
+ordinary inventory remains capped at4MiB. Neither path silently truncates a fleet.
+The local monitor's500s budget includes the independent metadata cleanup fallback.
+Panel backups must exclude `console_technicalmetadata` row data; restore projections
+only from the current consent-fenced source, never from an old metadata snapshot.
+Use Gunicorn access format `%(m)s %(U)s %(s)s %(D)s` when overlaying the existing
+production command: method/path/status/duration only, no query, referrer or peer IP.
+Otherwise a city/operator search could be retained in ordinary access logs.
+All groups, including hardware, expire independently after at most7days. UI source
+and the current implementation limits are recorded in the
+[selected task receipt](../docs/releases/2026-11-15-device-technical-metadata.md).
+GeoIP uses the canonical RU host's local DB-IP Lite MMDB pair and authenticated
+AWG peer binding, not loopback/XFF or a client-provided IP. The updater is
+`scripts/update_geoip.py --root /opt/apps/family_connect/geoip --version YYYY-MM`;
+install `control/geoip-requirements.lock` in the isolated collector environment.
+This command is preparation guidance, NOT a deployed scheduler. Preserve current/
+previous manifests and one rollback pair. Alert on update-status failure and45day
+age. Keep DB-IP attribution on every page rendering results. NL/TCP peer enrichment
+and live end-to-end qualification are pending; see the task receipt.
+
+## Системные сообщения · source candidate11 ноября2026
+
+`/system-messages/`: отдельная общедоступная лента объявлений, не личный чат.
+Compose/неизменяемый preview/подтверждение аудитории сохраняют запрос в локальную БД.
+Внешняя команда `publish_system_messages` использует отдельный bearer-файл0600,
+не web-секрет и не телефонную identity; перед отправкой заново проверяет права аккаунта.
+Потеря ответа → неизвестный результат → явный повтор того же ID. Публикация доказана
+только точным публичным readback, не доставкой/прочтением. Миграция0013 аддитивна.
+Ни установленная панель, ни production-лента этим source checkpoint не меняются.
+[RU-инструкция](../docs/operators/system-messages.ru.md) ·
+[EN guide](../docs/operators/system-messages.en.md) ·
+[Проверки/оставшиеся gates](../docs/releases/2026-11-11-system-messages.md).
+
+## Объекты и реальные графики · 8 ноября 2026
+
+Обычный вход: http://127.0.0.1:8765/ (существующая авторизация).
+Главная страница — **production-наблюдения**, не синтетические устройства/оплаты.
+Навигация: Обзор → Устройства → Серверы → Подписки → События.
+Демо, прежние источники/архив, fleet и административные инструменты сохраняются
+отдельно. Старый synthetic dashboard находится по `/demo/`.
+
+- `/inventory/<полный-HMAC>/` — одна карточка рабочего устройства: реестр,
+  источник версии, подписка, применение на узлах, AWG-трафик, события и подробности.
+  Full HMAC в production-контуре — связь, префикс только отображается. Локальная
+  метка редактируется в admin → «локальные метки рабочих устройств»; это не имя
+  identity и не запись в рабочем registry.
+- `/servers/` и `/servers/<source>/` — RU/Amsterdam1/Amsterdam2, отдельные состояния
+  процессов, readback применения, независимая TCP-проба, ресурсы и связанные устройства.
+  Переходы работают в обе стороны. Привязка/handshake/allowed не означают online.
+- `/events/` — события доступа дедуплицированы по полному event HMAC; изменения
+  наблюдений помечены отдельно. Импорт canonical APPLIED ограничен последними1000;
+  признак truncation и время покрытия видны. UI показывает последние500 событий
+  и смены результатов последних2000 попыток источника. Это не банковская выручка
+  и не подтверждение доставки клиенту.
+
+Внешний collector теперь отправляет inventory envelope4 с отдельным metrics1;
+старые envelopes1–3 читаются. Subscription envelope2 добавляет ограниченную историю,
+envelope1 остаётся совместимым. Канонические модули по-прежнему исполняются только
+из проверенного runtime archive. Django хранит append-only наблюдения, не новую
+машину подписок. Support ID/platform/app_version поступают из существующего отчёта
+поддержки (не аттестация APK); дата активации, имя и модель отсутствуют в источнике.
+Support ID находится только в авторизованных технических подробностях карточки.
+
+| Метрика | Источник и граница |
+| --- | --- |
+| Память, диск, uptime, load1m | Прежний read-only Linux collector, накопленная история |
+| CPU % | Разница total/idle `/proc/stat`; load average не процент CPU |
+| RX/TX узла | Внешний интерфейс из единственного default route; включает служебный трафик |
+| RX/TX устройства AWG | `awg show fcopen31 transfer`, точное соответствие публичного ключа retained decision → HMAC; неизвестные peers не присваиваются |
+| Последний AWG handshake | Отдельный read-only `latest-handshakes`; не текущая online-сессия |
+| TCP пользователя | NOT_COLLECTED: в установленном Xray только HandlerService, нет StatsService/user counters; runtime не меняется |
+| MESH пользователя | NOT_COLLECTED: нет принятого атрибутированного источника счётчиков; cert/CRL-граница сохраняется |
+
+RX/TX даны **со стороны сервера**. Скорость = разница байтов / фактические секунды.
+Boot/interface epoch, уменьшение счётчика, отсутствие измерения и разрыв более300s
+разрывают линию; они не становятся нулевым трафиком. CPU считается по корректной
+разнице ticks. Объём за период суммирует только измеренные интервалы, покрытие видно.
+Периоды1h/24h/7d ограничены10000 последними снимками каждого источника; история
+до появления счётчиков не дорисовывается. Наведение и клавиши ←/→ показывают UTC
+и величины. Перечитать страницу — перечитать PostgreSQL, не запустить remote сбор.
+
+Установка использует прежний compose project/volumes/.env, `prepare_local.py`,
+allowlisted image и штатные миграции0010/0011; старые строки и секреты сохраняются.
+Перед заменой console сохраняется приватный согласованный `pg_dump -Fc`; проверка
+восстановления — отдельный PostgreSQL, никогда не рабочий volume. Collector-файлы
+меняются отдельно от `.local` и `.env`, оба локальных monitoring timers сохраняются.
+Откат UI — прежний image и collector, без восстановления старой БД: новые таблицы
+аддитивны, старые import envelopes поддерживаются. Не удалять историю ради отката.
+Исходники/проверки/точная установленная поставка: [отчёт](../docs/releases/2026-11-08-control-panel-reference.md).
+
+## Подписки и доступ · 7 ноября 2026
+
+Установленная локальная страница http://127.0.0.1:8765/subscriptions/ — **рабочие
+данные, только просмотр**, не интерфейс оплаты/отзыва. Фильтры по состоянию и
+HMAC-псевдониму, по20 устройств на страницу; UTC-даты/revision/event/SHA — в details.
+Canonical paid_allow не доказывает AWG/TCP-доступ: отдельные append-only
+TransportSnapshot/attempt приходят внешним RO collector по pinned SSH, HMAC строится
+локально (ключ не передаётся NL). Веб-процесс не получает SSH или production DB.
+Отсутствующий node kit явно показан как «не включён», отсутствующая/старая/ошибочная
+квитанция — неизвестность; успех одного узла не распространяется на другие.
+Наблюдения применения старше90 секунд не считаются актуальными. Системные restart
+сценарии и MESH traffic эта страница сама не проверяет.
+Transport schema2 distinguishes ordinary noncohort (no paid timer) from durable
+pending enrollment and finite managed paid leases; schema1 historical observations
+remain readable. This is still applied-node evidence, never inferred from paid_allow.
+The PR4 kit is superseded by [the enforcement fix](../docs/releases/2026-11-07-subscription-enforcement-fix.md),
+not enabled in production. Existing layout and read-only boundaries are retained.
+[Инструкция](../docs/operators/subscriptions.ru.md) ·
+[проверки и границы](../docs/releases/2026-11-07-subscription-transport-enforcement.md).
+
 ## FLEET-BOOTSTRAP-2 · preparation
 
 The legacy12→50 synthetic seeder uses canonical `FC-` invitation formatting even when
@@ -149,7 +278,7 @@ Systemd active/низкая нагрузка не являются провер�
 `python3 control_plane/monitor_inventory.py` — один ограниченный цикл: существующий
 collector RU/NL → существующий strict stdin importer → локальный PostgreSQL.
 Никаких payment/entitlement commands, remote uploads/units/config edits. `flock`
-не допускает параллельных циклов. Каждый subprocess ограничен60s, цикл unit260s;
+не допускает параллельных циклов. Каждый subprocess ограничен60s, цикл unit380s;
 ошибка одного источника не прекращает попытку другого. Старые observations не
 переписываются, unavailable не превращается в0. После попытки импорта новый
 промежуточный snapshot удаляется; прежние ручные снимки не затрагиваются.
@@ -178,12 +307,43 @@ credential **может писать**: read-only обеспечивается �
 `mode=ro/query_only`, не ограниченным ключом. Ключа/production mount в Django нет.
 Отдельный least-privilege SSH endpoint требует нового security gate, не выдаётся за PASS.
 
-### Paid boundary: reviewed served baseline, not another authority
+### Реальные подписки: отдельный read-only источник
 
-[CP2 report](../docs/releases/2026-10-27-android106-control-plane-2.md) фиксирует
+[Ежедневная русская инструкция](../docs/operators/subscriptions.ru.md) — canonical
+операторский вход. Страница `http://127.0.0.1:8765/subscriptions/` показывает реальные
+наблюдения, не synthetic платежи. Нужна существующая роль чтения инвентаризации.
+Внешний RU collector использует private0600 `.local/subscriptions-source.json`
+(ровно `python`, `archive`, `archive_sha256`), прежний HMAC key и проверенный runtime.
+Пути и pins получают из закрытого операторского receipt, не из веб-формы.
+Новый bounded inventory envelope2 содержит отдельный subscription envelope1;
+старые envelope1 и NL collectors сохранены. Нет дополнительного timer/SSH hop.
+Importer хранит immutable `SubscriptionSnapshot`, не entitlement authority;
+публичные ID/reference/payment hashes не импортируются. Отдельного production
+режима выполнения операций в веб-процессе нет: `CONTROL_PLANE_MODE=synthetic`
+и guards реальных устройств остаются неизменны.
+Runtime mismatch/повреждение схемы/SSH failure → unknown/error, не пустой cohort;
+неудачный импорт оставляет стареющее наблюдение. Последняя попытка хранится отдельно
+в существующем append-only AuditRecord (`subscriptions.attempt`), в порядке локального
+журнала, а не серверных часов. Повторный импорт не дублирует SubscriptionSnapshot;
+отдельная попытка может дать новую запись аудита. Collector закрепляет SQLite snapshot
+первым чтением внутри read-only transaction и лишь затем берёт общий observed_at.
+В свежем isolated interpreter проверяются хеш архива, наличие модулей, их origin/file
+и zipimport loader; предзагруженные или внешние canonical modules отклоняются.
+Effective вычислен сервером на observed_at; после5 минут UI явно stale. Последнее APPLIED не банковское подтверждение
+и не подтверждение клиентской доставки. Изменение runtime pin требует ручной сверки.
+Ошибки collection/import видны независимо от clock skew; последнее успешное серверное
+observed_at показано отдельно. Если сам Docker/PostgreSQL недоступен или исчерпан60s
+бюджет импорта, запись попытки в PG невозможна: проверяйте private monitor receipt/user
+journal и старение данных. Отдельный retry loop не добавлен; общий бюджет380s сохранён.
+
+### Paid boundary: historical reviewed served baseline, not another authority
+
+[CP2 report](../docs/releases/2026-10-27-android106-control-plane-2.md) исторически фиксировал
 reconciled baseline и **DEPLOYED_EMPTY_COHORT / REVIEW_PENDING**: paid schema
 PRESENT_EMPTY, exact paid-aware HTTP обслуживает production после одного guarded
-restart. Реальных subscriptions/events0; это не paid launch. Общий packaging tool:
+restart. Тогда subscriptions/events0; это не текущее число и не paid launch.
+Актуальные наблюдения — в витрине и датированном операторском receipt.
+Общий packaging tool:
 `python3 -m scripts.package_paid_boundary build
 --ref <commit> --output <new-private-tar>` из repository root экспортирует только
 явный committed inventory; dirty working tree/DB/env не входят. `source-gate
@@ -225,6 +385,14 @@ STOP с сохранением evidence; не удалять backup и не по
 и безопасный application rollback требуют отдельной проверки согласованного baseline.
 
 ### Аварийная остановка и восстановление
+
+Оба локальных сервиса используют `restart: unless-stopped`: после перезапуска Docker
+они поднимаются без пересоздания volumes. Явная операторская остановка сохраняется.
+Для уже созданных контейнеров политика обновляется командой
+`docker update --restart unless-stopped fc-control-plane-0-postgres-1 fc-control-plane-0-console-1`; изменение
+Compose само по себе не обновляет существующие контейнеры. Сначала проверить их
+имена, image IDs и volumes. Это не обновление приложения и не восстановление БД.
+[Инцидент10 ноября и проверенный запуск](../docs/releases/2026-11-10-panel-availability.md).
 
 `/stop/` блокирует новые dispatch в **демо** backend (RBAC+CSRF+подтверждение,
 сохранённый PG singleton и audit). Уже отправленные RUNNING/UNKNOWN операции

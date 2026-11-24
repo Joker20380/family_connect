@@ -9,16 +9,21 @@ No manual service setup is needed. Affected Windows10 device acceptance is pendi
 ## First activation
 
 Android8.1+, ARM64; access is invitation-only. Installing the APK does not grant access.
-The invitation page and in-app updater both provide beta113. Updating does not enable restricted FIELD access.
 
-Beta113 includes MESH and quiet ongoing VPN-notification updates. Android8.1/API27 is the minimum; Android8.0 and older are unsupported.
-Exact Android CI41833086774 attempt2, existing signer and full verified-HTTPS hash checks PASS.
-Every mode now lists Russia, Netherlands and Netherlands2, with per-node load squares:
-green below85%, orange from85%, grey/dash when unavailable. Selected rows have a green tint
-and checkmark. Russia cannot use MESH; choose AWG/TCP/Auto. Owner112→113 installation and
-dashboard/load checks PASS; sustained MESH stability and physical Huawei113 acceptance remain open.
-![Android113 English server list; synthetic load values](assets/android113-server-picker-en.png)
-Paid baseline remains108 and existing entitlement is preserved. No Mi account or ADB is needed.
+Invitations and the in-app updater offer **beta126**, optional catalog9. Separate
+technical-information consent is OFF by default; enable it in Settings if you want
+support observations. Subscription/support remain compatible; updating grants no new
+VPN entitlement. [Artifacts and limits](releases/2026-11-16-android126-publication.md).
+
+Beta126 retains MESH and quiet VPN-notification updates. Android8.1/API27 is the
+minimum; Android8.0 and older are unsupported. Accepted sourceba3e9370, original signer
+and full HTTPS hashes pass; publication uses the same file, without rebuilding.
+Every mode lists Russia, Netherlands and Netherlands2; Russia cannot use MESH, so choose
+AWG/TCP/Auto. Preservation is recorded125→first126→corrected126, not direct125→corrected126.
+Other-model acceptance, sustained MESH stability and cold no-cache restricted-network
+startup remain open.
+![Historical Android113 server-list illustration; synthetic loads, not a126 screenshot](assets/android113-server-picker-en.png)
+Server policy and existing entitlement are unchanged. No Mi account or ADB is needed.
 MESH still requires accepted admission and current readiness material, not an old cached READY.
 
 1. Ask a participant for their link/QR from **Settings → Invite a friend**. Keep it private.
@@ -32,21 +37,15 @@ MESH still requires accepted admission and current readiness material, not an ol
 
 ## Update an existing app
 
-**Separate opt-in beta118 for MESH testing on mobile allowlists:**
-[download APK118, 50.3 MB](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta118.apk).
-Android8.1+/ARM64,50285984 bytes, SHA256
-`b7b0be92456f522f81d87c71c401c2622d2f823178510b28510a6fb8d5c69fca`.
-Update in place without uninstalling or clearing data. Enable diagnostics, disable Wi-Fi,
-explicitly select MESH and test Netherlands and Netherlands2 separately. After failure,
-export diagnostics and send them privately to the owner with operator and timestamp.
-[Full procedure, matching audio source and limitations](releases/2026-11-05-android118-field.md).
-Not an accepted stability fix; the default invitation/updater remain113.
+The [older beta118 field material](releases/2026-11-05-android118-field.md) is retained
+as history, not a downgrade instruction for126. Restricted-network field testing is
+separately coordinated; an ordinary Wi-Fi test does not replace it.
 
-[Download beta113 — 50.3 MB](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta113.apk).
-Version `0.1.18-beta113`, code113, ARM64,50273696 bytes; SHA256:
+[Download beta126 — 50.5 MB](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta126.apk).
+Version `0.1.18-beta126`, code126, ARM64,50478496 bytes; SHA256:
 
 ```text
-6078d0610272c5eb1b8008d330f9e646163b90b89df180b4bd56fd8ae4edc094
+4f288cbb107ac46c8c99ec0e274f57a5e1e8164796796781c4a2c275b57e2134
 ```
 
 The app also checks for updates. An update restarts the VPN; tap Connect again if needed. Open the APK and select **Update** in Android’s system
@@ -56,15 +55,15 @@ do not copy another device’s profiles or keys.
 
 The [older universal beta13](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.12-beta13.apk)
 remains available for other architectures,240.5 MB. It lacks current features and is not
-an equivalent alternative to113.
+an equivalent alternative to126.
 
-[Exact audio corresponding source and licenses](https://185.251.89.19:8443/downloads/FamilyConnect-Android-0.1.18-beta113-audio-source.tar.gz)
+[Exact126 audio corresponding source and licenses](https://185.251.89.19:8443/downloads/FamilyConnect-Android-0.1.18-beta126-audio-source.tar.gz)
 are available with the release. Installation requires Android confirmation; it is not forced.
 
-Update over the existing app via **Settings → Check for updates → Install beta113**.
+Update over the existing app via **Settings → Check for updates → Install beta126**.
 If the old updater fails, download the APK above in a browser. Do not uninstall, clear
-data or reenroll. Android sequence7 is optional; installation and operation on the
-affected Huawei still need confirmation. [Public108 rollback evidence](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta108.apk)
+data or reenroll. Catalog9 is optional; publication does not mean other users have
+already installed126. [Public108 rollback evidence](https://185.251.89.19:8443/downloads/FamilyConnect-Test-0.1.18-beta108.apk)
 remains immutable; no paid event or canary replay accompanies this update.
 
 ## Text and voice
@@ -94,7 +93,7 @@ not established. [Notification and announcement guide (RU)](testing/messenger-no
 - Update failure: record the error and versions; do not erase data to bypass a signature mismatch.
 
 Report model, Android/app version and network type. Exclude invitations, keys, profiles
-and messages. [Beta113 validation/publication](releases/2026-11-04-android113-server-picker.md#publication-and-readback).
+and messages. [Beta125 validation/publication](releases/2026-11-16-android126-publication.md).
 
 ## Desktop clients
 
@@ -105,7 +104,7 @@ current availability counts.
 
 ## Server load display
 
-Beta113 shows **Server CPU** on the dashboard and **CPU N%** in the server list when
+The dashboard shows **Server CPU** and the server list shows **CPU N%** when
 channel capacity is unknown. CPU is not channel utilization or the monthly traffic quota.
 Known-capacity servers retain their combined CPU/channel indicator; stale/missing samples show No data.
 [Release status](releases.md).
@@ -117,3 +116,15 @@ Each row uses that node's measurements: green squares below85%, orange from85%, 
 and a dash without fresh data, never an inferred country CPU value. CPU-only and estimated
 capacity values remain labelled; the two NL channel capacities are assumed5000Mbps,
 not a measured connection speed.
+## Technical information for support
+
+Public126 keeps this setting OFF by default. Explicit opt-in shares model/Android/app,
+connection/available operator and radio, VPN/gateway, bounded errors and approximate
+IP geography/ASN. This is not GPS or proof of physical location. Consent lasts until
+disabled; latest groups, including hardware, independently expire within7days, without
+movement history. Off immediately stops collection; offline revoke visibly awaits
+server delivery/deletion. Previous seven-day diagnostics consent is not reused.
+Refusal does not restrict services. Real RU/AWG peer attribution and local DB-IP
+lookup reach the panel; NL/TCP/MESH have no qualified direct-IP source. Test-phone
+consent is restored OFF and deletion is verified. [Privacy](privacy.md) ·
+[Release and acceptance limits](releases/2026-11-16-android126-publication.md).

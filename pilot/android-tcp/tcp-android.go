@@ -1,5 +1,6 @@
 package main
 // #include <stdint.h>
+// #include <stdlib.h>
 // int fcProtect(uintptr_t owner, int fd);
 // void fcRelease(uintptr_t owner);
 import "C"
@@ -139,4 +140,20 @@ func fcTcpStop(id int64)int32{
 func fcTcpConnections(id int64)int32{
  tcpMu.Lock();defer tcpMu.Unlock();if tcpCurrent==nil{return 0};if id!=0&&id!=tcpCurrent.id{return -1}
  tcpCurrent.mu.Lock();defer tcpCurrent.mu.Unlock();return int32(len(tcpCurrent.conns))
+}
+
+//export fcTcpDns
+func fcTcpDns(id int64, encoded string, millis int32)*C.char{
+ query,err:=base64.StdEncoding.DecodeString(encoded)
+ if err!=nil||len(query)<17||len(query)>512||millis<1||millis>2500{return nil}
+ if !tcpMu.TryLock(){return nil};session:=tcpCurrent
+ if session==nil||session.id!=id{tcpMu.Unlock();return nil}
+ tcpMu.Unlock()
+ ctx,cancel:=context.WithTimeout(session.ctx,time.Duration(millis)*time.Millisecond);defer cancel()
+ connection,err:=core.DialUDP(ctx,session.instance);if err!=nil{return nil};defer connection.Close()
+ unhook:=context.AfterFunc(ctx,func(){connection.Close()});defer unhook()
+ if _,err=connection.WriteTo(query,&net.UDPAddr{IP:net.IPv4(1,1,1,1),Port:53});err!=nil{return nil}
+ answer:=make([]byte,1232);count,_,err:=connection.ReadFrom(answer)
+ if err!=nil||ctx.Err()!=nil{return nil}
+ return C.CString(base64.StdEncoding.EncodeToString(answer[:count]))
 }

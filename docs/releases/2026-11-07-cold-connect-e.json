@@ -1,0 +1,849 @@
+{
+  "result": "PASS_POSITIVE_ONLY",
+  "qualification_scope": "Real API27 x86_64 Android/JNI/Keystore/TUN and Telemost; synthetic registered authority/identity, not production or physical-device acceptance.",
+  "runtime_source": "14c2b816c0a2aa3f9cd90ddbef65edb0c1a92ab7",
+  "application_source": "9bf02724deacf1c5e4293bea1bfdc6fc4f7fcacc",
+  "native_source": "6eb61a9faa659b6b07ac16bf9f4bac46a41cd2a7",
+  "native_sha256": "17119f000407ec1d7ccdf8d33acabe423f3cf20e32b6f8af839d209aa3360c59",
+  "abi": "x86_64",
+  "api": 27,
+  "native_rebuilt": false,
+  "accepted_android_jni_gate": "RETAINED_PASS_NOT_REPEATED",
+  "helper_import": {
+    "runner": {
+      "path": "/home/joker/.codex/worktrees/61d0/family_connect/tests/android_cold_runtime.py",
+      "sha256": "f02388c4f0dd651a0fd65aeda6e7df6faadeb084e759bbacc5399cc422a07783"
+    },
+    "guard": {
+      "path": "/home/joker/.codex/worktrees/61d0/family_connect/tests/android_emulator_guard.py",
+      "sha256": "a292cbd1251547cdfe120dfab06ecd8efa5dea67e1cb8aea6e82ae6449df7280"
+    },
+    "packager": {
+      "path": "/home/joker/.codex/worktrees/61d0/family_connect/tests/android_cold_pack_assets.py",
+      "sha256": "4c702cace1f41fbe541f397fa091347155bce5c3a9cf4736ef9a61c2920085fb"
+    }
+  },
+  "renderer": "GLES: Google (NVIDIA Corporation), Android Emulator OpenGL ES Translator (NVIDIA GeForce GTX 1650 Ti/PCIe/SSE2), OpenGL ES 3.1 (4.5.0 NVIDIA 580.178.04)",
+  "cold_conditions": {
+    "registered_synthetic_identity": true,
+    "no_package_readiness_vpn_before_workers": true,
+    "instrumented_no_identity_no_usable_cache_no_vpn_assertions_passed": true,
+    "fresh_locator_before_connect": {
+      "remaining_seconds": 408,
+      "verified": true,
+      "verified_at": 1794052836
+    },
+    "trust_and_locator_match_packaged_assets": true,
+    "guest_only_rejections": [
+      {
+        "destination": "185.251.89.19",
+        "tcp_port": 8443,
+        "rejected_packets": 2,
+        "rejected_bytes": 120
+      },
+      {
+        "destination": "186.246.45.246",
+        "tcp_port": 4242,
+        "rejected_packets": 2,
+        "rejected_bytes": 120
+      }
+    ],
+    "carrier_path": "Not blocked by those exact rules; actual provider provisioning and MESH succeeded."
+  },
+  "budgets_seconds": {
+    "preparation": 180,
+    "attempt_envelope": 390,
+    "candidate": 200,
+    "readiness": 30,
+    "cleanup": 120,
+    "overall": 705
+  },
+  "cpu_policy": "observe-only; actual temperature frames retained, no CPU software stop or system cooling/power change",
+  "guard_stop": null,
+  "candidate_success": {
+    "event": "candidate_succeeded",
+    "state": "CONNECTED",
+    "elapsed_ms": 43982,
+    "stage": "ORCHESTRATOR",
+    "monotonic_ms": 101480
+  },
+  "milestones": [
+    {
+      "stage": "COLD_PREREQUISITES_VERIFIED",
+      "monotonic_ms": 57484,
+      "relative_connect_ms": -2
+    },
+    {
+      "candidate_deadline_ms": 257581,
+      "remaining_ms": 156095,
+      "engine_stage": "READY",
+      "native_handle_present": true,
+      "native_state": 2,
+      "state": 2,
+      "events": null,
+      "protect_ok": 55,
+      "protect_denied": 0,
+      "mux_counters": {
+        "DNSRequests": 0,
+        "DNSResponses": 0,
+        "DNSErrors": 0,
+        "DNSTimeouts": 0,
+        "OpenOK": 0,
+        "OpenErrors": 0,
+        "ProtocolErrors": 0,
+        "SentBytes": 0,
+        "ReceivedBytes": 0
+      },
+      "readiness_fetch": {
+        "attempt_id": "cfa2e9dc4ce7499880e9f4440041ed0f",
+        "fetch_id": "6c84002f1087437881ac9f57b6ca786b",
+        "started_connection_id": "dffe80b3-f360-4bfd-b081-20f7a21d824c",
+        "started_at": 1794052837400,
+        "provisioning": [
+          {
+            "request_id": "cfa2e9dc4ce7499880e9f4440041ed0f",
+            "phase": "BEGIN",
+            "native": {
+              "handle": 1,
+              "go_entered": true,
+              "budget_known": true,
+              "stage": "LOCATOR",
+              "last_success": "LOCATOR",
+              "first_failure": "",
+              "reason": "NONE",
+              "provider_step": "",
+              "http_status": 0,
+              "errno": 0,
+              "security": false,
+              "elapsed_ms": 2,
+              "remaining_ms": 28194,
+              "protected": 0,
+              "denied": 0,
+              "closed": false,
+              "released": false
+            },
+            "network": {
+              "type": "WIFI",
+              "handle": 433808132830,
+              "available": true,
+              "foreground": true,
+              "not_restricted": true,
+              "resolver": "NETWORK_IPV4_GO_RESOLVER",
+              "resolver_class": "PRIVATE_IPV4",
+              "observed_ms": 59477,
+              "bind_ms": 0,
+              "bind_available": false,
+              "bind_result": "NOT_RUN",
+              "bind_operation": "NOT_RUN",
+              "bind_error": "NONE",
+              "bind_errno": 0
+            }
+          },
+          {
+            "request_id": "cfa2e9dc4ce7499880e9f4440041ed0f",
+            "phase": "POST",
+            "native": {
+              "handle": 1,
+              "go_entered": true,
+              "budget_known": true,
+              "stage": "RESPONSE_VALIDATE",
+              "last_success": "RESPONSE_VALIDATE",
+              "first_failure": "",
+              "reason": "NONE",
+              "provider_step": "",
+              "http_status": 0,
+              "errno": 0,
+              "security": false,
+              "elapsed_ms": 8335,
+              "remaining_ms": 19861,
+              "protected": 28,
+              "denied": 0,
+              "closed": false,
+              "released": false
+            },
+            "network": {
+              "type": "WIFI",
+              "handle": 433808132830,
+              "available": true,
+              "foreground": true,
+              "not_restricted": true,
+              "resolver": "NETWORK_IPV4_GO_RESOLVER",
+              "resolver_class": "PRIVATE_IPV4",
+              "observed_ms": 67810,
+              "bind_ms": 61039,
+              "bind_available": true,
+              "bind_result": "BOUND",
+              "bind_operation": "NETWORK_BIND",
+              "bind_error": "NONE",
+              "bind_errno": 0
+            }
+          },
+          {
+            "request_id": "6c84002f1087437881ac9f57b6ca786b",
+            "phase": "POST",
+            "native": {
+              "handle": 1,
+              "go_entered": true,
+              "budget_known": true,
+              "stage": "RESPONSE_VALIDATE",
+              "last_success": "RESPONSE_VALIDATE",
+              "first_failure": "",
+              "reason": "NONE",
+              "provider_step": "",
+              "http_status": 0,
+              "errno": 0,
+              "security": false,
+              "elapsed_ms": 15376,
+              "remaining_ms": 12820,
+              "protected": 28,
+              "denied": 0,
+              "closed": false,
+              "released": false
+            },
+            "network": {
+              "type": "WIFI",
+              "handle": 433808132830,
+              "available": true,
+              "foreground": true,
+              "not_restricted": true,
+              "resolver": "NETWORK_IPV4_GO_RESOLVER",
+              "resolver_class": "PRIVATE_IPV4",
+              "observed_ms": 74851,
+              "bind_ms": 61039,
+              "bind_available": true,
+              "bind_result": "BOUND",
+              "bind_operation": "NETWORK_BIND",
+              "bind_error": "NONE",
+              "bind_errno": 0
+            }
+          },
+          {
+            "request_id": "",
+            "phase": "CLOSE",
+            "native": {
+              "handle": 1,
+              "go_entered": true,
+              "budget_known": true,
+              "stage": "RESPONSE_VALIDATE",
+              "last_success": "RESPONSE_VALIDATE",
+              "first_failure": "",
+              "reason": "NONE",
+              "provider_step": "",
+              "http_status": 0,
+              "errno": 0,
+              "security": false,
+              "elapsed_ms": 15393,
+              "remaining_ms": 12803,
+              "protected": 28,
+              "denied": 0,
+              "closed": true,
+              "released": false
+            },
+            "network": {
+              "type": "WIFI",
+              "handle": 433808132830,
+              "available": true,
+              "foreground": true,
+              "not_restricted": true,
+              "resolver": "NETWORK_IPV4_GO_RESOLVER",
+              "resolver_class": "PRIVATE_IPV4",
+              "observed_ms": 74868,
+              "bind_ms": 61039,
+              "bind_available": true,
+              "bind_result": "BOUND",
+              "bind_operation": "NETWORK_BIND",
+              "bind_error": "NONE",
+              "bind_errno": 0
+            }
+          }
+        ],
+        "cache": {
+          "validation": "READY",
+          "age_seconds": 11,
+          "expires_at": 1794053243,
+          "revision": 1,
+          "minimum_crl": 1,
+          "fingerprint": "bbc8bb50836e87012cf96c6b3a5e0d723730bb536d42da2ab40ed67f04f98f23",
+          "issuer_expires_at": 1794056423,
+          "certificate_expires_at": 1794053422,
+          "revocations_expires_at": 1794053422,
+          "directory_expires_at": 1794053243,
+          "documents": {
+            "issuer": "VALIDATED_AS_BUNDLE",
+            "certificate": "VALIDATED_AS_BUNDLE",
+            "revocations": "VALIDATED_AS_BUNDLE",
+            "directory": "VALIDATED_AS_BUNDLE"
+          }
+        },
+        "refresh_result": "READY",
+        "selected_source": "REFRESH",
+        "finished_at": 1794052854740,
+        "operation": "FETCH",
+        "stage": "COMPLETE",
+        "duration_ms": 17339,
+        "failures": [
+          {
+            "operation": "CHALLENGE",
+            "stage": "CONNECT_TLS_WRITE",
+            "route": "HTTPS_UNDERLAY",
+            "error_class": "SOCKET",
+            "http_status": 0,
+            "elapsed_ms": 85,
+            "network_type": "CELLULAR",
+            "network_generation": 429513165534
+          },
+          {
+            "operation": "CHALLENGE",
+            "stage": "RELAY_OPEN",
+            "route": "RNS",
+            "error_class": "UNAVAILABLE",
+            "http_status": 0,
+            "elapsed_ms": 1861,
+            "network_type": "WIFI",
+            "network_generation": 433808132830
+          }
+        ],
+        "stages": [
+          {
+            "operation": "CHALLENGE",
+            "route": "HTTPS_UNDERLAY",
+            "stage": "LOCAL",
+            "elapsed_ms": 80,
+            "remaining_ms": 29998
+          },
+          {
+            "operation": "CHALLENGE",
+            "route": "HTTPS_UNDERLAY",
+            "stage": "OPEN_NETWORK",
+            "elapsed_ms": 80,
+            "remaining_ms": 29998
+          },
+          {
+            "operation": "CHALLENGE",
+            "route": "HTTPS_UNDERLAY",
+            "stage": "CONNECT_TLS_WRITE",
+            "elapsed_ms": 85,
+            "remaining_ms": 29993
+          },
+          {
+            "operation": "CHALLENGE",
+            "route": "RNS",
+            "stage": "LOCAL",
+            "elapsed_ms": 85,
+            "remaining_ms": 29992
+          },
+          {
+            "operation": "CHALLENGE",
+            "route": "RNS",
+            "stage": "RELAY_OPEN",
+            "elapsed_ms": 85,
+            "remaining_ms": 29992
+          },
+          {
+            "operation": "CHALLENGE",
+            "route": "PROVISIONING",
+            "stage": "LOCAL",
+            "elapsed_ms": 1879,
+            "remaining_ms": 28199
+          },
+          {
+            "operation": "CHALLENGE",
+            "route": "PROVISIONING",
+            "stage": "CARRIER_OPEN",
+            "elapsed_ms": 1879,
+            "remaining_ms": 28199
+          },
+          {
+            "operation": "CHALLENGE",
+            "route": "PROVISIONING",
+            "stage": "CARRIER_HANDLE",
+            "elapsed_ms": 1885,
+            "remaining_ms": 28193
+          },
+          {
+            "operation": "CHALLENGE",
+            "route": "PROVISIONING",
+            "stage": "CARRIER_REQUEST",
+            "elapsed_ms": 1885,
+            "remaining_ms": 28193
+          },
+          {
+            "operation": "CHALLENGE",
+            "route": "PROVISIONING",
+            "stage": "RESPONSE_RECEIVED",
+            "elapsed_ms": 10217,
+            "remaining_ms": 19860
+          },
+          {
+            "operation": "CHALLENGE",
+            "route": "PROVISIONING",
+            "stage": "HTTP_STATUS",
+            "elapsed_ms": 10218,
+            "remaining_ms": 19860
+          },
+          {
+            "operation": "FETCH",
+            "route": "PROVISIONING",
+            "stage": "LOCAL",
+            "elapsed_ms": 10229,
+            "remaining_ms": 19849
+          },
+          {
+            "operation": "FETCH",
+            "route": "PROVISIONING",
+            "stage": "CARRIER_OPEN",
+            "elapsed_ms": 10229,
+            "remaining_ms": 19849
+          },
+          {
+            "operation": "FETCH",
+            "route": "PROVISIONING",
+            "stage": "CARRIER_HANDLE",
+            "elapsed_ms": 10229,
+            "remaining_ms": 19849
+          },
+          {
+            "operation": "FETCH",
+            "route": "PROVISIONING",
+            "stage": "CARRIER_REQUEST",
+            "elapsed_ms": 10229,
+            "remaining_ms": 19849
+          },
+          {
+            "operation": "FETCH",
+            "route": "PROVISIONING",
+            "stage": "RESPONSE_RECEIVED",
+            "elapsed_ms": 17258,
+            "remaining_ms": 12820
+          },
+          {
+            "operation": "FETCH",
+            "route": "PROVISIONING",
+            "stage": "HTTP_STATUS",
+            "elapsed_ms": 17259,
+            "remaining_ms": 12819
+          },
+          {
+            "operation": "FETCH",
+            "route": "PROVISIONING",
+            "stage": "COMPLETE",
+            "elapsed_ms": 17275,
+            "remaining_ms": 12803
+          }
+        ]
+      },
+      "owner_acceptance": {
+        "receipt_class": "real_owner_product",
+        "challenge_id": "cfa2e9dc4ce7499880e9f4440041ed0f",
+        "fetch_id": "6c84002f1087437881ac9f57b6ca786b",
+        "challenge_result": "issued",
+        "fetch_result": "authorized",
+        "import_result": "accepted",
+        "revision": 1,
+        "expires_at": 1794053243,
+        "observed_at": 1794052854
+      },
+      "refresh": "SUCCESS",
+      "restricted_startup": {
+        "schema": 1,
+        "attempt": 1,
+        "started_unix_ms": 1794052854764,
+        "completed_ms": 26296,
+        "status": "SUCCEEDED",
+        "stage": "STARTUP",
+        "cause": "NONE",
+        "complete": true,
+        "directory_fingerprint": "a89316b2e5d34540a1ea1fd87ef9d01c9208965907bd4f8b601dddbfbdaff900",
+        "bootstrap_exchanges": [
+          {
+            "bootstrap_exchange_tag": "d0a3e5266fc64be5a15262fc486acfc99b3325ea3522cee6c8d161c8f6387a1d",
+            "family_authenticated": true
+          }
+        ],
+        "bootstrap_exchanges_dropped": 0,
+        "connection_id": "dffe80b3-f360-4bfd-b081-20f7a21d824c",
+        "incident_id": "489fefc5-2a74-45c0-be09-664808e613d5"
+      },
+      "counters": {
+        "protect_ok": 55,
+        "protect_denied": 0,
+        "dns": 0,
+        "tcp": 0,
+        "tcp_active": 0,
+        "tcp_peak": 0,
+        "limit_denied": 0,
+        "udp_denied": 0,
+        "ipv6_denied": 0
+      },
+      "readiness_file_exists": true,
+      "stage": "CONNECT_RETURNED",
+      "monotonic_ms": 101497,
+      "relative_connect_ms": 44011
+    },
+    {
+      "stage": "NATIVE_READY",
+      "monotonic_ms": 101497,
+      "relative_connect_ms": 44011
+    },
+    {
+      "stage": "ENCRYPTED_READINESS_ACCEPTED",
+      "monotonic_ms": 101499,
+      "relative_connect_ms": 44013
+    },
+    {
+      "stage": "DNS_OK",
+      "monotonic_ms": 115504,
+      "relative_connect_ms": 58018
+    },
+    {
+      "stage": "VERIFIED_HTTPS_OK",
+      "monotonic_ms": 118102,
+      "relative_connect_ms": 60616
+    },
+    {
+      "stage": "EGRESS_VERIFIED",
+      "monotonic_ms": 118103,
+      "relative_connect_ms": 60617
+    },
+    {
+      "id_and_header_valid": true,
+      "rcode": 3,
+      "answer_count": 0,
+      "stage": "ORIGINAL_TARGET_DNS_OBSERVATION",
+      "monotonic_ms": 119723,
+      "relative_connect_ms": 62237
+    },
+    {
+      "stage": "OWN_CLIENT_CLEANUP_RETURNED",
+      "monotonic_ms": 120446,
+      "relative_connect_ms": 62960
+    }
+  ],
+  "native_network_before_cleanup": [
+    {
+      "request_id": "cfa2e9dc4ce7499880e9f4440041ed0f",
+      "phase": "BEGIN",
+      "native": {
+        "handle": 1,
+        "go_entered": true,
+        "budget_known": true,
+        "stage": "LOCATOR",
+        "last_success": "LOCATOR",
+        "first_failure": "",
+        "reason": "NONE",
+        "provider_step": "",
+        "http_status": 0,
+        "errno": 0,
+        "security": false,
+        "elapsed_ms": 2,
+        "remaining_ms": 28194,
+        "protected": 0,
+        "denied": 0,
+        "closed": false,
+        "released": false
+      },
+      "network": {
+        "type": "WIFI",
+        "handle": 433808132830,
+        "available": true,
+        "foreground": true,
+        "not_restricted": true,
+        "resolver": "NETWORK_IPV4_GO_RESOLVER",
+        "resolver_class": "PRIVATE_IPV4",
+        "observed_ms": 59477,
+        "bind_ms": 0,
+        "bind_available": false,
+        "bind_result": "NOT_RUN",
+        "bind_operation": "NOT_RUN",
+        "bind_error": "NONE",
+        "bind_errno": 0
+      }
+    },
+    {
+      "request_id": "cfa2e9dc4ce7499880e9f4440041ed0f",
+      "phase": "POST",
+      "native": {
+        "handle": 1,
+        "go_entered": true,
+        "budget_known": true,
+        "stage": "RESPONSE_VALIDATE",
+        "last_success": "RESPONSE_VALIDATE",
+        "first_failure": "",
+        "reason": "NONE",
+        "provider_step": "",
+        "http_status": 0,
+        "errno": 0,
+        "security": false,
+        "elapsed_ms": 8335,
+        "remaining_ms": 19861,
+        "protected": 28,
+        "denied": 0,
+        "closed": false,
+        "released": false
+      },
+      "network": {
+        "type": "WIFI",
+        "handle": 433808132830,
+        "available": true,
+        "foreground": true,
+        "not_restricted": true,
+        "resolver": "NETWORK_IPV4_GO_RESOLVER",
+        "resolver_class": "PRIVATE_IPV4",
+        "observed_ms": 67810,
+        "bind_ms": 61039,
+        "bind_available": true,
+        "bind_result": "BOUND",
+        "bind_operation": "NETWORK_BIND",
+        "bind_error": "NONE",
+        "bind_errno": 0
+      }
+    },
+    {
+      "request_id": "6c84002f1087437881ac9f57b6ca786b",
+      "phase": "POST",
+      "native": {
+        "handle": 1,
+        "go_entered": true,
+        "budget_known": true,
+        "stage": "RESPONSE_VALIDATE",
+        "last_success": "RESPONSE_VALIDATE",
+        "first_failure": "",
+        "reason": "NONE",
+        "provider_step": "",
+        "http_status": 0,
+        "errno": 0,
+        "security": false,
+        "elapsed_ms": 15376,
+        "remaining_ms": 12820,
+        "protected": 28,
+        "denied": 0,
+        "closed": false,
+        "released": false
+      },
+      "network": {
+        "type": "WIFI",
+        "handle": 433808132830,
+        "available": true,
+        "foreground": true,
+        "not_restricted": true,
+        "resolver": "NETWORK_IPV4_GO_RESOLVER",
+        "resolver_class": "PRIVATE_IPV4",
+        "observed_ms": 74851,
+        "bind_ms": 61039,
+        "bind_available": true,
+        "bind_result": "BOUND",
+        "bind_operation": "NETWORK_BIND",
+        "bind_error": "NONE",
+        "bind_errno": 0
+      }
+    },
+    {
+      "request_id": "",
+      "phase": "CLOSE",
+      "native": {
+        "handle": 1,
+        "go_entered": true,
+        "budget_known": true,
+        "stage": "RESPONSE_VALIDATE",
+        "last_success": "RESPONSE_VALIDATE",
+        "first_failure": "",
+        "reason": "NONE",
+        "provider_step": "",
+        "http_status": 0,
+        "errno": 0,
+        "security": false,
+        "elapsed_ms": 15393,
+        "remaining_ms": 12803,
+        "protected": 28,
+        "denied": 0,
+        "closed": true,
+        "released": false
+      },
+      "network": {
+        "type": "WIFI",
+        "handle": 433808132830,
+        "available": true,
+        "foreground": true,
+        "not_restricted": true,
+        "resolver": "NETWORK_IPV4_GO_RESOLVER",
+        "resolver_class": "PRIVATE_IPV4",
+        "observed_ms": 74868,
+        "bind_ms": 61039,
+        "bind_available": true,
+        "bind_result": "BOUND",
+        "bind_operation": "NETWORK_BIND",
+        "bind_error": "NONE",
+        "bind_errno": 0
+      }
+    }
+  ],
+  "acceptance_before_cleanup": {
+    "receipt_class": "real_owner_product",
+    "challenge_id": "cfa2e9dc4ce7499880e9f4440041ed0f",
+    "fetch_id": "6c84002f1087437881ac9f57b6ca786b",
+    "challenge_result": "issued",
+    "fetch_result": "authorized",
+    "import_result": "accepted",
+    "revision": 1,
+    "expires_at": 1794053243,
+    "observed_at": 1794052854
+  },
+  "startup_before_cleanup": {
+    "schema": 1,
+    "attempt": 1,
+    "started_unix_ms": 1794052854764,
+    "completed_ms": 26296,
+    "status": "SUCCEEDED",
+    "stage": "STARTUP",
+    "cause": "NONE",
+    "complete": true,
+    "directory_fingerprint": "a89316b2e5d34540a1ea1fd87ef9d01c9208965907bd4f8b601dddbfbdaff900",
+    "bootstrap_exchanges": [
+      {
+        "bootstrap_exchange_tag": "d0a3e5266fc64be5a15262fc486acfc99b3325ea3522cee6c8d161c8f6387a1d",
+        "family_authenticated": true
+      }
+    ],
+    "bootstrap_exchanges_dropped": 0,
+    "connection_id": "dffe80b3-f360-4bfd-b081-20f7a21d824c",
+    "incident_id": "489fefc5-2a74-45c0-be09-664808e613d5"
+  },
+  "server_counts": {
+    "restricted_challenges": 1,
+    "restricted_certificates": 1
+  },
+  "server_provisioning_correlation": [
+    "cold_provision stage=tls_ready elapsed_ms=3441",
+    "cold_provision stage=request_accepted operation=0 request_id=cfa2e9dc4ce7499880e9f4440041ed0f elapsed_ms=3457",
+    "cold_provision stage=backend_complete operation=0 request_id=cfa2e9dc4ce7499880e9f4440041ed0f status=200 bytes=169 success=true elapsed_ms=3468",
+    "cold_provision stage=write_complete operation=0 request_id=cfa2e9dc4ce7499880e9f4440041ed0f elapsed_ms=3468",
+    "cold_provision stage=request_accepted operation=1 request_id=6c84002f1087437881ac9f57b6ca786b elapsed_ms=4304",
+    "cold_provision stage=backend_complete operation=1 request_id=6c84002f1087437881ac9f57b6ca786b status=200 bytes=2927 success=true elapsed_ms=4321",
+    "cold_provision stage=write_complete operation=1 request_id=6c84002f1087437881ac9f57b6ca786b elapsed_ms=4322",
+    "cold_provision stage=peer_end operation=1 request_id=6c84002f1087437881ac9f57b6ca786b elapsed_ms=11421"
+  ],
+  "traffic": {
+    "dns_public_target": "api.ipify.org",
+    "verified_https": "https://api.ipify.org",
+    "tls_verification": "Default Android HTTPS trust and hostname verification; no overrides",
+    "egress": "SHA256 of actual HTTPS body equals fresh direct verified host/gateway egress body; raw IP omitted",
+    "tun_counters": {
+      "protect_ok": 55,
+      "protect_denied": 0,
+      "dns": 6,
+      "tcp": 1,
+      "tcp_active": 1,
+      "tcp_peak": 1,
+      "limit_denied": 0,
+      "udp_denied": 0,
+      "ipv6_denied": 0
+    },
+    "mux_counters": {
+      "DNSRequests": 6,
+      "DNSResponses": 4,
+      "DNSErrors": 0,
+      "DNSTimeouts": 2,
+      "OpenOK": 2,
+      "OpenErrors": 0,
+      "ProtocolErrors": 2,
+      "SentBytes": 747,
+      "ReceivedBytes": 3589
+    },
+    "original_target": {
+      "id_and_header_valid": true,
+      "rcode": 3,
+      "answer_count": 0,
+      "stage": "ORIGINAL_TARGET_DNS_OBSERVATION",
+      "monotonic_ms": 119723
+    }
+  },
+  "causal_fix_evidence": [
+    "A/B: Go reached, first failure SOCKET_PROTECT_BIND/SOCKET_DENIED; B isolates NETWORK_BIND EACCES13 after FD_DUP. Background CELLULAR lacks FOREGROUND.",
+    "API27 netd permissions explain EACCES. Minimal selector requires unrestricted foreground non-VPN internet network and keeps per-operation DNS/network pinning; no added permissions or fallback.",
+    "Before/after regression; API27 hidden18 versus public19 corrected with actual bit-value SDK27/28/35 fixtures.",
+    "D and E: successful binds with zero denied, real TLS/challenge/fetch, server correlation and ordinary MESH READY. E adds positive DNS/HTTPS/egress.",
+    "D example.com failure reproduces via unchanged host resolver NXDOMAIN; E original-target query over TUN returns matching-id RCODE3. DNS/route settings not changed."
+  ],
+  "remaining_limits": [
+    "Two DNS timeouts and two Mux protocol-error counters observed in E; no attribution or zero-loss/stability claim.",
+    "No long-duration/load/general-negative suite, API35 device run, physical phone qualification or production deployment in this task.",
+    "Provider room-object deletion NOT_VERIFIED; local workers/processes/connections stopped."
+  ],
+  "final_apks": {
+    "source": "14c2b816c0a2aa3f9cd90ddbef65edb0c1a92ab7",
+    "abi": "x86_64",
+    "native_sha256": "17119f000407ec1d7ccdf8d33acabe423f3cf20e32b6f8af839d209aa3360c59",
+    "method": "assets-only zip rewrite, zipalign16K, fresh isolated test signer; unchanged manifest/dex/native",
+    "apks": {
+      "app-friends.apk": {
+        "sha256": "876daae0beb893e3b2bebb4773f6848de1f566ae76e960fb04c4cfa779858c50",
+        "base_sha256": "908c66c3d2bb1b39f35e30633b7303e9f96e0c57de7e4a30fdc56a4bf45159a5",
+        "changed_entries": [
+          "assets/control-anchor.pub",
+          "assets/provisioning/nl-amsterdam-1.json"
+        ]
+      },
+      "app-friends-androidTest.apk": {
+        "sha256": "5fd5299643d330d92130d5d676956000f32a5bfa8552c97b3a2f4cf8c6e863e2",
+        "base_sha256": "0ac712fa6322503824441a045bb02320a7e18aa8aaba65322c9afa111fe91204",
+        "changed_entries": [
+          "assets/identity96.private",
+          "assets/egress.sha256"
+        ]
+      }
+    },
+    "native_source": "6eb61a9faa659b6b07ac16bf9f4bac46a41cd2a7"
+  },
+  "manifest": {
+    "package": "com.familyconnect.app.friends",
+    "version_code": 118,
+    "version_name": "0.1.18-beta118",
+    "min_sdk": 27,
+    "target_sdk": 35,
+    "distribution": "Own disposable AVD only, fresh isolated test signer; public artifacts unchanged"
+  },
+  "native_exports": [
+    "Java_com_familyconnect_app_NativeRestricted_provisionBegin",
+    "Java_com_familyconnect_app_NativeRestricted_provisionPost",
+    "Java_com_familyconnect_app_NativeRestricted_provisionClose"
+  ],
+  "cleanup": {
+    "owned_roots_alive": [],
+    "authority_absent": true,
+    "shared_lock_available": true,
+    "stand_process_pids": [],
+    "old_fail_artifacts_preserved": 19,
+    "preserved_manifest_sha256": "8b4501cf10e7564e9992771087b4c9747e951c7d425dbf817b5c07cd7736961c",
+    "owned_emulator_stopped": true,
+    "monitor_joined": true,
+    "provider_room_deletion": "NOT_VERIFIED"
+  },
+  "rooms_created_this_run": 3,
+  "prior_attempts_preserved": [
+    "2026-11-07-cold-connect-a.json",
+    "2026-11-07-cold-connect-b.json",
+    "2026-11-07-cold-connect-c.json",
+    "2026-11-07-cold-connect-d.json"
+  ],
+  "local_evidence_root": "state-client-build/cold-native-diagnostic-20261106/connect-e-20261107",
+  "artifact_sha256": {
+    "immutable.json": "a2607852cc4ca4f44b53104d5ba7699c0837e722ee10f87d634326b9416bbf77",
+    "receipt.json": "11785add3cce485d9e4b86efc54aac4f3781f63744e30635d3ff290e4bf7cd82",
+    "runner.log": "a7bc6b892129322f7e4d43e31722de7270e620fdec4bd57be568d7388f8121b6",
+    "python-imports.log": "25db925c38810711c7b2b7d4e59389a0434fa94cb6e3649c29aa5ea9b7e8f919",
+    "instrumentation.log": "359d0eaf1780d0ba17519c4fce48d321525971db0e5a73a99c5281e227ce1e6a",
+    "resources.jsonl": "69f93921e3523ec1ddf1ab685f9fb23d2f2d5760d8e6eab1378cada9aaa55112",
+    "emulator.log": "07e5371c4c565a03cac6cc76d29d83fdbee0494caf88dfc8d4a7af744e2ee860",
+    "renderer.txt": "ef1df63ccf1d9ebba2d56bcd3c33d2ec5225b8411e2349438aa14383313ad6aa",
+    "guest-rules-before.txt": "b1c4e98331af17254989f446f00b8719db084ff0542588588cf5a225c0ab6134",
+    "guest-rules-after.txt": "48fe5133ff382d9d072161f77d2a98d82ec86fcc353acaccf1772c9a3b166508",
+    "guest-connectivity-after.txt": "0f23f2a78c013c0243a4bc5c6c7b7212ed0e66146568d269ba5948db1dc3fe40",
+    "local-auth/stand.log": "15223411963ebfa5b29deb7d10288b237a774d83247b7a05b365b0b089c7b3a0",
+    "cleanup-verified.json": "9f743d5a4d3b80ea7b4320a2c59ffad149cebd5740a98cc857faa066fff9c6c3",
+    "apk-final/receipt.json": "80eb66041ea1f081dff2fd7986d04a12c0c855df6d97258104db9a1be4e06f97",
+    "apk-final/app-friends.apk": "876daae0beb893e3b2bebb4773f6848de1f566ae76e960fb04c4cfa779858c50",
+    "apk-final/app-friends-androidTest.apk": "5fd5299643d330d92130d5d676956000f32a5bfa8552c97b3a2f4cf8c6e863e2",
+    "apk-final/app-friends.apk.verify.txt": "b7cb133936bb3442d5e2fa1986ec493523422972443a27a1e78c27c8f75338b8",
+    "apk-final/app-friends-androidTest.apk.verify.txt": "b7cb133936bb3442d5e2fa1986ec493523422972443a27a1e78c27c8f75338b8"
+  }
+}

@@ -527,6 +527,1541 @@ unchanged. [Evidence](releases/2026-11-07-vpn-health.md).
 bootstrap services active. No runtime changes; active state alone does not close the
 automatic-renewal or sustained MESH gates. Selected work unchanged.
 [Measurements](releases/2026-11-06-vpn-health.md#2005utc-read-only-refresh).
+## Retained remote checkpoint history — integrated 24 November
+
+The following remote-session records are preserved, not selected as new work. The current
+owner request and HA-02 navigation above take precedence. PR45 is already merged in the
+fetched remote main; its original review-only/no-merge wording below is historical evidence.
+
+**PR45/P1 — preserve pre-lock participant failures, repeat review only.**
+Continue the existing feature worktree from3f5698e4; mainbc8f7b5b and accepted PR44
+are unchanged. Exact old source and installed-systemd reproductions demonstrate
+the blocking shared-intent deletion race for expired open and immediate open error.
+Separate active/failed state, serialize outcome publication and explicit recovery,
+retain budget-before-open, final descriptor/deadline/ACK ordering and8/12/120.
+Gate:213 source tests, including real process/flock and final-outcome ordering.
+Require two reproducible bundles, new installed-systemd pending-stop scenarios plus
+previous watchdog/generation/expiry/revoke/retained-authority rollback/cost matrix,
+all applicable final-head CI and self-review. Panel fixture now matches the new
+outcome-lock;320 panel tests pass. Record terminal hashes/results on PR45, including
+the retained native recovery FAIL and stricter NRestarts=0 gate; old manifest/PASS
+is only evidence for3f5698e4. No merge before repeat review.
+Production **NOT_DEPLOYED**; no RU/NL operation or storage root-cause investigation.
+[Repair evidence/contract](releases/2026-11-18-pr45-prelock-fence.md).
+Android subscription-card auto-refresh remains the next product task, not this repair.
+
+### Previous PR45 package qualification / historical gates
+
+**RU-PERSISTENCE-READBACK-1 — coordinated package/systemd qualification.**
+PR44 source/CI/merge COMPLETE: accepted `ea661996`, main `bc8f7b5b`, tree
+`037783c0`; ten head and eight merge workflows SUCCESS. Do not repeat those gates.
+Preserve the recovered legacy RU/MESH runtime and local recovery receipt `ef55433c`.
+Selected continuation: reproduce watcher error/unlock/asynchronous-stop race;
+close it without loosening8/12/120s or PR44 budget/ACK contracts; package node,
+gateway, collector and units with explicit provenance; qualify installed bytes on
+disposable real systemd with synthetic authority, actual allowed/denied traffic,
+durable failures, generation/freshness and authority-preserving rollback.
+Installed6aba3211 package/systemd/rollback PASS;197 transport/package source tests.
+Final head closure/fixture receipts, applicable CI and review-readiness are tracked
+on [PR45](https://github.com/Joker20380/family_connect/pull/45); no historical PASS
+may be substituted. Package source/runtime mapping must remain explicit.
+Finish self-review and a review-ready PR, not production delivery. Production
+**NOT_DEPLOYED**; storage latency and initial renewal writer causes remain UNKNOWN.
+Separate next delivery: explicitly authorized RU-only fence/drain/stop and qualified
+bundle/rollback. Separate next small product task: Android subscription-card
+auto-refresh. Do not reopen accepted support/notifications/split tunneling/beta126,
+historical G4 RUNNING, deferred physical iOS, or paused desktop L04.2.
+[Stage receipt and gates](releases/2026-11-18-readback-delivery.md).
+[Future guarded delivery/rollback procedure](operators/transport-readback-delivery.md).
+
+### Superseded PR44 source queue / retained evidence
+
+**RU-PERSISTENCE-READBACK-1/P1 — selected / PR44 budget + panel clock repair.**
+Reproduce slow successful application.lock open on exact cff3 and compare c086.
+Start the shared budget before open; retain serialization through operation-exit
+validation and guarded error handling.101 focused/182 transport tests pass, including
+the prior barrier matrix. Separate test-only aware UTC clock fix passes exact
+3600→3601 ages and clock-skew label;36 targeted/320 full panel, browser2 and
+deployment-boundary1 checks pass locally. Final-head panel must execute browser,
+deployment-boundary and build steps; recheck native artifact provenance and
+six-cycle18-query/12→0-sync comparison. Record the pre-existing external watch
+fail-closed/concurrent registration window separately before delivery qualification.
+Keep PR44 draft; stop at repeat review, no merge/deployment or physical iOS.
+[Current evidence](releases/2026-11-17-pr44-budget-clock.md).
+
+Previous P1 checkpoint (retained evidence):
+Preserve the accepted old-head receipts, closed historical fixture export and
+opt-in persistence design. Reproduce premature application-lock release during
+blocked failure-receipt fsync on `c086d131`, then fix operation body/exit handling
+without losing the first error or ACK/deadline guarantees. Controlled real flock,
+watch/notify and collector tests must observe the unsafe interval, not only final
+cleanup.24 focused cases and179 transport/source-guard tests pass; finish exact new-head
+CI, author self-review and repeat review. **Do not merge or deploy PR44.**
+[Contract and remaining delivery boundaries](operators/transport-readback-candidate.md).
+Source qualification never closes historical storage attribution or RU availability.
+
+Documentation PR43 is integrated at main `380da279`; PR42 source
+`af1b37b6`/merge `b3fefac1` is complete; do not reopen their CI.
+The PR44 opt-in candidate retains durable
+decisions/leases/denies, membership preparation and applied-change ACKs; bind
+observations to revision, boot/runtime generation and completed real readback.
+Gate: baseline/candidate counters plus crash, expiry/revoke, ACK, concurrency,
+watchdog and collector safety, synthetic fixtures and all applicable exact-head CI.
+Legacy mode and its two-write regression remain unchanged. Stop at PR44's repeat
+review, NOT_DEPLOYED; no production SSH/deployment/restart or infrastructure work.
+RU historical recovery is not durable stability. Physical iOS and Apple enrollment/
+TestFlight are explicitly deferred; all physical iOS gates remain NOT_RUN.
+[Incident mechanism and limits](releases/2026-11-17-ru-storage-stall.md).
+
+### Superseded priorities / retained evidence
+
+**PR42-CI-REPAIR-2 — native/TCP/DNS validated / restart reservation correction.**
+815251a8 push passes full API35, then fails before API27 on reservation51900.
+Reproduce closed-peer TIME_WAIT false rejection locally; match Go SO_REUSEADDR
+with exclusive listen, preserving foreign-listener/child ownership checks.58 tests
+PASS; bounded socket-state receipt distinguishes future live conflicts from
+TIME_WAIT. Old actual conflict state/owner is not known. Final CI remains required.
+b8b3dc05 passes actual iOS attempt1, Desktop Auto and real WG/AWG/TCP/Auto with three
+successful system-consent transfers; old c568 consent cause remains UNKNOWN.
+Push44109482163 later fails per-app API35 DNS8s while IPv4/IPv6 TLS succeed.
+Logs prove853-to-HTTPS misrouting; actual pinned-Xray regression also reproduces
+TCP53-to-HTTPS. Correct the synthetic DNS endpoint/rules and retain bounded DNS
+diagnostics, with unchanged Android settings, deadline and routing assertions.
+All final-head gates including full legacy Android/payload remain mandatory;
+historical iOS/runtime PASS never substitutes for the new candidate.
+Owner explicitly extends the repair boundary: Desktop Auto must build the immutable
+accepted native closure via stage_linux_native, while current-head protocol,
+frontend and intentional lifetime overlays retain their existing gates. Repair
+Android TCP fixture readiness/ownership and port isolation; qualify actual runtime.
+Desktop staging15 tests PASS; Android ownership/cleanup10 isolated tests PASS.
+Current-code lifetime overlay bypass repaired: reproduced DEADLINE, then15 native
+lifecycle and3 isolated system gates PASS; hook/staging regressions13 PASS.
+Remaining integration gate: real Android and executed final-head iOS acceptance
+(one justified retry of an unacquired runner is allowed, not retries of executed
+failures for PASS).
+Entry2b32b69e; remote mainbda954fb verified unchanged. Preserve FD/AppImage repairs
+and their original UNKNOWN causes. Historical TCP port owner/reset sender UNKNOWN;
+the API35 bind failure is separate from API27 DNS. No accepted106 rehash, transport
+changes, product features, hosting, public releases or phone signing/install.
+Gate: all retained Desktop Auto checks, real Android/full Client builds, executed
+iOS and other applicable final-head push/PR gates; author self-review, normal merge
+and remote/tree verification. Do not stop after the first partial repair.
+[Live final gate/merge status](https://github.com/Joker20380/family_connect/pull/42#issuecomment-6950900474)
+is authoritative for terminal CI and integration; no follow-on product task starts
+automatically after merge.
+[Continuation evidence](releases/2026-11-17-pr42-final-ci.md).
+
+### Historical two-blocker repair (superseded scope)
+
+**PR42-CI-REPAIR-1 — fixes accepted; broader integration remained BLOCKED.**
+This replaces the previous docs-only restriction for two confirmed CI blockers:
+desktop resource-boundary diagnostics/repair (and runtime cleanup only if proven
+defective), plus pinned AppImage dependency acquisition and its CI integration.
+Dependencies: accepted iOS development implementation; entry690c9e57, mainbda954fb.
+Desktop: deterministic false failure reproduced; owned-resource audit and82
+targeted/context tests pass. Historical FD owner remains UNKNOWN; no runtime
+cleanup defect established. AppImage downloader retains both pins; both full binary
+downloads/hash verification and52 targeted downloader/workflow/scope tests pass.
+Full final-head Linux packaging and broader CI are pending; preserve old failures.
+Newly applicable Desktop Auto source verification fails49 reference entries (48
+also on mainbda954fb). Its accepted106 baseline cannot be updated by blind rehash;
+separate shared-transport reference reconciliation/qualification is outside these
+two CI repairs. Preserve this blocker and draft status unless legitimately resolved.
+Gate: negative tests, exact final-head phase0 push AND PR, Client Linux, Linux
+control, Android/iOS and all other applicable checks, explicit self-review and
+ordinary PR42 merge with remote verification. Do not retry unchanged CI for green.
+No hosting, production, Android DNS investigation, new iOS features or phone work.
+Next product step only after integration: separately agreed signed iPhone prototype.
+[Repair evidence and outstanding gates](releases/2026-11-17-pr42-ci-repair.md).
+
+### Historical iOS checkpoint (superseded repair boundary)
+
+**IOS-DEVELOPMENT-HANDOFF-1 — iOS source gate PASS / integration BLOCKED, PR42 DRAFT.**
+Owner resumes this stage17 November; hosting work is explicitly deferred.
+Exact47e89416 now passes iOS, Client builds (including Android API27/28/31), phase0
+and readiness. Linux control44038770715 fails unchanged desktop teardown:
+prepare-CONFLICT observes13 process descriptors against14 at entry. Preserve the
+earlier168f90c6 Android DNS failure too; a later success does not establish its cause.
+Do not merge with a failed mandatory gate, retry for green, or weaken/change unrelated
+desktop/Android runtime/assertions. Reconcile the completed evidence in one docs
+checkpoint; its automatic CI receives its own exact-head review. Further outcomes
+belong in the final PR receipt rather than repeated documentation pushes to rerun CI.
+
+Base PR41 merge bda954fb, remote unchanged; its5 post-merge workflows PASS.
+Gate: deterministic startup regression, generation-scoped provider lifecycle,
+idempotent NETunnelProviderManager, shared app-specific Keychain reference handoff,
+development signing parameters, exact-head unsigned device/simulator and isolated tests.
+Historical RU readback:01:03:56UTC operation-deadline failure proven at file_fsync;
+the later separate recovery is recorded in PR43. No new host access, repair or observer
+is selected here; underlying latency remains open. Physical VPN,
+Keychain sharing, routing, Telemost and whitelist remain a later device gate.
+[Receipt](releases/2026-11-17-ios-development-handoff.md).
+
+Development0.0.1/build2: startup commit/provider cleanup, manager, Keychain and
+signing preparation implemented. Exactfb13d23b macOS PR44032183193/push44032176415
+PASS both unsigned targets and nine isolated groups, zero handles;208 hashes
+verified. Author self-review is explicit, not independent approval. Broader gates
+and any subsequent documentation-head qualification/ordinary merge are recorded in
+[the final PR42 integration receipt](https://github.com/Joker20380/family_connect/pull/42#issuecomment-6940824604);
+a pending receipt does not authorize merge. Prior failed runs remain evidence.
+Next owner step: confirm actual phone/iOS/Xcode pairing, Team/capabilities,
+development provisioning and disposable test identity, then separately authorize
+the bounded signed-device plan in the iOS README. No real phone/Telemost/whitelist
+trial or RU recovery is selected automatically. PR41 finald02fce99 remains accepted.
+
+**RU-STABILITY-20261117 — explicitly selected by owner; availability recovery, cause open.**
+Investigate and address recurring service stops before continuing the separate iOS
+candidate. Entry main isbda954fb; iOS draft42 and the dirty checkout are preserved.
+The01:03:56 trigger is now measured: state-file fsync9.538854s exceeds8s. Guest
+ext4/jbd2 waits are also observed in a separate finite synthetic test, but the
+historical storage-delay source is not established. Fresh guarded recovery starts
+the accepted runtime at07:42:14UTC. Thirteen observations over474.358s and final
+07:50:53 renewal/preservation checks pass; availability recovery is complete.
+Durable fix is NOT_ACCEPTED: do not substitute successful recovery, relax8/12/120s,
+drop durable ACK semantics, or introduce blind restarts. Next evidence needed is
+hosting-side latency attribution/qualified storage, or a separately qualified
+security-state/liveness design; no migration, purchase or unrelated task is implied.
+[Current receipt and remaining gate](releases/2026-11-17-ru-storage-stall.md).
+
+**IOS-MESH-BRIDGE-1 — explicitly selected17 November / technical gate COMPLETE.**
+Dependency satisfied: PR40 exact3539ebe4 push/PR phase0 PASS, ordinary merge3468f828;
+retain RECOVERED_CAUSE_OPEN without repeating recovery.
+Gate: exact-head macOS unsigned iphoneos/arm64 and separate simulator builds,
+linked/invoked MESH, isolated Swift/C/Go lifecycle, notices/source closure, underlay
+limits and signed-iPhone prerequisites. No production/recovery/observer/next backlog
+task. Exactfc08a50e macOS43991766964 passes both builds, linked/invoked shared code,
+isolated Swift/Go lifecycle and closure checks; downloaded hashes verified. PR41
+records final source integration, author self-review and exact-head applicable CI.
+Do not substitute the earlierc125c0ea result or merge before those checks finish.
+Next, only if separately selected: secure device configuration + development
+provisioning and physical IPv4 underlay/NEPacketTunnelFlow/Telemost qualification.
+IPv6-only/NAT64 and user VPN readiness remain unaccepted.
+[Receipt](releases/2026-11-17-ios-mesh-bridge.md) · [Build](../clients/ios/README.md).
+
+**17 November00:02UTC — owner-requested RU recovery COMPLETE / RECOVERED_CAUSE_OPEN.**
+Fresh backup/isolated restore, RU-only fence/drain/stop, unchanged start, restored
+command map and six strict actual/persisted observations pass. The203.900s window
+crosses a lease deadline without process changes; final preservation and normal
+imports/support checks pass. Keep current HMAC2, exact paid-v2, metadata tombstones,
+public126/catalog9 and all current user data. No further recovery, runtime change or
+observer is selected automatically. The initiating stall remains a separate open
+cause, not a reason to claim this availability restoration is a durable fix.
+[Recovery receipt](releases/2026-11-17-ru-recovery.md).
+
+**Historical16 November22:47UTC — DEVICE-TECHNICAL-METADATA-1 public/source delivery completed;
+separate RU availability is OPEN.** PR38 merge7123b95e is remote-verified with the
+qualified588e793a tree. All ten source PR workflows and four push workflows pass.
+Keep signed4f288cbb/sourceba3e9370, catalog9, exact paid-v2 and installed acceptance.
+Do not select a CI APK, redo completed phone/HMAC/server stages or start another
+queued product task. Final documentation records actual source/merge results,
+observation limits and the new RU incident; it is not a production overlay.
+
+The22:07:37UTC watcher watchdog again stops RU AWG/TCP on unchanged runtime. The
+limited readback preserves support/HMAC2/tombstones and identifies recurring I/O/
+reclaim pressure without this task's earlier journal-scan load. Initiating cause is
+still open; no recovery or observer has been performed for this new incident.
+Separate incident handling must use fresh backups/guards and its authorized scope,
+not restore old data/keys or weaken paid deadlines. Do not call RU healthy merely
+because source CI passes. [Evidence and remaining boundary](releases/2026-11-16-ru-recurrence.md#new-recurrence--16-november2207utc).
+
+**Historical16 November21:45UTC — finish PR38 qualification; no blind rerun or merge.**
+Public126/catalog9 remains immutable and available. Final-head a1d5f632 Android
+push/API35 and PR/API31 fail separately; main99-case success does not cover the
+independent per-app harness. API31 fails DNS presence after TCP resume; exact probe
+details were lost because service.json was omitted from artifacts. Repair evidence
+retention without weakening assertions/timeouts, qualify the test-only change and
+retain the original failed attempts. No executable/candidate change or production
+redeployment; no infrastructure cause or full current-head PASS is established.
+[Evidence](releases/2026-11-16-android126-publication.md#final-head-ci-failure-and-evidence-repair).
+
+**16 November20:42UTC — DEVICE-TECHNICAL-METADATA-1 PUBLIC / optional catalog9.**
+The accepted signed126/4f288cbb is now the invitation and updater release. Full HTTPS
+APK/source/audio hashes, signer/package/ARM64/API27, Range/resume, signed discovery,
+legacy equality and both invitation/CSP paths pass. Installed metadata→API→HMAC2
+collector→real panel, device preservation and consent/revoke acceptance remain valid;
+phone consent is OFF. Exact paid-v2 retains108/119/123/125. No rebuild, signing,
+server deployment, RU recovery/rotation or user broadcast in publication. The separate
+watchdog initiating stall remains CAUSE_OPEN; fresh transport guards pass unchanged.
+Pre-publication head43da3339 has all ten workflows PASS, Android133562778411. Final
+source/catalog/docs integration uses PR38's own checks and ordinary merge, not inherited
+artifact CI. [Public files, device scope, checks and recovery](releases/2026-11-16-android126-publication.md).
+
+Do not automatically start another queued task after this delivery. RU recovery and
+HMAC2 remain accepted stages; the unresolved RU cause is a separate investigation.
+
+**Historical boundary — separate RU investigation/restoration selected by the owner,16 November evening.**
+RECOVERED_CAUSE_OPEN: watchdog→dependent engine stop→watcher-only restart cascade is
+established. The initiating stall is not conclusively attributed: the failure interval
+shows I/O/reclaim pressure and concurrent broad diagnostic reads, without a surviving
+pre-kill stack. Do not call correlation a provider fault, OOM or a complete cause fix.
+Use bounded selected-file journal reads; no live overload reproduction, weakened
+8s/12s/120s guarantees or unqualified recorder deployment. Fresh backup/isolated
+restore and guarded recovery preserve current metadata/paid-v2/HMAC2. After explained
+lease-expiry/renewal TCP restarts, six strict samples cross a lease deadline over
+223.969s with exact20/20 bindings and66 records. Support/imports/baseline/cursor remain.
+[Receipt and evidence boundary](releases/2026-11-16-ru-recurrence.md#watchdog-cascade-and-guarded-recovery--16-november-evening).
+
+This incident task does not publish126 or reopen completed phone/signing/server gates.
+Keep APK4f288cbb/sourceba3e9370 immutable. All ten entry-head2ec88d36 workflows pass,
+including Android133491153349; do not transfer that result to a later documentation
+head. Metadata publication/review/integration remains the selected product work after
+this separate incident, with a fresh service guard; recurring-stall cause remains open.
+
+**Historical boundary — DEVICE-TECHNICAL-METADATA-1 publication BLOCKED17:41UTC,16 November.**
+Keep installed signed4f288cbb, exact paid-v2, metadata server/panel and HMAC2 unchanged.
+Owner restoration and normal revoke are complete: OFF/NL1/VPN disconnected; canonical
+and panel epoch6/sequence116 contain zero groups/no geography. Revoked browser24PASS.
+ADB later disappears, without another phone operation; temporary probe removal and
+USB-setting restoration are not observed. No repeat USB permission/device gate.
+All ten applicable f781c77e workflows PASS, including Android133448566529 and
+Windows/Linux. Keep artifact-source, test-only9c421a9d and documentation-head results
+distinct; no duplicate manual rerun. Original125 JVM updater protocol and isolated
+two-phase publication guards pass, not a physical updater UI installation.
+
+Publication stops before its first write: new RU AWG timeout/TCP inactive/watcher
+restart observed17:40:42UTC. This is not the separately reconciled17:10UTC HTTP
+scheduled-renewal stop/start on unchanged accepted bytes. Public125/catalog8, both
+invitations/CSP and all live ingress files remain unchanged; publication journal
+absent. HMAC2, support IPC and original notification baseline/cursor remain intact.
+Next external prerequisite: receipt of a separate RU recovery. Then short fresh
+service/pin checks, publish the same immutable APK/source/audio and discovery, verify
+public HTTPS/signature/Range/original125 protocol, review and ordinary integration.
+Do not start RU investigation/recovery, observer work, HMAC rotation or a new build
+inside this selected task. [Receipt](releases/2026-11-15-device-technical-metadata.md#restoration-ci-and-pre-publication-stop--16-november1741utc).
+
+**Historical boundary — separate RU recovery16 November16:08UTC:** the owner's explicit
+confirmation is executed on the accepted current paid-v2/metadata/HMAC2 foundation.
+Fresh backup/isolated restore, RU-only fence/drain/stop/preflight, encrypted off-host
+backup and sequential unchanged start pass. Six strict samples over224.856s cross a
+lease deadline without process changes; final protected-state/unit checks pass.
+Normal three-node transport and canonical subscription imports resume, support IPC
+and original notification baseline/cursor remain. No active fence remains. Outcome:
+RECOVERED_CAUSE_OPEN, not a runtime fix or physical traffic acceptance. See the
+[receipt](releases/2026-11-16-ru-recurrence.md#authorized-recovery--16-november1608utc).
+
+Historical16:08 boundary: DEVICE-TECHNICAL-METADATA-1 delivery stayed unpublished. Do not
+rebuild/re-sign APK4f288cbb or repeat server/HMAC deployment. Remaining release work:
+recheck intended phone country/network/consent (new enabled epoch5/sequence104 was
+already received before the recovery pause), finish applicable CI and publish the
+accepted immutable assets/catalog/invitations, then review/integrate. Earlier OFF
+acceptance does not establish the current setting. No observer or new runtime work
+is started automatically because the recurrence cause remains open.
+
+**Historical interruption — RU outage16 November15:48UTC:** new owner report is confirmed:
+AWG failed/timeout, TCP inactive, watcher restart loop and failed reconciliation.
+HTTP/public125 and normal panel imports remain available, not proof of VPN health.
+Bounded first-failure/journal evidence is preserved without restarting or changing
+anything. DEVICE-TECHNICAL-METADATA-1 public delivery is held pending separately
+coordinated guarded RU restoration/health and remaining CI. Do not reinterpret the
+earlier successful recovery as current health, repeat it silently inside metadata,
+introduce an observer, or publish staged126/catalog9 while this interruption is open.
+
+**Historical boundary — online cleanup16 November15:38UTC:** offline OFF/pending becomes
+an authenticated epoch4/sequence83 tombstone after normal connectivity returns.
+Canonical and generation2 panel observations/GeoIP are empty; original card remains.
+OFF without pending survives a new process, and the exact tombstones remain unchanged
+over subsequent normal imports. Real revoked-card/filter UI passes24 checks at1440/390px.
+The initial unfiltered first-page assumption failed twice; corrected handle selection
+verifies retention without weakening the cleared-field/filter assertions.
+
+Remaining phone action: restore original NL1 on the open home screen, leaving VPN
+disconnected and consent OFF. Wi-Fi/mobile data are restored; USB remains until final
+owner-approved restoration. Frozen signed4f288cbb/source/audio are verified unchanged.
+Optional signed catalog9 and minimal privacy-preserving nginx delta are prepared only;
+public125/catalog8 remain. Complete remaining source/current-head CI and public
+APK/source/audio/catalog/invitation delivery, then normal PR review/integration.
+Do not rebuild/re-sign, repeat server deployment/RU recovery/HMAC2 or reopen the vault.
+
+**Historical boundary — durable offline revoke16 November15:12UTC:** real Wi-Fi→cellular
+handover preserves established RU/AWG, independently confirmed by the app-owned VPN
+capabilities and exact canonical/panel sequence71. Real cellular UI passes32 checks.
+Controlled process restart retains consent/identity; canonical/panel sequence75
+correctly changes to DISCONNECTED/NONE and cellular default network. The retained
+GeoIP observation keeps its original age. Offline consent is now OFF/pending and
+survives a new process; no new canonical report is received. Server/panel still hold
+epoch3/sequence75 until the pending revoke arrives, not falsely claimed deleted.
+Next owner action: restore Wi-Fi/mobile data, leaving consent OFF. Verify automatic
+online cleanup and final country/network restoration, then public gates. Settings
+remain open; no automatic taps/bypass or private preference editing.
+
+Source9c421a9d native race/diagnostic CI steps pass; Android133378630911 full matrix
+and phase0 remain in progress. Do not replace frozen signed4f288cbb or re-deploy the
+accepted server/paid/HMAC2 stages. Public125/catalog8 and draft PR38 stay unchanged.
+
+**Historical boundary — installed metadata chain16 November14:49UTC:** explicit consent
+produces epoch3 and an authenticated body-bound report. Its exact observations and
+received_at reach the original generation2 production card; Android properties and
+Wi-Fi match independently. Real1440/390px card/list/filter/source/navigation checks
+pass30 assertions. AWG/NL1 establishes over the owned VPN's observed Wi-Fi underlay;
+preference, connecting attempt and established transport remain separate. NL1 city
+stays unavailable. Real Russia/AWG peer geography now passes: canonical device/key
+binding, fresh handshake, local DB-IP Lite2026-11 and panel fields agree, without raw
+IP/coordinates. This is database attribution, not physical-location proof. Next
+finish network/restart/online-offline revoke, restore initial settings/consent and
+complete public delivery. MIUI still denies normal injected taps; no bypass.
+
+Android133352606266 fails the batch cancellation harness before instrumentation.
+The bounded test-only fix awaits actual transport closure, not only Done, retaining
+timeouts/assertions. Local100-repeat race and full selected scope812/55 skips pass;
+hosted corrected-head acceptance is pending. No native executable/APK change and no
+rebuild/re-sign. Keep signed4f288cbb, loaded exact paid-v2, HMAC2, accepted server image
+and public125/catalog8. Do not repeat RU recovery, rotation or server deployment.
+PR remains draft; this is a successful installed metadata path, not a public release.
+
+**Historical boundary — exact paid loaded16 November14:07UTC:** local support fingerprint
+matches the preserved canonical key, without exporting it. The frozen installed4f288cbb
+retains the completed bounded identity/settings/history acceptance. Exact paid-v2
+overlays are now loaded in HTTP/operator/reconciler, preserving108/119/123/125; both
+collector pins match the new HTTP archive. Only HTTP restarted. Protected canonical
+data, all37 panel historical row/digests, generation2, labels/users/events and original
+notification cursor/anchor pass. Three full automatic inventory/metadata cycles pass
+through14:06:19UTC. Normal subscription imports continue; no real payment or message
+fixture. This is not public126 delivery or corrected-byte metadata acceptance.
+
+Settings are open, consent OFF and empty epoch2/sequence30 tombstone unchanged. The
+next concrete owner action is enabling “Технические сведения для поддержки” and
+confirming the explanation. No private-data transcription or new USB grant is needed;
+MIUI input remains denied. Continue corrected installed APK → authenticated metadata
+API → generation2 collector → real panel, then available sessions/network changes,
+RU/AWG geography and online/offline revoke. Finish remaining release gates and public
+delivery of the same APK/source/audio, signed catalog/invitations and ordinary merge.
+No rebuild/re-sign, repeated server deployment, RU recovery or HMAC rotation. Keep
+original125→old126 and old126→corrected126 evidence separate. PR stays draft until gates.
+
+**Historical replacement boundary — settings checked16 November13:22UTC:** immutable4f288cbb
+is installed over the earlier test126 without data clearing. Pulled bytes/signer,
+UID/first-install time, network settings, bounded options/contact-list comparison,
+fresh device/chat proof and canonical identity/activation/chat pin/subscription/event
+preservation pass. Consent was already OFF with an empty epoch2/sequence30 tombstone;
+both remain after replacement/restart. Do not attribute the earlier revoke to this test.
+Normal exported tab/subscription intents remove unnecessary navigation prompts but
+do not change consent, connect VPN or bypass denied input. The owner opened the
+existing conversation; all four previously observed message/date/status pairs match
+exactly and in order. This closes that bounded history-page comparison, not a full
+local database or pinned-key comparison. The owner then opened the selected-only
+display filter: both saved applications, INCLUDE mode and count match the original125
+and earlier126 baselines, without invalid/unsaved/shared-UID ambiguity or policy save.
+Fresh input remains denied by MIUI. Chats are open; next owner action is displaying
+the existing support contact's “Verify fingerprint” dialog, not transcribing it.
+Fresh27-table canonical/paid projection and37-table panel restore checks pass; both
+dynamic metadata tables are excluded from the panel backup. Three exact paid-v2
+overlays are server-staged and verified, NOT_LOADED; accepted live runtime/policy,
+generation2 and services remain. Recheck live delta before loading. Then finish
+affected data/session acceptance, exact paid loading, new-APK metadata
+chain/revoke/RU-AWG geography and public delivery. No full-release or direct125→new
+PASS; preserve the separate125→old126→replacement evidence. No new build/signing.
+
+**Historical signature checkpoint:** signed ba3e9370/merge0a2863b3 candidate126 is frozen
+at SHA4f288cbb/50,478,496bytes, accepted signer; retired SHA97513e3f stays unchanged.
+Exact paid v2 and108/119/123/125 preservation pass153 focused/501 full locked tests,
+plus7 tests on actual metadata-aware overlay packages. HTTP/operator/reconciler
+overlays and matching source/audio assets are staged, NOT_LOADED/NOT_PUBLISHED.
+Policy source408fb282 passes hosted paid43868845382/job133304328602, panel,
+readiness-wire, notification-route and messenger contexts; remaining workflows
+are still running. These checks remain separate from accepted Android sourceba3e9370
+and do not establish full new-head CI PASS. Redmi is still on old test126: do not downgrade
+or erase data to replay125. Fresh read-only home capture succeeds, but MIUI still
+denies injected options taps and the temporary app USB grant is expired. Next owner
+step is options/temporary USB support with no transcription; then finish the fresh
+baseline, install replacement in place and compare affected state/session paths.
+Old125→test126 evidence stays scoped to those bytes; do not call it direct125→new
+acceptance. Unchanged Java DEX does not waive native/session or remaining release gates.
+
+**Historical16 November12:23UTC — DEVICE-TECHNICAL-METADATA-1 resumed by owner.**
+The stale subscriptions producer pin is corrected, not bypassed: provenance/live
+hash, fail-closed mismatch and config restore/permissions checks pass. Three normal
+imports are ok/66; existing handles/events/HMAC2/baseline/cursor remain. No server
+restart or repeated RU/HMAC/server deployment. Sourceba3e9370 has10 hosted workflows
+PASS, including Android133023081315 API35/27/28/31 and mandatory native race gate.
+Download14190548672 has CI merge0a2863b3/tree equal toba3e9370. The distinct unsigned
+replacement126 SHA2dd0729b/50,458,549bytes passes package/ABI/alignment. Preserve old
+signed SHA97513e3f, its bounded acceptance and failed-source history; it cannot inherit
+this correction. Next: sign this separately qualified replacement, record immutable
+signed bytes/exact descriptor, and repeat affected installed acceptance without
+downgrade or data clearing. Then remaining session/revoke/GeoIP, paid and publication
+gates. ADB Redmi is present; signing/device acceptance is not presumed complete.
+
+**16 November incident interruption: RU-INCIDENT-20261116 recovery complete.**
+The owner separately authorized unchanged-runtime recovery. Fresh backup/isolated
+restore, RU-only fence/drain/grouped stop/retained-state validation and sequential
+start pass; original command map restored. After an explained first-renewal TCP
+restart, six strict observations over210.483s confirm stable actual20 AWG/20 TCP,
+66 applied records and admission renewal across the initial observed deadline.
+The failed initial continuity check remains evidence, not PASS. Protected data,
+generation2 and notification baseline/cursor are preserved; HTTP/peer were not
+restarted. RECOVERED_CAUSE_OPEN is not a permanent latency fix or client-traffic
+acceptance. No observer, restart loop, timeout change or recovery successor selected.
+[Evidence and exact boundary](releases/2026-11-16-ru-recurrence.md).
+
+**Product scope: DEVICE-TECHNICAL-METADATA-1 delivery.** Accept the completed RU
+recovery, HMAC generation2 and minimal metadata server deployment without repeating
+them. Frozen signed126 is now installed over original ARM64125. Finish its remaining
+physical acceptance, then load exact paid126 and qualify the installed production
+chain before optional public release in the agreed order.
+Preserve aliases and existing paid descriptors. A connected device alone is not
+data-preservation or installed-metadata acceptance.
+No observer/recovery successor is selected. See the current metadata receipt.
+
+Historical12:04UTC readback identifies a separate pre-existing subscriptions projection
+gap: the producer still pins HTTP617c7d75, not installed70a924db. Last successful
+snapshot is15November13:47UTC; fresh snapshots are unavailable, despite preserved
+canonical subscriptions and enforcement. Before further metadata acceptance, validate
+the installed archive/provenance, update only that exact collector pin atomically
+with fields/permissions preserved, and verify ordinary imports and negative-pin
+checks. Do not weaken the pin or claim earlier monitor completion proved fresh
+subscriptions. This follow-up was not performed by the narrow RU recovery.
+
+Current16 November00:38UTC: owner-enabled installed126 now reaches authenticated API,
+canonical storage, normal generation2 import and the existing real device card.
+Available model/OS/app/default-Wi-Fi/operator observations match; missing radio and
+unqualified IP geography have explicit reasons. Real authenticated1440/390px layout,
+filters and navigation pass. Consent survives process restart and stays ON by the
+owner's explicit choice. Canonical identity/chat pin/subscription are preserved.
+Physical established-session/underlay/RU-AWG city and offline-revoke/cleanup remain.
+Wi-Fi→cellular reaches the same production card; original network settings are
+restored. Do not confuse this disconnected default-network check with VPN underlay.
+New mandatory CI failure133013037055 identifies a native batch/credential-renewal
+data race also present in the frozen artifact source. Fix and qualify that bounded
+defect; do not retry until green while ignoring it or transfer fixed-source results
+to unchanged signed bytes. The old candidate remains immutable/test-only; a corrected
+candidate needs its own source/hash/signature/exact paid descriptor and affected
+device gates. No paid126 loading or publication until then. Linux's independent
+pinned-appimagetool HTTP403 is separate. Accepted server/RU/HMAC stages are not reopened.
+
+Historical16 November00:10UTC gate: in-place installation, exact installed bytes, fresh
+device/chat proof, activation/canonical pin/subscription, four visible settings,
+complete two-entry per-app choice and four observed history rows are preserved.
+Normal relaunch and new metadata consent OFF pass. Five network settings remain
+unchanged; VPN is OFF. Local displayed support fingerprint and actual VPN/metadata
+opt-in/revoke/production-card/RU-AWG acceptance are still NOT_OBSERVED after upgrade.
+The owner enabled in-app USB support: bounded status/snapshot succeed, but Android
+still rejects ordinary taps with INJECT_EVENTS. It is not an absent ADB connection,
+an expired release vault or permission to bypass input security. Do not keep asking
+the owner for individual navigation taps after their explicit refusal. No support
+messages or private-data entry forms. Keep technical consent OFF until a deliberate
+authorized UI action can actually be performed and verified.
+Android132995666033/run43773890962 on0610be56 is full PASS (API35/27/28/31,
+separate per-app routing, final release payload). Keep prior failed/cancelled results
+and distinguish later documentation-head checks from this qualification.
+Three exact paid126 overlays now preserve the actual metadata/HMAC-aware runtime;
+archive-origin policies agree and7 actual-package isolated tests PASS. No loading
+before the outstanding device gate; fresh backups/delta checks still precede loading.
+No APK rebuild/re-sign, server-stage repeat or public126 publication.
+[Current receipt](releases/2026-11-15-device-technical-metadata.md#redmi-installed126--16-november).
+
+Historical checkpoints below are superseded by this installed-device boundary.
+Metadata HTTP/panel/collector/GeoIP are minimally deployed and normal
+generation2 imports/real legacy-card layout pass. Public125 remains unchanged.
+Vault-backed signing completed20:48UTC: frozen signed126 SHA97513e3f,50,478,496bytes,
+accepted certificate/package/ARM64/alignment and unchanged payload verified. Its
+exact paid126 policy is prepared with168 targeted/499 full isolated gate tests PASS;
+corrected sourcee977 passes hosted paid/panel and phase0 push/PR. Its failed Android
+transport probe and the earlier e7bd86c7 panel failure are retained separately;
+the current0ecf Android job ends CANCELLED during API27. Production policy remains108/119/123/125.
+Compatible ARM64125→126 precedes production paid loading; the installed
+opt-in/revoke chain must then pass before public publication.
+One authorized Redmi Note9Pro ARM64/Android12 is now connected; its original
+public125 APK/signer match exactly. MIUI still blocks actual taps (INJECT_EVENTS)
+after a completed normal reboot. Read-only local observations progress independently;
+the remaining profile/history screens require owner-performed navigation, not private
+data-entry forms. No install/data clear/network change yet. Do not claim an
+unsigned candidate, empty metadata projection or a controlled MMDB fixture as the
+required installed-device result. [Delivery/recovery plan](operators/technical-metadata-release.md).
+Delivery sourcef42efdab is now CI-qualified: all13 applicable workflows PASS,
+including phase0 and the Android matrix. Synthetic real-vault signing5 PASS.
+Those results do not remove the physical-device gates. Signing is now complete;
+do not rebuild or re-sign the selected artifact.
+Historical continuation20:22–20:26UTC reverified the exact selected unsigned APK/provenance and
+accepted runtime without redeployment. The actual KDBX chooser returned1/no selection,
+with no GUI error output; ADB remains empty. Next: identify/select the existing
+release vault locally, then sign the frozen artifact and perform ARM64 acceptance.
+That vault-selection/signing boundary is superseded by the20:48UTC receipt. Public
+descriptors remain125 until mandatory installed acceptance; no placeholder hashes.
+Current23:05UTC device boundary supersedes the earlier empty-ADB instructions:
+the selected original125 Redmi is authorized. A fresh support identity proof,
+canonical chat binding/pinned sender, current non-paid-cohort subscription response
+and bounded read-only UI baseline are saved privately. Full local chat profile,
+pinned fingerprint/history and per-app choices still need observation before install.
+The owner declines data-entry forms; do not ask for private values or screenshots.
+One normal reboot completed. Wake-up succeeds but a real tap still returns
+SecurityException/INJECT_EVENTS. Use specific owner-performed navigation, not a
+permission bypass; read/compare the resulting screens locally. No126 installation,
+data clearing, network/consent change, policy load or publication has occurred.
+Current Android132971537546/source0ecf2fe8 passes API35 runtime/per-app/conformance,
+then ends CANCELLED23:08UTC during API27 after the75-minute job window. Bounded
+artifacts retain99 main cases (54 executed/45 conditional skips,0 failures), all
+six metadata cases and the separate10-test per-app harness PASS. API27/28/31 are
+not qualified by this attempt. No additional parallel retry was started; retain
+the cancellation without guessing an infrastructure or Android-code cause.
+
+Historical corrected-sourcee977119d hosted paid/panel checks PASS. The first Android job's TCP
+Connection reset is retained separately; all three API35 metadata instrumentation
+cases PASS. Retry132963251910 passes the main debug/Friends instrumentation but
+fails the separate per-app TCP IPv6 probe with SocketTimeoutException; legacy stages
+are skipped. Preserve this red gate, not just the main runner's zero-failure summary.
+Android/native/workflow source is unchanged from selected61; do not rebuild the
+frozen APK or weaken the probe to obtain PASS.
+
+**RU-INCIDENT-20261115 — authorized recovery complete, RECOVERED_CAUSE_OPEN.**
+First failure retained: local TCP engine-query timeout, not a demonstrated fsync
+failure. Separate owner permission obtained. Fresh27-table restore/paid projection
+and encrypted backup pass; RU-only fence, drain/PID0/no-jobs/zero handlers,
+retained-state validation and unchanged-runtime sequential start complete.
+Exact original command map restored13:03:16UTC; six observations over201.054s pass,
+actual20 AWG/20 TCP,66 revisions, stable PIDs/restarts0 and admission renewal across
+the initial120s deadline. Canonical protected data, generation2/aliases and units
+remain. HTTP/peer worker not restarted; support active and panel RU/NL imports fresh.
+No DB restore over live data, paid terms change, HMAC rollback or PR38 deployment.
+Client traffic NOT_RUN; resource cause stays open. No unattended recovery, timeout
+relaxation or recorder successor is selected automatically by this completion.
+[Current diagnosis and recovery boundary](releases/2026-11-15-ru-recurrence.md).
+The metadata product remains selected but is not advanced by this recovery.
+
+**DEVICE-TECHNICAL-METADATA-1 — SELECTED / implementation in progress, 15 November.**
+HMAC prerequisite is **SWITCHED / completed**: owner-approved source61b00409 minimal
+overlay, generation2 keys/aliases, fresh full coverage, isolated restore/replay and
+three automatic cycles pass. Original storage handles/history, identity blocks,
+request/message IDs and notification baseline/cursor remain. Old key is not active;
+private mappings stay private. Recovery retains generation2 and new data, never
+reactivates the disclosed key or restores an old DB over current operations.
+The strict worker exit/socket/lock gate passed. The
+[generation runbook](operators/hmac-generation.md) records placement and recovery.
+Track actual activation in the [cutover receipt](releases/2026-11-15-hmac-generation2-cutover.md),
+not the historical rehearsal counts.
+No paid/HTTP/VPN archive was replaced for this rotation; PR38 delivery is
+still independent and NOT_USER_READY. [Receipt](releases/2026-11-15-hmac-migration-rehearsal.md).
+Historical HMAC observation: RU AWG stopped with timeout, TCP became inactive and paid-watch/
+reconcile failures occurred. This cutover issued no transport/HTTP/paid restarts;
+the HTTP process and admission/reconciler archive pins remain unchanged. Do not
+claim healthy VPN acceptance or assign a cause without evidence. RU CAUSE_OPEN
+remains separate; this does not authorize unrelated repair or transport restart.
+Android non-public test mutators corrected;20 JVM checks and419279c8 full hosted
+Android matrix PASS on rerun. Source61b00409 also completes the full API35/27/28/31
+matrix on exact-head rerun132675960943. Earlier failed attempts remain recorded.
+Source61b00409 full Python/Cargo and failover CI PASS with
+all6337 tests assigned to their normal contexts; explicit276 skips retained.
+Original public125 ARM64 crashes under x86_64 translation; preserve immutable125
+and qualify upgrade on compatible ARM64 rather than rebuilding the accepted APK.
+Versioned API, consent/revoke/retention, GeoIP and collector/object UI/filter server
+path are minimally deployed. Frozen release-signed126 is installed in place on the
+authorized ARM64 Redmi; observed preservation passes with explicitly bounded scope.
+Exact paid126 is loaded and the corrected installed metadata chain reaches its real
+generation2 card. Draft PR38 is not completion: physical network/revoke and full
+f781c77e CI now pass; public delivery and integration await the newer RU boundary
+recorded at the top. CI test builds never
+replace the selected immutable signed artifact.
+Controlled local GeoIP IPv4/IPv6 lookup and actual installed-client/production
+RU peer enrichment pass. RU/AWG source does not qualify NL/TCP or
+MESH city attribution. Keep unavailable/aged semantics, not gateway geography.
+Complete exact source/platform CI before signing/deployment; no acceptance waiver.
+Implement separately consented, identity/content-bound technical observations,
+bounded latest-only retention/revocation, honest underlay and IP provenance, local
+GeoIP, collector/importer and production device UI, then qualify a new immutable
+Friends APK and its exact paid descriptor before optional public publication.
+Dependencies: serving-runtime baseline/restore rehearsal, Android public APIs,
+existing device identity and pinned collector. Recorder architecture/failure-writer
+and a physical phone are NOT dependencies. RU CAUSE_OPEN / PR36 NO_GO_PREFLIGHT remain.
+Completion gate: authenticated installed APK → API → collector → production panel,
+125→new in-place preservation, negative security/consent/TTL/GeoIP checks, exact
+source/platform CI, minimal deployment and public HTTPS/catalog/invitation readback.
+Do not call source preparation a user-ready rollout. No unrelated queued successor.
+[Implementation and delivery receipt](releases/2026-11-15-device-technical-metadata.md).
+Preparation checkpoint: baseline-derived HTTP overlay/TLS42PASS, synthetic panel
+1440/390px PASS, public125 installed only on the isolated NVIDIA/KVM testbed.
+Android permission/legacy allowlist corrections pass exact-source CI; APK
+qualification, fresh backups/restore, minimal rollout and public delivery remain.
+Preparation backups/isolated SQLite paid projection and network-isolated PostgreSQL
+restore PASS; refresh baseline immediately before any switch. Capacity/privacy
+follow-up is qualified locally, not a deployed API or installed/public126.
+New-source gate also includes API30 ownerUid correction and panel log-query privacy.
+The isolated125 bench was activated through the ordinary referral/identity path;
+its incompatible ARM64 translation fails before126 installation. Own unused
+emulator/devserver/test databases are stopped; private state/evidence retained.
+No phone action, real payment/expiry mutation or user message is part of preparation.
+
+**Selected correction qualified: attribution failure-publication / PR37.**
+Deterministic empty/partial interprocess reproduction and atomic positive-fixture
+repair implemented; strict invalid_failure, immutable first receipt and SIGINT tail
+checks preserved. Sourcea5067ae2:100 scoped tests/6269 collection PASS. Hosted gate
+COMPLETED: phase0/tests132612972198 including cargo AND Linux control132612972299
+through GTK/render/build/extracted recovery. Context inventories and pipeline receipts
+verified, source/PR test-merge trees identical. Own review explicitly labelled;
+ordinary merge and remote-SHA receipt tracked in PR37, not a production rollout.
+No production change; O_EXCL-only product failure publication remains a documented
+future compatibility limitation, not permission to change it now. No recorder
+architecture or Gates A–C work; PR36 NO_GO_PREFLIGHT / RU CAUSE_OPEN unchanged.
+[Report](releases/2026-11-14-attribution-failure-publication.md).
+
+**RU compact transport continuation — NO_GO_PREFLIGHT / sourceea19c1d7, PR36.**
+The selected single direct-output format is measured and rejected BEFORE full
+implementation:82896B histogram demand /32768B ring; controlled quota pause loses
+1219 of1871 attempts, directly accounted by helper return + independent terminal
+maps. Final source also rejects two unpaced transport microbursts; no favorable-phase
+or paced replacement of admission. This microtest is not Gate A's original64 fsync
+pairs. Gates A/B/C and full overhead remain NOT_RUN after the authorized preflight
+rejection.90 scoped tests/6264 collection PASS, hosted results separately tracked.
+[Decision](releases/2026-11-14-ru-compact-transport-qualification.md).
+Single proposed next, NOT_STARTED: separately decide architecture only after a
+verifiable worst-quota-pause byte bound within32768B (all headers/events included,
+no hidden queues). Any future admission still requires original64+64+64, real
+lifecycle controls, first-failure/drain and the ENTIRE frozen matrix. No automatic
+architecture search, RU capture, host replacement, persistence or limit change.
+
+**RU attribution v2 identity/readiness continuation — NO_GO, source417edbe2 / PR35.**
+Selected continuation over PR34/41ada7cf now has verified attach/fences, generation
+lifetimes and exact ledger accounting. Original burst still FAIL:64 successful
+fsync,128 producer phases,17 enter/16 exit/16 pairs retained;1398 window events lost
+upstream of parser. Same32KiB ring/10%quota; no admission pacing or limit increase.
+Pipe drain/first-failure checks pass independently. Paced lifecycle diagnostic is
+not INITIAL_GATE_PASS. Full frozen kernel matrix and matched overhead NOT_RUN after
+the failed burst gate, not silently accepted.73 scoped checks/6247 collection PASS;
+hosted CI remains separately reported. No RU access/production/persistence changes.
+[Decision and receipts](releases/2026-11-14-ru-attribution-v2-qualification.md).
+Its then-proposed compact transport was subsequently selected and negatively
+qualified at the feasibility gate above, within unchanged limits.
+Completion gate: original64 enter+64 exit+64 unique ledger pairs, real allocation/
+reuse/partial controls, immutable first failure,≤8s drain, then ALL frozen kernel
+scenarios and matched overhead. No third RU capture or automatic new architecture.
+
+**RU-FIRST-FAILURE-ATTRIBUTION-QUALIFICATION-1 — completed negative admission / NO_GO (PR34).**
+Exact-kernel/BTF KVM candidate fails the first clean gate: zero allocation generation
+for162 request events and12/64 fsync coverage. First failure/pipe drain preserved,
+complete=false; advanced real scenarios and complete overhead qualification NOT_RUN.
+60 scoped checks PASS; no production deployment or third collection. See the
+[qualification report](releases/2026-11-14-ru-first-failure-qualification.md).
+Its proposed bounded producer identity and verified attach/terminal coverage redesign
+was separately selected and completed as v2 above on the same disposable fixture.
+Gate before full matrix:64/64 fsync, lifetime identity under reuse/partial completion,
+no unexplained loss, first-failure/8s drain and unchanged resource ceilings. No
+automatic second architecture, RU capture, timeout change or server replacement.
+
+**RU-PERSISTENCE-PRESSURE-1 / final offline analysis COMPLETE, CAUSE_OPEN (PR33).**
+Provenance, deduplication, retained-vs-aggregate statistics, serial-sample bounds and
+refined CPU202.841517ms cost stop verified;38 analysis/observer checks PASS. First
+349.878s/refined1171.448s include no new deadline failure. Refined counters cover
+only14:54–15:00UTC; historical8s failure attribution is absent, not reconstructed
+from healthy samples. No product fix/deployment/third capture is justified or made.
+[Completed evidence and decision](releases/2026-11-14-ru-persistence-pressure.md#final-analysis--complete-cause-remains-open).
+
+**Retained selected-task contract: RU-FIRST-FAILURE-ATTRIBUTION-QUALIFICATION-1.**
+Outcome NO_GO above. Scope was isolated qualification of a bounded event-driven recorder that
+distinguishes watcher off-CPU/reclaim, vda queue/completion wait and writer-cgroup
+activity at a real first failure, without full procfs polling. Gate: controlled
+isolated wait-class cases, exact first-failure/terminal-tail retention, no secrets,
+measured cost within original200ms CPU/10s wall and10% CPU/256MiB/no-swap/time/file
+limits. Failure to fit is a completed NO_GO, not a limit increase. No production
+capture is authorized by qualification; no provider-blame or replacement decision.
+CI PR32 stays closed; appimagetool/readiness follow-ups remain separate.
+
+**CI-RUNNER-COMPLETION-1 — COMPLETE / CI_ONLY, integration PR32.**
+Sourcefd1d8794 qualified:31 local checks/6203 collection; phase0/tests132506529152
+full step507s and subsequent cargo PASS; Linux control132506529441 full step519s
+and subsequent GTK/render/recovery/package/extracted checks PASS; final actual
+failover/auth/offline/revocation132506528873 PASS. Exact test-merge tree matches
+qualified source. Diagnostic60b3ff87 proves all inner processes/pipeline exited0;
+hosted processing of megabyte collect-only console lines continued until timeout.
+Bound only console representation, retaining full artifact, real exit status and
+all tests/pins/locks/contexts/25min timeout. No production deployment.
+[Evidence, receipts and integration](releases/2026-11-14-ci-runner-completion.md).
+Not whole-CI green: Client builds/linux132506592194 HTTP403 fetching appimagetool;
+earlier push failover build132506280739 failed unchanged readiness attempt-count
+assertion within150ms. These separate failures remain visible; no blanket rerun,
+assertion relaxation or silent repair. Follow-up needs explicit selection.
+The former RU analysis checkpoint is complete above; CAUSE_OPEN remains. No automatic task start,
+observer restart/extension, payment-provider, card-refresh or Android work.
+
+**RU-PERSISTENCE-PRESSURE-1 — retained scope/gates and historical collection.**
+Scope: authorized RU185.251.89.19 only; diagnose the observed persistence deadline
+overruns using actual node125c796a, saved first failures and bounded process/cgroup/
+host counters aligned to operation phases. No preventive restart, storage stress,
+timeout/lease increase or fsync removal. Closed beta125/paid125/support/notifications
+(including baseline/cursor/jobs/guard) stay closed and preserved.
+Gate: establish a causal mechanism before a minimal fix, qualify exact artifact over
+installed baseline and retain durability/access/crash/expiry/revoke guarantees plus
+8/12/120s. Otherwise deploy and verify a finite, resource/file-bounded observation
+for the specifically missing attribution, preserving first failure. Current health,
+root cause, deployed correction and observation window must remain distinct.
+No full-main/PR16/17 redeployment; recovery only after evidence of actual failure,
+using the existing RU-only controlled procedure. Replacement is a separate decision.
+Observer-only source43eb84eb qualified (27 tests/6191 collection;181.50s/75-cycle
+smoke, cost and lease-crossing/actual engine readback PASS), reviewed and merged in
+PR29/main59cd72ed. First RAM-only window enabled14Nov14:19:16UTC, stopped after
+349.88s on sample CPU306ms>200ms, no gateway failure. Full result extracted.
+Lower-cost kernel path qualified181.99s/75 cycles with unchanged limits,29 tests /
+6193 collection PASS; PR30 mergededd10793/source38e9f403 enabled14:40:36UTC with
+unchanged limits. No extension of the original overall window: normal deadline
+15Nov14:18:47UTC, hard ceiling14:19:16UTC. It stopped early on sample_cost_limit;
+entry/exit CI extractions retained identical final/start/error receipts. Final analysis
+above is complete; the original15November deadline is not a waiting condition.
+No specific product correction is warranted by these captures. First747.74ms fsync
+capture is retained; it is not an8s failure or proof against a particular process.
+No product persistence change is justified by current evidence. Preserve concurrent
+legitimate live metadata/enrollment; audited identity keys/device sets are unchanged.
+Revised window was running408s at14:47:24UTC, no RU failure; actual engine readback
+and lease crossing PASS. Final elapsed1171.45s; no failure/lost events, tracer rc0.
+No scheduled extraction/analysis exists. Old readback commands/deadlines remain
+historical evidence only; the single next proposal is above. The separately dated
+18:27:25UTC health check does not establish continuous historical VPN reachability.
+[Task evidence](releases/2026-11-14-ru-persistence-pressure.md).
+
+**CI-RUNNER-COMPLETION-1 — historical entry evidence; resolved separately above.**
+Phase0/tests132438099847 completed with external timeout; all three pytest contexts
+return0/coverage PASS, subsequent cargo skipped. Linux control132438784552 has the
+analogous outer timeout; failover/auth/offline/revocation132438099607 PASS. These
+old-source results are not replaced by newer-source qualification. Preserve mandatory
+gates for any future RU code change; general CI is not declared universally green.
+
+**SUBSCRIPTION-NOTIFICATIONS-1 — DEPLOYED_VERIFIED13:05UTC14 November.**
+PR26 ordinary mergefe6a317c retains separate late-ACK0950bba0 and referenceac3479bf
+commits. The owner executed the prepared installer; actual worker/collector/timer,
+RU helpers and console delta are installed and enabled. Atomic production baseline
+12:48:20UTC excludes4 observed historical events; cursor/highwater4, zero automatic
+jobs/messages and one future boundary. Three cycles, controlled restart, independent
+panel/source/hash readback and19 protected canonical groups PASS. Backup/isolated
+restore and preserved history/identity/request mappings/runtime inode PASS.
+Route acceptance is COMPLETE; new real-event delivery remains **NOT_OBSERVED**,
+not a reason to manufacture a payment or repeat accepted tablet/support testing.
+Collection6164; core422, panel48, reference/package25 and actual failover/auth/offline/
+revocation PASS. General CI is not green: Linux control43591863123 enclosing step
+timed out25 minutes despite all three pytest contexts returning0; standalone phase0
+43591863104 subsequently also timed out externally. No failing test IDs were reported;
+no assertion regression is established, and no timeout increase/test exclusion was
+made. Client builds PASS, no Android release. Preserve this separate CI follow-up,
+not an indefinite repair of the historical suite within this task.
+Retain the baseline/cursor/jobs/request mappings and guarded worker on disable or
+rollback; never restore an old database. No deployment action remains for the owner.
+Payment-provider integration, automatic client-card refresh and RU cause stay
+separate and are not started automatically after closure.
+[Task evidence](releases/2026-11-14-subscription-notifications.md).
+
+**SUBSCRIPTION-PAID-125-COMPAT — COMPLETE / DEPLOYED_VERIFIED14 November.**
+PR23 merged137f85dc; separate PR24 mergedf626fb4a. Canonical108/119/123/125 is loaded
+in all three actual serving executables.123 is explicitly newly admitted relative
+to installed108/119, not assumed deployed from PR14 source.441 paid/77 panel/38 actual
+overlay tests, scoped hosted paid/panel/readiness CI, nonempty backup/isolated restore,
+six observations/608s, fresh all-node renewal/panel/support and19 protected groups
+unchanged PASS. Current operator path resumed00:55:42UTC. No real payment or APK change.
+[Final receipt and rollback](releases/2026-11-14-subscription-paid-125-compat.md).
+Dependencies: finish PR23 public125 documentation/merge, then a separate branch
+from current main; retain qualified immutable125/sourceb293f9ac and support/recovery
+runtime. Explicitly resolve source123 versus installed108/119 before deployment.
+Gate: exact canonical125 version/code/APK hash; isolated first payment/renewal/grace,
+negative/replay/limit/revoke/access regressions; baseline-preserving executable
+overlay and backup/restore rehearsal; merged source; actual loaded policy across
+consumers, fresh panel/support health and unchanged protected business records.
+No real payment, APK rebuild, user broadcast or transport redesign. Rollback code
+and configuration only, never an old ledger over new events. After closure, queue
+automatic addressed notifications of confirmed subscription events, not implementation
+in this task. RU stop cause remains a separate task.
+
+**SUBSCRIPTION-NOTIFICATIONS-1 — deployed above (former queued scope).**
+Automatic addressed notifications of confirmed subscription events, using the
+accepted private support channel and authoritative event/binding model. Dependencies:
+paid125 delivery above and retained support acceptance. Completed route gate:
+confirmed events only, exact recipient, replay/dedup, offline delivery and truthful
+delivery/storage status; no speculative payment confirmation or unsolicited test send.
+The owner's14 November request authorized this task and server automation; actual
+new real-user storage is a separate NOT_OBSERVED observation, not implied by the gate.
+
+**CI-COLLECTION-NAMESPACE — collection/local regression PASS14 November.**
+Before correction, generic phase0/Linux inventory exited2 due to colliding root/
+desktop `test_chat_service.py` names. Fixed separately without dropping tests:
+initial6149 collected/24 scoped PASS; final notification head6164 collected PASS.
+The three entry-main messenger-reference failures are now fixed by the explicit
+accepted support delta, preserving original106 hashes (25 reference/package PASS).
+Full hosted CI remains separately unaccepted as described above; scoped paid125
+gates remain distinct.
+RU recurring-stop cause/replacement remains separate, not resolved by policy delivery.
+
+**TABLET109→125 — PASS — подтверждено пользователем14 November.**
+Real tablet download/install through the in-app update button succeeded; former1–2%
+interruption did not recur. No repeat required; no instrumental installed-SHA/full
+data-equality or beta113 root-cause claim. Public/invitation/updater125/catalog8 and
+owner installation are accepted. [Receipt](releases/2026-11-13-android125-publication.md).
+
+**ANDROID125-PUBLIC-20261113 — owner-selected, COMPLETE.**
+Qualified immutable125 is public13 November14:26:54UTC: exact hosted/source/artifact
+and original signer, locally signed optional catalog8, preserved113 downloads and
+prior metadata backup. All publication gates PASS:56 scoped tests, guarded static
+publication, matching invitation/CSP/legacy/v2, full verified-HTTPS APK/source hashes,
+unchanged protected records and backend/transport processes; one nginx HUP only.
+Current public/invitation/updater125/catalog8; owner already installed125. No forced
+install, all-users-installed claim or new VPN entitlement. Separate public-broadcast,
+cold field and RU-cause/replacement gates remain open; no unrelated queued task starts.
+[Current release receipt](releases/2026-11-13-android125-publication.md).
+
+**AMSTERDAM1-HEALTH-20261113 — owner-requested read-only check COMPLETE.**
+Gate: canonical NL1 target/pinned SSH, stable active transports, fresh applied
+readback/exact persisted TCP users, actual admission renewal beyond initial expiry,
+independent endpoint reachability and fresh panel evidence. Three samples/131.591s
+PASS, renewal1794573284→1794573419; no current failure or observed storage-pressure
+stall. No remote changes/repair indicated by this window; phone VPN traffic remains
+NOT_RUN. This does not close RU's cause/replacement or begin any queued task.
+[Amsterdam1 current receipt](releases/2026-11-13-amsterdam1-health.md).
+
+**RU-INCIDENT-20261113 — owner-requested recovery complete; RECOVERED_CAUSE_OPEN.**
+Dependencies: exact accepted node125c796a/gateway9023d2c3, policy108/119, retained
+decisions/deny/expiry, support-only HTTP16d96eb7 and current authoritative registry.
+Gate: preserve the first failure/current protected state; RU-only fence and handler
+drain; validate retained state; sequential unchanged-runtime start; restore exact
+command map; observe past the120s lease with actual renewal, exact engine/persisted
+readback, stable PIDs/restarts and unchanged protected data. No rollback of live DB.
+Gate PASS13 November: six samples/197.795s,64 records/20 allowed, renewal
+1794571181→1794571389 across initial expiry, no new failure; panel RU snapshot `ok`.
+This recurrence is a decision-state persistence deadline9.259661s/8s, accompanied
+by host disk/swap/memory pressure. Exact resource-pressure source remains unproven;
+watcher-only restarts still do not recover stopped AWG/TCP. USER_TRAFFIC NOT_RUN.
+Do not weaken8/12/120s, remove fsync, redeploy failed PR16/17 or call a restart FIXED.
+Next corrective boundary is storage/resource-pressure attribution or a separately
+qualified persistence/recovery correction. RU replacement remains WAITING_FOR_HOST.
+No queued support/broadcast/payment/desktop task is automatically started here.
+[Current RU evidence and limits](releases/2026-11-13-ru-recurrence.md).
+
+### Retained support acceptance
+
+**SUPPORT-CHAT-1 — core physical exchange with user tunnel OFF CONFIRMED12 November.**
+Owner confirmation plus actual panel IPC: one `verified` binding/thread, outgoing1
+with signed `recipient_stored`, incoming1 durably `received`; worker active/restarts0.
+Do not repeat installation, enrollment or the basic round trip merely to reproduce
+accepted evidence. `recipient_stored` is storage, not read. No live send in this check.
+Owner explicitly confirms «туннель был выключен» for the corroborated exchange.
+The user-tunnel-OFF physical condition is closed on owner testimony plus the earlier
+backend delivery/storage receipts; no new automated network/phone probe is claimed.
+Do not repeat this accepted exchange or assume a particular Wi-Fi/mobile network.
+The owner's short confirmation does not prove complete historical-data equality,
+offline/restart/closed-browser conditions, expired-subscription behavior or cold
+no-cache bootstrap. Preserve existing isolated PASS results at their actual scope.
+Public Android broadcast delivery remains a separate NOT_RUN production gate.
+[Owner confirmation and backend receipt](releases/2026-11-12-android125-owner-install.md).
+
+### Completed owner update — retained evidence
+
+**ANDROID125-OWNER-INSTALL — owner-requested update COMPLETE12 November13:06UTC.**
+Qualified immutable signed125 replaces physical123 in place: package, signer,
+installed bytes, unchanged UID/first-install/data directory and normal launch PASS.
+No source rebuild, new signing, public/invitation/catalog change or live message.
+MIUI UI restrictions were not bypassed. Physical history/settings/cryptographic
+identity preservation remains an owner UI check; unchanged Android package identity
+is not proof of chat-content equality. Subsequent owner/backend evidence confirms
+support enrollment and the core round trip; user tunnel OFF is now owner-confirmed.
+Do not reinstall125 or advance public-broadcast/cold-bootstrap/traffic gates from
+the installation result. [Receipt](releases/2026-11-12-android125-owner-install.md).
+
+### Previous RU incident — historical recovery, cause still open
+
+**RU-INCIDENT-20261112 — availability RECOVERED_CAUSE_OPEN; recovery gate complete.**
+Historical12 November result; superseded by the13 November recurrence above.
+Dependencies: exact installed node125c796a/gateway9023d2c3, unchanged108/119 policy,
+retained decisions/deny/expiry and currently installed support-only HTTP16d96eb7.
+First-failure evidence now identifies slow synchronous persistence in this occurrence;
+it does not resolve the older query-boundary incidents or establish the storage cause.
+Recovery gate: preserve failure/configuration/protected DB fingerprints; fence only
+RU with NL command entries and central timer unchanged; stop/PID0/no handlers;
+validate retained state; sequentially start the same bytes; restore exact command
+map; observe beyond120s admission renewal with fresh applied readback, exact persisted
+TCP users, stable PIDs/restarts, no new failure and unchanged protected data.
+Controlled restart and six-sample196.377s observation/comparison PASS, including
+actual renewal1794480005→1794480176 across the initial lease,63 records/20 allowed,
+exact persisted TCP users, stable services and unchanged protected data. Panel has
+fresh `ok` RU data. No client traffic acceptance is inferred from this or HTTP200.
+Do not deploy the previously rolled-back PR16/17 candidates or weaken8/12/120s
+and durability to hide delay.
+Next corrective boundary: isolate storage/fsync latency and qualify any persistence
+change separately; replacement remains WAITING_FOR_HOST. No automatic new task.
+[Current incident and limits](releases/2026-11-12-ru-recurrence.md).
+
+### Retained implementation — support network/field boundaries
+
+**SUPPORT-CHAT-1 — backend ENABLED; core owner-phone exchange confirmed above.**
+Operator entry: device card → «Сообщения · личная поддержка»; replies `/messages/`.
+Completed: chat-only service identity, authoritative binding collector, encrypted
+worker/outbox, existing owner permissions, CI/review/ordinary PR20/21 merges,
+backup with separate restore, runtime overlay and actual restart/stop-start IPC gate.
+The systemd socket-directory defect is fixed with RuntimeDirectoryPreserve=yes;
+scoped runtime CI43055427259 passes without rebuilding unchanged Android125.
+Isolated exchange, offline/dedup/closed-browser replies and existing124 evidence are
+preserved;125 API27/35 actual admission renewal and audience checks also pass.
+Installed panel50de6f25/database0013; RU HTTP support-only16d96eb7, not full main.
+Signed125 from qualifiedb293f9ac is public since13 November and installed over123 on
+the owner phone; installed bytes/signer/package identity/launch PASS12 November.
+Tablet109→125 update is user-confirmed14 November. The owner binding and addressed round trip are verified; remaining
+physical scope is retained-history/settings confirmation; tunnel OFF is confirmed.
+The panel still explicitly blocks unenrolled legacy recipients; no guessed binding.
+Public Android announcement delivery remains a separate NOT_RUN production gate:
+isolated audience checks do not authorize a broadcast. Cold no-cache/allowlisted
+bootstrap remains separate from ordinary Wi-Fi and expired synthetic subscription.
+Owner round trip is confirmed; host reboot/startup ordering remains NOT_RUN.
+Root979MiB→2.5GiB after1.557GB old build-cache cleanup, final2.3GiB; preserve artifacts.
+Next global tracks remain separate: confirmed subscription-change notifications;
+payment partner selection/integration; cold no-cache restricted bootstrap/recovery
+field gate; RU replacement WAITING_FOR_HOST and open stop cause; later Windows/Linux.
+[Current record and remaining gates](releases/2026-11-11-support-chat-125.md).
+
+### Previous completed activation — public announcements
+
+**SYSTEM-MESSAGES-1 — owner-authorized activation complete11 November13:17 UTC.**
+Owner requests sending system messages. Reuse the existing public service-events
+API/feed and the owner's panel login, not a clone of the phone's private identity.
+Scope: compose → immutable preview → explicit platform/audience confirmation → durable
+queue → external scoped publisher → exact public-feed readback. The public feed cannot
+target only the owner's phone or receive private replies; use SUPPORT-CHAT-1 for that.
+Dependencies: existing notices authorization/idempotency/feed contract and preserved
+panel users/history. No beta124 installation or separate chat sender is required for
+this feature. Do not grant a phone role or publish a test announcement automatically.
+Gate: view/send/CSRF/actor/content-bound preview, stable ID after ambiguous outcomes,
+bounded TLS/no-redirect/no-token-in-web, actual browser and isolated HTTPS/store path,
+panel regression/migration/packaging and scoped hosted CI/review/ordinary merge.
+Activation requires disk headroom, fresh consistent backup with separate restore and
+an external least-privilege publisher credential; actual broadcast separately requires
+an explicitly approved public text. Enabling the idle publisher is not a test broadcast.
+No RU policy/transport work, phone change, new client version or mass broadcast is
+performed as part of source qualification. [Report](releases/2026-11-11-system-messages.md).
+Local gate:295 panel tests (44 new),38 existing announcement/CI-contract checks,
+migration drift and actual1440/390px browser → canonical HTTPS → encrypted Store
+restart/same-ID lost-response acceptance PASS. Hosted panel run43020554360 PASS
+on19b6ab37, including actual allowlisted image build/check; unrelated Android/support
+jobs skipped. Final deployment source4c85cecb passes scoped hosted43023898059,
+including the actual Compose boundary. PR18 ordinarily merged asb896b38a under owner
+authorization/readiness review; no independent approval is claimed and no protections
+were changed. Fresh separate restore matches36 tables/939954 rows. Installed image
+50de6f25/database0013, existing-owner authenticated form HTTP200, three containers
+healthy and publisher-to-public-feed HTTPS readback PASS. Source hashes237/237 match
+the local image; no fixture reseeding, password reset, phone role or ordinary send grant.
+Queue0/feed3 unchanged, no announcements sent. Monitoring restored; old image and
+private backup/rollback retained. Root988MiB remains a capacity warning, not solved.
+Remaining check is an owner-approved public announcement and real-client receipt;
+not run automatically because no public text/audience was approved for a test.
+Private support/Android124 commissioning remains separate and is not resumed by this
+completion. RU transport is active; earlier incident-cause investigation remains open.
+
+### Previous selected task — support production preflight
+
+**11 November production follow-up selected by owner — PREFLIGHT, NOT_DEPLOYED.**
+CI43007041835: panel PASS; contracts287 PASS/1 stale UI-pin FAIL. Retain the failure,
+review/pin only the four support Java deltas and two additive string resources, then
+qualify the corrected head with the same scoped workflow. Do not remove the guard.
+The owner requests production and use of their account. Keep the existing panel
+login; do not silently clone its Android chat identity into the worker: the protocol
+rejects sender=recipient. A separate owner-controlled sender needs explicit resolution.
+Current snapshot/isolated restore passes36 tables/929830 rows; initial disk-sort failure
+is retained. Disk headroom, scoped hosted CI on the final source, independent review,
+ordinary merge, signed124 and verified commissioning remain gates. The owner-only
+PR review command `/qualify-support-candidate` requests the existing scoped jobs;
+it neither approves the PR nor publishes anything. No broad VPN/G4 rerun is required
+for this CI entrypoint. Refresh backup immediately before update, preserve prior image
+and all volumes. RU operational recovery is selected separately, not a chat dependency.
+
+**SUPPORT-CHAT-1 — selected, IN_PROGRESS; not installed or accepted.**
+Reuse registered device↔chat binding, encrypted history/outbox, existing mailbox,
+Android worker/notifications and signed recipient-stored ACK. The local panel outage
+reported during development is resolved with the unchanged installed image and
+persistent restart policy; this is not a support-chat rollout.
+Gate: real panel→official support identity→Android→same card with two synthetic
+clients, offline/restart/lost-response dedup, identity/permission/CSRF refusals,
+verified official contact, actual notification/deep link and accurate statuses.
+Then applicable CI/review/ordinary merge and verified backup/isolated restore before
+any local application update. beta123 is immutable; any new client needs a separate
+version/artifact and qualification. Production/phone/paid operations are excluded.
+RU replacement WAITING_FOR_HOST, RU incidents, paid123 rollout and payment-provider
+selection are not dependencies. [Panel availability receipt](releases/2026-11-10-panel-availability.md).
+
+11 November continuation: the API now records explicit support-protocol enrollment
+against the immutable official sender; legacy beta123 bindings remain send-blocked.
+Source checkpoint includes candidate124, not a release. Actual HTTPS dual-proof
+enrollment, ordinary Android worker/UI reply, closed systemd mailbox, notification,
+two-client isolation, offline/restart/storage-ACK and same-ID lost-response retry
+now pass without role injection. Foreign-sender mailbox rejection and actual browser
+permission/CSRF refusals pass. The closed kit's nonroot systemd owner and separate
+forced-SSH collector also pass. Minimum supported Friends API27 now passes on Wi-Fi,
+including the real button retry after response loss without changing its signed ID.
+Next: scoped hosted candidate CI/review/ordinary merge ([draft PR18](https://github.com/Joker20380/family_connect/pull/18)); fresh backup/isolated restore before a local
+panel update. Production commissioning still requires an explicitly designated
+support identity and separately scoped credentials. [Evidence and kit](releases/2026-11-11-support-chat-1.md).
+
+### Previous selected task — source candidate, no new deployment
+
+**Selected RU TCP-query boundary task.**
+Dependencies: PR16 rolled-back deployment receipt6755872599 and exact Xrayd2758a0.
+Gate: bounded saved/live evidence; exact-version systemd/native stage discrimination;
+before/after wrapper regression, security/package tests and normal hosted review/merge
+for a candidate only. Keep8/12/120s, actual set checks and durability. No production
+deployment, paid123, phone or NL change. One missing historical boundary must remain
+explicit rather than substituting a synthetic cause.
+[Scope and evidence](releases/2026-11-10-ru-tcp-query.md).
+
+### Previous selected task — accepted candidate, deployment rolled back
+
+**Selected RU recovery / lifecycle and diagnostic-output fix.**
+Dependencies: preexisting incident PR14/comment6751072916, installed PR15
+node125c796a/sourcefa0ec71e, unchanged gateway9023d2c3 and policy108/119.
+Availability recovery is authorized and verified separately from source work.
+Gate: exact-package real-systemd watcher-loss reproduction with production unit
+context, bounded unread-stderr regression, retained deny/expiry/security checks,
+ordinary hosted review/merge and an immutable RU-only candidate. The candidate
+chooses explicit manual RECOVERY_REQUIRED, not automatic VPN recovery. No new
+production code, paid123 retry, phone, Android/G4 or paid operations. First trigger
+remains open unless supported by original-invocation evidence, not synthetic similarity.
+[Evidence and scope](releases/2026-11-09-ru-watch-lifecycle.md).
+
+### Previous selected task — diagnostics delivered; prior traffic preserved
+
+**Selected RU incident follow-up — user traffic and bounded budget attribution.**
+Dependencies: accepted PR14 recovery receipt6740402014, exact RU sourceb811547f
+and nodef747759c. Gate: separate owner beta123 RU AWG/TCP DNS/verified HTTPS/egress,
+restore settings; deterministic pre/post-call deadline cases, immutable packaged
+diagnostic candidate, existing systemd/native and applicable hosted checks, ordinary
+review/merge. Diagnostics are not a historical root-cause proof or a production
+deployment. Keep durable decisions/receipts,8s operation/12s watchdog/120s lease;
+no service restart, paid123 retry, NL mutation or new policy. USB-support readiness
+may block only physical traffic, not source work. Final identities/results stay in
+the PR receipt without a cosmetic post-CI head.
+[Scope and completion evidence](releases/2026-11-09-ru-operation-budget.md).
+
+### Previous selected task — source/package accepted; rollout reverted
+
+**Selected SUBSCRIPTION-PAID-123 — exact signed release, source/package only.**
+Dependencies: PR13 merged, installed signed123 receipt and owner visual confirmation;
+split recovery/routing and existing Android/JNI/G4 acceptance remain closed. Preserve
+the two-system-launcher expanded-list limitation without reopening catalog work.
+Gate: explicit108/119/123 descriptors, old replay unchanged, synthetic packaged
+operator/authenticated HTTP/canonical projection agreement, rejection/limit/revoke
+regressions, fresh serving inventories, minimal three-archive overlay, backup/readback/
+code rollback plan, ordinary green hosted CI/review/merge. No deployed-policy or real
+payment claim; no phone/APK/production mutation. After acceptance, policy delivery is
+one separate addressed operation. Future direction: panel ↔ official support chat ↔
+Android, not parallel implementation. [Evidence](releases/2026-11-09-subscription-paid-123.md).
+
+### Previous selected task — delivered, physical checks accepted
+
+**Selected ANDROID-APP-VPN-RECOVERY — beta123 candidate.**
+Fix the launcher-based catalog and preclaim rejection/owned cleanup independently.
+Gate: real AppVpnActivity Save → ordinary Connect → ConnectionService rejection →
+valid selection → reconnect without process restart; distinct-UID traffic and pending
+policy, profile launcher comparison, disabled/shared UID and late-owner regressions.
+API31 plus applicable27/28/35, ordinary CI/review/merge and immutable ARM64 artifact.
+No owner installation/signing, servers, paid policy, G4, cold or updater changes.
+[Task receipt](releases/2026-11-08-android-app-vpn-recovery.md).
+
+### Previous selected task — accepted candidate, separate owner defect
+
+**Selected ANDROID-APP-VPN — per-application Android VPN.**
+Owner explicitly removes physical cold/whitelist as a priority blocker without changing
+measurements. Gate: one validated local policy, immutable active snapshot across all
+engines/Auto/recovery/guard, pending until next explicit Connect; two distinct-UID apps
+prove VPN/direct DNS/verified HTTPS and IPv6 contract on API27/35 plus targeted28.
+Preserve data on restart/update; empty INCLUDE/package races fail closed. Add only the
+Apps and VPN screen, keep UI60; ordinary CI/review/merge and immutable122 candidate.
+Production, owner phone, paid policy and adjacent tasks remain outside this task.
+[Implementation and runtime evidence](releases/2026-11-08-android-app-vpn.md).
+
+### Previous selected task — completed local panel
+
+**Selected CONTROL-PANEL-REFERENCE-1 — cohesive operator objects.**
+Dependency: current main501c94bd, installed Django/PostgreSQL observation panel and
+unchanged HMAC/source pins. Gate: one production device URL, bidirectional server
+links, deduplicated canonical events, honest rate/reset/gap calculations, separate
+source freshness/errors; locked focused/packaged tests, authenticated1440/390px
+visual journeys, data-preserving local update, ordinary green CI/review/merge.
+TCP/MESH missing per-user metrics stay explicit. No production transport changes,
+Android/phone/G4/entry/renewal/updater work; stop after panel handoff.
+Implementation/local installation and object journeys complete;248 packaged tests
+PASS. Final hosted checks and ordinary merge are recorded in the PR receipt, not
+followed by another product task or cosmetic CI-invalidating commit.
+[Scope, sources and evidence](releases/2026-11-08-control-panel-reference.md).
+
+### Earlier selected task — closed source/package checkpoint
+
+**Selected ANDROID-CONSOLIDATED-CANDIDATE — beta121 source/package integration.**
+Dependencies: main93102333/PR1–9, coldd3cf49c7 and frozen120 evidence. Gate: combine
+subscription and cold without changing UI60/settings/trust; strict original-receipt
+preflight and manifest launcher regression; isolated119/120 storage preservation,
+mandatory Android/release CI, visual review, unsigned ARM64 inventory, ordinary PR
+review/merge. No production, phone, signing/publication, entry or paid-policy change.
+Final accepted bytes/results are pinned in the PR receipt, not a cosmetic post-CI
+head. Stop after candidate delivery; physical COLD and owner installation remain
+separately selected operations. [Contract](releases/2026-11-08-android-consolidated.md).
+
+### Earlier task checkpoints — not active NEXTs
+
+**Selected RU-TRANSPORT-RECOVERY-2 — bounded incident response.**
+Preserve first-stop evidence before mutation; distinguish historical UNKNOWN cause
+from reproduced diagnostic loss. Accepted RU stop/PID0/no jobs/start has restored
+availability without changing NL, paid state or policy. Gate: safe pre-cleanup first
+failure, real systemd/native failure/retained-deny/recovery test, applicable CI and
+ordinary merge, exact RU-only overlay/per-node pin, lease/readback/panel verification,
+then physical RU AWG HTTPS and separate RU TCP HTTPS; restore NL1/MESH/OFF.
+Own subscription PASS is closed. No automatic restarter or watchdog/lease relaxation;
+no payment, APK, G4, renewal, NL rollout or adjacent task. If both physical probes pass
+but historical cause remains unknown, use RECOVERED_CAUSE_OPEN, not FIXED_AND_VERIFIED.
+[Incident report](releases/2026-11-08-ru-transport-recovery-2.md); final operational
+receipt records exact installed hashes and physical results after source acceptance.
+
+**Historical SUBSCRIPTION-USER-SMOKE — three owner checks and docs only.**
+Dependency: accepted PR7/main34e29d2c recovery; post-merge Client builds PASS.
+Device access BLOCKED at entry: ADB lists no device. Obtain the available owner phone
+without taking over parallel cold-provisioning, record actual package/version/provenance
+and original node/mode/VPN state. Gate: fresh own subscription without any VPN, small
+HTTPS over RU AWG, then separate RU TCP with actual route correlation; restore original
+settings/connection. No install, paid writes, server restart/configuration or wider matrix.
+Correct obsolete operator/current-status wording independently through docs-only CI/PR/merge.
+BLOCKED/FAIL must remain explicit until actual client evidence; real payment and physical
+paid/event scenario stay NOT_RUN. [Report](releases/2026-11-08-subscription-user-smoke.md).
+
+**SUBSCRIPTION-RU-RECOVERY — CLOSED, RECOVERED.**
+PR7 merged34e29d2c; RU≥360s then sequential NL and all-node lease/readback/panel checks
+passed, compatible operator current restored, protected data preserved. This is not a
+new recovery or Android qualification gate. Historical [report](releases/2026-11-07-subscription-ru-recovery.md)
+and [final installed receipt](https://github.com/Joker20380/family_connect/pull/7#issuecomment-6713677516)
+retain hashes, measurements and the distinct production user-traffic NOT_RUN boundary.
+
+**Owner-selected7 November: correct NL1 background load, bounded operational task.**
+Complete:54 scoped checks, read-only live parser preflight and exact systemd/native
+gates pass; NL1 node-only archive and persistent mailbox cap applied20:25UTC.
+MESH/mailbox PIDs stable,63 applied records/zero drift and60s load improvement verified.
+First failed grouped restart/rollback remains recorded. No further implementation is
+queued by this task: monitor long-term mailbox footprint separately, without declaring
+a leak fixed. No RU/NL2 rollout, subscription mutation, client release or adjacent task advancement.
+[Gate and rollback](releases/2026-11-07-nl1-load-fix.md).
+
+**Historical SUBSCRIPTION-ENFORCEMENT-FIX — corrected PR4; superseded operational status.**
+Core gate closed by PR5/3683fed3 with six green hosted runs and the real-systemd
+receipt. Final panel-only correction removes the hardcoded schema1 label, preserves
+historical observations and displays the actual imported schema when recorded.
+Its built41-test/readback gate passes; finish ordinary follow-up CI/merge without
+changing or requalifying the transport kit, and stop at the same delivery decision.
+Base: actual remote main `1cbe8fbf0de1924e9326125e1932078b5b1f56ee`, separate worktree.
+Gate: reproduced deadlock/deadline regressions; packaged watcher + exact preflight +
+actual systemd/native transitions and real streams; safe first cohort preparation
+with unavailable node/lost ACK/restart/replay; noncohort preserved on central outage.
+Retain paid108/119/replay/terminal rules, local panel and MESH cert/CRL boundary.
+Build a new inventory-bound kit, refresh private delivery/readback/fail-closed rollback,
+run applicable hosted checks/review and normal merge. Old v1 archive is forbidden for
+enablement; historical receipts remain. Production/ledger/phone/G4/renewal/cold work
+are excluded. [Corrected evidence and scope](releases/2026-11-07-subscription-enforcement-fix.md).
+
+**Historical SUBSCRIPTION-TRANSPORT-ENFORCEMENT — PR4 merged, kit superseded.**
+Dependency: closed PR1–3/maina258e933, installed108/119 policy and local RO panel.
+Gate: canonical decisions, protected AWG/TCP registration and persistent/live sets,
+finite leases and explicit open-flow/mux interruption; isolated exact-engine tests,
+fresh private mapping/impact/rollback kit, installed local authenticated desktop/390px
+visual acceptance, applicable hosted checks and normal PR merge. Preserve existing
+MESH certificate/CRL boundary, non-billing noncohort semantics and control HTTPS.
+The earlier proposed noncohort expiry on central outage was not approved and is
+replaced by explicit first-enrollment preparation in SUBSCRIPTION-ENFORCEMENT-FIX.
+Only subsequent owner enablement remains after the gate. No production transport
+activation, paid writes, phone/G4/renewal/cold-provisioning work in this task.
+[Evidence, recommended profile and exact kit](releases/2026-11-07-subscription-transport-enforcement.md).
+
+**Historical SUBSCRIPTION-PAID-119 — CLOSED, PR3 mergeda258e933 and installed.**
+Dependencies: closed PR1 and PR2/main5197563, accepted unchanged ARM119 artifact.
+Gate: explicit108/119 descriptors; matching authenticated latest pair/hash; exact
+legacy replay; canary/demo108 preserved; isolated real packaged CLI/server tests;
+green applicable hosted CI/review and ordinary merge. Then minimal serving paid-only
+overlay, verified nonempty backup/code rollback, installed private operator policy/status,
+collector source pin with unchanged HMAC and fresh authenticated panel readback;
+paid/identity fingerprints must match across the deployment interval. No real payment,
+cohort/period/identity changes, Android requalification, G4/renewal or decision B.
+Final CI/merge/install receipts go in the task PR, not a cosmetic documentation-only head.
+[Execution contract](releases/2026-11-07-subscription-paid-119.md).
+
+**Historical SUBSCRIPTION-OPERATIONS — CLOSED, PR2 merged5197563.**
+Dependency: closed PR1/main9d05c0f and existing local collector/importer panel.
+Gate: actual read-only observations, separate production subscription display without
+web SSH/DB secrets, preserved synthetic guards/local data, real-CLI isolated checks,
+paid-aware backup rehearsal and [canonical RU guide](operators/subscriptions.ru.md).
+Policy proposals119 eligibility and unified AWG/TCP/MESH enforcement remain proposals;
+do not change baseline108/cohort/identity, installed APK, G4 or production transport.
+Completion evidence: [7 November operator report](releases/2026-11-07-subscription-operations.md).
+Local read-only view/automatic collection and real nonempty isolated backup rehearsal
+are verified; coherent snapshot/archive-origin/attempt-clock and guide corrections proceed
+through final-head hosted checks and the authorized ordinary PR2 merge. Final receipts
+stay in PR2, not a documentation-only follow-up head. This is
+not permission to activate a paid device, change either proposed policy or merge/redeploy
+unrelated work. No additional Android qualification is opened.
+Earlier integration paragraphs below retain checkpoint history only: PR1 is merged,
+not an instruction to resume CI repair or repeat Android qualification.
+
+**Historical SUBSCRIPTION-INTEGRATION-1 — CLOSED by merge9d05c0f.**
+663377e passes all client/runtime gates and phase0; control stalls in dependency
+setup, not tests. Apply the already verified voice mirror repair to that job, then
+finish its real check and the complete final-head CI. No additional qualification.
+Full-suite/context and Linux candidate gates passed on360cc26. Repair only the
+repeated voice-runner APT mirror timeout, then require actual final-head checks;
+do not restart closed source investigations or relabel infrastructure cancellation
+as an assertion failure. Record final receipts/merge in PR1 without a docs-only head.
+Finish the remaining concrete1d4 fixtures and invitation-dispatch synchronization,
+including protected relocated Python and its real sanitized runtime probe,
+then require final-head hosted PASS and normal merge. Exact retained snapshot and current
+unbound renewal package must be supplied, not skipped. Do not repeat closed native or
+messenger investigations, change historical hashes or claim emulator/phone acceptance
+from a source-review adaptation. Keep receipts in PR1 after the cohesive source push.
+Current authorized work includes the complete beta119 source-review guard adaptation
+and CI fixture corrections. Finish the actual-head hosted checks and ordinary PR1 merge;
+do not open a runtime qualification phase. All152 guarded files match beta119; seven
+subscription and three inherited-renewal exceptions are exact reviewed hashes, not new
+unguarded files. Historical native/reference hashes remain fixed. Ownership, interpreter,
+historical source and process-global fixture isolation must be explicit and every collected
+test must run in its declared context. Record final CI/merge receipts in PR1 without a
+cosmetic docs-only head. A normal source/fixture failure remains work to fix, not a reason
+to stop. Production, G4, paid baseline108 and installed beta119 are unchanged.
+
+Earlier integration requirements and evidence:
+Use a separate worktree from current main; preserve the independent bootstrap and
+renewal work below. Validate the ordinary server package, complete repository CI and
+merge through a PR. Do not redeploy, install, alter paid data or open another Android
+matrix. Prepare one existing operator workflow read-only, including its eligibility
+and expiry consequences. Installed ARM119 provenance and prior NOT_RUN gates remain.
+PR1 base repairs explicitly authorized: update nine Session fixtures and the exact
+phase22 fragment; rebuild the already accepted native closure, not current carrier.
+The pinned `efc13f1c7f27` snapshot reproduces the existing313-file native digest;
+historical accepted hashes stay unchanged. Messenger222 and docs gates pass locally.
+Linux race/build/package smoke and Messenger PASS on `24de0b2`; no native baseline
+qualification or hash replacement was needed. Remaining gates are now concrete:
+Client builds/android source-review assertion for ChatActivity, phase0 fixture/root
+execution failures, and unfinished control/voice runs. Review these separately from
+the three repaired blockers; do not claim merge readiness or silently expand into
+renewal/bootstrap policy changes. Normal merge still requires all applicable checks.
+[Task evidence and completion gate](releases/2026-11-06-subscription-integration-1.md).
+
+**Completed8 November: authorized owner Wi-Fi experiment; stop at this result.**
+Owner chose Wi-Fi; one ordinary Connect on installed frozen120/API31 passed READY,
+DNS and verified HTTPS/NL1 egress. Existing identity/chat list and NL1/MESH/P1 settings
+preserved; VPN OFF and Wi-Fi ON restored. Cache was not cleared: WARM/direct-HTTPS,
+not mobile or cold acceptance. Entry was inactive at Connect after an operator launch
+error; that gate remains FAIL, despite successful normal Wi-Fi traffic. Both entries
+cleaned up; no production service restart, paid-policy change or updater publication.
+APK24a5338a…517ea retains source55525859, not the documentation/main SHA.120 lacks
+subscription UI119. Final G4 readback is FULL_CORE_PATH_PASS/exit0, with no new run.
+Do not automatically start integration with119, another field attempt or a common release.
+[Final receipt and limitations](releases/2026-11-07-cold-field-delivery.md#owner-wifi-final-result-8-november).
+
+### Superseded preparation notes (not active NEXTs)
+
+**In progress: authorized owner API31/119→120 field operation, awaiting phone setup.**
+The owner selected their connected API31 phone; this is not the original API28 case.
+Exact kit, actual phone signer/root, current NL1/RU trust and device admission pass
+preflight. Manifest-listed entry files are staged but inactive; vault check-only passes.
+No locator, signature, transfer, install or Connect yet. Phone still reports Wi-Fi and
+valid readiness: await manual mobile-only/NL1 setup, preserve cache and label WARM.
+Then execute only the authorized bounded entry/locator/finalization/private USB handoff
+and manual update/Connect, capturing the outcome and stopping only the new entry.
+Do not repeat CI/F/JNI, clear data, change production VPN services or begin another task.
+[Operation evidence](releases/2026-11-07-cold-field-delivery.md#owner-api31-operation-preflight).
+
+**Completed: beta120 READY_FOR_CONTROLLED_FIELD_OPERATION.**
+Exact Android release-CI42385799106/source55525859 and downloaded ARM64 prebuild
+9eae8668…7348c are accepted. Corrected NL1 server3c0487eb/archive5ec255f5…d71cb is
+reproducible and passes11 disposable package/finalizer checks. Finalizer pins select
+that CI payload only; new locator and signature will have their own final APK digest.
+Both CI failures and original local preparation/E/F/FAIL artifacts remain preserved.
+Selected scope is Android release qualification plus bounded server package, not whole
+repository CI green, G4 or a new Telemost/physical-phone PASS.
+
+**Next only after ONE explicit field-operation authorization and recipient readiness:**
+current NL1 profile/certificate/route/backend preflight → new bounded entry → fresh
+production locator → minimal asset-only packaging/vault signing → byte/window checks →
+agreed private handoff and one ordinary Connect over113 without data clearing.
+No blocked-download-page assumption, expired locator, new discovery/import or phone
+operation is authorized automatically. All preparation is finished before the finite
+entry window starts; no CI/tool build consumes it. Production/public updater/paid119
+and user phones are unchanged. No other queued task starts automatically.
+[Exact release receipt](releases/2026-11-07-beta120-release-qualification.json) ·
+[Operator procedure](../deploy/friends/restricted/COLD_FIELD_DELIVERY.md).
+
+**Completed7 November: API28/emulated CELLULAR-only cold DROP follow-up.**
+F/252c87e with unchanged application9bf0272 and JNI17119f00…60c59 passes real Android28
+sole foreground/unrestricted CELLULAR, no WiFi/VPN/readiness, fresh synthetic inputs and
+exact guest DROP. Direct HTTPS5.002s + RNS6.201s leave18.790s provisioning budget;
+fetch validated with7.279s remaining. READY57.565s, DNS/verified HTTPS/egress PASS.
+All per-traffic-boundary error/timeout/reason counters stay0, including after NXDOMAIN.
+E counter timing is localized, but same-request/underlying-delay causality remains unknown
+without E's missing per-request evidence; F is not a claimed fix. No product/native rebuild,
+deadline/security change, soak or unchanged retry. Own resources stopped, old evidence kept.
+Field gate remains ARM64 + real trust/signature + authorized provisioning entry + valid
+pre-Connect locator delivery; x86 synthetic rooms/APKs are not a field release.
+The emulator is not the original physical user's carrier; no G4/phone PASS or automatic
+next task. Field delivery is a separate controlled gate, not authorized production changes.
+[Follow-up evidence and remaining gate](releases/2026-11-07-cold-api28-cellular.json).
+
+**Completed7 November: authorized cold-provisioning positive runtime goal.**
+E/14c2b81: no-cache registered synthetic identity → real Telemost provisioning/TLS →
+verified encrypted bundle → ordinary MESH READY43.982s → DNS/verified HTTPS/correct
+gateway egress. Background-network EACCES is fixed with API27-compatible eligibility
+filter/pinning; D/E and targeted regressions confirm the causal correction. Original
+example.com NXDOMAIN is observed through both unchanged host resolver and MESH/TUN.
+Keep2 observed DNS timeouts/2 Mux protocol-error counts as remaining quality evidence,
+not a full stability PASS. No further runtime negatives, release, deployment, discovery,
+activation or queued platform task is started here. All own resources stopped; old FAILs
+retained. [Final result and exact artifacts](releases/2026-11-07-cold-connect-e.json).
+
+### Historical checkpoints for this incident (not active NEXTs)
+
+**Active7 November: finish traffic confirmation after real cold READY.**
+9bf0272/D confirms corrected bind, Telemost provisioning, verified encrypted bundle and
+normal MESH READY42.762s. DNS assertion used example.com, which also returns NXDOMAIN
+from the gateway host's actual resolver. Keep product/servers/DNS unchanged; use prechecked
+api.ipify.org for positive DNS/verified HTTPS/egress, retain Mux counters, then observe the
+original target's DNS RCODE through TUN. This is a specific traffic-harness hypothesis,
+not an unchanged retry. [D evidence](releases/2026-11-07-cold-connect-d.json).
+
+**Active7 November: API27-compatible network selection confirmation.**
+C exposed modern FOREGROUND19 versus API27 hidden18; correct that compatibility edge,
+retain filtering/pinning/fail-closed, verify actual bit values on27/28/35. Rebuild managed
+only and confirm cold runtime with retained JNI and32-byte raw egress expectation.
+No permission expansion, routing override or deadline change. [C evidence](releases/2026-11-07-cold-connect-c.json).
+
+**Active7 November: confirm foreground-network selection correction in cold runtime.**
+B localizes Android NETWORK_BIND EACCES(13), not FD duplication: the first enumerated
+CELLULAR is background and therefore permission-gated by API27. Filter unrestricted
+foreground physical candidates and retain pinned-network fail-closed semantics. Targeted
+before/after Java regression passes; real fix confirmation remains pending. Build managed
+APK only with accepted JNI; fresh cold inputs and existing runner, CPU observe-only.
+[B result and source correction](releases/2026-11-07-cold-connect-b.json).
+
+**Active7 November: localize and repair proven Android socket bind failure.**
+The owner removes the single-launch approval constraint; continue evidence-driven
+diagnostic/fix/confirmation runs with CPU observe-only and unchanged security/budgets.
+First real cold Connect: Go entered; SOCKET_PROTECT_BIND/SOCKET_DENIED before TLS,
+selected CELLULAR available, Java IO. Add bounded bind operation/errno to distinguish
+descriptor duplication from platform binding. Reuse accepted JNI, compile managed APK
+only, then confirm a specific cause; no unchanged retry-until-green or scope expansion.
+[Actual evidence](releases/2026-11-07-cold-connect-a.json).
+
+**7 November CPU-override attempt finished; packager repair verified offline only.**
+No thermal abort; no Connect: apksigner password-file EOF stops final packaging.
+Remove the redundant key-password read;39 targeted tests plus actual offline signing
+of both APKs pass. No product/native/readiness/TLS change. Runtime is cleaned up, two
+own room objects have unverified deletion, old evidence remains. Additional AVD launch
+requires owner approval; do not auto-repeat. Single Connect/READY/traffic gate remains
+unexecuted. [Exact result](releases/2026-11-07-cold-cpu-observed-runtime.json).
+
+**Selected7 November follow-up: owner cancels CPU-temperature stop for one new run.**
+Use explicit per-run CPU observation-only flag on the same versioned runner. Preserve
+raw CPU evidence; other guards/budgets and product source/JNI/Android PASS remain.
+38 targeted harness tests pass. Proceed with one fresh cold attempt and existing
+native snapshot/READY-traffic gate; no automatic series or old-evidence replacement.
+
+**Selected7 November runtime authorization completed: STOPPED_BEFORE_CONNECT.**
+One4854f96 guarded API27 run stops at FINAL_ASSET_PACKAGING on a persisted
+CPU_TEMPERATURE_LIMIT frame (Core4/raw91000/max91°C; Package90°C; GPU56°C).
+Android-ready/no-readiness/no-VPN, two own provider rooms and verified fresh locator
+precede the stop; no final APK install or client Connect/native snapshot/READY/traffic.
+Cleanup is verified; room-object deletion remains NOT_VERIFIED. Product6eb61a9,
+JNI17119f00…60c59, Android JNI PASS and both historical FAILs remain unchanged.
+No further local AVD/guard cycle, MESH patch or threshold increase is authorized.
+Next execution requires a separate owner decision on the environment, not another
+automatic attempt. [Exact evidence](releases/2026-11-07-cold-guarded-runtime.json).
+
+**Previous selected source repair (runtime authorization subsequently supplied):**
+**Selected7 November: bounded harness repair complete; NO runtime authorization.**
+One-frame thermal decision/evidence and finite preparation/attempt/cleanup/overall
+budgets are implemented in the existing test-helper lineage and versioned runner.
+34 targeted tests use fixtures, mocked process boundaries and controlled time only.
+Source6eb61a9, JNI17119f00…60c59 and accepted Android JNI PASS are unchanged. The helper
+no longer labels lifetime expiry as temperature failure or rereads temperatures for
+the stop evidence. The overall watchdog covers the full declared attempt window and
+bounded cleanup, and can interrupt a hung sampler/test. No product/readiness/TLS/network
+timeouts change. Cold stand remains STOPPED; no AVD/OAuth/room/APK/Connect, new hardware
+investigation or automatic next task. Old94°C remains unverified, provisioning unfixed.
+[Exact harness scope and limits](releases/2026-11-07-cold-harness-guards.md).
+
+**Previous selected audit, completed atbd0fbe7:**
+**Selected6 November: thermal-reader audit only; all cold runtime attempts STOPPED.**
+Owner supersedes the runtime continuation with read-only verification of the exact
+6096535 readers. Same-input comparison agrees on sensors/units/thresholds; independent
+sample domains explain how a watcher maximum66 can coexist with a stage94, but missing
+historical watch timestamps/raw inputs/fan data prevent confirmation of a real peak,
+sustained heat or sensor error. One60s passive observation is complete, no stress/AVD.
+The separate missing-sensor0°C fallback is reproduced and removed in the versioned
+test helper with16 focused tests; original as-run files remain immutable. The fixed
+helper has no new runtime qualification. A sensors JSON collection limitation leaves
+only a later paired sensors/sysfs comparison, not the full minute comparison. Do not
+rerun this observation or cold stand automatically to fill gaps. No Connect, rooms,
+APK/native build, BIOS/fan/power changes, production/G4 or foreign-process operations.
+Accepted Android JNI PASS and the unused single Connect remain unchanged. This result
+does not authorize resumption or environment migration; next action is the owner's.
+
+**Prior runtime authorization outcome; not an active launch instruction:**
+**Selected continuation6 November21:47UTC: reduced-load thermal stop; migration decision next.**
+Fromf7073e6, product6eb61a9/JNI17119f00…60c59 remain unchanged and reused. Accepted
+provider-free Android JNI PASS is retained, no native rebuild or host/JVM/race/JNI rerun.
+Exactly one initial preflight passes and one own API27 NVIDIA/KVM AVD boots. Cold package/
+VPN checks and unmodified clock convergence complete. Before OAuth/rooms/workers, the
+existing `ANDROID_READY_NO_VPN_BEFORE_ROOMS` gate measures Package id0/Core2 at94°C
+against85°C,41.740s after preflight. The paired1.069s CPU sample is substantially lower
+than the earlier attempt: QEMU2.81%, other processes58.01% (100%=one core); no own builds
+or workers. The measured thermal limit still fails; individual heat-source causality is
+not established. GPU53°C and16279992KiB available RAM pass. Own resources are stopped;
+no OAuth, new rooms/inputs/APK, guest blocks or Connect. ONE Connect remains unused.
+Do not repeat this host/AVD cycle. The next execution decision belongs to the owner:
+environment migration, not threshold increases, foreign-process termination or an
+automatic move to a phone/host. Server-worker co-load remains untested. Keep accepted
+JNI and immutable artifacts; future finite inputs must be fresh, not previous readiness.
+The unchanged gate remains AutomaticConnection200000ms candidate plus separate30000ms
+readiness: concrete native reason on failure; DNS/verified HTTPS/egress on READY, no
+negatives first. Both old FAILs/19 artifacts, accepted Android PASS andf7073e6 evidence
+are preserved. No product, production/G4, admission, public APK, discovery/import or
+activation work is authorized. See [measured stop](releases/2026-11-06-beta113-field16-bootstrap.md#reduced-load-runtime-stop).
+
+**Prior request outcome, superseded by the current authorization: retry consumed.**
+Original harness incorrectly gave the whole engine30s; corrected AutomaticConnection
+receives the production200000ms candidate deadline. The new API27/Telemost run fails
+BOOTSTRAP_UNAVAILABLE after1.792s, before challenge response, with198230ms remaining;
+readiness30s has not expired either. JNI provisioning lease exists, but native Post
+returns no reply; no server TLS/backend event, challenge, certificate, accepted bundle
+or native MESH startup is observed. Underlying native error is not exposed: no invented
+AUTH/network/slow-provider diagnosis and no claim to have fixed the original delivery
+failure. Post-run IO-wrapper diagnostic correction passes37 JVM tests; no second run.
+Both FAIL receipts remain separate and immutable. Owned runtime resources are closed;
+two exact new provider room objects are privately accounted for, deletion NOT_VERIFIED.
+Positive MESH, DNS/HTTPS/egress and runtime-negative gates remain unmet. No automatic
+runtime continuation, rollout, discovery, locator import or adjacent queued task.
+
+**Selected field bootstrap continuation — bounded provisioning candidate implemented.**
+The isolated uncached dual-block path now reaches real authority issuance, unchanged
+validation/encrypted vault, existing Android source owner and actual native MESH traffic.
+This is a separate finite-locator source candidate, not an installed beta113 repair.
+No production locator/credentials are supplied; missed rotation fails closed. Known
+field-network uncertainty, G4 and other branches retain their independent state.
+**One next:** localize the real issued-bundle→READY boundary after the first actual
+Android/Telemost Connect fails with `Rejected` at30.119s. Protected local vault input
+and token handoff succeeded; authentication is no longer the blocker. The corrected
+isolated server publishes a finite signed locator; the synthetic authority records
+one real restricted challenge/certificate issuance. Android API27 uses real NVIDIA/
+KVM, framework/Keystore/JNI and guest-only direct-path rejection, but no NATIVE_READY
+or proven delivery/cache completion. Retain the earlier loopback-ICE fixture failure.
+Do not repeat an unchanged Connect or extend the real30s readiness budget. Test-only118/x86_64 APK
+is built/AVD-installed, not distributed. DNS/HTTPS/egress and negative/ACK runtime
+checks remain NOT_RUN. Own processes/sessions are stopped; G4 cleanup and acceptance
+remain with the main session. No product code, live service, catalog or policy change.
+[Actual runtime attempt](releases/2026-11-06-beta113-field16-bootstrap.md#actual-androidtelemost-attempt-6-november).
+Existing source/core PASS remains separate, not runtime acceptance. Preserve the
+KVM/NVIDIA requirement and the finite pre-Connect APK asset; missed-rotation recovery
+remains unimplemented. Proposed signed-file locator import is a contract only, not
+another authorized implementation task or automatic discovery. The owner explicitly
+excludes locator import, new discovery and other features from this test.
+[Authorized access follow-up](releases/2026-11-06-beta113-field16-bootstrap.md#authorized-vault-access-follow-up-6-november).
+[Eligibility receipt and remaining boundary](releases/2026-11-06-beta113-field16-bootstrap.md#androidtelemost-runtime-eligibility-6-november1755utc).
+[Implementation, limits and exact receipts](releases/2026-11-06-beta113-field16-bootstrap.md#bounded-provisioning-candidate).
+The earlier selected/proposed entries below record completed incident investigation,
+not permission for parallel live/G4/ANDROID-APP-VPN work in this branch.
+
+**Selected6 November: separate beta113/API28 field bootstrap diagnosis, not G4.**
+The148e212 source/JSON findings stand. A bounded exact113 test now confirms no cold
+provisioning route when HTTPS8443 and RNS4242 both fail and readiness is missing.
+Actual FriendsAccessAndroid and ChatCarrier entrypoints are exercised with synthetic I/O;
+valid-cache selection is a separate model, backed by separate existing native crypto checks,
+not evidence of uncached or first-activation success. No product implementation is changed.
+**One proposed implementation next:** an activated-device service-only provisioning entry
+over the existing carrier and trust, with authenticated rendezvous independent of readiness.
+Require the same dual-block case to obtain and validate a real bundle before opening MESH;
+do not substitute today's cache-dependent ChatCarrier. First activation is a separate scope.
+[Bounded result, test commands and constraints](releases/2026-11-06-beta113-field16-bootstrap.md#dual-direct-path-failure).
+Phone endpoint reachability versus Network selection remains unproved. Preserve separate
+fetch/owner/cleanup causes; no timeout/AUTH relabelling or speculative diagnostic APK.
+Do not start AVDs, touch frozen G4, change production or advance ANDROID-APP-VPN here.
+The separately recorded live-renewal follow-up below remains outstanding, not executed
+by this source investigation; the product queue is unchanged.
 
 **Selected owner follow-up6 November: restore failed live MESH, not a new rollout.**
 Recovery and post-repair traffic are verified: ordinary fleet COMMIT, fresh signed
@@ -545,6 +2080,53 @@ All earlier dated preparation/NEXT entries below are historical, not parallel ta
 FAILED; ordinary AWG/TCP active. Diagnosis/recovery remains separate from isolated G4;
 no production mutation or task advancement by this check. Root cause not established.
 [Health snapshot](releases/2026-11-06-vpn-health.md).
+
+**Owner-selected SUBSCRIPTION-ANDROID-3 — narrow ARM/ingress gate complete.**
+Fixed119 installed in place over118 with explicit owner-phone consent; Redmi/API31
+receives fresh own non-cohort state from normal trusted HTTPS without VPN. Real encrypted
+restart/cache and subsequent response PASS; actual human Refresh requests confirmed.
+Serving archive overlay preserves every unrelated member; targeted deployment/readback
+and46 focused tests PASS. No paid row/event exists for this identity, so physical paid
+snapshot/notification/dedupe remains NOT_RUN; do not manufacture a payment to close it.
+No publication/merge or automatic successor. Whitelist/COLD_BOOTSTRAP_GAP, natural expiry,
+UI identity switch and prior mixed-network gate remain separate; G4/renewal untouched.
+[Installed candidate, evidence and rollback](releases/2026-11-06-subscription-android-3.md).
+
+**Owner-selected SUBSCRIPTION-ANDROID-2 — narrow task complete, ARM119 candidate retained.**
+Real UI/save/automatic delivery/notification/tap/dedupe passed on the isolated API35
+stand. Source `b2a37fe98929` ordinary source-bound ARM64 Friends build, existing-key
+signature,26 focused Gradle tests/lint and artifact inspection PASS; no publication,
+merge or owner-phone action. Next separate gate: authorized dedicated ARM retained-data
+installation plus trusted candidate ingress. Preserve previous runtime limitations;
+no automatic continuation, G4 action or hidden background acquisition.
+[Current task and gates](releases/2026-11-06-subscription-android-2.md).
+
+**Owner-selected SUBSCRIPTION-ANDROID-1 — bounded runtime complete6 November.**
+Independent feature worktree, not a G4 continuation. Source `934867678f99` pushed and
+remote-verified, own backend/AVD stopped; evidence retained. API35 NVIDIA/KVM diagnostic
+APK build/Chaquopy, real local HTTPS, Keystore/restart, canonical state/event display,
+permission/dedupe and cold/warm navigation pass; checked-exception compilation fixed.
+Mixed-underlay test-origin failure retained, stable Wi-Fi path qualified. Remaining
+independent gates: production-equivalent test ingress, ARM/release, physical whitelist
+and normal activated-service scheduling (notifications were exercised via the existing
+worker, not proven as automatic new-event delivery). No deployment/merge/full acceptance,
+G4 action or automatic next task. [Exact results and reproducible scope](releases/2026-11-06-subscription-android-1.md).
+
+**Independent owner-requested parallel subtask6 November — SUBSCRIPTION-CLIENT-VIEW**
+under `ANDROID-CONTROLLED-BETA`, not a replacement for the existing G4 critical path.
+Isolated source/integration candidate from checkpoint `47ef0463bd39`: authenticated
+schema1 personal HTTP read, canonical snapshot/event, explicit UI refresh and existing
+encrypted projection/notification fences;84 focused Python +26 pure JVM checks PASS.
+Dependencies reused: canonical paid_beta records, Friends identity, encrypted chat store,
+ChatRuntime/ChatNotifications and the existing protected HTTPS underlay.
+The owner-authorized minimal API closes the prior missing-contract dependency in source;
+registration status and public notices remain unchanged and never imply paid entitlement.
+Completion gate remains OPEN: separate review/merge and controlled backend ingress/runtime
+qualification, then Android build/Keystore/restart, permissions, cold/warm notification
+navigation and offline/time/expired-VPN checks when resources are free. No further API
+redesign is required to start those checks. No automatic continuation, G4 action, native
+rebuild, release or deployment is authorized by this entry.
+[Contract, test commands and deferred gates](releases/2026-11-06-subscription-authenticated-api.md).
 
 **5 November11:29UTC operational readback complete:** all ordinary VPN services
 and both NL bootstrap active; seven recent AWG peers, no sampled TCP443/8446 sockets.
@@ -741,12 +2323,12 @@ not full CI or accepted A. Actual traffic/restart evidence and artifact identiti
 [report](releases/2026-11-05-mesh-online-renewal.md#frozen8eeb9f0-checkpoint-incomplete-a).
 [Current package contract](../deploy/friends/restricted/maintenance/ONLINE_RUNTIME.md).
 
-**ANDROID-APP-VPN (bounded Android task, selected by owner, NOT STARTED).** Dependency:
-accepted A/G1–G4 checkpoint. One local ALL/INCLUDE/EXCLUDE policy and immutable per-Connect
+**ANDROID-APP-VPN (bounded Android task, selected8 November, IN PROGRESS).** Dependency:
+owner-accepted current launch; historical measurements unchanged. One local ALL/INCLUDE/EXCLUDE policy and immutable per-Connect
 snapshot across AWG/TCP/MESH/Auto/guard; active edits remain pending until explicit next
 Connect. Gate: API27/API35 distinct-UID VPN/direct DNS/verified-HTTPS/IPv6 routing evidence,
 recovery/guard/empty-INCLUDE/package-removal/update tests and renewal-delivery regression.
-No source work in parallel with unfinished A. No production, owner-phone installation,
+Cold/whitelist no longer blocks this owner-selected task. No production, owner-phone installation,
 publication, release/catalog/timer/admission/cohort/paid change in either task.
 
 Earlier emergency-only checkpointb1d17d3 (package blocker superseded above):

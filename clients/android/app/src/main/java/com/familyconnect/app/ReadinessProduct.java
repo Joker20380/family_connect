@@ -33,9 +33,10 @@ final class ReadinessProduct {
         }catch(Exception failure){durable=false;}
     }
     void publish(ReadinessImportResult result,Ack ack){
-        delivery="ACK_PENDING";persist(result,delivery);
+        deferAcknowledgement(result);
         try{ack.send(result.json());delivery="ACK_RECEIVED";}catch(Exception | LinkageError failure){delivery="ACK_PENDING";}
         persist(result,delivery);
     }
+    void deferAcknowledgement(ReadinessImportResult result){delivery="ACK_PENDING";persist(result,delivery);}
     void record(ReadinessImportResult result){delivery="UNKNOWN";persist(result,delivery);}
 }

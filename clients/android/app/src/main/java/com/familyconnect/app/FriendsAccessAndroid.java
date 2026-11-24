@@ -19,6 +19,7 @@ final class FriendsAccessAndroid {
     private volatile HttpsURLConnection pending;
     private volatile boolean cancelled;
     private volatile ControlRnsAndroid readinessRelay;
+    private volatile ProvisioningCarrier provisioningCarrier;
     private ReadinessFetchTrace fetchTrace;
     static final class Denied extends FriendsReadinessProtocol.AuthorizationFailure {}
     static final class Conflict extends Exception {}
@@ -28,7 +29,8 @@ final class FriendsAccessAndroid {
     FriendsAccessAndroid(Context context,long deadline){this(context,true);this.deadline=deadline;}
     FriendsAccessAndroid(Context context,long deadline,ReadinessFetchTrace trace){this(context,deadline);fetchTrace=trace;}
     FriendsAccessAndroid(Context context,ChatCarrier carrier){this(context,true);this.chatCarrier=carrier;this.deadline=android.os.SystemClock.elapsedRealtime()+60000;}
-    void cancel(){cancelled=true;HttpsURLConnection connection=pending;if(connection!=null)connection.disconnect();ControlRnsAndroid relay=readinessRelay;if(relay!=null)relay.cancel();}
+    void cancel(){cancelled=true;HttpsURLConnection connection=pending;if(connection!=null)connection.disconnect();ControlRnsAndroid relay=readinessRelay;if(relay!=null)relay.cancel();ProvisioningCarrier carrier=provisioningCarrier;if(carrier!=null)carrier.close();}
+    boolean usedProvisioning(){return provisioningCarrier!=null;}
     private int remaining(int maximum)throws IOException{
         long remaining=deadline-android.os.SystemClock.elapsedRealtime();
         if(cancelled)throw new IOException("Cancelled");
@@ -62,7 +64,7 @@ final class FriendsAccessAndroid {
     }
     private JsonObject directPostObserved(String path,JsonObject body,String requestId)throws Exception{
         remaining(5000);
-        require(path.matches("/friends/(challenge|activate|restricted-readiness(/(challenge|ack-challenge|ack))?|configuration/(ru|nl)|gateway-configuration/nl-amsterdam-[12]|chat/(challenge|register)|referral/(issue|claim)|device/(status|support|diagnostics)|notices/device/(role|publish|list|edit))"));
+        require(path.matches("/friends/(challenge|activate|restricted-readiness(/(challenge|ack-challenge|ack))?|configuration/(ru|nl)|gateway-configuration/nl-amsterdam-[12]|chat/(challenge|register)|referral/(issue|claim)|device/(status|subscription|support|diagnostics)|notices/device/(role|publish|list|edit))")||path.equals("/friends/device/technical-metadata/v1"));
         boolean viaVpn=ReadinessBootstrapRoute.allowed(path)&&"on".equals(ConnectionService.status)&&"ok".equals(ConnectionService.healthStatus);
         if(fetchTrace!=null){fetchTrace.request(path,direct&&!viaVpn?ReadinessFetchTrace.Route.HTTPS_UNDERLAY:ReadinessFetchTrace.Route.HTTPS_VPN);fetchTrace.stage(ReadinessFetchTrace.Stage.OPEN_NETWORK);}
         HttpsURLConnection connection=direct&&!viaVpn?new ChatNetworkAndroid(context).openHttps("https://185.251.89.19:8443"+path,fetchTrace):(HttpsURLConnection)new URL("https://185.251.89.19:8443"+path).openConnection();
@@ -73,16 +75,17 @@ final class FriendsAccessAndroid {
             byte[] raw=FriendsReadinessProtocol.wireBytes(body);require(raw.length<=((path.equals("/friends/notices/device/publish")||path.equals("/friends/notices/device/edit"))?32768:8192));connection.setFixedLengthStreamingMode(raw.length);
             if(fetchTrace!=null)fetchTrace.stage(ReadinessFetchTrace.Stage.CONNECT_TLS_WRITE);
             try(OutputStream out=connection.getOutputStream()){out.write(raw);}finally{Arrays.fill(raw,(byte)0);}
-            connection.setReadTimeout(remaining(15000));int status=connection.getResponseCode();if(path.equals("/friends/device/diagnostics")&&status==429)throw new SupportRateLimited();if(fetchTrace!=null)fetchTrace.status(status);if(path.equals("/friends/restricted-readiness/challenge"))FriendsReadinessProtocol.challengeStatus(status);if(status==409)throw new Conflict();if((status==400&&!path.startsWith("/friends/restricted-readiness"))||status==401||status==403)throw new Denied();if(path.equals("/friends/restricted-readiness")&&(status==429||status>=500&&status<=599))throw new FriendsReadinessProtocol.Unavailable();if(status!=200)throw new IOException("Test access unavailable");
+            connection.setReadTimeout(remaining(15000));int status=connection.getResponseCode();SubscriptionRequest.status(path,status);if((path.equals("/friends/device/diagnostics")||path.equals("/friends/device/technical-metadata/v1"))&&status==429)throw new SupportRateLimited();if(fetchTrace!=null)fetchTrace.status(status);if(path.equals("/friends/restricted-readiness/challenge"))FriendsReadinessProtocol.challengeStatus(status);if(status==409)throw new Conflict();if((status==400&&!path.startsWith("/friends/restricted-readiness"))||status==401||status==403)throw new Denied();if(path.equals("/friends/restricted-readiness")&&(status==429||status>=500&&status<=599))throw new FriendsReadinessProtocol.Unavailable();if(status!=200)throw new IOException("Test access unavailable");
             ByteArrayOutputStream bytes=new ByteArrayOutputStream();long deadline=System.nanoTime()+20_000_000_000L;
             if(fetchTrace!=null)fetchTrace.stage(ReadinessFetchTrace.Stage.READ_BODY);
             try(InputStream input=connection.getInputStream()){byte[] buffer=new byte[1024];while(true){connection.setReadTimeout(remaining(15000));int count=input.read(buffer);if(count==-1)break;
                 if(bytes.size()+count>(path.equals("/friends/notices/device/list")?1048576:path.equals("/friends/restricted-readiness")?65536:16384)){
+                    if(path.equals(SubscriptionRequest.PATH))throw new SubscriptionRequest.InvalidResponse();
                     if(path.equals("/friends/restricted-readiness/challenge"))throw new FriendsReadinessProtocol.ChallengeFailure(FriendsReadinessProtocol.ChallengeCode.CHALLENGE_INCOMPATIBLE_RESPONSE);throw new IOException();}
                 if(System.nanoTime()>deadline)throw new java.net.SocketTimeoutException();if(Thread.currentThread().isInterrupted())throw new IOException();bytes.write(buffer,0,count);}}
             if(fetchTrace!=null)fetchTrace.stage(ReadinessFetchTrace.Stage.PARSE);
             try{return parse(bytes.toByteArray()).getAsJsonObject();}
-            catch(Exception failure){if(path.equals("/friends/restricted-readiness/challenge"))throw new FriendsReadinessProtocol.ChallengeFailure(FriendsReadinessProtocol.ChallengeCode.CHALLENGE_INCOMPATIBLE_RESPONSE);throw failure;}
+            catch(Exception failure){if(path.equals(SubscriptionRequest.PATH))throw new SubscriptionRequest.InvalidResponse();if(path.equals("/friends/restricted-readiness/challenge"))throw new FriendsReadinessProtocol.ChallengeFailure(FriendsReadinessProtocol.ChallengeCode.CHALLENGE_INCOMPATIBLE_RESPONSE);throw failure;}
         }finally{connection.disconnect();pending=null;}
     }
     private JsonObject proof(ControlIdentity identity,String purpose,String invitation)throws Exception{
@@ -91,19 +94,49 @@ final class FriendsAccessAndroid {
         long now=System.currentTimeMillis()/1000,expiry=integer(challenge.get("expires_at"),1);require(expiry>now&&expiry-now<=120&&text(challenge.get("audience")).equals("family-connect/enrollment/v1"));
         return identity.proveTransportKey(text(challenge.get("challenge")));
     }
+    JsonObject subscription(ControlIdentity identity)throws Exception{
+        String device=identity.reference();
+        return SubscriptionRequest.fetch(new SubscriptionRequest.Exchange(){
+            public String device(){return device;}
+            public JsonObject proof(String purpose)throws Exception{
+                try{return FriendsAccessAndroid.this.proof(identity,purpose,"");}
+                catch(Denied rejected){throw new SubscriptionRequest.IdentityRejected();}
+                catch(IllegalArgumentException invalid){throw new SubscriptionRequest.InvalidResponse();}
+            }
+            public JsonObject post(String path,JsonObject proof)throws Exception{
+                try{return FriendsAccessAndroid.this.post(path,proof);}
+                catch(Denied rejected){throw new SubscriptionRequest.IdentityRejected();}
+            }
+        });
+    }
     byte[] restrictedReadiness(ControlIdentity identity,OwnerPrewarmReceipt receipt)throws Exception{
         return restrictedReadiness(identity,receipt,null);
     }
     byte[] restrictedReadiness(ControlIdentity identity,OwnerPrewarmReceipt receipt,String gateway)throws Exception{
         try(ProvisioningTestGate.Permit permit=ProvisioningTestGate.enter(context)){
             permit.requireAvailable();
-            ReadinessBootstrapRoute route=new ReadinessBootstrapRoute(this::post,this::relayPost);
+            ReadinessBootstrapRoute route=new ReadinessBootstrapRoute(this::post,this::relayPost,(path,body,id)->{
+                remaining(1);
+                if(provisioningCarrier==null)synchronized(RestrictedVault.LOCK){
+                    byte[] usable=FriendsRestricted.cache(context,identity,gateway).usable(System.currentTimeMillis()/1000);
+                    if(usable!=null){java.util.Arrays.fill(usable,(byte)0);throw new FriendsReadinessProtocol.Unavailable();}
+                }
+                if(provisioningCarrier==null)provisioningCarrier=new ProvisioningCarrier(context,gateway,deadline,fetchTrace);
+                try{remaining(1);if(fetchTrace!=null)fetchTrace.request(path,ReadinessFetchTrace.Route.PROVISIONING);return provisioningCarrier.post(path,body,id);}
+                catch(Exception failure){if(fetchTrace!=null)fetchTrace.failed(failure);provisioningCarrier.close();throw failure;}
+            });
             try{
                 byte[] result=FriendsReadinessProtocol.fetch(RestrictedGateway.route(route::post,gateway),identity,receipt);
+                if(provisioningCarrier!=null){
+                    try(ControlIdentity current=new FriendsIdentityVault(context).load()){
+                        remaining(1);
+                        if(!java.security.MessageDigest.isEqual(current.publicIdentity(),identity.publicIdentity())||!current.wireguardPublicKey().equals(identity.wireguardPublicKey()))throw new SecurityException("Provisioning recipient changed");
+                    }catch(Exception failure){java.util.Arrays.fill(result,(byte)0);throw failure;}
+                }
                 if(fetchTrace!=null)fetchTrace.stage(ReadinessFetchTrace.Stage.COMPLETE);
                 return result;
             }catch(Exception failure){if(fetchTrace!=null)fetchTrace.failed(failure);throw failure;}
-        }finally{closeReadinessRelay();}
+        }finally{closeReadinessRelay();ProvisioningCarrier carrier=provisioningCarrier;if(carrier!=null)carrier.close();}
     }
     void readinessAck(ControlIdentity identity,JsonObject receipt)throws Exception{
         readinessAck(identity,receipt,null);
@@ -191,6 +224,20 @@ final class FriendsAccessAndroid {
             integer(result.get("stored_at"),1);
         }
     }
+    void technicalMetadata(JsonObject report)throws Exception{
+        deadline=android.os.SystemClock.elapsedRealtime()+15000;
+        String raw=report.toString();byte[] encoded=raw.getBytes(StandardCharsets.UTF_8);require(encoded.length<=6144);
+        byte[] digest=java.security.MessageDigest.getInstance("SHA-256").digest(encoded);StringBuilder hash=new StringBuilder();
+        for(byte value:digest)hash.append(String.format(java.util.Locale.ROOT,"%02x",value&255));
+        try(ControlIdentity identity=identity(false)){
+            JsonObject request=new JsonObject();request.add("proof",proof(identity,"technical-metadata-v1:"+hash,""));request.addProperty("report",raw);
+            JsonObject result=post("/friends/device/technical-metadata/v1",request);
+            fields(result,"schema report_id received_at consent retention_seconds");
+            require(integer(result.get("schema"),1)==1&&text(result.get("report_id")).equals(text(report.get("report_id"))));
+            require(text(result.get("consent")).equals("revoke".equals(text(report.get("operation")))?"revoked":"enabled"));
+            require(integer(result.get("retention_seconds"),1)==604800);integer(result.get("received_at"),1);
+        }
+    }
     String supportId() throws Exception {
         try(ControlIdentity identity=identity(false)){
             JsonObject request=new JsonObject();request.add("proof",proof(identity,"support",""));
@@ -238,6 +285,10 @@ final class FriendsAccessAndroid {
         }
     }
     JsonObject registerChat(ChatLocalAndroid chat)throws Exception {
+        try { return registerChat(chat, true); }
+        catch (Denied unsupported) { return registerChat(chat, false); }
+    }
+    private JsonObject registerChat(ChatLocalAndroid chat, boolean supportProtocol)throws Exception {
         try(ControlIdentity identity=identity(false)) {
             String publicKey=chat.call("profile",new JsonObject()).getAsJsonObject().get("public").getAsString();
             JsonObject request=new JsonObject();
@@ -253,9 +304,14 @@ final class FriendsAccessAndroid {
             JsonObject body=chat.enrollmentProof(identity.reference(),nonce);
             fields(body,"chat_public chat_signature");require(text(body.get("chat_public")).equals(publicKey));
             body.add("proof",identity.proveTransportKey(nonce));
+            if(supportProtocol)body.addProperty("support_protocol",1);
             JsonObject result=post("/friends/chat/register",body);
             String status=text(result.get("status"));
-            fields(result,status.equals("active")?"device chat_public status node":"device chat_public status");
+            boolean support=result.has("support_configuration");
+            boolean publishers=result.has("publisher_configuration");
+            require(!support||supportProtocol&&status.equals("active"));
+            require(!publishers||status.equals("active"));
+            fields(result,(status.equals("active")?"device chat_public status node":"device chat_public status")+(support?" support_configuration":"")+(publishers?" publisher_configuration":""));
             require(text(result.get("device")).equals(identity.reference())&&text(result.get("chat_public")).equals(publicKey)
                 &&(status.equals("pending-node")||status.equals("active")));
             if(status.equals("active")) {
@@ -265,6 +321,8 @@ final class FriendsAccessAndroid {
                 require(until>current&&until-current<=120);
                 require(text(node.get("host")).matches("[0-9]+(\\.[0-9]+){3}")
                     &&integer(node.get("port"),1)<=65535&&text(node.get("public_key")).matches("[0-9a-f]{128}"));
+                if(publishers)ChatPublisherConfiguration.validate(result.getAsJsonObject("publisher_configuration"),identity.reference(),publicKey,current);
+                if(support)chat.acceptSupport(result.getAsJsonObject("support_configuration"),identity.reference());
             }
             return result;
         }

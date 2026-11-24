@@ -211,6 +211,7 @@ def test_bad_http_bodies_rejected(setup, body):
 def test_database_requires_private_storage(tmp_path):
     unsafe = tmp_path / 'shared'
     unsafe.mkdir(mode=0o755)
+    unsafe.chmod(0o755)
     with pytest.raises(RuntimeError):
         ProductStore(unsafe / 'product.db').migrate()
     assert not (unsafe / 'product.db').exists()

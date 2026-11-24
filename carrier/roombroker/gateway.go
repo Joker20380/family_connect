@@ -32,7 +32,8 @@ type GatewayCarrier interface {
 
 type PacketGateway struct {
 	TelemostGateway
-	Connect func(context.Context, context.Context, Room) (GatewayCarrier, error)
+	Connect     func(context.Context, context.Context, Room) (GatewayCarrier, error)
+	DNSUpstream string
 }
 
 type telemostGateway struct {
@@ -46,10 +47,11 @@ type telemostGateway struct {
 	services        map[string]netip.AddrPort
 	allowInternet   bool
 	credentialsPath string
+	dnsUpstream     string
 }
 
 func (starter TelemostGateway) Start(lifetime, ready context.Context, room Room, id string, identity Identity) (Gateway, error) {
-	return (PacketGateway{starter, func(lifetime, ready context.Context, room Room) (GatewayCarrier, error) {
+	return (PacketGateway{TelemostGateway: starter, Connect: func(lifetime, ready context.Context, room Room) (GatewayCarrier, error) {
 		session, err := telemost.New(lifetime, telemost.Config{RoomURL: room.JoinURL, DisplayName: "Family gateway", Mode: telemost.ModeVP8})
 		if err != nil {
 			return nil, Code("gateway_configuration")
@@ -93,7 +95,7 @@ func (starter PacketGateway) Start(lifetime, ready context.Context, room Room, i
 	for name, destination := range starter.Services {
 		services[name] = destination
 	}
-	return &telemostGateway{credit128, session, raw, id, identity, event, starter.Diagnostic, services, starter.AllowInternet, starter.CredentialsPath}, nil
+	return &telemostGateway{credit128, session, raw, id, identity, event, starter.Diagnostic, services, starter.AllowInternet, starter.CredentialsPath, starter.DNSUpstream}, nil
 }
 
 func bindingMessage(id string, nonce []byte) []byte {
@@ -144,7 +146,7 @@ func (gateway *telemostGateway) Run(ctx context.Context, active func() error) er
 		trace.Add("GATEWAY_SESSION", "FAILED", "GATEWAY_CLOSE")
 		return err
 	}
-	config := tcpforward.MuxConfig{MaxStreams: DedicatedMaxStreams, Policy: tcpforward.Policy{Services: gateway.services, ServicesOnly: len(gateway.services) > 0 && !gateway.allowInternet}}
+	config := tcpforward.MuxConfig{MaxStreams: DedicatedMaxStreams, DNSUpstream: gateway.dnsUpstream, Policy: tcpforward.Policy{Services: gateway.services, ServicesOnly: len(gateway.services) > 0 && !gateway.allowInternet}}
 	if binding, ok := ctx.Value(leaseKey{}).(*leaseBinding); ok {
 		if err := binding.configure(ctx, gateway.credentialsPath, secured, &config); err != nil {
 			return err

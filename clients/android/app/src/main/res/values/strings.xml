@@ -1,4 +1,60 @@
 <resources>
+    <string name="chat_official_support">✓ Family Connect support</string>
+    <string name="chat_support_unavailable">Support · verification unavailable</string>
+    <string name="app_vpn_title">Apps and VPN</string>
+    <string name="app_vpn_details">Android and profile limitations</string>
+    <string name="app_vpn_warning">Apps outside the VPN use your regular connection and remain subject to your network restrictions.</string>
+    <string name="app_vpn_scope">Only this Android profile is shown. Apps sharing a UID share one rule. A work profile has its own VPN. System “Block connections without VPN” may also block excluded apps; this screen does not change it.</string>
+    <string name="app_vpn_pending">Applies on the next connection; the current session is unchanged</string>
+    <string name="app_vpn_next">Saved choices apply on the next explicit Connect</string>
+    <string name="app_vpn_invalid">Cannot connect with this selection. Select at least one installed, enabled app in Only selected mode. Remove unavailable selections or save a valid policy.</string>
+    <string name="app_vpn_loading">Reading apps locally…</string>
+    <string name="app_vpn_search">Search name or package</string>
+    <string name="app_vpn_selected">Selected only</string>
+    <string name="app_vpn_save">Save selection</string>
+    <string name="app_vpn_saved">Selection saved locally</string>
+    <string name="app_vpn_back">Back</string>
+    <string name="app_vpn_missing">Unavailable in this profile: removed, hidden or in another profile. Remove the saved selection if needed.</string>
+    <string name="app_vpn_disabled">Installed in this profile, but disabled</string>
+    <string name="app_vpn_system">Preinstalled / system app</string>
+    <string name="app_vpn_shared">Shared UID · one rule for the entire group</string>
+    <string-array name="app_vpn_modes"><item>All apps</item><item>Only selected through VPN</item><item>All except selected</item></string-array>
+    <string-array name="app_vpn_categories"><item>Apps</item><item>All apps and components</item></string-array>
+    <string name="subscription_title">Subscription and access</string>
+    <string name="subscription_loading">Reading the last confirmed status…</string>
+    <string name="subscription_unknown">No confirmed subscription status is available. Device activation does not confirm payment.</string>
+    <string name="subscription_refresh">Refresh</string>
+    <string name="subscription_refresh_current">Status confirmed by the service at the time shown.</string>
+    <string name="subscription_refresh_cached">Saved information. The current status has not been checked yet.</string>
+    <string name="subscription_refresh_unsupported">This server does not support subscription status yet. Saved information is not a fresh confirmation.</string>
+    <string name="subscription_refresh_unavailable">The service is temporarily unavailable. Saved information is retained, not freshly confirmed.</string>
+    <string name="subscription_refresh_identity_rejected">Device identity verification was refused. Saved information is not a fresh confirmation.</string>
+    <string name="subscription_refresh_invalid">The response could not be verified. The last confirmed information is retained.</string>
+    <string name="subscription_refresh_stale">An older response was ignored. The newer saved confirmation is retained.</string>
+    <string name="subscription_refresh_busy">Another subscription refresh is already running. Try again after it finishes.</string>
+    <string name="subscription_refresh_refreshing">Refreshing… Showing saved information until a verified response arrives.</string>
+    <string name="subscription_refresh_cancelled">Refresh cancelled because the device or local session changed or closed. Reopen this screen to refresh.</string>
+    <string name="subscription_not_cohort">The last confirmation says this device is outside the paid pilot. This does not mean unpaid or unavailable access.</string>
+    <string name="subscription_offline">No connection to refresh the status. Last confirmed information is retained; a network error does not mean unpaid access.</string>
+    <string name="subscription_last_state">Last confirmed status: %1$s</string>
+    <string name="subscription_checked">Confirmed at: %1$s</string>
+    <string name="subscription_until">Access until: %1$s</string>
+    <string name="subscription_last_until">Last confirmed period end: %1$s</string>
+    <string name="subscription_clock">The device clock is earlier than the confirmation. Check the date and time.</string>
+    <string name="subscription_period_elapsed">The last confirmed period has ended according to the device clock. Any renewal is not yet confirmed here.</string>
+    <string name="subscription_renewal_required">The last confirmed status requires renewal for continued access.</string>
+    <string name="subscription_last_event">Last backend event: %1$s</string>
+    <string name="subscription_state_active">Active</string>
+    <string name="subscription_state_trial">Trial access</string>
+    <string name="subscription_state_grace">Grace period</string>
+    <string name="subscription_state_expired">Ended</string>
+    <string name="subscription_state_revoked">Access revoked</string>
+    <string name="subscription_event_activated">Access activation confirmed by the service.</string>
+    <string name="subscription_event_renewed">Access extension confirmed by the service.</string>
+    <string name="subscription_event_confirmed">Access confirmed by the service.</string>
+    <string name="subscription_event_grace">Grace period confirmed by the service. Renewal is required.</string>
+    <string name="subscription_event_expire">The service confirmed that access has ended. Renewal is required.</string>
+    <string name="subscription_event_revoke">The service confirmed that access has been revoked.</string>
     <string name="tagline">Connectivity for your family</string>
     <string name="off">VPN is off</string><string name="on">Tunnel is on</string>
     <string name="connecting">Connecting…</string><string name="connect">Connect</string><string name="disconnect">Disconnect</string>
@@ -252,4 +308,5 @@
     <string name="diagnostics_send">Send diagnostics</string>
     <string name="diagnostics_privacy">Share recent connection states, failure codes, app version and random support identifiers with someone you choose. No browsing history, messages, destinations or credentials are included. Nothing is uploaded automatically.</string>
     <string name="diagnostics_failed">Diagnostics could not be exported. Your connection is unchanged.</string>
+    <string name="app_vpn_unsaved">Unsaved changes. Save to use them on the next connection.</string>
 </resources>

@@ -108,6 +108,13 @@ class LocalChat:
                 names = self._store.contact_names()
                 for card in cards:
                     if card['address'] in names: card['name'] = names[card['address']]
+                from .support import role, active
+                support = role(self._store)
+                if support is not None:
+                    card = contact_card(support['sender_public'])
+                    cards = [item for item in cards if item['address'] != card['address']]
+                    card.update(official_support=active(support), support_unavailable=not active(support))
+                    cards.insert(0, card)
                 return cards
             except Exception:
                 raise LocalError('store_unavailable') from None
@@ -236,6 +243,20 @@ class LocalChat:
         with self._lock:
             self._require_open()
             return self._store.service_events()
+
+    def subscription_status(self, device):
+        with self._lock:
+            self._require_open()
+            try: return self._store.subscription_status(device)
+            except ValueError: raise LocalError('invalid_input') from None
+
+    def accept_subscription_response(self, raw, device):
+        from .subscription_view import decode_response
+        with self._lock:
+            self._require_open()
+            status, confirmed_at, event = decode_response(raw, device)
+            accepted = self._store.accept_confirmed_subscription(status, device=device, confirmed_at=confirmed_at, event=event)
+            return dict(accepted=accepted, view=self._store.subscription_status(device))
 
     def import_events(self, feed):
         from .service_events import validate_feed

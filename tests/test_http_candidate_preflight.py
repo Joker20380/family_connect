@@ -278,7 +278,7 @@ def test_verified_blue_green_direct_and_external_contracts(candidate, runtime, e
         def render(upstream):
             calls.append('render')
             assert upstream == 'http://127.0.0.1:18086' and candidate.direct_pass
-            ordinary, status = nginx_sections()
+            ordinary, status = nginx_sections(extensions=False)
             restricted = Path('deploy/friends/restricted/nginx-location.conf').read_text()
             template = (ordinary + restricted).replace('http://127.0.0.1:18084', '@FRIENDS_HTTP_UPSTREAM@')
             rendered = candidate.render_upstreams(template)

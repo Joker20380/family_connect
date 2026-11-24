@@ -12,13 +12,15 @@ PROVENANCE = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(PROVENANCE)
 
 
-@pytest.mark.parametrize('mismatch', [None, 'tcp_source_sha256', 'tcp_jni_sha256', 'builder_sha256', 'source_revision', 'binary'])
+@pytest.mark.parametrize('mismatch', [None, 'tcp_source_sha256', 'tcp_jni_sha256', 'builder_sha256', 'health_tun_sha256', 'health_android_sha256', 'source_revision', 'binary'])
 def test_physical_acceptance_requires_current_sources_and_exact_binary(tmp_path, mismatch):
     manifest = {'source_revision': 'a' * 40, 'abis': {'arm64-v8a': hashlib.sha256(b'native').hexdigest()}}
     for field, filename in (
         ('tcp_source_sha256', 'pilot/android-tcp/tcp-android.go'),
         ('tcp_jni_sha256', 'pilot/android-tcp/tcp-jni.c'),
         ('builder_sha256', 'pilot/android-awg/build.py'),
+        ('health_tun_sha256', 'pilot/android-awg/health-tun.go'),
+        ('health_android_sha256', 'pilot/android-awg/health-android.go'),
     ):
         manifest[field] = hashlib.sha256((ROOT / filename).read_bytes()).hexdigest()
     if mismatch and mismatch != 'binary':

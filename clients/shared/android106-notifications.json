@@ -1,6 +1,7 @@
 {
   "schema": 1,
   "reference": "android106-native105",
+  "subsequent_deltas": ["clients/shared/support1-messenger.json"],
   "source_inventory_sha256": "8574228fc809fdbd67b3d92680e09c979fe930599a47e4ed1b47fd30f872ed0c",
   "accepted_sources": {
     "clients/android/app/src/main/java/com/familyconnect/app/TerminalToggle.java": "7e5a569a93939920bf77c4991cffd11ef573514f1367fb58bd3a9de34f9d336e",
@@ -11,6 +12,13 @@
     "messenger/service_events.py": "8535cd7c3086537b159b966ac6c582380d776726e9fdda2bf2016fea834f78ee",
     "messenger/notices.py": "31241b050755b8ce9e0523c99032a528e11306f0742bcbd205375a2d1b440890",
     "messenger/store.py": "ffb7be9d5c8e4d304a53ec7a9b775e7b768fb692656dd25f32343208a54d6076"
+  },
+  "local_adaptations": {
+    "messenger/store.py": {
+      "sha256": "4e91993cb2357481c2bff1ae42e5962b43c7becc3b670058971136975bc5eb04",
+      "reason": "Beta119 durable subscription flags; not background acquisition or desktop subscription delivery acceptance.",
+      "patch": "clients/shared/subscription119-messenger.patch"
+    }
   },
   "polling": {
     "runtime_seconds": 6,

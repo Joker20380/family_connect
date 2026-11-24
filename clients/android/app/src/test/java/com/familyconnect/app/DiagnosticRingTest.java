@@ -5,6 +5,15 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class DiagnosticRingTest {
+    @Test public void cleanupMetadataRetainsPolicyAndTriggerWithoutExceptionText(){
+        DiagnosticRing ring=ring();
+        ring.event(new ConnectivityOrchestrator.Event("connect_failed",null,ConnectivityOrchestrator.Failure.INTERNAL,
+            ConnectivityOrchestrator.State.FAILED,10,ConnectivityOrchestrator.Failure.AUTH,ConnectivityOrchestrator.Failure.NETWORK),1);
+        JsonObject event=ring.snapshot().getAsJsonArray("events").get(0).getAsJsonObject();
+        assertEquals("INTERNAL",event.get("policy_reason").getAsString());assertEquals("AUTH",event.get("trigger_reason").getAsString());
+        assertEquals("NETWORK",event.get("cleanup_reason").getAsString());assertEquals("CLEANUP",event.get("secondary_stage").getAsString());
+        assertFalse(event.has("owner_callback"));
+    }
     @Test public void signalingReadClassesAreAdditiveAndAllowlisted(){
         for(String errorClass:(RestrictedTrace.SIGNALING_READ_ERROR_CLASSES+"||secret-url").split("\\|",-1)){
             DiagnosticRing ring=ring();JsonObject input=new JsonObject();

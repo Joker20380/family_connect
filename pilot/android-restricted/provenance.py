@@ -14,6 +14,8 @@ def verify_normal(apk, root=ROOT):
             ('tcp_source_sha256', 'pilot/android-tcp/tcp-android.go'),
             ('tcp_jni_sha256', 'pilot/android-tcp/tcp-jni.c'),
             ('builder_sha256', 'pilot/android-awg/build.py'),
+            ('health_tun_sha256', 'pilot/android-awg/health-tun.go'),
+            ('health_android_sha256', 'pilot/android-awg/health-android.go'),
         ):
             expected = hashlib.sha256((root / filename).read_bytes()).hexdigest()
             if manifest.get(field) != expected:

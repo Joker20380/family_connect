@@ -15,7 +15,12 @@ def test_monitor_is_bounded_sanitized_and_preserves_unknown(tmp_path, failure):
 
     def run(command, **options):
         calls.append(command)
-        assert options['capture_output'] and options['check'] and options['timeout'] == 60
+        assert options['capture_output'] and options['check']
+        if 'transport_failure' in command:
+            assert 0 < options['timeout'] <= 60 and 'input' not in options
+            assert command[-3] in monitor.SOURCES
+            return subprocess.CompletedProcess(command, 0)
+        assert options['timeout'] == 60
         if command[0] != 'docker':
             if failure == 'collect':
                 raise subprocess.CalledProcessError(1, command, stderr=b'private credentials must not leak')
@@ -56,7 +61,66 @@ def test_monitor_rejects_symlink_local_directory(tmp_path):
 def test_timer_budget_covers_all_three_bounded_collection_import_pairs():
     unit = (monitor.BASE / 'monitor.service.in').read_text()
     timeout = next(int(line.split('=', 1)[1]) for line in unit.splitlines() if line.startswith('TimeoutStartSec='))
-    assert timeout >= len(monitor.SOURCES) * 120 + 20
+    assert timeout >= len(monitor.SOURCES) * 120 + 100
+
+
+@pytest.mark.parametrize('failure', [False, True])
+def test_metadata_has_independent_capacity_and_cleanup_without_retained_payload(tmp_path, monkeypatch, failure):
+    monkeypatch.setattr(monitor, 'SOURCES', ())
+    local = tmp_path / '.local'
+    local.mkdir()
+    (local / 'technical-metadata-source.json').write_text('{}')
+    raw = b' ' * (4 * 1024 * 1024 + 1)
+    calls = []
+    def run(command, **options):
+        calls.append(command)
+        if command[0] != 'docker':
+            if failure:
+                raise subprocess.TimeoutExpired(command, 50, stderr=b'private metadata')
+            return subprocess.CompletedProcess(command, 0, stdout=raw)
+        assert 'import_technical_metadata' in command
+        assert options.get('input') == (None if failure else raw)
+        assert (command[-1] == '--unavailable') == failure
+        return subprocess.CompletedProcess(command, 0)
+    receipt = monitor.cycle(tmp_path, run)
+    assert receipt['technical_metadata'] == ('UNAVAILABLE' if failure else 'IMPORTED')
+    assert 'private metadata' not in json.dumps(receipt)
+    assert len(calls) == 2
+    assert {path.name for path in local.iterdir()} == {'technical-metadata-source.json', 'monitor.lock', 'monitor-latest.json'}
+
+
+@pytest.mark.parametrize('failure', ['collection_failed', 'import_failed'])
+def test_subscription_failure_records_attempt_without_fabricating_server_time(tmp_path, failure):
+    local = tmp_path / '.local'
+    local.mkdir()
+    (local / 'subscriptions-source.json').write_text('{}')
+    imports = []
+
+    def run(command, **options):
+        assert 0 < options['timeout'] <= 60
+        if command[0] != 'docker':
+            if failure == 'collection_failed':
+                raise subprocess.TimeoutExpired(command, 60)
+            source = command[-1]
+            path = local / (source + '-sample.json')
+            path.write_text(json.dumps(dict(source=source, scope='production')))
+            return subprocess.CompletedProcess(command, 0, stdout=str(path).encode())
+        if 'import_inventory' in command:
+            if '--subscription-attempt' in command:
+                assert 'gateway-ru' in json.loads(options['input'])['source']
+            raise subprocess.CalledProcessError(1, command)
+        if 'transport_failure' in command:
+            assert command[-3] in monitor.SOURCES and command[-1] == failure
+            assert 'input' not in options
+            return subprocess.CompletedProcess(command, 0)
+        assert command[-3:] == ['import_subscriptions', '--failure', failure]
+        assert 'input' not in options
+        imports.append(command)
+        return subprocess.CompletedProcess(command, 0)
+
+    receipt = monitor.cycle(tmp_path, run)
+    assert len(imports) == 1
+    assert all(row['status'] == 'FAILED' for row in receipt['sources'])
 
 
 def test_one_missing_node_never_reuses_other_node_or_stops_the_cycle(tmp_path):
@@ -75,6 +139,9 @@ def test_one_missing_node_never_reuses_other_node_or_stops_the_cycle(tmp_path):
             path.write_text(json.dumps(dict(source=source, scope='production',
                 observed_at='2026-11-03T00:00:00Z', registry_status='not_collected')))
             return subprocess.CompletedProcess(command, 0, stdout=str(path).encode())
+        if 'transport_failure' in command:
+            assert command[-3] == 'nl-amsterdam-1' and command[-1] == 'collection_failed'
+            return subprocess.CompletedProcess(command, 0)
         imported.append(json.loads(options['input'])['source'])
         return subprocess.CompletedProcess(command, 0, stdout=b'')
 
@@ -83,3 +150,24 @@ def test_one_missing_node_never_reuses_other_node_or_stops_the_cycle(tmp_path):
     assert imported == ['gateway-ru', 'nl-amsterdam-2']
     assert [item['status'] for item in result['sources']] == ['IMPORTED', 'FAILED', 'IMPORTED']
     assert result['sources'][1]['error'] == 'COLLECTION_FAILED'
+
+
+def test_subscription_error_reporting_does_not_extend_import_budget(tmp_path, monkeypatch):
+    local = tmp_path / '.local'
+    local.mkdir()
+    (local / 'subscriptions-source.json').write_text('{}')
+    clock = [0]
+    monkeypatch.setattr(monitor.time, 'monotonic', lambda: clock[0])
+
+    def run(command, **options):
+        if command[0] != 'docker':
+            source = command[-1]
+            path = local / (source + '-sample.json')
+            path.write_text(json.dumps(dict(source=source, scope='production')))
+            return subprocess.CompletedProcess(command, 0, stdout=str(path).encode())
+        assert 'import_inventory' in command
+        clock[0] += 61
+        raise subprocess.TimeoutExpired(command, 60)
+
+    receipt = monitor.cycle(tmp_path, run)
+    assert all(row['error'] == 'IMPORT_FAILED' for row in receipt['sources'])

@@ -1,0 +1,270 @@
+{
+  "scope": "unsigned iOS / isolated packet bridge; not physical VPN or Telemost",
+  "run_id": 43991766964,
+  "event": "push",
+  "conclusion": "success",
+  "artifact_id": 14288332488,
+  "artifact_zip_sha256": "5164ebc2d5dcaa235ba8d82bcbf1858673036037e653da91f00ef93cc0ef746a",
+  "verified_artifact_file_count": 208,
+  "manifest": {
+    "source_sha": "fc08a50ecec45ea94e9ab27b1a9cfe28d507dc5d",
+    "go": "go version go1.26.1 darwin/arm64",
+    "xray": "d2758a023cd7f4174a5a5fa4ff66e487d4342ba0",
+    "patch_sha256": "770f8f359faf0630a271f103bcd31033eb46d30aeb531b5933c15058c624b420",
+    "targets": [
+      {
+        "sdk": "iphoneos",
+        "sdk_version": "18.5",
+        "target": "arm64-apple-ios16.0",
+        "goos": "ios",
+        "goarch": "arm64",
+        "signing": "unsigned"
+      },
+      {
+        "sdk": "iphonesimulator",
+        "sdk_version": "18.5",
+        "target": "arm64-apple-ios16.0-simulator",
+        "goos": "ios",
+        "goarch": "arm64",
+        "signing": "unsigned"
+      }
+    ],
+    "endpoint_patch_sha256": "a58d22001dd31e464b58356a3b1d0e1d42fe4407476aa08e920cd5e2051e45b4",
+    "system": "macOS-15.8.2-arm64-arm-64bit-Mach-O",
+    "python": "3.15.2",
+    "image": "20261104.0514.1",
+    "real_vpn": "NOT_RUN",
+    "telemost": "NOT_RUN",
+    "xcode": "Xcode 16.4\nBuild version 16F6",
+    "swift": "Apple Swift version 6.1.2 (swiftlang-6.1.2.1.2 clang-1700.0.13.5)\nTarget: arm64-apple-macosx15.0",
+    "clang": "Apple clang version 17.0.0 (clang-1700.0.13.5)\nTarget: arm64-apple-darwin24.6.0\nThread model: posix\nInstalledDir: /Applications/Xcode_16.4.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin"
+  },
+  "simulator": {
+    "checks": [
+      "Swift-C-Go-copy-family-queue-cancel-recreate",
+      "async-flow-real-gvisor-wholedevice-DNS",
+      "cancel-config-late-completion",
+      "write-error-propagation"
+    ],
+    "handles": 0,
+    "passed": true,
+    "scope": "isolated-not-system-TUN-or-Telemost",
+    "source_sha": "fc08a50ecec45ea94e9ab27b1a9cfe28d507dc5d",
+    "runtime": "com.apple.CoreSimulator.SimRuntime.iOS-18-5",
+    "device": "iPhone 16 simulator",
+    "architecture": "arm64",
+    "simulator_runtime_signing": "ad-hoc copy; unsigned artifacts preserved"
+  },
+  "closure": {
+    "package_count": 408,
+    "modules": [
+      {
+        "path": "github.com/Joker20380/family_connect/carrier",
+        "version": "v0.0.0",
+        "sum": null,
+        "source": "repository"
+      },
+      {
+        "path": "github.com/Joker20380/family_connect/iosbridge",
+        "version": "source",
+        "sum": null,
+        "source": "repository"
+      },
+      {
+        "path": "github.com/Joker20380/family_connect/restrictedandroid",
+        "version": "v0.0.0",
+        "sum": null,
+        "source": "repository"
+      },
+      {
+        "path": "github.com/google/btree",
+        "version": "v1.1.2",
+        "sum": "h1:xf4v41cLI2Z6FxbKm+8Bu+m8ifhj15JuZ9sa0jZCMUU=",
+        "source": "dependency-sources.tar.gz"
+      },
+      {
+        "path": "github.com/google/uuid",
+        "version": "v1.6.0",
+        "sum": "h1:NIvaJDMOsjHA8n1jAhLSgzrAzy1Hgr+hNrb57e+94F0=",
+        "source": "dependency-sources.tar.gz"
+      },
+      {
+        "path": "github.com/gorilla/websocket",
+        "version": "v1.5.3",
+        "sum": "h1:saDtZ6Pbx/0u+bgYQ3q96pZgCzfhKXGPqt7kZ72aNNg=",
+        "source": "dependency-sources.tar.gz"
+      },
+      {
+        "path": "github.com/pion/datachannel",
+        "version": "v1.6.0",
+        "sum": "h1:XecBlj+cvsxhAMZWFfFcPyUaDZtd7IJvrXqlXD/53i0=",
+        "source": "dependency-sources.tar.gz"
+      },
+      {
+        "path": "github.com/pion/dtls/v3",
+        "version": "v3.1.4",
+        "sum": "h1:QhvtMflMfu9Kf0RcDC5BJBle4caPskByrKQR6uuYqpY=",
+        "source": "dependency-sources.tar.gz"
+      },
+      {
+        "path": "github.com/pion/ice/v4",
+        "version": "v4.2.7",
+        "sum": "h1:zDEbC6MiEdhQpF8TxBOTws+NU6ZgGpveHrQq4Lc1kao=",
+        "source": "dependency-sources.tar.gz"
+      },
+      {
+        "path": "github.com/pion/interceptor",
+        "version": "v0.1.45",
+        "sum": "h1:6PUo/5829bIfRFIPPJQzuDn8EjxRTSB/CSD7QVCOaqo=",
+        "source": "dependency-sources.tar.gz"
+      },
+      {
+        "path": "github.com/pion/logging",
+        "version": "v0.2.4",
+        "sum": "h1:tTew+7cmQ+Mc1pTBLKH2puKsOvhm32dROumOZ655zB8=",
+        "source": "dependency-sources.tar.gz"
+      },
+      {
+        "path": "github.com/pion/mdns/v2",
+        "version": "v2.1.0",
+        "sum": "h1:3IJ9+Xio6tWYjhN6WwuY142P/1jA0D5ERaIqawg/fOY=",
+        "source": "dependency-sources.tar.gz"
+      },
+      {
+        "path": "github.com/pion/randutil",
+        "version": "v0.1.0",
+        "sum": "h1:CFG1UdESneORglEsnimhUjf33Rwjubwj6xfiOXBa3mA=",
+        "source": "dependency-sources.tar.gz"
+      },
+      {
+        "path": "github.com/pion/rtcp",
+        "version": "v1.2.16",
+        "sum": "h1:fk1B1dNW4hsI78XUCljZJlC4kZOPk67mNRuQ0fcEkSo=",
+        "source": "dependency-sources.tar.gz"
+      },
+      {
+        "path": "github.com/pion/rtp",
+        "version": "v1.10.2",
+        "sum": "h1:l+f6tTDcAH6xwepaAoW791ddhuYsJlqRATOzirO04Mo=",
+        "source": "dependency-sources.tar.gz"
+      },
+      {
+        "path": "github.com/pion/sctp",
+        "version": "v1.10.0",
+        "sum": "h1:qeoD6swF/2M5bYRcAGayqSbTKX3m4AW29CiQxG1+Pfg=",
+        "source": "dependency-sources.tar.gz"
+      },
+      {
+        "path": "github.com/pion/sdp/v3",
+        "version": "v3.0.18",
+        "sum": "h1:l0bAXazKHpepazVdp+tPYnrsy9dfh7ZbT8DxesH5ZnI=",
+        "source": "dependency-sources.tar.gz"
+      },
+      {
+        "path": "github.com/pion/srtp/v3",
+        "version": "v3.0.11",
+        "sum": "h1:GiESUr54/K4UuPigfq/CvWUed80JenQAHXn0C2MQQIQ=",
+        "source": "dependency-sources.tar.gz"
+      },
+      {
+        "path": "github.com/pion/stun/v3",
+        "version": "v3.1.5",
+        "sum": "h1:Y1FHlhaI6+4UoC5i/zQf4F7JvdZtB24/05oyy/GF1x8=",
+        "source": "dependency-sources.tar.gz"
+      },
+      {
+        "path": "github.com/pion/transport/v4",
+        "version": "v4.0.2",
+        "sum": "h1:ifYlPqNwsy6aKQ9y8yzxXlHae5431ZrH2avkD/Rn6Tk=",
+        "source": "dependency-sources.tar.gz"
+      },
+      {
+        "path": "github.com/pion/turn/v5",
+        "version": "v5.0.9",
+        "sum": "h1:zNeBfRyzGn7MPyUTvmvxeltLEjlFdSLPT1tlakoaOXM=",
+        "source": "dependency-sources.tar.gz"
+      },
+      {
+        "path": "github.com/pion/webrtc/v4",
+        "version": "v4.2.15",
+        "sum": "h1:Ir/MauNFCfg+kgyBYPQLiGdVWFlzEcLxqtuzAkYkky0=",
+        "source": "dependency-sources.tar.gz"
+      },
+      {
+        "path": "github.com/wlynxg/anet",
+        "version": "v0.0.5",
+        "sum": "h1:J3VJGi1gvo0JwZ/P1/Yc/8p63SoW98B5dHkYDmpgvvU=",
+        "source": "dependency-sources.tar.gz"
+      },
+      {
+        "path": "github.com/xtls/xray-core",
+        "version": "v1.260327.0",
+        "sum": null,
+        "source": "dependency-sources.tar.gz"
+      },
+      {
+        "path": "golang.org/x/crypto",
+        "version": "v0.49.0",
+        "sum": "h1:+Ng2ULVvLHnJ/ZFEq4KdcDd/cfjrrjjNSXNzxg0Y4U4=",
+        "source": "dependency-sources.tar.gz"
+      },
+      {
+        "path": "golang.org/x/exp",
+        "version": "v0.0.0-20240506185415-9bf2ced13842",
+        "sum": "h1:vr/HnozRka3pE4EsMEg1lgkXJkTFJCVUX+S/ZT6wYzM=",
+        "source": "dependency-sources.tar.gz"
+      },
+      {
+        "path": "golang.org/x/net",
+        "version": "v0.52.0",
+        "sum": "h1:He/TN1l0e4mmR3QqHMT2Xab3Aj3L9qjbhRm78/6jrW0=",
+        "source": "dependency-sources.tar.gz"
+      },
+      {
+        "path": "golang.org/x/sys",
+        "version": "v0.42.0",
+        "sum": "h1:omrd2nAlyT5ESRdCLYdm3+fMfNFE/+Rf4bDIQImRJeo=",
+        "source": "dependency-sources.tar.gz"
+      },
+      {
+        "path": "golang.org/x/time",
+        "version": "v0.14.0",
+        "sum": "h1:MRx4UaLrDotUKUdCIqzPC48t1Y9hANFKIRpNx+Te8PI=",
+        "source": "dependency-sources.tar.gz"
+      },
+      {
+        "path": "google.golang.org/protobuf",
+        "version": "v1.36.11",
+        "sum": "h1:fV6ZwhNocDyBLK0dj+fg8ektcVegBBuEolpbTQyBNVE=",
+        "source": "dependency-sources.tar.gz"
+      },
+      {
+        "path": "gvisor.dev/gvisor",
+        "version": "v0.0.0-20260122175437-89a5d21be8f0",
+        "sum": "h1:Lk6hARj5UPY47dBep70OD/TIMwikJ5fGUGX0Rm3Xigk=",
+        "source": "dependency-sources.tar.gz"
+      }
+    ]
+  },
+  "selected_sha256": {
+    "closure.json": "64840fcb88301be2675abd3d403e7c1facee7346a3872971c862e61adc1635d4",
+    "dependency-sources.tar.gz": "e2b6d8b149fb62cdb4db1f3d90f61cde8b9ff2c77272472d78971eb71ccc0471",
+    "family-sources.tar.gz": "982f4bb213a10a9e30a9b04eb9e537b984df521ca77003bcf17354bdb8ec210f",
+    "iphoneos/FamilyConnect-platform.txt": "c76ff7c7081c7b736c029f9e2b7694933e5b8929f9907b2cbf2651c4b31809fa",
+    "iphoneos/FamilyConnect-symbols.txt": "c51cde9576d6ccfa0f74eb44752db37dd8d6b7466d29238672f76293da0cbc45",
+    "iphoneos/FamilyConnect.app/FamilyConnect": "5d580e6a56c80c78fd6118294451c164c7903ede3f1f71cf36a1beb81adefa53",
+    "iphoneos/FamilyConnect.app/PlugIns/MeshPacketTunnel.appex/MeshPacketTunnel": "e9d6e4809b79e7a3adbfb20123826dc49ca098715205e8477c58ca14c1ca1ff7",
+    "iphoneos/MeshPacketTunnel-platform.txt": "081e3a27b776fb6d046788fa6582ac7e12998f5a32878825b9ff07857f7b3dd7",
+    "iphoneos/MeshPacketTunnel-symbols.txt": "e831ef393ca22c93302f6c38a3acc9e6db7f3a4b855bd1fff58ee470be01058f",
+    "iphoneos/libFamilyMesh.a": "9481e20ac68e4fd78a0c11b5a60ffeebdc7bb5b69b2c7cd06a62574796cf2d06",
+    "iphonesimulator/FamilyConnect-platform.txt": "0aa617a7b45dee0d5def481639453f4a64be8c584662d51bafa3e5be627fda8f",
+    "iphonesimulator/FamilyConnect-symbols.txt": "3344eaa03b811ec93c2ea0197b54e98303b181347ff3399b5dbc80d7574f0603",
+    "iphonesimulator/FamilyConnect.app/FamilyConnect": "51ef0c014400aa9cfd3c5b403186cd76a4d235c47e498ab37f50b1a10fe8d54a",
+    "iphonesimulator/FamilyConnect.app/PlugIns/MeshPacketTunnel.appex/MeshPacketTunnel": "6f866653014b8d4d22205d44660c59ae8852d9ce9cca0c81c6246bbe547e5cfa",
+    "iphonesimulator/MeshPacketTunnel-platform.txt": "64504ebfb830248b7246898040924c82cde42c49713fa1b7fd3494b6106c9a8f",
+    "iphonesimulator/MeshPacketTunnel-symbols.txt": "50d7cae8a9a1024b6ccd1206cddeb6cdd2c23005199fae5fa11edaaba966a461",
+    "iphonesimulator/libFamilyMesh.a": "746fb7ba15f5377af67fb1d385ee875ceaff5c335f594d80e772932149712f58",
+    "simulator-result.json": "c082d84061f19be0520ee7f974db61abda37172ff9ec5f38dd16e96287df6bbe",
+    "simulator.png": "5a2eb20657fe24c60074fe2d0b7359c6354b980568f26988cfa12141cf1f7f5f"
+  }
+}

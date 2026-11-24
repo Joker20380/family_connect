@@ -13,16 +13,27 @@ ROOT = Path(__file__).resolve().parents[2]
 REVISION = 'd2758a023cd7f4174a5a5fa4ff66e487d4342ba0'
 
 
+def target(abi, local_core):
+    selected = abi or ('x86_64' if local_core else 'arm64-v8a')
+    if local_core and selected != 'x86_64':
+        raise ValueError('Local-core qualification requires x86_64')
+    targets = {'arm64-v8a': ('arm64', 'aarch64-linux-android26-clang'),
+               'x86_64': ('amd64', 'x86_64-linux-android27-clang')}
+    return (selected, *targets[selected])
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--xray', type=Path, required=True)
     parser.add_argument('--go', required=True)
     parser.add_argument('--ndk', type=Path, required=True)
     parser.add_argument('--out', type=Path, required=True)
+    parser.add_argument('--abi', choices=('arm64-v8a', 'x86_64'))
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument('--owner-diagnostic', action='store_true')
     mode.add_argument('--local-core-qualification', action='store_true')
     args = parser.parse_args()
+    abi, architecture, compiler_name = target(args.abi, args.local_core_qualification)
     revision_source = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()
     subprocess.run(['git', 'diff', '--exit-code', 'HEAD', '--', 'carrier', 'clients/android', 'pilot/android-restricted'], cwd=ROOT, check=True)
     revision = subprocess.check_output(['git', '-C', str(args.xray), 'rev-parse', 'HEAD'], text=True).strip()
@@ -47,7 +58,6 @@ def main():
                         '-replace=github.com/Joker20380/family_connect/carrier='+str(ROOT / 'carrier')], cwd=source, check=True)
         subprocess.run([args.go, 'test', '-race', '-count=3', '-timeout=90s', '-modfile='+str(module),
                         '-ldflags=-checklinkname=0', './packet'], cwd=source, check=True)
-        abi, architecture, compiler_name = ('x86_64', 'amd64', 'x86_64-linux-android27-clang') if args.local_core_qualification else ('arm64-v8a', 'arm64', 'aarch64-linux-android26-clang')
         tags = ['fc_local_core'] if args.local_core_qualification else ['fc_owner_diagnostic'] if args.owner_diagnostic else []
         output = args.out / 'jniLibs' / abi / 'libfc_restricted.so'
         output.parent.mkdir(parents=True)

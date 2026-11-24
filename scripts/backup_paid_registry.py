@@ -27,7 +27,17 @@ def inventory(database):
     return result
 
 
-def backup(source, destination):
+def paid_projection(database, observed):
+    from control.friends import paid_beta
+    from control.friends.subscription import snapshot
+    database.row_factory = sqlite3.Row
+    if not paid_beta.schema_present(database):
+        raise ValueError('Paid schema required for paid-aware restore verification')
+    return [snapshot(database, row['device'], observed) for row in
+            database.execute('SELECT device FROM paid_beta_subscriptions ORDER BY device')]
+
+
+def backup(source, destination, *, include_paid=False):
     source, destination = Path(source), Path(destination)
     if any(parent.is_symlink() for parent in (source, *source.parents)):
         raise ValueError('Symlink source forbidden')
@@ -41,8 +51,10 @@ def backup(source, destination):
         if original.execute('PRAGMA integrity_check').fetchall() != [('ok',)]:
             raise ValueError('Source integrity failed')
         before = inventory(original)
-        if any(before.get(name, {}).get('count', 0) for name in ('paid_beta_subscriptions', 'paid_beta_events')):
+        if not include_paid and any(before.get(name, {}).get('count', 0) for name in ('paid_beta_subscriptions', 'paid_beta_events')):
             raise ValueError('Nonempty paid cohort: this empty-cohort procedure is forbidden')
+        observed = int(datetime.now(timezone.utc).timestamp())
+        projection = paid_projection(original, observed) if include_paid else None
         destination.mkdir(mode=0o700)
         backup_path = destination / 'registry.sqlite3'
         descriptor = os.open(backup_path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
@@ -66,6 +78,8 @@ def backup(source, destination):
         if before != after or restored.execute('PRAGMA integrity_check').fetchall() != [('ok',)]:
             raise ValueError('Restore verification failed; retain private evidence and stop')
         foreign_keys = restored.execute('PRAGMA foreign_key_check').fetchall()
+        if include_paid and projection != paid_projection(restored, observed):
+            raise ValueError('Paid projection restore verification failed')
     finally:
         copied.close()
         restored.close()
@@ -75,7 +89,8 @@ def backup(source, destination):
     receipt = dict(schema=1, result='BACKUP_AND_ISOLATED_SQLITE_RESTORE_PASS',
         utc=datetime.now(timezone.utc).isoformat(), size=backup_path.stat().st_size,
         sha256=hashlib.sha256(backup_path.read_bytes()).hexdigest(), tables=before,
-        live_database_writes=0, service_restarts=0, application_recovery='NOT_RUN')
+        live_database_writes=0, service_restarts=0, application_recovery='NOT_RUN',
+        paid_projection_recovery='PASS' if include_paid else 'NOT_RUN', observed_at=observed)
     descriptor = os.open(destination / 'receipt.json', os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
     with os.fdopen(descriptor, 'w') as output:
         json.dump(receipt, output, sort_keys=True, indent=2, allow_nan=False)
@@ -87,10 +102,11 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--database', type=Path, required=True)
     parser.add_argument('--destination', type=Path, required=True)
+    parser.add_argument('--include-paid', action='store_true', help='Verify nonempty paid data and canonical projection on an isolated restore')
     args = parser.parse_args()
     if any(parent.is_symlink() for parent in (args.database, *args.database.parents)):
         parser.error('Symlink source forbidden')
-    receipt = backup(args.database, args.destination)
+    receipt = backup(args.database, args.destination, include_paid=args.include_paid)
     print(json.dumps({key: value for key, value in receipt.items() if key != 'tables'}, allow_nan=False))
 
 

@@ -8,6 +8,7 @@ from control.friends.access import Access,Rejected
 from control.friends.chat import ChatAccess
 from control.friends.chat_sync import synchronize
 from control.friends.referrals import Referrals,Exhausted,RateLimited
+from control.friends.subscription import Unsupported as SubscriptionUnsupported
 access=Access(ROOT/'access.db');slots=threading.BoundedSemaphore(4)
 chat_access=ChatAccess(access)
 
@@ -41,7 +42,7 @@ class Handler(BaseHTTPRequestHandler):
   raw=json.dumps(value,ensure_ascii=False,separators=(',',':')).encode();self.send_response(status);self.send_header('Content-Type','application/json');self.send_header('Cache-Control','no-store');self.send_header('Content-Length',str(len(raw)));self.end_headers();self.wfile.write(raw)
  def do_POST(self):
   self.connection.settimeout(5)
-  if self.path not in ('/friends/challenge','/friends/activate','/friends/restricted-readiness','/friends/restricted-readiness/challenge','/friends/restricted-readiness/ack-challenge','/friends/restricted-readiness/ack','/friends/configuration/ru','/friends/configuration/nl','/friends/gateway-configuration/nl-amsterdam-1','/friends/gateway-configuration/nl-amsterdam-2','/friends/chat/challenge','/friends/chat/register','/friends/referral/issue','/friends/referral/claim','/friends/device/status','/friends/device/support','/friends/device/diagnostics','/friends/notices/publish','/friends/notices/device/role','/friends/notices/device/publish','/friends/notices/device/list','/friends/notices/device/edit'):self.reply(404,{'error':'not-found'});return
+  if self.path not in ('/friends/challenge','/friends/activate','/friends/restricted-readiness','/friends/restricted-readiness/challenge','/friends/restricted-readiness/ack-challenge','/friends/restricted-readiness/ack','/friends/configuration/ru','/friends/configuration/nl','/friends/gateway-configuration/nl-amsterdam-1','/friends/gateway-configuration/nl-amsterdam-2','/friends/chat/challenge','/friends/chat/register','/friends/referral/issue','/friends/referral/claim','/friends/device/status','/friends/device/subscription','/friends/device/support','/friends/device/diagnostics','/friends/device/technical-metadata/v1','/friends/notices/publish','/friends/notices/device/role','/friends/notices/device/publish','/friends/notices/device/list','/friends/notices/device/edit'):self.reply(404,{'error':'not-found'});return
   if not slots.acquire(blocking=False):self.reply(429,{'error':'busy'});return
   phase='http_parse'
   try:
@@ -71,6 +72,8 @@ class Handler(BaseHTTPRequestHandler):
     assert set(value)=={'public_identity','wireguard_public_key','chat_public'}
     result=chat_access.challenge(**value)
    elif self.path=='/friends/chat/register':
+    support_protocol=value.pop('support_protocol',None)
+    assert support_protocol is None or type(support_protocol) is int and support_protocol==1
     assert set(value)=={'proof','chat_public','chat_signature'}
     result=chat_access.register(**value)
     if (ROOT/'chat-node.json').exists():
@@ -80,6 +83,9 @@ class Handler(BaseHTTPRequestHandler):
      from control.friends.chat_publishers import configured
      publisher_config=configured(ROOT/'chat-publishers.json',result['device'],value['chat_public'],node['expires_at'],int(access.clock()))
      if publisher_config is not None:result['publisher_configuration']=publisher_config
+     if support_protocol==1 and (ROOT/'chat-support.json').exists():
+      from control.friends.support import enroll
+      result['support_configuration']=enroll(access,ROOT/'chat-support.json',result['device'],value['chat_public'],node['expires_at'])
    elif self.path=='/friends/challenge':
     assert set(value)=={'public_identity','wireguard_public_key','purpose','invitation'}
     result=access.challenge(**value)
@@ -87,9 +93,15 @@ class Handler(BaseHTTPRequestHandler):
     record=access.complete(value,'activate');result={'device':record['device'],'status':'active'}
    elif self.path=='/friends/device/status':
     result=access.status(value)
+   elif self.path=='/friends/device/subscription':
+    from control.friends.subscription import request
+    result=request(access,value)
    elif self.path=='/friends/device/diagnostics':
     from control.friends.diagnostics import request
     result=request(access,ROOT/'diagnostics.sqlite',value)
+   elif self.path=='/friends/device/technical-metadata/v1':
+    from control.friends.technical_metadata import request
+    result=request(access,ROOT/'technical-metadata.sqlite',value)
    elif self.path=='/friends/device/support':
     from control.friends.support_ids import request
     result=request(access,value)
@@ -101,6 +113,9 @@ class Handler(BaseHTTPRequestHandler):
      from control.friends.gateway_selection import configuration
      catalog,host=configuration(access,ROOT,target,record['device'])
     else:catalog,host=configuration_catalog(country,record['device'])
+    from control.friends.transport_policy import configuration_decision,node_for_host
+    node=node_for_host(ROOT,host)
+    if node is not None:record=configuration_decision(access,ROOT,node,record)
     if country=='ru':command=['/usr/bin/python3','/opt/apps/family_connect/friends-awg/awg-gateway.py','register']
     else:command=['/usr/bin/ssh','-i','/opt/apps/family_connect/friends-awg/registration-key','-o','IdentitiesOnly=yes','-o','BatchMode=yes','-o','ConnectTimeout=5','-o','StrictHostKeyChecking=yes','-o','UserKnownHostsFile=/opt/apps/family_connect/friends-awg/known_hosts','root@'+host,'register']
     reply=subprocess.run(command,input=json.dumps(record).encode(),capture_output=True,timeout=15)
@@ -109,6 +124,7 @@ class Handler(BaseHTTPRequestHandler):
     result={'device':record['device'],'country':country,'address':assigned['address'],'tcp_id':record['tcp_id'],'catalog':catalog}
     if explicit:result['gateway_id']=target
    self.reply(200,result)
+  except SubscriptionUnsupported:self.reply(501,{'error':'subscription-unsupported'})
   except Exhausted:self.reply(410,{'error':'referral-pool-exhausted'})
   except RateLimited:self.reply(429,{'error':'referral-rate-limited'})
   except Rejected:self.reply(403,{'error':'access-rejected'})
@@ -150,7 +166,9 @@ def main():
   return
  from control.friends.diagnostics import start_retention
  retention=start_retention(ROOT/'diagnostics.sqlite')
+ from control.friends.technical_metadata import start_retention as start_metadata_retention
+ metadata_retention=start_metadata_retention(ROOT/'technical-metadata.sqlite')
  try:ThreadingHTTPServer(('127.0.0.1',args.port),Handler).serve_forever()
- finally:retention.set()
+ finally:retention.set();metadata_retention.set()
 
 if __name__=='__main__':main()

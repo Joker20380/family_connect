@@ -52,6 +52,15 @@ def inspect(apk, native, metadata, revision=None):
     return manifest
 
 
+def verify_native_source(revision, head, root=ROOT):
+    if not re.fullmatch('[0-9a-f]{40}', revision):
+        raise ValueError('Native source identity missing')
+    subprocess.run(['git', 'diff', '--exit-code', revision, head, '--', 'carrier',
+                    ':(exclude)carrier/cmd', 'pilot/android-restricted/native', 'pilot/android-restricted/packet',
+                    'pilot/android-restricted/build.py', 'pilot/android-restricted/go.mod',
+                    'pilot/android-restricted/go.sum', 'pilot/android-restricted/xray-packet-boundary.patch'], cwd=root, check=True)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--source-commit', required=True)
@@ -59,20 +68,25 @@ def main():
     parser.add_argument('--apksigner', type=Path)
     parser.add_argument('--check-generated', type=Path)
     parser.add_argument('--android-only', action='store_true')
+    parser.add_argument('--native-source-commit')
+    parser.add_argument('--apk', type=Path)
+    parser.add_argument('--generated', type=Path, default=ROOT / 'clients/android/restricted-generated')
     args = parser.parse_args()
     head = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()
     if not re.fullmatch('[0-9a-f]{40}', args.source_commit) or head != args.source_commit:
         raise ValueError('Source commit mismatch')
     subprocess.run(['git', 'diff', '--exit-code', 'HEAD', '--', 'carrier', 'clients/android', 'pilot/android-restricted'], cwd=ROOT, check=True)
+    native_revision = args.native_source_commit or head
+    verify_native_source(native_revision, head)
     if args.check_generated:
         print(json.dumps(verify_generated(args.check_generated / 'jniLibs/arm64-v8a/libfc_restricted.so',
-                                         args.check_generated / 'assets/restricted-build.json', head)))
+                                         args.check_generated / 'assets/restricted-build.json', native_revision)))
         return
     if args.out is None or args.apksigner is None:
         parser.error('--out and --apksigner required for APK acceptance')
-    apk = ROOT / 'clients/android/app/build/outputs/apk/friends/app-friends-unsigned.apk'
-    native = ROOT / 'clients/android/restricted-generated/jniLibs/arm64-v8a/libfc_restricted.so'
-    native_manifest = inspect(apk, native, ROOT / 'clients/android/restricted-generated/assets/restricted-build.json')
+    apk = args.apk or ROOT / 'clients/android/app/build/outputs/apk/friends/app-friends-unsigned.apk'
+    native = args.generated / 'jniLibs/arm64-v8a/libfc_restricted.so'
+    native_manifest = inspect(apk, native, args.generated / 'assets/restricted-build.json', native_revision)
     listing = json.loads((apk.parent / 'output-metadata.json').read_bytes())
     entry, = listing['elements']
     if listing['applicationId'] != 'com.familyconnect.app.friends' or entry['versionCode'] < 61:

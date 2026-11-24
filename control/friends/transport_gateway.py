@@ -1,0 +1,842 @@
+"""Gateway decision cache and bounded application, not a subscription authority."""
+import fcntl
+import hashlib
+from contextlib import contextmanager, ExitStack
+from contextvars import ContextVar
+import json
+import os
+from pathlib import Path
+import re
+import resource
+import signal
+import socket
+import stat
+import subprocess
+import sys
+import time
+import uuid
+
+from . import transport_policy as policy
+
+SERVICES = ('family-connect-friends-awg.service', 'family-connect-friends-tcp.service')
+OPERATION_SECONDS = 8
+CURRENT_OPERATION = ContextVar('transport_operation', default=None)
+DIAGNOSTIC_MESSAGES_DROPPED = 0
+FAILURE_CODES = frozenset(('TRANSPORT_OPERATION_DEADLINE', 'ENGINE_START_TIMEOUT',
+    'ENGINE_READBACK_MISMATCH', 'INVALID_AWG_READBACK', 'INVALID_TCP_READBACK',
+    'UNSAFE_GATEWAY_STATE', 'INVALID_GATEWAY_POLICY', 'INVALID_GATEWAY_CACHE',
+    'INVALID_MEMBERSHIP_CACHE', 'INVALID_GATEWAY_BINDING', 'TCP_BINDING_CONFLICT',
+    'INCOMPLETE_NODE_BINDING', 'APPLICATION_DID_NOT_CONVERGE', 'DUPLICATE_JSON_FIELD',
+    'TRANSPORT_RECOVERY_REQUIRED'))
+
+
+def emit(value):
+    global DIAGNOSTIC_MESSAGES_DROPPED
+    try:
+        payload = ('\n' + json.dumps(dict(value,
+            diagnostic_messages_dropped=DIAGNOSTIC_MESSAGES_DROPPED), sort_keys=True) + '\n').encode()
+        descriptor = sys.stderr.fileno()
+        mode = os.fstat(descriptor).st_mode
+        if len(payload) > 32768:
+            raise ValueError('DIAGNOSTIC_MESSAGE_TOO_LARGE')
+        if stat.S_ISSOCK(mode):
+            with socket.socket(fileno=os.dup(descriptor)) as channel:
+                written = channel.send(payload, socket.MSG_DONTWAIT | socket.MSG_NOSIGNAL)
+        elif stat.S_ISFIFO(mode):
+            pipe = os.open('/proc/self/fd/' + str(descriptor), os.O_WRONLY | os.O_NONBLOCK | os.O_CLOEXEC)
+            try:
+                if len(payload) > os.fpathconf(pipe, 'PC_PIPE_BUF'):
+                    raise ValueError('DIAGNOSTIC_MESSAGE_TOO_LARGE')
+                written = os.write(pipe, payload)
+            finally:
+                os.close(pipe)
+        else:
+            raise ValueError('DIAGNOSTIC_SINK_NOT_NONBLOCKING')
+        if written == len(payload):
+            return True
+    except (OSError, ValueError):
+        pass
+    DIAGNOSTIC_MESSAGES_DROPPED += 1
+    return False
+
+
+def process_usage():
+    try:
+        return resource.getrusage(resource.RUSAGE_SELF)
+    except OSError:
+        return None
+
+
+def command_family(arguments):
+    executable = Path(arguments[0]).name if arguments else ''
+    if executable == 'awg':
+        return 'awg-query' if arguments[1:2] == ['show'] else 'awg-actuation'
+    if executable == 'xray':
+        return 'tcp-query' if arguments[1:2] == ['api'] else 'tcp-engine'
+    return executable if executable in ('systemctl', 'ip', 'iptables') else 'other'
+
+
+def failure_record(error, mode):
+    context = getattr(error, 'transport_context', {})
+    if isinstance(error, subprocess.TimeoutExpired):
+        kind, reason = 'TimeoutExpired', 'COMMAND_TIMEOUT'
+    elif isinstance(error, subprocess.CalledProcessError):
+        kind, reason = 'CalledProcessError', 'COMMAND_FAILED'
+    elif isinstance(error, TimeoutError):
+        kind, reason = 'TimeoutError', 'TRANSPORT_OPERATION_DEADLINE'
+    elif isinstance(error, OSError):
+        kind, reason = 'OSError', 'FILESYSTEM_OR_OS_ERROR'
+    elif isinstance(error, ValueError):
+        kind, reason = 'ValueError', str(error) if str(error) in FAILURE_CODES else 'INVALID_INPUT_OR_STATE'
+    elif isinstance(error, AssertionError):
+        kind, reason = 'AssertionError', 'INVARIANT_FAILED'
+    else:
+        kind, reason = 'Exception', 'UNCLASSIFIED_FAILURE'
+    invocation = os.environ.get('INVOCATION_ID', '')
+    record = dict(schema=1, mode=mode if mode in ('watch', 'register', 'run', 'paid-preflight') else 'unknown',
+        phase=context.get('phase', 'entry'), exception_class=kind, reason=reason,
+        pid=os.getpid(), invocation_id=invocation if re.fullmatch('[a-f0-9]{32}', invocation) else None,
+        observed_at=time.time(), elapsed=context.get('elapsed'), budget=OPERATION_SECONDS)
+    for name in ('boundary', 'calls', 'calls_dropped', 'stage_counts'):
+        if name in context:
+            record[name] = context[name]
+    if isinstance(error, (subprocess.TimeoutExpired, subprocess.CalledProcessError)):
+        record.update(command_family=command_family(error.cmd),
+            returncode=getattr(error, 'returncode', None), timeout=isinstance(error, subprocess.TimeoutExpired))
+    if isinstance(error, OSError):
+        record['errno'] = error.errno
+    return record
+
+
+def report_failure(error, mode, root):
+    if getattr(error, 'transport_reported', False):
+        return
+    error.transport_reported = True
+    record = failure_record(error, mode)
+    emit(dict(transport_failure=record))
+    record['diagnostic_messages_dropped'] = DIAGNOSTIC_MESSAGES_DROPPED
+    diagnostic_started = time.monotonic()
+    outcome = 'unavailable'
+    try:
+        descriptor = os.open(root/'transport-failure.json', os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
+        with os.fdopen(descriptor, 'w') as output:
+            json.dump(record, output, sort_keys=True)
+            output.flush()
+            sync_started = time.monotonic()
+            emit(dict(transport_diagnostic_call=dict(role='failure_record', kind='file_fsync',
+                boundary='before', remaining=None)))
+            os.fsync(output.fileno())
+            emit(dict(transport_diagnostic_call=dict(role='failure_record', kind='file_fsync',
+                boundary='after', duration=time.monotonic()-sync_started, completed=True)))
+            outcome = 'created'
+    except FileExistsError:
+        outcome = 'retained'
+    except Exception:
+        emit(dict(transport_diagnostic_persistence='unavailable'))
+    finally:
+        emit(dict(transport_diagnostic_write=dict(role='failure_record', result=outcome,
+            duration=time.monotonic()-diagnostic_started)))
+
+
+class Operation:
+    def __init__(self, seconds=OPERATION_SECONDS):
+        self.started = time.monotonic()
+        self.deadline = self.started + seconds
+        self.stages = {}
+        self.stage_counts = {}
+        self.calls = []
+        self.calls_dropped = 0
+
+    def context(self, phase, boundary):
+        return dict(phase=phase, boundary=boundary, elapsed=time.monotonic()-self.started,
+            calls=self.calls.copy(), calls_dropped=self.calls_dropped, stage_counts=self.stage_counts.copy())
+
+    def remaining(self):
+        remaining = self.deadline - time.monotonic()
+        if remaining <= 0:
+            raise TimeoutError('TRANSPORT_OPERATION_DEADLINE')
+        return remaining
+
+    @contextmanager
+    def stage(self, name):
+        started = time.monotonic()
+        self.stage_counts[name] = self.stage_counts.get(name, 0) + 1
+        boundary = 'before'
+        try:
+            self.remaining()
+            boundary = 'body'
+            yield
+            boundary = 'after'
+            self.remaining()
+        except BaseException as error:
+            if not hasattr(error, 'transport_context'):
+                error.transport_context = self.context(name, boundary)
+            raise
+        finally:
+            self.stages[name] = self.stages.get(name, 0) + time.monotonic() - started
+
+    @contextmanager
+    def call(self, kind, *, role=None, replacement=None, phase=None):
+        entry = dict(kind=kind, role=role, entered=time.monotonic()-self.started,
+            remaining=self.deadline-time.monotonic(), started=None, finished=None,
+            duration=None, completed=False, replace_completed=replacement, boundary='before')
+        if len(self.calls) == 24:
+            self.calls.pop(0)
+            self.calls_dropped += 1
+        self.calls.append(entry)
+        usage = None
+        boundary = 'before'
+        if phase:
+            self.stage_counts[phase] = self.stage_counts.get(phase, 0) + 1
+        try:
+            self.remaining()
+            usage = process_usage()
+            entry['started'] = time.monotonic()-self.started
+            boundary = 'body'
+            entry['boundary'] = boundary
+            yield entry
+            entry['completed'] = True
+            entry['finished'] = time.monotonic()-self.started
+            boundary = 'after'
+            entry['boundary'] = boundary
+            self.remaining()
+        except BaseException as error:
+            if phase and not hasattr(error, 'transport_context'):
+                error.transport_context = self.context(phase, boundary)
+            raise
+        finally:
+            if entry['started'] is not None:
+                if entry['finished'] is None:
+                    entry['finished'] = time.monotonic()-self.started
+                entry['duration'] = entry['finished']-entry['started']
+                latest = process_usage()
+                if usage is not None and latest is not None:
+                    entry['self_cpu_seconds'] = latest.ru_utime+latest.ru_stime-usage.ru_utime-usage.ru_stime
+                    entry['major_faults'] = latest.ru_majflt-usage.ru_majflt
+                    entry['voluntary_switches'] = latest.ru_nvcsw-usage.ru_nvcsw
+                    entry['involuntary_switches'] = latest.ru_nivcsw-usage.ru_nivcsw
+            if phase:
+                self.stages[phase] = self.stages.get(phase, 0) + time.monotonic()-self.started-entry['entered']
+
+
+@contextmanager
+def measured_call(kind, *, role=None, replacement=None, phase=None):
+    operation = CURRENT_OPERATION.get()
+    if operation is None:
+        yield {}
+    else:
+        with operation.call(kind, role=role, replacement=replacement, phase=phase) as entry:
+            yield entry
+
+
+def remaining():
+    operation = CURRENT_OPERATION.get()
+    return operation.remaining() if operation else OPERATION_SECONDS
+
+
+def unique(pairs):
+    result = {}
+    for name, value in pairs:
+        if name in result:
+            raise ValueError('DUPLICATE_JSON_FIELD')
+        result[name] = value
+    return result
+
+
+def read(path):
+    info = path.lstat()
+    if path.is_symlink() or not path.is_file() or info.st_uid != os.geteuid() or info.st_mode & 0o077 or info.st_size > 8_000_000:
+        raise ValueError('UNSAFE_GATEWAY_STATE')
+    return json.loads(path.read_text(), object_pairs_hook=unique)
+
+
+def write(path, value, mode=0o600):
+    role = {'transport-state.json': 'decision_state', 'transport-attempt.json': 'attempt_result',
+        'server.json': 'engine_config'}.get(path.name, 'unknown')
+    temporary = path.with_suffix('.pending')
+    descriptor = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_TRUNC | os.O_NOFOLLOW, mode)
+    os.fchmod(descriptor, mode)
+    with os.fdopen(descriptor, 'w') as handle:
+        json.dump(value, handle, sort_keys=True)
+        handle.flush()
+        with measured_call('file_fsync', role=role, replacement=False, phase='persist_file'):
+            os.fsync(handle.fileno())
+    with measured_call('replace', role=role, replacement=False, phase='persist_replace') as entry:
+        os.replace(temporary, path)
+        entry['replace_completed'] = True
+    directory = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY)
+    try:
+        with measured_call('directory_fsync', role=role, replacement=True, phase='persist_directory'):
+            os.fsync(directory)
+    finally:
+        os.close(directory)
+
+
+def execute(arguments):
+    with measured_call(command_family(arguments)) as entry:
+        return execute_command(arguments, entry)
+
+
+@contextmanager
+def command_step(details, name):
+    started = time.monotonic()
+    operation = CURRENT_OPERATION.get()
+    step = dict(entered=started-operation.started if operation else None,
+        remaining=operation.deadline-started if operation else None, completed=False)
+    details[name] = step
+    try:
+        yield
+        step['completed'] = True
+    finally:
+        step['duration'] = time.monotonic()-started
+
+
+def terminate_command(process, details):
+    with command_step(details, 'cleanup'):
+        try:
+            os.killpg(process.pid, signal.SIGKILL)
+        except ProcessLookupError:
+            pass
+        except OSError as error:
+            details['kill_errno'] = error.errno
+            try:
+                process.kill()
+            except OSError as fallback:
+                details['kill_fallback_errno'] = fallback.errno
+        try:
+            process.wait(timeout=.25)
+            details['reaped'] = True
+        except (OSError, subprocess.TimeoutExpired):
+            details['reaped'] = False
+
+
+def execute_command(arguments, entry=None):
+    details = {}
+    if entry is not None:
+        entry['process'] = details
+    deadline = time.monotonic()+remaining()
+    with command_step(details, 'spawn'):
+        process = subprocess.Popen(arguments, stdout=subprocess.PIPE, stderr=subprocess.PIPE, start_new_session=True)
+    details['pid'] = process.pid
+    try:
+        with command_step(details, 'communicate'):
+            timeout = min(remaining(), deadline-time.monotonic())
+            if timeout <= 0:
+                raise TimeoutError('TRANSPORT_OPERATION_DEADLINE')
+            output, errors = process.communicate(timeout=timeout)
+        details.update(stdout_bytes=len(output), stderr_bytes=len(errors), returncode=process.returncode)
+        if process.returncode:
+            raise subprocess.CalledProcessError(process.returncode, arguments)
+        return output
+    except BaseException as error:
+        if isinstance(error, subprocess.TimeoutExpired):
+            details.update(stdout_bytes=len(error.output or b''), stderr_bytes=len(error.stderr or b''))
+        terminate_command(process, details)
+        details['returncode'] = process.returncode
+        raise
+    finally:
+        process.stdout.close()
+        process.stderr.close()
+
+
+def boot_id():
+    return Path('/proc/sys/kernel/random/boot_id').read_text().strip()
+
+
+def state_digest(value):
+    return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(',', ':'), allow_nan=False).encode()).hexdigest()
+
+
+def process_start(pid):
+    return Path(f'/proc/{pid}/stat').read_text().rsplit(')', 1)[1].split()[19]
+
+
+class Gateway:
+    observation_mode = False
+
+    def __init__(self, gateway, *, clock=time.time, monotonic=time.monotonic, run=execute):
+        self.gateway, self.root, self.clock, self.monotonic, self.run = gateway, gateway.ROOT, clock, monotonic, run
+        self.path = self.root / 'transport-state.json'
+        config = read(self.root / 'transport-enforcement.json')
+        self.observation_mode = config.get('readback_mode') == 'observations-v1'
+        if (set(config) != {'schema', 'profile', 'node', 'enabled'} | ({'readback_mode'} if self.observation_mode else set()) or config['schema'] != 1
+                or config['profile'] != policy.PROFILE or config['node'] not in policy.NODES or config['enabled'] is not True):
+            raise ValueError('INVALID_GATEWAY_POLICY')
+        self.node = config['node']
+        self.metrics = None
+        self.producer = dict(pid=os.getpid(), start=process_start(os.getpid()), generation=uuid.uuid4().hex) if self.observation_mode else None
+        self.observation_path = self.root / 'transport-observation.json'
+        self.fence_path = self.root / 'application-incomplete'
+        self.failed_path = self.root / 'application-failed'
+
+    @contextmanager
+    def operation(self, *, completion=None):
+        if CURRENT_OPERATION.get() is not None:
+            yield
+            if completion is not None:
+                completion()
+            return
+        operation = Operation()
+        token = CURRENT_OPERATION.set(operation)
+        result = 'error'
+        try:
+            yield
+            operation.remaining()
+            if completion is not None:
+                completion()
+                operation.remaining()
+            result = 'complete'
+        except BaseException as error:
+            if self.observation_mode:
+                try:
+                    self.observation_path.unlink(missing_ok=True)
+                except OSError as cleanup:
+                    emit(dict(observation_cleanup_error=type(cleanup).__name__))
+            if not hasattr(error, 'transport_context'):
+                error.transport_context = operation.context('operation', 'body')
+            raise
+        finally:
+            self.metrics = dict(result=result, total=time.monotonic()-operation.started, stages=operation.stages,
+                stage_counts=operation.stage_counts, calls=operation.calls, calls_dropped=operation.calls_dropped)
+            CURRENT_OPERATION.reset(token)
+            emit(dict(transport_progress=self.metrics))
+
+    @contextmanager
+    def stage(self, name):
+        operation = CURRENT_OPERATION.get()
+        if operation is None:
+            raise RuntimeError('TRANSPORT_OPERATION_REQUIRED')
+        with operation.stage(name):
+            yield
+
+    @contextmanager
+    def lock(self, name='registration.lock'):
+        with self.operation(), (self.root/name).open('a') as handle:
+            self.acquire(handle)
+            yield
+
+    def acquire(self, handle):
+        with self.stage('lock'):
+            while True:
+                try:
+                    fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                    break
+                except BlockingIOError:
+                    time.sleep(min(.02, remaining()))
+
+    @contextmanager
+    def serialized(self, *, failure_mode=None):
+        if not self.observation_mode:
+            with self.lock('application.lock'):
+                yield
+            return
+        failure_mode = failure_mode or 'watch'
+        first_error = None
+        try:
+            with ExitStack() as resources:
+                try:
+                    with ExitStack() as outcome:
+                        with self.operation(completion=self.require_no_failure):
+                            handle = resources.enter_context((self.root/'application.lock').open('a'))
+                            self.acquire(handle)
+                            self.require_no_failure()
+                            if os.path.lexists(self.fence_path):
+                                raise ValueError('TRANSPORT_RECOVERY_REQUIRED')
+                            self.fence_path.mkdir(mode=0o700)
+                            yield
+                            outcome.enter_context(self.outcome_lock())
+                            self.require_no_failure()
+                            self.fence_path.rmdir()
+                except BaseException as error:
+                    first_error = error
+                    self.fail_closed(error, failure_mode)
+                    raise
+        except BaseException as error:
+            if first_error is not None and error is not first_error:
+                emit(dict(transport_cleanup_failure=failure_record(error, failure_mode)))
+            error = first_error if first_error is not None else error
+            self.fail_closed(error, failure_mode)
+            raise error
+
+    def require_no_failure(self):
+        if os.path.lexists(self.failed_path):
+            raise ValueError('TRANSPORT_RECOVERY_REQUIRED')
+
+    def latch_failure(self):
+        self.failed_path.mkdir(mode=0o700, exist_ok=True)
+
+    @contextmanager
+    def outcome_lock(self):
+        with ExitStack() as resources:
+            token = CURRENT_OPERATION.set(Operation()) if CURRENT_OPERATION.get() is None else None
+            try:
+                handle = resources.enter_context((self.root/'application-outcome.lock').open('a'))
+                self.acquire(handle)
+            finally:
+                if token is not None:
+                    CURRENT_OPERATION.reset(token)
+            yield
+
+    def recover(self):
+        if not self.observation_mode:
+            raise ValueError('OBSERVATION_MODE_REQUIRED')
+        with ExitStack() as resources:
+            try:
+                with ExitStack() as outcome:
+                    with self.operation(completion=self.require_no_failure):
+                        handle = resources.enter_context((self.root/'application.lock').open('a'))
+                        self.acquire(handle)
+                        outcome.enter_context(self.outcome_lock())
+                        self.fence_path.mkdir(mode=0o700, exist_ok=True)
+                        for service in ('family-connect-paid-watch.service', *SERVICES):
+                            raw = self.run(['systemctl', 'show', service, '-p', 'LoadState', '-p', 'ActiveState',
+                                '-p', 'MainPID', '-p', 'ControlPID', '-p', 'Job']).decode()
+                            state = dict(line.split('=', 1) for line in raw.strip().splitlines())
+                            if (state.get('LoadState') != 'loaded' or state.get('ActiveState') not in ('inactive', 'failed')
+                                    or state.get('MainPID') != '0' or state.get('ControlPID') != '0' or state.get('Job') != ''):
+                                raise ValueError('TRANSPORT_RECOVERY_REQUIRES_STOPPED_UNITS')
+                        self.load()
+                        self.observation_path.unlink(missing_ok=True)
+                        for path in (self.failed_path, self.fence_path):
+                            if os.path.lexists(path):
+                                if path.is_symlink():
+                                    raise ValueError('UNSAFE_GATEWAY_STATE')
+                                path.rmdir()
+            except BaseException as error:
+                self.fail_closed(error, 'register')
+                raise
+
+    def load(self):
+        value = read(self.path)
+        if (set(value) != {'schema', 'node', 'records', 'observed_at'} or value['schema'] != 1
+                or value['node'] != self.node or type(value['records']) is not dict
+                or len(value['records']) > 10000 or self.clock() + policy.CLOCK_SKEW_SECONDS < value['observed_at']):
+            raise ValueError('INVALID_GATEWAY_CACHE')
+        for device, cached in value['records'].items():
+            if (set(cached) != {'decision', 'boot', 'deadline', 'applied', 'prepared'}
+                    or cached['prepared'] is not None and
+                    (type(cached['prepared']) is not str or not re.fullmatch('[a-f0-9]{64}', cached['prepared']))):
+                raise ValueError('INVALID_MEMBERSHIP_CACHE')
+            decision = cached['decision']
+            if device != decision['device']:
+                raise ValueError('INVALID_GATEWAY_BINDING')
+            policy.validate(dict(schema=1, profile=policy.PROFILE, node=self.node,
+                observed_at=decision['observed_at'], decisions=[decision]), self.node, decision['observed_at'])
+        return value
+
+    def allowed(self, cached):
+        decision = cached['decision']
+        if not decision['allowed']:
+            return False
+        if not decision['cohort']:
+            return not cached.get('prepared')
+        return (cached['boot'] == boot_id() and self.clock() < decision['valid_until']
+                and self.monotonic() < cached['deadline'])
+
+    def accept(self, envelope):
+        if self.observation_mode:
+            self.observation_path.unlink(missing_ok=True)
+        policy.validate(envelope, self.node, self.clock())
+        state = self.load()
+        for decision in envelope['decisions']:
+            remaining()
+            old = state['records'].get(decision['device'])
+            policy.successor(old['decision'] if old else None, decision)
+            for device, cached in state['records'].items():
+                if device != decision['device'] and any(cached['decision'][name] == decision[name] for name in ('public_key', 'tcp_id')):
+                    raise ValueError('DUPLICATE_GATEWAY_BINDING')
+            if old and decision == old['decision']:
+                continue
+            state['records'][decision['device']] = dict(decision=decision, boot=boot_id(),
+                deadline=self.monotonic() + min(policy.LEASE_SECONDS, max(0, decision['valid_until'] - self.clock())),
+                applied=old.get('applied') if old else None, prepared=old.get('prepared') if old else None)
+        state['observed_at'] = max(state['observed_at'], int(self.clock()))
+        write(self.path, state)
+        return state
+
+    def prepare(self, envelope, token):
+        if not isinstance(token, str) or not re.fullmatch('[a-f0-9]{64}', token) or len(envelope['decisions']) != 1:
+            raise ValueError('INVALID_MEMBERSHIP_PREPARATION')
+        state = self.accept(envelope)
+        cached = state['records'][envelope['decisions'][0]['device']]
+        if cached['decision']['cohort']:
+            raise ValueError('MEMBERSHIP_OPERATION_CONFLICT')
+        cached['prepared'] = token
+        write(self.path, state)
+
+    def peer_allowed(self, public):
+        state = self.load()
+        found = [cached for cached in state['records'].values() if cached['decision']['public_key'] == public]
+        return not found or self.allowed(found[0])
+
+    def stop_all(self):
+        token = CURRENT_OPERATION.set(None)
+        try:
+            self.run(['systemctl', '--no-block', 'stop', *SERVICES])
+        finally:
+            CURRENT_OPERATION.reset(token)
+
+    def failure(self):
+        write(self.root/'transport-attempt.json', dict(schema=1, node=self.node,
+            observed_at=int(self.clock()), result='error'))
+
+    def fail_closed(self, error, mode):
+        if self.observation_mode:
+            if getattr(error, 'transport_fail_closed', False):
+                return
+            error.transport_fail_closed = True
+        else:
+            report_failure(error, mode, self.root)
+        token = CURRENT_OPERATION.set(None)
+        try:
+            with ExitStack() as outcome:
+                if self.observation_mode:
+                    try:
+                        outcome.enter_context(self.outcome_lock())
+                    except BaseException as cleanup:
+                        emit(dict(transport_cleanup_failure=failure_record(cleanup, mode)))
+                actions = (self.stop_all, self.failure)
+                if self.observation_mode:
+                    actions = (self.latch_failure,
+                        lambda: self.fence_path.mkdir(mode=0o700, exist_ok=True),
+                        lambda: self.observation_path.unlink(missing_ok=True), *actions,
+                        lambda: report_failure(error, mode, self.root))
+                for action in actions:
+                    try:
+                        action()
+                    except BaseException as cleanup:
+                        emit(dict(transport_cleanup_failure=failure_record(cleanup, mode)))
+        except BaseException as cleanup:
+            emit(dict(transport_cleanup_failure=failure_record(cleanup, mode)))
+        finally:
+            CURRENT_OPERATION.reset(token)
+
+    def apply(self, *, starting=False):
+        if starting:
+            with self.lock():
+                self.plan()
+            return
+        with self.serialized():
+            self.apply_serialized()
+
+    def apply_serialized(self):
+        if self.observation_mode:
+            self.require_no_failure()
+            self.observation_path.unlink(missing_ok=True)
+            if self.producer['pid'] != os.getpid() or self.producer['start'] != process_start(os.getpid()):
+                self.producer = dict(pid=os.getpid(), start=process_start(os.getpid()), generation=uuid.uuid4().hex)
+        for attempt in range(12):
+            with self.lock():
+                with self.stage('plan'):
+                    state, peers, observations, changed = self.plan()
+            if changed:
+                with self.stage('restart_preflight'):
+                    self.run(['systemctl', 'restart', SERVICES[1]])
+            with self.lock():
+                with self.stage('readback'):
+                    if self.readback(state, peers, observations, changed=changed):
+                        return
+        raise ValueError('APPLICATION_DID_NOT_CONVERGE')
+
+    def plan(self):
+        state = self.load()
+        tcp_path = self.root.parent / 'friends-tcp/server.json'
+        info = tcp_path.stat()
+        config = json.loads(tcp_path.read_text(), object_pairs_hook=unique)
+        inbound = next(item for item in config['inbounds'] if item.get('tag') == 'friends')
+        clients = inbound['settings']['clients']
+        with self.gateway.database() as database:
+            peers = {public: self.gateway.address(index) for index, public in database.execute('SELECT id,public FROM peers')}
+        changed, observations = False, {}
+        for device, cached in state['records'].items():
+            remaining()
+            decision = cached['decision']
+            email = device + '@family.test'
+            matching = [client for client in clients if client.get('email') == email or client.get('id') == decision['tcp_id']]
+            expected = dict(id=decision['tcp_id'], email=email, flow='xtls-rprx-vision')
+            if matching and matching != [expected]:
+                raise ValueError('TCP_BINDING_CONFLICT')
+            registered = decision['public_key'] in peers
+            if not registered and matching:
+                raise ValueError('INCOMPLETE_NODE_BINDING')
+            allowed = self.allowed(cached)
+            if not allowed and matching:
+                clients.remove(matching[0])
+                changed = True
+            if allowed and registered and not matching:
+                clients.append(expected)
+                changed = True
+            observations[device] = dict(expected_revision=decision['revision'], applied_revision=None,
+                observed_at=int(self.clock()), registered=registered, allowed=registered and allowed, result='pending',
+                reason='membership-pending' if cached.get('prepared') and not decision['cohort'] else
+                    'canonical' if not decision['allowed'] else 'noncohort' if not decision['cohort'] else
+                    'lease-expired' if not allowed else 'lease-valid')
+        if changed:
+            write(tcp_path, config, info.st_mode & 0o777)
+            os.chown(tcp_path, info.st_uid, info.st_gid)
+        return state, peers, observations, changed
+
+    def readback(self, state, peers, observations, *, changed=False):
+        if self.observation_mode and state != self.load():
+            return False
+        committed = {device: cached['applied'] for device, cached in state['records'].items()}
+        live = self.awg_snapshot()
+        for device, cached in state['records'].items():
+            decision, observation = cached['decision'], observations[device]
+            public, allowed = decision['public_key'], observation['allowed']
+            if public in peers:
+                if allowed and live.get(public) != peers[public]:
+                    with self.stage('actuation'):
+                        self.gateway.add_peer(public, peers[public])
+                        changed = True
+                elif not allowed and public in live:
+                    with self.stage('actuation'):
+                        self.run([str(self.root / 'awg'), 'set', self.gateway.IFACE, 'peer', public, 'remove'])
+                        changed = True
+        tcp_by_email, tcp_by_id = self.tcp_snapshot()
+        live = self.awg_snapshot()
+        for device, cached in state['records'].items():
+            decision, observation = cached['decision'], observations[device]
+            public = decision['public_key']
+            email = device+'@family.test'
+            user = tcp_by_email.get(email)
+            tcp_present = user is not None and user['account']['id'] == decision['tcp_id']
+            if (user is not None or decision['tcp_id'] in tcp_by_id) and (
+                    not tcp_present or user['account'].get('flow') != 'xtls-rprx-vision'):
+                raise ValueError('ENGINE_READBACK_MISMATCH')
+            awg_present = public in live
+            expected = observation['allowed']
+            if tcp_present != expected or awg_present != expected or expected and live[public] != peers[public]:
+                if any(observations[key]['allowed'] != (observations[key]['registered'] and self.allowed(value))
+                       for key, value in state['records'].items()):
+                    return False
+                raise ValueError('ENGINE_READBACK_MISMATCH')
+            observation.update(applied_revision=decision['revision'], allowed=expected, result='applied')
+            if self.observation_mode:
+                observation['decision_sha256'] = state_digest(cached['decision'])
+            cached['applied'] = observation
+        if any(observations[key]['allowed'] != (observations[key]['registered'] and self.allowed(value))
+               for key, value in state['records'].items()):
+            return False
+        if self.observation_mode:
+            return self.record_observation(state, observations, committed, changed)
+        state['observed_at'] = int(self.clock())
+        write(self.path, state)
+        write(self.root/'transport-attempt.json', dict(schema=1, node=self.node,
+            observed_at=int(self.clock()), result='applied'))
+        return True
+
+    def record_observation(self, state, observations, committed, changed):
+        def semantic(value):
+            return {key: item for key, item in (value or {}).items() if key != 'observed_at'}
+        required = changed or any(semantic(committed[device]) != semantic(observation)
+            for device, observation in observations.items())
+        for device, cached in state['records'].items():
+            cached['applied'] = observations[device] if required else committed[device]
+        attempt_path = self.root / 'transport-attempt.json'
+        try:
+            attempt = read(attempt_path)
+        except (OSError, ValueError):
+            attempt = None
+        binding = dict(schema=2, node=self.node, result='applied', boot=boot_id(), producer=self.producer,
+            state_sha256=state_digest(state))
+        if required or attempt != dict(binding, observed_at=(attempt or {}).get('observed_at')):
+            for device, cached in state['records'].items():
+                cached['applied'] = observations[device]
+            state['observed_at'] = int(self.clock())
+            write(self.path, state)
+            binding['state_sha256'] = state_digest(state)
+            write(attempt_path, dict(binding, observed_at=int(self.clock())))
+        if any(observations[device]['allowed'] != (observations[device]['registered'] and self.allowed(cached))
+                for device, cached in state['records'].items()):
+            return False
+        remaining()
+        completed = int(self.clock())
+        observation = dict(binding, observed_at=completed, monotonic=self.monotonic(),
+            records={device: dict(value, observed_at=completed) for device, value in observations.items()})
+        temporary = self.observation_path.with_suffix('.pending')
+        try:
+            with self.stage('publish_observation'):
+                descriptor = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_TRUNC | os.O_NOFOLLOW, 0o600)
+                with os.fdopen(descriptor, 'w') as handle:
+                    os.fchmod(handle.fileno(), 0o600)
+                    json.dump(observation, handle, sort_keys=True, allow_nan=False)
+                remaining()
+                os.replace(temporary, self.observation_path)
+            if any(observations[device]['allowed'] != (observations[device]['registered'] and self.allowed(cached))
+                    for device, cached in state['records'].items()):
+                self.observation_path.unlink(missing_ok=True)
+                return False
+            return True
+        finally:
+            temporary.unlink(missing_ok=True)
+
+    def awg_snapshot(self):
+        live = {}
+        with self.stage('engine_query'):
+            output = self.run([str(self.root / 'awg'), 'show', self.gateway.IFACE, 'allowed-ips']).decode()
+        for line in output.splitlines():
+            fields = line.split()
+            if len(fields) != 2 or fields[0] in live:
+                raise ValueError('INVALID_AWG_READBACK')
+            live[fields[0]] = fields[1]
+        return live
+
+    def tcp_snapshot(self):
+        with self.stage('engine_query'):
+            runtime = json.loads(self.run([str(self.root.parent / 'friends-tcp/xray'), 'api', 'inbounduser',
+                '--server=127.0.0.1:18085', '-tag=friends']), object_pairs_hook=unique)
+        if type(runtime) is not dict or set(runtime) - {'users'} or type(runtime.get('users', [])) is not list:
+            raise ValueError('INVALID_TCP_READBACK')
+        users = runtime.get('users', [])
+        emails, identities = {}, {}
+        for user in users:
+            if (type(user) is not dict or type(user.get('email')) is not str or not user['email']
+                    or type(user.get('account')) is not dict or type(user['account'].get('id')) is not str
+                    or not user['account']['id'] or user['email'] in emails or user['account']['id'] in identities):
+                raise ValueError('INVALID_TCP_READBACK')
+            emails[user['email']] = user
+            identities[user['account']['id']] = user
+        return emails, identities
+
+
+def notify(value):
+    address = os.environ.get('NOTIFY_SOCKET')
+    if address:
+        with socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM) as channel:
+            channel.connect('\0'+address[1:] if address.startswith('@') else address)
+            channel.sendall(value.encode())
+
+
+def watch(gateway, *, run=execute):
+    engine = Gateway(gateway, run=run)
+    try:
+        if getattr(engine, 'observation_mode', False):
+            with engine.serialized(failure_mode='watch'):
+                engine.apply(starting=True)
+        else:
+            engine.apply(starting=True)
+        notify('READY=1')
+        for attempt in range(15):
+            try:
+                with engine.operation():
+                    for service in SERVICES:
+                        engine.run(['systemctl', 'is-active', '--quiet', service])
+                break
+            except subprocess.SubprocessError:
+                if not engine.observation_mode:
+                    notify('WATCHDOG=1')
+                time.sleep(policy.TICK_SECONDS)
+        else:
+            raise ValueError('ENGINE_START_TIMEOUT')
+        previous = time.monotonic()
+        while True:
+            engine.apply()
+            notify('WATCHDOG=1')
+            current = time.monotonic()
+            emit(dict(transport_progress_gap=current-previous))
+            previous = current
+            time.sleep(policy.TICK_SECONDS)
+    except BaseException as error:
+        engine.fail_closed(error, 'watch')
+        raise

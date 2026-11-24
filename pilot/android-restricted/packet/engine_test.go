@@ -138,12 +138,20 @@ func TestExistingPacketEngineTCPDNSAndFailClosed(test *testing.T) {
 		if err != nil {
 			test.Fatal(err)
 		}
-		connection.SetDeadline(time.Now().Add(100 * time.Millisecond))
+		budget := 100 * time.Millisecond
+		if port == 53 {
+			budget = 3 * time.Second
+		}
+		started := time.Now()
+		connection.SetDeadline(started.Add(budget))
 		query := make([]byte, 12)
 		query[0] = 12
-		connection.Write(query)
+		if count, err := connection.Write(query); err != nil || count != len(query) {
+			test.Fatal("fixture query write", count, err)
+		}
 		answer := make([]byte, 32)
 		count, err := connection.Read(answer)
+		test.Logf("isolated UDP port=%d count=%d elapsed=%s budget=%s queries=%d error=%v", port, count, time.Since(started), budget, plane.dns.Load(), err)
 		connection.Close()
 		if port == 53 && (err != nil || count != 12 || answer[2]&0x80 == 0) {
 			test.Fatal("Family DNS", err)

@@ -20,11 +20,14 @@ public class ConnectivityOrchestratorTest {
         Failure pauseInterruption;
         final List<String> attempts=new ArrayList<>(),phases=new ArrayList<>();
         final Map<String,Failure> failures=new HashMap<>();
+        final Map<String,Long> deadlines=new HashMap<>();
+        Failure observedBeforeCleanup;
         final ConnectivityOrchestrator core=new ConnectivityOrchestrator(this);
         public long now(){return time;}
         public List<String> configure(List<String> configured,long deadline){guard=true;return configured;}
         public void pause(long millis){assertTrue(guard);time+=millis;if(pauseInterruption!=null)core.interrupt(pauseInterruption);}
         public void open(String candidate,long deadline)throws Exception{
+            deadlines.put(candidate,deadline);
             assertTrue(guard);assertEquals(0,active);active++;peak=Math.max(peak,active);opens++;attempts.add(candidate);
             for(String phase:RESTRICTED.equals(candidate)?new String[]{"bootstrap","broker","dedicated"}:new String[]{"normal"}){
                 phases.add(phase);time+=10;
@@ -37,9 +40,23 @@ public class ConnectivityOrchestratorTest {
         public void closeCandidate()throws Exception{assertTrue(guard);if(cleanupFailure)throw new IllegalStateException();active=0;}
         public void release(){guard=false;releases++;}
         public void remember(String candidate){hint=candidate;}
-        public void event(Event event){}
+        public void event(Event event){if(event.name.equals("candidate_failed")&&active==1)observedBeforeCleanup=event.failure;}
         void connect(){core.connect(Arrays.asList("awg","tcp"),"awg",hint);}
         long count(String name){return core.events().stream().filter(event->event.name.equals(name)).count();}
+    }
+    @Test public void restrictedCandidateGetsProductionDeadlineNotReadinessBudget(){
+        Fixture fixture=new Fixture();fixture.time=123456;
+        fixture.core.connect(List.of(),RESTRICTED,null);
+        assertEquals(Long.valueOf(123456+RESTRICTED_TIMEOUT_MS),fixture.deadlines.get(RESTRICTED));
+        assertEquals(State.CONNECTED,fixture.core.state());
+    }
+    @Test public void rejectedEnumSurvivesBeforeCandidateCleanup(){
+        Fixture fixture=new Fixture();fixture.failures.put(RESTRICTED,Failure.BOOTSTRAP_UNAVAILABLE);
+        fixture.core.connect(List.of(),RESTRICTED,null);
+        assertEquals(Failure.BOOTSTRAP_UNAVAILABLE,fixture.observedBeforeCleanup);
+        assertEquals(Failure.BOOTSTRAP_UNAVAILABLE,ConnectivityOrchestrator.classify(new Rejected(Failure.BOOTSTRAP_UNAVAILABLE)));
+        assertEquals(0,fixture.active);
+        fixture.core.disconnect();
     }
     @Test public void primaryNeverStartsBootstrap(){
         Fixture fixture=new Fixture();fixture.connect();assertEquals(State.CONNECTED,fixture.core.state());
@@ -233,6 +250,26 @@ public class ConnectivityOrchestratorTest {
     @Test public void cleanupFailureNeverOpensNextEngine(){
         Fixture fixture=new Fixture();fixture.cleanupFailure=true;fixture.connect();
         assertEquals(State.FAILED,fixture.core.state());assertEquals(0,fixture.opens);assertTrue(fixture.guard);
+    }
+    @Test public void ownerAuthIsRetainedWhenFinishCleanupFails(){
+        Fixture fixture=new Fixture();fixture.connect();fixture.cleanupFailure=true;fixture.core.lost(Failure.AUTH);
+        Event last=fixture.core.events().get(fixture.core.events().size()-1);
+        assertEquals(State.FAILED,last.state);assertEquals(Failure.INTERNAL,last.failure);
+        assertEquals(Failure.AUTH,last.triggerReason);assertEquals(Failure.INTERNAL,last.cleanupReason);
+        assertEquals(1,fixture.opens);assertTrue(fixture.guard);
+    }
+    @Test public void candidateAuthIsRetainedWhenCleanupFails(){
+        Fixture fixture=new Fixture();fixture.cancelCandidate="awg";fixture.cancelPhase="normal";
+        Host host=new Host(){
+            int closes;
+            public long now(){return 0;}public void pause(long value){}public void open(String candidate,long deadline)throws Exception{throw new Rejected(Failure.AUTH);}
+            public void closeCandidate()throws Exception{if(++closes>1)throw new java.io.IOException("private detail");}
+            public void release(){}public void remember(String value){}public void event(Event event){}
+        };
+        ConnectivityOrchestrator core=new ConnectivityOrchestrator(host);core.connect(Arrays.asList("awg"),"awg",null);
+        Event last=core.events().get(core.events().size()-1);
+        assertEquals(Failure.INTERNAL,last.failure);assertEquals(Failure.AUTH,last.triggerReason);assertEquals(Failure.NETWORK,last.cleanupReason);
+        assertEquals(State.FAILED,core.state());
     }
     @Test public void failureClassificationIsExplicit(){
         assertEquals(Failure.AUTH,classify(new SecurityException()));assertEquals(Failure.CONFIGURATION,classify(new IllegalArgumentException()));

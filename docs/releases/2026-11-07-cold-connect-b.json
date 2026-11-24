@@ -1,0 +1,212 @@
+{
+  "result": "FAIL_RUNTIME",
+  "managed_source": "69bc3d1107eb3283be19821e01a1e435b48868cb",
+  "native_source": "6eb61a9faa659b6b07ac16bf9f4bac46a41cd2a7",
+  "native_sha256": "17119f000407ec1d7ccdf8d33acabe423f3cf20e32b6f8af839d209aa3360c59",
+  "connect_attempted": true,
+  "candidate_failure": {
+    "event": "candidate_failed",
+    "state": "CONNECTING",
+    "elapsed_ms": 2856,
+    "category": "BOOTSTRAP_UNAVAILABLE",
+    "trigger_reason": "BOOTSTRAP_UNAVAILABLE",
+    "stage": "ORCHESTRATOR",
+    "monotonic_ms": 61516
+  },
+  "all_provisioning_snapshots_before_cleanup": [
+    {
+      "request_id": "3ea11d3c3c3d4c92a5180d5355b37e0c",
+      "phase": "BEGIN",
+      "native": {
+        "handle": 1,
+        "go_entered": true,
+        "budget_known": true,
+        "stage": "LOCATOR",
+        "last_success": "LOCATOR",
+        "first_failure": "",
+        "reason": "NONE",
+        "provider_step": "",
+        "http_status": 0,
+        "errno": 0,
+        "security": false,
+        "elapsed_ms": 1,
+        "remaining_ms": 27564,
+        "protected": 0,
+        "denied": 0,
+        "closed": false,
+        "released": false
+      },
+      "network": {
+        "type": "CELLULAR",
+        "handle": 429513165534,
+        "available": true,
+        "resolver": "NETWORK_IPV4_GO_RESOLVER",
+        "resolver_class": "PRIVATE_IPV4",
+        "observed_ms": 61497,
+        "bind_ms": 61496,
+        "bind_available": true,
+        "bind_result": "IO",
+        "bind_operation": "NETWORK_BIND",
+        "bind_error": "SOCKET",
+        "bind_errno": 13
+      }
+    },
+    {
+      "request_id": "3ea11d3c3c3d4c92a5180d5355b37e0c",
+      "phase": "POST",
+      "native": {
+        "handle": 1,
+        "go_entered": true,
+        "budget_known": true,
+        "stage": "TELEMOST_CONNECT",
+        "last_success": "TELEMOST_CREATE",
+        "first_failure": "SOCKET_PROTECT_BIND",
+        "reason": "SOCKET_DENIED",
+        "provider_step": "",
+        "http_status": 0,
+        "errno": 0,
+        "security": false,
+        "elapsed_ms": 7,
+        "remaining_ms": 27558,
+        "protected": 0,
+        "denied": 4,
+        "closed": false,
+        "released": true
+      },
+      "network": {
+        "type": "CELLULAR",
+        "handle": 429513165534,
+        "available": true,
+        "resolver": "NETWORK_IPV4_GO_RESOLVER",
+        "resolver_class": "PRIVATE_IPV4",
+        "observed_ms": 61499,
+        "bind_ms": 61499,
+        "bind_available": true,
+        "bind_result": "IO",
+        "bind_operation": "NETWORK_BIND",
+        "bind_error": "SOCKET",
+        "bind_errno": 13
+      }
+    },
+    {
+      "request_id": "",
+      "phase": "CLOSE",
+      "native": {
+        "handle": 1,
+        "go_entered": true,
+        "budget_known": true,
+        "stage": "TELEMOST_CONNECT",
+        "last_success": "TELEMOST_CREATE",
+        "first_failure": "SOCKET_PROTECT_BIND",
+        "reason": "SOCKET_DENIED",
+        "provider_step": "",
+        "http_status": 0,
+        "errno": 0,
+        "security": false,
+        "elapsed_ms": 7,
+        "remaining_ms": 27558,
+        "protected": 0,
+        "denied": 4,
+        "closed": true,
+        "released": true
+      },
+      "network": {
+        "type": "CELLULAR",
+        "handle": 429513165534,
+        "available": true,
+        "resolver": "NETWORK_IPV4_GO_RESOLVER",
+        "resolver_class": "PRIVATE_IPV4",
+        "observed_ms": 61500,
+        "bind_ms": 61499,
+        "bind_available": true,
+        "bind_result": "IO",
+        "bind_operation": "NETWORK_BIND",
+        "bind_error": "SOCKET",
+        "bind_errno": 13
+      }
+    }
+  ],
+  "server_counts": {
+    "restricted_challenges": 0,
+    "restricted_certificates": 0
+  },
+  "ready_dns_https_egress": false,
+  "locator_before_connect": {
+    "remaining_seconds": 407,
+    "verified": true,
+    "verified_at": 1794051723
+  },
+  "synthetic_identity_registered": true,
+  "final_apks": {
+    "source": "69bc3d1107eb3283be19821e01a1e435b48868cb",
+    "abi": "x86_64",
+    "native_sha256": "17119f000407ec1d7ccdf8d33acabe423f3cf20e32b6f8af839d209aa3360c59",
+    "method": "assets-only zip rewrite, zipalign16K, fresh isolated test signer; unchanged manifest/dex/native",
+    "apks": {
+      "app-friends.apk": {
+        "sha256": "70c01de3f4cbd141943c0481c7d3e81bde5f927aa985b91ea6c550e0c3528564",
+        "base_sha256": "0b18112cb9c0043dcc8165562cc121c3c58f321644f16c2ddc564720dc872cc9",
+        "changed_entries": [
+          "assets/control-anchor.pub",
+          "assets/provisioning/nl-amsterdam-1.json"
+        ]
+      },
+      "app-friends-androidTest.apk": {
+        "sha256": "edb4be10c7190884833f5bdea3ea3281fcd3531a1848aea89840c073529f8647",
+        "base_sha256": "bd230fc53ed70ce84e2dd353cb511b930af22811c1a0cd0594cad3ec5a0b4257",
+        "changed_entries": [
+          "assets/identity96.private",
+          "assets/egress.sha256"
+        ]
+      }
+    },
+    "native_source": "6eb61a9faa659b6b07ac16bf9f4bac46a41cd2a7"
+  },
+  "cause": {
+    "operation": "NETWORK_BIND",
+    "errno": 13,
+    "errno_name": "EACCES",
+    "fd_dup_succeeded": true,
+    "selected_cellular_foreground": false,
+    "selected_cellular_not_restricted": true,
+    "wifi_foreground": true,
+    "android_rule": "API27 ConnectivityService.getNetworkPermission: non-FOREGROUND physical network requires PERMISSION_NETWORK; netd checkUserNetworkAccessLocked returns -EACCES for insufficient permission. App has INTERNET/ACCESS_NETWORK_STATE, not CHANGE_NETWORK_STATE.",
+    "sources": [
+      "https://android.googlesource.com/platform/frameworks/base/+/android-8.1.0_r1/services/core/java/com/android/server/ConnectivityService.java#4591",
+      "https://android.googlesource.com/platform/system/netd/+/android-8.1.0_r1/server/NetworkController.cpp#631"
+    ]
+  },
+  "fix": "Select only existing unrestricted foreground non-VPN internet networks; pin their resolver, fail closed on demotion; no new permissions or forced WiFi/route fallback.",
+  "regression": {
+    "before": {
+      "exit": 1,
+      "log_sha256": "96bdfa71f0a0d9f5e7998106ae440407cd42c169ec48399833ca9345405a1813"
+    },
+    "after": {
+      "exit": 0,
+      "log_sha256": "e749f36fbff708f9d3185e56a2d9aec0b7da61faf51bfac35f57c6c66bfba896"
+    }
+  },
+  "fix_runtime": "PENDING",
+  "cleanup": {
+    "own_emulator_stopped": true,
+    "monitor_joined": true,
+    "authority_container_absent": true,
+    "vault_exit": -15,
+    "provider_room_deletion": "NOT_VERIFIED"
+  },
+  "local_evidence_root": "state-client-build/cold-native-diagnostic-20261106/connect-b-20261107",
+  "artifact_sha256": {
+    "immutable.json": "0f4741dfb0eb670d8aabe4adab60ec1ace8e00540d45f6b17ce98355d8e925f1",
+    "receipt.json": "8d0357ee033bfc5697b66c123009ed837ba36e818844aeb3596abec831c53bfd",
+    "instrumentation.log": "2fbbb90134f495ee92fc6585e23114d8bff28fbc0ad8241a2237e1a9f6610b01",
+    "resources.jsonl": "163ff21bfd193c66dcee9526ceac4d6e2c211bc949853511d272e0bdabc78f71",
+    "renderer.txt": "a8ee911722a515778ee259498cf2e16f1cd523f7ca2a12b4eb94eb6e2929812c",
+    "guest-rules-after.txt": "5ff9e9647c239ce212f1848c76677feff5e2d01e3db59e4317bc1279a010f0cb",
+    "guest-connectivity-after.txt": "bb6e068bea4eda6c807f6aa6a3d1fc99d5f2dde09f0a503abe3ca8991851333b",
+    "local-auth/stand.log": "f308d574918c5062ea66f4677efce46215fa86cdbe662f434d9edbf796cd69bc",
+    "apk-final/receipt.json": "088111b56a62eb6ddfec01a3d69f72ed3cef4f78160e214524a58b8f992065e1",
+    "apk-final/app-friends.apk": "70c01de3f4cbd141943c0481c7d3e81bde5f927aa985b91ea6c550e0c3528564",
+    "apk-final/app-friends-androidTest.apk": "edb4be10c7190884833f5bdea3ea3281fcd3531a1848aea89840c073529f8647"
+  }
+}

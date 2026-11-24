@@ -1,18 +1,33 @@
 from django.urls import path
 from . import views
 from . import observability
+from . import objects
+from . import support
+from . import system_messages
 
 app_name = 'console'
 urlpatterns = [
+    path('system-messages/', system_messages.index, name='system_messages'),
+    path('system-messages/new/', system_messages.compose, name='system_message_new'),
+    path('system-messages/preview/', system_messages.preview, name='system_message_preview'),
+    path('system-messages/<uuid:ident>/', system_messages.detail, name='system_message'),
+    path('system-messages/<uuid:ident>/send/', system_messages.send, name='system_message_send'),
+    path('messages/', support.inbox, name='support_inbox'),
+    path('inventory/<str:pseudonym>/messages/', support.history, name='support_history'),
+    path('inventory/<str:pseudonym>/messages/send/', support.send, name='support_send'),
+    path('subscriptions/', observability.subscriptions, name='subscriptions'),
     path('observability/', observability.overview, name='observability'),
-    path('inventory/', observability.inventory, name='inventory'),
-    path('inventory/<str:pseudonym>/', observability.inventory_device, name='inventory_device'),
-    path('servers/<str:source>/', observability.server, name='server'),
+    path('inventory/', objects.devices, name='inventory'),
+    path('inventory/<str:pseudonym>/', objects.device, name='inventory_device'),
+    path('servers/', objects.servers, name='servers'),
+    path('servers/<str:source>/', objects.server, name='server'),
+    path('events/', objects.events, name='events'),
     path('telemetry.json', observability.telemetry_json, name='telemetry'),
     path('devices/<str:device>/telemetry/', observability.device_telemetry, name='device_telemetry'),
     path('stop/', observability.stop_screen, name='stop'),
     path('stop/change/', observability.stop_change, name='stop_change'),
-    path('', views.dashboard, name='dashboard'), path('analytics.json', views.analytics, name='analytics'),
+    path('', objects.overview, name='dashboard'),
+    path('demo/', views.dashboard, name='demo_dashboard'), path('analytics.json', views.analytics, name='analytics'),
     path('devices/', views.devices, name='devices'), path('devices/refresh/', views.refresh, name='refresh'),
     path('devices/<str:device>/', views.device_detail, name='device'),
     path('payments/', views.payments, name='payments'), path('payments/new/', views.payment_new, name='payment_new'),

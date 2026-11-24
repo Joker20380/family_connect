@@ -9,13 +9,12 @@ media path; Windows/Linux media clients remain incomplete.
 [Current status](docs/STATUS.md). The earlier Stage5 notes below are historical,
 not current implementation or release claims.
 
-Public Android **beta113 / Android8.1+ / ARM64**: [download and update in place](docs/getting-started.en.md).
-Separate opt-in **beta118** for mobile-allowlist field testing: [download and instructions](docs/releases/2026-11-05-android118-field.md).
-Same qualified/signed bytes; not an accepted stability fix. Default invitation/updater stay113.
-Invitation/default updater offer113: one Russia/Netherlands/Netherlands2 list in every mode,
-per-node load squares (green below85%, orange from85%) and a selected-row checkmark.
-Exact CI/signature/HTTPS and owner112→113 installation/UI checks PASS. Russia/MESH remains
-unavailable; sustained MESH stability is still open. No admission or entitlement change.
+Public Android **beta126 / Android8.1+ / ARM64**: [download and update in place](docs/getting-started.en.md).
+Invitations and optional signed catalog9 offer the accepted APK with separate, default-OFF
+technical-information consent. Installed device→real panel, revoke, signature, HTTPS and
+Range/resume checks pass. IP city is qualified only for RU/AWG, not GPS. Existing data,
+HMAC2 and paid admissions remain; installation needs user confirmation. The recurring
+RU stall remains unresolved, not fixed by this release. [Artifacts and limits](docs/releases/2026-11-16-android126-publication.md).
 
 **Stage5 priority update:** Android → Telemost VP8 → Linux EU Gateway → Internet.
 Reticulum control/recovery remains; Windows Home Gateway is a secondary feature.

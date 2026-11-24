@@ -23,6 +23,12 @@ class ReadOnlyAdmin(admin.ModelAdmin):
         return False
 
 
+@admin.register(models.DeviceLabel)
+class DeviceLabelAdmin(admin.ModelAdmin):
+    list_display = ('label', 'pseudonym', 'updated_at')
+    search_fields = ('label', 'pseudonym')
+
+
 @admin.register(models.DeviceProjection)
 class DeviceAdmin(ReadOnlyAdmin):
     list_display = ('label', 'device', 'observed_at')

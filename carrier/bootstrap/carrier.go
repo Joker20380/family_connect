@@ -159,6 +159,15 @@ func readLease(ctx context.Context, session *lease) {
 	}
 }
 
+func OpenPacketExchange(ctx context.Context, carrier familysession.PacketEndpoint) (familysession.PacketEndpoint, error) {
+	connection, err := connectLease(ctx, carrier)
+	if err != nil {
+		return nil, err
+	}
+	go readLease(ctx, connection)
+	return connection, nil
+}
+
 func ServeCarrier(ctx context.Context, carrier familysession.PacketEndpoint, exchange func(context.Context, familysession.PacketEndpoint)) error {
 	ctx, cancel := context.WithCancel(ctx)
 	var workers sync.WaitGroup

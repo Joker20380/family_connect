@@ -10,6 +10,15 @@ import java.io.IOException;
 /** JNI callback. Every mailbox socket must bind before connecting. */
 public final class ChatNetworkAndroid {
     private final Context context;
+    private Network provisioningNetwork;
+    private String provisioningType="NONE";
+    private long bindAt;
+    private boolean bindAvailable;
+    private String bindResult="NOT_RUN";
+    private String bindOperation="NOT_RUN";
+    private String bindError="NONE";
+    private int bindErrno;
+    private String resolverClass="NONE";
     ChatNetworkAndroid(Context context) { this.context = context.getApplicationContext(); }
 
     boolean available() {
@@ -39,9 +48,29 @@ public final class ChatNetworkAndroid {
         throw new IOException("Underlying network unavailable");
     }
 
-    public boolean bindSocket(int fd) {
+    public synchronized boolean bindSocket(int fd) {
         ConnectivityManager manager = context.getSystemService(ConnectivityManager.class);
         if (manager == null) return false;
+        if(provisioningNetwork!=null){
+            NetworkCapabilities caps=manager.getNetworkCapabilities(provisioningNetwork);
+            bindAt=android.os.SystemClock.elapsedRealtime();
+            bindOperation="NETWORK_CHECK";bindError="NONE";bindErrno=0;
+            bindAvailable=provisioningEligible(caps);
+            if(!bindAvailable){bindResult="NETWORK_UNAVAILABLE";return false;}
+            bindOperation="FD_DUP";
+            try(ParcelFileDescriptor socket=ParcelFileDescriptor.fromFd(fd)){bindOperation="NETWORK_BIND";provisioningNetwork.bindSocket(socket.getFileDescriptor());bindResult="BOUND";return true;}
+            catch(IOException unavailable){
+                bindResult="IO";bindError=unavailable instanceof java.net.SocketException?"SOCKET":"IO";
+                Throwable cause=unavailable;
+                for(int depth=0;cause!=null&&depth<4;depth++,cause=cause.getCause())if(cause instanceof android.system.ErrnoException){
+                    int code=((android.system.ErrnoException)cause).errno;
+                    if(code>0&&code<4096)bindErrno=code;
+                    break;
+                }
+                return false;
+            }
+            catch(SecurityException unavailable){bindResult="SECURITY";bindError="SECURITY";return false;}
+        }
         for (Network network : manager.getAllNetworks()) {
             NetworkCapabilities caps = manager.getNetworkCapabilities(network);
             if (caps == null || !caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)
@@ -55,4 +84,42 @@ public final class ChatNetworkAndroid {
     }
 
     public boolean protect(int fd) { return bindSocket(fd); }
+
+    private static boolean provisioningEligible(NetworkCapabilities caps){
+        return caps!=null&&caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)
+                &&caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                &&caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED)
+                &&foreground(caps);
+    }
+
+    @android.annotation.SuppressLint("WrongConstant")
+    private static boolean foreground(NetworkCapabilities caps){
+        int capability=android.os.Build.VERSION.SDK_INT==27?18:NetworkCapabilities.NET_CAPABILITY_FOREGROUND;
+        return caps!=null&&caps.hasCapability(capability);
+    }
+
+    synchronized String provisioningResolver()throws IOException{
+        ConnectivityManager manager=context.getSystemService(ConnectivityManager.class);
+        if(manager!=null)for(Network network:manager.getAllNetworks()){
+            NetworkCapabilities caps=manager.getNetworkCapabilities(network);
+            android.net.LinkProperties link=manager.getLinkProperties(network);
+            if(!provisioningEligible(caps)||link==null)continue;
+            for(java.net.InetAddress address:link.getDnsServers())if(address instanceof java.net.Inet4Address){provisioningNetwork=network;resolverClass=address.isLoopbackAddress()?"LOOPBACK":address.isSiteLocalAddress()?"PRIVATE_IPV4":"OTHER_IPV4";provisioningType=caps.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)?"CELLULAR":caps.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)?"WIFI":caps.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)?"ETHERNET":"OTHER";return address.getHostAddress()+":53";}
+        }
+        throw new IOException("Physical IPv4 resolver unavailable");
+    }
+    synchronized com.google.gson.JsonObject provisioningDiagnostic(){
+        com.google.gson.JsonObject value=new com.google.gson.JsonObject();
+        ConnectivityManager manager=context.getSystemService(ConnectivityManager.class);
+        NetworkCapabilities caps=manager==null||provisioningNetwork==null?null:manager.getNetworkCapabilities(provisioningNetwork);
+        value.addProperty("type",provisioningType);value.addProperty("handle",provisioningNetwork==null?0:provisioningNetwork.getNetworkHandle());
+        value.addProperty("available",caps!=null&&caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)&&caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET));
+        value.addProperty("foreground",foreground(caps));
+        value.addProperty("not_restricted",caps!=null&&caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_RESTRICTED));
+        value.addProperty("resolver",provisioningNetwork==null?"NONE":"NETWORK_IPV4_GO_RESOLVER");
+        value.addProperty("resolver_class",resolverClass);
+        value.addProperty("observed_ms",android.os.SystemClock.elapsedRealtime());value.addProperty("bind_ms",bindAt);value.addProperty("bind_available",bindAvailable);value.addProperty("bind_result",bindResult);
+        value.addProperty("bind_operation",bindOperation);value.addProperty("bind_error",bindError);value.addProperty("bind_errno",bindErrno);
+        return value;
+    }
 }

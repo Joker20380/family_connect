@@ -10,6 +10,7 @@ import shutil
 import struct
 import subprocess
 import sys
+import sysconfig
 import tempfile
 from types import SimpleNamespace
 import zipfile
@@ -22,13 +23,23 @@ from scripts import build_profile_snapshot_launcher as launcher
 @pytest.fixture
 def fixture():
     previous_umask = os.umask(0o022)
-    temporary = tempfile.TemporaryDirectory(prefix='snapshot-test-', dir=Path.home())
+    temporary = tempfile.TemporaryDirectory(prefix='snapshot-test-',
+        dir=os.environ.get('FC_TEST_SNAPSHOT_ROOT', str(Path.home())))
     tmp_path = Path(temporary.name)
     tmp_path.chmod(0o755)
     (tmp_path / 'bin').mkdir(mode=0o755)
     executable = tmp_path / 'bin' / 'python3.14'
     shutil.copyfile(Path(sys.executable).resolve(), executable)
     executable.chmod(0o755)
+    if sysconfig.get_config_var('Py_ENABLE_SHARED'):
+        library_name = sysconfig.get_config_var('INSTSONAME')
+        prefix = Path(sys.base_prefix).resolve()
+        candidates = [prefix / 'lib' / library_name,
+                      Path(sysconfig.get_config_var('LIBDIR')) / library_name]
+        library = next(path for path in candidates if path.is_file() and path.resolve().is_relative_to(prefix))
+        (tmp_path / 'lib').mkdir(mode=0o755)
+        shutil.copyfile(library, tmp_path / 'lib' / library_name)
+        (tmp_path / 'lib' / library_name).chmod(0o644)
     package = tmp_path / 'snapshot.pyz'
     with zipfile.ZipFile(package, 'w') as archive:
         archive.writestr('__main__.py', 'import json,sys; print(json.dumps(dict(argv=sys.argv,request=json.load(sys.stdin))))\n')

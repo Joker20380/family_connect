@@ -38,7 +38,7 @@ PROVISIONING = (
     'chat_owner.py', 'chat_keyring.py', 'chat_transport.py', 'chat_bridge.py', 'chat_bridge_protocol.py', 'chat_direct.py', 'chat_audio.py', 'chat_events.py', 'chat_rpc.py', 'chat_client.py', 'chat_admin.py',
 )
 MESSENGER = ('__init__.py', 'admission.py', 'chat.py', 'codec.py', 'delivery.py', 'local.py',
-             'mailbox.py', 'notices.py', 'routed.py', 'service_events.py', 'store.py')
+             'mailbox.py', 'notices.py', 'routed.py', 'service_events.py', 'store.py', 'support.py')
 LEGACY_TAR = ('app.py', 'backend.py', 'profile_config.py', 'updates.py', 'update.pub', 'install-linux.sh')
 
 FORBIDDEN_NAMES = ('.env', 'state-v2', 'state-product', 'friends-identity', '__pycache__')

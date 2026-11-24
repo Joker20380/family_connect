@@ -16,6 +16,7 @@
 | relay.py, server.py | Закрытый relay и daemon entry point | Operator config/volume/identity, ограничения ресурсов |
 | membership.py, admission.py | Участники и допуск | Закрытый relay не означает открытый доступ любому peer |
 | service_events.py | Сервисные события | Не содержимое пользовательского трафика в диагностике |
+| subscription_view.py | Проверка персонального ответа, snapshot/event pairing, проекция подписки | Не источник прав; encrypted store, ревизии, durable read/notified; snapshot без события не подтверждает платёж |
 
 Friends допуск расположен отдельно: `control/friends/chat.py`, `chat_sync.py` и
 `deploy/friends/chat-sync.py`. Его изменение требует проверки membership/revoke,
@@ -36,6 +37,16 @@ Bridge-файлы: `fc_chat_store.py`, `fc_chat_transport.py`, `fc_rns_transport
 OEM/restart и точные задержки требуют отдельных проверок; desktop parity не подтверждён.
 
 ## Сервисные объявления и измерения
+
+`SubscriptionUi`/`SubscriptionPresentation` показывают персональный статус.
+`SubscriptionRequest`/`SubscriptionRefreshGate` и `ChatRuntime` обновляют его только
+при открытии экрана или Refresh через существующий HTTPS/identity vault/WORKER.
+После проверки `fc_chat_store.py` сохраняет проекцию; штатная доставка вызывается
+после durable save и при открытии приложения. Только фактический фокус отмечает
+прочтение. Запуск приложения не получает новые события подписки в фоне.
+Тесты: `test_subscription_http.py`, `test_subscription_package.py`,
+`test_subscription_android_delivery.py`, Android `Subscription*Test`.
+
 
 - `control/friends/notices.py`, `scripts/service_notices.py`, `publish_service_notice.py`:
   операторские/авторизованные объявления. Публикация является внешним действием,

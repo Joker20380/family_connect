@@ -6,6 +6,18 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class ControlOperationsTest {
+    @Test public void rejectedAttemptCannotResetNewOrBusySession() throws Exception {
+        ControlOperations ops=new ControlOperations();Object rejected=new Object(),current=new Object();int[] resets={0};
+        assertThrows(NullPointerException.class,()->ops.unclaimed(null,()->fail("Unbound callback ran")));
+        ops.beginAttempt(rejected);ops.unclaimed(rejected,()->resets[0]++);assertEquals(1,resets[0]);
+        ops.beginAttempt(current);ops.unclaimed(rejected,()->fail("Late unclaimed destroy reset new attempt"));
+        ops.claim(current);ops.beginAttempt(rejected);
+        assertThrows(IOException.class,()->ops.claim(rejected));
+        ops.unclaimed(rejected,()->fail("Busy claimant changed active owner"));
+        ops.unclaimed(current,()->fail("Resource owner appeared idle"));
+        ops.release(current);ops.unclaimed(rejected,()->fail("Late unclaimed callback survived release"));
+        ops.beginAttempt(rejected);ops.unclaimed(rejected,()->resets[0]++);assertEquals(2,resets[0]);
+    }
     @Test public void liveLeaseBlocksImportsBetweenCallbacks() throws Exception {
         ControlOperations ops=new ControlOperations();Object owner=new Object();int[] writes={0};
         ops.claim(owner);ops.session(owner,()->writes[0]++);
@@ -13,6 +25,22 @@ public class ControlOperationsTest {
         assertThrows(IOException.class,()->ops.claim(new Object()));
         ops.session(owner,()->writes[0]++);assertEquals(2,writes[0]);
         ops.release(owner);ops.edit(()->{},()->writes[0]++);assertEquals(3,writes[0]);
+    }
+    @Test public void unclaimedLifecycleDoesNotBlockOwnedEngineShutdown() throws Exception {
+        ControlOperations ops=new ControlOperations();Object owner=new Object(),rejected=new Object();ops.claim(owner);
+        ExecutorService pool=Executors.newFixedThreadPool(2);
+        CountDownLatch working=new CountDownLatch(1),finish=new CountDownLatch(1);
+        try {
+            Future<?> worker=pool.submit(()->ops.session(owner,()->{
+                working.countDown();try{assertTrue(finish.await(5,TimeUnit.SECONDS));}
+                catch(InterruptedException interrupted){throw new AssertionError(interrupted);}
+            }));
+            assertTrue(working.await(1,TimeUnit.SECONDS));
+            Future<?> lifecycle=pool.submit(()->{ops.beginAttempt(rejected);ops.unclaimed(rejected,()->fail("Retained owner reset"));});
+            lifecycle.get(1,TimeUnit.SECONDS);assertFalse(worker.isDone());finish.countDown();worker.get(1,TimeUnit.SECONDS);
+            ops.requireOwner(owner);ops.release(owner);
+            ops.unclaimed(rejected,()->fail("Rejected destroy survived owner release"));
+        } finally {finish.countDown();pool.shutdownNow();}
     }
     @Test public void oldCleanupCannotReleaseNewSession() throws Exception {
         ControlOperations ops=new ControlOperations();Object old=new Object(),current=new Object();

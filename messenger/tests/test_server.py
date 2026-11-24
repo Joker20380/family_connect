@@ -8,6 +8,14 @@ def test_duplicate_settings_rejected():
     with pytest.raises(ValueError):unique([('allowed_public',[]),('allowed_public',[])])
 
 
+def test_mailbox_memory_budget_retains_other_resource_and_security_limits():
+    unit = (Path(__file__).resolve().parents[2]/'pilot/messenger/family-connect-mailbox.service').read_text()
+    assert 'MemoryMax=512M\n' in unit
+    for setting in ('CPUQuota=25%', 'TasksMax=64', 'LimitNOFILE=256', 'ProtectSystem=strict',
+                    'NoNewPrivileges=yes', 'KillMode=control-group'):
+        assert setting+'\n' in unit
+
+
 def test_unmounted_directory_cannot_be_used_as_spool(tmp_path):
     with pytest.raises(ValueError,match='not mounted'):validate_volume(tmp_path,'0'*32)
 

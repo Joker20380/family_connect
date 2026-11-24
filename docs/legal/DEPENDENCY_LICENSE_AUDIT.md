@@ -1,5 +1,31 @@
 # Dependency and repository licensing audit — 2026-09-25
 
+## Technical metadata GeoIP candidate — 2026-11-15
+
+Server-only `maxminddb==3.2.0` is Apache-2.0 (installed distribution METADATA and
+complete LICENSE inspected); no new Android dependency. Its separate hash lock
+pins the official PyPI source distribution. Runtime installation retains upstream
+license metadata; do not strip notices when packaging a collector environment.
+Official DB-IP Lite City/ASN monthly MMDB data is CC BY4.0, not MaxMind GeoLite data:
+https://db-ip.com/db/lite.php . The panel includes the required linked DB-IP
+attribution wherever results appear. Databases remain outside Git; no raw customer
+IP is sent to an external geolocation API. Locally computed SHA256 is not a vendor
+signature. Only required country/region/city/ASN/organization values are retained;
+no location coordinates or invented accuracy/confidence. Source preparation only,
+not a completed production deployment or blanket license audit of older releases.
+
+## iOS endpoint closure — 2026-11-17
+
+`clients/ios` reuses pinned Xray/gVisor and Family carrier, not JNI. Inspection
+finds GPL-3.0-or-later sing in the full Xray dispatcher closure; it is not described
+as permissive. The additional endpoint-only build-tag patch excludes that unused
+dispatcher and all platform TUN constructors without changing the packet engine.
+CI rejects sing in the selected iOS closure, retains all included-module notices,
+complete dependency sources, both MPL Xray patches and exact Family source SHA.
+No new third-party module pin, proprietary relicensing of MPL files, product
+release approval or re-audit of unrelated Android/desktop distributions is claimed.
+[Scope and reproduction](../../clients/ios/README.md).
+
 ## Desktop restricted-chat adaptation — 2026-10-24
 
 The portable API/mailbox adapter derives from this project's accepted native105

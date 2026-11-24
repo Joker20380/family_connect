@@ -27,10 +27,15 @@ final class ConnectivityOrchestrator {
     static final class Event {
         final String name,candidate;
         final Failure failure;
+        final Failure triggerReason,cleanupReason;
         final State state;
         final long elapsedMs;
         Event(String name,String candidate,Failure failure,State state,long elapsedMs) {
+            this(name,candidate,failure,state,elapsedMs,failure,null);
+        }
+        Event(String name,String candidate,Failure failure,State state,long elapsedMs,Failure triggerReason,Failure cleanupReason) {
             this.name=name;this.candidate=candidate;this.failure=failure;this.state=state;this.elapsedMs=elapsedMs;
+            this.triggerReason=triggerReason;this.cleanupReason=cleanupReason;
         }
     }
     interface Host {
@@ -140,7 +145,7 @@ final class ConnectivityOrchestrator {
                 temporaryBootstrap=interrupted==null&&failure instanceof Rejected&&((Rejected)failure).temporaryBootstrap;
                 emit("candidate_failed",candidate,last);
                 try { host.closeCandidate(); }
-                catch(Exception|LinkageError cleanup) { finish(Failure.INTERNAL,restoring);return; }
+                catch(Exception|LinkageError cleanup) { finish(Failure.INTERNAL,restoring,false,last,classify(cleanup));return; }
                 if(terminal(last)||host.now()>=deadline) { finish(last,restoring,temporaryBootstrap);return; }
             }
         }
@@ -161,7 +166,10 @@ final class ConnectivityOrchestrator {
         finish(reason,restoring,false);
     }
     private void finish(Failure reason,boolean restoring,boolean temporaryBootstrap) {
-        try { host.closeCandidate(); } catch(Exception|LinkageError failure) { reason=Failure.INTERNAL; }
+        finish(reason,restoring,temporaryBootstrap,reason,null);
+    }
+    private void finish(Failure reason,boolean restoring,boolean temporaryBootstrap,Failure triggerReason,Failure cleanupReason) {
+        try { host.closeCandidate(); } catch(Exception|LinkageError failure) { reason=Failure.INTERNAL;if(cleanupReason==null)cleanupReason=classify(failure); }
         selected=null;
         if(reason==Failure.CANCELLED) { disconnect();return; }
         boolean bootstrapRetry=reason==Failure.BOOTSTRAP_UNAVAILABLE&&temporaryBootstrap;
@@ -175,17 +183,20 @@ final class ConnectivityOrchestrator {
         }
         requested=false;retryAt=0;
         state=State.FAILED;
-        emit(restoring?"restoration_failed":"connect_failed",null,reason);
+        emit(restoring?"restoration_failed":"connect_failed",null,reason,triggerReason,cleanupReason);
     }
     void disconnect() {
         requested=false;retryAt=0;
         if(state==State.DISCONNECTED)return;
         interrupted=Failure.CANCELLED;state=State.DISCONNECTING;emit("disconnect_requested",selected,Failure.CANCELLED);
         try { host.closeCandidate();host.release();selected=null;state=State.DISCONNECTED;emit("disconnected",null,Failure.CANCELLED);interrupted=null; }
-        catch(Exception|LinkageError failure) { state=State.FAILED;emit("cleanup_failed",selected,Failure.INTERNAL); }
+        catch(Exception|LinkageError failure) { state=State.FAILED;emit("cleanup_failed",selected,Failure.INTERNAL,Failure.CANCELLED,classify(failure)); }
     }
     private synchronized void emit(String name,String candidate,Failure failure) {
-        Event event=new Event(name,candidate,failure,state,Math.max(0,host.now()-started));
+        emit(name,candidate,failure,failure,null);
+    }
+    private synchronized void emit(String name,String candidate,Failure failure,Failure triggerReason,Failure cleanupReason) {
+        Event event=new Event(name,candidate,failure,state,Math.max(0,host.now()-started),triggerReason,cleanupReason);
         if(events.size()==MAX_EVENTS)events.removeFirst();events.addLast(event);host.event(event);
     }
 }
