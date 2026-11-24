@@ -3,19 +3,20 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Actual OWNER configuration delta is now materialized privately, not just described:23:28:37UTC
-same running identities/configuration; only image, gate assignment and separate gate bind may
-change. Original private configuration/rollback and named-volume bindings are preserved.159 tests
-PASS/0 skips,64 new cases; retained plan verifies without writes. No installation/version change.
-[Exact proposal, verification and rollback](releases/2026-11-24-control-ha-owner-activation-plan.md).
-The prior role overlaysb62e6693/2162635c meet config/layer preservation. Normal-build4392d4b7 does
-not preserve the original layer prefix and is refused for this minimal-delta route; its build
-proof remains valid, not deployment approval. Next: independent candidate/config acceptance,
-actual durable gate/namespace/guardian bindings and existing-work settlement, remaining RU/NL/
-manual/transport coverage, then approved coherent interval and independent custody/recovery.
-No executable recreation payload or gate directories are produced. Workstation packages remain
+OWNER candidate kernel integration now passes across separate container mount/PID namespaces,
+not only within one container:23:50:26–23:50:41UTC, same private ext4 gate inodes as10001/1000,
+active-writer drain, both admissions closed, release and persistent uncertainty after recreation.
+182 tests PASS/0 skips,46 new cases; owned containers removed. Installed bindings unchanged;
+no working gate, permission, service, RU/NL, image build or version change.
+[Cross-container evidence and rollback boundary](releases/2026-11-24-control-ha-owner-cross-mount.md).
+Working console /proc namespaces are not readable by the current user; do not bypass access
+with permission changes or a privileged host-PID container. Isolated agreement is not actual
+installed binding approval. The exact private configuration proposal remains uninstalled.
+Next: independent candidate/config/runtime acceptance and authorized actual gate/namespace/
+guardian setup, existing-work settlement and remaining RU/NL/manual/transport coverage, then
+approved coherent interval and independent custody/recovery. Workstation packages remain
 uninstalled; working-NL changes outside permission. Replication PASS; same three gates partial.
-Do not repeat completed config-plan/build/collector/NL2-diagnosis slices as new gates.
+Do not repeat accepted cross-mount/config-plan/build/collector/NL2 slices as new gates.
 
 At the preceding collector-admission checkpoint:
 Standalone OWNER collector admission is implemented: complete inventory/probe cycles, manual
