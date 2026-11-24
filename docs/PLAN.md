@@ -11,21 +11,21 @@ remains selected; this publication task does not advance its acceptance gates.
 [Reconciliation record](releases/2026-11-24-source-reconciliation.md).
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Featured76df5cf is pushed/remote-SHA verified. Scoped read-only NL checks bind loaded assignments/
-provider files to three selected process names on NL1 and one on NL2;11 other names per process
-are outside the comparison. Both units active/running at21:35:59–21:36:00UTC; no fleet-wide health
-claim. NL1's exact diagnostic stop-post passes seven isolated synthetic cases. Invalid input/
-storage can silently return zero: this is not a durable-report or capture permit. NL2 has no
-stop-post; its unexplained reload marker remains.162 tests PASS/0 skips,70 new observer cases.
-No RU access, service/helper dispatch, reload, deployment or version change; working-NL deployment
-remains outside scope. Candidates stay unapproved/uninstalled.
-[Native observations, limits and rollback](releases/2026-11-24-control-ha-installed-recovery.md#selected-environment-and-diagnostic-stop-post--no-activation).
-Next selected work: remaining full helper/runtime and AWG external settlement, collector/manual
-coverage and concrete independently approved joint activation/capture proposal; then real coherent
-interval and independent current-input approval/custody/final recovery. Replication PASS;
-the same three gates partial, not a new stage or calendar estimate.
+Feature444a51cb is pushed/remote-SHA verified. AWG network cleanup errors no longer skip
+owned-engine termination/reap or later interface deletion. Failed graceful stop attempts kill/
+bounded reap and still raises; signal setup failure is covered.17 new cases include real owned
+Python children and pending retained through retry.169 focused PASS/1 skip; that exact PostgreSQL
+case separately PASS on owned17.11, container removed. Four earlier legacy package failures
+remain, with no input-pin/guard changes. No RU/NL access, working-service, deployment or version
+change. Emergency `--no-block` stop and paid-watch policy are unchanged; no installed admission.
+[Source fix, tests, limitations and rollback](releases/2026-11-24-control-ha-installed-recovery.md#awg-owned-engine-teardown--source-only).
+Next selected work: installed AWG/systemd queued-job/cgroup completion and gate/runtime bindings,
+collector/manual coverage and concrete independently approved joint activation/capture proposal;
+actual coherent interval and independent current-input approval/custody/final recovery follow.
+Owned-child exit does not prove kernel/network/cgroup settlement. Replication PASS; the same three
+gates partial, not a new stage or calendar estimate. Working-NL deployment remains outside scope.
 Keep strict NL1 inventory refusal and unexplained NL2 reload marker visible; no bypass/reload.
-Do not repeat selected environment/hook checks, reader cleanup, support admission, cache comparison, runtime/sudo/unit census,
+Do not repeat AWG owned-child cleanup, environment/hook checks, reader cleanup, support admission, cache/runtime census,
 source-chain/lock stand, SSH census or wrapper bridge as new acceptance work. Original four
 acceptance gates are fixed; prior1–2/2–4 day estimates are withdrawn, not a rolling deadline.
 Never delete transaction journals or chmod/reload working services merely to make checks pass.

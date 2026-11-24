@@ -6,6 +6,47 @@ divergence is reconciled/pushed at2ae5c512; older publication-blocker statements
 historical, not active instructions or a current blocker.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## AWG owned-engine teardown — source only
+
+[Authoritative fix, regression cases, evidence and rollback](https://github.com/Joker20380/family_connect/blob/444a51cb0c738ec0733ef67704b661aed188ed41/docs/releases/2026-11-24-control-ha-awg-cleanup.md)
+are pushed/remote-SHA verified at444a51cb0c738ec0733ef67704b661aed188ed41. Main remains navigation
+only. No RU/NL access, working-service/unit/policy/environment/key change, deployment or cutover.
+Client/build/installed/public-installer/catalog/invitation versions remain unchanged; no release
+tag, signing, public build or artifact replacement.
+
+The AWG source previously skipped engine stop/reap and interface deletion after a network cleanup
+exception; graceful-stop timeout also left no kill/reap fallback. Three regressions reproduce
+the old failure. Source now attempts every teardown callback in the existing order, covers signal
+setup failure and attempts bounded kill/reap after failed graceful stop. Such failure still raises,
+even if fallback succeeds. When an explicitly guarded test caller fails, pending survives retry.
+This does not silently enable installed lifecycle admission or change asynchronous emergency stop.
+
+**169 focused PASS/1 skip /18.40s**, including17 new cases. The exact skipped PostgreSQL parity
+test is then **1 PASS/0 skips** on owned PostgreSQL17.11 at21:52:33.768–21:52:40.490UTC; container
+cleanup verified. All170 selected cases have passed across the two environments.27 dependency
+versions match four lockfiles. Three native cases use real owned Python children; network calls
+are substituted, not run against real interfaces/firewall/systemd or the AWG binary.
+
+Legacy packaging selection is **2 PASS/4 FAIL**: one `UNRELATED_PAID_DELTA`, three
+`POLICY_CHANGE_FORBIDDEN`, all before the modified gateway is read. Nine relevant files match
+based76df5cf byte-for-byte. Historical hashes/guards are unchanged; old module-only builders must
+not carry this gateway delta. No full-suite, installed runtime or GUI/device acceptance is claimed.
+Feature documentation:4 files/1068 link targets/zero errors; whitespace PASS. Raw test evidence
+and synthetic PostgreSQL credentials stay private outside Git. Main navigation:3 files/698 link
+targets/zero errors; whitespace PASS.
+
+Remaining: installed AWG/systemd queued-stop/cgroup completion and gate/runtime bindings,
+collector/manual coverage, concrete approved activation/capture proposal, actual coherent interval
+and independent current-input approval/custody/final recovery. Existing best-effort network
+command semantics and systemd stop budgets remain unchanged; owned-child exit does not prove
+those external effects settled. Do not stop paid-watch or extend its budgets to manufacture a
+capture. Replication PASS in isolation; the same three HA-02 gates partial. No new stage or ETA.
+
+Rollback: nothing is deployed, so no production restore/restart is needed. Revert the source/test
+delta before a future build if necessary, retaining the last approved runtime. Any later approved
+activation needs its exact package/configuration rollback; abort capture first and preserve
+committed state and pending uncertainty. Test-owned children and disposable PostgreSQL are gone.
+
 ## Selected environment and diagnostic stop-post — no activation
 
 [Authoritative observer, tests, exact native evidence and rollback](https://github.com/Joker20380/family_connect/blob/d76df5cf9f1d8ec0126db036279b7bbe35a55da1/docs/releases/2026-11-24-control-ha-service-environment.md)
