@@ -11,20 +11,22 @@ remains selected; this publication task does not advance its acceptance gates.
 [Reconciliation record](releases/2026-11-24-source-reconciliation.md).
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Feature26cbde01 is pushed/remote-SHA verified. Exact-command OWNER image activation/revert now
-passes in isolation: both identities, separate gates, preserved base config/dependency layers,
-acknowledged post-upgrade PostgreSQL/SQLite writes and unchanged migration set. Unknown-operation
-markers survive revert and continue to refuse capture.161 tests PASS/0 skips; final native
-PASS18:02:31–18:04:00UTC, owned resources removed. Installed OWNER bindings remain unchanged:
-images5ce82415/50de6f25, no configured gates; new candidatesb62e6693/2162635c are local only.
-No working-service change, RU/NL access, deployment or version change. Empty-queue fixture
-publisher shutdown is not live external-settlement qualification.
-[Candidate images, native checks and rollback](releases/2026-11-24-control-ha-installed-recovery.md#owner-image-upgrade--isolated-revert).
-Next selected work: remaining fleet/manual bindings, independent external completion and real
-capture/flush latency before overlapping all-store/fleet capture. Independently approve images
-and exact live gate/config/mount bindings before any working-container replacement. Prepare/
-qualify, do not silently deploy. Do not rebuild the completed OWNER stand, local interval/launcher
-or repeat the scoped installed-source observation.
+Featuree59b2d6a is pushed/remote-SHA verified. Read-only SSH binding observation completes
+the explicit-account/context projection on RU/NL1/NL2:14 accounts, four contexts, two equal
+samples at18:18:48–18:18:51UTC. Root has2/1/1 configured keys without per-key commands;
+no tested on-disk ForceCommand overrides them. Both restricted-account commands are included.
+112 tests PASS/0 skips. Loaded-daemon configuration and exact receiver sources are not attested;
+this is neither writer closure nor a capture permit. No SSH/key/service or version change.
+[Actual bindings and remaining gate](releases/2026-11-24-control-ha-installed-recovery.md#ssh-dispatch-bindings--read-only-observation).
+Next selected work: bind those installed receiver sources to the existing launcher; establish
+an explicit bounded manual product-write/deployment pause while retaining recovery SSH;
+independently settle remote work and qualify real latency before overlapping all-store capture.
+Do not invent a root-key removal requirement or repeat this scoped SSH observation as progress.
+Exact-command OWNER activation/revert already passes on disposable state; its post-upgrade
+PG/SQLite writes and unknown markers survive rollback. Images5ce82415/50de6f25 remain the last
+observed installed images without gates; candidatesb62e6693/2162635c are local, not approved or
+installed. Independently approve images and exact live gate/config/mount bindings before any
+working-container replacement. No silent deployment or repeat of the completed OWNER stand.
 Do not widen0700/0600, change product/token ownership or treat a local receipt as approval.
 Direct ORM/programmatic commands and asynchronous remote support remain coverage gaps.
 Do not reimplement completed timer/payment/renewal/OWNER/receiver source
@@ -32,7 +34,7 @@ slices or repeat inventory/NL2 recovery. Keep paid-watch running; current NL sco
 permission. Independent current approval, coherent capture, off-laptop key/access custody
 and final combined recovery remain the same three partial HA-02 gates; replication PASS,
 no new lettered stage, HA-03 or cutover.
-[Implementation and next boundary](releases/2026-11-24-control-ha-installed-recovery.md#owner-image-upgrade--isolated-revert).
+[Implementation and next boundary](releases/2026-11-24-control-ha-installed-recovery.md#ssh-dispatch-bindings--read-only-observation).
 
 Owner-confirmed NL2 isolated retained-state recovery PASS14:12UTC, final cleanup/service
 checks PASS14:20UTC; source/reporte353ff85 pushed and verified. Wrong-key refusal,50 focused

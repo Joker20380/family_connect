@@ -6,6 +6,53 @@ divergence is reconciled/pushed at2ae5c512; older publication-blocker statements
 historical, not active instructions or a current blocker.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## SSH dispatch bindings — read-only observation
+
+[Authoritative source and report](https://github.com/Joker20380/family_connect/blob/e59b2d6a899ada88293dbda2d0ad522575a586e5/docs/releases/2026-11-24-control-ha-ssh-binding.md)
+is pushed/remote-SHA verified ate59b2d6a899ada88293dbda2d0ad522575a586e5. Main is navigation
+only; no source deployment, release tag, image replacement, version or catalog change.
+
+At18:18:48.334509–18:18:51.464273UTC bounded pinned SSH observations cover the14 explicit
+RU/NL1/NL2 accounts, current-connection and three fixed node-source contexts. Repeated policy
+projections and key contents agree;112 sshd test-mode queries run, no forced commands.
+Default on-disk policy reports `ForceCommand none`. Root configured-key counts are3/4/3,
+including2/1/1 entries without a per-key command. Both `family-restricted` forced commands
+are included, closing the earlier literal-path matcher omission. No dynamic key/CA/principal
+command provider is present in the selected projection.
+
+This does not attest loaded-daemon config/startup overrides or authenticate every key. NL1/NL2
+password-authentication/PermitRootLogin flags are enabled in the tested on-disk projection;
+usable passwords and actual login permissions are not established. No credential/shadow data
+is read or exported. Raw keys, command arguments, comments and operator source IP remain out
+of reports and Git; private evidence is0700/0600. Existing strict pins/authentication are kept.
+No service/key/SSH setting changes, reload, locks, product reads or OWNER container access.
+
+112 focused tests PASS/0 skips:50 new SSH-binding and62 writer/census tests. Feature documentation
+passes4-file/1044-local-link and whitespace checks. The source pin is
+`593acfdb98ea6e7ece1fa842120e360956bce30bc58a5beaed40d4e86d040c4f`.
+Main navigation passes3-file/682-local-link and whitespace checks; external URLs are not
+represented as HTTP-verified artifacts.
+Accepted report hashes:
+
+- RU: `ee6eca67fac2fefa7bb6302460a9a2064465918d22759c8d3946165cdf1b869f`.
+- NL1: `16a6ce62e042c07519cc0fcd532f1b1c9bf5a90660c1d0c49c9bc2fe62713caf`.
+- NL2: `d617db761072bbfd1161039197e3d8c0dcb6057e5bea30ff1c0f213db4ca3639`.
+
+Next selected work uses these observed routes: resolve installed receiver source/dependency
+bindings, qualify participation in the existing launcher, and establish the bounded operational
+no-manual-product-writes/deployments interval. Retain emergency SSH access: root remains a
+trusted administrator, not an adversary this cooperative gate can constrain. Do not remove keys,
+disable authentication or reload sshd to improvise writer closure. Missing operator coordination
+refuses capture rather than being replaced by an empty process sample or invented acknowledgement.
+Independently settle already-dispatched SSH/Docker/support/publication work and measure real
+flush/capture latency before the overlapping all-store/fleet interval. OWNER candidate/live-config
+approval, current trust/key/access custody and final combined recovery remain mandatory.
+
+Rollback is observer process exit only, already completed: nothing installed or held needs undoing.
+Keep private receipts and existing recovery access. Paid-watch/deny enforcement is untouched.
+Replication PASS, the other three fixed HA-02 gates partial; no HA-03 or new numbered stage.
+Do not repeat this observation, OWNER stand or NL2 restore as a new readiness increment.
+
 ## OWNER image upgrade — isolated revert
 
 [Authoritative source and report](https://github.com/Joker20380/family_connect/blob/26cbde013b6864f54dc738772d8a4b3dfca82d6f/docs/releases/2026-11-24-control-ha-owner-upgrade.md)

@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+**24 November — SSH binding gap narrowed; manual product writes still require coordination.**
+HA sourcee59b2d6a is pushed/remote-SHA verified.18:18:48–18:18:51UTC read-only checks on
+RU/NL1/NL2 cover14 known accounts and four named connection contexts, with equal repeats.
+The tested on-disk policy has no ForceCommand; root has2/1/1 configured keys without
+per-key commands. Both restricted-account commands are included.112 focused tests PASS/0 skips.
+This is not loaded-daemon attestation, login testing or a capture permit. No keys, SSH settings,
+services, databases, images or versions changed; recovery SSH and paid-watch remain untouched.
+Next: bind installed receiver sources, coordinate a bounded manual-write/deployment pause
+without removing root access, settle external operations and qualify real capture latency.
+Do not repeat this observer or deploy source candidates silently. Independent image/live-config
+approval, coherent capture and current trust/custody/final recovery remain; replication PASS,
+three HA-02 blocks partial. [Evidence and decision](releases/2026-11-24-control-ha-installed-recovery.md#ssh-dispatch-bindings--read-only-observation).
+
 **24 November — OWNER image upgrade and data-preserving revert pass in isolation.**
 HA source26cbde01 is pushed and remote-SHA verified. Two locally built candidates preserve
 the installed base image config/dependencies; exact installed startup commands and identities
