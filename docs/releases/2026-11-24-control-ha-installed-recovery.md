@@ -6,6 +6,64 @@ divergence is reconciled/pushed at2ae5c512; older publication-blocker statements
 historical, not active instructions or a current blocker.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## Profile wrapper admission — isolated binding
+
+[Authoritative source and report](https://github.com/Joker20380/family_connect/blob/9830aab8086158da92828a09ec51032725620005/docs/releases/2026-11-24-control-ha-profile-launcher.md)
+is pushed/remote-SHA verified at9830aab8086158da92828a09ec51032725620005. Main is navigation
+only. This implements the preserved installed-wrapper chain, not another general SSH census.
+
+Scoped read-only source lookup resolves RU support reader, both NL AWG registration entries,
+NL1 mailbox membership and both restricted profile wrappers. The shared extra NL root command
+is a literal fixed `/usr/bin/cat` route, not a Python receiver; target contents are not read.
+Full dependency/configuration and manual-dispatch coverage are not inferred from entry hashes.
+No forced commands, working helpers, product reads, locks, SSH edits or service actions run.
+
+At18:45:54/18:45:55UTC, stable double observations bind the root-owned0755 wrappers and0644
+archives. Both wrappers exactly match the existing renderer with READ_ONLY=False. New opt-in
+`profile-launcher` requires that exact template, original interpreter path and one pinned
+snapshot archive. It preserves wrapper guards, cwd and cleaned environment. Only the validated
+exec transition substitutes the sealed archive FD for its pathname; both wrapper/archive bytes
+remain pinned across later file replacement. The parent holds admission through re-exec/final
+exit, while parent death, broken replies and post-admission failure preserve pending.
+
+186 tests PASS/0 skips on Python3.14.4 across receiver/profile/renderer/gate/package suites.
+Feature docs pass4-file/1046-local-link and whitespace checks; main navigation passes3-file/
+684-local-link and whitespace checks. External URLs are not claimed as HTTP-verified.
+Native PASS18:50:08.407583–
+18:50:12.369093UTC executes exact collected wrappers under UID979/993 in an owned isolated
+Python3.13.15 container: no network, read-only rootfs, fresh tmpfs, no live mounts or Docker
+socket. Gates/bindings retain0700/0600; no DAC override. Both roles succeed with clean cwd/env,
+refuse busy admission and reject a changed archive. All owned containers are removed.
+
+**Qualification limit:** snapshot archives are synthetic probes, not installed implementations;
+the container Python/dependencies are not the actual runtime. This does not validate product
+profile material, root helpers, package-relative pathname behavior, configuration or external
+completion. Initial fixture permission failures are retained; fixes use stdin inventory and
+owner-UID gate creation/readback, not broader permissions. Unit failures found and corrected
+a closed-FD cleanup bug and a reserved pytest parameter name before the final pass.
+
+Candidate capsule is local/unapproved/uninstalled:
+`4e9ab90f70e6353b20b73a232aba933efaa2d15204a7f80690d3cdeeb2f4fabe`.
+Native success receipt:
+`cf68e25c81c7e568ede3f53601864811ee0ec6fecbd0f9b117460e001e94c726`.
+Fixture source:
+`5b686a68a2d5c7aadae2eb4baec3e1982d6b477f0859e1c1aff7bb8588b75f85`.
+Private inventory/source copies/receipts stay outside Git; exact installed archive/wrapper pins
+and per-node receipts are in the authoritative report. Old artifacts remain immutable; no
+application version, public installer, catalog, signing sequence or server policy changes.
+
+Rollback now is process exit/owned-container cleanup, completed. Future approved activation
+must retain exact old commands/source pins and undo only the launcher/gate delta. Preserve
+current data and pending markers; no stale DB restore, root-key deletion or paid-watch stop.
+An ungated rollback invalidates capture readiness even if the service continues working.
+
+Next selected work: remaining actual dependency/config/helper and external-completion closure
+for resolved routes, explicit bounded manual-write coordination, real latency/overlap and
+coherent capture. Independent runtime/source/gate and OWNER image/live-config approval still
+precedes activation. Current NL scope does not permit working-service deployment. Do not repeat
+the SSH census or this wrapper stand. Current checkpoint/key/access custody and final recovery
+remain the other existing gates: replication PASS, three HA-02 blocks partial, no HA-03/cutover.
+
 ## SSH dispatch bindings — read-only observation
 
 [Authoritative source and report](https://github.com/Joker20380/family_connect/blob/e59b2d6a899ada88293dbda2d0ad522575a586e5/docs/releases/2026-11-24-control-ha-ssh-binding.md)

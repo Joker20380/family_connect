@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+**24 November — restricted-profile wrapper admission implemented; isolated stand PASS.**
+HA source9830aab8 is pushed/remote-SHA verified. Actual NL1/NL2 wrapper/archive pins are
+observed read-only. New opt-in `profile-launcher` preserves wrapper guards, Python path,
+flags, cwd and cleaned environment while executing a sealed snapshot archive. Admission
+lasts through final exit; death/broken replies retain uncertainty.186 tests PASS/0 skips.
+Exact wrapper bytes under UID979/993 pass18:50:08–18:50:12UTC in an isolated container,
+with synthetic archives/Python3.13.15, not installed dependencies or product data.
+No deployment, SSH/key/service/config/version change. Capsule4e9ab90f is local only.
+Next: actual dependency/config/helper closure and independent external completion for
+resolved routes, bounded manual-write coordination, then real latency/coherent capture.
+Do not repeat the SSH census or wrapper stand. Replication PASS; three HA-02 gates partial.
+[Implementation, limits and rollback](releases/2026-11-24-control-ha-installed-recovery.md#profile-wrapper-admission--isolated-binding).
+
 **24 November — SSH binding gap narrowed; manual product writes still require coordination.**
 HA sourcee59b2d6a is pushed/remote-SHA verified.18:18:48–18:18:51UTC read-only checks on
 RU/NL1/NL2 cover14 known accounts and four named connection contexts, with equal repeats.

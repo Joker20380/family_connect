@@ -11,17 +11,19 @@ remains selected; this publication task does not advance its acceptance gates.
 [Reconciliation record](releases/2026-11-24-source-reconciliation.md).
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Featuree59b2d6a is pushed/remote-SHA verified. Read-only SSH binding observation completes
-the explicit-account/context projection on RU/NL1/NL2:14 accounts, four contexts, two equal
-samples at18:18:48–18:18:51UTC. Root has2/1/1 configured keys without per-key commands;
-no tested on-disk ForceCommand overrides them. Both restricted-account commands are included.
-112 tests PASS/0 skips. Loaded-daemon configuration and exact receiver sources are not attested;
-this is neither writer closure nor a capture permit. No SSH/key/service or version change.
-[Actual bindings and remaining gate](releases/2026-11-24-control-ha-installed-recovery.md#ssh-dispatch-bindings--read-only-observation).
-Next selected work: bind those installed receiver sources to the existing launcher; establish
-an explicit bounded manual product-write/deployment pause while retaining recovery SSH;
-independently settle remote work and qualify real latency before overlapping all-store capture.
-Do not invent a root-key removal requirement or repeat this scoped SSH observation as progress.
+Feature9830aab8 is pushed/remote-SHA verified. Installed Python entry sources and both profile
+wrapper/archive pins are resolved read-only. New `profile-launcher` preserves existing native
+guards/runtime path/environment/cwd and holds admission through sealed archive re-exec and exit.
+186 tests PASS/0 skips; exact wrapper bytes under UID979/993 pass the isolated18:50:08–18:50:12UTC
+stand. Synthetic payloads/Python3.13.15 do not qualify installed package/config/helper behavior.
+No working-service/SSH/key/version changes or deployment. Candidate capsule4e9ab90f is local.
+[Bound wrapper chain and exact limits](releases/2026-11-24-control-ha-installed-recovery.md#profile-wrapper-admission--isolated-binding).
+Next selected work: close actual dependency/config/helper and external-completion coverage for
+the resolved routes; establish the bounded manual product-write/deployment pause without losing
+recovery SSH, then qualify real capture/flush latency and overlap. Do not repeat the SSH census
+or this wrapper bridge/stand. Shared fixed cat routes are not Python receivers; no blind route
+replacement or root-key removal. Loaded-daemon policy and independently approved runtime/source/
+gate bindings remain required before activation, not inferred from this isolated result.
 Exact-command OWNER activation/revert already passes on disposable state; its post-upgrade
 PG/SQLite writes and unknown markers survive rollback. Images5ce82415/50de6f25 remain the last
 observed installed images without gates; candidatesb62e6693/2162635c are local, not approved or
@@ -34,7 +36,7 @@ slices or repeat inventory/NL2 recovery. Keep paid-watch running; current NL sco
 permission. Independent current approval, coherent capture, off-laptop key/access custody
 and final combined recovery remain the same three partial HA-02 gates; replication PASS,
 no new lettered stage, HA-03 or cutover.
-[Implementation and next boundary](releases/2026-11-24-control-ha-installed-recovery.md#ssh-dispatch-bindings--read-only-observation).
+[Implementation and next boundary](releases/2026-11-24-control-ha-installed-recovery.md#profile-wrapper-admission--isolated-binding).
 
 Owner-confirmed NL2 isolated retained-state recovery PASS14:12UTC, final cleanup/service
 checks PASS14:20UTC; source/reporte353ff85 pushed and verified. Wrong-key refusal,50 focused
