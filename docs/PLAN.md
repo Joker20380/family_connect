@@ -11,20 +11,22 @@ remains selected; this publication task does not advance its acceptance gates.
 [Reconciliation record](releases/2026-11-24-source-reconciliation.md).
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Feature1f494b5f is pushed/remote-SHA verified. Profile source/config/helper closure is observed
-read-only, including14 pinned renewal modules per node and common API. New opt-in guardian schema2
-refuses successful RPCs whose renewal journal remains open, and holds the existing native lock
-through the interval/final ACK.264 tests PASS/0 skips; exact installed lock/acquire code passes the
-root+UID993 isolated19:36:58UTC stand. Synthetic state/config, not full live helper/systemd execution.
-Both journals appear idle19:38:13UTC without live lock acquisition. No production deployment or
-working-service/SSH/key/version change. Candidate guardian2c37bdb7 is local/unapproved/uninstalled;
-receiver4e9ab90f and installed OWNER images are unchanged. Schema1 is not a settlement assertion.
-[Native transaction gap and remaining boundary](releases/2026-11-24-control-ha-installed-recovery.md#native-renewal-settlement--successful-rpc-is-not-completion).
-Next selected work: actual Python/site-package/sudo/unit binding, remaining AWG/mailbox/support
-external completion and bounded manual product-write/deployment coordination; then independently
-approved runtime/source/gate activation, real latency/overlap and coherent capture. Do not repeat
-the source-chain/lock stand, SSH census or wrapper bridge. Never delete transaction journals to
-make capture pass. Fixed cat routes are not Python receivers; no blind replacement/root-key removal.
+Feature413d48b9 is pushed/remote-SHA verified. Actual Python/sudo/systemd bindings observed
+20:13:20–20:13:23UTC: both configured restricted-bootstrap services active/running; one pinned
+zero-argument root helper allowed per sudo listing. NL1 Python3.14.4/UID979; NL2 Python3.12.3/UID993.
+NL2's534 site files/five dependency RECORDs and17 external script pins verify; NL1's strict
+inventory refuses an inaccessible root-only0700 cryptography bytecode cache, not a proven service
+failure. NL1 has13 unit drop-ins/ExecStopPost; NL2 NeedDaemonReload=yes needs explanation before
+qualification, not an automatic reload.135 tests PASS/0 skips. No package imports, chmod,
+helper dispatch, service/SSH/key/version change or production deployment. Local guardian2c37bdb7,
+receiver4e9ab90f and OWNER candidates remain unapproved/uninstalled.
+[Observed runtime limits and current boundary](releases/2026-11-24-control-ha-installed-recovery.md#profile-runtime-bindings--observed-limits).
+Next selected work: exact runtime/cache and loaded/disk-unit qualification, full helper/environment/
+stop-post and AWG/mailbox/support external completion, bounded manual product-write coordination;
+then independently approved runtime/source/gate activation and real latency/overlap/coherent capture.
+Do not repeat the runtime/sudo/unit census, source-chain/lock stand, SSH census or wrapper bridge.
+Never delete transaction journals or chmod/reload working services merely to make checks pass.
+Fixed cat routes are not Python receivers; no blind replacement/root-key removal.
 Loaded-daemon policy and independent exact runtime/source/gate approval remain prerequisites.
 Exact-command OWNER activation/revert already passes on disposable state; its post-upgrade
 PG/SQLite writes and unknown markers survive rollback. Images5ce82415/50de6f25 remain the last
@@ -38,7 +40,7 @@ slices or repeat inventory/NL2 recovery. Keep paid-watch running; current NL sco
 permission. Independent current approval, coherent capture, off-laptop key/access custody
 and final combined recovery remain the same three partial HA-02 gates; replication PASS,
 no new lettered stage, HA-03 or cutover.
-[Implementation and next boundary](releases/2026-11-24-control-ha-installed-recovery.md#native-renewal-settlement--successful-rpc-is-not-completion).
+[Implementation and next boundary](releases/2026-11-24-control-ha-installed-recovery.md#profile-runtime-bindings--observed-limits).
 
 Owner-confirmed NL2 isolated retained-state recovery PASS14:12UTC, final cleanup/service
 checks PASS14:20UTC; source/reporte353ff85 pushed and verified. Wrong-key refusal,50 focused

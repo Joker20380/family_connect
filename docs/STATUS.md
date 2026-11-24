@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+**24 November — actual NL profile runtime/sudo/unit bindings observed; services unchanged.**
+HA source413d48b9 is pushed/remote-SHA verified. At20:13:20–20:13:23UTC both configured
+restricted-bootstrap units are loaded/active/running. Actual Python3.14.4/UID979 on NL1,
+3.12.3/UID993 on NL2; sudo allows only each pinned zero-argument helper as root. NL2's534-file
+site inventory/five dependency RECORDs and17 external script pins verify without package imports.
+NL1 strict inventory refuses root-only0700 cryptography bytecode cache; not proof of service failure.
+NL1 has13 unit drop-ins/ExecStopPost. NL2 NeedDaemonReload=yes is retained, not a proof of changed
+command bytes or permission to reload. No chmod/helper dispatch/service/deployment/version change.
+135 tests PASS/0 skips. Next: exact runtime/unit qualification limits and remaining external
+completion, then approved gates/real coherent interval and independent approval/custody/recovery.
+Do not repeat this census. Replication PASS; three HA-02 gates partial.
+[Observed limits and rollback](releases/2026-11-24-control-ha-installed-recovery.md#profile-runtime-bindings--observed-limits).
+
 **24 November — open renewal transactions now block source-level capture admission.**
 HA source1f494b5f is pushed/remote-SHA verified. Read-only NL1/NL2 profile source/config/helper
 closure binds14 renewal modules each and their API. A successful RPC can leave an ACQUIRED

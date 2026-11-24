@@ -6,6 +6,61 @@ divergence is reconciled/pushed at2ae5c512; older publication-blocker statements
 historical, not active instructions or a current blocker.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## Profile runtime bindings — observed limits
+
+[Authoritative source and report](https://github.com/Joker20380/family_connect/blob/413d48b99cc217b180efe51a1caa92d60cf9ad1a/docs/releases/2026-11-24-control-ha-profile-runtime.md)
+is pushed/remote-SHA verified at413d48b99cc217b180efe51a1caa92d60cf9ad1a. Main remains
+navigation only. No deployment, service/SSH/key/policy change, client/catalog version or signature
+change; prior local receiver/guardian/OWNER candidates remain unapproved and uninstalled.
+
+**20:13:20–20:13:23UTC read-only NL1/NL2 observation:** both configured
+`family-connect-restricted-bootstrap.service` units are loaded/active/running, Result=success,
+ControlPID0 and empty Job in equal repeated loaded-property samples. This is not a claim about
+all NL services, end-to-end connectivity or stable all-writer quiescence. Each sudo listing allows
+only the pinned root renewal helper with no arguments, without authentication. Helpers were not
+executed. Main units, loaded properties, sudo binaries/policy and drop-ins were pinned privately.
+
+Actual isolated interpreter probes use UID979/Python3.14.4 on NL1 and UID993/Python3.12.3 on NL2,
+exact `-I -S -B`, clean PATH/LANG and cwd `/`; no application imports or site hooks. NL2's534-file
+site inventory matches before/after, with five dependency RECORDs and17 referenced venv scripts
+verified/rechecked. Versions: RNS1.5.1, cryptography46.0.7, pyserial3.5, cffi2.1.1, pycparser3.0.
+Full shared-library/stdlib closure and actual root helper/systemd lifecycle are not thereby tested.
+
+Two specific qualification limits remain, not reasons to alter working services:
+
+- NL1's root-owned0700 `cryptography/__pycache__` cannot be traversed by UID979; the existing
+  strict launcher inventory refuses it. Interpreter-only probing succeeds. Inaccessible cache
+  does not prove application failure; no live chmod, cache deletion or relaxed inventory rule.
+- NL2 reports `NeedDaemonReload=yes`. This alone does not prove changed loaded command bytes
+  or identify why; no daemon reload performed. NL1 has13 pinned drop-ins and a nonempty loaded
+  ExecStopPost. Both units reference environment files whose contents were not read. Those
+  lifecycle/environment boundaries and loaded/disk semantic comparison remain to qualify.
+
+New read-only source observer has bounded static-tree/METADATA/RECORD checks, account/isolation
+validation, repeated file/interpreter pins and explicit false capture/independent-approval flags.
+**135 tests PASS/0 skips**, Python3.14.4,16.25s;37 new tests plus98 existing launcher contracts.
+Includes real no-site/PYTHONPATH isolation, malformed/escaping RECORDs, changed external scripts
+and a regression preserving refusal for the NL1 cache case. Feature docs:4 files/1052 local-link
+targets/zero errors, whitespace clean; external URLs are not asserted HTTP-verified.
+Main navigation checks:3 changed documents/688 local-link targets/zero errors, whitespace clean.
+
+Private final receipt SHA-256: NL1 `1ffdea003e0f6fe00765648d9b6af8ceef4d01b931c9c7e5ab3afadd3975c1e1`;
+NL2 `e89762ab208119f9fdcf657c92cecdaeb2981252f5affeeebff20b1e21d3fff3`.
+Sanitized summary `e736d76d9408fca54314d23480876985661851e836d9ce757b58a3a9e127070b`.
+Eight read-only attempts, including observer-assumption refusals, are retained in the private
+0700/0600 evidence store; raw units/configs/sudo text and source capsules stay outside Git.
+
+No live rollback is needed. Source-only observer rollback means omitting/reverting this utility,
+not restoring databases, changing sudo, restarting units or touching recovery SSH. No service
+control, package install, product/journal change or native lock was used for this observation.
+
+Next: exact runtime/cache and loaded/disk-unit qualification, full helper/environment/stop-post
+and remaining AWG/mailbox/support external settlement, then bounded manual-write coordination,
+approved gate/runtime/source activation, measured real interval and coherent capture. Current
+independent approval/checkpoint/key custody and final combined recovery remain required.
+Replication PASS; the same three HA-02 gates partial. No new numbered stage or HA-03/cutover;
+do not repeat this completed binding census as acceptance work.
+
 ## Native renewal settlement — successful RPC is not completion
 
 [Authoritative source and report](https://github.com/Joker20380/family_connect/blob/1f494b5f831df5de224e4bcc51b407bd88eaa60a/docs/releases/2026-11-24-control-ha-renewal-settlement.md)
