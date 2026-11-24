@@ -3,6 +3,21 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+Scoped NL service-environment binding is observed, not activated:21:35:59–21:36:00UTC loaded
+assignments/provider files match three selected process names on NL1 and one on NL2. Each has11
+other names outside this assertion. Source/argv of NL1's diagnostic stop-post are pinned; its exact
+source passes seven isolated synthetic checks. Silent zero-exit on invalid input/storage means
+its exit status is not a durable-report or capture permit. NL2 has no stop-post; its unexplained
+NeedDaemonReload=yes is unchanged.162 tests PASS/0 skips;70 new observer tests. No reload/helper
+dispatch, service/deployment/version change. [Evidence and rollback](releases/2026-11-24-control-ha-service-environment.md).
+Next selected work: remaining full runtime/helper and AWG external settlement, collector/manual
+coverage and the concrete joint activation/capture proposal, then actual coherent interval and
+independent current-input approval/custody/final recovery. Working-NL deployment is still outside
+scope. Replication PASS; the same three gates partial, no new stage or ETA. Do not repeat the
+completed selected-environment comparison or isolated hook cases as remaining engineering work;
+their installed lifecycle/resource bindings and non-atomic observation limits remain explicit.
+
+At the preceding mailbox-cleanup checkpoint:
 Routed mailbox cleanup now verifies reader termination after the existing bounded join and
 attempts all cleanup steps on error. Unfinished/failed cleanup is terminal, never route fallback
 or success; support admission retains pending through later retries. Real local TCP/RNS exchange,

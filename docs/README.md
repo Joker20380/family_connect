@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 24 November: NL selected service environments match, exact NL1 diagnostic stop-post isolated qualification and silent-error limit;162 tests, no service changes](releases/2026-11-24-control-ha-service-environment.md).
+
 [CONTROL-HA · 24 November: fail-closed mailbox reader cleanup, real local RNS/ACK and failure qualification;153 focused tests, explicit source delta and unchanged acceptance gates, no deployment](releases/2026-11-24-control-ha-mailbox-cleanup.md).
 
 [CONTROL-HA · 24 November: opt-in support-worker admission for IPC, notification and background exchange;123 tests, durable failure/death refusal, fixed completion map, no deployment](releases/2026-11-24-control-ha-support-admission.md).

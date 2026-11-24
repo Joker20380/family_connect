@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+**24 November — NL selected service environments match; stop-post qualified only in isolation.**
+Read-only21:35:59–21:36:00UTC checks bind loaded assignments/provider files to the same running
+restricted-bootstrap PID: NL1 three selected names, NL2 one, no differences. Each process has11
+other unqualified names. Source/argv of NL1's diagnostic stop-post are pinned; NL2 has no hook.
+Exact NL1 hook passes seven synthetic container checks, including killed-and-waited timeout,
+duplicate protection and32-report retention. Invalid input/storage can silently return zero:
+hook success is not durable-receipt or capture proof.162 tests PASS/0 skips,70 new cases.
+NL2 NeedDaemonReload=yes persists unexplained; no reload, service/helper dispatch, deployment or
+version change. Next: remaining full runtime/helper/AWG settlement and collector/manual bindings,
+then concrete joint activation/capture proposal, coherent interval and independent custody/recovery.
+Replication PASS; the same three HA-02 gates partial. Do not repeat this selected-environment/hook
+slice as full runtime acceptance. [Evidence, exact limits and rollback](releases/2026-11-24-control-ha-service-environment.md).
+
 **24 November — routed mailbox cleanup is now fail-closed; source only.**
 A timed reader join no longer counts as completion: a live reader or cleanup exception raises
 terminal `cleanup_incomplete`, attempts remaining cleanup and preserves the support gate marker.
