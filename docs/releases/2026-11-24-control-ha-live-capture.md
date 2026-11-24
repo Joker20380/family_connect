@@ -1,5 +1,48 @@
 # 24 November 2026 — authorized bounded live capture
 
+## Installed node custody
+
+Preparation source: `scripts/control_ha_node_capture.py` and
+`scripts/control_ha_node_restore.py`;91 focused checks PASS, including46 new cases.
+These cover immediate lock/SQLite contention refusal, source changes, symlinks/hardlinks,
+same-byte rewrites, kernel deadline release after a hung read, sequence-floor corruption,
+unknown schema/peer, stale/changed/wrong-key capsules, unsafe tar members and private restore.
+No version, installer/catalog, deployment or production PostgreSQL change is authorized here.
+
+Read-only preflight finds a16,384-byte rollback-journal allocator and69 cached records on
+each node. RU installed gateway source matches the repository, NL1/NL2 retain the older
+failure-reporting variant. Both use application.lock then registration.lock for registration
+and paid-watch; exact gateway/archive hashes are pinned before locking. The installed
+policy differs from repository only in the storage implementation of read_snapshot, not
+the decision validation/successor contract. Original AWG/TCP state is failed/inactive on
+RU, active/active on NL1/NL2; paid-watch is active on all three. These are pre-existing
+states, not a traffic-health proof or a request to start failed services during rollback.
+
+Execution/abort plan: acquire the existing application and registration lock files with
+LOCK_NB, then BEGIN IMMEDIATE with SQLite timeout0; never create missing locks/databases.
+The kernel250ms SIGALRM is armed before the first lock and kills a stalled collector,
+closing descriptors/transaction without committing. Any contention, unexpected source,
+non-DELETE journal, sidecar, link, replaced/changed file or oversized input refuses the
+attempt. No retry loop, service stop, paid-watch freeze or gateway command is used.
+Tar construction, transmission and encryption happen after releasing the barrier.
+
+The fixed capture scope is peers.db including sqlite_sequence, settings.json,
+transport-state/enforcement, AWG server.conf, TCP server.json and the two installed
+source files. No client profile or metadata observations are selected. Settings.external
+is the native interface name (ens3/eth0), **not** the node public host assumed by the
+older synthetic adapter; that adapter is not weakened. Dynamic receiver clocks/boot,
+prepared tokens, terminal denials and configuration bytes are retained without refresh.
+No restart/activation or live engine state is reconstructed. The locks cover the reviewed
+local application paths, not all administrative writers, the canonical registry, mailbox,
+legacy worker or OWNER dispatcher. A per-node capture is not a cross-node fleet fence.
+
+Custody uses AES-256-GCM with a distinct purpose and separately held key/checkpoint.
+Only a new0700 offline directory with0600 files is permitted; exact byte readback,
+installed source pins, allocator schema/sequence/IP range and receiver binding checks
+must pass. The checkpoint is operator-held custody, not independently approved forward
+authority. Rollback means automatic release on refusal; no live source is changed.
+Actual capture/readback and native behavior evidence are still pending at this checkpoint.
+
 ## OWNER database capture — 07:38:49UTC
 
 The three existing OWNER containers are pinned by exact ID, Compose project

@@ -3,6 +3,12 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+Current node slice: qualify the pinned250ms application/registration/allocator capture and
+perform actual encrypted offline readback on RU/NL1/NL2. Preserve cached lease clocks and
+terminal decisions without activation. This is not the missing fleet/dispatcher fence;
+mailbox, legacy-worker, panel-runtime and independent forward trust remain selected gates.
+[Capture/abort plan](releases/2026-11-24-control-ha-live-capture.md#installed-node-custody).
+
 OWNER DB point07:38:49UTC now passes encrypted capture and isolated native restore:
 37 retained-data tables/1,907,455 rows,3 consent floors,39 schemas/25 sequences, no metadata
 observations. All table row-hashes match; owned test resources removed, existing containers

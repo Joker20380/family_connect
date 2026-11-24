@@ -1,5 +1,15 @@
 # Текущее состояние / Current state
 
+**24 November — installed node capture preparation (not yet live acceptance).**
+The separate receiver/allocator collector pins the two observed installed source variants,
+takes application/registration locks without waiting and a zero-wait SQLite write lock,
+and releases everything under a250ms kernel deadline. No service stop or source write.
+It retains the allocator sequence, native interface-valued settings, cached decisions,
+AWG/TCP configuration and installed sources in encrypted private custody; restore only
+creates a new offline directory. Cached leases are never renewed. Fleet/registry consistency,
+mailbox, legacy-worker and panel-runtime recovery remain open. Installed/public versions
+are unchanged. [Scope, abort and rollback](releases/2026-11-24-control-ha-live-capture.md#installed-node-custody).
+
 **24 November07:38:49UTC — actual OWNER panel database restore PASS.**
 One exported read-only PostgreSQL snapshot retains37 ordinary tables/1,907,455 rows and
 3 metadata consent floors; observation/GeoIP and source-projection rows are excluded.
