@@ -1,5 +1,37 @@
 # 24 November 2026 — authorized bounded live capture
 
+## OWNER runtime preflight
+
+Read-only follow-up after worker recovery resolves the three exact existing containers'
+effective Compose file chains, environment and mounts, with raw results retained privately.
+IDs/images/start times match the earlier OWNER PostgreSQL capture. Console image is
+`sha256:5ce824159e9f206c27ba92185097857382aa5fec71678ce5e728423509d1446a`,
+publisher image`sha256:50de6f25a04c1127b127b3278314619c69eddeec229d0d4ad9b7e67c1d2ffeab`;
+PG remains the previously recorded pinned17.11 image. Do not assume the console/publisher
+share an image or that the original checkout's Compose file is the whole active deployment.
+Eight distinct Compose inputs and two `.env` files are readable, as are the explicit
+collector configurations/HMAC/alias file and publisher token. The panel's alias bind is
+root-owned; inspect it only through its exact existing read-only mount when qualifying.
+Never print resolved environment/token/HMAC values or archive transient metadata observations.
+
+The console `.local` volume contains rebuildable static files and a separate synthetic
+registry directory. The read-only SQLite transaction observes9 tables/223 rows:50 devices,
+50 display bindings,50 Support ID rows,50 invites,12 challenges,7 paid events,3 subscriptions,
+one fixture marker and zero field-support audit rows. Schema SHA256
+`69675bccf69f73e3c89010ea056b7d83017307940ec96ea603ef0b504af11952`.
+Only `registry.sqlite3` (135,168 bytes) and existing `seed.lock` are present in that directory;
+no WAL/SHM/journal is observed. No source row values are emitted or retained by this census.
+This is explicitly synthetic OWNER authority, not an additional live gateway registry.
+
+Remaining OWNER capture must include this store and exact runtime inputs, preserving
+HMAC generation/aliases, Django/DB credentials and publisher credential without regeneration.
+It needs a bounded database/seed barrier, file-stability verification, encrypted private
+custody and new-directory/native-image readback with no network, original volumes, default
+startup, seeding/migrations or publisher. A separately restored store does not prove a
+coherent PG/synthetic/fleet pair. No capture/recovery PASS is claimed from this preflight;
+do not rerun the already passed1.9M-row PG restore as a substitute. Private census lives
+under `/tmp/fc-control-ha-20261124/owner-runtime`, outside Git. No versions or services change.
+
 ## Actual worker readback — 08:43:22UTC
 
 Source157bb8d749cf2f52fb2fad1f4f8ca49f2dcf2733 captures the RU legacy worker at
@@ -22,6 +54,10 @@ retry, restart before retry_at performs no adapter call, expiry produces only ab
 Zero real gateway commands; the untouched restored image is rechecked afterwards.
 60 focused tests pass, including active/revoked/retry-pending synthetic cases not present in
 the expired actual snapshot. These do not prove that live Docker operations have finished.
+Final combined regression:206 tests/0 failures/0 skips across worker, native reconciler/
+adapter, node/mailbox/file custody, installed inventory and SQLite capture. Native worker
+qualification compares every non-outbox table, not only a selected list. Documentation:
+612 links/0 errors. Only the two existing Starlette/httpx deprecation warnings remain.
 
 The exact worker container/image/start time/mount set/command and service invocation/PID/
 restart counter match before/after. Docker mount-array order is normalized for comparison

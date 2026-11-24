@@ -36,8 +36,7 @@ def qualify(value, destination):
     store.check_ready()
     adapters = {name: OfflineAdapter() for name in custody.bindings(files)}
     worker = GatewayReconciler(store, adapters)
-    preserved_tables = ('peer_allocations', 'peer_deployments', 'provisioning_versions', 'devices',
-                        'entitlements', 'transport_keys', 'challenges', 'provisioning_challenges')
+    preserved_tables = tuple(name for name in custody.validate(value)['tables'] if name != 'peer_outbox')
 
     def preserved():
         with store._transaction() as database:

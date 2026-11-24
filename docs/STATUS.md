@@ -1,11 +1,22 @@
 # Текущее состояние / Current state
 
+**24 November — OWNER runtime follow-up is read-only census, not recovery.**
+Existing three container IDs/images/start times match the earlier panel DB point. Effective
+Compose inputs, two environment files, HMAC/aliases and publisher-token locations are
+identified privately. The console volume contains a separate synthetic SQLite store:
+9 tables/223 rows (50 synthetic devices,7 paid events). Preserve it alongside PG; do not
+pretend the PG-only restore covers it. No source secret values, observations or DB rows
+are printed, no startup/publisher/migration is run and no OWNER runtime capsule exists yet.
+[Next bounded scope](releases/2026-11-24-control-ha-live-capture.md#owner-runtime-preflight).
+
 **24 November08:43:22UTC — legacy-worker actual offline recovery PASS.**
 The41.191ms DB/enrollment barrier captures19 files,13 tables/58 rows and one persisted
 peer intent. A separately encrypted capsule restores byte-for-byte in a fresh process;
 all table counts/digests match. Native duplicate/restart/retry/expiry checks pass on a
 different offline copy: all3 captured deployments are expired, zero real gateway commands.
 Worker container/service identity is unchanged; no installed/public version change.
+Combined worker/node/mailbox/file-custody/inventory/SQLite regression:206 tests PASS,
+0 failures/skips;612 documentation links checked,0 errors.
 RU AWG remains failed/TCP inactive; paid-watch shows pre-existing restart churn (NRestarts
 5265→5283 across preflights), so no claim of overall RU health. The successful interval
 has unchanged service samples. HA-02 still needs OWNER runtime, native composite integration,

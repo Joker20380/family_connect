@@ -9,6 +9,12 @@ Do not repeat this completed slice. Remaining critical path: OWNER runtime/confi
 native composite integration, coherent canonical/all-writer/dispatcher capture and independently
 approved forward trust. An earlier timed-out Docker exec is not fenced by this capture.
 [Evidence](releases/2026-11-24-control-ha-live-capture.md#actual-worker-readback--084322utc).
+Next OWNER preflight locates the actual console/runtime configuration, HMAC/aliases/token
+and a separate synthetic SQLite store:9 tables/223 rows, including50 synthetic identities
+and7 paid events. It is not the already restored PostgreSQL database. Prepare the exact
+closed file/store scope and abort plan before any capture; do not run default Compose
+startup, seed/migrations, publisher or live restoration. Its pair with PG and dispatcher
+coherence remains unqualified. [Census](releases/2026-11-24-control-ha-live-capture.md#owner-runtime-preflight).
 Mailbox authority slice completed08:18:34UTC:9 files,8.170ms lock, sequence456216,
 56 dynamic/3 static members. Independent readback, node key/bootstrap/marker and native
 stale-floor/expiry checks pass; service identity unchanged. Do not repeat the already
