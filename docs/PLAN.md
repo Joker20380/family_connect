@@ -178,9 +178,17 @@ diagnostic confirms three expired removals/one signed addition, bound current
 all_activated admission semantics and four unchanged DB projections.175 focused tests
 /0 skips and six source docs/966 links PASS. Content compatibility is not consumed-proof,
 paid-history or recovery authorization; strict five-table acceptance remains unchanged.
-Continue the same task with trusted original provenance and a coherent post-renewal
-current-state snapshot/recovery binding. Retain immutable baseline; never restore old
-rows, invent past approval or add an equality bypass.
+Source6eb4c2f3 pushed/remote-SHA verified: exact installed fcb31164 reconstruction
+matches prior14-module e9fd3175 observations. Its native record does not retain original
+approval/config, and seven selected retained artifacts do not establish that custody.
+Bounded investigation complete, not an exhaustive search or journal PASS. Selected task
+remains IN_PROGRESS / OWNER DECISION REQUIRED: a concrete independent original source,
+or approval to develop the recommended forward-only current-state checkpoint contract.
+No repeating the same search without new evidence, retroactive approval, old-row restore,
+equality bypass, production capture/writer stop/deployment or automatic next block.
+Fresh authorization would govern a new current-state checkpoint while retaining old
+immutable journals as history; other coherent-capture/recovery/floor/signature gates remain.
+[Exact evidence and decision scope](releases/2026-11-24-control-ha-provenance-decision.md).
 [Certificate-content evidence and remaining gate](releases/2026-11-24-control-ha-certificate-delta.md).
 No speculative next variant, permissive flag or deployment is selected. Stage2 completion is
 the joint PASS of four fixed blocks: journals (partial), schemas/writer barrier,
