@@ -1,26 +1,25 @@
 # Текущее состояние / Current state
 
-**24 November — CONTROL-HA переносимый зашифрованный комплект проверен offline.**
-Source75ad8011cf32893a2f283f6f78e1d469a97ddfd1 pushed/remote-SHA verified on the
+**24 November — CONTROL-HA репликационный стенд принят; выбрано завершение всего HA-02.**
+Source9034163db7370803e1d008ed9678e3107d27cec0 pushed/remote-SHA verified on the
 metadata branch in `/home/joker/.codex/worktrees/dad9/family_connect`.
-Exact signed request, both existing encrypted capsules and public/source sidecars now
-travel in one bounded AES-256-GCM archive. Keys, signer/anchor, pins, time and floors
-remain external. Packing is not approval; reading reruns all forward checks.
-Fresh-process/source-removed readback preserves exact input fingerprints. Native recovery
-through the archive retains used-proof refusal/fresh-proof issuance and strict old-baseline
-refusal.261 tests PASS /2 existing PostgreSQL skips;59 new archive cases and the added
-native portable scenario have no skips. Six source docs/975 links and whitespace PASS.
-No extractor, host resume, actual capture, full-store recovery or independent off-host
-backup acceptance. Short-lived approval is not extended; runtime attestation remains open.
-Selected journal task remains IN_PROGRESS; portability is not coherent production capture.
-До конца этапа2: доведение фактических journal/source/capture bindings и ещё три крупных
-блока — установленные схемы/writers со согласованным снимком, полное off-host recovery,
-строгая репликация/quorum/RPO0. Это не одна-две мелкие правки; календарный ETA не установлен.
-No queued block selected, no SSH/deployment/writer stop/version change or fresh health claim.
+Owner: «дальше. работай до завершения 2 этапа». All four existing HA-02 criteria now
+selected; earlier journal-only selection is superseded, not production cutover.
+Two full PostgreSQL17.11/Patroni4.1.5/etcd3.7.4 fault runs PASS: primary loss/return,
+DCS minority/majority and return, no-sync COMMIT blocking and canceled-wait protection.
+Native test found a false success after PostgreSQL WARNING01000 on canceled synchronous
+commit. Canonical PG connection now closes/reports uncertainty, never a durable ACK;
+original operation is reconciled after recovery, consumed proof/stale import refuse.
+905 SQLite/PostgreSQL contracts +28 guards PASS /0 skips;44tables/91acknowledged rows
+exact across copies. Seven source docs/1010links and whitespace PASS.
+Stage2 remains IN_PROGRESS. Three criteria remain: actual-current authorization/history
+custody; installed schemas/all writers and coherent capture; independent full recovery.
+Next is installed-state/writer census without service stops. Live barrier still requires
+scoped abort/recovery paths. No SSH/deployment/writer stop/version change in this checkpoint.
 Console5ce82415, RU HTTP4e2df679, NL GeoIP22 November, Android126/catalog9 unchanged.
 RU dependence persists; HA-03 fencing, HA-04 failover and HA-05 cutover follow HA-02.
 Old main remains navigation only; original work preserved, prior push non-fast-forward.
-[Current source, tests, remaining gates and rollback](releases/2026-11-24-control-ha-forward-archive.md).
+[Current source, tests, remaining gates and rollback](releases/2026-11-24-control-ha-replication.md).
 
 **24 November — CONTROL-HA forward-checkpoint contract implemented offline.**
 Owner explicitly approved development without service stops or server changes.

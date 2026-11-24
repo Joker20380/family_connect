@@ -3,6 +3,17 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+Latest owner request24 November selects **completion of all HA-02**, not only the
+journal slice. Source9034163d pushed/remote-SHA verified in the metadata worktree.
+Isolated strict PostgreSQL/Patroni replication gate PASS: two full fault runs,
+905 SQLite/PostgreSQL contracts +28 guards /0 skips, including cancellation uncertainty
+instead of a false durable ACK. Seven source docs/1010links/0errors and whitespace PASS.
+Remaining selected criteria: actual-current authorization/history custody; installed
+schemas/all writers/coherent capture; independent complete recovery. Next: read-only
+installed census and scoped barrier design, not service stops or production cutover.
+HA-03..05 remain unselected. Earlier chronological checkpoints below retain historical
+scope/results; their old journal-only selection/four-open-block counts are superseded.
+[Current all-stage2 scope, evidence and rollback](releases/2026-11-24-control-ha-replication.md).
 HA-01 isolated foundation COMPLETE in metadata branchbbc0a9fb. HA-02 IN_PROGRESS:
 HA-02A enrollment qualified in9d1219d8; HA-02B paid/subscription contracts and
 recovery qualified/pusheda62b5b2e.89 contracts /0 skips and366 regression/runner
