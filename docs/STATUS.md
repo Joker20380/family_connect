@@ -1,5 +1,21 @@
 # Текущее состояние / Current state
 
+**24 November — CONTROL-HA actual current evidence; post-renewal DB binding still open.**
+Source1ecfda710e6f1142204a8a8a926a81ed8b0dd71d pushed/remote-SHA verified on the
+metadata branch in `/home/joker/.codex/worktrees/dad9/family_connect`.
+Read-only RU/NL1/NL2 checks00:13:07–00:13:10UTC bind current node configs/unit order
+to the shared operation; issuer/gateway material/both publications match. RU API and
+both NL bootstrap services active; successful one-shots are not crash evidence.
+Four DB projections match; three expired baseline certificates are absent and one
+later-issued certificate is present. This is consistent with normal issuance/pruning,
+not independent authorization. Do not restore old rows or bypass audit checks.
+Original schedule provenance/coherent current capture remain open; same selected task
+continues with post-renewal current-state binding.112 tests PASS /0 skips; six source
+docs/962 links PASS. Stage2 remains partial across four fixed gates; no deployment,
+service/configuration/policy/version change. Console5ce82415, NL GeoIP22 November,
+Android126/catalog9 and8/12/120s unchanged. Old main remains navigation only.
+[Evidence, safe next step and rollback](releases/2026-11-24-control-ha-installed-current.md).
+
 **24 November — CONTROL-HA scheduled current-content audit PARTIAL; same selected gate remains open.**
 Source174f525a632ebbb7aa0cc6798090030a69d93420 pushed and independently remote-SHA
 verified on the metadata branch in `/home/joker/.codex/worktrees/dad9/family_connect`.

@@ -168,12 +168,20 @@ resume a host. Source174f525a pushed/remote-SHA verified: content-only audit now
 native scheduled/service receipts and current bindings while preserving opaque history.
 56 new /111 stopped /45 custody tests PASS;15 explicit PostgreSQL skips, no PG requalification.
 Result always recovery BLOCKED: original approval/configuration provenance and actual
-installed coherent capture remain open. Continue this same task; no speculative next
-variant, permissive acceptance flag or deployment is selected. Stage2 completion is
+installed coherent capture remain open. Source1ecfda71 pushed/remote-SHA verified:
+actual fleet observation now binds installed configs/unit order to the current operation,
+observes active RU API/both NL bootstrap and matching issuer/material/publications.
+Four DB projections match, but certificates advanced after renewal: three expired
+baseline rows absent, one later-issued row present.112 focused tests /0 skips PASS.
+Continue the same task with a bounded post-renewal current-state contract and trusted
+original provenance; retain immutable baseline, independently qualify later certificate
+changes and coherent capture. Never restore old rows or add an equality bypass.
+No speculative next variant, permissive flag or deployment is selected. Stage2 completion is
 the joint PASS of four fixed blocks: journals (partial), schemas/writer barrier,
 full off-host/current-state recovery and strict replication/RPO0 (other three open).
 No calendar ETA is established; test/letter counts are not a completion percentage.
-[Current checkpoint and stage2 endpoint](releases/2026-11-24-control-ha-current-audit.md).
+[Current installed evidence and next gate](releases/2026-11-24-control-ha-installed-current.md).
+[Previous synthetic checkpoint and stage2 endpoint](releases/2026-11-24-control-ha-current-audit.md).
 [Custody contract and gate](releases/2026-11-24-control-ha-legacy-custody.md).
 [Observed inventory and gate](releases/2026-11-24-control-ha-installed-inventory.md).
 Journal block remains partial; never infer empty journals,
