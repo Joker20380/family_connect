@@ -3,19 +3,20 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Guardian schema3 now rejects queued systemd jobs/control processes, changed running lifecycle/
-recursive process tree and NeedDaemonReload before DRAINED/HELD. Closed source includes the veto;
-schemas1/2 remain compatible.223 focused PASS/0 skips,43 new cases, including actual local
-user-systemd child/stop-post/ACK tests. [Evidence and rollback](releases/2026-11-24-control-ha-systemd-lifecycle.md).
-Read-only22:06UTC: AWG/TCP/paid-watch active/running on both NL hosts; NL1 stable observations,
-NL2 refusal on all three NeedDaemonReload=yes units. Installed gateway differs from candidate.
-Next selected work: diagnose NL2 loaded/disk mismatch without reload; finish actual writer/
-lifecycle/collector/manual bindings and explicit joint activation proposal, then coherent interval
-and independent current-input approval/custody/final recovery. Do not repeat queued-stop or
-owned-child cleanup qualification as new gates. Lifecycle observations are a veto, not a systemd
-admission lock or proof of all-writer quiescence. Emergency `--no-block` stop, paid-watch and
-working services are unchanged. Replication PASS; three fixed gates partial, no new stage/ETA.
-No deployment/version change; legacy packaging/announcement limits remain separately documented.
+NL2 reload-cause diagnosis is complete: reviewed Ubuntu255.4-1ubuntu8.18 source and the fileless
+-.slice witness at22:23:59UTC identify the manager-wide unit_file_state_outdated condition.
+36 filesystem candidates absent, matching manager mount/root view; all four scoped NL2 services
+active/running with unchanged identities/no jobs.44 tests PASS/0 skips. This does not identify the
+past triggering operation or establish unit-content/runtime equivalence. Do not chase that history
+or repeat this census as a new acceptance gate. [Evidence and next scope](releases/2026-11-24-control-ha-systemd-lifecycle.md#nl2-manager-wide-reload-cause--read-only).
+Existing schema3 veto still rejects NeedDaemonReload; no relaxation, reload or working-service
+change. Next selected work: actual writer/lifecycle/collector/manual bindings and the explicit
+joint activation proposal, including the host-wide flag's approved disposition; then coherent
+interval and independent current-input approval/custody/final recovery. A daemon-reload is not
+per-service and may run generators/rebuild dependencies, so it is not a read-only diagnostic or
+already authorized NL operation. Keep emergency stop, paid-watch and prior rollback access intact.
+Replication PASS; the same three gates partial, no new stage/ETA/deployment/version change.
+Legacy package/announcement limits and incomplete installed admission remain separately documented.
 
 At the preceding service-environment checkpoint:
 Scoped NL service-environment binding is observed, not activated:21:35:59–21:36:00UTC loaded

@@ -1,18 +1,18 @@
 # Текущее состояние / Current state
 
-**24 November — queued systemd work now vetoes guardian ACK; no activation.**
-Opt-in schema3 binds the approved running unit/invocation/process-tree snapshot; checks before
-DRAINED and HELD refuse queued jobs, control processes, drift and NeedDaemonReload. This is a
-veto, not a lock on systemd or uncooperative writers.223 focused tests PASS/0 skips,43 new cases:
-real user-systemd proves successful asynchronous stop still leaves a child, and MainPID=0 still
-leaves an ExecStopPost/control process/job. Both refuse completion; unchanged active service passes.
-Read-only22:06:44–22:06:45UTC: AWG/TCP/paid-watch active/running on both NL hosts. NL1's six
-snapshots match pairwise; NL2's three units refuse because NeedDaemonReload=yes. No reload or
-service change; these are point observations, not VPN/data-plane or installed gate acceptance.
-Installed gateway source on both hosts differs from the candidate; earlier cleanup is not deployed.
-Next: explain NL2 loaded/disk mismatch read-only; finish writer/lifecycle/collector/manual bindings
-and the explicit activation proposal, then approved joint interval and independent custody/recovery.
-Replication PASS; the same three HA-02 gates partial. [Evidence, limits and rollback](releases/2026-11-24-control-ha-systemd-lifecycle.md).
+**24 November — NL2 reload warning traced to the manager-wide flag; no reload.**
+At22:23:59.926–22:23:59.980UTC the built-in -.slice has NeedDaemonReload=true despite no fragment,
+source, aliases or drop-ins;36 possible filesystem entries are absent in the manager's own mount/
+root view. The reviewed Ubuntu255.4-1ubuntu8.18 source explains this as the manager-wide
+unit_file_state_outdated flag. It is not proof that AWG/TCP unit contents differ. The originating
+past operation is unidentified; full unit/runtime equivalence and capture remain unapproved.
+All four scoped NL2 services active/running, no jobs/control processes, identities unchanged
+around the observation.44 focused diagnosis tests PASS/0 skips. No RU/NL1 access, reload, service,
+policy, deployment or version change. Existing lifecycle veto remains strict; no warning bypass.
+Next: actual writer/lifecycle/collector/manual bindings and the explicit joint activation proposal,
+including disposition of this host-wide flag, then approved interval and independent custody/
+recovery. The diagnosis is complete; do not repeat the sentinel/census as a new gate. Replication
+PASS; the same three HA-02 gates partial. [Cause, source proof and safe next scope](releases/2026-11-24-control-ha-systemd-lifecycle.md#nl2-manager-wide-reload-cause--read-only).
 
 **24 November — NL selected service environments match; stop-post qualified only in isolation.**
 Read-only21:35:59–21:36:00UTC checks bind loaded assignments/provider files to the same running
