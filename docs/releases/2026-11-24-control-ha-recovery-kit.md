@@ -14,7 +14,8 @@ explicit native checks below. It does not bootstrap the recovery host operating 
 `scripts/control_ha_recovery_kit.py` uses only the standard library. It collects regular files
 from an explicit committed Git object, never dirty/untracked work or private state. Included
 scope is Python/SQL under control, device_identity, provisioning, messenger and scripts;
-the two canonical SQLite schema manifests; the native allocator/worker sources; and the
+the two canonical SQLite schema manifests; the native allocator/worker and two shared
+desktop profile/version parser sources; and the
 control, identity and HA lockfiles. Other deployment configuration, databases, profiles,
 source capsules, credentials, keys and runtime state are excluded.
 
@@ -74,6 +75,15 @@ on the read-only image root. The correction places every new input/work mountpoi
 the private `/tmp` tmpfs and adds a command-topology regression test. The failed attempt and
 its checkpoint remain private evidence, not an overwritten success. Corrected cold execution
 is pending; no production action or rollback is involved.
+
+The second attempt from22c24c58255a0f1625f03fff8b6868743c33ed82 independently restores417
+sources, installs all28 hash-locked wheels with no index and passes `pip check`. It then
+refuses an absent transitive `clients` import: provisioning shares the desktop profile and
+version parsers. The correction includes only `clients/desktop/profile_config.py` and
+`clients/desktop/updates.py`, not a desktop GUI/install/runtime. A subprocess regression
+imports the complete entry set using only copied committed sources and checks every loaded
+project module's origin. No source-path fallback is added. Keep the second failed receipt;
+the complete corrected cold native-data run remains pending.
 
 The fixed four HA-02 gates remain: replication PASS in isolation; current independent
 approval/trust, coherent all-writer/in-flight capture and final complete recovery are partial.

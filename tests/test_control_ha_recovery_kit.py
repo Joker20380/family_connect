@@ -185,3 +185,28 @@ def test_new_mountpoints_live_under_writable_tmpfs_not_readonly_image_root():
 def test_required_entry_modules_exist_in_selected_source():
     root = Path(kit.__file__).resolve().parents[1]
     assert all((root / (name.replace('.', '/') + '.py')).is_file() for name in probe.MODULES)
+
+
+def test_recovery_entry_imports_need_no_original_checkout(tmp_path):
+    root = Path(kit.__file__).resolve().parents[1]
+    commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=root).decode().strip()
+    source = tmp_path / 'source'
+    for name, raw in kit.collect_sources(root, commit).items():
+        target = source / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(raw)
+    code = '''import importlib,json,sys
+from pathlib import Path
+root=Path(sys.argv[1]);sys.path.insert(0,str(root))
+for name in json.loads(sys.argv[2]):
+    module=importlib.import_module(name)
+    assert root in Path(module.__file__).resolve().parents
+for name,module in tuple(sys.modules.items()):
+    if name.split('.')[0] in ('control','device_identity','scripts','provisioning','messenger','clients') and getattr(module,'__file__',None):
+        assert root in Path(module.__file__).resolve().parents
+print('CLOSED_SOURCE_IMPORTS_PASS')
+'''
+    result = subprocess.run([sys.executable, '-I', '-c', code, str(source), json.dumps(probe.MODULES)],
+                            cwd=tmp_path, capture_output=True, timeout=60)
+    assert result.returncode == 0, result.stderr.decode()
+    assert result.stdout.strip() == b'CLOSED_SOURCE_IMPORTS_PASS'

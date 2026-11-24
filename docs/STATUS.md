@@ -11,6 +11,9 @@ a blocker. HA source remains on the separate metadata branch, not deployed or me
 First actual attempt refuses before execution: the retained image root is read-only and has
 no `/work` mountpoint. All new mounts now live under the private `/tmp` tmpfs; a regression
 check covers the command topology. The failed receipt is preserved; corrected cold run pending.
+Second attempt installs/verifies all28 wheels offline, then refuses a missing transitive
+desktop-parser import. The two pure parser/version modules are now explicitly retained;
+a checkout-removed import regression covers the complete recovery entry set. No fallback.
 [Scope, execution gate and rollback](releases/2026-11-24-control-ha-recovery-kit.md).
 
 **24 November11:43:57UTC — actual OWNER image-loss cold bootstrap PASS.**

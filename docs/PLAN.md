@@ -12,6 +12,8 @@ reconciled at2ae5c512, not an active blocker or a deployment.
 [Qualification gate and remaining boundaries](releases/2026-11-24-control-ha-recovery-kit.md).
 First cold attempt refused at namespace construction, before source execution. New input/work
 mountpoints are corrected to private tmpfs paths; retry with a new kit checkpoint/destination.
+Second attempt proves offline dependency installation but refuses missing shared desktop
+parsers. Include the two exact source modules and qualify imports with the checkout absent.
 
 OWNER image-loss cold bootstrap passes11:43:57UTC: all three exact images recovered from
 encrypted custody, native Python/Django/crypto/libpq probes and PG17.11 restart/dump/restore

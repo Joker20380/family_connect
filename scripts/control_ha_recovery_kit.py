@@ -15,7 +15,8 @@ import zipfile
 PURPOSE = 'family-connect/recovery-toolkit/v1/cp313-linux-amd64/offline-only'
 LOCKS = ('control/requirements.lock', 'device_identity/requirements.lock', 'deploy/control-ha/requirements.lock')
 SCHEMAS = ('deploy/control-ha/sqlite-source-v1.json', 'deploy/control-ha/sqlite-handoff-v2.json')
-NATIVE = ('deploy/friends/awg-gateway.py', 'deploy/product-peer-worker/worker.py')
+NATIVE = ('deploy/friends/awg-gateway.py', 'deploy/product-peer-worker/worker.py',
+          'clients/desktop/profile_config.py', 'clients/desktop/updates.py')
 SOURCE_ROOTS = ('control', 'device_identity', 'scripts', 'provisioning', 'messenger')
 BOOTSTRAP = 'scripts/control_ha_recovery_kit.py'
 LIMIT = 128 * 1024 * 1024
