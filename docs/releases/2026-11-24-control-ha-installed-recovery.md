@@ -6,6 +6,44 @@ divergence is reconciled/pushed at2ae5c512; older publication-blocker statements
 historical, not active instructions or a current blocker.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## Joint OWNER drain — isolated qualification
+
+[Authoritative source and report](https://github.com/Joker20380/family_connect/blob/4758969f836b3467210996b2b70d689accb926cb/docs/releases/2026-11-24-control-ha-joint-drain.md)
+is pushed/remote-SHA verified at4758969f836b3467210996b2b70d689accb926cb. Main updates
+navigation only; HA implementation remains on the existing feature branch, not deployed.
+
+`control/capture_group.py` jointly drains two to eight separately owned gates through
+inherited Unix packet channels. Each guardian retains its existing UID and strict gate
+permissions; the coordinator neither opens foreign gates nor switches identities. Kernel
+PID/UID/GID credentials, approved gate device/inode pins, a common time namespace, overlap
+and final HELD acknowledgements after the read body are mandatory. Partial/expired/dead
+participants or lost final ACKs leave no confirmed receipt. The receipt proves only the
+local participating interval and always has `capture_permitted=false`.
+
+120 focused tests PASS/0 skips. Final17:07:50–17:08:00UTC disposable-container run also
+passes with real10001:10001/1000:1000 processes and two synthetic SQLite stores: both
+writers are BUSY during the snapshot `[1,1]` and succeed afterwards to reach `[2,2]`.
+Pending uncertainty is retained; wrong identity refuses;0700/0600 ownership is preserved.
+Coordinator SIGKILL releases/write/reap completes in observed0.288s; SIGSTOP releases
+through independent guardian deadlines in1.873s and the resumed coordinator refuses.
+These are stand measurements, not a RU/WAN/load guarantee or native OWNER-PG capture.
+
+Guard drain/hold/total limits are5s/2s/7s under normal scheduling and interruptible I/O;
+stopped guardians and uninterruptible disk stalls remain outside this qualification.
+The stand has no network or product/secret mounts, uses read-only source/root and private
+tmpfs state, and both owned containers are removed. No working services, images, routes,
+policies, versions or catalogs changed; no RU/NL connection occurred. Four feature docs/
+1032 local-link targets and whitespace checks PASS. Private receipts remain outside Git.
+
+The separate-UID joint interval design gap is closed in isolation. Next finish approved
+effective source/config/argv/UID/mount/namespace/inode bindings, trusted guardian launch and
+manual/SSH coverage. Independently settle external operations and qualify real flush/capture
+latency before the all-store/fleet point, independent approval/custody and final current/
+post-ACK/stale recovery. No production change requires rollback; failed isolated captures
+close only their channels, await own guardians and discard unaccepted results. Never erase
+pending records or restart old failed units. Replication PASS; the same three HA-02 gates
+remain partial. No HA-03/cutover, extra numbered stage or deployment authorization.
+
 ## Installed OWNER admission bindings — read-only
 
 [Authoritative source and report](https://github.com/Joker20380/family_connect/blob/552f0ed885dd9e3a0a615e03a0403637bc0afdeb/docs/releases/2026-11-24-control-ha-owner-admission-binding.md)

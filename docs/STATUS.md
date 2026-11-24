@@ -1,5 +1,17 @@
 # Текущее состояние / Current state
 
+**24 November — separate-UID joint drain qualified in isolation; no deployment.**
+HA source4758969f is pushed and remote-SHA verified. Separate guardians jointly hold
+per-UID gates without widening0700/0600 or changing service identities. Kernel credentials,
+exact gate inodes, common clock/overlap and final completion ACKs prevent false acceptance.
+120 tests PASS/0 skips; real UID10001/1000 + two SQLite stores PASS. Coordinator death/
+stop releases in observed0.288s/1.873s on the isolated stand, not a production latency claim.
+No working service/image/config/mount/policy/version change or RU/NL access occurred.
+Next: approved actual bindings and guardian launch/manual coverage, independent external
+settlement and real latency, then coherent capture/approval/custody/final recovery.
+The per-UID joint interval is now qualified locally; replication PASS, three HA-02 gates partial.
+[Checks, limits and rollback](releases/2026-11-24-control-ha-installed-recovery.md#joint-owner-drain--isolated-qualification).
+
 **24 November — installed OWNER admission bindings checked; no live changes.**
 HA source552f0ed8 is pushed and remote-SHA verified. Actual console/publisher host
 identities are10001/1000; neither container configures the admission gate. Installed
