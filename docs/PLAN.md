@@ -3,23 +3,24 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Local cooperative admission/drain remains source-only. OWNER dynamic requests/session
-saves, management commands, synthetic registry writes, system publisher and support IPC
-now join the completed HTTP/retention/product-worker/chat/payment/renewal slices.
-Caught publication/IPC failures, HTTP500, streaming and process death retain uncertainty.
-Full panel suite350 PASS/0 skips on disposable real PostgreSQL; core gate31 PASS;
-source-only Python3.13 image build/runtime probes PASS. The OWNER opt-in environment is
-unset by default; no installed image, Compose/mount, policy or version change.
-[Implementation and exact validation](releases/2026-11-24-control-ha-admission-drain.md#owner-panel-and-publisher-continuation).
-Next selected work: remaining operator/forced-SSH/receiver/direct-dispatch entrypoints;
-bind effective source/argv/UID/mounts for all
-participants, independently settle external dispatch, and qualify flush latency plus a
-provably overlapping fleet interval. Per-RPC node admission is not a whole remote transaction
-fence; direct node.dispatch and existing fixed SSH routes do not invoke the wrapper yet.
+Local cooperative admission/drain remains source-only. Pinned one-shot launchers now cover
+AWG/mailbox/snapshot/fleet-agent receiver command shapes; direct renewal node dispatch has
+an explicit gate and retains caught uncertainty. Verified native bytes use sealed memfds;
+the parent holds admission until child exit, not merely ACK. Parent death never proves
+child cancellation.300 tests PASS/1 accepted-native skip/1 reproduced pre-existing failure
+deselected; isolated unchanged AWG/mailbox probes PASS with simulated engines. The22
+separate root-only profile-snapshot cases are not qualified by this run. No deployment,
+route, watchdog/policy, package replacement or version change.
+[Implementation and exact validation](releases/2026-11-24-control-ha-receiver-admission.md).
+Next selected work: qualify effective installed participation, including remaining manual
+entrypoints/bypasses; bind approved source/config/argv/UID/mounts for all participants,
+independently settle external dispatch and qualify flush latency plus a provably overlapping
+fleet interval. Per-RPC node admission is not a whole remote transaction fence; existing
+fixed SSH routes and direct callers without a gate remain unchanged until explicitly bound.
 OWNER direct ORM/programmatic `call_command` outside the admitted entrypoints and remote
 asynchronous support jobs are not newly fenced. Different console/publisher UIDs must be
 reconciled before any enablement; the single-UID gate does not silently widen permissions.
-Do not reimplement the completed timer/payment/renewal-wrapper/OWNER source slices.
+Do not reimplement the completed timer/payment/renewal-wrapper/OWNER/receiver source slices.
 Keep paid-watch/deny enforcement running; current NL scope does not permit changing working
 services. No live snapshot is authorized by this local gate or an empty process/lock sample.
 Do not repeat the completed writer census/NL2 recovery or create another lettered stage.

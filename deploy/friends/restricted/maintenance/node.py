@@ -1,5 +1,6 @@
 import argparse
 import base64
+from contextlib import nullcontext
 import json
 import os
 from pathlib import Path
@@ -114,7 +115,17 @@ def construct(config_path, *, fenced_recovery=False):
     return node,source_sha256
 
 
-def dispatch(node, request):
+def dispatch(node, request, *, capture_gate=None):
+    capture = sys.modules.get('control.capture_gate')
+    if capture_gate is not None:
+        require(capture is not None and isinstance(capture_gate, capture.Gate) and
+                capture_gate.directory is not None, 'CAPTURE_GATE_REQUIRED')
+    with (capture_gate.operation() if capture_gate is not None else nullcontext()):
+        with (capture.external_operation() if capture is not None else nullcontext()):
+            return _dispatch(node, request)
+
+
+def _dispatch(node, request):
     require(set(request) == {'schema','role','action','operation_id','expected_source_sha256','payload'}
             and request['schema'] == 1 and request['role'] == node.role and request['action'] in ACTIONS,
             'RPC_SCHEMA')

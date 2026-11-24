@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 24 November: pinned one-shot SSH/receiver launcher and direct-node admission;300 tests, unchanged native AWG/mailbox probes, no deployment](releases/2026-11-24-control-ha-receiver-admission.md).
+
 [CONTROL-HA · 24 November: opt-in OWNER request/management/synthetic/publisher/support admission;350 real-PG checks, image probes, no deployment](releases/2026-11-24-control-ha-admission-drain.md#owner-panel-and-publisher-continuation).
 
 [CONTROL-HA · 24 November: pinned renewal admission wrapper, caught SSH uncertainty, unchanged legacy dispatch;319 checks, no deployment](releases/2026-11-24-control-ha-admission-drain.md#pinned-renewal-dispatch-continuation).

@@ -8,10 +8,30 @@ import zipfile
 
 import pytest
 
-from control.capture_gate import GateError
+from control.capture_gate import Busy, Gate, GateError
 from test_capture_gate import gate, pending, child, line, GUARD
 from test_package_credential_renewal import source, package
 from test_renewal_profile_routes import route, transport, Rejected
+
+
+def test_direct_node_dispatch_is_gated_and_caught_failure_remains(gate, monkeypatch):
+    import node
+    calls = []
+    def dispatch(native, request):
+        calls.append(request)
+        assert len(pending(gate)) == 1
+        raise Rejected('SYNTHETIC_NATIVE_FAILURE')
+    monkeypatch.setattr(node, '_dispatch', dispatch)
+    with gate.drain(.2):
+        with pytest.raises(Busy):
+            node.dispatch(None, {}, capture_gate=gate)
+    assert not calls and not pending(gate)
+    with gate.operation():
+        with pytest.raises(Rejected, match='SYNTHETIC_NATIVE_FAILURE'):
+            node.dispatch(None, {})
+    assert calls == [{}] and len(pending(gate)) == 1
+    with pytest.raises(Rejected, match='CAPTURE_GATE_REQUIRED'):
+        node.dispatch(None, {}, capture_gate=Gate())
 
 
 @pytest.fixture

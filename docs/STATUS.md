@@ -1,5 +1,21 @@
 # Текущее состояние / Current state
 
+**24 November — pinned receiver admission implemented; not deployed.**
+An explicit launcher now wraps AWG registration, mailbox membership, canonical snapshot/
+renewal RPC and fleet-agent one-shot commands. It verifies private binding/source pins,
+uses sealed bytes and holds admission through native child exit. Parent death, failed
+reply or nonzero native exit retains uncertainty even after later success. Direct renewal
+node dispatch also supports admission and marks caught failures. Existing native files,
+SSH routes, services/watchdogs, versions and catalogs are unchanged.
+Final regression300 PASS/1 accepted-native skip/1 independently reproduced pre-existing
+test failure deselected;22 unrelated root-only snapshot cases are not qualified by this
+run. Actual unchanged AWG/mailbox probes PASS in an isolated Python3.13 container with
+simulated engine commands, including partial file write/DB rollback and capture refusal.
+Next: effective installed participation/bypasses, approved source/config/UID/mount bindings,
+remote completion/latency, then coherent capture/approval/custody/final recovery. Do not
+repeat this source slice. Replication PASS; the same three HA-02 gates remain partial.
+[Exact checks, limitations and rollback](releases/2026-11-24-control-ha-receiver-admission.md).
+
 **24 November — OWNER admission implemented and locally qualified; not deployed.**
 Opt-in `FC_CONTROL_CAPTURE_GATE` now encloses dynamic Django requests (including session
 saves), management commands, synthetic registry writes, system-message publication/queue
