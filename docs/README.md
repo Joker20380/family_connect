@@ -1,6 +1,6 @@
 # Documentation
 
-[CONTROL-HA · 24 November: actual canonical/fleet cold recovery source/dependency readback PASS;419 files,28 wheels,242 checks, no original checkout/venv/network or activation](releases/2026-11-24-control-ha-recovery-kit.md#actual-execution--123138utc).
+[CONTROL-HA · 24 November: actual isolated retained-state recovery on NL2 PASS; encrypted off-machine custody, wrong-key refusal, production services unchanged; coherent approval/final recovery remain](releases/2026-11-24-control-ha-recovery-kit.md#actual-nl2-recovery--1412utc).
 
 [CONTROL-HA · 24 November: actual encrypted OWNER image cold bootstrap PASS without Docker/source/registry; three native probes, authenticated native readback,71 tests, no activation](releases/2026-11-24-control-ha-image-custody.md#actual-execution--114357utc).
 

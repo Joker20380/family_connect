@@ -1,5 +1,19 @@
 # Текущее состояние / Current state
 
+**24 November14:12UTC — actual isolated recovery on NL2 PASS; cleanup verified14:20UTC.**
+Published runnerd85cccb2 restores the accepted8acc6bd2 kit on Ubuntu24.04/NL2, with no
+Docker/package installation, RU connection, host source/venv, live volume or network in
+the recovery process. The610-row canonical/207-decision/82-peer, worker and mailbox
+results exactly match retained native readback. Wrong-key input is refused in a fresh
+unit. All21 original inputs and five production-service states/PIDs/invocations/restart
+counters are unchanged; zero recovery units remain. Seven encrypted capsules plus the
+pinned toolkit/runtime are durably retained on NL2; keys/checkpoints entered only over
+stdin into temporary memory, not persistent files.50 focused tests PASS.
+This closes practical NL2 host/tool availability and off-machine retained-state execution,
+not independent off-laptop key/access custody, coherent capture/approval or final complete
+recovery. Same three partial HA-02 blocks; replication PASS, no HA-03/cutover.
+[Actual evidence and rollback](releases/2026-11-24-control-ha-recovery-kit.md#actual-nl2-recovery--1412utc).
+
 **24 November — bounded NL2 recovery runner prepared, actual readback pending.**
 Systemd-native runner uses an isolated retained image, dynamic non-root identity,
 no network/capabilities,512MiB memory/no swap,25% CPU and600s hard runtime bound.

@@ -4,6 +4,77 @@ Selected task: CONTROL-HA-20261123 / HA-02, existing complete-recovery acceptanc
 Actual cold execution PASS; complete HA-02 remains IN_PROGRESS. No product version, installation, public
 artifact/catalog, gateway policy or production service change. This is not HA-03 activation.
 
+## Actual NL2 recovery — 14:12UTC
+
+Actual successful readback is saved at2026-11-24T14:12:14.686332UTC on the owner workstation
+after the isolated NL2 process completes. Runner source
+`d85cccb20524fd9b75ede0908ebbb47c339ad068` was committed, pushed and remote-SHA verified
+before execution; the immutable recovered toolkit remains source8acc6bd2, not the runner
+branch HEAD. Recovery uses existing Ubuntu24.04/systemd/kernel facilities on NL2, not
+Docker, a new package installation, the working checkout/venv, RU, live volumes or an
+installed application entrypoint. This proves a practical independent recovery host;
+it does not perform a bare-metal operating-system installation.
+
+- Restored419 source files/28 locked wheels, native10-module/binary-libpq checks,610 canonical
+  rows,207 receiver decisions/82 allocations, legacy worker and mailbox. The `dependencies`,
+  `canonical` and complete `fleet` results equal the accepted local readback exactly;
+  original capture timestamps and security floors are not refreshed to make them valid.
+- The actual transient unit reports512MiB MemoryMax, zero swap,250ms/s CPU quota,32 tasks,
+  ten-minute deadline, read-only private image root, DynamicUser/private user and network
+  namespaces, empty capabilities and no-new-privileges. In-process readback confirms a
+  non-root identity, zero effective capabilities, only loopback and inaccessible live paths.
+  Sampled memory peak was444690432 bytes, not an asserted final lifetime maximum.
+- Eleven transported files total142031569 bytes: seven AES-GCM custody capsules, the toolkit,
+  its independent checkpoint/bootstrap, and a private retained Python-image archive.
+  NL2 independently rehashes every file and fsyncs the private custody directories14:16UTC.
+  Protected parent is0700; no custody key is retained in persistent remote files. Native
+  keys/checkpoints arrive over encrypted SSH stdin into unit-private temporary memory.
+- A fresh negative unit changes only one key byte in memory. Native readback refuses with
+  the public `ValueError` result; the scoped systemd journal confirms exit1 and unit cleanup.
+  The same retained ciphertext/key mutation locally identifies `CAPSULE_AUTHENTICATION`.
+  The harness first expected the lower-level `InvalidTag`, but the established loader
+  intentionally wraps it; the failed harness assertion is retained, not hidden by a rerun.
+- Final check2026-11-24T14:20:09UTC confirms all five production-service states, main PIDs,
+  invocation IDs and restart counters exactly equal13:53UTC baselines; no recovery unit
+  remains active. All21 original owner-held capsule/key/checkpoint files are byte-identical.
+  Zero native dispatch, no live service restart/configuration change, no release/version change.
+
+The first actual native attempt was safely refused because umask077 made the encrypted
+bind directory0700, unreadable to DynamicUser. Only that directory became0755 beneath its
+unchanged root-owned0700 parent; ciphertext files are read-only, not keys. A new unit then
+passed. Do not weaken the private parent or run recovery as root to bypass this boundary.
+The image derivative excludes `/app`, `/root` and `/home`;184 absolute internal symlinks
+were converted to equivalent relative links for data-filtered extraction of14966 entries.
+The original accepted image root and all retained inputs remain unchanged.
+
+| Sanitized artifact | SHA256 |
+| --- | --- |
+| Python runtime transport archive |04f6061c0156b74f8b7a5d11baf8d0db41706454b42c2c12ab2aa3aea6beb751 |
+| Closed transport manifest |892ae5104e5effbf333074ba1772ceb65e4c4a0a55e002b3707323a21a5f09cd |
+| Native remote readback |d4dfce71f7538cc155e95f5dc8e691824dae377f8c95a499147d6e5a2a39dbb9 |
+| Wrong-key refusal receipt |ed47688271a235aa8a5402072c0611581dc447bb600c1d78412eeacc21c7f108 |
+| Separately retained published systemd runner |d290e513358addf1b9e00d904c5e8b4b89cbd6d491c93441f0cb7d0921f5dd5e |
+
+The3550-byte runner from exact publishedd85cccb2 is also retained/read back/fsynced in
+the private NL2 directory after qualification, so constructing a later transient unit
+does not require the original checkout or a Git download. Its imports are in the verified
+kit. This is a separate source receipt; the original eleven-file transport manifest is
+unchanged. The owner must still supply independently retained keys/access and trusted pins.
+
+Private owner evidence: `control-ha/20261124-recovery-hosts-01`; private NL2 custody:
+`/opt/apps/family_connect/ha-recovery/20261124-host-01`. Do not commit the runtime, archive,
+keys, raw receipts or databases.50 focused tests PASS; previous242 local tests are not
+rerun or claimed as a new platform/whole-system gate. No package or persistent daemon
+was installed. Cleanup is complete; on a future aborted run, stop only its exact transient
+unit and retain encrypted custody/evidence. Never restore a laboratory DB over production.
+
+Practical host/tool availability and remote execution are now qualified. Remaining:
+coherent all-writer/in-flight capture, independently approved current checkpoint, independent
+off-laptop custody of recovery keys/access, and final complete OWNER-PG/post-ACK/stale-copy
+readback from that coherent point. Remote ciphertext alone does not survive loss of the
+only key/access holder. These are the same three partial HA-02 gates; replication remains
+PASS. This historical-snapshot readback is not full recovery, production HA or HA-03.
+
 ## Bounded NL2 recovery runner
 
 The [systemd runner](../../scripts/control_ha_recovery_systemd.py) adapts the accepted
@@ -12,7 +83,8 @@ Exact scoped paths and a separate transient unit prefix reject production-unit/p
 substitution. It uses a read-only retained Python image, DynamicUser, private network/user/
 device namespaces, no capabilities, no-new-privileges, AF_UNIX only and hidden live paths.
 Limits:512MiB memory, no swap,25% of one CPU,32 tasks,600s runtime,5s kill deadline,
-idle I/O/priority19. KillMode=control-group covers descendants after disconnect/timeouts.
+idle I/O/priority19. KillMode=control-group covers descendants when the unit stops;
+the ten-minute deadline bounds an orphan after SSH loss, not immediate disconnect detection.
 The only writable application tree is a320MiB private temporary filesystem. Encrypted
 capsules/toolkit are read-only; custody keys and independent checkpoints enter over stdin,
 not argv, the journal or a persistent input directory. There is no release-signing key.
@@ -234,8 +306,8 @@ the corrected complete gate subsequently passes from a new committed kit as reco
 
 The fixed four HA-02 gates remain: replication PASS in isolation; current independent
 approval/trust, coherent all-writer/in-flight capture and final complete recovery are partial.
-Still required: recovery-host OS/tool availability, off-machine independent custody, actual
-approval-authority workflow, final coherent checkpoint and combined post-ACK/stale-copy
+Still required: independent off-laptop recovery-key/access custody, actual approval-authority
+workflow, final coherent checkpoint and complete combined post-ACK/stale-copy
 readback. No new lettered stage, live cutover or automatic next task is introduced.
 
 Host prerequisites: Linux amd64, working unprivileged user/PID/network namespaces, bubblewrap,

@@ -3,10 +3,16 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Bounded NL2 systemd recovery runner and50 focused tests are ready; actual isolated
-readback of retained inputs remains next, after published-source and safe-image checks.
-No live writer pause or final coherent acceptance is implied.
-[Runner scope](releases/2026-11-24-control-ha-recovery-kit.md#bounded-nl2-recovery-runner).
+Actual NL2 retained-state recovery PASS14:12UTC; final unchanged-service/cleanup check
+PASS14:20UTC. Seven encrypted capsules and pinned runtime/toolkit are durably retained
+off the laptop. Wrong-key input refuses in a fresh unit;50 focused tests PASS. Practical
+recovery-host/tool availability is no longer pending; do not repeat the laptop/runtime
+dependency checks. No RU connection or production-service change occurred.
+Next critical path: coherent all-writer/in-flight capture and independent current approval;
+remaining complete-recovery scope is independent off-laptop key/access custody and final
+combined OWNER-PG/post-ACK/stale-copy recovery from that coherent point. Current remote
+run reuses different-time snapshots and is not full HA-02 acceptance or bare-metal OS install.
+[Actual recovery evidence](releases/2026-11-24-control-ha-recovery-kit.md#actual-nl2-recovery--1412utc).
 
 Owner confirms current NL1/NL2 targets for HA-02 preflight/isolated recovery without
 working-service changes. The target ambiguity is resolved; no repeated permission request.
@@ -23,7 +29,7 @@ legacy worker and mailbox, with no source/developer venv/network/Docker fallback
 kit/custody pins are refused;242 focused tests PASS,0 skips. Do not repeat this completed
 tooling/Python-dependency slice as pending. Root-main divergence is also resolved at2ae5c512.
 Remaining selected work: actual approval-authority workflow, coherent all-writer/in-flight
-capture, recovery-host OS/tool prerequisites and off-machine custody, then final combined
+capture and independent off-laptop key/access custody, then final combined
 post-ACK/stale-copy readback from that approved coherent point. These stay within the same
 three partial HA-02 blocks; replication PASS. No HA-03..05, live cutover or version change.
 [Actual evidence and rollback](releases/2026-11-24-control-ha-recovery-kit.md#actual-execution--123138utc).
