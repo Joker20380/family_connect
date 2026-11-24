@@ -3,25 +3,24 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Current selected slice: OWNER machine-loss image custody. Three exact linux/amd64 exports
-pass closed graph/layer checks;69 focused tests pass. Encrypted offline packaging and the
-standalone cold bootstrap are prepared, not yet qualified on the actual archive. Next execute
-the restored probes with no Docker/source/production mounts. This is inside the existing
-complete-recovery block, not another stage or permission to begin HA-03.
-First actual cold attempt refuses before native execution on absent resolver metadata;
-synthetic namespace files correct this without host DNS access.70 focused tests pass;
-rerun from a newly pinned capsule, preserving the first attempt as failed evidence.
-The second attempt reaches native Django and refuses too-short LAB credentials; fresh random
-values satisfy the unchanged policy.71 tests pass; repeat the corrected cold run, not live services.
-[Preparation, prerequisites and rollback](releases/2026-11-24-control-ha-image-custody.md).
+OWNER image-loss cold bootstrap passes11:43:57UTC: all three exact images recovered from
+encrypted custody, native Python/Django/crypto/libpq probes and PG17.11 restart/dump/restore
+without Docker, registry, working source or original state. Native fresh-process authenticated
+readback passes11:45:32UTC.71 tests,0 skips; original containers unchanged, owned processes
+stopped. Do not repeat this retained OWNER image-availability check as pending. Remaining:
+finish recovery-host/fleet source/dependency coverage and independent custody, coherent
+all-writer/in-flight capture, actual approval-authority workflow and final combined recovery.
+No bare-metal/off-site/full-state acceptance or HA-03 activation is implied.
+[Actual execution, prerequisites and rollback](releases/2026-11-24-control-ha-image-custody.md#actual-execution--114357utc).
 
 Actual canonical/OWNER/legacy joint qualification passes11:10:32UTC: native ingestion of69
 devices/4 paid events, exact39-table post-ACK restore, duplicate/conflict/generation checks
 and stale-copy refusal.50 synthetic and4 legacy identities stay separate; native worker
 retry/expiry checks pass without dispatch.103 focused real-PG tests,0 skips. Production untouched.
 Do not repeat this completed panel-projection integration as pending recovery or treat it as
-qualification of every OWNER writer. Remaining selected scope: machine-loss source/image
-dependencies, coherent all-writer/in-flight dispatcher capture and independently approved trust.
+qualification of every OWNER writer. At that checkpoint, remaining selected scope included
+machine-loss dependencies (OWNER image availability now passes above), coherent all-writer/
+in-flight dispatcher capture and independently approved trust.
 The fixed stage2 remainder is three partial acceptance blocks, not new lettered stages:
 inputs/trust, coherent all-writer capture and complete final recovery; replication is PASS.
 [Actual execution, rollback and exact remainder](releases/2026-11-24-control-ha-owner-joint.md#actual-execution--111032utc).

@@ -1,20 +1,16 @@
 # Текущее состояние / Current state
 
-**24 November — OWNER image-loss custody prepared; cold execution pending.**
-The exact three linux/amd64 OWNER images are exported privately without stopping containers.
-The closed verifier checks59 content-addressed blobs,48 unique layers/65 references and
-uncompressed layer digests. A bounded AES-GCM archive includes the pinned offline extractor
-and two bootstrap sources; keys/checkpoints stay separate.69 focused tests PASS,0 skips.
-The next check restores the archive and boots only contained dependency probes without Docker,
-the working repository, original volumes or production entrypoints. No cold/full-recovery
-PASS is claimed yet. All versions/services unchanged; the same three HA-02 blocks remain partial.
-First actual cold attempt safely refuses: umoci expects resolver mount metadata in its empty
-namespace. Use empty synthetic resolver/hosts files, never host DNS; the native nonroot probe
-also gets a synthetic passwd entry, not host identity data.70 focused tests now pass.
-Second attempt unpacks successfully and correctly refuses too-short test credentials under
-native Django policy. Use fresh random64-character LAB values; do not weaken native settings.
-71 focused tests pass; the corrected actual cold run remains pending.
-[Scope, prerequisites and rollback](releases/2026-11-24-control-ha-image-custody.md).
+**24 November11:43:57UTC — actual OWNER image-loss cold bootstrap PASS.**
+All three exact linux/amd64 images recover from a private encrypted archive, without Docker,
+registry access, working source or original volumes. Native console/publisher dependency
+probes pass with zero dispatch; PostgreSQL17.11 restarts and restores one synthetic row.
+At11:45:32UTC the restored image's own Python independently decrypts/verifies all four custody
+files with separate key/pins.71 focused tests PASS,0 skips. Original OWNER containers unchanged;
+all owned processes stopped, versions/services untouched. This closes the retained OWNER
+image-availability dependency, not whole-machine/off-site or final full-state recovery.
+The same three HA-02 acceptance blocks remain partial: current trust, coherent capture,
+complete recovery. Replication remains PASS; no HA-03/cutover.
+[Actual evidence, prerequisites and rollback](releases/2026-11-24-control-ha-image-custody.md#actual-execution--114357utc).
 
 **24 November11:10:32UTC — actual canonical/OWNER/legacy joint qualification PASS.**
 The native panel accepts69 canonical devices/4 paid events on an isolated restore of its
