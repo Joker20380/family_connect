@@ -32,7 +32,7 @@ def same(raw, expected, names, parent=None):
                 'NATIVE_SAFETY_IMPLEMENTATION_CHANGED')
 
 
-def qualify(files, manifest, scratch):
+def receiver(files, manifest, scratch):
     summary = validate(files, manifest)
     gateway_source = (SOURCE / 'control/friends/transport_gateway.py').read_bytes()
     allocator_source = (SOURCE / 'deploy/friends/awg-gateway.py').read_bytes()
@@ -67,6 +67,11 @@ def qualify(files, manifest, scratch):
         raise RuntimeError('NODE_RUNTIME_COMMAND_FORBIDDEN')
     engine = module.Gateway(SimpleNamespace(ROOT=scratch, add_peer=forbidden),
                             clock=lambda: point['wall'], monotonic=lambda: point['monotonic'], run=forbidden)
+    return engine, point, summary
+
+
+def qualify(files, manifest, scratch):
+    engine, point, summary = receiver(files, manifest, scratch)
     original = document(files['state.json'])
     require(engine.load() == original, 'NATIVE_LOAD_CHANGED')
     counts = dict(duplicate_preserved=0, stale_envelope_refused=0, terminal_denial_preserved=0,
@@ -120,7 +125,7 @@ def qualify(files, manifest, scratch):
         database.rollback()
     settings = document(files['settings.json'])
     namespace = dict(ipaddress=ipaddress, settings=lambda: settings)
-    function = definition(allocator_source, 'address')
+    function = definition((SOURCE / 'deploy/friends/awg-gateway.py').read_bytes(), 'address')
     exec(compile(ast.Module(body=[function], type_ignores=[]), '<reviewed-native-address>', 'exec'), namespace)
     require(namespace['address'](next_id) == str(ipaddress.ip_network(settings['network'])[next_id + 1]) + '/32',
             'NATIVE_ALLOCATION_CHANGED')

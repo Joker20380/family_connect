@@ -239,6 +239,11 @@ gateway leaf/private keys и независимое off-host custody всё ещ
 
 ### Когда заканчивается этап 2
 
+Текущая совместная проверка: canonical PostgreSQL → три receiver/allocator.
+Подготовка проходит109 focused real-PG tests без skips; actual retained-input recovery
+ещё не заявлен. Совпадение исторических решений не создаёт общий writer fence и не
+продлевает leases. [Контракт, тесты и rollback](releases/2026-11-24-control-ha-joint-nodes.md).
+
 На24 ноября календарный срок не подтверждён: журнальный блок, установленный capture
 и полное независимое восстановление ещё открыты. Репликационный стенд квалифицирован.
 Нельзя обещать «ещё один подпункт»,

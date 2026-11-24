@@ -3,6 +3,13 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+Current action: qualify the authenticated canonical-to-three-node integration on owned PG.
+Preparation passes109 focused real-PG tests,0 skips; exact decision parity at original times,
+allocator bindings and lab-only revocation/restart/replay checks do not renew cached authority.
+Actual-input recovery is pending; worker/OWNER joint recovery, coherent writer/dispatcher
+capture, machine-loss dependencies and independent forward trust remain open.
+[Bounded qualification and rollback](releases/2026-11-24-control-ha-joint-nodes.md).
+
 Native canonical integration now PASS09:37:05UTC: actual610 source rows,49 PG target tables,
 exact crash/current restore, new laboratory enrollment ACK preserved, stale dump/old import/
 proof replay refused.249 real-PG contracts pass without skips.66 mapped/3 new native identities
