@@ -1,5 +1,19 @@
 # Текущее состояние / Current state
 
+**24 November07:22/07:38UTC — actual external files and OWNER database restored.**
+Authoritative source246e160bbae3eb861be68858a901faf089c98780 is pushed and remote-SHA
+verified on the implementation branch. Three encrypted capsules restore8,731 exact files
+(62,193,541 bytes);9,660 unchanged observations bracket the52.099ms RU SQLite point:
+34 tables/610 rows restored. Source/API, issuer/profile keys, CRL, routing and current
+archive bindings pass.108 focused tests PASS; native aliases retain66 known plus3 new
+device identities without regeneration; old all-mapped adapter integration remains open.
+Separately OWNER PG restores39 tables/25 sequences,37 retained-data tables/1,907,455 rows
+and3 consent floors; every table row hash matches. Metadata observations/GeoIP are excluded.
+The networkless lab container/volume are removed; original service/container states remain
+unchanged. No deployment/version/cutover. HA-02 remains IN_PROGRESS: receiver/allocator,
+legacy worker, panel-runtime custody, complete writer/queue fencing and independent forward
+trust are still open. [Current evidence/rollback](releases/2026-11-24-control-ha-installed-recovery.md#actual-external-files-and-owner-database).
+
 **24 November04:58UTC — authorized live capture and privacy-safe off-RU restore PASS.**
 Owner confirmation removes the earlier live-capture permission blocker; no PG cutover
 is authorized. Authoritative sourcee90f8f1565d42d07484f7687c1019cfd9761835c is pushed and

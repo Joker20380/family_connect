@@ -3,7 +3,15 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Current sourcee90f8f15 is pushed/remote-SHA verified. Owner explicitly authorized bounded
+Current source246e160b is pushed/remote-SHA verified. Actual three-node file custody/readback
+passes8,731 files and key/profile/source/history checks, with unchanged observations around
+the52.099ms SQLite point (34 tables/610 rows). Separate OWNER DB native restore passes
+37 retained-data tables/1,907,455 rows plus3 consent floors, without metadata observations.
+All owned lab resources are removed;108 focused source checks PASS. No live backend change.
+Next remains receiver/allocator/legacy-worker, panel runtime/configuration custody, native
+format integration, full writer/dispatcher coverage and independently approved forward trust.
+Do not repeat completed DB/file slices as pending gates; HA-02 is not complete.
+Earlier sourcee90f8f15 is pushed/remote-SHA verified. Owner explicitly authorized bounded
 capture; the earlier permission-pending statements below are superseded. Actual04:58UTC
 v2 capture/restore passes:61.694ms four-store lock barrier,34 tables/609 rows, metadata
 consent/replay floors without observation payloads;79 tests PASS. No service stop/cutover.

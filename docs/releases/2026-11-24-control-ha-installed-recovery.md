@@ -4,6 +4,40 @@ Authoritative implementation remains `/home/joker/.codex/worktrees/dad9/family_c
 on `feature/device-technical-metadata-20261115`, not this divergent old main.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## Actual external files and OWNER database
+
+Current implementation `246e160bbae3eb861be68858a901faf089c98780` is pushed and remote-SHA
+verified. [Pinned actual capture/restore report](https://github.com/Joker20380/family_connect/blob/246e160bbae3eb861be68858a901faf089c98780/docs/releases/2026-11-24-control-ha-live-capture.md)
+contains exact scope, native commands, encrypted receipt hashes, refusals and rollback.
+
+- Three encrypted node capsules restore8,731 files/62,193,541 bytes and929 directories.
+  Runtime issuer/profile keys, source/configuration, aliases/HMAC/referral/admission/sender,
+  routing and original renewal/coordinator/profile-operation history remain private.
+- At07:22:17UTC,9,660 unchanged file/directory observations bracket a52.099ms simultaneous
+  RU SQLite capture; fresh-process restore retains34 tables/610 rows and consent floors only.
+  The older actual SQLite capsule refuses against the newer checkpoint before decryption.
+- Source/API bindings on all nodes, both delegation/profile/key/CRL27423 bindings, signed
+  routing/registry references and current closed archive manifests pass. Native alias roundtrip
+  preserves66 historical plus3 explicit new identities and4 paid events; the legacy all-mapped
+  recovery adapter still refuses this shape. No alias regeneration or production edits.
+- At07:38:49UTC, one exported read-only OWNER PG snapshot preserves37 ordinary data tables/
+  1,907,455 rows and3 consent floors; observation/GeoIP and source-projection rows are excluded.
+  A new same-image networkless/portless PostgreSQL restores39 tables/25 sequences. All37
+  logical row-hash multisets/counts and3 floors match; no application/dispatcher runs.
+- Owned restoration container and volume are verified then removed. Original OWNER container
+  IDs/images/start times and sampled fleet service states/PIDs/restarts remain unchanged.
+  The encrypted capsules/checkpoints are retained outside Git;108 focused tests and doc checks pass.
+
+No release, installed version change, server policy change or PostgreSQL cutover. Rollback
+needs no production action; never copy old offline credentials/DBs over live state. HA-02
+is still IN_PROGRESS: receiver/allocator/mailbox and legacy-worker state, panel runtime/secrets,
+installed-format integration, all-writer/queue consistency and independently approved forward
+trust remain open. The file/DB slices are completed, not substitutes for full disaster recovery.
+
+The existing implementation branch is published. This old-main navigation is separate;
+its previous push was non-fast-forward. Preserve the four original modified and six untracked
+root files; never reset/force-push to make this navigation appear published.
+
 ## Authorized live capture and privacy-safe restoration
 
 Owner confirmation “подтверждаю давай делай” explicitly authorizes the reviewed bounded
