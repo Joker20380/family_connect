@@ -1,5 +1,17 @@
 # Текущее состояние / Current state
 
+**24 November — actual OWNER admission binding checked; enablement refused.**
+Read-only Docker inspection confirms the console uses host UID10001 and publisher UID1000,
+with neither configured for the capture gate. Installed images remain5ce82415/50de6f25;
+source hooks are not deployed. Numeric identities, instance/image/argv/environment/mount
+bindings are observed without Docker exec or any live changes; hashes replace private values.
+104 focused tests PASS/0 skips. Matching samples never grant capture permission.
+Next: qualify identity-preserving joint drain for the different OWNER identities in isolation,
+then finish effective fleet/manual bindings, external settlement/latency, coherent capture,
+independent approval/custody and final recovery. Do not relax gate permissions or change
+service identities as a shortcut. Replication PASS; the same three HA-02 gates remain partial.
+[Actual bindings, remaining gaps and rollback](releases/2026-11-24-control-ha-owner-admission-binding.md).
+
 **24 November — pinned receiver admission implemented; not deployed.**
 An explicit launcher now wraps AWG registration, mailbox membership, canonical snapshot/
 renewal RPC and fleet-agent one-shot commands. It verifies private binding/source pins,

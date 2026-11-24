@@ -3,23 +3,22 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Local cooperative admission/drain remains source-only. Pinned one-shot launchers now cover
-AWG/mailbox/snapshot/fleet-agent receiver command shapes; direct renewal node dispatch has
-an explicit gate and retains caught uncertainty. Verified native bytes use sealed memfds;
-the parent holds admission until child exit, not merely ACK. Parent death never proves
-child cancellation.300 tests PASS/1 accepted-native skip/1 reproduced pre-existing failure
-deselected; isolated unchanged AWG/mailbox probes PASS with simulated engines. The22
-separate root-only profile-snapshot cases are not qualified by this run. No deployment,
-route, watchdog/policy, package replacement or version change.
-[Implementation and exact validation](releases/2026-11-24-control-ha-receiver-admission.md).
-Next selected work: qualify effective installed participation, including remaining manual
-entrypoints/bypasses; bind approved source/config/argv/UID/mounts for all participants,
-independently settle external dispatch and qualify flush latency plus a provably overlapping
-fleet interval. Per-RPC node admission is not a whole remote transaction fence; existing
+Local cooperative admission/drain remains source-only. Targeted installed OWNER inspection
+now observes console host UID10001 versus publisher UID1000, not root; neither configures
+the gate. Installed images remain5ce82415/50de6f25 and observed bindings match before/after,
+without any Docker exec/service change.104 focused tests PASS/0 skips. Matching samples
+are not source-loaded equivalence, namespace/inode attestation, drain or capture approval.
+[Actual bindings and exact validation](releases/2026-11-24-control-ha-owner-admission-binding.md).
+Next selected work: qualify an identity-preserving jointly drained set of OWNER gates in
+isolation, without loosening0700/0600 or changing product/token ownership; finish actual
+source/config/argv/UID/mount and manual/SSH entrypoint bindings across the existing inventory.
+Then independently settle external dispatch and qualify flush latency plus a provably
+overlapping fleet interval. Different-time drains are not a coherent boundary. Existing
 fixed SSH routes and direct callers without a gate remain unchanged until explicitly bound.
-OWNER direct ORM/programmatic `call_command` outside the admitted entrypoints and remote
-asynchronous support jobs are not newly fenced. Different console/publisher UIDs must be
-reconciled before any enablement; the single-UID gate does not silently widen permissions.
+OWNER direct ORM/programmatic `call_command` and asynchronous support jobs remain coverage
+gaps outside admitted entrypoints. Per-RPC admission is not a whole remote transaction fence.
+The [completed receiver source checkpoint](releases/2026-11-24-control-ha-receiver-admission.md)
+retains its exact validation/limitations; it is not installed by this observation.
 Do not reimplement the completed timer/payment/renewal-wrapper/OWNER/receiver source slices.
 Keep paid-watch/deny enforcement running; current NL scope does not permit changing working
 services. No live snapshot is authorized by this local gate or an empty process/lock sample.
