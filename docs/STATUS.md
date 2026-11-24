@@ -1,5 +1,12 @@
 # Текущее состояние / Current state
 
+**24 November — bounded legacy-worker custody prepared.**
+The separate product DB and persisted peer intent now have a fail-closed250ms capture,
+encrypted new-directory restore and native queue qualification without Docker dispatch.
+60 focused checks PASS. Actual capture/readback is still pending; no service or installed version change. This
+advances the selected HA-02 legacy-worker slice, not a full external-command/fleet fence.
+[Scope, abort and rollback](releases/2026-11-24-control-ha-live-capture.md#legacy-worker-custody-plan).
+
 **24 November08:18:34UTC — actual NL1 mailbox authority restore PASS.**
 Nine encrypted authority/source/configuration files restore off-node after an8.170ms
 membership-writer lock. The node key, bootstrap/destination and volume marker bind; native

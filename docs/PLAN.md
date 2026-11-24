@@ -3,6 +3,10 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+Immediate worker step: qualify the bounded product DB/peer-intent collector and native
+offline queue checks, then execute the already authorized bounded capture with exact
+preflight and encrypted independent readback. No Docker dispatch, worker restart or
+server-key read. [Plan and abort](releases/2026-11-24-control-ha-live-capture.md#legacy-worker-custody-plan).
 Mailbox authority slice completed08:18:34UTC:9 files,8.170ms lock, sequence456216,
 56 dynamic/3 static members. Independent readback, node key/bootstrap/marker and native
 stale-floor/expiry checks pass; service identity unchanged. Do not repeat the already

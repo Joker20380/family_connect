@@ -1,5 +1,43 @@
 # 24 November 2026 — authorized bounded live capture
 
+## Legacy-worker custody plan
+
+Selected HA-02 scope: the separately mounted legacy product SQLite database, its durable
+peer queue/leases/revisions, gateway mapping/public keys/persisted peer intent,11 pinned
+source/migration files and the exact worker unit/environment. Not the gateway server private
+key, provisioning signer, client private profiles or a live Docker command. The source pins
+match installed files; the census finds13 tables/58 rows and one persisted peer file.
+The worker image remains the observed `family-connect-product:0.2.1`; no version changes.
+
+Preflight: strict known-host SSH, exact named Family Connect container/image/mount/command
+comparison; fixed five environment paths, one configured pilot gateway, source digests,
+regular no-link DB/files, rollback-journal SQLite with no sidecars. Capture follows native
+writer order: zero-wait `BEGIN IMMEDIATE`, then existing `.enrollment.lock` with `LOCK_NB`.
+Kernel SIGALRM releases both under250ms even if Python hangs. No lock file is created.
+Files are verified against inode/ctime observations under the barrier; DB serialization
+and peer-directory enumeration finish before release. Source/config drift, contention,
+unexpected schema, sidecars or deadline failure abort without retrying or stopping workers.
+
+Encrypt only on the owner host with a separate key/checkpoint; restore only into a new
+private offline directory. Validate exact v3 schema/foreign keys/integrity and every table's
+count/row digest. Native qualification uses the pinned repository consumers with in-memory
+adapters only: replay/restart never resets allocations, versions, revocations or leases;
+failed operations remain durable retries and expired deployments never install. Retain the
+untouched restored image separately from the qualification copy. Reject stale/wrong capsules.
+Rollback means collector exit and automatic lock release; never restore the old DB on RU.
+
+Validation:60 focused custody/reconciler/adapter/worker tests pass, including a subprocess
+killed by the kernel deadline with both locks subsequently available, zero-wait contention,
+schema/foreign-key/version refusals, source/config drift, stale checkpoint and key failures,
+native active/revoked/retry-pending/expired cases. Only existing test-client deprecations.
+
+This is a DB-plus-persisted-intent custody point, **not an external Docker-exec fence**:
+an earlier timed-out exec may still finish, and this point is not coherent with canonical,
+OWNER or the three-node snapshots. No worker restart, gateway command, rollout or activation.
+OWNER runtime, native composite integration, coherent dispatcher/writer capture and independent
+forward trust remain required. Report the new observed RU health separately; do not infer
+unchanged VPN/watchdog health from unchanged worker identity.
+
 ## Actual mailbox readback — 08:18:34UTC
 
 Session boundary: remaining legacy-worker read-only preflight identifies the separately
