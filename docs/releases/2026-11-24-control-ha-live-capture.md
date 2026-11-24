@@ -1,5 +1,62 @@
 # 24 November 2026 — authorized bounded live capture
 
+## Actual three-node file readback — 07:22:17UTC
+
+Executed source `16c94824d49a3140f3a151729d78dc4db54fd7ed`, all108 focused tests pass.
+Per-host explicit plans select36/19/19 files and3/2/2 bounded trees. These cover current
+node/controller configuration,14 declared renewal source modules and API archive per node,
+issuer/anchor/referral/HMAC/admission/sender inputs, both gateway private profiles/locators,
+retained routing files, original renewal/coordinator and profile-operation history.
+Derived short-lived directory publications, receivers, allocators, worker product database
+and OWNER panel are not included or silently declared rebuildable.
+
+| Host | Files | Directories | Exact bytes | Encrypted capsule SHA256 |
+| --- | --- | --- | --- | --- |
+| RU | 3,870 | 377 | 33,469,038 | `88d1175c81d7805eff5a0df91b7aa44dea2f6de9756341d0af48ec8891bbf5e0` |
+| NL1 | 3,286 | 374 | 18,452,995 | `3a9cbeb7941e8483d68eb1d893f67e27cec5d705f961d480b3e6c7319b0c6789` |
+| NL2 | 1,575 | 178 | 10,271,508 | `031d83f94b974106ab0a2d5bb980c75081064d55ffab79729f3744cbcf6c7990` |
+
+After all file captures, a new simultaneous four-store SQLite barrier lasts52.099ms at
+07:22:17.358283UTC; later witnesses match4,247/3,660/1,753 captured file/directory stamps.
+The9,660 observations bracket the SQLite point without paid-watch/VPN/service stops.
+AWG/TCP/paid-watch unit states/PIDs/invocations/restart counters and RU HTTP candidate
+observations match before/after this point. This is not an end-to-end VPN traffic test.
+
+Fresh processes, using only local encrypted capsules and separately held keys/checkpoints,
+restore every file into new0700/0600 offline destinations and the four SQLite images into
+a separate directory:34 tables/610 rows; closed handoff1/2/1/1/1. Metadata contains only
+consent/replay floors. The earlier04:58 actual capsule refuses against the newer checkpoint
+before decryption. Latest SQLite ciphertext SHA256:
+`5ba8a5d2b720d07e91beba35ae887309538f1d44448e858edf8158b93ef77c35`.
+
+Offline checks at the capture time pass: all three installed source/config/API bindings;
+both signed delegations and issuer private-key/public-certificate equality; CRL27423;
+both gateway leaf signatures/current validity/private-key match and locator/CRL/floor
+bindings; signed routing/registry references; current terminal coordinator and all three
+archive manifests. Original ledgers contain369/369/175 entries, not the older366/366/172
+sample. Legacy bytes are preserved without executing code or inventing old approvals.
+
+Native alias HMAC binding passes. Of69 devices,66 have retained alias history and3 are
+explicit new entities, as supported by `pseudonyms.seal/unseal`; all4 paid events are mapped.
+Native roundtrip preserves old handles and the3 current identities without changing the
+manifest. The older `external_v1.alias_check` deliberately requires every mapping and still
+refuses this shape. Do not repair that refusal by inventing old identities or changing
+production aliases: an installed-format recovery path remains required. Initial exploratory
+anchor verification supplied encoded file bytes instead of decoded32-byte public material;
+correct decoding passes the unchanged source verifier. Initial probe receipts remain.
+
+Private receipts/capsules/readback are under the owner-only `control-ha/20261124-external-01`
+custody directory; wrapping keys and checkpoints remain separately in `control-ha-keys`.
+No raw records, profiles, keys or journals are committed. Source publication does not deploy
+the collector. Installed console5ce82415, RU HTTP4e2df679 and public Android126/catalog9
+are unchanged. Rollback of this read-only operation requires no live action: never restore
+these old credential profiles into a running host or start pre-existing failed units.
+
+HA-02 remains IN_PROGRESS. File-stability observations do not prove an all-writer fence or
+absence of an already incomplete cross-store operation. Full receiver/allocator/mailbox,
+legacy worker and OWNER panel custody/recovery, exact installed-format integration and
+independently approved current forward trust remain required. No production PG switch.
+
 ## External-file custody
 
 The next bounded operation uses `scripts/control_ha_file_custody.py`: an explicit private

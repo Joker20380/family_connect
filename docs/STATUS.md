@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+**24 November07:22:17UTC — actual external authority/history retained and restored.**
+Three encrypted node capsules preserve8,731 files/62,193,541 bytes plus929 directories;
+fresh-process private offline readback matches every file.9,660 unchanged inode/ctime/directory
+observations bracket a fresh52.099ms RU four-store capture:34 tables/610 rows restored.
+All14 declared renewal modules and API pins per node, both delegated issuer/profile keys,
+current CRL27423, routing signatures/DB bindings and current closed archive manifests pass.
+Observed AWG/TCP/paid-watch/RU HTTP unit states/PIDs/counters are unchanged. No service stop.
+The native alias protocol preserves66 migrated devices plus3 explicit new identities and4
+paid events; the old all-mapped recovery adapter still refuses that legitimate native shape.
+No alias was regenerated. Full receiver/legacy-worker/OWNER recovery, complete writer fencing
+and independently approved forward checkpoint remain open; HA-02 is not complete.
+[Actual evidence and remaining gates](releases/2026-11-24-control-ha-live-capture.md#actual-three-node-file-readback--072217utc).
+
 **24 November — external-file capture/readback guard ready; actual capture next.**
 The scoped collector retains exact authority/profile/source and opaque history bytes,
 rejects database/metadata paths, symlinks, hardlinks, unknown trees and changed observations.

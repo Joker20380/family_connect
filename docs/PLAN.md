@@ -3,6 +3,14 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+Latest actual point07:22:17UTC:8,731 external files restored from three encrypted capsules;
+9,660 unchanged file/directory observations bracket the52.099ms RU SQLite snapshot,
+34 tables/610 rows restored. Source/API, issuer/profile key/CRL, routing and current archive
+bindings pass. This advances custody, not a complete writer fence or trusted full-DR gate.
+Keep the native alias shape (66 retained mappings plus3 explicit new entities) without
+inventing legacy handles; the strict old recovery adapter cannot yet import that shape.
+Remaining selected work: actual receiver/allocator/legacy-worker/OWNER recovery, installed
+format integration, full writer/queue coverage and independently approved forward checkpoint.
 External authority/history continuation: the bounded encrypted file collector and new-directory
 readback pass108 focused checks. Next execute the reviewed actual three-node file plans,
 bracket a fresh RU SQLite point with unchanged file witnesses, and verify retained source/key
