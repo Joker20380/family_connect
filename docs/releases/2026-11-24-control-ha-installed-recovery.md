@@ -27,7 +27,7 @@ contains the kit/receipt hashes, all failed attempts/corrections and exact trust
   and live volumes are not mounted. Audit hook records zero network/process dispatch.
   Changed kit bytes and changed independent custody pins refuse in fresh namespaces.
   All21 original custody inputs remain byte-identical; namespaces exit, no daemon is started.
--242 focused tests PASS,0 skips, with two existing Starlette/AnyIO deprecation warnings.
+- 242 focused tests PASS,0 skips, with two existing Starlette/AnyIO deprecation warnings.
   No SSH/live service operation, installation, version/catalog/release change occurs.
 
 This closes the explicit recovery-tool source/Python-dependency availability gap. It is NOT
