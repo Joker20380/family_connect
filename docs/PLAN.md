@@ -188,6 +188,13 @@ independent request pin and sequence/CRL floors, exact current capsule/opaque hi
 source/config/issuer/publication bindings. Native post-renewal issuance, source-removed
 readback and isolated registry consumed/fresh-proof checks pass.251 selected tests PASS
 /3 optional PostgreSQL skips; old equality/import implementations remain unchanged.
+Follow-up sourceb105033d pushed/remote-SHA verified: both publication semantics now
+checked offline against signed distinct gateway identities/delegations, native validity
+at capture/verification, shared CA/family/minimum revision and independent sequence floors.
+Mandatory gateway bindings tighten the unpublished contract, not a new phase or permit
+to execute old archives. Caller map mutation cannot replace already pinned public bytes.
+219 tests /0 skips (checkpoint86/publications77/current audit56); six docs/970 links PASS.
+[Latest qualification and fixed stage2 remainder](releases/2026-11-24-control-ha-forward-publications.md).
 Same selected task IN_PROGRESS: actual-current publication/source/capture bindings,
 coherent capture and full recovery still open. Development decision is resolved, not
 historical approval. No new signer, retroactive consent, old-row restore, production
