@@ -1,5 +1,19 @@
 # Текущее состояние / Current state
 
+**24 November — cache-content/permission and selected unit-setting checks complete; no activation.**
+NL1's four retained caches match readable sources without execution. Actual pinned Python3.14.4
+synthetic stand20:32:29UTC proves UID979 source fallback with a root-only cache; root reads that
+cache. Owned test directory removed, interpreter pins unchanged; no live cache permissions changed.
+NL2's14 selected loaded/disk Service settings match, and no applicable disk drop-ins are found.
+NeedDaemonReload=yes persists; its exact cause remains unknown, not a reason to reload. The old
+strict NL1 inventory refusal is unchanged; these supplementary checks are not runtime acceptance.
+190 tests PASS/0 skips plus native stand PASS. No working-service/deployment/version change.
+Next: full helper/runtime/environment/stop-post and AWG/mailbox/support external settlement,
+bounded manual-write coordination, approved activation/real coherent interval and independent
+approval/custody/final recovery. Replication PASS; three HA-02 gates partial. Do not repeat this
+cache experiment/selected-setting comparison. Earlier entries are checkpoint history, not new NEXTs.
+[Evidence, limits and rollback](releases/2026-11-24-control-ha-runtime-qualification.md).
+
 **24 November — actual profile Python/sudo/systemd bindings observed; no activation.**
 20:13:20–20:13:23UTC NL1/NL2 scoped read-only check: Python3.14.4/3.12.3 under UID979/993;
 both configured restricted-bootstrap units loaded/active/running, no pending unit job.

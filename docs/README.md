@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 24 November: four NL1 caches/source and actual permission stand PASS,14 NL2 loaded/disk settings match;190 tests, explicit remaining limits, no deployment](releases/2026-11-24-control-ha-runtime-qualification.md).
+
 [CONTROL-HA · 24 November: actual NL Python/sudo/systemd bindings, explicit cache/unit qualification limits,135 tests; both scoped services active, no deployment](releases/2026-11-24-control-ha-profile-runtime.md).
 
 [CONTROL-HA · 24 November: native multi-RPC renewal settlement guard, pinned source/config chain,264 tests and actual-lock root/UID993 stand; no deployment](releases/2026-11-24-control-ha-renewal-settlement.md).

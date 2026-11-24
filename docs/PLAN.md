@@ -3,6 +3,22 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+Targeted cache and selected unit-setting qualification is complete, not full runtime acceptance.
+Four NL1 caches match retained readable source without execution; actual pinned Python3.14.4
+UID979/root synthetic stand20:32:29UTC proves source fallback versus cache reads, with cleanup.
+The old strict inventory refusal is unchanged; do not chmod live cache or bypass that policy.
+NL2's14 selected loaded/disk settings match; no applicable on-disk drop-ins found. NeedDaemonReload
+remains unexplained, not permission to reload; full Unit/environment/lifecycle equivalence is open.
+190 tests PASS/0 skips plus native stand PASS. No working-service/deployment/version changes.
+[Targeted findings and exact limits](releases/2026-11-24-control-ha-runtime-qualification.md).
+Next selected work: full helper/runtime/environment/stop-post and AWG/mailbox/support external
+settlement; bounded manual-write coordination, independent source/runtime/gate approval, actual
+drain/overlap/coherent capture and current independent approval/custody/final recovery. Keep the
+strict inventory and unexplained reload marker visible in any activation proposal. Do not repeat
+the completed cache experiment, selected-setting comparison or prior censuses as new gates.
+Replication PASS; the same three HA-02 gates partial, no HA-03/cutover or working-NL deployment.
+
+At the preceding profile-runtime checkpoint:
 Actual profile Python/sudo/unit observation is now recorded at20:13:20–20:13:23UTC. Both
 configured NL restricted-bootstrap units are active/running; effective sudo permits only each
 pinned zero-argument helper as root. Python is3.14.4/UID979 on NL1 and3.12.3/UID993 on NL2.
@@ -12,7 +28,7 @@ NL1 has13 drop-ins and a loaded ExecStopPost; NL2's NeedDaemonReload=yes remains
 not proof of a changed loaded command. Unit source/properties are pinned privately; no reload,
 helper dispatch, service/deployment/version change.135 focused tests PASS/0 skips.
 [Actual runtime/sudo/unit evidence and limits](releases/2026-11-24-control-ha-profile-runtime.md).
-Next selected work: resolve the exact bytecode-cache qualification and loaded/disk-unit limits,
+At that checkpoint, remaining work was exact bytecode-cache qualification and loaded/disk-unit limits,
 complete helper/systemd/environment/stop-post and AWG/mailbox/support external settlement,
 then bounded manual-write coordination and independently approved activation/real latency/overlap.
 Do not repeat the completed SSH, wrapper, source-chain, native-lock or runtime/sudo/unit census.
