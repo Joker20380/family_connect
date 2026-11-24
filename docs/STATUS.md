@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+**24 November — OWNER image upgrade and data-preserving revert pass in isolation.**
+HA source26cbde01 is pushed and remote-SHA verified. Two locally built candidates preserve
+the installed base image config/dependencies; exact installed startup commands and identities
+pass old → candidate → old on disposable state. Final native PASS18:02:31–18:04:00UTC;
+161 focused tests PASS/0 skips. Post-upgrade PostgreSQL/SQLite writes, migration set and
+unsettled-operation evidence survive rollback. Separate gates retain0700/0600 and existing UIDs.
+Working OWNER images/configurations remain unchanged; no RU/NL access or production deployment.
+Next: remaining fleet/manual writer bindings and external settlement/real latency, then coherent
+capture, independent current approval/custody and final combined recovery. Candidate image/live
+gate-config approval is still required before working-container replacement. The empty-queue
+stand does not qualify live publisher shutdown. Replication PASS; three HA-02 blocks partial.
+[Evidence and rollback boundary](releases/2026-11-24-control-ha-installed-recovery.md#owner-image-upgrade--isolated-revert).
+
 **24 November — installed OWNER sources bound; configuration-only admission enablement refused.**
 HA sourcef7859b1e is pushed and remote-SHA verified.17:38:42UTC GET-only inspection confirms
 both installed images lack the two admission modules; six of eight present scoped files

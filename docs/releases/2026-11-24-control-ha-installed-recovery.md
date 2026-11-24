@@ -6,6 +6,53 @@ divergence is reconciled/pushed at2ae5c512; older publication-blocker statements
 historical, not active instructions or a current blocker.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## OWNER image upgrade — isolated revert
+
+[Authoritative source and report](https://github.com/Joker20380/family_connect/blob/26cbde013b6864f54dc738772d8a4b3dfca82d6f/docs/releases/2026-11-24-control-ha-owner-upgrade.md)
+is pushed/remote-SHA verified at26cbde013b6864f54dc738772d8a4b3dfca82d6f. Main contains
+navigation only; source remains on the existing HA feature branch, not deployed.
+
+The builder overlays only ten closed Python source paths on each exact installed image.
+Original image Config/OS/architecture/dependency layers are unchanged; exactly one source
+layer is added. No dependency installation, migration file or private build input. Local
+candidate image IDs are recorded in the authoritative report: consoleb62e6693, publisher2162635c.
+Still installed/rollback images remain5ce82415 and50de6f25. Built is not independently approved,
+installed, registry-published or a new application release.
+
+Final native PASS18:02:31.561639–18:04:00.368232UTC exercises old → candidate → old for both
+roles with byte-identical installed command arrays, users10001/1000 and working directories.
+Disposable pinned PG and synthetic SQLite run without external connectivity, published ports,
+live mounts or actual credentials. Both startup chains become ready; separate gates refuse
+management dispatch while drained; invalid gate configuration refuses console startup.
+Acknowledged candidate PG/session and SQLite/label writes survive image revert without data
+restore/rewind. Migration set remains unchanged. Durable unknown-operation evidence retains
+its exact name/content hash and still prevents drain after rollback.0700/0600/UIDs are preserved.
+Live OWNER config/image/start/restart/mount/argv/environment bindings are equal before/after;
+all owned stand containers/volumes are removed. No RU/NL access or working-service change.
+
+161 tests PASS/0 skips:53 new image/workload/fixture-safety checks,66 source-observer and42
+admission-preflight. The accepted native receipt is
+`2dc9d3eba4c752d08eb42ce1a7c750540b07a7550123423897dd8caf44a71625`.
+Four feature docs/1041 local-link targets and whitespace checks pass. Private manifests/logs,
+initial fixture failures, corrected-volume safety checks and final evidence remain outside Git.
+
+The stand uses fresh state, fake token/origin and an empty publication queue. The preserved
+publisher shell loop needs bounded stop/force fallback in this fixture; this is **not** a live
+in-flight drain or latency qualification. Automatic Docker healthchecks are disabled in the
+stand while readiness is explicitly polled. Exact live environment/mount/token/guardian binding,
+independent approval and external settlement remain required before a working-image change.
+
+Rollback contract: preserve current PG/SQLite state and exact old images/effective commands;
+undo only the approved image/gate-config delta, retain unknown markers and invalidate capture
+readiness. Never run default Compose seeding, overwrite current state with a pre-upgrade backup,
+weaken gate permissions/change token ownership or stop paid-watch as a shortcut.
+
+Next selected work is remaining fleet/manual writer participation and external settlement/
+real latency, then coherent capture, independent current approval/key/access custody and final
+combined recovery. Source candidates require separate approval and a reviewed live config delta
+before any production replacement. Replication PASS; three HA-02 blocks partial, no HA-03,
+cutover or new stage. Do not repeat the completed OWNER image stand as another pending task.
+
 ## Installed OWNER sources — read-only binding
 
 [Authoritative source and report](https://github.com/Joker20380/family_connect/blob/f7859b1ee8dfea087d457bf8b785f4203569387d/docs/releases/2026-11-24-control-ha-owner-source-binding.md)

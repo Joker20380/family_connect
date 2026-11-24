@@ -11,19 +11,20 @@ remains selected; this publication task does not advance its acceptance gates.
 [Reconciliation record](releases/2026-11-24-source-reconciliation.md).
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Featuref7859b1e is pushed/remote-SHA verified. The scoped installed OWNER source/dispatch
-observation now confirms the two admission modules are absent in both pinned images;
-six present files differ from candidate and only two shims match. All selected paths are
-in declared read-only rootfs.17:38:42UTC pre/post source/config bindings agree;108 focused
-tests PASS/0 skips. Zero retained execs is not a closed manual route. No Docker exec,
-source import, working-service change, RU/NL access, deployment or version change.
-Installed images remain5ce82415/50de6f25 without gates; configuration-only enablement refuses.
-[Source decision and rollback](releases/2026-11-24-control-ha-installed-recovery.md#installed-owner-sources--read-only-binding).
-Next selected work: qualify exact OWNER activation/revert with independently approved
-replacement images, separate gate mounts and preserved effective commands; finish actual
-fleet/manual bindings, independent external completion and real capture/flush latency
-before overlapping all-store/fleet capture. Prepare/qualify, do not silently deploy.
-Do not rebuild the completed local interval/launcher or repeat this scoped observation.
+Feature26cbde01 is pushed/remote-SHA verified. Exact-command OWNER image activation/revert now
+passes in isolation: both identities, separate gates, preserved base config/dependency layers,
+acknowledged post-upgrade PostgreSQL/SQLite writes and unchanged migration set. Unknown-operation
+markers survive revert and continue to refuse capture.161 tests PASS/0 skips; final native
+PASS18:02:31–18:04:00UTC, owned resources removed. Installed OWNER bindings remain unchanged:
+images5ce82415/50de6f25, no configured gates; new candidatesb62e6693/2162635c are local only.
+No working-service change, RU/NL access, deployment or version change. Empty-queue fixture
+publisher shutdown is not live external-settlement qualification.
+[Candidate images, native checks and rollback](releases/2026-11-24-control-ha-installed-recovery.md#owner-image-upgrade--isolated-revert).
+Next selected work: remaining fleet/manual bindings, independent external completion and real
+capture/flush latency before overlapping all-store/fleet capture. Independently approve images
+and exact live gate/config/mount bindings before any working-container replacement. Prepare/
+qualify, do not silently deploy. Do not rebuild the completed OWNER stand, local interval/launcher
+or repeat the scoped installed-source observation.
 Do not widen0700/0600, change product/token ownership or treat a local receipt as approval.
 Direct ORM/programmatic commands and asynchronous remote support remain coverage gaps.
 Do not reimplement completed timer/payment/renewal/OWNER/receiver source
@@ -31,7 +32,7 @@ slices or repeat inventory/NL2 recovery. Keep paid-watch running; current NL sco
 permission. Independent current approval, coherent capture, off-laptop key/access custody
 and final combined recovery remain the same three partial HA-02 gates; replication PASS,
 no new lettered stage, HA-03 or cutover.
-[Implementation and next boundary](releases/2026-11-24-control-ha-installed-recovery.md#installed-owner-sources--read-only-binding).
+[Implementation and next boundary](releases/2026-11-24-control-ha-installed-recovery.md#owner-image-upgrade--isolated-revert).
 
 Owner-confirmed NL2 isolated retained-state recovery PASS14:12UTC, final cleanup/service
 checks PASS14:20UTC; source/reporte353ff85 pushed and verified. Wrong-key refusal,50 focused
