@@ -1,5 +1,15 @@
 # Текущее состояние / Current state
 
+**24 November09:17UTC — OWNER runtime/synthetic recovery PASS.**
+Authoritative source699ac9b179754995687cb4dbd68b816a09785520 is pushed/remote-SHA verified.
+The24.374ms bounded barrier retains20 exact runtime files and9 tables/223 rows. Fresh-process
+encrypted readback and pinned native console-image checks pass: all row digests/paid projection,
+140 alias resolutions and3 paid expiry denials. No network/PG/publisher call, original volume
+mount or existing-container restart.76 focused tests PASS; no release/version/deployment.
+HA-02 remains IN_PROGRESS: native composite integration, coherent PG/synthetic/canonical/
+all-writer/dispatcher capture and independent trust. OWNER custody is not pending again.
+[Actual evidence and rollback](releases/2026-11-24-control-ha-installed-recovery.md#actual-owner-runtime-recovery).
+
 **24 November08:43UTC — legacy-worker recovery PASS; OWNER runtime census recorded.**
 Authoritative source37230214f7d54a511dbb84b3449cc9de7d309de8 is pushed/remote-SHA verified.
 Encrypted fresh-process recovery restores19 files,13 tables/58 rows and one persisted peer

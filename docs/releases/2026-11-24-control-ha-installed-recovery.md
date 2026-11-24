@@ -4,6 +4,33 @@ Authoritative implementation remains `/home/joker/.codex/worktrees/dad9/family_c
 on `feature/device-technical-metadata-20261115`, not this divergent old main.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## Actual OWNER runtime recovery
+
+Implementation `699ac9b179754995687cb4dbd68b816a09785520` is pushed and remote-SHA verified;
+capture source `25d84dcd19f139009970ba2d6a622dbfec7f3e6a` was pushed before execution.
+[Pinned OWNER runtime report](https://github.com/Joker20380/family_connect/blob/699ac9b179754995687cb4dbd68b816a09785520/docs/releases/2026-11-24-control-ha-live-capture.md#actual-owner-runtime-readback--091714utc)
+documents the exact closed scope, abort/rollback, checksums, native checks and limits.
+
+- Actual2026-11-24T09:17:14.453588Z point:24.374ms local seed/SQLite barrier,20 runtime/
+  configuration/credential files,9 tables/223 rows. Separate owner-held encryption key and
+  checkpoint; no secret, alias value, raw DB row or transient metadata observation in Git.
+- Fresh-process new-directory restore matches every file/table digest. Exact pinned console
+  image checks native paid projection,140 alias resolutions and3 expiry denials without
+  socket/subprocess/PG/publisher calls. No default Compose/seed/migration or original volume.
+- Native copy stays unchanged; probe container is removed. Existing console/PG/publisher
+  ID/image/configuration/mount/start observations remain unchanged; no installed/public/
+  invitation version changes, production restore or server policy change.
+- 76 focused tests pass,0 failures/skips. Private custody is
+  `~/.local/share/family-connect/control-ha/20261124-owner-runtime-01/`; separate key/checkpoint
+  are in `control-ha-keys/` with the same basename. Restore only to NEW private directories.
+
+This closes OWNER runtime/synthetic custody, not a joint PG/synthetic/dispatcher point.
+The referenced collector archives and pinned images are dependencies, not included in this
+20-file capsule. HA-02 remains IN_PROGRESS for native composite integration, coherent
+canonical/all-writer/dispatcher capture and independent forward trust. Do not start HA-03..05.
+Rollback needs no production action: release local locks and remove only owned test resources.
+Old main remains divergent; preserve the owner's dirty work and never force a navigation push.
+
 ## Actual worker and OWNER runtime census
 
 Current implementation `37230214f7d54a511dbb84b3449cc9de7d309de8` is pushed and remote-SHA

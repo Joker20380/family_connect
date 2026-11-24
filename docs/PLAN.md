@@ -3,12 +3,19 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Current source37230214 is pushed/remote-SHA verified. Actual legacy-worker DB/queue/persisted
+Current source699ac9b1 is pushed/remote-SHA verified. OWNER runtime/synthetic capture and
+native readback now PASS:20 files,9 tables/223 rows,24.374ms barrier,140 alias resolutions,
+3 paid expiry denials;76 focused tests PASS. Existing3 containers unchanged, no dispatch,
+default startup/migration, original volume mount or release/version change. Next inside
+HA-02: native composite integration, coherent PG/synthetic/canonical/all-writer/dispatcher
+capture and independently approved trust. No HA-03..05 or cutover selected.
+[Current evidence](releases/2026-11-24-control-ha-installed-recovery.md#actual-owner-runtime-recovery).
+Earlier source37230214 is pushed/remote-SHA verified. Actual legacy-worker DB/queue/persisted
 intent is restored:19 files,13 tables/58 rows;41.191ms bounded barrier and native replay/
 retry/restart/expiry checks, without Docker dispatch.206 combined tests PASS. OWNER runtime
 preflight identifies exact configuration/HMAC/aliases/token plus a separate synthetic SQLite
-store (9 tables/223 rows), not covered by its already restored PG database. Next: bounded
-OWNER runtime/synthetic capture and native readback, then native composite integration,
+store (9 tables/223 rows), not covered by its already restored PG database. That bounded
+OWNER capture/native readback is now complete above, leaving native composite integration,
 coherent all-writer/dispatcher capture and independent forward trust. No HA-03..05 or live
 cutover. [Current evidence](releases/2026-11-24-control-ha-installed-recovery.md#actual-worker-and-owner-runtime-census).
 Earlier source1d014f71 is pushed/remote-SHA verified. Actual node-local allocator/receiver
