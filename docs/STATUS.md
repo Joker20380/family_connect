@@ -1,5 +1,20 @@
 # Текущее состояние / Current state
 
+**24 November — renewal transaction settlement guarded, not inferred from SSH success.**
+Observed NL1/NL2 snapshot→config→helper→14 renewal-module/API bindings read-only. Each snapshot's
+25 manifest members match;18 files equal its retained commit. Both native journals have no owner
+or residual transaction entries at19:38:13UTC; no live lock acquired. New opt-in guardian schema2
+pins the renewal config/state/native lock, refuses open transactions and holds that lock through
+the joint interval/final ACK. Legacy schema1 is unchanged, not a settlement assertion.
+264 focused tests PASS/0 skips. Exact retained native lock/acquire implementations reproduce
+successful RPC with open transaction; the root+UID993 isolated stand refuses it, holds idle
+native locks and releases on deadline. Synthetic state/config, not full live helper/systemd.
+No deployment/service/SSH/key/version changes; guardian capsule2c37bdb7 is local/unapproved.
+Next: actual Python/dependency/sudo/unit bindings and remaining AWG/mailbox/support external
+completion, bounded manual-write coordination, then approved activation/latency/coherent capture.
+Do not repeat this source-chain observation or native-lock stand. Replication PASS; three HA-02
+gates partial. [Evidence, limits and rollback](releases/2026-11-24-control-ha-renewal-settlement.md).
+
 **24 November — installed restricted-profile wrapper chain bound and qualified in isolation.**
 New opt-in receiver kind preserves the exact NL1/NL2 wrapper guards, Python path, flags,
 clean environment and cwd, while sealing both wrapper and snapshot archive. Admission lasts

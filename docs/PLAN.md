@@ -3,13 +3,31 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+The successful-RPC/open-renewal-transaction gap is now reproduced with both retained NL
+implementations and guarded in source. New opt-in guardian schema2 binds config SHA and native
+state/operation.lock identities, refuses owner/residual entries and holds the native lock through
+final ACK/deadline.264 tests PASS/0 skips; root+UID993 isolated stand PASS19:36:58UTC with synthetic
+state/config and exact installed lock/acquire code. No live gate/SSH/service/version change.
+Read-only source closure covers both snapshot configs/helpers,14 renewal modules per node and
+their common API archive. Journals appear idle19:38:13UTC without taking locks; this is not capture
+readiness. Candidate guardian2c37bdb7 is local, unapproved and uninstalled; schema1 is unchanged.
+[Transaction settlement, native evidence and limits](releases/2026-11-24-control-ha-renewal-settlement.md).
+Next selected work: actual Python/site-package/sudo/unit bindings and remaining AWG/mailbox/support
+external-completion coverage, bounded manual-write/deployment coordination, then independently
+approved runtime/source/gate activation and real latency/overlap. Do not repeat the completed profile
+source-chain observation or native-lock stand. Exact full helper/systemd execution remains distinct
+from this lock implementation test; no transaction journal may be deleted to make capture pass.
+Independent current checkpoint/key custody and final combined recovery remain required.
+Replication PASS; three HA-02 gates partial. Current NL scope still excludes working-service deployment.
+
+At the preceding profile-wrapper checkpoint:
 Installed forced-command entry sources are now resolved; the NL profile routes use generated
 wrappers, not bare snapshot archives. New `profile-launcher` receiver binding preserves their
 guards/runtime path/environment/cwd and seals the wrapper→archive exec transition.186 tests PASS;
 actual wrapper bytes under UID979/993 pass the isolated18:50:08–18:50:12UTC stand. Its archives
 are synthetic and Python3.13.15 is not installed-runtime qualification. No production deployment.
 [Actual bindings, source change and exact remaining gate](releases/2026-11-24-control-ha-profile-launcher.md).
-Next selected work: close actual dependency/config/helper and external-completion coverage for
+At that checkpoint, remaining work was actual dependency/config/helper and external-completion coverage for
 these resolved routes, coordinate the bounded manual product-write/deployment pause, and qualify
 real latency/overlap. Runtime/source/gate and OWNER image/live-config approval remain mandatory
 before activation; keep recovery SSH and paid-watch. Do not repeat the SSH census or this wrapper

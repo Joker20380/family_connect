@@ -6,7 +6,7 @@ from pathlib import Path
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCES = ('control/capture_gate.py', 'control/capture_group.py', 'control/capture_launch.py')
+SOURCES = ('control/capture_gate.py', 'control/capture_group.py', 'control/capture_launch.py', 'control/capture_renewal.py')
 MAIN = b'from control.capture_launch import guardian_main\nraise SystemExit(guardian_main())\n'
 
 

@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 24 November: native multi-RPC renewal settlement guard, pinned source/config chain,264 tests and actual-lock root/UID993 stand; no deployment](releases/2026-11-24-control-ha-renewal-settlement.md).
+
 [CONTROL-HA · 24 November: installed profile wrapper/source bindings and sealed exec admission,186 tests and actual-wrapper UID979/993 isolated stand; no deployment](releases/2026-11-24-control-ha-profile-launcher.md).
 
 [CONTROL-HA · 24 November: read-only RU/NL1/NL2 SSH policy/key bindings, explicit unfenced root routes and bounded manual-write prerequisite;112 tests, no SSH/service changes](releases/2026-11-24-control-ha-ssh-binding.md).

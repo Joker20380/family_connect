@@ -1,6 +1,6 @@
 """Bounded same-kernel joint drain of separately owned gates; no deployment or capture permit."""
 from array import array
-from contextlib import contextmanager
+from contextlib import contextmanager, ExitStack
 from dataclasses import dataclass
 import json
 import math
@@ -112,7 +112,7 @@ def command(channel, expected, deadline, operation=None):
     return value
 
 
-def serve(gate, channel, coordinator, expected_pins, *, drain_seconds=5, hold_seconds=2):
+def serve(gate, channel, coordinator, expected_pins, *, drain_seconds=5, hold_seconds=2, renewal=None):
     drain = duration(drain_seconds, 5)
     hold = duration(hold_seconds, 2)
     expected_pins = pins(expected_pins)
@@ -129,7 +129,10 @@ def serve(gate, channel, coordinator, expected_pins, *, drain_seconds=5, hold_se
         request = command(channel, coordinator, min(deadline, time.monotonic_ns() + drain))
         require(request['command'] == 'BEGIN', 'GROUP_BEGIN')
         operation = request['operation']
-        with gate.drain(drain_seconds):
+        with gate.drain(drain_seconds), ExitStack() as settlement:
+            if renewal is not None:
+                from .capture_renewal import RenewalState
+                retained = settlement.enter_context(RenewalState(renewal).hold())
             held_since = time.monotonic_ns()
             expires = min(deadline, held_since + hold)
             remaining = (expires - time.monotonic_ns()) / NANOSECONDS
@@ -141,6 +144,8 @@ def serve(gate, channel, coordinator, expected_pins, *, drain_seconds=5, hold_se
             request = command(channel, coordinator, expires, operation)
             require(request['command'] == 'FINISH', 'GROUP_FINISH')
             with gate.opened():
+                if renewal is not None:
+                    retained.verify()
                 acknowledged = time.monotonic_ns()
                 require(clock() == common['clock'] and acknowledged < expires, 'GROUP_EXPIRED')
                 send(channel, dict(status='HELD', acknowledged_ns=acknowledged, **common))
