@@ -3,6 +3,13 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+Current selected slice: OWNER machine-loss image custody. Three exact linux/amd64 exports
+pass closed graph/layer checks;69 focused tests pass. Encrypted offline packaging and the
+standalone cold bootstrap are prepared, not yet qualified on the actual archive. Next execute
+the restored probes with no Docker/source/production mounts. This is inside the existing
+complete-recovery block, not another stage or permission to begin HA-03.
+[Preparation, prerequisites and rollback](releases/2026-11-24-control-ha-image-custody.md).
+
 Actual canonical/OWNER/legacy joint qualification passes11:10:32UTC: native ingestion of69
 devices/4 paid events, exact39-table post-ACK restore, duplicate/conflict/generation checks
 and stale-copy refusal.50 synthetic and4 legacy identities stay separate; native worker

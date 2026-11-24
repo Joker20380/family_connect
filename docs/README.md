@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 24 November: private pinned OWNER image custody and standalone cold-bootstrap preparation;69 focused tests, actual cold run pending, no activation](releases/2026-11-24-control-ha-image-custody.md).
+
 [CONTROL-HA · 24 November: actual canonical/OWNER/legacy joint qualification PASS;69 devices/4 events,39-table post-ACK restore and stale refusal,103 real-PG tests; three acceptance blocks remain partial](releases/2026-11-24-control-ha-owner-joint.md#actual-execution--111032utc).
 
 [CONTROL-HA · 24 November: actual canonical/three-receiver integration PASS;207 decisions/82 peers, post-revocation recovery and stale refusal,109 real-PG tests, no activation](releases/2026-11-24-control-ha-joint-nodes.md).

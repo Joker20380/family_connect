@@ -1,5 +1,15 @@
 # Текущее состояние / Current state
 
+**24 November — OWNER image-loss custody prepared; cold execution pending.**
+The exact three linux/amd64 OWNER images are exported privately without stopping containers.
+The closed verifier checks59 content-addressed blobs,48 unique layers/65 references and
+uncompressed layer digests. A bounded AES-GCM archive includes the pinned offline extractor
+and two bootstrap sources; keys/checkpoints stay separate.69 focused tests PASS,0 skips.
+The next check restores the archive and boots only contained dependency probes without Docker,
+the working repository, original volumes or production entrypoints. No cold/full-recovery
+PASS is claimed yet. All versions/services unchanged; the same three HA-02 blocks remain partial.
+[Scope, prerequisites and rollback](releases/2026-11-24-control-ha-image-custody.md).
+
 **24 November11:10:32UTC — actual canonical/OWNER/legacy joint qualification PASS.**
 The native panel accepts69 canonical devices/4 paid events on an isolated restore of its
 39-table database (1,907,455 retained source rows +3 consent floors). Only snapshot/audit
