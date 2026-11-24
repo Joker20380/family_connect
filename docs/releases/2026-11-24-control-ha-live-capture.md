@@ -123,7 +123,7 @@ independently approved current forward trust remain required. No production PG s
 
 ## External-file custody
 
-The next bounded operation uses `scripts/control_ha_file_custody.py`: an explicit private
+The prepared bounded operation uses `scripts/control_ha_file_custody.py`: an explicit private
 per-host plan, restricted Family Connect roots, exact selected files and only renewal history,
 profile-operation or routing trees. No broad project/home/key-directory backup. Database and
 technical-metadata paths are rejected. Runtime issuer/profile keys belong in encrypted owner

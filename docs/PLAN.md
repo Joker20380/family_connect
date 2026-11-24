@@ -16,12 +16,12 @@ Keep the native alias shape (66 retained mappings plus3 explicit new entities) w
 inventing legacy handles; the strict old recovery adapter cannot yet import that shape.
 Remaining selected work: actual receiver/allocator/legacy-worker/OWNER recovery, installed
 format integration, full writer/queue coverage and independently approved forward checkpoint.
-External authority/history continuation: the bounded encrypted file collector and new-directory
-readback pass108 focused checks. Next execute the reviewed actual three-node file plans,
-bracket a fresh RU SQLite point with unchanged file witnesses, and verify retained source/key
-bindings offline. This observation is not a fleet writer fence; receiver/OWNER/legacy-worker
-coverage and independently approved current trust remain required, not waived by file custody.
-Current retained actual snapshot:04:58:58UTC, v2 sourceeba7a5ce,61.694ms barrier,
+Earlier external authority/history preparation: the bounded encrypted file collector and
+new-directory readback pass108 focused checks. Actual three-node collection, bracketing
+and source/key readback are now executed at07:22 as recorded above; they are not another
+pending capture task. The observation is not a fleet writer fence. Receiver, panel-runtime,
+legacy-worker coverage and independently approved current trust remain required.
+Earlier retained actual snapshot:04:58:58UTC, v2 sourceeba7a5ce,61.694ms barrier,
 4 stores/34 tables/609 rows restored off-RU; metadata consent floors only, no observations.
 No observed service changes. The remaining critical path is still external authority/history,
 NL receiver/mailbox/legacy-worker and OWNER-panel coherent capture/trusted recovery.

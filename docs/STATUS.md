@@ -23,7 +23,7 @@ No alias was regenerated. Full receiver/legacy-worker/OWNER recovery, complete w
 and independently approved forward checkpoint remain open; HA-02 is not complete.
 [Actual evidence and remaining gates](releases/2026-11-24-control-ha-live-capture.md#actual-three-node-file-readback--072217utc).
 
-**24 November — external-file capture/readback guard ready; actual capture next.**
+**24 November — earlier external-file capture/readback preparation.**
 The scoped collector retains exact authority/profile/source and opaque history bytes,
 rejects database/metadata paths, symlinks, hardlinks, unknown trees and changed observations.
 AES-GCM custody uses separate owner-held key/checkpoint; offline restore creates only a new
