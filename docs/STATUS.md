@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+**24 November UTC — actual collector roots bound; rollback-bearing candidates prepared.**
+HA source6be057eb is pushed/remote-SHA verified. Inventory runs from the separate installed
+collector-runtime, network probe from main; both still use pre-admission sources. Two pinned
+private candidates preserve dependencies and retain exact previous files for rollback.33 package
+tests PASS/0 skips; three extracted CLIs refuse closed gates and two synthetic cycles pass on
+the actual interpreter. No live dispatch, server access, source installation, unit/version change.
+Both timers remain active; selected loaded configuration/argv unchanged. [Targets and rollback](releases/2026-11-24-control-ha-installed-recovery.md#actual-collector-binding--no-installation).
+Next: remaining OWNER/RU/NL/manual/transport runtime/gate/config bindings and exact activation
+approval, then coherent interval and independent custody/final recovery. Packaging is not full
+runtime trust or permission to overwrite main. Working-NL changes remain unauthorized.
+Replication PASS; same three gates partial. Do not repeat this completed package/source slice.
+
+At the preceding collector-admission checkpoint:
 **24 November — standalone OWNER collector admission implemented; activation matrix recorded.**
 HA sourceb5dce8de is pushed/remote-SHA verified. Inventory/probe cycles and manual inventory
 writes now use opt-in admission; caught Docker failures, killed collectors and late external

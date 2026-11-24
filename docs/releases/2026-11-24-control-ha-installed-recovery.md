@@ -6,6 +6,56 @@ divergence is reconciled/pushed at2ae5c512; older publication-blocker statements
 historical, not active instructions or a current blocker.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## Actual collector binding — no installation
+
+[Authoritative source/launch binding, private candidates, tests and rollback](https://github.com/Joker20380/family_connect/blob/6be057eba4ae31e71998f2d3631b220b0d9efd0e/docs/releases/2026-11-24-control-ha-collector-binding.md)
+is pushed/remote-SHA verified at6be057eba4ae31e71998f2d3631b220b0d9efd0e. Main is navigation
+only. No RU/NL connection, live Docker/SSH dispatch, product DB read, source installation,
+unit/timer/environment change, deployment, version/publication/catalog/signing or release change.
+
+At22:49:23UTC the two actual user services are idle, timers active/waiting; this is not a quiet
+capture interval. Inventory runs from the separate installed collector-runtime, probe from
+main's working checkout. Both exact entry sources match pre-admission c5e404ca, and their three
+shared admission helpers are absent. Unit/user-manager gate assignment is absent. Merely pushing
+the candidate or changing one timer cannot activate this boundary. Known-hosts argv is retained.
+At22:56:58UTC parsed argv and selected loaded configuration still match; both timers are active,
+with the monitor timer naturally running. Original selected source hashes remain unchanged.
+
+The new fixed-member builder prepares private0600 source candidates without installation or
+state/config/key collection. It refuses unreviewed entry replacements, ambiguous pins, unsafe
+sources and observed changes. Existing dependencies remain byte-identical; original changed
+files are included for rollback, separately from the list of newly added helpers to remove.
+Inventory candidate:16 source files,5 changed,2 previous files retained,3 added helpers.
+Probe candidate:9 source files,4 changed,1 previous file retained,3 added helpers.
+Exact artifact/source/interpreter hashes are in the authoritative report. Both candidates are
+deterministic; no private package, raw unit argv or synthetic DB is committed.
+
+33 new package tests PASS/0 skips,2.37s; all26 control/identity package pins match. Three
+extracted entrypoints refuse a closed gate before files/dispatch. Both roles complete isolated
+synthetic SQLite cycles on the actual system Python, with mocked subprocess/network adapters;
+not live OWNER PostgreSQL or installed-gate acceptance. Final rollback-bearing archives have
+the same complete candidate-source maps as those qualified packages. Initial source-mode test
+failures and a role-import harness failure are corrected and retained, not counted as PASS.
+Feature documentation:5 files/1092 local link targets/zero errors; whitespace PASS.
+Main navigation:3 files/704 local link targets/zero errors; whitespace PASS. External URLs are
+references, not fetched public-artifact checks.
+
+Existing development files can be group-writable; pinned offline assembly accepts that without
+changing their modes or granting runtime trust. The sealed launcher's stricter checks and gate
+permissions remain unchanged. Full source archives must not be copied over runtime directories,
+main, private state or Compose. Source-root-derived data/subprocess paths prohibit silently
+relocating either unit. No blanket source overlay or production rollout is authorized here.
+
+Next: remaining OWNER/RU/NL/manual/transport runtime/gate/config bindings and exact activation
+approval, then coherent capture and independent checkpoint/custody/final recovery. The collector
+source/package slice is complete and not a new repeat gate. Working-NL changes and host-wide
+reload remain outside present scope. Replication PASS; same three HA-02 gates partial, no ETA.
+
+Rollback now: none on live systems. After future approved activation, abort/release capture and
+settle external work first; restore only exact previous files and remove only new helpers whose
+bytes still match the candidate. Mismatches require review, not overwriting unrelated edits.
+Preserve pending markers/data/access; never disable paid-watch/retention or reset a product DB.
+
 ## Standalone collector admission — source only
 
 [Authoritative source, tests, activation matrix and rollback](https://github.com/Joker20380/family_connect/blob/b5dce8de98412468bfabab1ddb9a2daefdd63775/docs/releases/2026-11-24-control-ha-collector-admission.md)

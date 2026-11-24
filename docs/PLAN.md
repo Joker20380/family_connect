@@ -11,16 +11,19 @@ remains selected; this publication task does not advance its acceptance gates.
 [Reconciliation record](releases/2026-11-24-source-reconciliation.md).
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Featureb5dce8de is pushed/remote-SHA verified. Standalone inventory/probe cycles and manual
-inventory writes now participate in opt-in source admission, including caught Docker failure,
-fallback/local completion and retention after retry.117 tests PASS/0 skips,29 new cases. No
-server access, deployment, runtime image build, unit/configuration or version change.
-[Joint activation matrix and rollback](releases/2026-11-24-control-ha-installed-recovery.md#standalone-collector-admission--source-only).
-Next selected work: exact workstation/OWNER/RU/NL source/runtime/gate bindings and manual/
-transport participation decision from that proposal, then approved activation, coherent interval
-and independent current-input approval/custody/final recovery. Direct ORM/DB/SSH/Docker bypasses
-are not covered automatically; Docker exec does not inherit a host-side gate. Do not repeat the
-completed collector source or NL2 diagnosis as new gates. Working-NL changes are not authorized.
+Feature6be057eb is pushed/remote-SHA verified. Actual workstation collector launch/source mapping
+and two private rollback candidates prepared: inventory uses separate collector-runtime, probe
+main; both still use pre-admission source.33 package tests PASS/0 skips; three extracted CLIs and
+two synthetic cycles qualified on the actual interpreter, not installed Docker/OWNER imports.
+No server access, deployment, source installation, unit/configuration or version change.
+[Concrete targets, exact source deltas and rollback](releases/2026-11-24-control-ha-installed-recovery.md#actual-collector-binding--no-installation).
+Next selected work: remaining OWNER/RU/NL/manual/transport runtime/gate/config bindings and
+exact activation approval, then coherent interval and independent checkpoint/custody/recovery.
+Workstation source packaging is complete; runtime/import/config trust and actual gate activation
+remain unapproved. Preserve original source/data roots and known-hosts argv; no blind overlay of
+main or directory relocation. Direct ORM/DB/SSH/Docker bypasses remain outside the source gate;
+Docker exec does not inherit it. Do not repeat collector packaging/admission or NL2 diagnosis
+as gates. Working-NL changes are not authorized.
 A host-wide daemon-reload may run generators/rebuild dependencies; it is not a per-service or
 authorized read-only NL diagnostic. Its disposition still belongs to the exact activation scope.
 Existing schema3 veto stays strict. No changes to working services, emergency stop, paid-watch,
