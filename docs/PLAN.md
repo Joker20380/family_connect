@@ -11,16 +11,18 @@ remains selected; this publication task does not advance its acceptance gates.
 [Reconciliation record](releases/2026-11-24-source-reconciliation.md).
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Feature58a82d47 is pushed/remote-SHA verified. NL2 reload-cause diagnosis complete: reviewed
-Ubuntu255.4-1ubuntu8.18 source and the fileless -.slice witness identify the manager-wide outdated
-flag, not a proven per-service content mismatch.44 tests PASS/0 skips; final22:23:59UTC observation
-keeps four scoped NL2 services active/running with unchanged identities/no jobs. No reload or
-source/runtime/gate activation. [Evidence and next scope](releases/2026-11-24-control-ha-installed-recovery.md#nl2-manager-wide-reload-cause--no-mutation).
-Next selected work: actual writer/lifecycle/collector/manual admission bindings and explicit joint
-activation proposal including disposition of the host-wide flag, then coherent interval and
-independent current-input approval/custody/final recovery. Do not trace the unattributed historical
-trigger or repeat the sentinel/census as a new gate. A host-wide daemon-reload may run generators
-and rebuild dependencies; it is neither per-service nor an authorized read-only NL diagnostic.
+Featureb5dce8de is pushed/remote-SHA verified. Standalone inventory/probe cycles and manual
+inventory writes now participate in opt-in source admission, including caught Docker failure,
+fallback/local completion and retention after retry.117 tests PASS/0 skips,29 new cases. No
+server access, deployment, runtime image build, unit/configuration or version change.
+[Joint activation matrix and rollback](releases/2026-11-24-control-ha-installed-recovery.md#standalone-collector-admission--source-only).
+Next selected work: exact workstation/OWNER/RU/NL source/runtime/gate bindings and manual/
+transport participation decision from that proposal, then approved activation, coherent interval
+and independent current-input approval/custody/final recovery. Direct ORM/DB/SSH/Docker bypasses
+are not covered automatically; Docker exec does not inherit a host-side gate. Do not repeat the
+completed collector source or NL2 diagnosis as new gates. Working-NL changes are not authorized.
+A host-wide daemon-reload may run generators/rebuild dependencies; it is not a per-service or
+authorized read-only NL diagnostic. Its disposition still belongs to the exact activation scope.
 Existing schema3 veto stays strict. No changes to working services, emergency stop, paid-watch,
 recovery access or versions. Replication PASS; the same three gates partial, no new stage/ETA.
 Installed admission and legacy inventory/package/announcement limits are not silently cleared.

@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+**24 November — standalone OWNER collector admission implemented; activation matrix recorded.**
+HA sourceb5dce8de is pushed/remote-SHA verified. Inventory/probe cycles and manual inventory
+writes now use opt-in admission; caught Docker failures, killed collectors and late external
+commits retain uncertainty through fallback/retry.117 tests PASS/0 skips,29 new cases. Synthetic
+SQLite/process fixtures are not installed OWNER PostgreSQL acceptance. No server connection,
+deployment, image build, unit/configuration or version change.
+Next: exact workstation/OWNER/RU/NL gate/runtime bindings and manual/transport participation
+decision, then approved joint capture and independent custody/recovery. Docker exec does not
+inherit the host gate automatically; working-NL changes remain outside current authorization.
+Replication PASS; same three HA-02 gates partial. Do not repeat this collector implementation
+or completed NL2 diagnosis as new gates. [Source, proposal and rollback](releases/2026-11-24-control-ha-installed-recovery.md#standalone-collector-admission--source-only).
+
+At the preceding lifecycle checkpoint:
 **24 November — NL2 manager-wide reload cause established; no reload.**
 HA source58a82d47 is pushed/remote-SHA verified. Reviewed Ubuntu255.4-1ubuntu8.18 logic and the
 fileless -.slice witness identify the manager-wide unit_file_state_outdated flag at22:23:59UTC.

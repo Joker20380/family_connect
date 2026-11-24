@@ -6,6 +6,51 @@ divergence is reconciled/pushed at2ae5c512; older publication-blocker statements
 historical, not active instructions or a current blocker.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## Standalone collector admission — source only
+
+[Authoritative source, tests, activation matrix and rollback](https://github.com/Joker20380/family_connect/blob/b5dce8de98412468bfabab1ddb9a2daefdd63775/docs/releases/2026-11-24-control-ha-collector-admission.md)
+are pushed/remote-SHA verified atb5dce8de98412468bfabab1ddb9a2daefdd63775. Main is navigation
+only. No server connection, production source/configuration/unit change, Docker image build,
+deployment, version/catalog/invitation/public-artifact change, signing or release tag.
+
+The source now admits complete standalone OWNER inventory and network-probe cycles before
+local files/dispatch, through Docker imports, failure fallbacks and local completion. Manual
+inventory key/snapshot writes are admitted even through the programmatic collector function.
+Caught subprocess uncertainty persists after fallback and later successful retry; duplicate
+local cycle-lock acquisition remains a clean skip. All three actual CLIs return75 for a closed
+gate or1 for an invalid gate with sanitized errors. Without opt-in, existing behavior remains.
+
+117 focused tests PASS/0 skips,29 new cases,6.30s. Two killed native local collector processes
+retain committed synthetic SQLite writes and their pending markers. A native child committing
+after an adapter's synthetic timeout also prevents capture despite later success. These are
+external-completion fixtures, not live Docker/OWNER PostgreSQL or installed-host acceptance.
+All test-owned processes are waited/cleaned;26 control/identity package pins match the runtime.
+The initial3 newline-assertion failures were corrected; intermediate115 passes are not added
+to the final count. No unrelated legacy package/announcement guard is weakened or repinned.
+Feature docs:5 files/1088 local link targets/zero errors; whitespace PASS. Main navigation:
+3 files/702 local link targets/zero errors; whitespace PASS. External GitHub links are references,
+not fetched artifacts.
+
+The proposal enumerates workstation, OWNER, RU, NL and manual participants, gate ownership/
+inode/mount bindings, activation order, abort conditions and rollback. The six admission-source
+hashes are not the full executable closure. Host environment is not automatically inherited by
+`docker compose exec`; container writers require their own explicitly approved participation.
+Unrestricted direct ORM/SQL/SSH/Docker operations still need a closed operator agreement and
+real dispatch/access binding. Installed support/transport/lifecycle completion remains partial.
+Working-NL changes and a host-wide NL2 daemon-reload are not authorized by this source push.
+
+Next: complete and independently approve those exact actual activation bindings and the manual/
+transport participation decision, then one coherent joint interval and independent custody/final
+combined recovery. Collector source admission and the preceding NL2 diagnosis are completed
+subtasks, not new recurring gates. Replication PASS; the same three HA-02 gates remain partial.
+No extra stage, percentage or calendar estimate is introduced.
+
+Rollback now is source-only; no live rollback is needed. Future approved rollback first aborts/
+releases capture, preserves uncertain markers and settles dispatched work, then restores only
+approved prior sources/environments. Never unset a gate during capture, delete pending, restore
+an old product DB, stop paid-watch/retention or start previously failed services as a shortcut.
+Private test evidence stays outside Git. The existing runtime images/services are unchanged.
+
 ## NL2 manager-wide reload cause — no mutation
 
 [Authoritative source diagnosis, tests, provenance, native result and next-scope limits](https://github.com/Joker20380/family_connect/blob/c5e404ca50ec243a0f962c1aa7d1efb279dd642c/docs/releases/2026-11-24-control-ha-systemd-lifecycle.md#nl2-manager-wide-reload-cause--read-only)
