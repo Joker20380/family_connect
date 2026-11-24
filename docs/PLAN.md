@@ -248,11 +248,23 @@ or stale inputs; never replay historical approvals or resume a host. Content-aud
 implementation and native synthetic qualification are complete, not the selected gate:
 it retains full unequal ledgers/opaque history and checks native scheduled service
 archives/current bindings, but always reports recovery BLOCKED. Original gate/configuration
-provenance, supplied unit-order attestation and actual installed consistent capture are
-still unqualified. A recorded schedule result and a start intent are not original approval
-or fresh service liveness. Continue this same task with provenance/installed evidence;
+provenance and actual installed consistent capture are still unqualified.24 November
+00:13:07–00:13:10UTC read-only fleet observation binds all three actual config hashes/
+unit orders to the current transaction and observes RU API/both NL bootstrap active.
+Issuer/CRL/certificates/both publications match, but one DB table advanced after renewal:
+three now-expired baseline certificates replaced by one later-issued certificate.
+The other four projections match. Do not restore old rows or treat normal-looking
+pruning/issuance as independently authenticated. Original controller approval is not
+retained in the transaction; present flag and unbound source capsule do not replace it.
+Continue this same task with a bounded post-renewal current-state contract and trusted
+provenance: preserve immutable baseline, independently qualify subsequent certificate
+changes and require coherent current capture. No permissive equality bypass. A recorded
+schedule result and a start intent are not original approval or service liveness.
+The actual observation is not end-to-end traffic validation or recovery acceptance;
 do not invent approval, add a permissive switch or select another hypothetical variant.
-[Current checkpoint](releases/2026-11-24-control-ha-current-audit.md).
+[Current installed evidence](releases/2026-11-24-control-ha-installed-current.md).
+112 focused tests PASS /0 skips (30 collector +26 inventory +56 current audit).
+[Previous synthetic checkpoint](releases/2026-11-24-control-ha-current-audit.md).
 56 new tests /0 skips,111 stopped regressions /15 PostgreSQL skips and45 custody
 regressions /0 skips PASS; no new PostgreSQL/import/recovery acceptance is claimed.
 No deployment or further queued block is selected. T alone

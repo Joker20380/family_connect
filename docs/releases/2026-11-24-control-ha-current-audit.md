@@ -1,5 +1,9 @@
 # 24 November 2026 — scheduled current-content audit and stage2 exit criteria
 
+Follow-up: [actual installed-current observations](2026-11-24-control-ha-installed-current.md)
+bind node config/order and observe running services, but identify post-renewal certificate
+DB drift. This report remains the earlier synthetic checkpoint, not current live acceptance.
+
 ## Selected scope and result
 
 Continuation of [legacy custody](2026-11-24-control-ha-legacy-custody.md), not a new

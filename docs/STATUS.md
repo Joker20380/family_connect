@@ -1,5 +1,22 @@
 # Текущее состояние / Current state
 
+**24 November — CONTROL-HA actual current inputs observed; concrete post-renewal DB gap.**
+Read-only RU/NL1/NL2 observation00:13:07–00:13:10UTC: same current COMMITTED plan;
+366/366/172 ledgers preserved; all three installed node config hashes match the current
+transaction, binding service-unit order. Current issuer/CRL/gateway certificates and
+both directory publications agree. RU API and both NL bootstrap services active;
+one-shot renewal/directory services inactive with success and their timers active.
+Legacy sync timer remains intentionally inactive; no end-to-end health claim.
+Four DB projections match, but certificates advanced: three baseline rows now expired,
+one different certificate issued after the plan. Normal prune/issuance is consistent
+with this observation, not independently authorized by timing. Do not restore old rows
+or weaken the auditor. Original schedule approval/controller custody and coherent
+current capture remain unqualified; recovery BLOCKED. Same selected task continues
+with post-renewal current-state binding, not another speculative variant/new HA block.
+112 focused tests PASS /0 skips. No deployment/service/policy/version changes; existing
+console5ce82415, NL GeoIP22 November, Android126/catalog9 and8/12/120s unchanged.
+[Evidence, exact limitations and rollback](releases/2026-11-24-control-ha-installed-current.md).
+
 **24 November — CONTROL-HA current scheduled-content audit PARTIAL; selected gate remains open.**
 Read-only audit selects the current operation from authenticated opaque custody without
 rewriting the full unequal ledgers or legacy files. It checks native scheduled COMMITTED
