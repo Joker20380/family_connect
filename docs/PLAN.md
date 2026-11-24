@@ -11,18 +11,20 @@ remains selected; this publication task does not advance its acceptance gates.
 [Reconciliation record](releases/2026-11-24-source-reconciliation.md).
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Featurea6e8a019 is pushed/remote-SHA verified. Opt-in support-worker source now guards store/owner
-initialization, requests/bindings/enqueue, notifications/outbox expiry, periodic scheduling and each
-background exchange through close. Failure/death retains uncertainty; success cannot clear older
-pending. Closed kit includes the gate/helper.123 tests PASS/0 skips;20 new cases,17 package pins.
-No RU/NL access, service/unit/deployment/version change; actual installed support/runtime cleanup
-is not qualified by synthetic transport tests. Existing local candidates remain unapproved/uninstalled.
-[Worker integration and fixed completion map](releases/2026-11-24-control-ha-installed-recovery.md#support-worker-admission--source-only).
-Next selected work: native helper/environment/stop-post and AWG/mailbox/support completion/runtime
+Feature0eccb9e3 is pushed/remote-SHA verified. Routed cleanup now checks actual reader termination,
+attempts all cleanup steps on failure and refuses route fallback/success when cleanup is uncertain.
+The already implemented support gate retains the marker, even after a later successful exchange.
+153 focused tests PASS/0 skips,16 new cases, real local TCP/RNS relay/recipient ACK and native Unix
+cleanup.19 provenance checks PASS; one unrelated existing announcement-pin failure is documented.
+Linux package import PASS with system GI/pinned dependencies; no GUI/device release acceptance.
+Explicit source-only delta preserves accepted client hashes. No RU/NL access, service/unit/deployment/
+version change. Local proof does not bind installed runtime; candidates remain unapproved/uninstalled.
+[Native proof, exact limits and rollback](releases/2026-11-24-control-ha-installed-recovery.md#mailbox-reader-cleanup--native-local-proof).
+Next selected work: remaining native helper/environment/stop-post and AWG/support completion/runtime
 bindings, collector/manual coverage, concrete independently approved joint activation/capture
 proposal and real coherent interval, then independent current approval/custody/final recovery.
 Keep strict NL1 inventory refusal and unexplained NL2 reload marker visible; no bypass/reload.
-Do not repeat support source admission, cache stand/comparison, runtime/sudo/unit census,
+Do not repeat reader cleanup, support source admission, cache stand/comparison, runtime/sudo/unit census,
 source-chain/lock stand, SSH census or wrapper bridge as new acceptance work. Original four
 acceptance gates are fixed; prior1–2/2–4 day estimates are withdrawn, not a rolling deadline.
 Never delete transaction journals or chmod/reload working services merely to make checks pass.
@@ -40,7 +42,7 @@ slices or repeat inventory/NL2 recovery. Keep paid-watch running; current NL sco
 permission. Independent current approval, coherent capture, off-laptop key/access custody
 and final combined recovery remain the same three partial HA-02 gates; replication PASS,
 no new lettered stage, HA-03 or cutover.
-[Implementation and next boundary](releases/2026-11-24-control-ha-installed-recovery.md#support-worker-admission--source-only).
+[Implementation and next boundary](releases/2026-11-24-control-ha-installed-recovery.md#mailbox-reader-cleanup--native-local-proof).
 
 Owner-confirmed NL2 isolated retained-state recovery PASS14:12UTC, final cleanup/service
 checks PASS14:20UTC; source/reporte353ff85 pushed and verified. Wrong-key refusal,50 focused

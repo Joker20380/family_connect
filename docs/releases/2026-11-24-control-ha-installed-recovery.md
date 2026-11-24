@@ -6,6 +6,52 @@ divergence is reconciled/pushed at2ae5c512; older publication-blocker statements
 historical, not active instructions or a current blocker.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## Mailbox reader cleanup — native local proof
+
+[Authoritative source, tests, provenance delta and rollback](https://github.com/Joker20380/family_connect/blob/0eccb9e34c3e0f71e5fb5a40bbd99696362e1c82/docs/releases/2026-11-24-control-ha-mailbox-cleanup.md)
+are pushed/remote-SHA verified at0eccb9e34c3e0f71e5fb5a40bbd99696362e1c82. Main remains
+navigation only. No RU/NL access, production store/key access, service/unit/environment/image
+change, deployment, signing or client/catalog/invitation version change occurred.
+
+The documented reader-join gap is fixed in shared source: the existing one-second join now
+checks whether the thread actually exited. Failure raises terminal `cleanup_incomplete`, not
+success or route fallback. All remaining teardown steps are attempted after an error, including
+socket close, interface removal and session-lock release. Unstarted-reader/setup failures clean
+up too. Guarded support work retains its durable marker; committed relay state is not rolled back
+and a later successful exchange cannot erase uncertainty. The delivery controller does not retry
+this error automatically as transient. Accepted client hashes/patches stay unchanged; a separate
+reversible source-only delta records the change, not a platform release.
+
+**153 focused tests PASS/0 skips,41.24s**,16 new cases, Python3.14.4 with17 matching lockfile
+package versions. Actual localhost TCP/RNS/LXMF verifies relay commit, reader termination while
+admitted, recipient-storage ACK and idempotency. A native-reader stall and detach fault retain
+the committed message and pending marker; capture refuses before and after retry. Native Unix
+socketpair/interface checks cover normal cleanup and partial registration/thread-start failures
+with a substituted handshake. Test-owned threads/processes are released/joined/closed; interface
+registrations return to baseline. Android Python carrier checks are not device/JNI/VPN acceptance.
+
+Additional provenance/package run:19 PASS,2 FAIL/2.86s. The announcement-pin failure is
+pre-existing: `control/friends/notices.py` and `scripts/service_notices.py` match basea6e8a019
+exactly but differ from their old reference pins. It remains unresolved, not silently repinned.
+The second failure was missing GI in the HA virtualenv. Linux package import rerun with system
+Python/GI and the same pinned dependency directory under `dbus-run-session` gives1 PASS/0.70s;
+no packages/application settings changed. No broad-suite or GUI rendering PASS is claimed.
+Feature documentation:4 files/1062 local-link targets/zero errors; whitespace clean. Private
+state, test keys and built kits stay out of Git; external URLs are not release-artifact checks.
+
+This closes owned route-reader termination, not every Reticulum callback/watchdog/runtime writer
+or ambiguous remote effect. Remaining helper/environment/stop-post/AWG, installed support/runtime
+and collector/manual bindings feed the concrete joint activation/capture proposal. Then qualify
+the real coherent interval, independently approved current inputs, off-laptop custody and final
+combined recovery. Four original gates remain fixed: replication PASS in isolation, other three
+partial. No new stage, percentage or replacement calendar promise. Working-NL deployment is not
+authorized by a source push; existing bounded management-write-capture permission is unchanged.
+
+Rollback: no live action needed. Revert source/provenance delta together before future builds.
+For a future approved activation, abort capture before restoring the previous approved code/argv;
+preserve committed messages and pending markers for reconciliation. Do not restore databases,
+erase markers or alter SSH/ownership to make the check pass. Earlier sections are historical.
+
 ## Support worker admission — source only
 
 [Authoritative source, tests, completion map and rollback](https://github.com/Joker20380/family_connect/blob/a6e8a019b626fdc3ee09fca08e86e8d9d777d021/docs/releases/2026-11-24-control-ha-support-admission.md)

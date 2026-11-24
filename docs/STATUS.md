@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+**24 November — mailbox reader cleanup now fails closed; no deployment.**
+HA source0eccb9e3 is pushed/remote-SHA verified. A timed join no longer counts as completed
+cleanup when its reader is alive; all teardown stages are attempted after errors. Terminal
+failure cannot be hidden by route fallback and preserves the guarded support-operation marker.
+Real local TCP/RNS relay/recipient ACK and native Unix cleanup pass.153 focused tests PASS/0 skips,
+16 new cases;19 provenance checks PASS, one pre-existing announcement-pin failure documented.
+Linux package import PASS with system GI/pinned dependencies, not GUI/device acceptance.
+No RU/NL connection, installed service, deployment or version change. Next: remaining native
+helper/environment/stop-post, AWG/runtime/collector/manual bindings and concrete joint activation/
+capture proposal; then coherent interval and independent approval/custody/final recovery.
+Replication PASS; three fixed HA-02 gates partial, no new stage or ETA.
+[Exact source, test limits and rollback](releases/2026-11-24-control-ha-installed-recovery.md#mailbox-reader-cleanup--native-local-proof).
+
 **24 November — asynchronous support-worker admission implemented in source; not deployed.**
 HA sourcea6e8a019 is pushed/remote-SHA verified. Panel IPC success no longer serves as the only
 source-level boundary: opt-in worker gate covers initialization, requests/bindings/enqueue,
