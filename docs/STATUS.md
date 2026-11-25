@@ -1,5 +1,20 @@
 # Текущее состояние / Current state
 
+**25 November06:31UTC — stopped OWNER replacement/revert executor qualified.**
+Exact effective Config/HostConfig, mounts and network policy are preserved; old container ID
+and current data remain the rollback target, never a pre-upgrade DB snapshot.174 focused tests
+PASS/0 skips,57 new. Six native Docker cases pass, including5 real SIGKILL coordinator deaths
+with journal recovery. Candidate SQLite writes and an unknown gate marker survive revert.
+At06:28:58 both working OWNER containers remain running/healthy and refuse replacement;
+only GET observation, no deployment, image build, working stop or version change.
+[Executor, evidence, engine normalization and rollback limits](releases/2026-11-25-control-ha-owner-replacement.md).
+Next is controlled ingress/dispatcher drain and independent publication/support/manual
+settlement, followed by gate/runtime/startup/abort integration. This tool deliberately cannot
+stop or start a service; stopped state alone is not settlement. Then remaining fleet writers,
+coherent capture, independent custody/approval and final recovery. Replication PASS; same
+three gates partial. Do not repeat this completed stopped-replacement component as a new gate.
+
+At the preceding working-collector checkpoint:
 **25 November01:00UTC — two working workstation collectors admitted and verified.**
 Inventory's5 changed source files are installed in its existing runtime. Probe runs the pinned
 9-file capsule with its original runtime/config/state base; main source is untouched. Two user
