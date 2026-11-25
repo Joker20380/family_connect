@@ -53,9 +53,10 @@ def test_required_git_objects_cover_the_real_native_and_renewal_inputs():
     from scripts.package_ru_lifecycle import BASE_SOURCE as LIFECYCLE_BASE
     from test_technical_metadata_overlay import OVERLAY_SOURCE
     from test_transport_package import TRANSPORT_SOURCES
+    from scripts.ci_support_fixture import BASELINE_COMMIT
     assert set(fixtures.REQUIRED_COMMITS) == {fixtures.HISTORICAL, ACCEPTED_API_SOURCE,
         reference()['commit'], PREVIOUS_SOURCE, BASE_SOURCE, LIFECYCLE_BASE, OVERLAY_SOURCE,
-        *TRANSPORT_SOURCES.values()}
+        *TRANSPORT_SOURCES.values(), BASELINE_COMMIT}
 
 
 def test_fixture_environment_rejects_modified_artifact_or_commit(tmp_path, monkeypatch):

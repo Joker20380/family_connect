@@ -22,6 +22,10 @@ image qualification:592 PASS/31 explicit PG skips across all ten affected famili
 build-helper qualification PASS. Secure314 launcher/context regression131 PASS, final context29 PASS.
 Announcement original pins remain unchanged; reviewed HA-only reversible delta83 PASS/40 PG skips.
 These are source corrections, not combined handoff or working installation; new exact-SHA CI remains required.
+Checkpoint1c24d595 pushed/remote-SHA verified; new full CI is running, not accepted.
+Native support CI now has a separate zero-skip gate with the exact19-file public61b00409 baseline
+and unchanged9d7bf840 archive, protected314/GIL and disposable user-systemd. Fixture/export10 PASS,
+portable ptracer acceptance/terminal2 PASS. No host ptrace-policy relaxation; workflow itself still unqualified.
 
 ## Retained checkpoints (historical, not simultaneous NEXTs)
 

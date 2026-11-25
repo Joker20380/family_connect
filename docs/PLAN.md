@@ -34,6 +34,9 @@ Checkpointa6f7c730 is pushed but phase0 tests still FAIL. Missing local native i
 retained stderr; reproducible fixture592 PASS/31 PG skips and protected314 launcher corrections are
 ready for new-SHA CI. Reviewed reversible announcement delta retains original pins (83 PASS/40 PG skips).
 No shared handoff/reclosure/recovery executor or working replacement is accepted yet.
+Native support's separate protected314/GIL zero-skip workflow must actually pass on the exact source;
+reconstructed public baseline/archive10 checks and portable user-systemd controller2 checks pass locally.
+Checkpoint1c24d595 is pushed; new CI remains in progress, not a replacement for the combined result.
 The same three HA-02 criteria remain partial; isolated replication PASS. Onboarding remains mandatory.
 
 ## Retained HA-02 checkpoint history (not active NEXTs)

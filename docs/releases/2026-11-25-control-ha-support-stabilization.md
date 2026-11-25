@@ -182,3 +182,23 @@ byte-for-byte to the original accepted hashes. Reference/authorization/publicati
 83 PASS/40 explicit PG skips, not client rollout or complete PG acceptance. No new runtime logic is
 introduced by this contract bookkeeping. The combined executor, queue-pause qualification and working
 installation remain part of the **same single next result**, not displaced by these CI corrections.
+
+## 21:57UTC — required native support CI, not a skipped-test PASS
+
+Checkpoint `1c24d595ee729b8be6fb9cf7494a059fcec1f3cb` was pushed and remote-SHA verified.
+Its full phase0 run45707883397 is still in progress at this checkpoint. To prevent the missing
+installed baseline from silently skipping the selected shutdown/replacement/witness tests, a dedicated
+HA-02 native workflow reconstructs exactly19 public files from
+`61b00409e24b92651678b817d2a6f5d4796948f9`; every original deployed-source hash independently matches.
+The deterministic candidate remains9d7bf840, not a new binary or changed contract. No private installed
+state or source capsule is uploaded. The historical object joins the closed CI source export.
+
+This workflow explicitly provisions root-owned CPython3.14/GIL, pinned packages and a disposable
+runner user-systemd manager. It requires **zero skipped, failed or errored cases** in the selected
+legacy admission/quiescence/exit/replacement/witness/terminal/archive/native mailbox tests and records
+the exact SHA. Missing XML is NOT_RUN, not PASS. Docker's non-systemd context does not substitute for
+this job. A test-only portable PR_SET_PTRACER exec wrapper replaces dependence on the host util-linux
+`setpriv --ptracer` option; production units and global host ptrace policy are unchanged.
+Source reconstruction/export10 PASS in3.83s; actual isolated user-systemd acceptance/code-only rollback
+and irreversible terminal2 PASS in24.09s, no skips. The new workflow itself must still run and pass;
+neither these local results nor its mere addition closes CI or the combined OWNER/NL1 result.

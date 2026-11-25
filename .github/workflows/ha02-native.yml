@@ -1,0 +1,65 @@
+name: HA-02 native support qualification
+on:
+  push:
+    paths: ['scripts/control_ha_*.py', 'scripts/ci_*.py', 'scripts/ci_python314_context.sh', 'provisioning/**', 'messenger/**', 'control/capture*', 'deploy/support-chat/**', 'tests/test_control_ha_support*', 'tests/test_control_ha_legacy_support.py', 'tests/test_ci_support_fixture.py', 'tests/fixtures/support*', '.github/workflows/ha02-native.yml']
+  pull_request:
+    paths: ['scripts/control_ha_*.py', 'scripts/ci_*.py', 'scripts/ci_python314_context.sh', 'provisioning/**', 'messenger/**', 'control/capture*', 'deploy/support-chat/**', 'tests/test_control_ha_support*', 'tests/test_control_ha_legacy_support.py', 'tests/test_ci_support_fixture.py', 'tests/fixtures/support*', '.github/workflows/ha02-native.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  support314:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+      FC_TEST_SYSTEMD_SUPPORT_DRAIN: "1"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        id: python314
+        with:
+          python-version: '3.14'
+      - name: Root-owned CPython 3.14 with GIL and pinned native packages
+        run: sudo --preserve-env=LD_LIBRARY_PATH bash scripts/ci_python314_context.sh '${{ steps.python314.outputs.python-path }}' /usr/lib/fc-ci-python314 "$(id -un)"
+      - name: Reconstruct exact public baseline and candidate
+        run: |
+          /usr/lib/fc-ci-python314/test-env/bin/python scripts/ci_support_fixture.py --output "$RUNNER_TEMP/support-fixture" >> "$GITHUB_ENV"
+          echo 'FC_TEST_SUPPORT_PYTHON=/usr/lib/fc-ci-python314/test-env/bin/python' >> "$GITHUB_ENV"
+      - name: Start disposable runner user manager
+        run: |
+          sudo systemctl start "user@$(id -u).service"
+          echo "XDG_RUNTIME_DIR=/run/user/$(id -u)" >> "$GITHUB_ENV"
+          echo "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus" >> "$GITHUB_ENV"
+      - name: Native shutdown, terminal, reservation and mailbox qualification
+        shell: bash
+        run: |
+          systemctl --user show --property=Version
+          "$FC_TEST_SUPPORT_PYTHON" -c 'import sys; assert sys.version_info[:2] == (3,14) and sys._is_gil_enabled()'
+          "$FC_TEST_SUPPORT_PYTHON" -m pytest -q --tb=short --junitxml="$RUNNER_TEMP/support-native.xml" tests/test_control_ha_legacy_support.py tests/test_control_ha_support_quiesce.py tests/test_control_ha_support_exit.py tests/test_control_ha_support_replace.py tests/test_control_ha_support_witness.py tests/test_control_ha_support_terminal.py tests/test_control_ha_support_terminal_native.py tests/test_package_support_capture.py messenger/tests/test_control_ha_mailbox_fence.py messenger/tests/test_control_ha_mailbox_links.py messenger/tests/test_control_ha_mailbox_startup.py 2>&1 | tee "$RUNNER_TEMP/support-native.log"
+      - name: Require complete execution at this exact SHA
+        if: always()
+        run: |
+          python - <<'PY'
+          import json, os, subprocess, xml.etree.ElementTree as ET
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP'])
+          source = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
+          assert source == os.environ['GITHUB_SHA']
+          executed = (root / 'support-native.xml').is_file()
+          cases = list(ET.parse(root / 'support-native.xml').iter('testcase')) if executed else []
+          passed = bool(cases) and all(case.find('skipped') is None and case.find('failure') is None and case.find('error') is None for case in cases)
+          (root / 'support-native-receipt.json').write_text(json.dumps(dict(source_commit=source, tests=len(cases), zero_skips=passed, result='PASS' if passed else 'FAIL' if executed else 'NOT_RUN')) + '\n')
+          assert passed, 'Native qualification incomplete or failed'
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ha02-native-support
+          path: |
+            ${{ runner.temp }}/support-native.xml
+            ${{ runner.temp }}/support-native.log
+            ${{ runner.temp }}/support-native-receipt.json
+          if-no-files-found: error

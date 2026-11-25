@@ -27,6 +27,7 @@ REQUIRED_COMMITS = (HISTORICAL, 'edca5447418141cb44c0706e26d1973d7defd397',
                     '80b38d5510dab13c13d2a7c8e6280ae4ba6774a9',
                     '1cc6c51044ac3409383db28b2c8abe2c15b55192',
                     '5eb8cec57623fd8fa1c1e7346af9c15ba58c3c6b')
+REQUIRED_COMMITS += ('61b00409e24b92651678b817d2a6f5d4796948f9',)
 
 
 def git(*arguments, source=None, **kwargs):

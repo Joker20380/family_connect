@@ -65,7 +65,8 @@ def service(tmp_path, installed):
         plan = replace.prepare(manager, installed, candidate, root, data / 'participant', tmp_path / 'support.pyz', seconds=8)
         config = root / 'support.conf'
         raw = config.read_bytes().replace(('ExecStart=' + interpreter).encode(),
-                                         ('ExecStart=/usr/bin/setpriv --ptracer any ' + interpreter).encode())
+            ('ExecStart=' + interpreter + ' -I -B ' + str(ROOT / 'tests/fixtures/support_ptracer.py') +
+             ' ' + interpreter).encode())
         config.write_bytes(raw)
         plan['dropin_sha256'] = hashlib.sha256(raw).hexdigest()
         (root / 'plan.json').write_text(json.dumps(plan))
