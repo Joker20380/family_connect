@@ -41,6 +41,12 @@ def test_public_export_restores_exact_commit_without_host_git_or_untracked_files
     assert fixtures.git('show', historical + ':public.txt') == b'public source\n'
     assert fixtures.git('archive', historical) == (output / 'historical.tar').read_bytes()
     assert b'private-marker' not in (restored / '.git/config').read_bytes()
+    from test_transport_package import historical_source, TRANSPORT_SOURCES, kit
+    monkeypatch.setattr(kit, 'ROOT', restored)
+    monkeypatch.setitem(TRANSPORT_SOURCES, 'fixture', historical)
+    checkout = historical_source(tmp_path, 'fixture')
+    assert (checkout / 'public.txt').read_text() == 'public source\n'
+    assert (checkout / '.git/shallow').read_bytes() == (restored / '.git/shallow').read_bytes()
     with pytest.raises(ValueError, match='replace Git'):
         fixtures.restore_git(output / 'current.commit', output / 'tracked.paths')
 

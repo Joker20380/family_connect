@@ -36,12 +36,27 @@ def audit_coverage(expected, collections):
             raise ValueError('Fixture collection changed between contexts: ' + name)
 
 
+def emit_native_failures():
+    directory = os.environ.get('FC_NATIVE_DIAGNOSTICS_DIR')
+    if not directory:
+        return
+    paths = sorted(Path(directory).glob('fc-ha-maintenance-error-*.log'))
+    for path in paths[:16]:
+        with path.open('rb') as source:
+            raw = source.read(4097)
+        print('NATIVE_FIXTURE_DIAGNOSTIC ' + json.dumps(dict(file=path.name,
+            stderr=raw[:4096].decode('utf-8', errors='replace'), incomplete=len(raw) > 4096)), flush=True)
+    if len(paths) > 16:
+        print('NATIVE_FIXTURE_DIAGNOSTIC_INCOMPLETE: FILE_LIMIT', flush=True)
+
+
 @contextmanager
 def workspace():
     temporary = tempfile.TemporaryDirectory(prefix='fc-test-contexts-')
     try:
         yield temporary.name
     finally:
+        emit_native_failures()
         mark('cleanup_start')
         temporary.cleanup()
         mark('cleanup_end')

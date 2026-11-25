@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 import subprocess
 import sys
 import zipfile
@@ -16,8 +17,14 @@ TRANSPORT_SOURCES = {
 
 def historical_source(tmp_path, kind):
     source = tmp_path / ('source-' + kind)
-    subprocess.run(['git', 'clone', '--shared', '--no-checkout', str(kit.ROOT), str(source)],
-                   check=True, capture_output=True)
+    subprocess.run(['git', 'init', '--quiet', str(source)], check=True, capture_output=True)
+    objects = subprocess.check_output(['git', 'rev-parse', '--path-format=absolute', '--git-path', 'objects'],
+                                      cwd=kit.ROOT, text=True).strip()
+    (source / '.git/objects/info/alternates').write_text(objects + '\n')
+    shallow = Path(subprocess.check_output(['git', 'rev-parse', '--path-format=absolute', '--git-path', 'shallow'],
+                                          cwd=kit.ROOT, text=True).strip())
+    if shallow.exists():
+        (source / '.git/shallow').write_bytes(shallow.read_bytes())
     subprocess.run(['git', 'checkout', '--detach', TRANSPORT_SOURCES[kind]], cwd=source,
                    check=True, capture_output=True)
     assert subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=source, text=True).strip() == TRANSPORT_SOURCES[kind]

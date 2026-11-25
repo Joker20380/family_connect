@@ -39,7 +39,9 @@ reconstructed public baseline/archive10 checks and portable user-systemd control
 Exactf6c6171e native CI214 PASS/zero skips; full phase0/control FAIL because coverage inventory omitted64
 mailbox tests outside default testpaths. All execution contexts pass, but this does not waive coverage:
 declared inventory is corrected and collection diagnostics retained (20 scoped regressions PASS).
-Corrected exact-SHA full CI and the combined result remain outstanding; candidate remains NOT installed.
+Exacteb058196 host full/coverage and Linux control/native workflows PASS; Docker gate FAIL on separate
+fixture-version/shallow-history issues. Those corrections pass35 scoped checks; new Docker CI and the
+combined result remain outstanding. Candidate remains NOT installed; no working-service change.
 The same three HA-02 criteria remain partial; isolated replication PASS. Onboarding remains mandatory.
 
 ## Retained HA-02 checkpoint history (not active NEXTs)

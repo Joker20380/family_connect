@@ -45,6 +45,26 @@ def test_collection_evidence_survives_workspace_cleanup(tmp_path, monkeypatch):
     assert json.loads((tmp_path / 'collections/inventory.json').read_text()) == collection
 
 
+def test_docker_fixture_python_matches_native_contract_without_changing_runtime_base():
+    import json
+    contract = json.loads((android.ROOT / 'deploy/control-ha/rehearsal-maintenance.json').read_text())
+    dockerfile = (android.ROOT / 'Dockerfile.control').read_text()
+    assert 'FROM python:' + contract['python'] + '-slim-bookworm AS tests\n' in dockerfile
+    assert 'FROM python:3.14-slim-bookworm AS test-python314\n' in dockerfile
+    assert 'FROM python:3.13-slim AS base\n' in dockerfile
+    assert 'FROM base AS runtime\n' in dockerfile
+
+
+def test_failed_build_emits_bounded_native_diagnostics(tmp_path, monkeypatch, capsys):
+    from scripts import ci_full_pytest as full
+    monkeypatch.setenv('FC_NATIVE_DIAGNOSTICS_DIR', str(tmp_path))
+    (tmp_path / 'fc-ha-maintenance-error-fixture.log').write_text('ORIGINAL_FAILURE\n' + 'x' * 8192)
+    full.emit_native_failures()
+    output = capsys.readouterr().out
+    assert 'ORIGINAL_FAILURE' in output and '"incomplete": true' in output
+    assert len(output) < 4500
+
+
 def test_inventory_failure_keeps_collection_diagnostics(tmp_path):
     import inspect
     from scripts import ci_full_pytest

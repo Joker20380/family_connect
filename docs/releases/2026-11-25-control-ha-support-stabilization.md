@@ -1,5 +1,35 @@
 # 25 November 2026 — HA-02 support stabilization, not handoff acceptance
 
+## eb058196 outcome and Docker-only corrections (22:56UTC)
+
+Exact `eb058196f87ae4d51cf61ba6817bb8180cf542c0` is pushed/remote-SHA verified. Native45713384438,
+Linux control45713384570, readiness45713384444 and the phase045713384557 host test job139553209050
+PASS. The phase0 Docker failover job139553209601 FAILS. This is not a full CI PASS.
+
+Private artifact15070180771 is retained with SHA256
+`cfff70edec5ddc613fbeb04af0c1c8c51f74f05d9523849e3735de0efae95778`.
+It records22 failed/8934 passed/889 skipped/521 errors in the Docker standard context; coverage now
+matches. Root/snapshot314/native314 execution passes. Earlier host-context success must not be read
+as a Docker success. The Docker error wrapper retained only ephemeral inner log paths; the missing
+inner traceback cannot be recovered from that artifact. New diagnostics emit bounded stderr on build
+failure, with explicit truncation, without stdout/issuer material.
+
+Two concrete incompatibilities are addressed without relaxing assertions or repinning contracts:
+
+- Build log identifies Python3.13.18; the native root fixture requires exactly3.13.15. Isolated test
+  stage now uses the same3.13.15-bookworm image family as the accepted native fixture. Production
+  `base`/`runtime` stages remain unchanged; this is not a production Python downgrade. The absent
+  historical inner traceback is not presented as if it directly recorded ROOT_FIXTURE_VERSION.
+- Historical overlay checkout failure is reproduced with two synthetic public commits and restored
+  shallow Git: checkout exits128 (`unable to read tree`). A shared clone loses historical shallow
+  boundaries. Disposable isolated checkouts now reference the already-exported public object store
+  and preserve its full declared shallow set; exact baseline SHAs and artifact hashes are unchanged.
+
+35 focused export/overlay/context tests PASS in8.78s (`ci-docker-context.xml`, private). This is not a
+rerun-to-PASS of the failed workflow: a new source SHA must pass the mandatory Docker gate.
+Combined executor development is still in progress, with no working OWNER/NL1 installation or data
+change. Existing UNKNOWN and handoff reservations are preserved; all three HA-02 criteria remain partial.
+
 ## Exact f6c6171e CI outcome and coverage correction (22:20UTC)
 
 Native workflow45709174045 at `f6c6171e022fbf2b671e7c950671a556a7fdeb79` actually passed214 tests,

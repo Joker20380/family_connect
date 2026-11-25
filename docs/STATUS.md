@@ -1,5 +1,15 @@
 # Текущее состояние / Current state
 
+**25 November22:56UTC — exacteb058196 host/full coverage PASS; Docker gate still FAIL.**
+Native45713384438 and Linux control45713384570 PASS; phase045713384557 host tests PASS, isolated
+Docker failover build FAIL. Retained log records Python3.13.18 against native fixture's required3.13.15;
+isolated tests now pin3.13.15, without changing production base or the accepted contract. Historical
+overlay checkout failure reproduced on a minimal restored shallow repository: clone lost historical
+boundaries; disposable checkout now retains the complete declared boundaries.35 focused checks PASS.
+Bounded inner native stderr is now emitted for failed Docker builds as well as retained on disk.
+Next exact-SHA Docker qualification remains required. Combined handoff implementation is in progress,
+not installed or accepted; current OWNER/NL1 remain unchanged from the last independent readback.
+
 **25 November21:14UTC — HA-02 shutdown/terminal correction; combined handoff NOT complete.**
 [Evidence, CI failures and exact remainder](releases/2026-11-25-control-ha-support-stabilization.md).
 Original WORKERS_REMAIN receipts/JUnit retained; historical task identity remains unproven.
