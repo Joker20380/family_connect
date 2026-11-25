@@ -1,16 +1,17 @@
 # Текущее состояние / Current state
 
-**25 November — paired receiver controller qualified and privately prepared on RU; not activated.**
-88 focused checks PASS/0 skips, including native old-loop drain, paired archive/unit activation,
-data-preserving rollback and independent systemd recovery after controller SIGKILL. Three guard
-death scenarios pass; the final-controller rerun also passes all24 cases/0 skips.
-RU preparation preserves PID43082, the original archive and15 unit files; it stages a separate
-candidate/plan/gate with one persistent legacy-uncertainty marker, without stopping the receiver.
-[Controller, failure fixes, private staging and rollback](releases/2026-11-25-control-ha-receiver-replacement.md).
-Next is guarded activation of this exact pair, then readback; no forced old-process termination,
-database/feed rewind or uncertainty clearing. Support/manual/OWNER integration, complete fleet
-capture, independent custody/trust/approval and final recovery remain. HA-02 replication PASS
-in isolation; the same three gates partial. No product/public version or NL service change.
+**25 November15:09UTC — paired receiver installed on RU; independent readback PASS.**
+At15:08:03UTC the guarded replacement completes: old PID43082 exits naturally after local
+drain; new PID476518 serves the pinned58c5fde9 archive with its gate and graceful unit policy.
+Independent15:09:39UTC readback verifies exact argv/archive,15 original unit files retained,
+400/503/400 gate probes,30s stable active/running,0 restarts and no daemon-reload warning.
+One legacy-uncertainty marker remains; no data rewind or capture acceptance. The deployment
+guard finishes successfully with0 restarts; actual production rollback was not needed.
+[Installed pair,88 checks plus final24-case rerun, failures and rollback](releases/2026-11-25-control-ha-receiver-replacement.md).
+Source qualification and this receiver activation are COMPLETE, not HA-02 as a whole. Next:
+support/manual/OWNER integration and old remote-effect reconciliation, then complete fleet
+capture, independent custody/trust/approval and final recovery. Replication PASS in isolation;
+the same three gates partial. No NL change, public/product version change or client E2E claim.
 
 At the preceding legacy-bridge checkpoint:
 

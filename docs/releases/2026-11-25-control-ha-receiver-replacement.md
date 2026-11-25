@@ -97,6 +97,7 @@ Local private evidence locator: `/tmp/fc-ha-receiver-replacement-current`.
 | Prepared private RU plan | `f2244aea12259ef28b4406fee931086d70f443c4893ca7390ce5b53a4ba076c2` |
 | Combined88-case JUnit | `0b3c686e4c6bbc0262e11e6aaa7d2aac96c07c8f806f9269a5ac1a4379c119a8` |
 | Final24-case controller JUnit | `9a66f50cc3033d9c2720d1242b4ad064410cc492b8aec6ba259c5b864941e88f` |
+| Independent RU verification response | `257575f49b69a5fb66a0a1b6b28b41325911b1a61bbcefdee944deb4b56cade0` |
 
 No product version, public installer/catalog, invitation page or client download is changed by
 this maintenance overlay. Raw unit environment, argv, receipts and databases remain private;
@@ -112,6 +113,42 @@ These are handled explicitly rather than weakening source/argv/cgroup checks. In
 controller deaths are tested under real systemd, not a mocked restart. The bridge now records
 only exception class and source function/line for unexpected refusal, not exception text,
 request contents or private values.
+
+## Actual RU activation — 15:08UTC
+
+Qualified source commit `05edd4beeb8265a1cd786b2a73a1e548fb87f6c6` is pushed and remote-SHA
+verified before activation. A fresh preflight rechecks the exact prepared plan, original
+process binding/configuration and HTTP readiness. The independently supervised controller
+`fc-ha02-receiver-replace-0d181404201b8d27.service` is then submitted once, using2s restart delay
+and the qualified restart/terminal-status policy. No repeated launch or ordinary receiver
+restart command is used.
+
+Observed old exit: **15:07:58.460300UTC**, PID43082; bridge receipts attest zero admitted local
+handlers, retention workers and children before natural exit. Acceptance: **15:08:03.236579UTC**,
+new PID476518. The4.776s between these observations is not an independently measured client
+outage. Guard is active/exited, `Result=success`, exit0,0 restarts. Receiver is active/running,
+0 restarts, `NeedDaemonReload=no`, new archive/gate argv and all four paired kill settings.
+No rollback intent is present: production rollback was not needed or claimed exercised.
+
+Independent readback at **15:09:39.619113UTC** uses direct process/unit/file inspection and HTTP/
+flock calls, not the controller's success receipt alone. It verifies the exact candidate and
+old archive hashes, disappearance of the old PID, all15 original unit-file hashes, owned
+drop-in hash, preserved marker, and invalid-request responses400/503/400 across gate hold/
+release. After30s the entire selected unit snapshot is unchanged and HTTP still responds400.
+There is exactly one pending marker: the original legacy uncertainty. No historical remote
+effect is inferred settled. No product database/feed is restored and no schema is migrated.
+
+The new installed runtime is the already reviewed maintenance overlay, not the canonical
+storage adapter migration or a public application release. Original private configuration,
+archive and guarded rollback remain available at the retained activation root. Native rollback
+tests demonstrate newer synthetic writes survive; no intentional production rollback/re-upgrade
+cycle was added. User-device mutations/client end-to-end operation and full-host reboot recovery
+are **not** tested by these probes. NL and neighbouring services are not contacted or changed.
+
+Private audit receipts/preimages are also copied to local protected evidence, excluding the
+active gate directory; this audit copy is not a coherent product-data backup. Never commit raw
+unit environment, private plan/preimages, audit tar or gate state. Source rollback alone does
+not revert the serving archive: use the retained operational plan and documented recovery.
 
 ## Fixed remaining stage2 work
 

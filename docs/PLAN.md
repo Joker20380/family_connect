@@ -3,16 +3,17 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-25 November: paired RU receiver controller qualification PASS; separate private preparation
-completed with original PID43082/archive/15 unit files unchanged.88 focused checks pass,
-including real systemd controller death/recovery and code-only rollback retaining newer data.
-The final-controller rerun also passes all24 cases/0 skips before guarded activation.
-[Paired replacement, explicit failure fixes and recovery](releases/2026-11-25-control-ha-receiver-replacement.md).
-Immediate task: activate this pinned pair under the independent supervisor and verify actual
-runtime/admission/rollback bindings. Keep the legacy uncertainty marker; activation is not
-historical external settlement or full capture acceptance. Support/manual/OWNER integration,
-fleet coherent capture, independent custody/trust/approval and final recovery remain within
-the same three partial HA-02 gates; replication PASS in isolation, no HA-03 or new ETA.
+25 November15:09UTC: paired RU receiver qualification, guarded activation and independent
+readback COMPLETE.88 focused checks and final24-case controller rerun PASS/0 skips. Actual
+old PID43082 exits naturally; new PID476518 is active on pinned58c5fde9 with the paired gate/
+graceful settings,0 restarts. Independent400/503/400 probes and30s stable readback pass;
+original archive/15 unit files and one unresolved legacy marker remain. No data restore.
+[Actual installed pair, explicit failure fixes and recovery](releases/2026-11-25-control-ha-receiver-replacement.md).
+Do not repeat receiver source preparation/activation as an open NEXT. Next bounded work is
+support/manual writer and guarded OWNER integration, retaining old remote-effect uncertainty.
+Complete fleet coherent capture, independent custody/trust/approval and final recovery remain
+within the same three partial HA-02 gates; replication PASS in isolation. No HA-03, automatic
+failover, client E2E acceptance, product version change or newly supported ETA.
 
 At the preceding legacy-bridge checkpoint:
 
