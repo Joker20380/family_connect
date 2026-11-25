@@ -134,6 +134,7 @@ def test_migration_preserves_existing_confirmed_payment_rows(console):
     old_target = [('console', '0005_observations_immutable')]
     new_target = [('console', '0006_payment_purpose')]
     executor = MigrationExecutor(connection)
+    current_targets = executor.loader.graph.leaf_nodes()
     try:
         executor.migrate(old_target)
         old_model = executor.loader.project_state(old_target).apps.get_model('console', 'PaymentRecord')
@@ -147,4 +148,4 @@ def test_migration_preserves_existing_confirmed_payment_rows(console):
         MigrationExecutor(connection).migrate(new_target)
         assert new_model.objects.filter(pk=record.pk).count() == 1
     finally:
-        MigrationExecutor(connection).migrate(new_target)
+        MigrationExecutor(connection).migrate(current_targets)

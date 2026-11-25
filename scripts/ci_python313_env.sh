@@ -5,7 +5,7 @@ environment="${1:?Usage: ci_python313_env.sh VENV_PATH}"
 python -c 'import sys; print("Bootstrap:", sys.executable, sys.version); assert sys.version_info[:2] == (3, 13)'
 python -m venv "$environment"
 export PATH="$environment/bin:$PATH"
-"$environment/bin/python" -m pip install -r control/requirements.lock -r provisioning/requirements.lock -r device_identity/requirements.lock
+"$environment/bin/python" -m pip install -r control/requirements.lock -r provisioning/requirements.lock -r device_identity/requirements.lock -r deploy/control-ha/requirements.lock
 "$environment/bin/python" -m pip install --no-deps --require-hashes -r messenger/requirements.lock
 "$environment/bin/python" -m pip install meson==1.7.0 meson-python==0.17.1 pyproject-metadata==0.9.1 ninja==1.11.1.3
 "$environment/bin/python" -m pip install --no-build-isolation pycairo==1.27.0
@@ -25,6 +25,7 @@ import RNS
 import cairo
 import gi
 import gi._gi
+import psycopg
 
 for namespace, required in (("Gio", "2.0"), ("GLib", "2.0"), ("Gtk", "4.0"), ("Adw", "1")):
     gi.require_version(namespace, required)

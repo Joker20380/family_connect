@@ -93,6 +93,7 @@ def sample(root, ticket):
     replacement = replace.Replacement(root)
     admission.require(replacement.manager.user or os.geteuid() == 0, 'ROOT_WITNESS_REQUIRED')
     with replace.controller_lock(replacement.root):
+        admission.require(not replacement.terminal_failure(), 'TERMINAL_RECONCILIATION_REQUIRED')
         plan_raw = owned(replacement.root / 'plan.json', os.geteuid())
         admission.require(encoded(json.loads(plan_raw, object_pairs_hook=unique)) == encoded(replacement.plan),
                           'PLAN_CHANGED')

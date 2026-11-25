@@ -5,6 +5,7 @@ import math
 import os
 from pathlib import Path
 import runpy
+import select
 import stat
 import sys
 import threading
@@ -66,6 +67,86 @@ class Retired(SystemExit):
     pass
 
 
+class NativeRetirement:
+    def __init__(self, owners, *, allow_reaped=False):
+        self.descriptors = []
+        try:
+            for role, worker in owners:
+                if worker is threading.main_thread():
+                    continue
+                require(worker.native_id is not None, 'OWNED_TASK_MISSING')
+                task = Path('/proc/self/task') / str(worker.native_id)
+                try:
+                    require(task.exists() or allow_reaped, 'OWNED_TASK_MISSING')
+                    descriptor = os.pidfd_open(worker.native_id, 128)
+                except ProcessLookupError:
+                    require(allow_reaped, 'OWNED_TASK_MISSING')
+                    worker.join()
+                    require(not task.exists(), 'OWNED_TASK_REUSED')
+                    continue
+                self.descriptors.append((role, worker.native_id, descriptor))
+        except BaseException:
+            self.close()
+            raise
+
+    def wait(self):
+        poller = select.poll()
+        pending = {descriptor for _, _, descriptor in self.descriptors}
+        for descriptor in pending:
+            poller.register(descriptor, select.POLLHUP)
+        while pending:
+            for descriptor, events in poller.poll():
+                require(not events & (select.POLLERR | select.POLLNVAL), 'OWNED_TASK_WAIT_FAILED')
+                require(events & select.POLLHUP, 'OWNED_TASK_NOT_REAPED')
+                poller.unregister(descriptor)
+                pending.remove(descriptor)
+
+    def close(self):
+        for _, _, descriptor in self.descriptors:
+            os.close(descriptor)
+        self.descriptors.clear()
+
+
+class PersistenceWork:
+    def __init__(self, owners):
+        self.owners = owners
+        self.workers = []
+        self.lock = threading.Lock()
+        self.original = threading.Thread.start
+        self.retirements = []
+
+    def __enter__(self):
+        def start(worker, *args, **kwargs):
+            with self.lock:
+                require(threading.current_thread() is threading.main_thread() or
+                        threading.current_thread() in self.workers, 'PERSISTENCE_WORK_OWNER')
+                require(len(self.workers) < 128, 'PERSISTENCE_WORK_LIMIT')
+                self.workers.append(worker)
+                self.owners.append(('final-persistence', worker))
+            result = self.original(worker, *args, **kwargs)
+            retirement = NativeRetirement([('final-persistence', worker)], allow_reaped=True)
+            with self.lock:
+                self.retirements.append(retirement)
+            return result
+        self.wrapper = start
+        threading.Thread.start = start
+        return self
+
+    def finish(self):
+        index = 0
+        while index < len(self.workers):
+            self.workers[index].join()
+            index += 1
+        for retirement in self.retirements:
+            retirement.wait()
+
+    def __exit__(self, *_):
+        require(threading.Thread.start is self.wrapper, 'PERSISTENCE_START_CHANGED')
+        threading.Thread.start = self.original
+        for retirement in self.retirements:
+            retirement.close()
+
+
 def terminal_type(base):
     class TerminalPause(base):
         committed = False
@@ -122,7 +203,43 @@ def owned(admission, request, content):
     return delivery, stopped, server, store, store_root, runtime_root, socket, (info.st_dev, info.st_ino)
 
 
-def only_main():
+def census(phase, owners, last_step):
+    limit = 128
+    result = dict(schema=1, phase=phase, last_completed_step=last_step, complete=True,
+                  atomic=False, errors=[], capture_permitted=False)
+    def sample():
+        threads = list(threading.enumerate())
+        tasks = sorted(int(path.name) for path in Path('/proc/self/task').iterdir())
+        return threads, tasks
+    try:
+        threads, tasks = sample()
+        result['python_threads'] = [dict(ident=worker.ident, native_id=worker.native_id,
+                                        daemon=worker.daemon, alive=worker.is_alive())
+                                    for worker in threads[:limit]]
+        result['known_owners'] = [dict(role=role, ident=worker.ident, native_id=worker.native_id,
+                                      alive=worker.is_alive()) for role, worker in owners[:limit]]
+        result['native_tids'] = tasks[:limit]
+        python_ids = {worker.native_id for worker in threads if worker.native_id is not None}
+        known_ids = {worker.native_id for _, worker in owners if worker.native_id is not None}
+        result['native_without_python'] = sorted(set(tasks) - python_ids)[:limit]
+        result['python_without_native'] = sorted(python_ids - set(tasks))[:limit]
+        result['native_without_known_owner'] = sorted(set(tasks) - known_ids)[:limit]
+        result['counts'] = dict(python=len(threads), native=len(tasks), owners=len(owners))
+        after_threads, after_tasks = sample()
+        if threads != after_threads or tasks != after_tasks:
+            result['errors'].append('CHANGED_DURING_SAMPLE')
+        if max(len(threads), len(tasks), len(owners)) > limit:
+            result['errors'].append('TRUNCATED')
+    except Exception:
+        result['errors'].append('SAMPLE_UNAVAILABLE')
+    result['complete'] = not result['errors']
+    return result
+
+
+def only_main(output, phase, owners, last_step):
+    snapshot = census(phase, owners, last_step)
+    stage(output / ('threads-' + phase + '.json'), (json.dumps(snapshot, sort_keys=True) + '\n').encode())
+    require(snapshot['complete'], 'THREAD_SNAPSHOT_INCOMPLETE')
     require(threading.enumerate() == [threading.main_thread()] and
             {int(path.name) for path in Path('/proc/self/task').iterdir()} ==
             {threading.main_thread().native_id}, 'WORKERS_REMAIN')
@@ -130,25 +247,21 @@ def only_main():
                     for path in Path('/proc/self/task').iterdir()), 'CHILDREN_REMAIN')
 
 
-def persist(runtime, contract, store, store_root, runtime_root):
+def persist(runtime, contract, store, store_root, runtime_root, output, owners):
     rns = contract['RNS']
     atexit.unregister(rns.Reticulum.exit_handler)
     streams = sys.stdout, sys.stderr
-    try:
-        rns.Reticulum.exit_handler()
-    finally:
-        detached = sys.stdout, sys.stderr
-        sys.stdout, sys.stderr = streams
-        for stream in detached:
-            if not any(stream is original for original in streams):
-                stream.close()
-    while True:
-        workers = [worker for worker in threading.enumerate() if worker is not threading.main_thread()]
-        if not workers:
-            break
-        for worker in workers:
-            worker.join(.1)
-    only_main()
+    with PersistenceWork(owners) as work:
+        try:
+            rns.Reticulum.exit_handler()
+        finally:
+            detached = sys.stdout, sys.stderr
+            sys.stdout, sys.stderr = streams
+            for stream in detached:
+                if not any(stream is original for original in streams):
+                    stream.close()
+        work.finish()
+    only_main(output, 'after-persistence', owners, 'persistence-workers-joined')
     require(not runtime.failed.is_set(), 'FINAL_PERSISTENCE_UNCERTAIN')
     contract['sync_tree'](runtime_root)
     store.close()
@@ -160,7 +273,7 @@ def execute(output):
     output = Path(output)
     admission = runpy.run_path(str(output / 'admission.py'))
     read, write = admission['read'], admission['write']
-    runtime, delivery, online, entered = None, None, None, False
+    runtime, delivery, online, entered, retirement = None, None, None, False, None
     require(output.stat().st_uid == os.getuid() and output.stat().st_mode & 0o777 == 0o700,
             'PRIVATE_OUTPUT')
     try:
@@ -211,6 +324,10 @@ def execute(output):
             require(runtime.ready() and not stopped.is_set(), 'QUIESCENCE_LOST')
             time.sleep(min(.02, pause['remaining'](request['deadline'])))
         require(json.loads(read(output / 'commit.json')) == receipt, 'COMMIT_BINDING')
+        owners = [('main', threading.main_thread()), ('delivery', delivery._worker)]
+        owners += [('rns-producer', worker) for worker in runtime.producers]
+        owners += [('rns-queue', worker) for worker in runtime.queues]
+        retirement = NativeRetirement(owners)
         write(output / 'uncertainty.json', dict(legacy_external_outcomes_proven=False, capture_permitted=False))
         runtime.commit(stopped)
         write(output / 'committed.json', dict(binding=request['binding'], irreversible=True, capture_permitted=False))
@@ -218,9 +335,11 @@ def execute(output):
         require(delivery._cancel is None, 'DELIVERY_NOT_IDLE')
         delivery.close(timeout=0)
         delivery._worker.join()
-        only_main()
+        retirement.wait()
+        retirement.close()
+        only_main(output, 'before-persistence', owners, 'owned-native-tasks-reaped')
         require([(path.stat().st_dev, path.stat().st_ino) for path in roots] == root_pins, 'STATE_REPLACED')
-        persist(runtime, contract, store, store_root, runtime_root)
+        persist(runtime, contract, store, store_root, runtime_root, output, owners)
         server.server_close()
         info = socket.lstat()
         require((info.st_dev, info.st_ino) == socket_pin and stat.S_ISSOCK(info.st_mode), 'SOCKET_REPLACED')
@@ -230,7 +349,7 @@ def execute(output):
             os.fsync(descriptor)
         finally:
             os.close(descriptor)
-        only_main()
+        only_main(output, 'before-exit', owners, 'socket-parent-synced')
         write(output / 'exited.json', dict(binding=request['binding'], final_persistence=True,
               stores_closed=True, workers=0, exit_code=0, capture_permitted=False))
         os._exit(0)
@@ -248,6 +367,8 @@ def execute(output):
                 except BaseException:
                     pass
     finally:
+        if retirement is not None:
+            retirement.close()
         if entered and not runtime.committed:
             runtime.__exit__()
         if delivery is not None and online is not None and not (runtime and runtime.committed):

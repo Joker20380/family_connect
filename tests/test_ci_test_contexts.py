@@ -34,6 +34,9 @@ def test_inventory_failure_keeps_collection_diagnostics(tmp_path):
     ('tests/test_gateway_credential_publication.py::IsolatedRootTests::test_owner', 'root'),
     ('tests/test_gateway_credential_publication.py::PublicationTests::test_owner', 'standard'),
     ('tests/test_profile_snapshot_launcher.py::test_executable', 'snapshot314'),
+    ('messenger/tests/test_control_ha_mailbox_links.py::test_native_link', 'native314'),
+    ('tests/test_control_ha_legacy_support.py::test_invalid_budget', 'native314'),
+    ('tests/test_control_ha_support_terminal.py::test_census', 'native314'),
     ('tests/test_device_identity.py::test_private', 'standard'),
 ])
 def test_explicit_context_partition(nodeid, expected):

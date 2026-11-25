@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 25 November: bounded shutdown census, owned native retirement and terminal78; working support unchanged; original cause unproven, CI and combined handoff/recovery remain open](releases/2026-11-25-control-ha-support-stabilization.md).
+
 [CONTROL-HA · 25 November20:39UTC: OWNER witness/rollback reservation checkpoint;57 local and3 root cases pass, one native WORKERS_REMAIN refusal retained; combined handoff remains](releases/2026-11-25-control-ha-support-witness.md).
 
 [CONTROL-HA · 25 November20:12UTC: manifest-required startup/restart fence,104 checks and actual NL1 systemd crash/restart/native RNS PASS; stale ticket refused, working installation/OWNER exit proof remain](releases/2026-11-25-control-ha-mailbox-startup.md).

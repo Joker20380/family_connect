@@ -32,7 +32,8 @@ jobs:
           ref: ${{ env.SUPPORT_SOURCE_SHA }}
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.13'
+          python-version: '3.14'
+      - run: python -c 'import sys; assert sys.version_info[:2] == (3,14) and sys._is_gil_enabled()'
       - run: python -m pip install -r control/requirements.lock -r provisioning/requirements.lock -r device_identity/requirements.lock
       - run: python -m pip install --no-deps --require-hashes -r messenger/requirements.lock
       - name: Existing messenger and addressed support contracts

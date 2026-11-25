@@ -1,5 +1,19 @@
 # Текущее состояние / Current state
 
+**25 November21:14UTC — HA-02 shutdown/terminal correction; combined handoff NOT complete.**
+[Evidence, CI failures and exact remainder](releases/2026-11-25-control-ha-support-stabilization.md).
+Original WORKERS_REMAIN receipts/JUnit retained; historical task identity remains unproven.
+Controlled native-tail exclusion now waits for owned kernel retirement; three bounded censuses retain
+no payloads/locals. Irreversible errors latch original cause/evidence and exit78 without restart-loop.
+65 targeted,1 native terminal and3 actual fc-support tests pass; OWNER remains PID2022541/0 restarts,
+19 sources/unit/interpreter unchanged. Candidate9d7bf840 NOT installed; seven UNKNOWN retained.
+CI context/dependency/diagnostic and migration corrections are source-only; exact595acebe CI still
+fails, new-source CI and combined resumable OWNER/NL1 handoff/reclosure/recovery remain unaccepted.
+No mailbox opening, capture permit, working replacement, HA-03 or version change. Same three HA-02
+criteria remain partial; isolated replication PASS. PLAN has one current next result.
+
+## Retained checkpoints (historical, not simultaneous NEXTs)
+
 **25 November — обязательный итог модернизации принят владельцем.**
 [FLEET-PRODUCTION-ONBOARDING-1](fleet-production-onboarding.md):
 подготовленный VPS → IP, защищённый доступ и роли → штатный ввод → проверенный

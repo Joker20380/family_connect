@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 export FC_CI_LIFECYCLE_LOG="$RUNNER_TEMP/full-pytest-lifecycle.jsonl"
+export FC_NATIVE_DIAGNOSTICS_DIR="$RUNNER_TEMP/native-fixtures"
 python3 scripts/ci_lifecycle.py "$FC_CI_LIFECYCLE_LOG" "$RUNNER_TEMP/full-pytest-processes.json" >"$RUNNER_TEMP/full-pytest-monitor.log" 2>&1 &
 monitor=$!
 trap 'kill "$monitor" 2>/dev/null || true; wait "$monitor" 2>/dev/null || true' EXIT

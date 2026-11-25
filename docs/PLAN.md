@@ -15,7 +15,22 @@
 исполнитель панели, динамический serving set и каталог; завершить сквозную ONB-01..12.
 
 
-**CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+**CONTROL-HA-20261123 / HA-02 — one selected result, IN_PROGRESS.**
+Finish the combined resumable OWNER ↔ NL1 handoff/reclosure/recovery and its applicable CI,
+then authorized working installation with independent readback. Include current closed/drained
+mailbox proof, old OWNER exit/candidate verification, reservation-bound authenticated witness
+consumption, confirmed opening, identity-specific notice-queue pause, reclosure/drain/invalidation
+before code-only recovery, and loss/death/restart boundary qualification. Preserve current data,
+seven UNKNOWN outcomes and other clients. No reservation deletion, legacy bypass or HA-03 cutover.
+[25 November stabilization evidence and exact incomplete gates](releases/2026-11-25-control-ha-support-stabilization.md).
+Native-tail correction/terminal78 pass65 targeted+1 native terminal+3 actual-root checks; this is
+not combined acceptance. Historical WORKERS_REMAIN cause remains unproven. Existing head CI fails;
+partial CI environment/diagnostic corrections require exact new-SHA workflows. Candidate NOT installed.
+The same three HA-02 criteria remain partial; isolated replication PASS. Onboarding remains mandatory.
+
+## Retained HA-02 checkpoint history (not active NEXTs)
+
+**CONTROL-HA-20261123 — historical checkpoint.**
 25 November20:39UTC: independent OWNER replacement witness CHECKPOINT, not combined admission acceptance.
 [Source, native-wire/systemd/root checks, rollback reservation and exact limits](releases/2026-11-25-control-ha-support-witness.md).
 57 distinct local checks and3 actual-root/fc-support cases pass across scoped runs/0 skips. One root

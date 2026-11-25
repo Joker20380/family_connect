@@ -16,8 +16,9 @@ chmod -R go-w "$destination"
 patchelf --set-rpath '$ORIGIN/../lib' "$destination/bin/python3.14"
 unset LD_LIBRARY_PATH
 "$destination/bin/python3.14" -m venv "$destination/test-env"
-"$destination/test-env/bin/python" -m pip install -r control/requirements.lock
-"$destination/test-env/bin/python" -c 'import sys,pytest; assert sys.version_info[:2] == (3,14); print(sys.executable, pytest.__version__)'
+"$destination/test-env/bin/python" -m pip install -r control/requirements.lock -r provisioning/requirements.lock -r device_identity/requirements.lock -r deploy/control-ha/requirements.lock
+"$destination/test-env/bin/python" -m pip install --no-deps --require-hashes -r messenger/requirements.lock
+"$destination/test-env/bin/python" -c 'import sys,pytest,RNS; assert sys.version_info[:2] == (3,14) and sys._is_gil_enabled(); print(sys.executable, pytest.__version__)'
 test "$(id -u "$fixture_user")" != 0
 install -d -m 0755 -o "$fixture_user" /usr/local/lib/fc-ci-snapshot-fixtures
 "$destination/bin/python3.14" -B -c 'from scripts.ci_fixture_permissions import remove_acls; remove_acls("/usr/local/lib/fc-ci-snapshot-fixtures")'

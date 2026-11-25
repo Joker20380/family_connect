@@ -12,7 +12,7 @@ from contextlib import contextmanager
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from scripts.ci_pytest_context import CONTEXTS, SNAPSHOT_FILE
+from scripts.ci_pytest_context import CONTEXTS, NATIVE314_FILES, SNAPSHOT_FILE
 from scripts.ci_lifecycle import mark
 
 
@@ -46,7 +46,7 @@ def main():
                 parser.error('Test account must not be root')
             os.chown(folder, account.pw_uid, account.pw_gid)
         def command(name, output):
-            python = str(args.python314) if name == 'snapshot314' else sys.executable
+            python = str(args.python314) if name in ('snapshot314', 'native314') else sys.executable
             prefix = []
             if privileged and name != 'root':
                 prefix = ['runuser', '-u', args.unprivileged_user, '--']
@@ -57,6 +57,8 @@ def main():
             if name == 'root':
                 return prefix + [python, str(ROOT / 'scripts/ci_root_pytest.py'), '--collection', str(output)]
             selection = [SNAPSHOT_FILE] if name == 'snapshot314' else []
+            if name == 'native314':
+                selection = sorted(NATIVE314_FILES)
             return prefix + [python, '-m', 'pytest', '-p', 'scripts.ci_pytest_context',
                 '--fixture-context=' + name, '--fixture-collection=' + str(output),
                 '-o', 'faulthandler_timeout=180', '-q', '--tb=short', *selection]

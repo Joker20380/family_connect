@@ -92,6 +92,7 @@ jobs:
             ${{ runner.temp }}/full-pytest-processes.json
             ${{ runner.temp }}/full-pytest-monitor.log
             ${{ runner.temp }}/python314-prepare.log
+            ${{ runner.temp }}/native-fixtures/
           if-no-files-found: error
       - name: System GTK dependencies
         run: sudo apt-get update && sudo apt-get install -y python3-gi python3-gi-cairo python3-venv gir1.2-gtk-4.0 gir1.2-adw-1 libqrencode4 libzbar0 python3-cryptography xvfb dbus-x11

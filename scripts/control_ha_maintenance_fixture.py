@@ -214,6 +214,19 @@ def native_capture(issuer):
         return capture_container(issuer, source)
 
 
+def retain_failure(stderr, outcome):
+    directory = os.environ.get('FC_NATIVE_DIAGNOSTICS_DIR')
+    if directory:
+        Path(directory).mkdir(mode=0o700, parents=True, exist_ok=True)
+    with tempfile.NamedTemporaryFile(prefix='fc-ha-maintenance-error-', suffix='.log',
+                                     dir=directory, delete=False) as output:
+        output.write(('native-fixture outcome=' + outcome + '\n').encode())
+        output.write((stderr or b'')[:1048576])
+        if len(stderr or b'') > 1048576:
+            output.write(b'\nDIAGNOSTIC_INCOMPLETE: STDERR_TRUNCATED\n')
+    return output.name
+
+
 def capture_container(issuer, source):
     manifest = parse((ROOT / 'deploy/control-ha/rehearsal-maintenance.json').read_bytes())
     token = uuid.uuid4().hex
@@ -228,12 +241,15 @@ def capture_container(issuer, source):
         '--env', 'PYTHONDONTWRITEBYTECODE=1', '--entrypoint', 'python', manifest['image'],
         '-m', 'scripts.control_ha_maintenance_fixture']
     try:
-        result = subprocess.run(arguments, input=encoded({name: packed(raw) for name, raw in issuer.items()}),
-                                capture_output=True, timeout=45, env=environment)
+        try:
+            result = subprocess.run(arguments, input=encoded({name: packed(raw) for name, raw in issuer.items()}),
+                                    capture_output=True, timeout=45, env=environment)
+        except subprocess.TimeoutExpired as error:
+            output = retain_failure(error.stderr, 'timeout')
+            raise ValueError('NATIVE_ROOT_FIXTURE_TIMEOUT: ' + output) from None
         if result.returncode:
-            with tempfile.NamedTemporaryFile(prefix='fc-ha-maintenance-error-', suffix='.log', delete=False) as output:
-                output.write(result.stderr)
-            raise ValueError('NATIVE_ROOT_FIXTURE_FAILED: ' + output.name)
+            output = retain_failure(result.stderr, 'exit-' + str(result.returncode))
+            raise ValueError('NATIVE_ROOT_FIXTURE_FAILED: ' + output)
         value = parse(result.stdout)
         return dict(settled={name: base64.b64decode(raw, validate=True) for name, raw in value['settled'].items()},
                     pending={name: base64.b64decode(raw, validate=True) for name, raw in value['pending'].items()},

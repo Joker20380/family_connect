@@ -249,6 +249,35 @@ class Replacement:
         if not self.has(name):
             admission.write(self.root / (name + '.json'), dict(at=time.time(), **value))
 
+    def terminal_failure(self):
+        if self.has('terminal-failure'):
+            return True
+        path = self.drain / 'error.json'
+        if not path.exists():
+            return False
+        raw = admission.read(path)
+        error = json.loads(raw)
+        require(type(error.get('irreversible')) is bool and error.get('capture_permitted') is False,
+                'INVALID_EXIT_ERROR')
+        if not error['irreversible']:
+            return False
+        reason = error.get('reason')
+        require(isinstance(reason, str) and re.fullmatch(r'[A-Z][A-Z0-9_]{1,80}', reason), 'INVALID_EXIT_REASON')
+        evidence = {'error.json': hashlib.sha256(raw).hexdigest()}
+        for name in ('ready.json', 'commit.json', 'committed.json', 'threads-before-persistence.json',
+                     'threads-after-persistence.json', 'threads-before-exit.json'):
+            if (self.drain / name).exists():
+                evidence[name] = digest(self.drain / name)
+        self.record('terminal-failure', result='MANUAL_RECONCILIATION_REQUIRED', reason=reason,
+                    evidence=evidence, irreversible=True, capture_permitted=False,
+                    opening_permitted=False, witness_permitted=False)
+        return True
+
+    def old_exit_outcome(self):
+        if self.terminal_failure():
+            return 'MANUAL_RECONCILIATION_REQUIRED'
+        return 'ABORTED' if self.has('aborted') else 'WAITING_OLD_EXIT'
+
     def validate(self):
         plan = self.plan
         require(all(digest(self.root / name) == value for name, value in plan['sources'].items()), 'SUPERVISOR_PIN')
@@ -277,6 +306,8 @@ class Replacement:
         return pid
 
     def old_exit(self, *, commit=True):
+        if self.terminal_failure():
+            return False
         if self.has('old-exited'):
             return True
         state = self.validate()
@@ -319,6 +350,7 @@ class Replacement:
             if (self.drain / 'error.json').exists():
                 error = json.loads(admission.read(self.drain / 'error.json'))
                 if error['irreversible']:
+                    self.terminal_failure()
                     return False
                 if (self.drain / 'restored.json').exists():
                     require(admission.binding(int(state['MainPID'])) == self.plan['old_binding'], 'OLD_RUNTIME_CHANGED')
@@ -403,6 +435,8 @@ class Replacement:
 
     def _rollback_locked(self):
         require(not self.has('handoff-reserved'), 'MAILBOX_RECLOSURE_REQUIRED')
+        if self.terminal_failure():
+            return 'MANUAL_RECONCILIATION_REQUIRED'
         state = self.validate()
         if not self.dropin.exists() and state['MainPID'] != '0' and argv(int(state['MainPID'])) == self.plan['old_argv']:
             require(all(state[key] == self.plan['before'][key] for key in CONFIG), 'ORIGINAL_SETTINGS_NOT_RESTORED')
@@ -413,7 +447,7 @@ class Replacement:
         if not self.has('old-exited'):
             if self.has('drain-intent') and not self.has('aborted'):
                 if not self.old_exit(commit=False):
-                    return 'ABORTED' if self.has('aborted') else 'WAITING_OLD_EXIT'
+                    return self.old_exit_outcome()
             else:
                 self.live(state, self.plan['old_argv'])
                 self.record('rolled-back', old_unchanged=True, data_restored=False)
@@ -464,6 +498,8 @@ class Replacement:
         with controller_lock(self.root):
             require(not self.has('handoff-reserved') or not (recover or self.has('rollback-intent')),
                     'MAILBOX_RECLOSURE_REQUIRED')
+            if self.terminal_failure():
+                return 'MANUAL_RECONCILIATION_REQUIRED'
             state = self.validate()
             if recover:
                 self.record('rollback-intent', reason='EXPLICIT_RECOVERY', data_restore_allowed=False)
@@ -478,7 +514,7 @@ class Replacement:
                 self.verify(state)
                 return 'ALREADY_ACCEPTED'
             if not self.old_exit():
-                return 'ABORTED' if self.has('aborted') else 'WAITING_OLD_EXIT'
+                return self.old_exit_outcome()
             try:
                 state = self.validate()
                 if not self.dropin.exists():
@@ -518,7 +554,11 @@ def main():
     parser.add_argument('--recover', action='store_true')
     args = parser.parse_args()
     try:
-        result = Replacement(args.run).run(recover=args.recover)
+        replacement = Replacement(args.run)
+        result = replacement.run(recover=args.recover)
+        if result == 'MANUAL_RECONCILIATION_REQUIRED':
+            print(admission.read(replacement.root / 'terminal-failure.json').decode())
+            raise SystemExit(78)
     except Exception as error:
         print(json.dumps(dict(result='MANUAL_RECONCILIATION_REQUIRED', reason=type(error).__name__,
                               code=str(error) if re.fullmatch(r'[A-Z][A-Z0-9_]{1,80}', str(error)) else None,

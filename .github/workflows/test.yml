@@ -80,6 +80,7 @@ jobs:
             ${{ runner.temp }}/full-pytest-processes.json
             ${{ runner.temp }}/full-pytest-monitor.log
             ${{ runner.temp }}/python314-prepare.log
+            ${{ runner.temp }}/native-fixtures/
           if-no-files-found: error
       - run: cargo test --manifest-path core/Cargo.toml --locked
   failover:
