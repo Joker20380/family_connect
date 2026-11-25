@@ -1,6 +1,8 @@
 # Documentation
 
-[CONTROL-HA · 25 November: reversible legacy-support admission probe,55 checks PASS; no cancellation, forced stop or capture permission; production probe awaits renewed technical authentication](releases/2026-11-25-control-ha-support-bridge.md).
+[CONTROL-HA · 25 November16:40UTC: working support admission probe PASS, same process/source/unit and restored IPC;62 tests plus fc-support PrivateTmp fixture; RNS closure and safe replacement remain](releases/2026-11-25-control-ha-support-live-probe.md).
+
+[CONTROL-HA · preceding25 November checkpoint: isolated legacy-support admission probe,55 checks PASS; no cancellation, forced stop or capture permission](releases/2026-11-25-control-ha-support-bridge.md).
 
 [CONTROL-HA · 25 November: OWNER GUI authentication confirmed; pinned installed-shape support candidate,36 tests and actual fc-support systemd/readback PASS; working service unchanged, safe old-process transition still required](releases/2026-11-25-control-ha-support-overlay.md).
 

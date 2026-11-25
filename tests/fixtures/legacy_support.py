@@ -3,11 +3,13 @@ import ctypes
 import json
 import os
 from pathlib import Path
+import runpy
 import socket
 import subprocess
 import sys
 import threading
 import time
+import types
 
 assert ctypes.CDLL(None, use_errno=True).prctl(0x59616d61, ctypes.c_ulong(-1), 0, 0, 0) == 0
 root, source, mode, reader_fd = Path(sys.argv[1]), sys.argv[2], sys.argv[3], int(sys.argv[4])
@@ -79,6 +81,8 @@ original_activate = worker.SupportServer.server_activate
 
 def activate(server):
     original_activate(server)
+    if mode == 'module-globals':
+        worker.main = types.FunctionType(worker.main.__code__, dict(vars(worker)))
     (root / 'ready').touch()
 
 
@@ -87,5 +91,26 @@ sys.argv = ['support', '--store', str(root / 'store'), '--key', str(root / 'key'
             '--sender-public', public, '--snapshot', str(root / 'unused-snapshot'),
             '--runtime', str(root / 'runtime'), '--socket', str(root / 'worker.sock'),
             '--snapshot-uid', str(os.getuid())]
-worker.main()
+if mode.startswith('module'):
+    def module_entry(frame, event, argument):
+        global worker, original_activate
+        if event == 'call' and frame.f_code.co_name == 'main' and frame.f_globals.get('__name__') == '__main__':
+            sys.settrace(None)
+            worker = sys.modules['__main__']
+            worker.SupportMailbox.refresh = refresh
+            worker.SupportMailbox.exchange = exchange
+            original_activate = worker.SupportServer.server_activate
+            worker.SupportServer.server_activate = activate
+            assert sys.modules['__mp_main__'] is worker
+            assert sys.modules['provisioning.support_worker'] is not worker
+            if mode == 'module-ambiguous':
+                duplicate = types.ModuleType('synthetic-duplicate')
+                duplicate.__dict__.update(vars(worker))
+                sys.modules['synthetic-duplicate'] = duplicate
+            (root / 'module-shape').touch()
+        return module_entry
+    sys.settrace(module_entry)
+    runpy._run_module_as_main('provisioning.support_worker', alter_argv=False)
+else:
+    worker.main()
 (root / 'finished').touch()

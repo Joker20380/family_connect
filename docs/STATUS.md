@@ -1,18 +1,18 @@
 # Текущее состояние / Current state
 
-**25 November — reversible legacy-support admission probe qualified; not run on production.**
-The pinned CPython3.14 bridge pauses only an idle main loop, lets delivery finish without cancelling
-it, joins leftover route readers and restores admission on success, deadline or controller exit.
-It has no stop mode; RNS jobs remain live and capture is always refused.55 checks PASS/0 skips,
-including30 new cases under the installed interpreter with synthetic stores/IPC and fresh readback.
-[Exact scope, failed attempts and rollout boundary](releases/2026-11-25-control-ha-support-bridge.md).
-At16:22:44UTC working support remains active PID2022541/0 restarts, all19 source hashes unchanged,
-old40s policy/no reload warning. No live injection, working service change or RU/NL connection.
-The prior terminal's sudo timestamp expired; the requested GUI reauthentication did not complete.
-Next: reauthenticate for the bounded live probe, close RNS background persistence, then qualify the
-independently supervised stop/replacement/rollback. No renewed authorization is needed. Installed
-manual/OWNER coverage, coherent capture and independent trust/custody/recovery still remain; the
-same three HA-02 gates partial and isolated replication PASS, not a new numbered stage or ETA.
+**25 November — working legacy-support admission probe PASS; no stop or replacement.**
+GUI authentication succeeded. At16:40:26UTC the actual support process pauses serial/delivery
+admission, drains the checked application scope without cancellation and restores online admission.
+Malformed IPC works before/after; PID2022541, all19 sources,3 unit files and15 unit fields remain
+unchanged, active/running/0 restarts. The old40s policy remains; no capture permission is issued.
+Four RNS background jobs remain live.62 tests PASS/0 skips plus a real fc-support systemd namespace
+fixture PASS. Two refused live attempts exposed PrivateTmp staging and multiple module loads;
+target-visible staging and exact active-frame/globals binding now qualify without relaxing pins.
+[Failures, actual probe, evidence and rollback](releases/2026-11-25-control-ha-support-live-probe.md).
+Next: exact RNS periodic/queued/exit persistence closure and independently supervised safe stop/
+replacement/rollback, then installed manual/OWNER coverage and coherent fleet capture. Independent
+current trust/custody/approval and full post-ACK recovery remain. Same three HA-02 gates partial;
+isolated replication PASS. No RU/NL contact, container requalification, version change, HA-03 or ETA.
 
 At the preceding installed-shape candidate checkpoint:
 

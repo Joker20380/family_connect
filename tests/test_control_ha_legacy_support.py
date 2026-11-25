@@ -114,8 +114,11 @@ def assert_restored(root, process, output):
         assert json.loads(connection.recv(16384))['ok'] is False
 
 
-def test_idle_pause_is_reversible_and_never_permits_capture(running, installed):
-    root, process, _ = running()
+@pytest.mark.parametrize('mode', ['idle', 'module'])
+def test_idle_pause_is_reversible_and_never_permits_capture(running, installed, mode):
+    root, process, _ = running(mode)
+    if mode == 'module':
+        assert (root / 'module-shape').exists()
     before = bridge.binding(process.pid)
     output = invoke(root, installed, process, hold=.5)
     wait_for(lambda: (output / 'drained.json').exists())
@@ -305,3 +308,56 @@ def test_invalid_budget_refuses_before_staging(tmp_path, seconds, hold):
     with pytest.raises(ValueError, match='REQUEST_TIME'):
         bridge.prepare(os.getpid(), tmp_path, tmp_path / 'probe', seconds=seconds, hold=hold)
     assert not (tmp_path / 'probe').exists()
+
+
+def test_module_main_globals_must_match_running_frame(running, installed):
+    root, process, _ = running('module-globals')
+    output = invoke(root, installed, process)
+    assert read(output / 'error.json')['reason'] == 'RUNTIME_BINDING'
+    assert not (output / 'entered.json').exists()
+    with ipc(root) as connection:
+        assert json.loads(connection.recv(16384))['ok'] is False
+
+
+def test_inactive_import_with_identical_code_does_not_replace_active_main(running, installed):
+    root, process, _ = running('module-ambiguous')
+    output = invoke(root, installed, process)
+    assert_restored(root, process, output)
+    assert not (output / 'error.json').exists()
+
+
+@pytest.mark.parametrize('missing', [False, True])
+def test_namespace_check_rejects_different_or_missing_paths(tmp_path, monkeypatch, missing):
+    actual = Path.stat
+    target = Path('/proc') / str(os.getpid()) / 'root' / tmp_path.relative_to('/')
+    other = tmp_path / 'other'
+    other.mkdir()
+
+    def stat_path(path, *args, **kwargs):
+        if path == target:
+            if missing:
+                raise FileNotFoundError()
+            return actual(other)
+        return actual(path, *args, **kwargs)
+
+    monkeypatch.setattr(Path, 'stat', stat_path)
+    with pytest.raises(ValueError, match='OUTPUT_NAMESPACE'):
+        bridge.visible_to(os.getpid(), tmp_path)
+
+
+@pytest.mark.parametrize('changed', ['namespace', 'process'])
+def test_prepare_rechecks_staged_files_and_process(installed, tmp_path, monkeypatch, changed):
+    observed = bridge.binding(os.getpid())
+    real_write = bridge.write
+
+    def write(path, value):
+        real_write(path, value)
+        if path.name == 'prepared.json':
+            if changed == 'process':
+                monkeypatch.setattr(bridge, 'binding', lambda pid: dict(observed, start='changed'))
+            else:
+                monkeypatch.setattr(bridge, 'visible_to', lambda pid, path: bridge.require(False, 'OUTPUT_NAMESPACE'))
+
+    monkeypatch.setattr(bridge, 'write', write)
+    with pytest.raises(ValueError, match='PID_CHANGED' if changed == 'process' else 'OUTPUT_NAMESPACE'):
+        bridge.prepare(os.getpid(), installed, tmp_path / 'probe')

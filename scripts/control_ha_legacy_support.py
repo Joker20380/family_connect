@@ -81,6 +81,16 @@ def sources(root, expected):
     return content
 
 
+def visible_to(pid, path):
+    target = Path('/proc') / str(pid) / 'root' / path.relative_to('/')
+    try:
+        host, remote = path.stat(), target.stat()
+    except OSError:
+        raise ValueError('OUTPUT_NAMESPACE') from None
+    require((host.st_dev, host.st_ino, host.st_mode) ==
+            (remote.st_dev, remote.st_ino, remote.st_mode), 'OUTPUT_NAMESPACE')
+
+
 def prepare(pid, root, output, *, seconds=5, hold=0):
     require(sys.version_info[:2] == (3, 14) and hasattr(sys, 'remote_exec'), 'CPYTHON_314_REQUIRED')
     require(type(seconds) in (int, float) and math.isfinite(seconds) and .2 <= seconds <= 15 and
@@ -91,6 +101,7 @@ def prepare(pid, root, output, *, seconds=5, hold=0):
     sources(root, expected)
     observed = binding(pid)
     require(not any(path.is_symlink() for path in (output, *output.parents)), 'OUTPUT_SYMLINK')
+    visible_to(pid, output.parent)
     output.mkdir(mode=0o700, exist_ok=False)
     raw = read(Path(__file__).absolute())
     with (output / 'bridge.py').open('xb') as target:
@@ -113,6 +124,9 @@ def prepare(pid, root, output, *, seconds=5, hold=0):
         target.flush()
         os.fsync(target.fileno())
     write(output / 'prepared.json', dict(binding=observed, submitted=False, capture_permitted=False))
+    for path in (output, *output.iterdir()):
+        visible_to(pid, path)
+    require(binding(pid) == observed, 'PID_CHANGED')
     return output / 'invoke.py'
 
 
@@ -133,23 +147,29 @@ def context(root, content):
     require(threading.current_thread() is threading.main_thread() and not sys.flags.optimize,
             'MAIN_THREAD_REQUIRED')
     filename = str(Path(root) / 'provisioning/support_worker.py')
-    modules = [module for module in tuple(sys.modules.values())
-               if getattr(module, '__file__', None) == filename and hasattr(module, 'main')]
-    require(len(modules) == 1, 'RUNTIME_BINDING')
-    runtime = modules[0]
+    modules = []
+    for module in tuple(sys.modules.values()):
+        if getattr(module, '__file__', None) == filename and hasattr(module, 'main'):
+            if not any(module is previous for previous in modules):
+                modules.append(module)
+    frames, frame = [], sys._getframe()
+    while frame is not None:
+        frames.append(frame)
+        frame = frame.f_back
+    owners = [(module, frame) for module in modules for frame in frames
+              if getattr(module.main, '__code__', None) is frame.f_code and
+              module.__dict__ is frame.f_globals and module.main.__globals__ is frame.f_globals]
+    require(len(owners) == 1, 'RUNTIME_BINDING')
+    runtime, main = owners[0]
     for function in (runtime.main, runtime.SupportHandler.handle, runtime.SupportServer.__init__):
         code_matches(function, content['provisioning/support_worker.py'], filename)
     for function in (runtime.DeliveryController._run, runtime.DeliveryController.close,
                      runtime.DeliveryController.update, runtime.DeliveryController.request_sync):
         code_matches(function, content['messenger/delivery.py'], str(Path(root) / 'messenger/delivery.py'))
-    frames, frame = [], sys._getframe()
-    while frame is not None:
-        frames.append(frame)
-        frame = frame.f_back
     mains = [frame for frame in frames if frame.f_code is runtime.main.__code__]
     loops = [frame for frame in frames if frame.f_code is socketserver.BaseServer.handle_request.__code__]
     require(len(mains) == len(loops) == 1, 'IDLE_MAIN_LOOP_REQUIRED')
-    main, loop = mains[0], loops[0]
+    loop = loops[0]
     require(loop.f_back is main, 'SERIAL_LOOP_BINDING')
     require(not any(frame.f_code is socketserver.BaseServer._handle_request_noblock.__code__
                     for frame in frames), 'PARTIAL_ACCEPT_REFUSED')

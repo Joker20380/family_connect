@@ -3,17 +3,18 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-25 November: reversible old-support admission/drain probe source slice COMPLETE IN ISOLATION.
-55 checks PASS/0 skips:30 new native cases plus25 pinned packaging regressions. Exact installed
-Python runs unchanged legacy main/delivery code against synthetic stores and actual RNS threads.
-[Qualification and limits](releases/2026-11-25-control-ha-support-bridge.md). This is not the stop/
-replacement supervisor or complete runtime drain; every result keeps capture forbidden. No live
-injection, support replacement or RU/NL contact. Support remains PID2022541/0 restarts at16:22UTC.
-The previous sudo timestamp expired; GUI reauthentication did not complete. Next: authenticated
-bounded live probe, exact RNS periodic/queued/exit persistence closure, supervised stop/replacement/
-rollback, then installed manual/OWNER coverage and coherent fleet capture. Independent current-input
-trust/custody/approval and full post-ACK recovery remain. Replication PASS in isolation; the same
-three HA-02 gates partial. Do not replace these gates with ordinary TERM/40s force-stop or HA-03.
+25 November16:40UTC: working old-support reversible admission/drain probe COMPLETE; not installation.
+GUI authentication succeeds.62 tests PASS/0 skips and an actual fc-support PrivateTmp systemd
+fixture PASS. Two refused attempts identify invisible staging and multiple runtime module loads;
+the bridge now verifies target namespace visibility and the unique active main frame/globals,
+retaining exact source/loaded-code pins. [Actual result and limits](releases/2026-11-25-control-ha-support-live-probe.md).
+Application admission restores without cancellation; same PID2022541/0 restarts,19 source hashes,
+3 unit files/15 unit fields and malformed IPC before/after. Four RNS jobs remain live; no stop,
+candidate install or capture permission. Next: exact RNS periodic/queued/exit persistence closure
+and independently supervised stop/replacement/rollback, then installed manual/OWNER coverage and
+coherent fleet capture. Independent current-input trust/custody/approval and full post-ACK recovery
+remain. Replication PASS in isolation; same three HA-02 gates partial. No RU/NL contact, HA-03 or
+new ETA. Do not repeat the live probe as the next task or substitute ordinary TERM/40s force-stop.
 
 At the preceding installed-shape candidate checkpoint:
 
