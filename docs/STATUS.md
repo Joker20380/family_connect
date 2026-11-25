@@ -1,5 +1,23 @@
 # Текущее состояние / Current state
 
+**25 November17:52UTC — isolated old-support final persistence/exit qualification PASS.**
+Two-phase exit now preserves the reversible boundary until an exact independent commit; afterward
+errors park admission closed, never resume the old handler or force-stop writers. RNS final writes,
+file/directory fsync, encrypted-store close and empty Python/native/child coverage precede exit0.
+82 tests PASS/0 skips plus actual fc-support/installed-interpreter/systemd fixture: final native write
+held beyond41s, exit0/0 restarts/empty cgroup and fresh decrypted-store/native-state readback PASS.
+[Mechanism, retained failed attempts, exact evidence and rollback](releases/2026-11-25-control-ha-support-exit.md).
+Working support retains PID2022541/19 sources/3 unit files/15 fields/interpreter digest/0 restarts;
+no working injection, stop or upgrade. Candidate9d7bf840 remains unchanged and NOT installed.
+GUI authentication succeeds; no password captured/permanent privilege, terminal closed/sudo invalidated.
+Next: resumable independent replacement supervisor and paired source/unit activation with verified
+code/config-only rollback on current data, preserving legacy gate uncertainty and external settlement.
+Then installed UID/source/gate/sandbox, remaining manual/OWNER writers, coherent capture and independent
+trust/custody/approval/full recovery. Same three HA-02 gates partial; isolated replication PASS.
+No RU/NL/container operations, HA-03 or public version changes. No further owner input is needed now.
+
+At the preceding working reversible-pause checkpoint:
+
 **25 November17:32UTC — working old-support application/RNS idle pause and restoration PASS.**
 The one-use probe waits51.464s without waking the existing periodic sleep or cancelling delivery;
 3 producers and1 inbound drainer park after queues/descendants finish. Original hooks and online

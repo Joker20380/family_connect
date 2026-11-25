@@ -3,6 +3,25 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+25 November17:52UTC: isolated irreversible old-support final-persistence/exit mechanism COMPLETE;
+not an installed replacement supervisor.82 tests PASS/0 skips plus actual fc-support systemd fixture:
+native final write retained beyond41s, exit0/0 restarts, empty cgroup and fresh decrypted/native readback.
+Before exact controller commit, expiry restores the process. After the latch, failure parks admission
+closed; final writes/fsync/store close precede exit0 and no partial rollback or deadline kill occurs.
+[Evidence, observed fixture failures and remaining supervisor](releases/2026-11-25-control-ha-support-exit.md).
+Working PID2022541/all19 sources/3 units/15 fields/interpreter digest/0 restarts remain unchanged;
+candidate9d7bf840 NOT installed. GUI access works; no additional owner input is currently required.
+Next: qualify resumable independent replacement, preserve legacy uncertainty into the gate, observe
+actual exit/empty cgroup, pair source and kill policy, verify startup and code/config-only rollback
+without rewinding data. External settlement and independent installed UID/source/gate/sandbox readback
+remain mandatory. Do not repeat the working reversible probe or deploy only a kill-policy change.
+Then remaining manual/OWNER writer coverage, coherent fleet capture and independent current-input
+trust/custody/approval/full post-ACK recovery. Same three HA-02 gates partial; isolated replication PASS.
+No working support/RU/NL/container operation, HA-03/version change or new ETA in this checkpoint.
+
+At the preceding working reversible-pause checkpoint:
+
+**CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
 25 November17:32UTC: reversible old-process application plus RNS idle boundary COMPLETE on working
 support; candidate NOT installed.120 tests PASS/0 skips plus actual fc-support system fixture:
 native write retained beyond41s, fresh saved-ratchet readback. Working probe takes51.464s, parks3

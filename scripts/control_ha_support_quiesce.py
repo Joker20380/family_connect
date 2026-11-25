@@ -43,6 +43,7 @@ class Clock:
         finally:
             with self.owner.lock:
                 self.owner.parked.discard(worker)
+        self.owner.resume(worker)
         self.original.sleep(max(0, seconds - (time.monotonic() - started)))
 
 
@@ -60,6 +61,12 @@ class RuntimePause:
         original = inspect.getattr_static(owner, name)
         self.restore.callback(setattr, owner, name, original)
         setattr(owner, name, replacement)
+
+    def resume(self, worker):
+        pass
+
+    def expected_exit(self, arguments):
+        return False
 
     @contextmanager
     def queue_lock(self):
@@ -113,6 +120,7 @@ class RuntimePause:
                         if freeze:
                             self.queue_parked.add(worker)
                     if not freeze:
+                        self.resume(worker)
                         duration = .05 if timeout is None else max(0, min(.05, timeout))
                         return original_wait(duration)
                     original_wait(.05)
@@ -138,6 +146,8 @@ class RuntimePause:
                 return original_log(message, level, *args, **kwargs)
 
             def thread_error(arguments):
+                if self.expected_exit(arguments):
+                    return
                 self.failed.set()
                 original_hook(arguments)
 

@@ -121,6 +121,38 @@ def activate(server):
             threading.Thread(target=lambda: wait('unknown-entered'), daemon=True).start()
         if mode == 'rns-drift':
             RNS.Transport.inbound_job = lambda: None
+        if mode.startswith('rns-final-'):
+            original_open, original_fsync, original_close, original_link = open, os.fsync, os.close, os.link
+            import builtins
+
+            def final_open(file, *args, **kwargs):
+                if Path(file).name.startswith('known_destinations.tmp.'):
+                    if mode == 'rns-final-write':
+                        raise OSError('synthetic final persistence failure')
+                    if mode == 'rns-final-blocked':
+                        wait('final-entered')
+                return original_open(file, *args, **kwargs)
+
+            def final_fsync(descriptor):
+                if mode == 'rns-final-fsync' and (root / 'exit/committed.json').exists():
+                    if 'runtime/' in os.readlink(f'/proc/self/fd/{descriptor}'):
+                        raise OSError('synthetic runtime fsync failure')
+                return original_fsync(descriptor)
+
+            def final_close(descriptor):
+                if mode == 'rns-final-close' and (root / 'exit/committed.json').exists():
+                    if os.readlink(f'/proc/self/fd/{descriptor}').endswith('store/.lock'):
+                        raise OSError('synthetic store close failure')
+                return original_close(descriptor)
+
+            def final_link(source, target, *args, **kwargs):
+                if mode == 'rns-final-receipt' and str(target).endswith('exited.json'):
+                    raise OSError('synthetic final receipt failure')
+                if mode == 'rns-final-commitreceipt' and str(target).endswith('committed.json'):
+                    raise OSError('synthetic irreversible receipt failure')
+                return original_link(source, target, *args, **kwargs)
+
+            builtins.open, os.fsync, os.close, os.link = final_open, final_fsync, final_close, final_link
     if mode == 'module-globals':
         worker.main = types.FunctionType(worker.main.__code__, dict(vars(worker)))
     (root / 'ready').touch()

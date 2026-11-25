@@ -156,6 +156,13 @@ Its360s expiry restores the running process rather than killing it; it must not 
 irreversible-transition deadline. Candidate ownership remains startup-only. The rebuilt candidate
 and120 regression checks are pinned in the [working result and next commit boundary](releases/2026-11-25-control-ha-support-quiesce.md).
 
+The subsequent [two-phase legacy exit qualification](releases/2026-11-25-control-ha-support-exit.md)
+adds final native persistence/fsync/store close and actual isolated systemd exit0. Before the exact
+controller commit, expiry restores the old process; after the irreversible latch any fault parks
+it with admission closed, without a kill deadline or retry. The local uncertainty receipt must be
+preserved into the replacement gate. This is not a production replacement supervisor or installed
+writer coverage; a final receipt alone cannot attest process/cgroup exit. Working support is unchanged.
+
 ## Import and recovery input contract
 
 The [24 November installed census](releases/2026-11-24-control-ha-installed-census.md)
