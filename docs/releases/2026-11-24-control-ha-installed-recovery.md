@@ -8,6 +8,58 @@ Owner request selects all four existing HA-02 gates, not HA-03..05. The25 Novemb
 also authorizes participant installation and bounded operational work with documented rollback;
 earlier read-only/deployment-permission limitations in the historical sections are superseded.
 
+## Mailbox startup and restart fence — 25 November
+
+[Authoritative source,104 tests, actual NL1 systemd restart and full evidence](https://github.com/Joker20380/family_connect/blob/a39c74b95d04cb2953f05476b6d0172988505570/docs/releases/2026-11-25-control-ha-mailbox-startup.md).
+Featurea39c74b95d04cb2953f05476b6d0172988505570 is ordinarily pushed/remote-SHA verified; main remains
+navigation-only. This qualifies the restart prerequisite within the existing HA-02 settlement gate,
+not working deployment, independent OWNER exit, a cross-host commit or HA-02 completion.
+
+The startup wrapper requires a safe operator-owned manifest, with no unfenced fallback. It defers the
+exact native incoming destination registration until the pinned relay and persistent link fence are
+constructed and admission is checked closed. A fresh PID/start/boot/command/cgroup/challenge ticket
+binds the manifest generation and expected OWNER/plan digests. Old opening files are not reused after
+restart; an exact root-owned LOCAL_QUALIFICATION_ONLY request can exercise a fresh local opening.
+Expected OWNER/plan hashes are not evidence that OWNER exited. All production activation/capture/
+independent-exit flags remain false. The startup guard cannot be removed with abort.
+
+**104 tests PASS/0 skips in57.94s**:25 startup/control contracts,1 native authenticated crash/restart
+scenario and78 preceding regression checks. Required-file/owner/parent/mode/symlink/hardlink/duplicate/
+schema/drift/source failures, publication order, stale tickets and retained native data are covered.
+No failures occurred in this continuation; preliminary23/1/102-pass runs are not added to104.
+
+Actual NL1 **20:08:21–20:08:53UTC**, installed Python3.14.4/RNS1.5.1/LXMF1.1.1/native relay/codec,
+fc-mailbox UID996/GID982. A root verifier checks the exact synthetic lab PID/UID/command/start/cgroup
+and sends SIGKILL through a pidfd only to that lab main. Its independent systemd unit restarts once,
+returns closed, refuses the previous root-owned ticket, serves another sender and accepts a fresh
+local ticket. Three rows survive the crash and independent read-only SQLite reopening. Real native
+RNS clients run inside the lab's private network namespace; no production identity or DB is used.
+
+Effective sandbox readback verifies root control files not writable by fc-mailbox, PrivateNetwork/
+PrivateTmp, ProtectHome, strict ProtectSystem, NoNewPrivileges,0077, isolated writable runtime,
+512MiB/96 tasks/400ms-per-second CPU quota, Restart=on-failure/1s and no forced-kill stop timeout.
+The second process exits0; MainPID/ControlPID0, NRestarts1 and absent exact lab cgroup are verified.
+Only that exited lab unit is stopped; final LoadState=not-found/inactive/PID0. Working NL1 remains
+PID3705/0 restarts with17 fields/unit hashes/four native and three RNS source pins/process binding
+unchanged. OWNER is observed active/running PID2022541/0 restarts/no pending reload at20:10UTC;
+this is not a new full19-source OWNER audit. No working injection, signal, stop or restart occurs.
+
+Startup module SHA256: `23109a63064cf3aacf1419b56cf176b5d4a771da2a1f23112bc1af139e39b553`.
+Final104 JUnit: `3cb5bf336ae09298dfd58a2b2a2820089810df87fac909094628ae1c1f8ffe93`.
+Independent NL1 receipt: `269c580471cda9cc614323d41fd2d73b824a3adbef6dd1a90f1d332243ed7aa5`.
+Seven-public-source archive: `d987de3907690ded2ebe8fa715e0b0c25738cd7642a272d5bc639add60fb4388`.
+Raw synthetic/private evidence remains outside Git under `/tmp/fc-ha-mailbox-startup-20261125` locally
+and `/run/fc-ha-mailbox-startup-20261125` on NL1. Candidate9d7bf840 remains unchanged/NOT installed.
+No working policy/product data, RU/NL2/container/MicroTrader, public version/tag/catalog or persistent
+privilege changes; no production rollback is needed. Do not use old tickets or remove guards as rollback.
+
+Next: paired NL1 startup-unit/manifest installation and adoption of the existing PID, independent
+OWNER quiescent/exit/replacement-commit proof bound to the live mailbox ticket, combined deployment/
+controller failure recovery, then authorized activation/readback. The production unit and mounted-
+volume server CLI are not newly qualified by this fixture. Seven historical unknowns remain untouched;
+remaining manual/OWNER writers, coherent capture, independent trust/custody/approval and full recovery
+keep the same three HA-02 gates partial; isolated replication PASS. No extra owner action is needed now.
+
 ## Support mailbox link generations — 25 November
 
 [Authoritative source,78 checks, authenticated native RNS and actual NL1 qualification](https://github.com/Joker20380/family_connect/blob/8b19f6a52a5f45bf0cc7989b65181d1897ca800a/docs/releases/2026-11-25-control-ha-mailbox-links.md).

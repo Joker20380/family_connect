@@ -14,20 +14,21 @@
 
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-25 November19:41UTC: old-link exclusion after local reopening COMPLETE IN ISOLATION; feature8b19f6a5
-pushed/remote-SHA verified, no working deployment.78 tests PASS/0 skips with authenticated native RNS
-and actual NL1 fc-mailbox UID996/GID982/systemd/effective readback. Old identified/unidentified/
-in-constructor links and captured callbacks stay refused, fresh links PUT/purge, unrelated old links
-continue; three synthetic rows reopen. [Evidence and explicit non-handoff boundary](releases/2026-11-24-control-ha-installed-recovery.md#support-mailbox-link-generations--25-november).
-Next within the same settlement gate: independent OWNER quiescent/exit generation/replacement-commit
-binding, durable mailbox restart/fail-closed recovery and combined controller-failure qualification.
-A fresh link is not proof of a fresh OWNER process; removing the post-open guard remains forbidden.
-Seven historical unknowns remain. NL1 PID3705/source/unit/process pins/0 restarts unchanged; OWNER
-observed PID2022541/0 restarts. Candidate9d7bf840 NOT installed; no activation/capture permit yet.
-Then authorized activation/readback, remaining manual/OWNER writers, coherent capture and independent
-trust/custody/approval/full recovery. Same three HA-02 gates partial, isolated replication PASS.
-No working injection/stop/product write, RU/NL2/container operation, HA-03/version change or additional
-owner action now. Main stays navigation-only; this source checkpoint is not working installation.
+25 November20:12UTC: manifest-required restart fence COMPLETE IN ISOLATION; featurea39c74b9 pushed/
+remote-SHA verified, no working installation.104 tests PASS/0 skips; actual NL1 fc-mailbox UID996/GID982
+systemd crash/restart with authenticated native RNS keeps support closed, rejects the old root-owned
+ticket, serves another sender and retains three rows. Publication waits for guard installation.
+[Evidence and exact remaining boundary](releases/2026-11-24-control-ha-installed-recovery.md#mailbox-startup-and-restart-fence--25-november).
+Next in the same settlement gate: paired NL1 startup-unit/manifest installation and current-PID hold
+adoption, independent OWNER quiescent/exit/replacement-commit proof bound to the exact live mailbox
+ticket, then combined controller/deployment failure recovery before authorized activation/readback.
+Expected OWNER/plan hashes are not verified exit evidence; local qualification never authorizes working
+activation/capture. Startup guards cannot be aborted away. NL1 PID3705/0 restarts/source/unit/process
+pins unchanged; OWNER observed PID2022541/0 restarts. Candidate9d7bf840 unchanged/NOT installed.
+Seven unknowns, remaining manual/OWNER writers, coherent capture and independent current trust/custody/
+approval/full recovery remain. Same three HA-02 gates partial, isolated replication PASS. No new gate/
+HA-03, working injection/stop/product write, RU/NL2/container/version change or extra owner action now.
+Main remains navigation-only; the production unit and mounted-volume server CLI are not newly qualified.
 
 At the preceding outcome-census checkpoint:
 
