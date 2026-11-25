@@ -1,14 +1,13 @@
 """Single encrypted support identity owner; only addressed text/history over local IPC."""
 import argparse
+from contextlib import ExitStack
 import ipaddress
 import json
 import os
 from pathlib import Path
 import re
-import signal
 import socketserver
 import stat
-import threading
 import time
 
 from messenger import codec
@@ -19,6 +18,7 @@ from messenger.store import Store
 from provisioning.subscription_notifications import Notifications
 from provisioning.chat_transport import SystemMailbox, initialize
 from provisioning.support_capture import admitted
+from provisioning.support_lifecycle import close_store, drain_delivery, stop_requested, unlink_socket
 from control.capture_gate import Busy, Gate, GateError, external_operation
 from control.friends.pseudonyms import handle
 
@@ -243,6 +243,12 @@ class SupportOwner:
         return self.notifications.cursor()
 
 
+class SupportTransport(SystemMailbox):
+    @staticmethod
+    def _finish_reader(reader):
+        reader.join()
+
+
 class SupportMailbox:
     def __init__(self, owner, snapshot_path, runtime, *, snapshot_uid=None):
         self.owner, self.snapshot_path, self.runtime = owner, snapshot_path, runtime
@@ -273,7 +279,7 @@ class SupportMailbox:
     def admitted_exchange(self, *, timeout, cancel):
         try:
             snapshot = self.refresh()
-            mailbox = SystemMailbox(self.owner.chat, snapshot['node'], self.runtime)
+            mailbox = SupportTransport(self.owner.chat, snapshot['node'], self.runtime)
         except (OSError, ValueError, KeyError):
             raise MailboxError('access_denied') from None
         try:
@@ -347,33 +353,33 @@ def main(argv=None):
     parser.add_argument('--subscription-feed', type=Path)
     parser.add_argument('--capture-gate', type=Path)
     args = parser.parse_args(argv)
-    gate = Gate(args.capture_gate)
-    with gate.operation(), external_operation():
-        key_path = Path(args.key)
-        info = key_path.lstat()
-        if not stat.S_ISREG(info.st_mode) or info.st_mode & 0o077 or info.st_size != 32:
-            parser.error('Private external 32-byte store key required')
-        store = SupportStore(args.store, key_path.read_bytes(), create=False, capture_gate=gate)
-        owner = SupportOwner(store, args.sender_public)
-        mailbox = SupportMailbox(owner, Path(args.snapshot), initialize(args.runtime), snapshot_uid=args.snapshot_uid)
-    delivery = DeliveryController(mailbox, timeout=30)
-    stopped = threading.Event()
-    signal.signal(signal.SIGTERM, lambda *_: stopped.set())
-    signal.signal(signal.SIGINT, lambda *_: stopped.set())
-    try:
+    with stop_requested() as stopped, ExitStack() as cleanup:
+        gate = Gate(args.capture_gate)
+        with gate.operation(), external_operation():
+            key_path = Path(args.key)
+            info = key_path.lstat()
+            if not stat.S_ISREG(info.st_mode) or info.st_mode & 0o077 or info.st_size != 32:
+                parser.error('Private external 32-byte store key required')
+            store = SupportStore(args.store, key_path.read_bytes(), create=False, capture_gate=gate)
+            cleanup.callback(close_store, store)
+            owner = SupportOwner(store, args.sender_public)
+            mailbox = SupportMailbox(owner, Path(args.snapshot), initialize(args.runtime), snapshot_uid=args.snapshot_uid)
+        if stopped.is_set():
+            return
+        delivery = DeliveryController(mailbox, timeout=30)
+        cleanup.callback(drain_delivery, delivery)
         with SupportServer(Path(args.socket), owner, mailbox, delivery) as server:
-            server.timeout = 1
+            socket_path = Path(args.socket)
+            info = socket_path.lstat()
+            cleanup.callback(unlink_socket, socket_path, (info.st_dev, info.st_ino))
+            server.timeout = .2
             delivery.update(online=True, foreground=True)
             next_sync = time.monotonic() + 60
             while not stopped.is_set():
                 server.handle_request()
-                if time.monotonic() >= next_sync:
+                if not stopped.is_set() and time.monotonic() >= next_sync:
                     periodic(owner, delivery, args.subscription_feed, uid=args.snapshot_uid)
                     next_sync = time.monotonic() + 60
-    finally:
-        if delivery.close(timeout=31):
-            store.close()
-            Path(args.socket).unlink(missing_ok=True)
 
 
 if __name__ == '__main__':

@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 25 November: support graceful worker/reader stop,106 focused checks and actual systemd child completion; source only, working privileged-access blocker](releases/2026-11-25-control-ha-support-lifecycle.md).
+
 [CONTROL-HA · 25 November: paired receiver installed on RU at15:08UTC; independent gate/runtime readback,88 checks and24-case final rerun; data-preserving rollback retained](releases/2026-11-25-control-ha-receiver-replacement.md).
 
 [CONTROL-HA · 25 November: native legacy HTTP drain bridge,64 tests; reversible RU main-thread admission probe passed, receiver not stopped/replaced](releases/2026-11-25-control-ha-legacy-http-bridge.md).

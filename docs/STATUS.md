@@ -1,5 +1,21 @@
 # Текущее состояние / Current state
 
+**25 November — support termination source fixed; working installation unchanged.**
+The remaining OWNER support writer is active without a gate; its old31s worker close and40s
+systemd force-stop can interrupt delivery. The candidate now waits for actual delivery/reader
+completion, finishes admitted IPC, delays store close under a held gate and pairs main-only
+SIGTERM with no forced timeout.106 focused checks PASS/0 skips, including actual systemd stop
+past both old deadlines. [Evidence, access blocker, rollback and limits](releases/2026-11-25-control-ha-support-lifecycle.md).
+Working support PID2022541 and three OWNER containers remain healthy/0 restarts; installed RU
+receiver PID476518 remains active/0 restarts at15:25UTC. No deployment or public version change.
+Support activation needs working privileged access: `sudo -n` currently requires interactive
+authentication; owner authorization is already granted. Next: exact installed support transition/
+runtime closure, manual writers and guarded OWNER integration, preserving old remote uncertainty.
+Fleet coherent capture, independent custody/trust/approval and combined recovery still leave
+three HA-02 gates partial; replication PASS in isolation. No HA-03 or new ETA.
+
+At the preceding installed-receiver checkpoint:
+
 **25 November15:09UTC — paired receiver installed on RU; independent readback PASS.**
 At15:08:03UTC the guarded replacement completes: old PID43082 exits naturally after local
 drain; new PID476518 serves the pinned58c5fde9 archive with its gate and graceful unit policy.

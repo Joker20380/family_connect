@@ -16,7 +16,6 @@ from RNS.Interfaces.TCPInterface import TCPClientInterface
 from control.capture_gate import Busy, CURRENT, GateError, initialize
 from messenger.delivery import DeliveryController
 from messenger.mailbox import ExchangeResult, MailboxError
-from messenger.routed import RoutedMailbox
 from messenger.tests.test_offline import Peer
 from messenger.tests.test_support import queued, support
 from provisioning import support_worker as worker
@@ -71,7 +70,7 @@ def test_native_support_exchange_settles_reader_before_gate_and_recipient_ack(na
     owner = mailbox.owner
     request, ident = queued(owner, client)
     finished = []
-    original = RoutedMailbox._finish_reader
+    original = worker.SupportTransport._finish_reader
 
     def finish(reader):
         assert CURRENT.get() is not None and len(pending(owner.capture_gate)) == 1
@@ -80,7 +79,7 @@ def test_native_support_exchange_settles_reader_before_gate_and_recipient_ack(na
         finished.append(reader)
 
     with monkeypatch.context() as patch:
-        patch.setattr(RoutedMailbox, '_finish_reader', staticmethod(finish))
+        patch.setattr(worker.SupportTransport, '_finish_reader', staticmethod(finish))
         assert mailbox.exchange(timeout=20).relayed == 1
     assert len(finished) == 1 and not pending(owner.capture_gate)
     assert node.call('stats')['count'] == 1
@@ -99,47 +98,61 @@ def test_native_support_exchange_settles_reader_before_gate_and_recipient_ack(na
     assert not pending(owner.capture_gate)
 
 
-@pytest.mark.parametrize('failure', ['stalled_reader', 'detach'])
-def test_native_cleanup_failure_retains_committed_work_and_refuses_capture(native_mailbox, monkeypatch, failure):
+def test_native_stalled_reader_holds_delivery_and_gate_until_actual_completion(native_mailbox, monkeypatch):
     mailbox, node, client, snapshot = native_mailbox
-    owner = mailbox.owner
-    request, ident = queued(owner, client)
-    release = threading.Event()
-    readers = []
+    queued(mailbox.owner, client)
+    entered, release = threading.Event(), threading.Event()
     original_read = TCPClientInterface.read_loop
-    original_detach = TCPClientInterface.detach
+    readers = []
 
     def stalled_reader(interface):
         readers.append(threading.current_thread())
         original_read(interface)
+        entered.set()
         release.wait()
+
+    monkeypatch.setattr(TCPClientInterface, 'read_loop', stalled_reader)
+    delivery = DeliveryController(mailbox, timeout=20)
+    try:
+        delivery.update(online=True, foreground=True)
+        assert entered.wait(20)
+        assert not delivery.close(timeout=1.2)
+        assert readers[0].is_alive()
+        assert len(pending(mailbox.capture_gate)) == 1
+        assert node.call('stats')['count'] == 1
+        with pytest.raises(Busy, match='DRAIN_TIMEOUT'):
+            with mailbox.capture_gate.drain(.05):
+                pytest.fail('a live reader still owns the operation')
+    finally:
+        release.set()
+        assert delivery.close(timeout=5)
+    assert not readers[0].is_alive()
+    assert not pending(mailbox.capture_gate)
+    with mailbox.capture_gate.drain(.2):
+        pass
+
+
+def test_native_cleanup_failure_retains_committed_work_and_refuses_capture(native_mailbox, monkeypatch):
+    mailbox, node, client, snapshot = native_mailbox
+    owner = mailbox.owner
+    request, ident = queued(owner, client)
+    original_detach = TCPClientInterface.detach
 
     def failed_detach(interface):
         original_detach(interface)
         raise OSError('synthetic private cleanup detail')
 
-    try:
-        with monkeypatch.context() as patch:
-            if failure == 'stalled_reader':
-                patch.setattr(TCPClientInterface, 'read_loop', stalled_reader)
-            else:
-                patch.setattr(TCPClientInterface, 'detach', failed_detach)
-            with pytest.raises(MailboxError, match='^cleanup_incomplete$'):
-                mailbox.exchange(timeout=20)
-        retained = pending(owner.capture_gate)
-        assert len(retained) == 1
-        assert node.call('stats')['count'] == 1
-        assert owner.history('1' * 64)['messages'][0]['status'] == 'relayed'
-        if failure == 'stalled_reader':
-            assert len(readers) == 1 and readers[0].is_alive()
-        with pytest.raises(GateError, match='UNSETTLED_OPERATION'):
-            with owner.capture_gate.drain(.2):
-                pytest.fail('reader/cleanup failure is not settlement')
-    finally:
-        release.set()
-        for reader in readers:
-            reader.join(2)
-            assert not reader.is_alive()
+    with monkeypatch.context() as patch:
+        patch.setattr(TCPClientInterface, 'detach', failed_detach)
+        with pytest.raises(MailboxError, match='^cleanup_incomplete$'):
+            mailbox.exchange(timeout=20)
+    retained = pending(owner.capture_gate)
+    assert len(retained) == 1
+    assert node.call('stats')['count'] == 1
+    assert owner.history('1' * 64)['messages'][0]['status'] == 'relayed'
+    with pytest.raises(GateError, match='UNSETTLED_OPERATION'):
+        with owner.capture_gate.drain(.2):
+            pytest.fail('cleanup failure is not settlement')
     assert mailbox.exchange(timeout=20).relayed == 0
     assert owner.send(**request)['id'] == ident
     assert pending(owner.capture_gate) == retained
@@ -260,7 +273,7 @@ def test_exchange_gate_remains_held_through_cleanup(gated_support, tmp_path, mon
             assert release.wait(3)
             observed.append(len(pending(owner.capture_gate)))
 
-    monkeypatch.setattr(worker, 'SystemMailbox', Transport)
+    monkeypatch.setattr(worker, 'SupportTransport', Transport)
     results = []
     thread = threading.Thread(target=lambda: results.append(mailbox.exchange()))
     thread.start()
@@ -298,7 +311,7 @@ def test_failed_external_work_stays_pending_after_success(gated_support, tmp_pat
             if failed[0] and phase == 'close':
                 raise OSError('synthetic private cleanup detail')
 
-    monkeypatch.setattr(worker, 'SystemMailbox', Transport)
+    monkeypatch.setattr(worker, 'SupportTransport', Transport)
     with pytest.raises((MailboxError, OSError)):
         mailbox.exchange()
     retained = pending(owner.capture_gate)
@@ -343,7 +356,7 @@ def test_background_delivery_retries_after_admission_reopens(gated_support, tmp_
         def close(self):
             assert CURRENT.get() is not None
 
-    monkeypatch.setattr(worker, 'SystemMailbox', Transport)
+    monkeypatch.setattr(worker, 'SupportTransport', Transport)
     delivery = DeliveryController(mailbox, cooldown=.02, max_backoff=.05, timeout=.1, max_retries=1)
     try:
         with owner.capture_gate.drain(.2):
@@ -386,7 +399,7 @@ class Transport:
         print('READY',flush=True)
         threading.Event().wait(30)
     def close(self): pass
-worker.SystemMailbox=Transport
+worker.SupportTransport=Transport
 mailbox=worker.SupportMailbox(owner,None,None)
 mailbox.refresh=lambda:dict(node={})
 mailbox.exchange()

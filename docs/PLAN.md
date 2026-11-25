@@ -3,6 +3,20 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+25 November: support managed-worker/reader termination source slice COMPLETE;106 focused
+checks PASS/0 skips. Actual user-systemd stop preserves a child beyond old31s/40s deadlines,
+then finishes without forced kill; gate-busy close waits and failures keep uncertainty.
+[Support source qualification, unchanged installed state and technical blocker](releases/2026-11-25-control-ha-support-lifecycle.md).
+No support deployment: working old PID2022541 still has no gate; `sudo -n` requires interactive
+authentication. Restore approved privileged execution for the guarded installed-shape support
+transition; do not repeat source qualification or install kill-policy alone. Next selected scope
+also retains exact runtime/background persistence closure, manual writers, guarded OWNER
+integration and independent old remote-outcome reconciliation. Complete fleet capture, actual
+trust/custody/approval and final recovery remain the same three partial HA-02 gates; isolated
+replication PASS. RU receiver activation remains COMPLETE, no HA-03/public version change.
+
+At the preceding installed-receiver checkpoint:
+
 25 November15:09UTC: paired RU receiver qualification, guarded activation and independent
 readback COMPLETE.88 focused checks and final24-case controller rerun PASS/0 skips. Actual
 old PID43082 exits naturally; new PID476518 is active on pinned58c5fde9 with the paired gate/
