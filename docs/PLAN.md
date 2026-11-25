@@ -13,7 +13,23 @@
 сохраняет свои четыре результата и выбранный runtime-шаг; новый подпункт HA-02 не создаётся.
 
 
-**CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+**CONTROL-HA-20261123 / HA-02 — один выбранный результат, IN_PROGRESS.**
+Завершить общий возобновляемый OWNER ↔ NL1 handoff/reclosure/recovery: независимый актуальный
+closed/drained mailbox, старый OWNER exit и candidate, reservation-bound аутентифицированный witness,
+подтверждённое открытие, pause выбранной support identity с сохранением очереди уведомлений,
+reclosure/drain/инвалидирование старых разрешений до code-only recovery. Проверить потерю ответа,
+смерть контроллера и рестарты mailbox/candidate; затем общий CI, разрешённая установка/readback.
+Данные,7UNKNOWN и остальные клиенты сохраняются; reservation не удаляется и не обходится.
+Featuref6c6171e опубликован/remote-SHA проверен. Shutdown/terminal исправления проверены, но
+общий исполнитель и рабочая установка НЕ завершены. Новый314/GIL zero-skip workflow уже выполняет
+native tests; незавершённые workflow не считаются PASS.
+[Текущее evidence и CI](releases/2026-11-25-control-ha-support-stabilization.md).
+Остаток без новых этапов: текущие inputs/trust, coherent all-writer capture, полное независимое
+восстановление. Репликация PASS изолированно; onboarding requirement остаётся обязательным.
+
+## Сохранённые HA-02 checkpoint — история, не активные NEXT
+
+**CONTROL-HA-20261123 — historical checkpoint.**
 25 November20:39UTC: OWNER witness/rollback reservation CHECKPOINT, feature595acebe pushed/remote-SHA
 verified.57 distinct local and3 actual-root cases pass across scoped runs/0 skips; a failed native
 WORKERS_REMAIN exit attempt is retained and not explained by the successful root retry.

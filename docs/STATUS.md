@@ -1,5 +1,21 @@
 # Текущее состояние / Current state
 
+**25 November21:59UTC — HA-02 стабилизация shutdown/terminal и CI; общий handoff НЕ завершён.**
+Feature `f6c6171e022fbf2b671e7c950671a556a7fdeb79` опубликован, remote SHA проверен.
+[Причина/пределы доказательств, CI и точный остаток](releases/2026-11-25-control-ha-support-stabilization.md).
+Старые WORKERS_REMAIN receipts/JUnit сохранены; историческая причина не доказана.
+Управляемый native-tail сценарий исправлен ожиданием завершения принадлежащих процессу workers,
+а irreversible error фиксируется как MANUAL_RECONCILIATION_REQUIRED/exit78 без restart-loop.
+Исправлены контексты Python/UID/БД/runtime и исторические overlay inputs; исходные contract pins сохранены.
+На текущем SHA phase0/control и отдельный314/GIL zero-skip native job выполняются, не PASS.
+Read-only OWNER/NL1: PID2022541/3705,0 рестартов,19/4 source pins неизменны. Кандидат9d7bf840
+НЕ установлен, mailbox не открыт, reservation/7UNKNOWN не сняты. Main остаётся navigation-only.
+Один следующий результат — совместный resumable handoff/reclosure/recovery, применимый CI,
+затем разрешённая рабочая установка/readback. Три прежних критерия HA-02 остаются открыты частично;
+изолированная репликация PASS, FLEET-PRODUCTION-ONBOARDING-1 не закрыт.
+
+## Сохранённые checkpoint — история, не параллельные NEXT
+
 **25 November — обязательный итог модернизации принят владельцем.**
 [FLEET-PRODUCTION-ONBOARDING-1](releases/2026-11-25-fleet-onboarding-requirement.md):
 VPS → IP, защищённый доступ и роли → штатный ввод → проверенный активный узел.
