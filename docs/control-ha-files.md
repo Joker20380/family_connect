@@ -131,6 +131,23 @@ working unit or installed archive is changed by this checkpoint. Gate permission
 must not be relaxed to share a gate across unrelated UIDs.
 [211 checks, actual unchanged prestate and rollback](releases/2026-11-25-control-ha-operator-capture.md).
 
+### Support runtime admission — 25 November source candidate
+
+The qualified support candidate with `--capture-gate` holds admission from startup until delivery,
+RNS periodic/queued/asynchronous work, explicit final persistence, file/directory fsync and encrypted
+store close finish. **An idle running candidate is not capture-ready.** Use only a qualified managed
+shutdown before the coordinator attempts capture; never infer complete drain from an idle socket,
+empty application queue or the reversible legacy application probe. No timeout may kill a writer.
+Repeated stop signals do not shorten completion; an unfinished worker keeps the boundary held.
+
+The RNS1.5.1 adapter is startup-only and requires the pinned standalone/non-transport/no-outbound-
+queue shape. It refuses an already-owned runtime. Background/final write failures retain a durable
+uncertain marker, including errors the library logs rather than propagates; a later successful
+close does not erase it. Ungated invocations remain legacy behavior. This candidate is not installed
+and does not supply the supervised old-process transition or remote-outcome settlement. Preserve
+the old service/data and require separate actual installed UID/runtime/gate/sandbox readback.
+[Exact candidate,169 checks, observed working state and rollback](releases/2026-11-25-control-ha-support-runtime.md).
+
 ## Import and recovery input contract
 
 The [24 November installed census](releases/2026-11-24-control-ha-installed-census.md)

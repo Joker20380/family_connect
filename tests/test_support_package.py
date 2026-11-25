@@ -43,7 +43,7 @@ def test_closed_support_kit_imports_outside_checkout_and_is_reproducible(tmp_pat
     hashes = build(output)
     assert hashes['app/provisioning/support_worker.py'] == hashlib.sha256(
         (ROOT / 'provisioning/support_worker.py').read_bytes()).hexdigest()
-    for name in ('provisioning/support_capture.py', 'provisioning/support_lifecycle.py', 'control/capture_gate.py'):
+    for name in ('provisioning/support_capture.py', 'provisioning/support_lifecycle.py', 'provisioning/support_runtime.py', 'control/capture_gate.py'):
         assert hashes['app/' + name] == hashlib.sha256((ROOT / name).read_bytes()).hexdigest()
     assert 'registry/http/friends-http.pyz' in hashes
     assert not any(name.endswith(('.key', '.db', '.env')) or 'state' in Path(name).parts for name in hashes)

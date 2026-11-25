@@ -19,6 +19,7 @@ from provisioning.subscription_notifications import Notifications
 from provisioning.chat_transport import SystemMailbox, initialize
 from provisioning.support_capture import admitted
 from provisioning.support_lifecycle import close_store, drain_delivery, stop_requested, unlink_socket
+from provisioning.support_runtime import ManagedRuntime
 from control.capture_gate import Busy, Gate, GateError, external_operation
 from control.friends.pseudonyms import handle
 
@@ -353,8 +354,8 @@ def main(argv=None):
     parser.add_argument('--subscription-feed', type=Path)
     parser.add_argument('--capture-gate', type=Path)
     args = parser.parse_args(argv)
-    with stop_requested() as stopped, ExitStack() as cleanup:
-        gate = Gate(args.capture_gate)
+    gate = Gate(args.capture_gate)
+    with stop_requested() as stopped, gate.operation(), external_operation(), ExitStack() as cleanup:
         with gate.operation(), external_operation():
             key_path = Path(args.key)
             info = key_path.lstat()
@@ -363,7 +364,10 @@ def main(argv=None):
             store = SupportStore(args.store, key_path.read_bytes(), create=False, capture_gate=gate)
             cleanup.callback(close_store, store)
             owner = SupportOwner(store, args.sender_public)
-            mailbox = SupportMailbox(owner, Path(args.snapshot), initialize(args.runtime), snapshot_uid=args.snapshot_uid)
+        managed = cleanup.enter_context(ManagedRuntime(gate)) if args.capture_gate is not None else None
+        with gate.operation(), external_operation():
+            runtime = managed.initialize(args.runtime, initializer=initialize) if managed else initialize(args.runtime)
+            mailbox = SupportMailbox(owner, Path(args.snapshot), runtime, snapshot_uid=args.snapshot_uid)
         if stopped.is_set():
             return
         delivery = DeliveryController(mailbox, timeout=30)

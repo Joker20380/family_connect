@@ -3,18 +3,19 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-25 November16:40UTC: working old-support reversible admission/drain probe COMPLETE; not installation.
-GUI authentication succeeds.62 tests PASS/0 skips and an actual fc-support PrivateTmp systemd
-fixture PASS. Two refused attempts identify invisible staging and multiple runtime module loads;
-the bridge now verifies target namespace visibility and the unique active main frame/globals,
-retaining exact source/loaded-code pins. [Actual result and limits](releases/2026-11-25-control-ha-support-live-probe.md).
-Application admission restores without cancellation; same PID2022541/0 restarts,19 source hashes,
-3 unit files/15 unit fields and malformed IPC before/after. Four RNS jobs remain live; no stop,
-candidate install or capture permission. Next: exact RNS periodic/queued/exit persistence closure
-and independently supervised stop/replacement/rollback, then installed manual/OWNER coverage and
-coherent fleet capture. Independent current-input trust/custody/approval and full post-ACK recovery
-remain. Replication PASS in isolation; same three HA-02 gates partial. No RU/NL contact, HA-03 or
-new ETA. Do not repeat the live probe as the next task or substitute ordinary TERM/40s force-stop.
+25 November: pinned standalone RNS lifecycle/source candidate COMPLETE IN ISOLATION, not deployed.
+169 checks PASS/0 skips, including two actual user-systemd waits beyond41s and fresh persisted
+readback. Whole-worker capture admission now encloses periodic/queued/asynchronous/exit persistence,
+all owned thread completion, fsync and store close. Failures retain uncertainty; idle runtime is
+not capture-ready. [Candidate, evidence and transition limits](releases/2026-11-25-control-ha-support-runtime.md).
+The23-source archive changes3/adds4/preserves16; installed support still retains PID2022541/all19
+sources/0 restarts and old40s policy at17:07UTC. No live runtime mutation or RU/NL contact. Next:
+independently supervised old-process drain/transition/rollback, then candidate activation/readback,
+remaining installed manual/OWNER coverage and coherent fleet capture. The new startup-only owner
+cannot adopt the already-running RNS instance, and the earlier15s application probe does not stop
+its300s periodic sleeper. Qualify that transition; do not force-stop old support or repeat completed
+candidate work. Independent current-input trust/custody/approval/full recovery remain. Same three
+HA-02 gates partial; isolated replication PASS, no HA-03/version change or new ETA.
 
 At the preceding installed-shape candidate checkpoint:
 

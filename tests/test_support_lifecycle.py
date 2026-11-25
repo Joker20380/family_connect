@@ -18,6 +18,7 @@ from provisioning.support_worker import SupportStore
 
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURE = ROOT / 'tests/fixtures/support_lifecycle.py'
+INTERPRETER = os.environ.get('FC_TEST_SUPPORT_PYTHON', sys.executable)
 
 
 def wait_for(predicate, seconds=15):
@@ -33,7 +34,7 @@ def launch(tmp_path):
 
     def start(mode):
         output = (tmp_path / 'output').open('wb')
-        process = subprocess.Popen([sys.executable, '-B', str(FIXTURE), str(tmp_path), mode],
+        process = subprocess.Popen([INTERPRETER, '-B', str(FIXTURE), str(tmp_path), mode],
                                    stdout=output, stderr=subprocess.STDOUT, start_new_session=True)
         output.close()
         processes.append(process)
@@ -110,17 +111,49 @@ def test_stop_finishes_admitted_ipc_commit_before_exit(launch, tmp_path):
     assert_finished(process, tmp_path, committed=True)
 
 
-def test_closed_gate_delays_store_close_without_bypass(launch, tmp_path):
+def test_runtime_lifetime_prevents_capture_before_store_close(launch, tmp_path):
     process = launch('idle')
     gate = Gate(tmp_path / 'gate')
     time.sleep(.3)
-    with gate.drain(1):
-        process.terminate()
-        wait_for(lambda: not (tmp_path / 'worker.sock').exists())
-        time.sleep(.3)
-        assert process.poll() is None and not (tmp_path / 'store-closed').exists()
-        process.send_signal(signal.SIGTERM)
+    with pytest.raises(Busy):
+        with gate.drain(.05):
+            pytest.fail('idle RNS jobs are still writers')
+    process.terminate()
     assert_finished(process, tmp_path)
+    with gate.drain(.2):
+        pass
+
+
+def test_support_store_stays_open_until_async_rns_write_finishes(launch, tmp_path):
+    process = launch('runtime-async')
+    wait_for(lambda: (tmp_path / 'runtime-writer-entered').exists())
+    process.terminate()
+    wait_for(lambda: not (tmp_path / 'worker.sock').exists())
+    time.sleep(.3)
+    assert process.poll() is None and not (tmp_path / 'store-closed').exists()
+    with pytest.raises(Busy):
+        with Gate(tmp_path / 'gate').drain(.05):
+            pytest.fail('support runtime still owns a pending write')
+    (tmp_path / 'release').touch()
+    assert_finished(process, tmp_path)
+    assert (tmp_path / 'runtime-writer-finished').exists()
+    code = ('import sys;from pathlib import Path;from RNS.vendor import umsgpack;'
+            'root=Path(sys.argv[1]);data=umsgpack.unpackb((root/"runtime/storage/ratchets"/(b"d"*16).hex()).read_bytes());'
+            'assert data["ratchet"]==b"r"*32')
+    subprocess.run([INTERPRETER, '-I', '-c', code, str(tmp_path)], check=True, capture_output=True, timeout=10)
+    with Gate(tmp_path / 'gate').drain(.2):
+        pass
+
+
+def test_support_exit_persistence_failure_is_not_clean_capture(launch, tmp_path):
+    process = launch('runtime-exit-failure')
+    process.terminate()
+    assert process.wait(12) != 0
+    assert (tmp_path / 'store-closed').exists()
+    assert 'RNS_PERSISTENCE_UNCERTAIN' in (tmp_path / 'output').read_text()
+    with pytest.raises(GateError, match='UNSETTLED_OPERATION'):
+        with Gate(tmp_path / 'gate').drain(.2):
+            pytest.fail('failed RNS persistence must remain unsettled')
 
 
 def test_startup_signal_finishes_initialization_without_opening_listener(launch, tmp_path):
@@ -202,7 +235,7 @@ def test_actual_systemd_stop_preserves_child_beyond_old_deadlines(tmp_path):
     archive = os.environ.get('FC_TEST_SUPPORT_ARCHIVE')
     environment = 'Environment=' + json.dumps('FC_TEST_SUPPORT_ARCHIVE=' + archive) + '\n' if archive else ''
     unit_path.write_text('[Service]\nType=exec\nRestart=no\n' + environment + '\n'.join(paired) + '\nExecStart=' +
-                         f'{sys.executable} -B {FIXTURE} {tmp_path} exchange\n')
+                         f'{INTERPRETER} -B {FIXTURE} {tmp_path} exchange\n')
 
     def systemctl(*args):
         return subprocess.run(['systemctl', '--user', *args], capture_output=True, text=True, check=True, timeout=10).stdout

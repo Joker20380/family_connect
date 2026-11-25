@@ -27,6 +27,7 @@ if archive:
     check_imports()
 
 root, mode = Path(sys.argv[1]), sys.argv[2]
+os.umask(0o077)
 gate = initialize(root / 'gate')
 store = worker.SupportStore(root / 'store', b's' * 32, create=True)
 public = store.chat_identity().get_public_key().hex()
@@ -55,6 +56,10 @@ original_close = worker.SupportStore.close
 
 def close(store):
     original_close(store)
+    if (root / 'ready').exists() or (root / 'startup-entered').exists():
+        import threading
+        assert len(threading.enumerate()) == 1
+        assert len(list(Path('/proc/self/task').iterdir())) == 1
     (root / 'store-closed').touch()
 
 
@@ -66,6 +71,21 @@ def runtime(directory):
     result = original_initialize(directory)
     if mode == 'startup':
         pause('startup-entered')
+    if mode in ('runtime-async', 'runtime-exit-failure'):
+        import RNS
+        original_replace = os.replace
+
+        def replace(source, target, *args, **kwargs):
+            if mode == 'runtime-async' and str(source).endswith((b'd' * 16).hex() + '.out'):
+                pause('runtime-writer-entered')
+                (root / 'runtime-writer-finished').touch()
+            elif mode == 'runtime-exit-failure' and str(target).endswith('/known_destinations'):
+                raise OSError('synthetic support runtime exit failure')
+            return original_replace(source, target, *args, **kwargs)
+
+        os.replace = replace
+        if mode == 'runtime-async':
+            RNS.Identity._remember_ratchet(b'd' * 16, b'r' * 32)
     return result
 
 

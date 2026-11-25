@@ -14,7 +14,7 @@ CONTRACT = Path('deploy/support-chat/support-capture-v1.json')
 MODIFIED = frozenset(('messenger/routed.py', 'provisioning/subscription_notifications.py',
                       'provisioning/support_worker.py'))
 ADDED = frozenset(('control/capture_gate.py', 'provisioning/support_capture.py',
-                   'provisioning/support_lifecycle.py'))
+                   'provisioning/support_lifecycle.py', 'provisioning/support_runtime.py'))
 ENTRYPOINT = b'from provisioning.support_worker import main\nmain()\n'
 LIMIT = 512 * 1024
 

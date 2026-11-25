@@ -52,7 +52,7 @@ def test_exact_closure_determinism_private_output_and_preserved_bytes(synthetic)
         assert new.read('__main__.py') == package.ENTRYPOINT
         old_files = json.loads(old.read('source-manifest.json'))
         new_files = json.loads(new.read('source-manifest.json'))
-        assert len(old_files) == 19 and len(new_files) == 22
+        assert len(old_files) == 19 and len(new_files) == 23
         for name in old_files:
             if name not in package.MODIFIED:
                 assert new.read(name) == old.read(name)
@@ -169,7 +169,7 @@ from provisioning import support_worker
 with zipfile.ZipFile(sys.argv[1]) as package:
     names = json.loads(package.read('source-manifest.json'))
 modules = {(name[:-12] if name.endswith('/__init__.py') else name[:-3]).replace('/', '.') for name in names}
-required = {'provisioning.support_worker', 'provisioning.support_capture', 'provisioning.support_lifecycle',
+required = {'provisioning.support_worker', 'provisioning.support_capture', 'provisioning.support_lifecycle', 'provisioning.support_runtime',
             'provisioning.subscription_notifications', 'messenger.routed', 'control.capture_gate'}
 assert required <= sys.modules.keys()
 for name, module in tuple(sys.modules.items()):
@@ -178,4 +178,4 @@ for name, module in tuple(sys.modules.items()):
 '''
     subprocess.run([sys.executable, '-I', '-c', code, str(output / 'candidate.pyz')],
                    cwd=tmp_path, capture_output=True, check=True, timeout=10)
-    assert len(receipt['files']) == 22
+    assert len(receipt['files']) == 23

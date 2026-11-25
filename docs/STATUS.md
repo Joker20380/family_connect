@@ -1,18 +1,20 @@
 # Текущее состояние / Current state
 
-**25 November — working legacy-support admission probe PASS; no stop or replacement.**
-GUI authentication succeeded. At16:40:26UTC the actual support process pauses serial/delivery
-admission, drains the checked application scope without cancellation and restores online admission.
-Malformed IPC works before/after; PID2022541, all19 sources,3 unit files and15 unit fields remain
-unchanged, active/running/0 restarts. The old40s policy remains; no capture permission is issued.
-Four RNS background jobs remain live.62 tests PASS/0 skips plus a real fc-support systemd namespace
-fixture PASS. Two refused live attempts exposed PrivateTmp staging and multiple module loads;
-target-visible staging and exact active-frame/globals binding now qualify without relaxing pins.
-[Failures, actual probe, evidence and rollback](releases/2026-11-25-control-ha-support-live-probe.md).
-Next: exact RNS periodic/queued/exit persistence closure and independently supervised safe stop/
-replacement/rollback, then installed manual/OWNER coverage and coherent fleet capture. Independent
-current trust/custody/approval and full post-ACK recovery remain. Same three HA-02 gates partial;
-isolated replication PASS. No RU/NL contact, container requalification, version change, HA-03 or ETA.
+**25 November — pinned support RNS lifecycle candidate qualified; not installed.**
+Configured support now holds its capture operation for the full worker lifetime, including RNS
+periodic/queued/asynchronous/final persistence, fsync and encrypted-store close. Cooperative idle
+checkpoints stop producers without interrupting writes; queue/descendant workers finish before
+one explicit exit flush. Logged/thread/flush failures retain uncertainty. An idle running worker
+cannot authorize capture: the candidate must complete its managed shutdown first.
+[169 checks PASS/0 skips, exact candidate and remaining transition](releases/2026-11-25-control-ha-support-runtime.md).
+Two actual user-systemd fixtures preserve delivery/ratchet writes beyond41s; fresh readback passes.
+The23-source candidate preserves16 baseline modules, changes3/adds4. No dependency/version upgrade.
+At17:07:01UTC working support remains PID2022541/0 restarts, all19 sources unchanged and old40s
+policy; no live mutation in this slice. The earlier reversible application probe remains PASS,
+not old-runtime drain. Next: independently supervised old-process drain/transition/rollback,
+then candidate activation/readback, remaining installed manual/OWNER coverage and coherent capture.
+Independent current trust/custody/approval/full recovery remain; same three HA-02 gates partial,
+isolated replication PASS. No RU/NL contact, container requalification, HA-03 or new ETA.
 
 At the preceding installed-shape candidate checkpoint:
 
