@@ -1,5 +1,21 @@
 # Текущее состояние / Current state
 
+**25 November — three manual operator CLI admission boundaries qualified; not installed.**
+Feature171014ad is pushed/remote-SHA verified; all17 restricted/support/notices CLI actions gain
+admission before private/store access, retained through commits/publication/close, with uncertainty
+after interrupted or partly successful work.211 focused tests PASS/0 skips,89 new; isolated native
+archives refuse/recover outside checkout. [Scope, evidence and rollback](releases/2026-11-24-control-ha-installed-recovery.md#manual-operator-admission--25-november).
+This is source-only: commands without `--capture-gate` remain ungated; installed CLI/forced-command
+binding and remaining manual writers are still open. At15:39UTC support PID2022541/all19 sources/
+unit fields and all three healthy OWNER container PIDs/images remain unchanged,0 restarts.
+`sudo -n` again requires interactive authentication, blocking already authorized support activation.
+No RU/NL contact or deployment/version/public artifact change in this continuation. Next: privileged
+guarded support transition/runtime closure, installed/manual coverage and OWNER integration, then
+coherent fleet capture and independent trust/custody/full recovery. Same three HA-02 gates partial;
+replication PASS in isolation. No HA-03 or new ETA.
+
+At the preceding support-lifecycle checkpoint:
+
 **25 November — support graceful-stop source qualified, not installed.**
 Feature54d91ee3 is pushed/remote-SHA verified.106 focused checks PASS/0 skips on final source;
 actual systemd stop preserves delivery/child beyond the old31s/40s deadlines, then closes safely.

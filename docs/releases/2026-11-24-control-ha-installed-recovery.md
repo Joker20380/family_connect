@@ -8,6 +8,54 @@ Owner request selects all four existing HA-02 gates, not HA-03..05. The25 Novemb
 also authorizes participant installation and bounded operational work with documented rollback;
 earlier read-only/deployment-permission limitations in the historical sections are superseded.
 
+## Manual operator admission — 25 November
+
+[Authoritative source,211 checks, unchanged prestate and rollback](https://github.com/Joker20380/family_connect/blob/171014ad39b08e424d5ce57dac0dd83dc9e5dca9/docs/releases/2026-11-25-control-ha-operator-capture.md).
+Feature171014ad39b08e424d5ce57dac0dd83dc9e5dca9 is ordinarily pushed and remote-SHA verified.
+It closes three source entrypoints, not their installation or all manual writers. Main remains
+navigation-only, not a working code deployment.
+
+Restricted administration, support/FIELD administration and service notices now accept an explicit
+`--capture-gate` before their action/subcommand. All17 actions acquire admission before opening
+stores/private inputs; a held gate yields exit75/`CAPTURE_BUSY` without database/token/publication
+creation. Invalid gates fail closed. Admission spans database commits, file publication and close;
+process death, post-commit/rename/close failures preserve durable uncertainty. The existing support
+error sanitizer does not hide failures from the gate. A later success cannot erase old markers.
+Original action semantics, schemas, FIELD limits, grant expiry and public feed formats remain.
+
+Final211 focused tests PASS/0 skips,62.83s,89 new. Includes all-action refusals, native SQLite lock
+waits/process death, commit/close/rename outcomes, and three closed-archive CLI probes under `-I`
+outside checkout. All26 control/identity pins match;5 documentation files/1169 link targets and
+whitespace pass. Earlier85 and196-pass/13-skip runs overlap; final qualification supplies the
+privately retained baseline for the13 installed-shape regressions and skips none. That old pinned
+receiver overlay is unchanged and is not a deployment of these new CLI boundaries.
+Main navigation validation:3 documents/744 link targets and whitespace PASS.
+
+No installed coverage claim: omitted gates intentionally retain ungated legacy behavior. Existing
+CLI/forced-command/queue/source/UID bindings and already running work require independent census/
+settlement; remaining support sender/routing/alias/offline paths and OWNER integration remain open.
+Do not share private per-UID gate locks by weakening permissions or infer old settlement from a
+new empty gate. No root-owned source, unit, forced command or archive is changed in this task.
+
+Initial `sudo -n true` again reports `sudo: interactive authentication is required`; already granted
+authorization still lacks technical privileged execution for support activation. No bypass/password
+collection/force-stop attempted. Read-only15:39:12UTC support prestate: same PID2022541, all19 source
+hashes/effective unit fields unchanged, active/running/0 restarts/no reload warning.15:39:23UTC:
+the exact three OWNER containers remain running/healthy with unchanged PIDs/images,0 restarts.
+RU/NL not contacted; the preceding15:25UTC RU result is historical, not a new liveness observation.
+No product/client/public installer/catalog/invitation/signature change or production data write.
+
+Private locator `/tmp/fc-ha-operator-capture-current`; final JUnit SHA256
+`ed24524e2ecfaeb8c179b402487bb01b3d5fc17125f057f47b2693a7a14ac2bc`.
+No operational rollback needed. Source revert removes only these CLI boundaries/tests/docs;
+future installed rollback must preserve current data and uncertainty while restoring exact old
+code/configuration. Never rewind the DB/feed or clear pending markers to manufacture a barrier.
+
+Next: privileged guarded support transition and exact runtime/background persistence closure,
+installed/manual writer coverage and OWNER integration; then coherent fleet capture, independent
+current-input trust/custody/approval and final current/post-ACK recovery. Replication PASS only in
+isolation; same three HA-02 gates partial. No HA-03/automatic failover or new completion ETA.
+
 ## Support managed-worker stop — 25 November
 
 [Authoritative source, native qualification, prestate and rollback](https://github.com/Joker20380/family_connect/blob/54d91ee35000df4825fd05a35073bfbdbf38fbe2/docs/releases/2026-11-25-control-ha-support-lifecycle.md).

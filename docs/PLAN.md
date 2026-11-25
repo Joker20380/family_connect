@@ -2,6 +2,21 @@
 
 ## Current engineering priority / Текущий critical path
 
+**CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+25 November: manual restricted/support/notices CLI source slice COMPLETE at171014ad, pushed and
+remote-SHA verified. All17 actions honor configured admission.211 checks PASS/0 skips,89 new, including
+native SQLite waits/process death, post-commit/rename/close uncertainty and isolated archives.
+[Exact scope and remaining installation boundary](releases/2026-11-24-control-ha-installed-recovery.md#manual-operator-admission--25-november).
+Do not equate this with installed manual-writer closure: no-option commands remain ungated,
+effective CLI/forced-command/queue/source/UID bindings and remaining writer paths still need closure.
+OWNER support and containers unchanged at15:39UTC. `sudo -n` still needs interactive authentication;
+technical privileged execution, not renewed authorization, blocks guarded support activation.
+Next: that transition/runtime closure, installed/manual coverage and guarded OWNER integration,
+then coherent fleet capture and independent trust/custody/combined recovery. Three HA-02 gates
+partial; isolated replication PASS. No RU/NL operation, HA-03, public version change or new ETA.
+
+At the preceding support-lifecycle checkpoint:
+
 **Owner publication request24 November COMPLETE.**
 Safe pending files are checkpointed and both main histories merged;9aac6e16 is pushed and
 remote-SHA verified12:06UTC.47 renewal tests and44-document/741-link checks pass. No force-push,
