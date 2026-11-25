@@ -1,5 +1,23 @@
 # Текущее состояние / Current state
 
+**25 November13:14UTC — receiving notice-export uncertainty repaired and qualified.**
+Reproduced a concrete old-source bug: a caught second-file export failure left v1 published,
+v2 absent and no pending marker, incorrectly permitting drain. Both exports now share one
+SQLite transaction/time, sync each file and its parent directory, and retain uncertainty on
+any export/commit failure even when the HTTP handler catches it.146 focused tests PASS/0 skips,
+18 new, including actual HTTP/TCP-reset and process-death cases; closed HTTP candidate built
+and isolated import/export verified. Candidate is not installed or publicly distributed.
+[Failure reproduction, native evidence and rollback](releases/2026-11-25-control-ha-notice-export.md).
+Working OWNER images remain healthy,0 restarts and both collector timers active; no remote host
+contact or public feed modification. This closes a receiving-export source gap, not settlement
+of old ungated handlers, support/manual operations or permission for coherent capture.
+Next: qualify/adopt the receiver fix with independent old-work settlement and remaining support/
+manual coverage, then actual gate/runtime attestation and guarded startup/abort. The same fleet,
+coherent capture, custody/trust/approval and final recovery work remains within HA-02.
+Replication PASS in isolation; three gates partial. No HA-03, automatic failover or version bump.
+
+At the preceding publication-database checkpoint:
+
 **25 November12:31UTC — working PostgreSQL publication boundary verified with both admission guards.**
 A dedicated PostgreSQL17 transaction briefly locks both publication authority tables; it refuses
 an unfinished COMMIT even after sender exit/HTTP ACK. Server-side transaction expiry releases

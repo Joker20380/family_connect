@@ -3,6 +3,19 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+25 November13:14UTC: receiving-side export completion source gap fixed. Old code reproducibly
+allowed drain after a caught partial v1/v2 export; new code retains uncertainty and durably
+syncs both outputs from one SQLite snapshot/time.146 focused tests PASS/0 skips,18 new; real
+HTTP success/error/TCP-reset, actual receiver process death and closed-package export covered.
+[Reproduction, evidence and rollback](releases/2026-11-25-control-ha-notice-export.md).
+Candidate built/tested, not installed; working OWNER health unchanged, no remote changes.
+Do not infer settlement of old ungated requests from the new source or from two matching files.
+Next: receiver adoption with independent old-work settlement and support/manual coverage, then
+real gate/runtime attestation and guarded startup/abort using the qualified OWNER components.
+Remaining fleet participation, coherent capture, independent custody/trust/approval and final
+recovery remain the same HA-02 scope: replication PASS, three gates partial, no HA-03 or ETA.
+
+At the preceding publication-database checkpoint:
 25 November12:31UTC: the short PostgreSQL publication boundary is qualified and works together
 with the existing publisher hold and console ingress lease.226 focused tests PASS/0 skips,49 new;
 native unfinished COMMIT, controller SIGSTOP/SIGKILL and non-renewable server expiry tested.

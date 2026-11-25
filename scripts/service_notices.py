@@ -18,6 +18,7 @@ import tempfile
 import time
 import uuid
 from messenger.service_events import validate_feed, KINDS
+from control.capture_gate import external_operation
 
 
 REPOSITORY_PURPOSE = 'family-connect/ha-notices-synthetic/v1/db-only'
@@ -209,22 +210,33 @@ class Notices(NoticeTransaction):
             self.assign_device(device, name)
 
     def export_all(self, path):
-        self.export(path)
-        self.export(Path(path).with_name('family-connect-events-v2.json'),version=2)
+        self._export_versions(((Path(path), 1), (Path(path).with_name('family-connect-events-v2.json'), 2)))
 
     def export(self, path, version=1):
-        path = Path(path)
-        self.db.execute('BEGIN IMMEDIATE')
-        data = json.dumps(self.feed(version=version), ensure_ascii=False, separators=(',', ':')).encode()
-        fd, temporary = tempfile.mkstemp(prefix='.notices-', dir=path.parent)
+        self._export_versions(((Path(path), version),))
+
+    def _export_versions(self, targets):
+        with external_operation():
+            with self.transaction():
+                now = int(time.time())
+                for path, version in targets:
+                    self._write_feed(path, version, now)
+
+    def _write_feed(self, path, version, now):
+        data = json.dumps(self.feed(version=version, now=now), ensure_ascii=False, separators=(',', ':')).encode()
+        descriptor, temporary = tempfile.mkstemp(prefix='.notices-', dir=path.parent)
         try:
-            with os.fdopen(fd, 'wb') as output:
+            with os.fdopen(descriptor, 'wb') as output:
+                os.fchmod(output.fileno(), 0o644)
                 output.write(data);output.flush();os.fsync(output.fileno())
-            os.chmod(temporary, 0o644)
             os.replace(temporary, path)
+            directory = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY)
+            try:
+                os.fsync(directory)
+            finally:
+                os.close(directory)
         finally:
             if os.path.exists(temporary): os.unlink(temporary)
-            self.db.commit()
 
 
 def main():

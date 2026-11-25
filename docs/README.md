@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 25 November: receiving notice-export uncertainty fixed;146 tests, native HTTP/lost ACK/receiver death, single-snapshot durable outputs; candidate only, no working adoption](releases/2026-11-25-control-ha-notice-export.md).
+
 [CONTROL-HA · 25 November: working PostgreSQL publication boundary composed with both admission guards;226 tests, late COMMIT and controller-death expiry, no external-settlement/capture claim](releases/2026-11-25-control-ha-publication-boundary.md).
 
 [CONTROL-HA · 25 November: working console TCP admission and automatic expiry,175 tests/four native cases; unchanged healthy OWNER runtime, no complete-drain claim](releases/2026-11-25-control-ha-console-ingress.md).
