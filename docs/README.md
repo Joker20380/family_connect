@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 25 November20:12UTC: manifest-required startup/restart fence,104 checks and actual NL1 systemd crash/restart/native RNS PASS; stale ticket refused, working installation/OWNER exit proof remain](releases/2026-11-25-control-ha-mailbox-startup.md).
+
 [CONTROL-HA · 25 November19:41UTC: old RNS link exclusion after local reopening,78 checks/authenticated wire/actual NL1 UID/systemd PASS; OWNER exit binding and restart protection still required](releases/2026-11-25-control-ha-mailbox-links.md).
 
 [CONTROL-HA · 25 November19:08UTC: support mailbox hold/drain,64 checks and isolated NL1 fc-mailbox systemd/readback PASS; working unchanged, cross-host handoff still unqualified](releases/2026-11-25-control-ha-mailbox-fence.md).

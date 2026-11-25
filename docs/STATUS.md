@@ -10,21 +10,22 @@
 Выбранный HA-02 и его четыре результата сохраняются; сквозной ввод узла обязателен
 для завершения модернизации.
 
-**25 November19:41UTC — old RNS link exclusion survives local reopening, qualified in isolation.**
-78 tests PASS/0 skips, including authenticated native loopback RNS, plus actual NL1 fc-mailbox
-UID996/GID982/systemd qualification at19:38:52–19:39:09UTC with independent sandbox/source/unit readback.
-Old identified/unidentified links, captured callbacks and direct saved spool methods remain refused;
-fresh authenticated links can PUT/purge, unrelated old links continue, three synthetic rows reopen.
-[Mechanism, exact evidence and remaining trust boundary](releases/2026-11-25-control-ha-mailbox-links.md).
-This does NOT prove a fresh OWNER process: a still-running old process can create a fresh link.
-Next within the existing settlement gate: independently bind OWNER quiescence/exit and replacement
-commit, and add durable fail-closed mailbox restart/recovery before working activation. The guard
-must remain installed after local opening; abort is allowed only beforehand. Seven historical
-unknowns remain; full writer/capture scope and independent trust/custody/approval/recovery remain.
-Working NL1 PID3705/0 restarts/four relay sources/RNS Link/unit/process pins unchanged; OWNER
-observed active PID2022541/0 restarts at19:40UTC. Lab unit exited0 and was removed. Candidate9d7bf840
-unchanged/NOT installed. No working injection/stop/policy/product write, RU/NL2/container operation,
-HA-03 or version change. No extra owner action now. Three HA-02 gates partial; isolated replication PASS.
+**25 November20:12UTC — manifest-required mailbox restart defaults closed, qualified in isolation.**
+104 tests PASS/0 skips; actual NL1 fc-mailbox UID996/GID982/systemd qualification at20:08:21–20:08:53UTC
+uses authenticated native RNS and one deliberately killed/restarted lab main process. Startup installs
+the guard before destination publication. After restart, an old root-owned opening ticket is refused,
+support remains closed, another client continues, a fresh local ticket works and three rows reopen.
+[Mechanism, exact evidence and non-activation boundary](releases/2026-11-25-control-ha-mailbox-startup.md).
+The production unit is NOT changed: current OWNER/PID2022541 and NL1/PID3705 both retain0 restarts;
+NL1 four native/three RNS source pins,17 fields/unit/process bindings match. Lab ends exit0 and is removed.
+Next in the same settlement gate: paired NL1 startup-unit/manifest installation and existing-PID hold
+adoption, independently bind OWNER quiescence/exit/replacement commit to that exact mailbox ticket,
+then qualify combined failure/recovery and activate/read back. Manifest OWNER/plan hashes are expected
+bindings, not evidence of OWNER exit; LOCAL_QUALIFICATION_ONLY never authorizes production activation.
+Seven unknown outcomes remain; candidate9d7bf840 unchanged/NOT installed. No working injection/stop/
+policy/product write, RU/NL2/container operation, HA-03 or version change. No extra owner action now.
+Remaining writers/coherent capture/current independent trust/custody/approval/recovery keep the same
+three HA-02 gates partial; isolated replication PASS. Startup guards cannot be removed via abort.
 
 At the preceding outcome-census checkpoint:
 

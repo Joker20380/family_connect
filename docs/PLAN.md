@@ -16,21 +16,21 @@
 
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-25 November19:41UTC: old-link exclusion across local reopening COMPLETE IN ISOLATION, not deployment.
-[78 checks, authenticated native RNS, actual NL1 UID/systemd qualification and exact limits](releases/2026-11-25-control-ha-mailbox-links.md).
-Pre-open identified/unidentified/in-constructor links, captured callbacks and saved direct spool
-methods cannot gain support admission after opening. New authenticated links retain native membership
-checks; unrelated old links continue. Independent RPC-controller SIGKILL preserves the hold; actual
-fc-mailbox UID996/GID982 fixture reopens three synthetic rows. Working NL1 PID3705/0 restarts/four
-source pins/RNS Link/unit/process bindings unchanged; OWNER observed PID2022541/0 restarts. No installation.
-Next in this same settlement gate: independently bind OWNER quiescent/exit generation and replacement
-commit, add durable mailbox restart/fail-closed recovery and qualify combined controller failure paths.
-A new link is NOT proof of a new OWNER process; the old process can establish one while still alive.
-The post-open guard cannot be removed by abort. No independent handoff/capture permit exists yet.
-Then authorized activation/readback, remaining manual/OWNER coverage, coherent capture and independent
-current trust/custody/approval/full recovery. Seven historical unknowns remain. Same three HA-02 gates
-partial, isolated replication PASS; no new gate/HA-03, working injection/stop/product write, RU/NL2/
-container or version change. No additional owner action now; candidate9d7bf840 remains NOT installed.
+25 November20:12UTC: manifest-required restart fencing COMPLETE IN ISOLATION, not working installation.
+[104 checks, native RNS crash/restart, actual NL1 UID/systemd/readback and limits](releases/2026-11-25-control-ha-mailbox-startup.md).
+Native destination publication occurs only after guard installation. Required operator-owned manifest,
+fresh process/boot/start/challenge ticket and exact canonical request exclude stale opening after restart.
+Actual fc-mailbox UID996/GID982 lab survives main SIGKILL with one systemd restart, closes support,
+refuses the old root-owned ticket, serves another sender and preserves three native rows. Working NL1
+PID3705/0 restarts/source/unit/process pins unchanged; OWNER observed PID2022541/0 restarts. No installation.
+Next within this existing settlement gate: paired NL1 startup-unit/manifest installation and adoption
+of the already-running PID, independent OWNER quiescent/exit/replacement-commit proof bound to the exact
+mailbox ticket, and combined controller/deployment failure recovery before authorized activation/readback.
+Expected OWNER/plan hashes are not verified exit evidence; LOCAL_QUALIFICATION_ONLY remains non-production.
+The startup guard cannot be removed by abort. No handoff/capture permit exists yet. Then remaining manual/
+OWNER writers, coherent capture and independent current trust/custody/approval/full recovery. Seven unknowns
+remain. Same three HA-02 gates partial, isolated replication PASS; no new gate/HA-03, working injection/stop/
+product write, RU/NL2/container or version change. No extra owner action now; candidate9d7bf840 NOT installed.
 
 At the preceding outcome-census checkpoint:
 
