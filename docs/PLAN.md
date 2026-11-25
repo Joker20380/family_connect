@@ -2,6 +2,17 @@
 
 ## Current engineering priority / Текущий critical path
 
+**FLEET-PRODUCTION-ONBOARDING-1 — принят 25 ноября, IMPLEMENTATION_PENDING.**
+Владелец требует полный процесс VPS → IP/защищённый доступ/роли → штатный ввод →
+проверенный активный узел. [Навигация и границы](releases/2026-11-25-fleet-onboarding-requirement.md);
+[ONB-01..12 в рабочей ветке](https://github.com/Joker20380/family_connect/blob/1a9d84c9af8f38e4d51c991bc34c7ec67962ff71/docs/fleet-production-onboarding.md).
+Приёмка включает production enrollment, внешний VPN-трафик и публикацию, динамический
+реестр/клиентский каталог, повтор/замену/возврат без потери состояния. Новый сервер
+не требует правки исходников и отдельной сборки совместимого клиента.
+Это обязательный итог модернизации после нужных HA-03..05 зависимостей. Текущий HA-02
+сохраняет свои четыре результата и выбранный runtime-шаг; новый подпункт HA-02 не создаётся.
+
+
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
 25 November17:32UTC: working reversible application plus RNS idle boundary COMPLETE at feature1f339eb3,
 pushed/remote-SHA verified; candidate NOT installed.120 tests PASS/0 skips plus actual fc-support

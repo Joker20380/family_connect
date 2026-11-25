@@ -1,5 +1,15 @@
 # Текущее состояние / Current state
 
+**25 November — обязательный итог модернизации принят владельцем.**
+[FLEET-PRODUCTION-ONBOARDING-1](releases/2026-11-25-fleet-onboarding-requirement.md):
+VPS → IP, защищённый доступ и роли → штатный ввод → проверенный активный узел.
+[Полный контракт и 12 критериев](https://github.com/Joker20380/family_connect/blob/1a9d84c9af8f38e4d51c991bc34c7ec67962ff71/docs/fleet-production-onboarding.md).
+REQUIREMENT_ACCEPTED / IMPLEMENTATION_PENDING: требуется рабочая регистрация, реальный
+трафик и публикация без правки кода/новой сборки совместимого клиента, безопасный повтор
+и замена. Feature checkpoint `1a9d84c9` опубликован и проверен.
+Текущий HA-02 и четыре его результата сохраняются; сквозной ввод обязателен для итоговой
+приёмки всей модернизации.
+
 **25 November17:32UTC — working old-support application/RNS idle pause and restoration PASS.**
 Feature1f339eb3 is pushed/remote-SHA verified.120 tests PASS/0 skips plus actual fc-support systemd
 fixture: native writer retained beyond41s and fresh saved-ratchet readback. Working probe takes

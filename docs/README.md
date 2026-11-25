@@ -1,5 +1,7 @@
 # Documentation
 
+[FLEET-PRODUCTION-ONBOARDING-1 · обязательный итог владельца 25 ноября: VPS → IP/доступ/роли → проверенный активный узел; полный контракт и критерии](releases/2026-11-25-fleet-onboarding-requirement.md).
+
 [iOS development handoff — resumed stage, verified unsigned artifacts and exact CI boundary](releases/2026-11-17-ios-development-handoff.md#owner-resumption--17-november1115utc)
 
 [iOS PR41 final d02fce99 acceptance](https://github.com/Joker20380/family_connect/pull/41#issuecomment-6935466490)
