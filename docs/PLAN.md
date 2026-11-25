@@ -6,9 +6,12 @@
 25 November continuation authorizes HA-02 participant installation/bounded OWNER/RU/NL work
 with rollback. Earlier NL read-only limitations are superseded, not technical safeguards or
 independent trust/capture acceptance. No HA-03 cutover or paid-watch/deny disablement.
-Next actual operation: activate the workstation collectors with pinned source, preserved runtime
-roots, private gates, inhibited dispatch during installation, reversible unit/source deltas and
-native readback. Probe runtime-base separation passes68 collector/package checks (6 new).
+Workstation collectors are now installed at01:00:32UTC with pinned sources, preserved runtime
+roots, separate private gates and reversible user-unit/source changes. Both real services succeed
+at01:00:50–01:01:00 with0 pending markers; timers restored. First attempt's actual automatic
+rollback verified source/timer restoration before retry.68 source checks,6 filesystem rollback
+cases and5 isolated rollback cases pass. Next actual operation is OWNER container admission and
+remaining RU/NL/manual/transport participation, not repeating collector source/package tests.
 Console namespace access is now observed from inside its existing container without escalation;
 the previous host-side PermissionError is not an unresolved access prerequisite for that read.
 [Execution/rollback record](releases/2026-11-25-control-ha-collector-activation.md).

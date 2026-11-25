@@ -72,3 +72,88 @@ participation. Manual direct ORM/DB/SSH/Docker entrypoints and the other OWNER/R
 remain separate participants. The three unfinished HA-02 gates remain current-input trust,
 coherent all-writer capture and complete independent recovery; replication remains PASS.
 No product/client/image version, catalog, installer or public release changes.
+
+## Actual installation — 01:00:32UTC
+
+Source checkpoint93f4ce3c is pushed and remote-SHA verified before installation. At
+**01:00:32.902740UTC** the two workstation collectors are installed, not merely built:
+
+| Participant | Installed source | Kept runtime/state | Gate and unit delta |
+| --- | --- | --- | --- |
+| Inventory |5 changed files from the16-file pinned package in the original collector-runtime root | Existing .local/.env/Compose and known-hosts argv | Separate UID1000 private gate; environment-only user drop-in |
+| Network probe | Fresh9-file capsule, probe SHA19ed2bf5e2769cc4f5f1b5bd2b94b4ac74212ecd0059d95f5ff8af6c6cd3f9bf | Original main control_plane base selected explicitly; main sources untouched | Separate UID1000 private gate; environment plus ExecStart override |
+
+All original non-gate environment assignments, inventory ExecStart, both KillMode and
+TimeoutStartUSec values are checked unchanged. No timer enable/disable setting changes.
+Only these two timers stop dispatch; active oneshots are allowed to finish without signals.
+Existing monitor/probe locks are held during file installation. No other service is stopped.
+Private0700 gates contain0600 lock files. Two actual source CLI invocations under held gates
+return75/CAPTURE_BUSY without output, dispatch or residual pending markers.
+
+At **01:00:50.439377–01:01:00.237839UTC**, actual user-systemd starts of both services finish
+with Result=success/ExecMainStatus=0, no remaining process and **zero pending markers in both
+gates**. Probe finishes01:00:54UTC; inventory finishes01:01:00UTC. The later ordinary
+inventory cycle01:02:15.662261UTC imports all three authorized sources RU/NL1/NL2 and technical
+metadata successfully. Both timers are active. Existing OWNER console/publisher remain healthy
+on original5ce82415/50de6f25 images; neither is restarted/reconfigured by this operation.
+Inventory performs its existing read-only remote collection and local product imports; these
+normal local observation writes are not a coherent HA snapshot or a database-version change.
+
+### Failure handling actually exercised
+
+Preparation first catches an umask-sensitive self-test expectation before any live mutation.
+The corrected file writer explicitly sets requested mode. Six isolated filesystem cases cover
+failure after each of five source replacements plus complete apply/revert with mode preservation.
+
+The first real installation attempt refuses its post-readback: systemd's ExecStart property
+contains last-run timestamps/PID/status, which daemon-reload resets even when argv is identical.
+Automatic rollback restores all original source hashes, removes both new drop-ins and resumes
+both originally active timers. Those facts are independently read back before retry. No unknown
+operation marker is deleted, database rewound or outstanding import killed.
+
+The retry compares the full command configuration prefix separately from a strictly parsed
+execution-result suffix, plus complete environment assignments. It does not ignore argv,
+ignore_errors, interpreter, runtime root, security or timeout differences. The corrected attempt
+passes. Failed-attempt artifacts remain private alongside successful evidence.
+
+### Retained operational rollback
+
+Private working record: `~/.local/share/family-connect/control-ha/20261125-collector-activation-4sc56eop/`.
+It contains0600 original unit observations, source archives/preimages, new drop-ins, installer,
+receipts and a standalone stdlib-only `rollback.py`; directories/gates are0700. Never add this
+directory, raw unit environment or source capsules to Git. Preserve them on this workstation.
+
+With no capture in progress, rollback is explicitly invoked as:
+
+```sh
+/usr/bin/python3 ~/.local/share/family-connect/control-ha/20261125-collector-activation-4sc56eop/rollback.py --confirm-no-capture
+```
+
+It verifies archive/source/drop-in pins, stops only these timers, waits at most520s for existing
+services without killing them, and takes exclusive local gate locks. Pending uncertainty, changed
+source/drop-ins or conflicting work refuse rather than erase evidence. It restores the two
+inventory entry preimages, removes only the three added helpers and two owned drop-ins, reloads
+the user manager and resumes originally active timers. It does not delete probe capsule/gates,
+private evidence, .local state or observations. On refusal after timers stop, timers may remain
+stopped: inspect/reconcile the explicit blocker before restoring dispatch. No blind rollback retry.
+
+Five isolated rollback cases pass using real source files/archives and fake systemd calls:
+complete restoration, retained pending marker, later source edit, later drop-in edit and wrong
+archive checksum. They do not claim a second live rollback. The earlier first-attempt rollback
+is the actual live proof. No power-loss or all-writer/fleet-fencing claim is made.
+
+| Retained artifact | SHA256 |
+| --- | --- |
+| Inventory package |2ac21a87f0507aa235933126dda9c1839775d5c434adc4a172996ad4584c7659|
+| Probe package |201f7346a14116ba033bde4bb24ee121b8cd2db35c2153f137d9163561cac437|
+| Installer |7dd3600ad9c8c34b12102d8801ed4bf7b160848de76ccad14c29f14026668de0|
+| Rollback helper |88dcea70f4247b6ecd1e18657ee5406607ae28ecaa1c9955b17cff4f3bf73409|
+| Rollback test receipt |26ecf0f213649a6b3b97fb2f1a25aea6c51bafff2b245d5ba4a6c90015bca4a8|
+| Installed receipt |4d372c775c2580e3eaaed4a5531df497fb693638d35da3fb41ba54efcd9729d3|
+| Actual service cycles |885f36120304eaad7703cbcf05c970d8f8f594e1db80a7e7a73d8819ab4d8d88|
+| Initial sanitized post-readback |0cf49e8772dfc041066647713eb84317c508ae4c089e39c111880847a4f03237|
+
+The initial post-readback predates the standalone rollback-helper amendment; its older helper
+hash is historical. The table pins the tested final helper. The installed source and units are
+unchanged by that amendment. The existing container-side/manual/remote participation, actual
+coherent checkpoint and independent approval/custody/final recovery remain required.

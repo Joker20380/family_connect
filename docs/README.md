@@ -1,6 +1,6 @@
 # Documentation
 
-[CONTROL-HA · 25 November: operational authorization, collector runtime separation, installation and rollback record](releases/2026-11-25-control-ha-collector-activation.md).
+[CONTROL-HA · 25 November: two workstation collectors installed; real normal cycles and rollback verified, original timers restored; operational authorization and remaining fleet gates](releases/2026-11-25-control-ha-collector-activation.md).
 
 [CONTROL-HA · 25 November: offline owner checkpoint review/sign/verify workflow;231 tests, existing protocol unchanged, no real authority enrolment or live approval](releases/2026-11-25-control-ha-forward-signing.md).
 

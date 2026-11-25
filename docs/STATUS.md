@@ -1,5 +1,21 @@
 # Текущее состояние / Current state
 
+**25 November01:00UTC — two working workstation collectors admitted and verified.**
+Inventory's5 changed source files are installed in its existing runtime. Probe runs the pinned
+9-file capsule with its original runtime/config/state base; main source is untouched. Two user
+drop-ins add separate private gates and only the probe ExecStart override. Both original timers
+are active again. At01:00:50–01:01:00 both actual services complete successfully with0 pending
+markers; follow-up inventory/technical metadata imports for RU/NL1/NL2 also succeed.
+68 source/package tests,6 filesystem fault/rollback cases and5 isolated rollback cases pass.
+The first install attempt actually rolls back on a systemd execution-metadata comparison;
+source prestate, absent drop-ins and both timer states are verified before the corrected retry.
+[Installed versions, receipts and exact rollback](releases/2026-11-25-control-ha-collector-activation.md#actual-installation--010032utc).
+No OWNER container restart/image/config change, remote service change or client version/release.
+Next is OWNER container-side admission and the remaining RU/NL/manual/transport participants;
+host collectors do not fence arbitrary Docker imports. Coherent capture, independent custody/
+approval and final recovery remain. Replication PASS; same three gates partial, no HA-03 cutover.
+
+At the source/authorization checkpoint earlier this session:
 **25 November — HA-02 operational installation authorized; collector runtime separation ready.**
 Owner now authorizes the selected participant installation and bounded OWNER/RU/NL work with
 rollback; earlier NL read-only restrictions below are historical. No HA-03 database cutover,
