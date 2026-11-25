@@ -10,8 +10,13 @@ Workstation collectors are now installed at01:00:32UTC with pinned sources, pres
 roots, separate private gates and reversible user-unit/source changes. Both real services succeed
 at01:00:50–01:01:00 with0 pending markers; timers restored. First attempt's actual automatic
 rollback verified source/timer restoration before retry.68 source checks,6 filesystem rollback
-cases and5 isolated rollback cases pass. Next actual operation is OWNER container admission and
-remaining RU/NL/manual/transport participation, not repeating collector source/package tests.
+cases and5 isolated rollback cases pass. At01:12:34–01:12:45UTC the actual installed two-collector
+guardian integration passes: running identities/runtime/gate bindings, joint120.511ms hold,
+two CLI refusals, complete guardian cleanup, pending0, restored timers; no data copied.
+Next bounded engineering work is the controlled OWNER drain/replacement/revert executor over
+the retained effective configuration, with independently settled old publication/support/manual
+work before stopping writers. Do not use default Compose seeding or force-kill as settlement.
+Then remaining RU/NL/manual/transport participation, not repeating collector source/package tests.
 Console namespace access is now observed from inside its existing container without escalation;
 the previous host-side PermissionError is not an unresolved access prerequisite for that read.
 [Execution/rollback record](releases/2026-11-25-control-ha-collector-activation.md).

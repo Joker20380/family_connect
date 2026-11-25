@@ -6,12 +6,17 @@ Inventory's5 changed source files are installed in its existing runtime. Probe r
 drop-ins add separate private gates and only the probe ExecStart override. Both original timers
 are active again. At01:00:50–01:01:00 both actual services complete successfully with0 pending
 markers; follow-up inventory/technical metadata imports for RU/NL1/NL2 also succeed.
+Installed two-participant guardian check01:12:34–01:12:45UTC PASS: actual running writer UID/
+groups/namespaces/runtime/gate environment observed; joint held interval120.511ms, both real
+collector CLIs refuse75, guardians reaped, pending0 and timers restored. No data copied.
 68 source/package tests,6 filesystem fault/rollback cases and5 isolated rollback cases pass.
 The first install attempt actually rolls back on a systemd execution-metadata comparison;
 source prestate, absent drop-ins and both timer states are verified before the corrected retry.
 [Installed versions, receipts and exact rollback](releases/2026-11-25-control-ha-collector-activation.md#actual-installation--010032utc).
 No OWNER container restart/image/config change, remote service change or client version/release.
-Next is OWNER container-side admission and the remaining RU/NL/manual/transport participants;
+Next is a qualified controlled OWNER drain/replacement/revert using retained effective configs,
+then remaining RU/NL/manual/transport participants. Do not stop old writers before independent
+publication/support/manual settlement or use default Compose (its startup includes seeding);
 host collectors do not fence arbitrary Docker imports. Coherent capture, independent custody/
 approval and final recovery remain. Replication PASS; same three gates partial, no HA-03 cutover.
 

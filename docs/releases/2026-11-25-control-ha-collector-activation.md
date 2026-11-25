@@ -157,3 +157,42 @@ The initial post-readback predates the standalone rollback-helper amendment; its
 hash is historical. The table pins the tested final helper. The installed source and units are
 unchanged by that amendment. The existing container-side/manual/remote participation, actual
 coherent checkpoint and independent approval/custody/final recovery remain required.
+
+## Installed joint guardian qualification — 01:12UTC
+
+At **01:12:34.455336–01:12:45.669963UTC**, only the two collector timers are temporarily stopped
+again, with restoration in finally. Their actual service entrypoints run normal cycles. While
+each is running, one active-operation marker is observed, along with its MainPID, UID/GID1000,
+groups4/24/27/30/46/100/116/124/1000, matching gate environment and UID/GID mappings. Native
+mnt/pid/user/time namespaces match the coordinator: device5 and inodes4026531832/4026531836/
+4026531837/4026531834. The actual interpreter SHA is52e0a13e60a981d8c4b6478be2ba5176f69da07948a056bf49cf6f077e30cb41.
+No full process environment is printed or saved. Both services settle successfully without
+signals; pending directories become empty before any guardian drain is attempted.
+
+The existing closed five-source guardian package is reused, not reimplemented or installed as
+a service. Fresh private bindings pin the two real gate inode sets, observed identities/maps/
+namespaces and interpreter. The launcher seals package/bindings in memfds and starts two owned
+guardians. The existing joint protocol confirms an overlapping **120.510967ms** held interval.
+Within it, both installed collector CLIs return75/CAPTURE_BUSY with no stdout: no new collection
+or Docker import is dispatched. Both owned guardians are reaped afterward, pending counts are0,
+and both original timers are active again. This is the installed collector integration proof,
+not a replay of the earlier split-container synthetic stand.
+
+`capture_permitted=false`, `all_writers_qualified=false`, `data_copied=false` remain explicit.
+Only these two host collectors participate; neither OWNER Docker-import processes, support,
+RU/NL receivers/transport nor manual bypasses are implicitly fenced by their gates. No product
+DB snapshot, remote service change, container restart or current-state signature is performed.
+
+| Private artifact | SHA256 |
+| --- | --- |
+| Actual installed joint receipt |babe68ebc31f3caacab1ee08b3e1191e2a2b143b009c5f774b14724c5cc7b3b4|
+| Closed guardian package |12e83c6596c9416cd6fcfff8e01b584c48078641d7653d678b309ca4da410d21|
+| Actual host/gate binding |5556f3249a311bef7e0a16f9c66e59956c893bd594100029a441055a0309ed82|
+| Private integration runner |c1671f328d58ab619d3badd83e226c29e5ac7979caf745972a8f38da3dcb1235|
+
+Remaining immediate engineering work is a qualified controlled OWNER drain/replacement/revert
+executor using retained effective configuration, not an absent permission. The older working
+containers lack admission; independently settle their publication/support/manual work before
+stopping them. Default repository Compose invokes seeding and must not replace the observed
+startup. A force-killed sender, empty activity sample or HTTP reply is not settlement. Then
+qualify the other participants, capture coherently and complete independent trust/custody/recovery.
