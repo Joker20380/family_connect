@@ -14,6 +14,23 @@
 
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+25 November17:52UTC: isolated irreversible old-support final-persistence/exit mechanism COMPLETE;
+not an installed replacement supervisor. Implementation547f51ee/mergec92b735d pushed and remote verified;
+parallel fleet requirements preserved without force/rebase.82 tests PASS/0 skips plus fc-support
+systemd fixture: final write retained beyond41s, exit0/0 restarts/empty cgroup/fresh encrypted/native readback.
+[Qualification, failures and exact remaining boundary](releases/2026-11-24-control-ha-installed-recovery.md#isolated-support-final-exit--25-november).
+Working PID2022541/19 sources/3 units/15 fields/interpreter/0 restarts unchanged; candidate NOT installed.
+GUI access works; no additional owner input currently required. Next: qualify resumable independent
+replacement, preserve old uncertainty into the gate, observe actual exit/cgroup, pair source/kill policy,
+verify startup and code/config-only rollback without data rewind. External settlement and installed
+UID/source/gate/sandbox readback remain mandatory. Do not repeat the completed reversible live probe.
+Then remaining manual/OWNER writer coverage, coherent capture and independent current-input trust/
+custody/approval/full post-ACK recovery. Same three HA-02 gates partial; isolated replication PASS.
+No working support/RU/NL/container operation, HA-03/version change or new ETA in this checkpoint.
+
+At the preceding working reversible-pause checkpoint:
+
+**CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
 25 November17:32UTC: working reversible application plus RNS idle boundary COMPLETE at feature1f339eb3,
 pushed/remote-SHA verified; candidate NOT installed.120 tests PASS/0 skips plus actual fc-support
 system fixture with native writer retained beyond41s/fresh readback. Working probe takes51.464s:

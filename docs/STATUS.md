@@ -10,6 +10,24 @@ REQUIREMENT_ACCEPTED / IMPLEMENTATION_PENDING: требуется рабочая
 Текущий HA-02 и четыре его результата сохраняются; сквозной ввод обязателен для итоговой
 приёмки всей модернизации.
 
+**25 November17:52UTC — isolated old-support final persistence/exit qualification PASS.**
+Implementation547f51ee and mergec92b735d are pushed; feature head remote-SHA verified. Parallel fleet
+onboarding requirements are preserved through ordinary merge, without force/rebase or scope expansion.
+82 tests PASS/0 skips plus actual fc-support/installed-interpreter/systemd fixture: final native write
+held beyond41s, exit0/0 restarts/empty cgroup and fresh decrypted-store/native-state readback PASS.
+[Mechanism, retained failed attempts and next boundary](releases/2026-11-24-control-ha-installed-recovery.md#isolated-support-final-exit--25-november).
+Before exact controller commit, expiry restores admission; afterward failures park it closed rather
+than retry persistence, resume old IPC or kill writers. Working PID2022541/19 sources/3 units/15 fields/
+interpreter digest/0 restarts remain unchanged. Candidate9d7bf840 NOT installed; no live callback/stop.
+GUI authentication works; password not captured, terminal closed/sudo invalidated, no permanent access.
+Next: qualify resumable independent replacement and paired source/unit installation plus code/config-only
+rollback on current data, retaining old gate uncertainty and external settlement. Then installed
+UID/source/gate/sandbox, remaining manual/OWNER writers, coherent capture and independent trust/custody/
+approval/full recovery. Three HA-02 gates partial; isolated replication PASS. No owner input needed now,
+RU/NL/container operations, HA-03 or public version changes in this checkpoint.
+
+At the preceding working reversible-pause checkpoint:
+
 **25 November17:32UTC — working old-support application/RNS idle pause and restoration PASS.**
 Feature1f339eb3 is pushed/remote-SHA verified.120 tests PASS/0 skips plus actual fc-support systemd
 fixture: native writer retained beyond41s and fresh saved-ratchet readback. Working probe takes

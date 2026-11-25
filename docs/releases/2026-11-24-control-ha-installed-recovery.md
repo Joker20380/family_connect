@@ -8,6 +8,53 @@ Owner request selects all four existing HA-02 gates, not HA-03..05. The25 Novemb
 also authorizes participant installation and bounded operational work with documented rollback;
 earlier read-only/deployment-permission limitations in the historical sections are superseded.
 
+## Isolated support final exit — 25 November
+
+[Authoritative mechanism,82 checks, failures and installed-UID fixture](https://github.com/Joker20380/family_connect/blob/c92b735d4949332891188b198a5ab8313bb91331/docs/releases/2026-11-25-control-ha-support-exit.md).
+Implementation547f51eed6cefa832e3b8753dbffe281c4fc7c12 is published through ordinary merge
+c92b735d4949332891188b198a5ab8313bb91331; remote feature head verified. The first push was rejected
+because parallel fleet requirement1a9d84c9 arrived. Both changes are preserved without force-push,
+rebase or rewritten published history. Main remains navigation-only and preserves32599e39.
+
+**Old-process final persistence/exit mechanism qualified in isolation; working support NOT upgraded.**
+The one-use bridge requires an exact independently published commit after the application/RNS idle
+boundary. Before commit, timeout/refusal restores admission. After the irreversible latch, errors
+park the process indefinitely with admission closed; they do not restart work, retry final writes
+or force-stop writers. Idle RNS loops and delivery join, explicit native final persistence runs once,
+files/directories fsync, encrypted store closes and the bound socket unlinks before exit0. It uses
+`os._exit(0)` only after accounted writer completion and durable receipt, never returns into the old
+pending IPC/tick, and never treats local persistence as proof of external delivery settlement.
+
+82 tests PASS/0 skips in284.27s:23 exit protocol,22 reversible RNS pause and37 legacy application
+cases. Initial9-pass/1-failure evidence retains a fault-injection filename mismatch; corrected14 pass.
+Additional coverage verifies precommit controller death/expiry, malformed commit, staged-file tampering,
+duplicate invocation, pending native/delivery work, postcommit write/fsync/close/receipt errors and
+SIGTERM during persistence. No preliminary results are added to the82 count.
+
+At17:52:34UTC a separate actual systemd fixture under fc-support/installed Python3.14.4 and strict
+sandbox retains a final native write beyond41s (also beyond its8s precommit budget), then exits0 with
+0 restarts, empty cgroup and fresh same-UID decrypted-store/native-state readback. Initial transient
+unit garbage collection prevented exit-code observation, so that attempt is not an acceptance PASS.
+The successful fixture uses RemainAfterExit=yes only to retain exit status; its other old restart/
+kill/40s settings are unchanged. Its empty completed unit is stopped after verification, never while
+the writer runs. No such setting is installed on working support.
+
+- Final82 JUnit SHA256: `e3c025cf8c4c1de6d9ebd67979d629102ba8a40a7d8aae6eb24114f508ba21ee`.
+- Actual systemd/readback SHA256: `d9cca15f63e5226120d8eb1e94e548e1bb8821b37395c9a09234788a84750e69`.
+- Candidate remains `9d7bf840f3455d0ef2e7653dc9289aac2f0d77c9f2a0a8e305c786f7ddb80489`, not rebuilt/installed.
+
+Privileged pre/post checks preserve PID2022541/start/boot/command/cgroup,19 source hashes,3 unit files,
+15 effective fields and interpreter digest; support active/running/0 restarts, old40s/control-group/
+SIGKILL policy. No working injection/signal/stop/replacement, container/RU/NL operations or public
+version change. GUI password authentication succeeds without capture/permanent privileges; terminal
+closed and sudo timestamp invalidated. No owner action is needed at this checkpoint.
+
+Next: resumable independent supervisor with uncertainty preserved into the gate, actual exit/cgroup
+observation, paired source/unit activation, candidate readback and code/config-only rollback retaining
+current data. After an irreversible failure, do not resume the old process, clear uncertainty or
+force-stop/replay final persistence. Remaining manual/OWNER coverage, coherent capture and independent
+current trust/custody/approval/full recovery remain; three HA-02 gates partial, isolated replication PASS.
+
 ## Working support RNS quiescence — 25 November
 
 [Authoritative mechanism, failures, qualification and working readback](https://github.com/Joker20380/family_connect/blob/1f339eb375f3bb9ca7c8bba39a17821befe1d97c/docs/releases/2026-11-25-control-ha-support-quiesce.md).
