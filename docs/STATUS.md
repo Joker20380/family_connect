@@ -1,20 +1,19 @@
 # Текущее состояние / Current state
 
-**25 November — pinned support RNS lifecycle candidate qualified; not installed.**
-Featureba1e4991 is pushed/remote-SHA verified.169 tests PASS/0 skips include two actual user-systemd
-fixtures preserving delivery/native asynchronous persistence beyond41s, followed by fresh saved-data
-readback. The candidate owns a new pinned RNS runtime, drains periodic/queued/descendant writers,
-runs final persistence/fsync and closes the encrypted store before releasing lifetime admission.
-It does not adopt the old process; an idle managed worker is not capture-ready and must stop first.
-[Qualification, working state and rollback](releases/2026-11-24-control-ha-installed-recovery.md#support-rns-lifecycle-candidate--25-november).
-At17:07UTC working support remains active/running PID2022541/0 restarts, with all19 baseline source
-hashes and old40s stop policy unchanged. No working hook, signal, installation or privileged
-authentication occurred in this checkpoint; earlier application-probe PASS remains scope-limited.
-Next: independently supervised old-process drain/transition/rollback and external-outcome settlement,
-then candidate activation/installed UID/source/gate/sandbox readback, remaining manual/OWNER writers,
-coherent capture and independent current trust/custody/approval/full recovery. Same three HA-02 gates
-partial; isolated replication PASS. No RU/NL contact, container requalification, HA-03, public version
-change or new ETA. Stage2 remains incomplete.
+**25 November17:32UTC — working old-support application/RNS idle pause and restoration PASS.**
+Feature1f339eb3 is pushed/remote-SHA verified.120 tests PASS/0 skips plus actual fc-support systemd
+fixture: native writer retained beyond41s and fresh saved-ratchet readback. Working probe takes
+51.464s, parks3 producer/1 inbound loops after delivery/queued/descendant work, then restores all
+hooks/admission. No interruption of the old periodic sleep or delivery cancellation.
+[Actual result, failures and rollback](releases/2026-11-24-control-ha-installed-recovery.md#working-support-rns-quiescence--25-november).
+PID2022541/0 restarts,19 sources/3 unit files/15 fields/interpreter digest remain unchanged;
+malformed IPC works before/after. GUI authentication succeeds without password capture or permanent
+privilege. Candidate rebuilt, NOT installed; no final exit flush/stop or capture permission.
+Next: independently supervised irreversible commit through final persistence/fsync/store close,
+old-process exit/replacement and code/config-only rollback, preserving data and unresolved outcomes.
+Then installed UID/source/gate/sandbox and remaining manual/OWNER coverage, coherent capture and
+independent current trust/custody/approval/full recovery. Same three HA-02 gates partial; isolated
+replication PASS. No RU/NL contact, container requalification, HA-03, public version change or new ETA.
 
 At the preceding installed-shape candidate checkpoint:
 

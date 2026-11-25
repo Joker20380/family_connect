@@ -8,6 +8,48 @@ Owner request selects all four existing HA-02 gates, not HA-03..05. The25 Novemb
 also authorizes participant installation and bounded operational work with documented rollback;
 earlier read-only/deployment-permission limitations in the historical sections are superseded.
 
+## Working support RNS quiescence — 25 November
+
+[Authoritative mechanism, failures, qualification and working readback](https://github.com/Joker20380/family_connect/blob/1f339eb375f3bb9ca7c8bba39a17821befe1d97c/docs/releases/2026-11-25-control-ha-support-quiesce.md).
+Feature1f339eb375f3bb9ca7c8bba39a17821befe1d97c is ordinarily pushed and remote-SHA verified.
+Main remains navigation-only. **Working old-process application/RNS idle pause and restoration PASS;
+no final exit persistence, old-process stop, candidate installation or capture permission.**
+
+Scoped hooks wait for existing sleeps and writes instead of interrupting them. Application admission
+pauses, delivery finishes without cancellation,3 RNS producer loops park at pinned idle checkpoints,
+queued/descendant/child work completes and1 inbound drainer parks. Python/native coverage is checked.
+The one-use request expires within360s and restores original hooks/admission even after refusal or
+controller death; this expiry is not a kill deadline. No vendor files or dependency versions change.
+
+120 checks PASS/0 skips in266.13s:22 quiescence,37 old application-probe,19 managed-runtime,
+13 lifecycle,25 archive and4 kit regressions. This includes both prior actual user-systemd stop
+fixtures. An additional actual system unit under fc-support/installed Python3.14.4 and PrivateTmp/
+strict protection retains a native ratchet writer beyond41s, then passes pause/restoration and fresh
+saved-ratchet readback. Initial14-pass/5-failure evidence is retained: four budgets expired before
+entry; one real error-hook/entered-receipt race is corrected. No preliminary counts are added again.
+
+At17:32:19UTC the working probe completes in51.464s. Independent post-return readback confirms
+original hooks,6 live Python threads, expected malformed-IPC rejection before/after, same PID2022541/
+start/boot/command/cgroup,19 source hashes,3 unit-file hashes/15 fields and interpreter digest.
+Active/running/0 restarts/no reload warning; old control-group/SIGKILL/40s policy unchanged. The
+temporary in-memory pause restores; no standing capture barrier, stop/restart/signal or installation.
+Owner GUI sudo authentication succeeds with no password captured, permanent privilege or sudoers
+change. The authenticated terminal is closed and its timestamp invalidated afterward; future normal
+authentication is not missing authorization. No container/RU/NL contact or public version change.
+
+- Updated23-source candidate SHA256: `9d7bf840f3455d0ef2e7653dc9289aac2f0d77c9f2a0a8e305c786f7ddb80489`.
+- Final120 JUnit SHA256: `192e7efe7e591a02fd858ef9dc893343c9df08667b2ffa9a80d27db26ca9969b`.
+- Installed-UID fixture SHA256: `9dee6a48110e39fa8b9482f553d55ebaab6a99e9fbe824320c03b21941586983`.
+- Working readback SHA256: `1db740e403eafe0dbc07aacbc6ba9a5d3dd75c2811f5618f0734fceccf639b5d`.
+
+Next: independently supervised irreversible commit through explicit final persistence/fsync/store
+close, old-process exit and source/unit replacement, with code/config-only rollback preserving
+current data/uncertainty and independent old external-outcome settlement. Do not repeat the completed
+probe, rewind stores, infer settlement from idle threads or apply only a kill-policy override.
+Then installed UID/source/gate/sandbox and remaining manual/OWNER writers, coherent fleet capture,
+independent current-input trust/custody/approval/full recovery. Same three HA-02 gates partial;
+isolated replication PASS. Stage2 incomplete; no HA-03, automatic failover or new ETA.
+
 ## Support RNS lifecycle candidate — 25 November
 
 [Authoritative runtime mechanism, failed attempts, qualification and transition limits](https://github.com/Joker20380/family_connect/blob/ba1e4991aaa3f8f513e67cc233c5207f08f63576/docs/releases/2026-11-25-control-ha-support-runtime.md).

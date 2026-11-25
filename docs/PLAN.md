@@ -3,20 +3,20 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-25 November: pinned standalone support RNS lifecycle candidate qualified at featureba1e4991,
-pushed/remote-SHA verified; NOT installed.169 tests PASS/0 skips include two actual user-systemd
-fixtures preserving delivery/native asynchronous persistence beyond41s and fresh saved-data readback.
-[Candidate qualification and remaining boundary](releases/2026-11-24-control-ha-installed-recovery.md#support-rns-lifecycle-candidate--25-november).
-Runtime lifetime admission now encloses periodic/queued/descendant/final persistence and store close;
-managed capture requires a stopped worker. Startup-only hooks cannot adopt the existing old process.
-At17:07UTC working support remains PID2022541/0 restarts, all19 baseline source hashes/old40s policy
-unchanged. No working mutation or privileged authentication in this checkpoint;16:40 application
-probe PASS remains limited to its checked scope. Next: independently supervised old-process drain/
-transition/rollback and external-outcome settlement before candidate activation, then installed
+25 November17:32UTC: working reversible application plus RNS idle boundary COMPLETE at feature1f339eb3,
+pushed/remote-SHA verified; candidate NOT installed.120 tests PASS/0 skips plus actual fc-support
+system fixture with native writer retained beyond41s/fresh readback. Working probe takes51.464s:
+3 producers/1 inbound loop park and resume, same PID2022541/0 restarts/19 sources/3 units/15 fields/
+interpreter digest. GUI authentication succeeds; no permanent access or sudoers change.
+[Working result and remaining boundary](releases/2026-11-24-control-ha-installed-recovery.md#working-support-rns-quiescence--25-november).
+No final exit persistence, stop, early wake of old sleep, cancellation or capture permission.
+Next: qualify independently supervised irreversible commit from idle through final persistence/
+fsync/store close, old-process exit/source-unit replacement and code/config-only rollback, keeping
+current data and unresolved outcomes; independent external-work settlement before activation.
+Do not repeat the completed reversible probe or deploy only a kill-policy change. Then installed
 UID/source/gate/sandbox readback, remaining manual/OWNER coverage and coherent fleet capture.
-Independent trust/custody/approval and full post-ACK recovery remain. Same three HA-02 gates partial;
-isolated replication PASS. No RU/NL contact, HA-03, public version change or new ETA. Do not repeat
-completed candidate/probe work or substitute ordinary old TERM/40s force-stop for remaining closure.
+Independent trust/custody/approval/full post-ACK recovery remain. Same three HA-02 gates partial;
+isolated replication PASS. No RU/NL contact, container requalification, HA-03/version change or ETA.
 
 At the preceding installed-shape candidate checkpoint:
 
