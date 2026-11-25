@@ -11,6 +11,18 @@ remains selected; this publication task does not advance its acceptance gates.
 [Reconciliation record](releases/2026-11-24-source-reconciliation.md).
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+25 November11:58UTC: feature720a1a94 is pushed/remote-SHA verified. Working console TCP
+admission/restore qualified: kernel-expiring scoped rule,175 focused tests/0 skips,63 new and
+four native failure/rollback cases. Both OWNER roles healthy with original configuration/runtime
+and0 restarts, both collector timers active; no persistent install or main implementation change.
+[Result and rollback](releases/2026-11-24-control-ha-installed-recovery.md#console-tcp-admission--25-november).
+Console admission, publisher dispatcher hold and stopped replacement are completed components.
+Next is independent settlement of publication/support/manual effects, then real gate/runtime
+attestation and guarded startup/abort. Remaining fleet writers, coherent capture, independent
+custody/approval and final current recovery remain. Replication PASS; same three partial HA-02
+gates, no HA-03/cutover or new ETA. Closed TCP/process exit is not settlement or capture permission.
+
+At the preceding publisher-dispatcher checkpoint:
 25 November07:49UTC: bounded publisher scheduler inhibition/resume is qualified on the working
 runtime. Feature4597e672 is pushed/remote-SHA verified:159 tests/0 skips,47 new,4 native Docker
 cases. A one-second working hold resumes with unchanged healthy containers; no child workload

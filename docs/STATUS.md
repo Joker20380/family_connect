@@ -1,5 +1,21 @@
 # Текущее состояние / Current state
 
+**25 November11:58UTC — working console TCP admission/restore verified.**
+Feature720a1a94 is pushed/remote-SHA verified.175 focused tests PASS/0 skips,63 new; four native
+cases cover in-flight completion, controller SIGKILL, table collision and lost helper response.
+A scoped kernel-expiring rule briefly rejects new console connections, without stopping workers.
+Working health200 before/after; both OWNER containers healthy, unchanged runtime/configuration,
+0 restarts, both collector timers active. Temporary table/helpers removed. No persistent image/
+config install, container stop/start, remote service or client version change; main sources untouched.
+[Working receipt, rollback and failure boundary](releases/2026-11-24-control-ha-installed-recovery.md#console-tcp-admission--25-november).
+Console TCP admission, publisher dispatch inhibition and stopped replacement are complete
+components, not complete OWNER drain. Next: independent publication/support/manual settlement,
+then real gate/runtime attestation and guarded startup/abort. Remaining fleet participation,
+coherent capture, independent custody/approval and final recovery remain open. Replication PASS;
+same three partial HA-02 gates, no HA-03 cutover or automatic RU-independent failover.
+
+At the preceding publisher-dispatcher checkpoint:
+
 **25 November07:49UTC — working publisher dispatcher hold/resume verified.**
 Feature4597e672 is pushed/remote-SHA verified.159 focused tests PASS/0 skips,47 new;4 native
 Docker cases preserve an in-flight child commit and recover from guardian death/stall or

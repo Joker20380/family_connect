@@ -8,6 +8,40 @@ Owner request selects all four existing HA-02 gates, not HA-03..05. The25 Novemb
 also authorizes participant installation and bounded operational work with documented rollback;
 earlier read-only/deployment-permission limitations in the historical sections are superseded.
 
+## Console TCP admission — 25 November
+
+[Authoritative implementation, native/working receipts, limitations and rollback](https://github.com/Joker20380/family_connect/blob/720a1a943c816bcd8d61c4ffc48258f15de76009/docs/releases/2026-11-25-control-ha-console-ingress.md).
+Feature720a1a943c816bcd8d61c4ffc48258f15de76009 is ordinarily pushed and remote-SHA verified.
+Main changes only STATUS/PLAN/this navigation report; no implementation merge/deployment implied.
+
+175 focused tests PASS/0 skips,63 new; all26 control/identity package pins match. Four native
+cases at11:57:44.636171–11:58:01.363458UTC prove an in-flight synthetic Gunicorn response finishes
+while a new TCP connection is refused, kernel expiry after actual controller SIGKILL, atomic
+table-collision refusal and lost helper response with retained uncertainty and automatic expiry.
+Owned stand containers/networks/helpers removed, no product data used.
+
+At11:58:52.421164–11:58:57.277053UTC the working console probe succeeds. `/health/` returns200
+before/after; during the checked lease a new HTTP request is refused with1 rejected SYN and3
+seconds remaining. This is a point proof, not an all-writer capture interval. At11:58:57.504684
+both OWNER roles are healthy, original IDs/PIDs/start times/full effective configs and0 restarts;
+both collector timers active. Temporary table/helpers removed. No container stop/start, publisher
+signal, persistent configuration/image, remote service, client version or catalog change.
+
+The offline-built scratch tool has only nft1.1.6 and12 ELF dependencies; no package download,
+host mount/socket/PID namespace, shell or privileged mode. NET_ADMIN is scoped to the console
+network namespace, never the host firewall; readonly root, no-new-privileges and resource limits.
+An owned port8000 set element expires1–5 seconds from insertion without a watchdog. Delayed
+unknown helper execution can insert it later: retain all intent/ID journals, do not blindly retry,
+flush rules, stop workloads or infer settlement. Normal rollback deletes only the exact verified
+table and non-force removes completed helpers; unknown outcomes require reconciliation first.
+Raw evidence remains private via `/tmp/fc-ha-ingress-current`; only sanitized digests in the report.
+
+Console TCP admission, publisher dispatch inhibition and stopped replacement are complete
+components, not full OWNER drain. Next: independently settle old publication/support/manual
+effects, then real gate/runtime attestation and guarded startup/abort. Remaining fleet writers,
+coherent all-store capture, independent custody/approval and combined current recovery remain.
+Replication PASS; same three partial HA-02 gates, no HA-03 or automatic RU-independent failover.
+
 ## Publisher dispatcher hold — 25 November
 
 [Authoritative source, working receipt, failure tests and exact evidence pins](https://github.com/Joker20380/family_connect/blob/4597e672ed2bb7ee41e54081dc64c904fd2684e3/docs/releases/2026-11-25-control-ha-dispatcher-hold.md).
