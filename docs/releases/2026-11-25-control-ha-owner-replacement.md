@@ -4,6 +4,11 @@ Date:25 November2026 UTC. Selected task:CONTROL-HA-20261123 / HA-02, the existin
 acceptance gates. This is an executable **stopped-container** transition component,
 not a drain, working deployment, capture permit or completion of stage2.
 
+Source commit `6b9ec0c9785541adb1aa1b0841002e46aa79db10` is pushed and remote-SHA verified.
+Its initial documentation retained the preceding174-test proof pins after a failed edit;
+this documentation-only correction records the final176-test/06:37 exact-source evidence.
+No source rewrite, repeated deployment or changed binary is implied.
+
 ## Result
 
 `scripts/control_ha_owner_replacement.py` stages one already stopped OWNER role from
@@ -12,7 +17,7 @@ It has no start, stop, kill, exec, image-build, volume-delete or data-restore op
 The old container and its exact image/configuration stay available under a retained name.
 Unknown operations and acknowledged data are not reset to make rollback pass.
 
-174 focused Python tests PASS,0 skips, including57 new replacement tests. Native Docker
+176 focused Python tests PASS,0 skips, including59 new replacement tests. Native Docker
 qualification passes6 cases: one normal transition with application writes and five
 **actual SIGKILL deaths of a separate coordinator process** after create, retain-name,
 promote-name, candidate removal and original-name restoration. A new coordinator reads
@@ -71,14 +76,17 @@ The protocol:
 
 A timeout is not success. A known applied result can be recovered by readback; if the
 result is still unknown, the operation refuses and retains its intent. It does not blindly
-repeat create/rename/delete. An externally removed candidate, changed configuration or
+repeat create/rename/delete. Revert also refuses an unresolved forward rename: otherwise a
+late rename could arrive after rollback and invalidate the restored name. The intent must
+first be independently observed as applied; no switch of direction cancels a pending API call.
+An externally removed candidate, changed configuration or
 unexpected running process also stops progress. A failed transition may leave the original
 under its retained name and both services stopped; this is **recovery required**, not a
 successful rollback or permission to force/remove unrelated resources.
 
 ## Native qualification and failures
 
-Final native transition interval06:31:39.864436–06:31:44.169832UTC uses the existing pinned
+Final native transition interval06:37:01.694861–06:37:05.954274UTC uses the existing pinned
 publisher baseline/candidate, two fresh internal Docker bridge networks, a private named
 SQLite volume, synthetic read-only token bind and a separate host gate. The workload
 uses UID1000, supplementary group100, read-only root, dropped capabilities, no-new-privileges,
@@ -97,7 +105,9 @@ normalization, then an empty NetworkID on a merely created endpoint. The first i
 narrowly handled as described above; the second is fixed by explicitly supplying the
 retained network ID instead of accepting a missing binding. Those attempts did not pass.
 Their private records are retained. A preceding in-process interruption stand also passed,
-but the final six-case receipt uses real killed child processes. All owned test containers,
+but the final six-case receipt uses real killed child processes. Final review also added the
+cross-direction unknown-rename refusal and two late-completion regression cases; final
+native qualification was repeated for that exact source. All owned test containers,
 networks and volumes are removed and the label-filtered resource counts are0/0/0.
 
 Validation command:
@@ -117,15 +127,16 @@ or destinations are accepted by its setup. Control/identity test interpreter is 
 
 Private root: `/home/joker/.local/share/family-connect/control-ha/20261125-owner-replacement-luu7c3fl`.
 Raw current configuration, journals, source copies, test XML and native/preliminary receipts
-remain outside Git. The successful native capsule is `native/`; its data volume was disposable.
+remain outside Git. Final sources/XML/native proof are in `final/`, the successful native
+capsule is `final/native/`; its data volume was disposable. Earlier receipts remain retained.
 
 | Item | SHA-256 |
 | --- | --- |
-| Replacement source | `83e8e3bd2757a3ae9dd1606efec6b9676dbb89df20c418418861cf53d1ce49a4` |
+| Replacement source | `c83554c0674b413350bded104789b265108193a0ed967828c5826758b1c1548d` |
 | Native fixture source | `721d3a2844eb3b4bf4e50b0309833e1aba9c47cb2aae309039aecef7edc2a3c0` |
-| Replacement tests | `782627d88acb1ad4d415d7d8b884e58200a4e8fc24106a486fa01ea32c607b38` |
-| Focused test XML | `4134bb64b5a5285399a9aeb2585964b49467cc2b2b6c07dd82017a2ca0bfc540` |
-| Native receipt | `1be4d444d767af348057d9c97bd789fe9124dd1ac3c1c5a877420b8920b88d8d` |
+| Replacement tests | `8568cf8b9ced8f2ff070b0384fed805dc54a3d62c8a4d442e07f3426ff453442` |
+| Focused test XML | `887972d0b7d8e825c891b61a72c2c4c619b131eeb1086e5a7de656385a6a6dae` |
+| Native receipt | `a898c2c132f4a8a269fb2d14edce0458d0323292444dfaed70d7dba16511694d` |
 | Working read-only receipt | `83b68a1b7346d33afbe96cbfe37fef515e0cad8362dff55bc046b7c35ac20a83` |
 
 Original console `sha256:5ce824159e9f206c27ba92185097857382aa5fec71678ce5e728423509d1446a`

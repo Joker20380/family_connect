@@ -3,8 +3,8 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-25 November06:31UTC: stopped OWNER stage/revert executor is implemented and qualified.
-174 focused tests/0 skips,57 new;6 native Docker cases, including5 real coordinator SIGKILLs
+25 November06:37UTC: stopped OWNER stage/revert executor is implemented and qualified.
+176 focused tests/0 skips,59 new;6 native Docker cases, including5 real coordinator SIGKILLs
 and retained-journal recovery. Current SQLite writes and unknown markers survive rollback;
 old container identity, effective config/mounts/network policy preserved. No working deployment.
 Both working OWNER roles observed healthy at06:28:58 and refuse replacement while running.

@@ -1,9 +1,9 @@
 # Текущее состояние / Current state
 
-**25 November06:31UTC — stopped OWNER replacement/revert executor qualified.**
+**25 November06:37UTC — stopped OWNER replacement/revert executor qualified.**
 Exact effective Config/HostConfig, mounts and network policy are preserved; old container ID
-and current data remain the rollback target, never a pre-upgrade DB snapshot.174 focused tests
-PASS/0 skips,57 new. Six native Docker cases pass, including5 real SIGKILL coordinator deaths
+and current data remain the rollback target, never a pre-upgrade DB snapshot.176 focused tests
+PASS/0 skips,59 new. Six native Docker cases pass, including5 real SIGKILL coordinator deaths
 with journal recovery. Candidate SQLite writes and an unknown gate marker survive revert.
 At06:28:58 both working OWNER containers remain running/healthy and refuse replacement;
 only GET observation, no deployment, image build, working stop or version change.
