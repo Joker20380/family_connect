@@ -127,6 +127,7 @@ def sample(root, ticket):
             return dict(schema=1, result='OWNER_REPLACEMENT_SAMPLED', sampled_at_ns=time.time_ns(),
                         ticket_sha256=sha(ticket), plan_sha256=plan_sha256, old_binding=old,
                         candidate_binding=candidate, archive_sha256=replace.CANDIDATE,
+                        accepted_sha256=sha(records['accepted']), reservation_sha256=sha(reservation),
                         evidence_sha256=sha(records), owner_exit_verified=True,
                         independent_controller=True, controller_uid=os.geteuid(), rollback_requires_mailbox_reclosure=True,
                         fixture=replacement.manager.user or replacement.manager.fixture,

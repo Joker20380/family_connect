@@ -19,7 +19,7 @@ REPO = Path(__file__).resolve().parents[1]
 
 
 @pytest.fixture
-def system_service():
+def system_service(request):
     if os.geteuid() != 0 or os.environ.get('FC_TEST_SUPPORT_SYSTEM') != '1':
         pytest.skip('requires explicit root qualification of synthetic system services')
     account = pwd.getpwnam('fc-support')
@@ -29,7 +29,7 @@ def system_service():
     source, data = root / 'source', root / 'data'
     data.mkdir(mode=0o700)
     os.chown(data, account.pw_uid, account.pw_gid)
-    baseline = json.loads((REPO / replace.SOURCES[-1]).read_bytes())['baseline']
+    baseline = json.loads((REPO / 'deploy/support-chat/support-capture-v1.json').read_bytes())['baseline']
     for name, content in replace.admission.sources('/opt/family-connect-support/app', baseline).items():
         path = source / name
         path.parent.mkdir(mode=0o755, parents=True, exist_ok=True)
@@ -64,7 +64,8 @@ def system_service():
         manager.call('start', unit)
         wait_for(lambda: (data / 'worker.sock').exists())
         plan = replace.prepare(manager, source, os.environ['FC_TEST_SUPPORT_ARCHIVE'], root / 'controller',
-                               data / 'participant', root / 'support.pyz', seconds=15)
+                               data / 'participant', root / 'support.pyz', seconds=15,
+                               handoff=getattr(request, 'param', False))
         guard_path.write_text(replace.supervisor_unit(plan, interpreter))
         guard_path.chmod(0o644)
         yield manager, plan, root, data, guard_path
@@ -163,3 +164,55 @@ def test_root_witness_reservation_with_real_support_uid_and_private_tmp(system_s
         replace.Replacement(controller).run(recover=True)
     assert not (controller / 'rollback-intent.json').exists()
     assert all((Path(plan['gate']) / 'pending' / name).exists() for name in plan['pending'])
+
+
+@pytest.mark.parametrize('system_service', [True], indirect=True)
+def test_real_support_uid_cannot_reuse_or_rewrite_handoff_start_authority(system_service):
+    from test_control_ha_support_replace import eventually
+    manager, plan, root, data, guard_path = system_service
+    controller = Path(plan['root'])
+    manager.call('daemon-reload')
+    manager.call('start', guard_path.name)
+    wait_for(lambda: (controller / 'accepted.json').exists(), seconds=35)
+    manager.call('stop', guard_path.name)
+    assert manager.state()['Restart'] == 'no'
+    with replace.effective_user(plan['uid'], plan['gid']):
+        assert not os.access(plan['start_authority'], os.W_OK, effective_ids=True)
+        assert not os.access(plan['entry'], os.W_OK, effective_ids=True)
+    manager.call('restart', manager.unit)
+    wait_for(lambda: manager.state()['MainPID'] == '0')
+    assert manager.state()['ExecMainStatus'] == '78' and manager.state()['NRestarts'] == '0'
+    assert not (controller / 'rollback-intent.json').exists()
+    assert eventually(controller, recover=True) == 'ROLLED_BACK'
+    assert all((Path(plan['gate']) / 'pending' / name).exists() for name in plan['pending'])
+
+
+def test_systemd_completed_status_is_lost_without_live_unit_reference(tmp_path):
+    if os.geteuid() != 0 or os.environ.get('FC_TEST_SUPPORT_SYSTEM') != '1':
+        pytest.skip('requires explicit root qualification of synthetic system services')
+    unit = 'fc-ha-support-replace-fixture-' + uuid.uuid4().hex + '.service'
+    anchor = unit.removesuffix('.service') + '.target'
+    service_path, anchor_path = (Path('/run/systemd/system') / name for name in (unit, anchor))
+    service_path.write_text('[Service]\nType=oneshot\nExecStart=/usr/bin/true\n')
+    anchor_path.write_text('[Unit]\nAfter=' + unit + '\n')
+    manager = replace.Manager(unit)
+    try:
+        manager.call('daemon-reload')
+        manager.call('start', anchor)
+        manager.call('start', unit)
+        retained = manager.state()
+        assert retained['MainPID'] == '0' and retained['ExecMainCode'] == '1'
+        assert retained['ExecMainStatus'] == '0'
+        manager.call('stop', anchor)
+        manager.call('daemon-reload')
+        wait_for(lambda: manager.state()['ExecMainCode'] == '0')
+        unloaded = manager.state()
+        assert unloaded['MainPID'] == '0' and unloaded['ExecMainCode'] == '0'
+        (tmp_path / 'manager-completion.json').write_text(json.dumps({name: {key: value[key] for key in
+            ('MainPID', 'ActiveState', 'SubState', 'ExecMainCode', 'ExecMainStatus')}
+            for name, value in (('referenced', retained), ('unreferenced', unloaded))}))
+    finally:
+        manager.call('stop', anchor, unit)
+        service_path.unlink()
+        anchor_path.unlink()
+        manager.call('daemon-reload')

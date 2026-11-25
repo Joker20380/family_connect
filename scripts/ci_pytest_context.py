@@ -18,7 +18,8 @@ NATIVE314_FILES = frozenset((
     'tests/test_control_ha_legacy_http.py', 'tests/test_control_ha_legacy_support.py',
     'tests/test_control_ha_support_quiesce.py', 'tests/test_control_ha_support_exit.py',
     'tests/test_control_ha_support_replace.py', 'tests/test_control_ha_support_witness.py',
-    'tests/test_control_ha_support_terminal.py', 'tests/test_control_ha_support_terminal_native.py'))
+    'tests/test_control_ha_support_terminal.py', 'tests/test_control_ha_support_terminal_native.py',
+    'tests/test_control_ha_support_handoff.py'))
 CONTEXTS = ('standard', 'root', 'snapshot314', 'native314')
 
 

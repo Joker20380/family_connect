@@ -65,6 +65,22 @@ def test_failed_build_emits_bounded_native_diagnostics(tmp_path, monkeypatch, ca
     assert len(output) < 4500
 
 
+def test_native_diagnostics_use_private_uid_directory(tmp_path, monkeypatch, capsys):
+    from scripts import ci_full_pytest as full
+    from scripts.control_ha_maintenance_fixture import retain_failure
+    environment = {'FC_NATIVE_DIAGNOSTICS_DIR': str(tmp_path), 'PATH': 'unchanged'}
+    scoped = full.diagnostic_environment(environment, os.geteuid(), os.getegid())
+    assert scoped['PATH'] == 'unchanged' and environment['FC_NATIVE_DIAGNOSTICS_DIR'] == str(tmp_path)
+    folder = Path(scoped['FC_NATIVE_DIAGNOSTICS_DIR'])
+    assert folder.stat().st_mode & 0o777 == 0o700
+    monkeypatch.setenv('FC_NATIVE_DIAGNOSTICS_DIR', str(folder))
+    path = Path(retain_failure(b'ORIGINAL_NATIVE_FAILURE', 'exit-1'))
+    assert path.parent == folder and path.stat().st_mode & 0o777 == 0o600
+    monkeypatch.setenv('FC_NATIVE_DIAGNOSTICS_DIR', str(tmp_path))
+    full.emit_native_failures()
+    assert 'ORIGINAL_NATIVE_FAILURE' in capsys.readouterr().out
+
+
 def test_inventory_failure_keeps_collection_diagnostics(tmp_path):
     import inspect
     from scripts import ci_full_pytest

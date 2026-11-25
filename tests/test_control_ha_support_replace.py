@@ -30,7 +30,7 @@ def eventually(root, recover=False, seconds=15):
 
 
 @pytest.fixture
-def service(tmp_path, installed):
+def service(tmp_path, installed, request):
     candidate = os.environ.get('FC_TEST_SUPPORT_ARCHIVE')
     if not candidate or os.environ.get('FC_TEST_SYSTEMD_SUPPORT_DRAIN') != '1':
         pytest.skip('requires pinned support archive and owned user-systemd fixtures')
@@ -62,7 +62,8 @@ def service(tmp_path, installed):
         manager.call('start', unit)
         wait_for(lambda: (data / 'worker.sock').exists())
         root = tmp_path / 'replacement'
-        plan = replace.prepare(manager, installed, candidate, root, data / 'participant', tmp_path / 'support.pyz', seconds=8)
+        plan = replace.prepare(manager, installed, candidate, root, data / 'participant', tmp_path / 'support.pyz',
+                               seconds=8, handoff=getattr(request, 'param', False))
         config = root / 'support.conf'
         raw = config.read_bytes().replace(('ExecStart=' + interpreter).encode(),
             ('ExecStart=' + interpreter + ' -I -B ' + str(ROOT / 'tests/fixtures/support_ptracer.py') +
@@ -83,6 +84,25 @@ def service(tmp_path, installed):
         shutil.rmtree(Path(str(path) + '.d'), ignore_errors=True)
         manager.call('daemon-reload')
         subprocess.run([*manager.command, 'reset-failed', unit], capture_output=True)
+
+
+@pytest.mark.parametrize('service', [True], indirect=True)
+def test_handoff_candidate_restart_cannot_reuse_process_start_authority(service):
+    manager, plan, root, data = service
+    assert eventually(root) == 'ACCEPTED'
+    first = manager.state()
+    assert first['Restart'] == 'no'
+    assert read(Path(plan['start_authority']))['binding']['pid'] == int(first['MainPID'])
+    assert not (Path('/proc') / str(plan['old_binding']['pid'])).exists()
+    manager.call('restart', manager.unit)
+    wait_for(lambda: manager.state()['MainPID'] == '0')
+    state = manager.state()
+    assert state['ExecMainStatus'] == '78' and state['NRestarts'] == '0'
+    with pytest.raises(ValueError):
+        replace.Replacement(root).run()
+    assert not (root / 'rollback-intent.json').exists()
+    assert all((Path(plan['gate']) / 'pending' / name).exists() for name in plan['pending'])
+    assert eventually(root, recover=True) == 'ROLLED_BACK'
 
 
 def test_actual_systemd_install_and_code_only_rollback_preserve_uncertainty(service):

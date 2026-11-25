@@ -92,6 +92,9 @@ class Startup:
         self.fence = None
         self.published = False
         self.used = False
+        self.consumed = None
+        self.seal = self.path.with_suffix('.reclosed.json')
+        self.adopted = False
 
     def unchanged(self):
         admission.require(hashlib.sha256(owned(self.path, self.owner_uid)).hexdigest() == self.digest,
@@ -146,6 +149,9 @@ class Startup:
                                   and expected_hash not in RNS.Transport.destinations_map, 'PREMATURE_PUBLICATION')
                 self.fence = PersistentLinkFence(relay, bytes.fromhex(self.manifest['support_public']),
                                                  self.manifest['generation'], self.process).install()
+                if self.seal.exists() or self.seal.is_symlink():
+                    self.check_seal()
+                    self.fence.reclose(self.manifest['generation'])
                 self.unchanged()
                 admission.require(self.fence.observe()['new_link_admission'] == 'CLOSED', 'STARTUP_NOT_CLOSED')
             finally:
@@ -159,10 +165,90 @@ class Startup:
         ticket = self.ticket()
         admission.require(self.published and self.fence is not None, 'STARTUP_NOT_PUBLISHED')
         return dict(ticket=ticket, ticket_sha256=hashlib.sha256(encoded(ticket)).hexdigest(),
-                    root_owned_manifest=self.owner_uid == 0, closed_before_publication=True,
-                    restart_defaults_closed=True, fence=self.fence.observe(),
+                    root_owned_manifest=self.owner_uid == 0, closed_before_publication=not self.adopted,
+                    restart_defaults_closed=not self.adopted, live_adoption=self.adopted, fence=self.fence.observe(),
                     owner_exit_verified=False, installed_unit_verified=False, activation_ready=False,
-                    capture_permitted=False)
+                    capture_permitted=False, consumed=self.consumed)
+
+    def adopt(self, relay):
+        import RNS
+        from messenger import relay as native
+        with CREATION:
+            admission.require(not self.used, 'ONE_STARTUP_ONLY')
+            self.unchanged()
+            for owner, expected in ((native.ClosedRelay, RELAY_SHA256), (native.Spool, RELAY_SHA256),
+                                    (RNS.Destination, DESTINATION_SHA256)):
+                pinned_class(owner, expected)
+            admission.require(type(relay) is native.ClosedRelay and
+                              RNS.Transport.destinations_map.get(relay.destination.hash) is relay.destination and
+                              relay.destination in RNS.Transport.destinations, 'ADOPTION_DESTINATION')
+            self.used = True
+            self.adopted = True
+            self.fence = PersistentLinkFence(relay, bytes.fromhex(self.manifest['support_public']),
+                                             self.manifest['generation'], self.process).install()
+            if self.seal.exists() or self.seal.is_symlink():
+                self.check_seal()
+                self.fence.reclose(self.manifest['generation'])
+            self.published = True
+            return self.observe()
+
+    def check_seal(self):
+        seal = json.loads(owned(self.seal, self.owner_uid), object_pairs_hook=unique)
+        admission.require(seal == dict(schema=1, generation=self.manifest['generation'],
+                                      manifest_sha256=self.digest, opening_invalidated=True), 'RECLOSURE_SEAL')
+
+    def consume(self, request):
+        admission.require(self.fence is not None and self.published, 'STARTUP_NOT_PUBLISHED')
+        raw = owned(request, self.owner_uid)
+        value = json.loads(raw, object_pairs_hook=unique)
+        admission.require(type(value) is dict and set(value) == {'action', 'ticket', 'witness', 'reservation'} and
+                          value['action'] == 'OWNER_HANDOFF', 'HANDOFF_REQUEST')
+        with self.fence.lock:
+            admission.require(encoded(value['ticket']) == encoded(self.ticket()), 'STALE_OR_UNBOUND_TICKET')
+            admission.require(not self.seal.exists() and not self.seal.is_symlink() and not self.fence.sealed,
+                              'OPENING_INVALIDATED')
+            request_sha = hashlib.sha256(encoded(value)).hexdigest()
+            if self.consumed is not None:
+                admission.require(self.consumed['request_sha256'] == request_sha, 'WITNESS_ALREADY_CONSUMED')
+                return self.observe()
+            ticket, witness, reservation = value['ticket'], value['witness'], value['reservation']
+            sha = lambda item: hashlib.sha256(encoded(item)).hexdigest()
+            admission.require(type(witness) is dict and type(witness.get('schema')) is int and witness.get('schema') == 1 and
+                              witness.get('result') == 'OWNER_REPLACEMENT_SAMPLED' and
+                              witness.get('owner_exit_verified') is True and
+                              witness.get('independent_controller') is True and
+                              witness.get('legacy_uncertainty_preserved') is True and
+                              witness.get('rollback_requires_mailbox_reclosure') is True and
+                              witness.get('opening_permitted') is False and witness.get('capture_permitted') is False,
+                              'OWNER_EXIT_WITNESS')
+            admission.require(witness.get('fixture') is (self.owner_uid != 0) and
+                              witness.get('controller_uid') == self.owner_uid, 'WITNESS_AUTHORITY')
+            admission.require(witness.get('ticket_sha256') == sha(ticket) and
+                              witness.get('plan_sha256') == ticket['replacement_plan_sha256'] and
+                              sha(witness.get('old_binding')) == ticket['owner_binding_sha256'], 'WITNESS_BINDING')
+            admission.require(type(reservation) is dict and set(reservation) == {
+                'schema', 'ticket_sha256', 'plan_sha256', 'accepted_sha256', 'opening_permitted', 'capture_permitted'}
+                and type(reservation.get('schema')) is int and reservation.get('schema') == 1 and
+                reservation.get('ticket_sha256') == sha(ticket) and
+                reservation.get('plan_sha256') == ticket['replacement_plan_sha256'] and
+                reservation.get('accepted_sha256') == witness.get('accepted_sha256') and
+                reservation.get('opening_permitted') is False and reservation.get('capture_permitted') is False and
+                sha(reservation) == witness.get('reservation_sha256'), 'RESERVATION_BINDING')
+            admission.require(witness.get('archive_sha256') ==
+                              '621009b8df9baffb81e0d9069cfa52b3781e7dd7bf4e435dd89740e38cae5739',
+                              'CANDIDATE_ARCHIVE')
+            self.fence.open_after_local_drain(self.manifest['generation'])
+            self.consumed = dict(request_sha256=request_sha, witness_sha256=sha(witness),
+                                 reservation_sha256=sha(reservation), ticket_sha256=sha(ticket))
+            return self.observe()
+
+    def reclose(self, request):
+        value = json.loads(owned(request, self.owner_uid), object_pairs_hook=unique)
+        admission.require(value == dict(action='RECLOSE', ticket=self.ticket()), 'STALE_OR_UNBOUND_TICKET')
+        self.check_seal()
+        admission.require(self.fence is not None and self.published, 'STARTUP_NOT_PUBLISHED')
+        self.fence.reclose(self.manifest['generation'])
+        return self.observe()
 
     def open_for_qualification(self, request):
         admission.require(self.fence is not None and self.published, 'STARTUP_NOT_PUBLISHED')

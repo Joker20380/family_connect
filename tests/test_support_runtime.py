@@ -4,6 +4,7 @@ from pathlib import Path
 import signal
 import subprocess
 import sys
+import threading
 import time
 import uuid
 
@@ -15,6 +16,37 @@ from control.capture_gate import Busy, Gate, GateError
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURE = ROOT / 'tests/fixtures/support_runtime.py'
 INTERPRETER = os.environ.get('FC_TEST_SUPPORT_PYTHON', sys.executable)
+
+
+def test_owned_worker_in_limbo_is_waited_for_before_join(tmp_path):
+    from provisioning.support_runtime import ManagedRuntime
+    entered, release, finished = threading.Event(), threading.Event(), threading.Event()
+
+    class DelayedBootstrap(threading.Thread):
+        def _bootstrap_inner(self):
+            entered.set()
+            assert release.wait(5)
+            super()._bootstrap_inner()
+
+    worker = DelayedBootstrap(target=finished.set)
+    starter = threading.Thread(target=worker.start)
+    starter.start()
+    owner = ManagedRuntime(None)
+    try:
+        assert entered.wait(5)
+        assert worker in owner.workers() and not worker._started.is_set()
+        with pytest.raises(RuntimeError, match='cannot join thread before it is started'):
+            worker.join(.05)
+        owner.join_worker(worker, .05)
+        assert worker in owner.workers() and not finished.is_set()
+        release.set()
+        starter.join(5)
+        owner.join_worker(worker, 5)
+        assert finished.is_set() and not worker.is_alive() and not starter.is_alive()
+    finally:
+        release.set()
+        starter.join(5)
+        worker.join(5)
 
 
 def wait(predicate, seconds=12):

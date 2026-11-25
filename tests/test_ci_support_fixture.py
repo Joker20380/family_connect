@@ -27,6 +27,19 @@ def test_wrong_historical_support_source_cannot_replace_pins(tmp_path, monkeypat
     assert not (tmp_path / 'fixture/archive').exists()
 
 
+def test_v2_preserves_v1_baseline_and_changes_only_reviewed_runtime():
+    from scripts import package_support_capture as package
+    original = json.loads((fixture.ROOT / 'deploy/support-chat/support-capture-v1.json').read_text())
+    current = package.contract(fixture.ROOT)
+    assert current['baseline'] == original['baseline']
+    assert current['candidate'].keys() == original['candidate'].keys()
+    changed = {name for name in current['candidate'] if current['candidate'][name] != original['candidate'][name]}
+    assert changed == {'provisioning/support_runtime.py'}
+    assert original['candidate']['provisioning/support_runtime.py'] == 'e24cba1a8bf913c0ba86d5269ff77bf1e5472d22fedf3fbf49750be2f16ba810'
+    assert current['candidate']['provisioning/support_runtime.py'] == hashlib.sha256(
+        (fixture.ROOT / 'provisioning/support_runtime.py').read_bytes()).hexdigest()
+
+
 def test_native_ci_keeps_gil_systemd_and_zero_skip_gate():
     workflow = (fixture.ROOT / '.github/workflows/ha02-native.yml').read_text()
     assert 'ci_python314_context.sh' in workflow

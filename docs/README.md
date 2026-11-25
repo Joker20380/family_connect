@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 26 November: joint resumable handoff/reclosure/recovery, separate v2 candidate, controlled CI/accounting failures; working installation remains unaccepted](releases/2026-11-26-control-ha-joint-support.md).
+
 [CONTROL-HA · 25 November: bounded shutdown census, owned native retirement and terminal78; working support unchanged; original cause unproven, CI and combined handoff/recovery remain open](releases/2026-11-25-control-ha-support-stabilization.md).
 
 [CONTROL-HA · 25 November20:39UTC: OWNER witness/rollback reservation checkpoint;57 local and3 root cases pass, one native WORKERS_REMAIN refusal retained; combined handoff remains](releases/2026-11-25-control-ha-support-witness.md).

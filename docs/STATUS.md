@@ -1,5 +1,22 @@
 # Текущее состояние / Current state
 
+**25 November23:36UTC — joint v2 native qualification PASS; working acceptance remains open.**
+[Coupled procedure, controlled causes, exact CI and installed state](releases/2026-11-26-control-ha-joint-support.md).
+42 joint/native runtime tests PASS/0 skips on v2; actual-root/fc-support5 PASS with working OWNER unchanged.
+Earlier full native248 PASS applies before the v2 delta. Candidate621009b8 has a separate immutable v2
+contract; original v1 and19-file baseline remain unchanged. Neither candidate is installed.
+Original WORKERS_REMAIN task identity remains unproven. Separate CI thread-start/join and systemd
+unit-collection accounting failures have controlled reproductions; no assertion or native task is ignored.
+Terminal78 retains cause/evidence and forbids witness/open/capture/candidate and old-writer restart.
+Exacteb86e856 native/readiness/phase0-host PASS; Linux control and Docker FAIL. Diagnostic UID/package
+corrections pass51 checks/1 explicit skip; new exact-SHA CI and actual cross-host qualification remain.
+OWNER PID2022541/0 restarts; NL1 PID3705/0 restarts and original unit hashes. NL1 NeedDaemonReload=yes,
+but all normalized Service directives match loaded values; no reload performed.
+One next result: complete qualified coupled OWNER↔NL1 installation/readback, not another helper PASS.
+Three HA-02 gates remain partial; isolated replication PASS; FLEET-PRODUCTION-ONBOARDING-1 remains open.
+
+## Retained checkpoints (historical, not simultaneous NEXTs)
+
 **25 November22:56UTC — exacteb058196 host/full coverage PASS; Docker gate still FAIL.**
 Native45713384438 and Linux control45713384570 PASS; phase045713384557 host tests PASS, isolated
 Docker failover build FAIL. Retained log records Python3.13.18 against native fixture's required3.13.15;
@@ -42,7 +59,7 @@ contexts pass, but inventory omitted64 explicitly selected mailbox tests (26/13/
 testpaths. The declared full inventory now includes those files; mismatch assertions remain and retain
 collection diagnostics. Scoped inventory/audit regressions20 PASS. Exact corrected-SHA CI remains required.
 
-## Retained checkpoints (historical, not simultaneous NEXTs)
+### Earlier retained checkpoints
 
 **25 November — обязательный итог модернизации принят владельцем.**
 [FLEET-PRODUCTION-ONBOARDING-1](fleet-production-onboarding.md):

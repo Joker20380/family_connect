@@ -50,6 +50,60 @@ def dispatch(link, data, monkeypatch, path=PUT_PATH):
     link.handle_request(os.urandom(16), [0, RNS.Identity.truncated_hash(path.encode()), data])
 
 
+@pytest.mark.parametrize('operation', ['put', 'purge'])
+def test_reclosure_finishes_admitted_work_before_reporting_drain(mailbox, monkeypatch, operation):
+    relay, support, peer, fence = mailbox
+    incoming = relay.spool.put(peer.hash, envelope(support))
+    fence.install()
+    fence.open_after_local_drain(GENERATION)
+    accepted, release = threading.Event(), threading.Event()
+    original = fence.originals['respond']
+
+    def held(*arguments):
+        if arguments[4] is support:
+            accepted.set()
+            assert release.wait(5)
+        return original(*arguments)
+
+    monkeypatch.setitem(fence.originals, 'respond', held)
+    link = native_link(relay, support)
+    path = PUT_PATH if operation == 'put' else LXMPeer.MESSAGE_GET_PATH
+    data = envelope(peer) if operation == 'put' else [None, [incoming]]
+    with ThreadPoolExecutor(max_workers=1) as pool:
+        active = pool.submit(dispatch, link, data, monkeypatch, path)
+        try:
+            assert accepted.wait(5)
+            closed = fence.reclose(GENERATION)
+            assert closed['new_link_admission'] == 'CLOSED'
+            assert closed['accepted_target_work'] == 1
+            assert closed['opening_invalidated'] and not closed['in_process_drained']
+            dispatch(native_link(relay, support), envelope(peer), monkeypatch)
+            dispatch(native_link(relay, peer), envelope(support), monkeypatch)
+            assert relay.spool.stats()['count'] == 2
+        finally:
+            release.set()
+        active.result(timeout=5)
+    closed = fence.reclose(GENERATION)
+    assert closed['in_process_drained'] and closed['accepted_target_work'] == 0
+    assert relay.spool.stats()['count'] == (3 if operation == 'put' else 1)
+    dispatch(link, envelope(peer), monkeypatch)
+    assert relay.spool.stats()['count'] == (3 if operation == 'put' else 1)
+    with pytest.raises(ValueError, match='ONE_OPEN_ONLY'):
+        fence.open_after_local_drain(GENERATION)
+    with pytest.raises(ValueError, match='OPEN_LINEAGE_REQUIRES_GUARD'):
+        fence.abort(GENERATION)
+
+
+def test_reclosure_before_open_permanently_invalidates_generation(mailbox):
+    relay, support, peer, fence = mailbox
+    fence.install()
+    with pytest.raises(ValueError, match='GENERATION_MISMATCH'):
+        fence.reclose('0' * 64)
+    assert fence.reclose(GENERATION)['opening_invalidated']
+    with pytest.raises(ValueError, match='ONE_OPEN_ONLY'):
+        fence.open_after_local_drain(GENERATION)
+
+
 @pytest.mark.parametrize('birth', ['before', 'held', 'unidentified'])
 def test_old_links_never_gain_support_admission_after_local_open(mailbox, monkeypatch, birth):
     relay, support, peer, fence = mailbox

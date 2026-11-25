@@ -22,7 +22,7 @@ from scripts.control_ha_receiver_replace import put, sync
 
 require = admission.require
 UNIT = 'family-connect-support.service'
-CANDIDATE = '9d7bf840f3455d0ef2e7653dc9289aac2f0d77c9f2a0a8e305c786f7ddb80489'
+CANDIDATE = '621009b8df9baffb81e0d9069cfa52b3781e7dd7bf4e435dd89740e38cae5739'
 DROPIN = 'zzzzzzzzzzzzzzzz-ha02-support-capture.conf'
 SETTINGS = dict(KillMode='mixed', KillSignal='15', SendSIGKILL='no', TimeoutStopUSec='infinity')
 CONFIG = ('Type', 'Restart', 'User', 'Group', 'Environment', 'EnvironmentFiles', 'WorkingDirectory',
@@ -34,7 +34,12 @@ FIELDS = (*CONFIG, 'MainPID', 'ControlPID', 'ActiveState', 'SubState', 'ControlG
 SOURCES = ('scripts/control_ha_support_replace.py', 'scripts/control_ha_support_exit.py',
            'scripts/control_ha_support_quiesce.py', 'scripts/control_ha_legacy_support.py',
            'scripts/control_ha_receiver_replace.py', 'scripts/control_ha_legacy_http.py',
-           'provisioning/support_runtime.py', 'deploy/support-chat/support-capture-v1.json')
+           'provisioning/support_runtime.py', 'deploy/support-chat/support-capture-v1.json',
+           'deploy/support-chat/support-capture-v2.json',
+           'scripts/control_ha_support_entry.py', 'scripts/control_ha_handoff.py',
+           'scripts/control_ha_support_witness.py', 'scripts/control_ha_mailbox_startup.py',
+           'scripts/control_ha_mailbox_links.py', 'scripts/control_ha_mailbox_fence.py',
+           'scripts/control_ha_mailbox_control.py')
 
 
 def digest(path):
@@ -133,11 +138,11 @@ def controller_lock(root):
         os.close(descriptor)
 
 
-def prepare(manager, baseline, candidate, root, participant, artifact, *, seconds=360):
+def prepare(manager, baseline, candidate, root, participant, artifact, *, seconds=360, handoff=False):
     baseline, candidate, root, participant, artifact = map(lambda path: Path(path).absolute(),
                                                          (baseline, candidate, root, participant, artifact))
     repo = Path(__file__).resolve().parents[1]
-    expected = json.loads(admission.read(repo / SOURCES[-1]))['baseline']
+    expected = json.loads(admission.read(repo / 'deploy/support-chat/support-capture-v1.json'))['baseline']
     admission.sources(baseline, expected)
     require(digest(candidate) == CANDIDATE, 'CANDIDATE_PIN')
     before = manager.state()
@@ -195,6 +200,9 @@ def prepare(manager, baseline, candidate, root, participant, artifact, *, second
               'from scripts.control_ha_support_replace import main\nmain()\n')
     put(root / 'runner.py', runner.encode())
     stage_pins['runner.py'] = digest(root / 'runner.py')
+    if handoff:
+        put(root / 'handoff.py', runner.replace('scripts.control_ha_support_replace', 'scripts.control_ha_handoff').encode())
+        stage_pins['handoff.py'] = digest(root / 'handoff.py')
     gate = participant / 'gate'
     initialize = ('import json,sys;sys.path.insert(0,sys.argv[1]);from control.capture_gate import initialize;'
                   'gate=initialize(sys.argv[2]);\nwith gate.operation() as operation:operation.uncertain()\n'
@@ -204,9 +212,17 @@ def prepare(manager, baseline, candidate, root, participant, artifact, *, second
     pending = json.loads(initialized.stdout)
     require(len(pending) == 1, 'LEGACY_UNCERTAINTY_REQUIRED')
     newer = [arguments[0], '-I', '-B', str(artifact), *options, '--capture-gate', str(gate)]
+    entry, start_authority = artifact.with_suffix('.entry.py'), artifact.with_suffix('.start.json')
+    if handoff:
+        require(not any(path.exists() or path.is_symlink() for path in (entry, start_authority)), 'NEW_PATHS_REQUIRED')
+        put(entry, admission.read(root / 'scripts/control_ha_support_entry.py'))
+        entry.chmod(0o644)
+        newer = [arguments[0], '-I', '-B', str(entry), str(artifact), str(start_authority),
+                 str(os.geteuid()), *options, '--capture-gate', str(gate)]
     require(all(re.fullmatch(r'[A-Za-z0-9_./:@+-]+', value) for value in newer), 'CANDIDATE_COMMAND')
     content = ('[Service]\nExecStart=\nExecStart=' + ' '.join(newer) +
-               '\nKillMode=mixed\nKillSignal=SIGTERM\nSendSIGKILL=no\nTimeoutStopSec=infinity\n').encode()
+               '\nKillMode=mixed\nKillSignal=SIGTERM\nSendSIGKILL=no\nTimeoutStopSec=infinity\n' +
+               ('Restart=no\n' if handoff else '')).encode()
     put(root / 'support.conf', content)
     plan = dict(schema=1, root=str(root), participant=str(participant), unit=manager.unit, user=manager.user,
                 uid=uid, gid=gid, baseline=str(baseline), baseline_pins=expected, artifact=str(artifact),
@@ -214,7 +230,8 @@ def prepare(manager, baseline, candidate, root, participant, artifact, *, second
                 old_binding=admission.binding(pid), executable=str(Path(arguments[0]).resolve()),
                 executable_sha256=digest(Path(arguments[0]).resolve()), sources=stage_pins, socket=socket_path,
                 gate=str(gate), gate_pins=pins(gate), pending=pending, seconds=seconds, dropin=str(dropin),
-                dropin_sha256=hashlib.sha256(content).hexdigest())
+                dropin_sha256=hashlib.sha256(content).hexdigest(), handoff=handoff,
+                entry=str(entry) if handoff else None, start_authority=str(start_authority) if handoff else None)
     require(manager.state() == before and files(before) == original_files and environment_files(before) == env_files,
             'PRESTATE_CHANGED')
     admission.write(root / 'plan.json', plan)
@@ -296,8 +313,30 @@ class Replacement:
         state = self.manager.state()
         require({state['FragmentPath'], *shlex.split(state['DropInPaths'])} in
                 (set(plan['files']), set(plan['files']) | {str(self.dropin)}), 'UNEXPECTED_UNIT_FILES')
-        require(all(state[key] == plan['before'][key] for key in CONFIG if key not in SETTINGS), 'UNIT_CONFIG_CHANGED')
+        config_excluded = set(SETTINGS) | ({'Restart'} if plan.get('handoff') else set())
+        require(all(state[key] == plan['before'][key] for key in CONFIG if key not in config_excluded), 'UNIT_CONFIG_CHANGED')
+        if plan.get('handoff'):
+            require(digest(plan['entry']) == plan['sources']['scripts/control_ha_support_entry.py'], 'ENTRY_CHANGED')
+            restart = 'no' if str(self.dropin) in shlex.split(state['DropInPaths']) else plan['before']['Restart']
+            require(state['Restart'] == restart, 'CANDIDATE_RESTART_POLICY')
         return state
+
+    def admit_candidate(self):
+        state = self.validate()
+        pid = self.live(state, self.plan['new_argv'])
+        value = dict(schema=1, binding=admission.binding(pid), archive_sha256=CANDIDATE)
+        if self.has('candidate-binding-intent'):
+            retained = json.loads(admission.read(self.root / 'candidate-binding-intent.json'))
+            require({key: item for key, item in retained.items() if key != 'at'} == value,
+                    'CANDIDATE_RESTART_REFUSED')
+        else:
+            self.record('candidate-binding-intent', **value)
+        authority = Path(self.plan['start_authority'])
+        if authority.exists() or authority.is_symlink():
+            require(json.loads(admission.read(authority)) == value, 'START_AUTHORITY_CHANGED')
+        else:
+            admission.write(authority, value)
+            authority.chmod(0o644)
 
     def live(self, state, expected):
         pid = int(state['MainPID'])
@@ -327,6 +366,12 @@ class Replacement:
             if state['MainPID'] == '0':
                 empty(state, self.plan['before']['ControlGroup'])
                 result = json.loads(admission.read(self.drain / 'exited.json'))
+                self.record('old-exit-observed', complete=state['ExecMainCode'] != '0',
+                            last_completed_step='exited-receipt-read',
+                            manager={key: state[key] for key in ('MainPID', 'ControlPID', 'ActiveState', 'SubState',
+                                     'ExecMainCode', 'ExecMainStatus', 'NRestarts')},
+                            expected_restarts=self.plan['before']['NRestarts'],
+                            exited_sha256=digest(self.drain / 'exited.json'), capture_permitted=False)
                 require(result == dict(binding=self.plan['old_binding'], final_persistence=True, stores_closed=True,
                                        workers=0, exit_code=0, capture_permitted=False) and
                         state['ExecMainStatus'] == '0' and state['ExecMainCode'] == '1' and
@@ -433,8 +478,29 @@ class Replacement:
         with controller_lock(self.root):
             return self._rollback_locked()
 
-    def _rollback_locked(self):
-        require(not self.has('handoff-reserved'), 'MAILBOX_RECLOSURE_REQUIRED')
+    def recover_reclosed(self, readback):
+        with controller_lock(self.root):
+            if self.terminal_failure():
+                return 'MANUAL_RECONCILIATION_REQUIRED'
+            proof = readback()
+            reservation = json.loads(admission.read(self.root / 'handoff-reserved.json'))
+            require(self.plan.get('handoff') is True and proof.get('result') == 'CLOSED_DRAINED_INVALIDATED' and
+                    proof.get('reservation_ticket_sha256') == reservation['ticket_sha256'] and
+                    proof.get('plan_sha256') == digest(self.root / 'plan.json') and
+                    proof.get('capture_permitted') is False and proof.get('fresh_readback') is True,
+                    'MAILBOX_RECLOSURE_REQUIRED')
+            self.record('handoff-reclosed', **proof)
+            self.record('rollback-intent', reason='AUTHENTICATED_RECLOSURE', data_restore_allowed=False)
+            self._fresh_reclosure = proof
+            try:
+                return self._rollback_locked(reclosure=proof)
+            finally:
+                del self._fresh_reclosure
+
+    def _rollback_locked(self, reclosure=None):
+        require(not self.has('handoff-reserved') or
+                reclosure is not None and getattr(self, '_fresh_reclosure', None) is reclosure,
+                'MAILBOX_RECLOSURE_REQUIRED')
         if self.terminal_failure():
             return 'MANUAL_RECONCILIATION_REQUIRED'
         state = self.validate()
@@ -531,6 +597,8 @@ class Replacement:
                     empty(state, self.plan['before']['ControlGroup'])
                     self.record('candidate-start-intent')
                     self.manager.call('start', self.manager.unit)
+                if self.plan.get('handoff'):
+                    self.admit_candidate()
                 deadline = time.monotonic() + 5
                 while True:
                     try:

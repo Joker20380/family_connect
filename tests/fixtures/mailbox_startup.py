@@ -7,6 +7,7 @@ import signal
 import socket
 import sys
 import threading
+import ctypes
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
@@ -15,12 +16,16 @@ import RNS
 from messenger.codec import address
 from messenger.relay import Spool
 from scripts.control_ha_mailbox_startup import Startup
+from scripts import control_ha_mailbox_startup as bootstrap
 
 
 root, manifest, allowed, owner_uid = sys.argv[1:]
 root, manifest, allowed = Path(root), Path(manifest), Path(allowed)
+if os.environ.get('FC_TEST_PTRACER_ANY') == '1':
+    assert ctypes.CDLL(None, use_errno=True).prctl(0x59616d61, ctypes.c_ulong(-1), 0, 0, 0) == 0
 os.umask(0o077)
 startup = Startup(manifest, owner_uid=int(owner_uid))
+bootstrap.ACTIVE = startup
 publics = [bytes.fromhex(value) for value in json.loads(allowed.read_text())]
 with socket.socket() as reservation:
     reservation.bind(('127.0.0.1', 0))

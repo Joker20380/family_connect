@@ -229,6 +229,10 @@ class ManagedRuntime:
     def workers(self):
         return [worker for worker in threading.enumerate() if worker is not threading.main_thread()]
 
+    def join_worker(self, worker, timeout):
+        if worker._started.wait(timeout):
+            worker.join(timeout)
+
     def close(self):
         try:
             return self._close()
@@ -260,11 +264,11 @@ class ManagedRuntime:
                         self.queues_stop = True
                         break
                 for worker in others:
-                    worker.join(.05)
+                    self.join_worker(worker, .05)
                 time.sleep(.01)
             while self.workers():
                 for worker in self.workers():
-                    worker.join(.1)
+                    self.join_worker(worker, .1)
             require(not any(task.joinpath('children').read_text().strip()
                             for task in Path('/proc/self/task').iterdir()), 'RNS_CHILDREN_REMAIN')
             if RNS.Reticulum.get_instance() is not None:
@@ -286,7 +290,7 @@ class ManagedRuntime:
                             stream.close()
             while self.workers():
                 for worker in self.workers():
-                    worker.join(.1)
+                    self.join_worker(worker, .1)
             require({int(path.name) for path in Path('/proc/self/task').iterdir()} ==
                     {threading.main_thread().native_id}, 'RNS_NATIVE_WORKERS_REMAIN')
             if self.root is not None:

@@ -41,6 +41,9 @@ class SupportLinkFence(SupportFence):
         self.links = weakref.WeakKeyDictionary()
         self.epoch = None
         self.context = threading.local()
+        self.admitted = set()
+        self.opened = False
+        self.sealed = False
 
     def check_links(self, installed):
         admission.require(self.module.RNS.Link is self.link_class and
@@ -93,6 +96,7 @@ class SupportLinkFence(SupportFence):
             del frame
 
     def invoke(self, name, *arguments):
+        token = None
         with self.lock:
             target = self.targeted(name, arguments)
             link = None
@@ -103,10 +107,12 @@ class SupportLinkFence(SupportFence):
                     reject = link is None
                 else:
                     link = getattr(self.context, 'link', None)
-                    reject = (self.epoch is None or link is None or self.links.get(link) is not self.epoch or
-                              link.status != self.link_class.ACTIVE)
+                    reject = link is None or getattr(self.context, 'token', None) not in self.admitted
                 if reject:
                     self.denied += 1
+                elif name == 'respond':
+                    token = object()
+                    self.admitted.add(token)
         if reject:
             if name == 'respond':
                 return ['unavailable'] if arguments[1] == self.module.PUT_PATH else self.module.LXMPeer.ERROR_NO_ACCESS
@@ -114,11 +120,16 @@ class SupportLinkFence(SupportFence):
         if name != 'respond' or not target:
             return self.originals[name](*arguments)
         previous = getattr(self.context, 'link', None)
+        previous_token = getattr(self.context, 'token', None)
         self.context.link = link
+        self.context.token = token
         try:
             return self.originals[name](*arguments)
         finally:
             self.context.link = previous
+            self.context.token = previous_token
+            with self.lock:
+                self.admitted.discard(token)
 
     def validate(self):
         super().validate()
@@ -129,24 +140,35 @@ class SupportLinkFence(SupportFence):
             result = super().observe()
             result.update(new_link_admission='CLOSED' if self.epoch is None else 'OPEN_LOCAL_ONLY',
                           old_links_excluded=True, direct_support_writes_closed=True,
-                          process_lifetime_guard_required=self.epoch is not None)
+                          process_lifetime_guard_required=self.opened,
+                          accepted_target_work=len(self.admitted), opening_invalidated=self.sealed,
+                          in_process_drained=result['in_process_drained'] and not self.admitted)
             return result
 
     def open_after_local_drain(self, generation):
         with self.lock:
             admission.require(generation == self.generation, 'GENERATION_MISMATCH')
             self.validate()
-            admission.require(self.epoch is None, 'ONE_OPEN_ONLY')
+            admission.require(not self.opened and not self.sealed, 'ONE_OPEN_ONLY')
             admission.require(self.old_frames() == 0, 'OLD_WORK_NOT_DRAINED')
             admission.require(hashlib.sha256(admission.read(self.link_module.__file__)).hexdigest() == LINK_SHA256,
                               'LINK_SOURCE_PIN')
             self.epoch = object()
+            self.opened = True
+            return self.observe()
+
+    def reclose(self, generation):
+        with self.lock:
+            admission.require(generation == self.generation, 'GENERATION_MISMATCH')
+            self.validate()
+            self.epoch = None
+            self.sealed = True
             return self.observe()
 
     def abort(self, generation):
         with self.lock:
             admission.require(generation == self.generation, 'GENERATION_MISMATCH')
-            admission.require(self.epoch is None, 'OPEN_LINEAGE_REQUIRES_GUARD')
+            admission.require(not self.opened and not self.sealed, 'OPEN_LINEAGE_REQUIRES_GUARD')
             if self.phase == 'HELD':
                 self.validate()
             elif self.phase in ('ABORTING', 'ABORTED'):

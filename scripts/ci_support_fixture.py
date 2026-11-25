@@ -6,7 +6,7 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 BASELINE_COMMIT = '61b00409e24b92651678b817d2a6f5d4796948f9'
-CANDIDATE_SHA256 = '9d7bf840f3455d0ef2e7653dc9289aac2f0d77c9f2a0a8e305c786f7ddb80489'
+CANDIDATE_SHA256 = '621009b8df9baffb81e0d9069cfa52b3781e7dd7bf4e435dd89740e38cae5739'
 
 
 def prepare(output):

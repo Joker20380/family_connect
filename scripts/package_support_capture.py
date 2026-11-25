@@ -10,7 +10,7 @@ import zipfile
 
 
 ROOT = Path(__file__).resolve().parents[1]
-CONTRACT = Path('deploy/support-chat/support-capture-v1.json')
+CONTRACT = Path('deploy/support-chat/support-capture-v2.json')
 MODIFIED = frozenset(('messenger/routed.py', 'provisioning/subscription_notifications.py',
                       'provisioning/support_worker.py'))
 ADDED = frozenset(('control/capture_gate.py', 'provisioning/support_capture.py',

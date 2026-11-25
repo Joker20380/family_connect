@@ -16,6 +16,23 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — one selected result, IN_PROGRESS.**
+Finish and install the coupled resumable OWNER ↔ NL1 handoff/reclosure/recovery after applicable
+exact-SHA CI and actual cross-host/root/service-UID qualification, then independently read back.
+Include current closed/drained mailbox proof, old exit/candidate verification, authenticated
+reservation-bound witness consumption, confirmed opening, selected-identity notification pause,
+reclosure/drain/permit invalidation before code-only recovery. Preserve current data, UNKNOWN and others.
+[Current combined evidence, CI failures and installation remainder](releases/2026-11-26-control-ha-joint-support.md).
+v2 candidate621009b8:42 joint/native runtime PASS/0 skips, actual-root5 PASS; original v1/baseline retained.
+Neither candidate is installed. Earlier248 full native PASS applies before v2. Original WORKERS_REMAIN
+cause stays unproven; distinct CI limbo-thread and systemd collection scenarios are controlled/proven.
+Exacteb86e856 native/readiness/phase0-host PASS; Linux-control and Docker FAIL. New exact-SHA CI,
+actual OWNER/NL1 boundary qualification and guarded working installation/readback remain mandatory.
+No reservation/legacy-controller bypass, HA-03, data restoration or paid-watch/deny relaxation.
+Same three HA-02 criteria remain partial; isolated replication PASS. Onboarding remains separately open.
+
+## Retained HA-02 checkpoint history (not active NEXTs)
+
+### Selected-result checkpoint through25 November22:56UTC
 Finish the combined resumable OWNER ↔ NL1 handoff/reclosure/recovery and its applicable CI,
 then authorized working installation with independent readback. Include current closed/drained
 mailbox proof, old OWNER exit/candidate verification, reservation-bound authenticated witness
@@ -44,7 +61,7 @@ fixture-version/shallow-history issues. Those corrections pass35 scoped checks; 
 combined result remain outstanding. Candidate remains NOT installed; no working-service change.
 The same three HA-02 criteria remain partial; isolated replication PASS. Onboarding remains mandatory.
 
-## Retained HA-02 checkpoint history (not active NEXTs)
+### Earlier retained checkpoint history
 
 **CONTROL-HA-20261123 — historical checkpoint.**
 25 November20:39UTC: independent OWNER replacement witness CHECKPOINT, not combined admission acceptance.

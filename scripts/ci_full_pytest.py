@@ -40,7 +40,7 @@ def emit_native_failures():
     directory = os.environ.get('FC_NATIVE_DIAGNOSTICS_DIR')
     if not directory:
         return
-    paths = sorted(Path(directory).glob('fc-ha-maintenance-error-*.log'))
+    paths = sorted(Path(directory).glob('**/fc-ha-maintenance-error-*.log'))
     for path in paths[:16]:
         with path.open('rb') as source:
             raw = source.read(4097)
@@ -60,6 +60,20 @@ def workspace():
         mark('cleanup_start')
         temporary.cleanup()
         mark('cleanup_end')
+
+
+def diagnostic_environment(environment, uid, gid):
+    result = dict(environment)
+    destination = result.get('FC_NATIVE_DIAGNOSTICS_DIR')
+    if destination:
+        folder = Path(destination) / ('uid-' + str(uid))
+        folder.mkdir(mode=0o700, parents=True, exist_ok=True)
+        if os.geteuid() == 0:
+            os.chown(folder, uid, gid)
+        if folder.stat().st_uid != uid or folder.stat().st_mode & 0o077:
+            raise ValueError('NATIVE_DIAGNOSTICS_OWNERSHIP')
+        result['FC_NATIVE_DIAGNOSTICS_DIR'] = str(folder)
+    return result
 
 
 def main():
@@ -87,7 +101,8 @@ def main():
                 prefix = ['runuser', '-u', args.unprivileged_user, '--']
             elif not privileged and name == 'root':
                 preserved = [key for key in environment if key.startswith('FC_TEST_')]
-                preserved += ['PATH', 'PYTHONDONTWRITEBYTECODE', 'PYTHONUNBUFFERED', 'FC_CI_LIFECYCLE_LOG']
+                preserved += ['PATH', 'PYTHONDONTWRITEBYTECODE', 'PYTHONUNBUFFERED', 'FC_CI_LIFECYCLE_LOG',
+                              'FC_NATIVE_DIAGNOSTICS_DIR']
                 prefix = ['sudo', '--preserve-env=' + ','.join(preserved)]
             if name == 'root':
                 return prefix + [python, str(ROOT / 'scripts/ci_root_pytest.py'), '--collection', str(output)]
@@ -113,7 +128,9 @@ def main():
             print('FULL-SUITE CONTEXT: ' + name, flush=True)
             output = folder / (name + '.json')
             mark('context_start', context=name)
-            result = subprocess.run(command(name, output), cwd=ROOT, env=environment)
+            uid, gid = (account.pw_uid, account.pw_gid) if privileged and name != 'root' else (os.geteuid(), os.getegid())
+            context_environment = diagnostic_environment(environment, uid, gid)
+            result = subprocess.run(command(name, output), cwd=ROOT, env=context_environment)
             mark('context_end', context=name, returncode=result.returncode)
             actual = json.loads(output.read_text())
             retain_collection(name, actual)
