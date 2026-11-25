@@ -11,6 +11,19 @@ remains selected; this publication task does not advance its acceptance gates.
 [Reconciliation record](releases/2026-11-24-source-reconciliation.md).
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+25 November14:29UTC: native legacy drain bridge qualification COMPLETE; reversible RU probe
+PASS. Featureae1b9e5c pushed/remote-SHA verified;64 focused tests PASS/0 skips,19 new.
+[Main-thread admission/exit bridge, live evidence and rollback](releases/2026-11-24-control-ha-installed-recovery.md#legacy-http-main-thread-bridge--25-november).
+Confirmed probe resumes the same old PID/archive/unit,0 restarts. No stop/replacement; private
+bridge/evidence staged only. Local handler completion does not attest historical external ACKs.
+Next: qualify rollback-guarded paired archive/unit replacement, then activate using the tested
+bridge instead of default TERM. Retain uncertainty and original serving prestate; no stale-data
+rollback. Support/manual/OWNER integration, fleet coherent capture, independent custody/trust/
+approval and full recovery remain in HA-02: replication PASS in isolation, three partial gates.
+No measured finish date, HA-03 or automatic failover. Main remains navigation-only.
+
+At the preceding installed-shape checkpoint:
+
 25 November13:56UTC: installed-shape source qualification COMPLETE; featuref9520616 pushed and
 remote-SHA verified. Pinned overlay changes6 members/adds2/removes0, preserving38 other entries;
 no canonical adapter/schema migration.171 focused PASS/0 skips; identical129 archive-bound

@@ -8,6 +8,57 @@ Owner request selects all four existing HA-02 gates, not HA-03..05. The25 Novemb
 also authorizes participant installation and bounded operational work with documented rollback;
 earlier read-only/deployment-permission limitations in the historical sections are superseded.
 
+## Legacy HTTP main-thread bridge — 25 November
+
+[Authoritative bridge, native tests, actual probe and rollback](https://github.com/Joker20380/family_connect/blob/ae1b9e5c41afb0a4cbd1a023e075d4c75ed54616/docs/releases/2026-11-25-control-ha-legacy-http-bridge.md).
+Featureae1b9e5c41afb0a4cbd1a023e075d4c75ed54616 is ordinarily pushed and remote-SHA verified.
+Main changes only STATUS/PLAN/this navigation report, not serving code or deployment.
+
+RU actually runs CPython3.14 and the old archive on loopback18086. The supported main-thread
+remote-execution hook can pause its accept loop and join already admitted request threads.
+The socket remains listening with queued connections; no new application handler runs during
+the pause. Short-lived requests bind PID/start/boot/command/cgroup, exact archive/source,
+native loop/handler, both retention events and native/Python thread coverage. Partial accept,
+unknown workers, stale input and pending request timeout refuse before changing retention.
+
+Probe returns directly to the same loop. Stop mode records old external uncertainty, joins both
+retention workers and returns through the native server loop. It never sends TERM/KILL or
+pretends that a receipt proves process exit. Once retention stop starts, unknown work must
+settle; a hung worker or failed receipt holds admission instead of forcing termination. A
+separate replacement/rollback guard is still needed before production stop. Local completion
+does not prove historical remote effects, clear markers or permit coherent capture.
+
+Final14:25:46UTC suite:64 PASS/0 skips,19 new native bridge tests;45.23s. Actual old archive,
+real CPython remote execution, child completion, partial export, both retention workers,
+incomplete headers, timeout rollback/retry, queued requests, stale/replayed requests and
+launcher failures covered. Candidate lifecycle/package regressions include real user-systemd
+stop. Fixtures cleaned up; Python3.14.4/pytest9.1.1 and26 control/identity pins match.
+
+Only probe mode executed on RU. A source-default18084 precheck failed before submission;
+actual command/socket inspection resolved18086. The next hook returned normally, but its
+controller comparison asserted RUNTIME_CHANGED without retaining differing fields, so that
+attempt is not claimed fully verified. Independent reconciliation found unchanged process
+binding, active/running with0 restarts and HTTP501. A fresh named probe retained both unit
+snapshots and passed at14:29:12.380614UTC: identical PID43082, archive, cgroup, kill/restart
+policy and process binding;0 handlers/2 retention workers at entry. Submission-to-verification
+took0.331s, not a measured outage duration. GET `/` returns expected501 before/after; this
+verifies the loopback server loop, not a device write or end-to-end client operation.
+
+No production stop/restart, candidate activation, gate initialization, unit policy, DB/feed,
+version/catalog/installer/invitation-page change. Only new private bridge/evidence files staged
+under the authorized RU application path. No NL/neighbouring service contact. Evidence locator:
+`/tmp/fc-ha-legacy-http-current`; failed attempts and all receipts are retained privately.
+Final JUnit SHA256 `62e2abd72c7724bb2437dec986289583f8a4ec0579ff1641c409321941a6405e`.
+Verified RU receipt SHA256 `0cf2a900003e034974645d681a6d5d7a577772eb75f19a30ba07d4db51158ae0`.
+
+Probe rollback is native return; source rollback is an ordinary revert. Next: qualify guarded
+paired archive/unit replacement, observe old process exit and activate the already qualified
+installed-shape candidate, preserving old external uncertainty and current data. No concurrent
+writer, running archive replacement, standalone unit change or stale data restore is allowed.
+Support/manual coverage, guarded OWNER integration, fleet coherent capture, independent
+custody/trust/approval and full current/post-ACK recovery remain. HA-02 has the same three
+partial gates plus isolated replication PASS; the old1–2-day estimate is not a validated ETA.
+
 ## Installed-shape receiver candidate — 25 November
 
 [Authoritative exact delta, native evidence and rollback](https://github.com/Joker20380/family_connect/blob/f95206163f05f4af0fc0e773371ffb5e1772f8de/docs/releases/2026-11-25-control-ha-receiver-overlay.md).

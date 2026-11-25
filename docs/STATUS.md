@@ -1,5 +1,21 @@
 # Текущее состояние / Current state
 
+**25 November14:29UTC — legacy drain bridge qualified; reversible RU admission probe PASS.**
+Featureae1b9e5c is pushed/remote-SHA verified. CPython3.14 main-thread execution pauses the old
+accept loop and joins existing handlers; native stop tests also join retention before loop exit.
+64 focused tests PASS/0 skips,19 new. Child/partial-export completion, incomplete headers,
+deadline rollback, replay and launcher failures covered without forced process termination.
+[Actual RU result, limitations and rollback](releases/2026-11-24-control-ha-installed-recovery.md#legacy-http-main-thread-bridge--25-november).
+Live probe at14:29:12UTC returns to the same PID43082/archive/unit,0 restarts; loopback HTTP
+responds as before. Only private bridge/evidence files staged: no service stop or replacement,
+unit policy/version change or NL contact. Old external uncertainty remains explicitly unresolved.
+Next: rollback-guarded paired receiver replacement/activation, then remaining support/manual/
+OWNER coverage, fleet coherent capture and independent custody/trust/approval/full recovery.
+HA-02 still has replication PASS in isolation and three partial gates. No measured ETA or
+automatic failover; the former1–2-day estimate is not a validated completion schedule.
+
+At the preceding installed-shape checkpoint:
+
 **25 November13:56UTC — installed-shape receiver candidate qualified, not installed.**
 Featuref9520616 is pushed/remote-SHA verified. The pinned maintenance overlay changes only6
 installed members and adds2 helpers, removes none and preserves the other38 entries byte-for-byte.
