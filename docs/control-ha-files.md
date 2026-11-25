@@ -148,6 +148,14 @@ and does not supply the supervised old-process transition or remote-outcome sett
 the old service/data and require separate actual installed UID/runtime/gate/sandbox readback.
 [Exact candidate,169 checks, observed working state and rollback](releases/2026-11-25-control-ha-support-runtime.md).
 
+The subsequent reversible legacy probe now covers application and RNS idle quiescence on the working
+process. It waits naturally for old sleeps and admitted writes, parks3 producers/1 inbound drainer,
+then restores all hooks and admission. **This is not final persistence, stop or a standing capture
+barrier.** No captured state or independent remote-outcome settlement follows from its PASS.
+Its360s expiry restores the running process rather than killing it; it must not be reused as an
+irreversible-transition deadline. Candidate ownership remains startup-only. The rebuilt candidate
+and120 regression checks are pinned in the [working result and next commit boundary](releases/2026-11-25-control-ha-support-quiesce.md).
+
 ## Import and recovery input contract
 
 The [24 November installed census](releases/2026-11-24-control-ha-installed-census.md)

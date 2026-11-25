@@ -15,9 +15,6 @@ import types
 
 import RNS
 
-from provisioning.support_lifecycle import stop_requested
-
-
 PINS = {
     'RNS': 'ed6cd970da6e19a0fdc34aae74897f876917879eb02cf6aacc86eb9ae13ebbd9',
     'RNS.Reticulum': 'e7c8908081132a6ca26593a833a5a41cb1bedaf45713958a1cac870b758f5fc7',
@@ -38,15 +35,9 @@ def code_tree(code):
             yield from code_tree(value)
 
 
-def verify():
+def verify_code():
     require(threading.current_thread() is threading.main_thread() and not sys.flags.optimize,
             'RNS_MAIN_THREAD_REQUIRED')
-    require(RNS.Reticulum.get_instance() is None and len(threading.enumerate()) == 1,
-            'RNS_ALREADY_OWNED')
-    require({int(path.name) for path in Path('/proc/self/task').iterdir()} ==
-            {threading.main_thread().native_id}, 'RNS_ALREADY_OWNED')
-    require(RNS.Transport.USE_INBOUND_QUEUE and not RNS.Transport.USE_OUTBOUND_QUEUE,
-            'RNS_QUEUE_SHAPE')
     modules = {name: importlib.import_module(name) for name in PINS}
     compiled = {}
     for name, module in modules.items():
@@ -68,6 +59,17 @@ def verify():
                       if code.co_qualname == function.__qualname__]
         require(len(candidates) == 1 and function.__code__ == candidates[0] and
                 function.__code__.co_filename == modules[function.__module__].__file__, 'RNS_LOADED_CODE')
+    return modules
+
+
+def verify():
+    modules = verify_code()
+    require(RNS.Reticulum.get_instance() is None and len(threading.enumerate()) == 1,
+            'RNS_ALREADY_OWNED')
+    require({int(path.name) for path in Path('/proc/self/task').iterdir()} ==
+            {threading.main_thread().native_id}, 'RNS_ALREADY_OWNED')
+    require(RNS.Transport.USE_INBOUND_QUEUE and not RNS.Transport.USE_OUTBOUND_QUEUE,
+            'RNS_QUEUE_SHAPE')
     return modules
 
 
@@ -236,6 +238,8 @@ class ManagedRuntime:
             raise
 
     def _close(self):
+        from provisioning.support_lifecycle import stop_requested
+
         if self.closed:
             require(not self.failed.is_set(), 'RNS_PERSISTENCE_UNCERTAIN')
             return

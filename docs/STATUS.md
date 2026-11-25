@@ -1,20 +1,21 @@
 # Текущее состояние / Current state
 
-**25 November — pinned support RNS lifecycle candidate qualified; not installed.**
-Configured support now holds its capture operation for the full worker lifetime, including RNS
-periodic/queued/asynchronous/final persistence, fsync and encrypted-store close. Cooperative idle
-checkpoints stop producers without interrupting writes; queue/descendant workers finish before
-one explicit exit flush. Logged/thread/flush failures retain uncertainty. An idle running worker
-cannot authorize capture: the candidate must complete its managed shutdown first.
-[169 checks PASS/0 skips, exact candidate and remaining transition](releases/2026-11-25-control-ha-support-runtime.md).
-Two actual user-systemd fixtures preserve delivery/ratchet writes beyond41s; fresh readback passes.
-The23-source candidate preserves16 baseline modules, changes3/adds4. No dependency/version upgrade.
-At17:07:01UTC working support remains PID2022541/0 restarts, all19 sources unchanged and old40s
-policy; no live mutation in this slice. The earlier reversible application probe remains PASS,
-not old-runtime drain. Next: independently supervised old-process drain/transition/rollback,
-then candidate activation/readback, remaining installed manual/OWNER coverage and coherent capture.
-Independent current trust/custody/approval/full recovery remain; same three HA-02 gates partial,
-isolated replication PASS. No RU/NL contact, container requalification, HA-03 or new ETA.
+**25 November17:32UTC — working old-support application/RNS idle pause and restoration PASS.**
+The one-use probe waits51.464s without waking the existing periodic sleep or cancelling delivery;
+3 producers and1 inbound drainer park after queues/descendants finish. Original hooks and online
+admission restore; malformed IPC works before/after. PID2022541/0 restarts,19 source hashes,
+3 unit-file hashes/15 fields and interpreter digest unchanged; old40s stop policy remains.
+[120 checks, actual installed-UID fixture, working result and rollback](releases/2026-11-25-control-ha-support-quiesce.md).
+120 tests PASS/0 skips plus fc-support systemd fixture retaining a native writer beyond41s with
+fresh ratchet readback. An observed error-hook/receipt race is fixed and refusal evidence retained.
+GUI authentication succeeds; no password captured, permanent privilege or sudoers change.
+The23-source candidate is rebuilt with a shared verifier but not installed. No final exit flush,
+old-process stop or capture permission is claimed; this reversible pause is not a standing fence.
+Next: independently supervised irreversible commit through final persistence/fsync/store close,
+old-process exit/replacement and code/config-only rollback, with old external-outcome settlement.
+Then installed UID/source/gate/sandbox and remaining manual/OWNER coverage, coherent capture and
+independent current trust/custody/approval/full recovery. Same three HA-02 gates partial, isolated
+replication PASS. No RU/NL contact, container requalification, HA-03, version change or new ETA.
 
 At the preceding installed-shape candidate checkpoint:
 

@@ -17,6 +17,11 @@ sys.path.insert(0, source)
 from provisioning import support_worker as worker
 from messenger.mailbox import ExchangeResult, SyncResult
 
+if mode.startswith('rns-'):
+    import RNS
+    os.umask(0o077)
+    RNS.Reticulum.JOB_INTERVAL = 8 if mode == 'rns-sleep' else .2
+
 store = worker.SupportStore(root / 'store', b's' * 32, create=True)
 public = store.chat_identity().get_public_key().hex()
 store.close()
@@ -26,7 +31,7 @@ store.close()
 
 def wait(name):
     (root / name).touch()
-    deadline = time.monotonic() + 30
+    deadline = time.monotonic() + (60 if mode.startswith('rns-') else 30)
     while not (root / 'release').exists():
         if time.monotonic() > deadline:
             raise TimeoutError('synthetic wait')
@@ -40,7 +45,7 @@ def refresh(mailbox):
 
 
 def exchange(mailbox, **kwargs):
-    if mode in ('exchange', 'failure', 'child'):
+    if mode in ('exchange', 'failure', 'child', 'rns-exchange'):
         if mode == 'child':
             code = ('import sys,time;from pathlib import Path;root=Path(sys.argv[1]);'
                     '(root/"exchange-entered").touch();deadline=time.monotonic()+30\n'
@@ -81,6 +86,41 @@ original_activate = worker.SupportServer.server_activate
 
 def activate(server):
     original_activate(server)
+    if mode.startswith('rns-'):
+        destination = b'd' * 16
+        identity = RNS.Identity()
+        RNS.Identity.remember(b'p' * 32, destination, identity.get_public_key(), b'synthetic-probe')
+        (root / 'public').write_bytes(identity.get_public_key())
+        if mode in ('rns-queue', 'rns-descendant'):
+            def inbound(packet):
+                if packet == 'first':
+                    wait('writer-entered')
+                    if mode == 'rns-descendant':
+                        def descendant():
+                            time.sleep(.2)
+                            RNS.Transport.inbound_queues.put(0, 'second')
+                        threading.Thread(target=descendant, daemon=True).start()
+                RNS.Identity._remember_ratchet(destination, b'r' * 32)
+                (root / ('packet-' + packet)).touch()
+            RNS.Transport._inbound = inbound
+            RNS.Transport.inbound_queues.put(0, 'first')
+        if mode in ('rns-async', 'rns-uncertain'):
+            original_replace = os.replace
+
+            def replace(source, target, *args, **kwargs):
+                if str(source).endswith(destination.hex() + '.out'):
+                    wait('writer-entered')
+                    if mode == 'rns-uncertain':
+                        raise OSError('synthetic persistence uncertainty')
+                    (root / 'writer-finished').touch()
+                return original_replace(source, target, *args, **kwargs)
+
+            os.replace = replace
+            RNS.Identity._remember_ratchet(destination, b'r' * 32)
+        if mode == 'rns-unknown':
+            threading.Thread(target=lambda: wait('unknown-entered'), daemon=True).start()
+        if mode == 'rns-drift':
+            RNS.Transport.inbound_job = lambda: None
     if mode == 'module-globals':
         worker.main = types.FunctionType(worker.main.__code__, dict(vars(worker)))
     (root / 'ready').touch()

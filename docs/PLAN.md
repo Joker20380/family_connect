@@ -3,19 +3,20 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-25 November: pinned standalone RNS lifecycle/source candidate COMPLETE IN ISOLATION, not deployed.
-169 checks PASS/0 skips, including two actual user-systemd waits beyond41s and fresh persisted
-readback. Whole-worker capture admission now encloses periodic/queued/asynchronous/exit persistence,
-all owned thread completion, fsync and store close. Failures retain uncertainty; idle runtime is
-not capture-ready. [Candidate, evidence and transition limits](releases/2026-11-25-control-ha-support-runtime.md).
-The23-source archive changes3/adds4/preserves16; installed support still retains PID2022541/all19
-sources/0 restarts and old40s policy at17:07UTC. No live runtime mutation or RU/NL contact. Next:
-independently supervised old-process drain/transition/rollback, then candidate activation/readback,
-remaining installed manual/OWNER coverage and coherent fleet capture. The new startup-only owner
-cannot adopt the already-running RNS instance, and the earlier15s application probe does not stop
-its300s periodic sleeper. Qualify that transition; do not force-stop old support or repeat completed
-candidate work. Independent current-input trust/custody/approval/full recovery remain. Same three
-HA-02 gates partial; isolated replication PASS, no HA-03/version change or new ETA.
+25 November17:32UTC: reversible old-process application plus RNS idle boundary COMPLETE on working
+support; candidate NOT installed.120 tests PASS/0 skips plus actual fc-support system fixture:
+native write retained beyond41s, fresh saved-ratchet readback. Working probe takes51.464s, parks3
+producer/1 inbound loops and restores all hooks/admission, with same PID2022541/0 restarts/all19
+sources/3 unit files/15 fields/interpreter digest. GUI authentication succeeded; no permanent access.
+[Actual result, observed failures and fixed remaining boundary](releases/2026-11-25-control-ha-support-quiesce.md).
+No early wake of the old300s sleep, cancellation, final exit persistence, stop or capture permission.
+Next: qualify independently supervised irreversible commit from idle through RNS final persistence/
+fsync/store close, old-process exit/source-unit replacement and code/config-only rollback, preserving
+current data and unresolved old outcomes. Independently settle external work before activation.
+Do not repeat the completed reversible probe or deploy only a kill-policy change. Then installed
+UID/source/gate/sandbox readback, remaining manual/OWNER writers and coherent fleet capture.
+Independent current-input trust/custody/approval/full recovery remain. Same three HA-02 gates partial;
+isolated replication PASS. No RU/NL contact, container requalification, HA-03/version change or ETA.
 
 At the preceding installed-shape candidate checkpoint:
 
