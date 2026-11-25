@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 25 November18:24UTC: independent support replacement/rollback supervisor qualified,18 checks including actual-root/fc-support systemd; working unchanged, settlement/installation remain](releases/2026-11-24-control-ha-installed-recovery.md#independent-support-replacement-supervisor--25-november).
+
 [FLEET-PRODUCTION-ONBOARDING-1 · обязательный итог владельца 25 ноября: VPS → IP/доступ/роли → проверенный активный узел; полный контракт и критерии](releases/2026-11-25-fleet-onboarding-requirement.md).
 
 [iOS development handoff — resumed stage, verified unsigned artifacts and exact CI boundary](releases/2026-11-17-ios-development-handoff.md#owner-resumption--17-november1115utc)

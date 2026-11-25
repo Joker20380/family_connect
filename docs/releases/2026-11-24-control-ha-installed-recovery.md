@@ -8,6 +8,59 @@ Owner request selects all four existing HA-02 gates, not HA-03..05. The25 Novemb
 also authorizes participant installation and bounded operational work with documented rollback;
 earlier read-only/deployment-permission limitations in the historical sections are superseded.
 
+## Independent support replacement supervisor — 25 November
+
+[Authoritative controller,18 checks, retained failures and operational contract](https://github.com/Joker20380/family_connect/blob/76b32e35d07de53b21d09ca5b05cd27169f7189e/docs/releases/2026-11-25-control-ha-support-replacement.md).
+Feature76b32e35d07de53b21d09ca5b05cd27169f7189e is ordinarily pushed and independently remote-SHA
+verified. Main remains navigation-only; no release, working deployment or acceptance PASS is implied.
+
+**The resumable supervisor component is qualified in isolation; working support is NOT upgraded.**
+It retains pinned source/config/environment/interpreter/process/gate state and immutable receipts.
+The old exit bridge is invoked once, with exact READY/commit handling. Before commit, expiry restores
+admission; after commit, unresolved final persistence is awaited without kill, replay or resumption.
+Attested exit0/unchanged restart count/empty cgroup precede paired archive ExecStart and the safe
+mixed/no-SIGKILL/infinite stop policy. Independent runtime readback covers code, UID, mounted gate,
+effective settings, IPC and the held lifetime lock. Legacy uncertainty remains and capture is refused.
+
+The independent systemd supervisor uses After without Wants/Requires to preserve the old unit's exit
+status, closing the prior transient-unit observation gap. Actual system tests retain the target's
+RemainAfterExit=no. The guard can restart after a crash/WAIT75 but does not auto-retry a manual78
+refusal. Rollback awaits candidate writers, cancels auto-restart, removes only its own checked drop-in
+and restarts original code on current data. No old database/runtime tree or uncertainty-free gate
+is restored. Failure before/after the irreversible boundary is kept distinct.
+
+Final16 user-systemd tests PASS/0 skips in186.58s, plus2 actual-root/fc-support systemd tests PASS/0
+skips in34.20s. Coverage includes six controller-death boundaries, independent guard death/restart,
+foreign/staged configuration refusal, failed start/readback, candidate native write beyond41s and
+fresh decrypted readback of a new record committed after activation and retained through rollback.
+The actual system tests use installed Python3.14.4, fc-support/fc-support-ipc, PrivateTmp,
+ProtectHome, ProtectSystem=strict, NoNewPrivileges/0077 and no ptrace wrapper. User fixtures alone
+use test-only ptrace access; it is never applied to the working service.
+
+Initial fixture main/signature/empty-property errors, user-Yama refusal with safe rollback, an
+intermediate11-pass run and13-pass/1-failure native synthetic-readback attempt are retained, not
+added to the final18. The latter lacked a known destination and normal RNS cleanup removed its
+synthetic ratchet; the fixture now remembers it, without weakening product cleanup or persistence.
+
+- Final16 JUnit: `9a9ebabc31bebd480cd1b496a5dc87a139f3aef82116f0047ae72e0a13720c4b`.
+- Actual-root2 JUnit: `c1d64ca5d9f452fef98a03f2a3fc6b26007baa6a778b93f63b38653513e2bd2d`.
+- Privileged working-invariance receipt: `d22d36dfefa9acd201f014546932da77f54ea1de99977e7c4f43bcde7a02fa87`.
+- Candidate remains `9d7bf840f3455d0ef2e7653dc9289aac2f0d77c9f2a0a8e305c786f7ddb80489`, not rebuilt/installed.
+
+Privileged pre/post checks retain working PID2022541/start/boot/command/cgroup,19 sources,3 unit-file
+hashes,15 effective fields and interpreter digest. Active/running,0 restarts and old40s/control-group/
+SIGKILL settings remain. No working injection/signal/stop/upgrade, container/RU/NL/MicroTrader operation,
+HA-03 or public-version change. GUI authentication succeeds without password capture; terminal closed,
+sudo timestamp invalidated, no permanent privileges or policy changes. Synthetic units are removed;
+private evidence/state remains local. No additional owner input is requested at this checkpoint.
+
+Next: independent old-support external-outcome reconciliation and fresh working prestate, then
+authorized OWNER activation using the retained supervisor with installed UID/source/gate/sandbox
+readback. The existing settlement/activation gate is not waived by local exit0, synthetic tests,
+source publication or merely preserving uncertainty. Then remaining manual/OWNER writers, coherent
+capture and independent current trust/custody/approval/full post-ACK recovery. Same three HA-02
+gates partial; isolated replication PASS. Do not repeat the completed working reversible probe.
+
 ## Isolated support final exit — 25 November
 
 [Authoritative mechanism,82 checks, failures and installed-UID fixture](https://github.com/Joker20380/family_connect/blob/c92b735d4949332891188b198a5ab8313bb91331/docs/releases/2026-11-25-control-ha-support-exit.md).

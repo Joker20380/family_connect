@@ -14,6 +14,24 @@
 
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+25 November18:24UTC: independent support replacement/rollback supervisor COMPLETE IN ISOLATION at
+feature76b32e35, ordinarily pushed/remote-SHA verified; not a working installation.16 user-systemd
+plus2 actual-root/fc-support tests PASS/0 skips: crash/resume, real old exit0 with RemainAfterExit=no,
+paired activation, native persistence beyond41s and rollback retaining new encrypted data.
+[Mechanism, retained failed attempts and next gate](releases/2026-11-24-control-ha-installed-recovery.md#independent-support-replacement-supervisor--25-november).
+Working PID2022541/19 sources/3 units/15 fields/interpreter digest/0 restarts unchanged;
+candidate9d7bf840 unchanged and NOT installed. GUI access works; no additional owner input now.
+Next: independently reconcile old support external outcomes and check fresh working prestate, then
+authorized OWNER activation with the retained supervisor and installed UID/source/gate/sandbox
+readback. Preserve uncertainty; do not substitute local exit0 or tests for external settlement/
+capture approval. No repeat of the completed reversible probe or isolated kill-policy installation.
+Remaining manual/OWNER coverage, coherent capture and independent current trust/custody/approval/
+full recovery remain. Same three HA-02 gates partial, isolated replication PASS. No working
+support/RU/NL/container operation, HA-03, version change or new ETA in this checkpoint.
+
+At the preceding isolated-final-exit checkpoint:
+
+**CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
 25 November17:52UTC: isolated irreversible old-support final-persistence/exit mechanism COMPLETE;
 not an installed replacement supervisor. Implementation547f51ee/mergec92b735d pushed and remote verified;
 parallel fleet requirements preserved without force/rebase.82 tests PASS/0 skips plus fc-support

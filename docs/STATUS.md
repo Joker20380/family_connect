@@ -10,6 +10,23 @@ REQUIREMENT_ACCEPTED / IMPLEMENTATION_PENDING: требуется рабочая
 Текущий HA-02 и четыре его результата сохраняются; сквозной ввод обязателен для итоговой
 приёмки всей модернизации.
 
+**25 November18:24UTC — independent support replacement/rollback supervisor qualified in isolation.**
+Feature76b32e35 is ordinarily pushed/remote-SHA verified; main remains navigation-only.
+16 user-systemd plus2 actual-root/fc-support tests PASS/0 skips: six crash boundaries, independent
+supervisor restart, old exit0 with RemainAfterExit=no, paired archive/kill policy, native persistence
+beyond41s and code/config rollback retaining newly committed encrypted data and legacy uncertainty.
+[Evidence, retained failures and remaining gate](releases/2026-11-24-control-ha-installed-recovery.md#independent-support-replacement-supervisor--25-november).
+Working PID2022541/19 sources/3 units/15 fields/interpreter digest/0 restarts unchanged;
+candidate9d7bf840 unchanged, NOT installed. No working injection, signal, stop or upgrade.
+GUI sudo succeeds without password capture/permanent privilege; terminal closed/timestamp invalidated.
+Next: independent old-support external-outcome reconciliation and fresh prestate, then authorized
+OWNER activation and installed UID/source/gate/sandbox readback. Preserved uncertainty is not
+settlement or capture permission. Remaining manual/OWNER writers, coherent capture and independent
+trust/custody/approval/full recovery remain. Three HA-02 gates partial, isolated replication PASS.
+No RU/NL/container operation, HA-03 or version change. No additional owner input requested now.
+
+At the preceding isolated-final-exit checkpoint:
+
 **25 November17:52UTC — isolated old-support final persistence/exit qualification PASS.**
 Implementation547f51ee and mergec92b735d are pushed; feature head remote-SHA verified. Parallel fleet
 onboarding requirements are preserved through ordinary merge, without force/rebase or scope expansion.
