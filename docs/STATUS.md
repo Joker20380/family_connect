@@ -1,5 +1,24 @@
 # Текущее состояние / Current state
 
+**25 November23:38UTC — joint v2 native qualification PASS; working acceptance remains open.**
+[Coupled procedure, controlled causes, exact CI and installed state](releases/2026-11-26-control-ha-joint-support.md).
+42 joint/native runtime tests PASS/0 skips on v2; actual-root/fc-support5 PASS with working OWNER unchanged.
+Earlier full native248 PASS applies before the v2 delta. Candidate621009b8 has a separate immutable v2
+contract; original v1 and19-file baseline remain unchanged. Neither candidate is installed.
+Original WORKERS_REMAIN task identity remains unproven. Separate CI thread-start/join and systemd
+unit-collection accounting failures have controlled reproductions; no assertion or native task is ignored.
+Terminal78 retains cause/evidence and forbids witness/open/capture/candidate and old-writer restart.
+Exacteb86e856 native/readiness/phase0-host PASS; Linux control and Docker FAIL. Diagnostic UID/package
+corrections pass51 checks/1 explicit skip; new exact-SHA CI and actual cross-host qualification remain.
+OWNER PID2022541/0 restarts; NL1 PID3705/0 restarts and original unit hashes. NL1 NeedDaemonReload=yes,
+but all normalized Service directives match loaded values; no reload performed.
+One next result: complete qualified coupled OWNER↔NL1 installation/readback, not another helper PASS.
+Three HA-02 gates remain partial; isolated replication PASS; FLEET-PRODUCTION-ONBOARDING-1 remains open.
+
+Feature checkpoint `c4cc510f83e3ae3d3dc667c307dabebed150b5f1` pushed; remote SHA verified.
+
+## Исторические checkpoint — не текущие NEXT
+
 **25 November21:59UTC — HA-02 стабилизация shutdown/terminal и CI; общий handoff НЕ завершён.**
 Feature `f6c6171e022fbf2b671e7c950671a556a7fdeb79` опубликован, remote SHA проверен.
 [Причина/пределы доказательств, CI и точный остаток](releases/2026-11-25-control-ha-support-stabilization.md).

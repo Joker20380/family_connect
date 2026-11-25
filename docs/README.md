@@ -1,5 +1,7 @@
 # Documentation
 
+[HA-02 joint support checkpoint: v2 lifecycle, resumable handoff/reclosure/recovery, actual-root qualification; CI and working installation remain open](releases/2026-11-26-control-ha-joint-support.md).
+
 [CONTROL-HA · 25 November21:59UTC: shutdown/terminal correction and CI stabilization; historical WORKERS_REMAIN cause unproven, shared handoff and working installation incomplete](releases/2026-11-25-control-ha-support-stabilization.md).
 
 [CONTROL-HA · 25 November20:39UTC: OWNER witness/rollback reservation checkpoint;57 local and3 root cases pass, one native WORKERS_REMAIN refusal retained; combined handoff remains](releases/2026-11-24-control-ha-installed-recovery.md#owner-replacement-witness-and-retained-exit-refusal--25-november).
