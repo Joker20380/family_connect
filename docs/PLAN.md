@@ -3,6 +3,21 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+25 November: reversible old-support admission probe source slice COMPLETE IN ISOLATION at
+feature0cfde800, pushed/remote-SHA verified.55 checks PASS/0 skips;30 new cases use the installed
+interpreter, unchanged legacy main/delivery code, synthetic stores and actual RNS/route threads.
+[Qualification and remaining boundary](releases/2026-11-24-control-ha-installed-recovery.md#reversible-legacy-support-admission--25-november).
+No live submission or working upgrade; support remains PID2022541/0 restarts at16:22UTC. Its previous
+sudo timestamp expired and GUI reauthentication did not complete. Next: authenticate the bounded
+live probe, close RNS periodic/queued/exit persistence, then qualify independently supervised safe
+stop/replacement/rollback. The bridge intentionally has no stop mode and never permits capture.
+Installed manual/OWNER coverage, coherent fleet capture, independent trust/custody/approval and
+combined post-ACK recovery remain. Same three HA-02 gates partial; isolated replication PASS.
+No ordinary TERM/40s force-stop, permission bypass, HA-03, public version change or new ETA.
+
+At the preceding installed-shape candidate checkpoint:
+
+**CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
 25 November: OWNER GUI sudo authentication and exact installed-shape support candidate qualification
 COMPLETE at featurea2807348, pushed/remote-SHA verified.36 tests PASS/0 skips plus a separate actual
 installed-UID/interpreter systemd fixture and fresh encrypted-store readback PASS. Working support

@@ -8,6 +8,58 @@ Owner request selects all four existing HA-02 gates, not HA-03..05. The25 Novemb
 also authorizes participant installation and bounded operational work with documented rollback;
 earlier read-only/deployment-permission limitations in the historical sections are superseded.
 
+## Reversible legacy support admission — 25 November
+
+[Authoritative bridge, qualification, failure history and rollback](https://github.com/Joker20380/family_connect/blob/0cfde800b79a08dea279deb920510bccd2043623/docs/releases/2026-11-25-control-ha-support-bridge.md).
+Feature0cfde800b79a08dea279deb920510bccd2043623 is ordinarily pushed and remote-SHA verified.
+Main remains navigation-only. **The bridge is qualified in isolation, not run on working support.**
+
+One-use CPython3.14 requests bind process identity/command/cgroup, exact19 installed sources and
+critical loaded main/handler/delivery code. Only an idle serial main loop may be paused. Delivery
+admission is temporarily held without cancellation/generation changes or dropping pending work;
+active delivery, route readers and children must finish. The original online value resumes in
+`finally`, including deadline/receipt failure and submitting-controller exit. Partial IPC, source/
+loaded-code drift, stale/replayed requests and unrecognized work refuse. This is a bounded probe,
+not a hard realtime guarantee against OS filesystem stalls or a complete loaded-module attestation.
+
+There is no stop mode, signal, unit-policy change, store close or gate acceptance. Reticulum's
+periodic jobs, transport loop, traffic counter and inbound queue remain live. Every result keeps
+`capture_permitted=false`; asynchronous runtime persistence and old remote effects remain open.
+Do not use a successful application drain to justify ordinary unsafe old TERM/40s shutdown.
+
+Final55 checks PASS/0 skips,67.31s:30 new native bridge cases plus25 existing packaging regressions.
+Bridge workers run the installed interpreter with unchanged installed main/delivery sources,
+synthetic stores/IPC and real RNS/loopback reader threads, as the owner rather than `fc-support`.
+Committed encrypted records survive normal synthetic-worker exit and fresh-process readback.
+Initial21-pass/4-failure and second29-pass/1-failure attempts are retained: fixtures incorrectly
+opened a second store owner, underbudgeted a selector wakeup or expected an incomplete header to
+survive its original read timeout. Final tests respect these contracts; no production check relaxed.
+Four feature documents/1123 local-link targets and whitespace PASS.
+
+Read-only16:22:44UTC: working support PID2022541, active/running/0 restarts/no reload warning; all19
+source hashes unchanged, old control-group/SIGKILL/40s effective policy. No live injection, working
+service/source/container/version change or RU/NL connection. Earlier OWNER-container observations
+are historical, not a new liveness claim. The private HMAC unit drop-in is unreadable without sudo;
+no new full unit-byte comparison is claimed. Previous privileged copies remain retained privately.
+
+The prior authenticated terminal's normal sudo timestamp expired. A new GUI password window was
+opened under the existing request, but authentication did not complete: `Authentication required
+but not attempted`. No password captured, permanent access policy or alternate privilege route.
+Owner authorization remains valid; technical authentication is needed before the live probe.
+
+Private locator `/tmp/fc-ha-support-bridge-20261125`. Final55 JUnit SHA256
+`e371a5e525ab4132a31dbacb03b6460a2be6b28f00ff1947229abe0aad25394b`; working readback SHA256
+`df95c5a1bcc024f46fd109c12be67b198947661848c3f7bb36ef8a302eeb2d4a`.
+No production rollback required. Revert removes only optional bridge/tests/docs, not current data;
+the candidate source contract is unchanged. A future probe must stage for the actual service UID
+and independently verify same-process restoration using malformed IPC, not chat messages.
+
+Next: authenticated bounded live probe, exact RNS periodic/queued/exit persistence closure and
+independently supervised stop/replacement/rollback, then installed manual/OWNER coverage, coherent
+capture and independent current trust/custody/approval/full post-ACK recovery. Never rewind stores,
+erase uncertainty or treat this as capture acceptance. Replication PASS in isolation; same three
+HA-02 gates partial. No HA-03, automatic failover, release/public version change or new ETA.
+
 ## Authenticated OWNER support candidate — 25 November
 
 [Authoritative candidate, qualification, retained prestate and rollback limits](https://github.com/Joker20380/family_connect/blob/a2807348d6153e97f459b411a34909f2dbaa998e/docs/releases/2026-11-25-control-ha-support-overlay.md).

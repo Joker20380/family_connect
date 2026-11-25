@@ -1,5 +1,21 @@
 # Текущее состояние / Current state
 
+**25 November — reversible legacy-support admission probe qualified; no working injection.**
+Feature0cfde800 is pushed/remote-SHA verified.55 checks PASS/0 skips,30 new bridge cases plus25
+packaging regressions. Installed Python runs the unchanged old main/delivery code with synthetic
+data: current delivery is not cancelled, route readers finish, and admission resumes even after
+deadline, receipt failure or controller exit. There is no stop mode or capture permission.
+[Scope, evidence and rollback](releases/2026-11-24-control-ha-installed-recovery.md#reversible-legacy-support-admission--25-november).
+At16:22:44UTC working support retains PID2022541/all19 sources, active/running/0 restarts and old40s
+policy. No working service/container change or RU/NL contact. The previous sudo timestamp expired;
+GUI reauthentication did not complete, so the live probe was not submitted. Next: authenticated
+bounded live probe, exact RNS periodic/queued/exit writer closure and supervised stop/replacement/
+rollback, then remaining installed manual/OWNER coverage and coherent fleet capture. Independent
+current trust/custody/approval and full recovery remain. Isolated replication PASS; same three
+HA-02 gates partial, no HA-03/automatic failover/public version change or new ETA.
+
+At the preceding installed-shape candidate checkpoint:
+
 **25 November — OWNER access restored; pinned support candidate qualified, not installed.**
 Owner authenticated through a local GUI password dialog; privileged readback and a separate system
 fixture now succeed. No password captured, permanent privilege or sudoers/polkit change; normal
