@@ -3,6 +3,19 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+25 November continuation authorizes HA-02 participant installation/bounded OWNER/RU/NL work
+with rollback. Earlier NL read-only limitations are superseded, not technical safeguards or
+independent trust/capture acceptance. No HA-03 cutover or paid-watch/deny disablement.
+Next actual operation: activate the workstation collectors with pinned source, preserved runtime
+roots, private gates, inhibited dispatch during installation, reversible unit/source deltas and
+native readback. Probe runtime-base separation passes68 collector/package checks (6 new).
+Console namespace access is now observed from inside its existing container without escalation;
+the previous host-side PermissionError is not an unresolved access prerequisite for that read.
+[Execution/rollback record](releases/2026-11-25-control-ha-collector-activation.md).
+Remaining acceptance is real participant/work-settlement coverage, coherent capture, independent
+signer/pin/floor custody and approval, final recovery. Replication PASS; three gates partial.
+
+At the preceding signing checkpoint:
 Existing current-input trust gate: owner-facing offline review/sign/verify CLI is implemented,
 without changing the signed request protocol or full verifier. Independently supplied request/
 key pins, external replay floor, fresh validity, explicit offline scope and private-file checks;

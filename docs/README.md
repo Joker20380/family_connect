@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 25 November: operational authorization, collector runtime separation, installation and rollback record](releases/2026-11-25-control-ha-collector-activation.md).
+
 [CONTROL-HA · 25 November: offline owner checkpoint review/sign/verify workflow;231 tests, existing protocol unchanged, no real authority enrolment or live approval](releases/2026-11-25-control-ha-forward-signing.md).
 
 [CONTROL-HA · 25 November UTC: nonempty HTTPS publication and native PG COMMIT settlement; killed sender can commit late, uncertainty still blocks capture;67 tests, no working changes](releases/2026-11-25-control-ha-publication-settlement.md).

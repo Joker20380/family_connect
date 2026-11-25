@@ -37,6 +37,43 @@ def completed(command, stdout=b''):
     return subprocess.CompletedProcess(command, 0, stdout=stdout)
 
 
+@pytest.mark.parametrize('explicit', [False, True])
+def test_probe_cli_preserves_selected_runtime_base(tmp_path, monkeypatch, explicit):
+    chosen = tmp_path / 'existing-runtime'
+    chosen.mkdir()
+    observed = []
+    monkeypatch.setattr(probe_network, 'BASE', chosen)
+    monkeypatch.setattr(sys, 'argv', ['probe_network.py'] +
+                        (['--runtime-base', str(chosen)] if explicit else []))
+    monkeypatch.setattr(probe_network, 'cycle', lambda *, base:
+                        observed.append(base) or dict(sources=[]))
+    assert probe_network.main() == 0
+    assert observed == [chosen.resolve()] and list(chosen.iterdir()) == []
+
+
+@pytest.mark.parametrize('value', ['relative', 'absent', 'file'])
+def test_probe_cli_refuses_invalid_runtime_without_dispatch(tmp_path, monkeypatch, value):
+    target = tmp_path / value
+    if value == 'file':
+        target.write_text('not a directory')
+    monkeypatch.setattr(sys, 'argv', ['probe_network.py', '--runtime-base',
+                                   value if value == 'relative' else str(target)])
+    monkeypatch.setattr(probe_network, 'cycle', lambda **kwargs: pytest.fail('unexpected dispatch'))
+    with pytest.raises(SystemExit) as caught:
+        probe_network.main()
+    assert caught.value.code == 2
+
+
+def test_probe_cli_runtime_override_still_refuses_closed_gate(gate, tmp_path):
+    runtime = tmp_path / 'runtime'
+    runtime.mkdir()
+    with gate.drain(.1):
+        result = subprocess.run([sys.executable, '-B', str(ROOT / 'control_plane/probe_network.py'),
+                                 '--runtime-base', str(runtime)], capture_output=True, timeout=5)
+    assert result.returncode == 75 and result.stderr == b'CAPTURE_BUSY\n'
+    assert list(runtime.iterdir()) == [] and not pending(gate)
+
+
 def snapshot(base, command):
     destination = base / '.local' / (command[-1] + '-test.json')
     destination.write_text(json.dumps(dict(source=command[-1], scope='production',

@@ -1,5 +1,20 @@
 # Текущее состояние / Current state
 
+**25 November — HA-02 operational installation authorized; collector runtime separation ready.**
+Owner now authorizes the selected participant installation and bounded OWNER/RU/NL work with
+rollback; earlier NL read-only restrictions below are historical. No HA-03 database cutover,
+paid-watch/deny disablement, unknown-marker deletion or self-issued independent acceptance.
+The network probe can run from a separate pinned source capsule while keeping its existing
+Compose/.env/.local runtime base; main remains navigation-only.68 collector/package tests PASS,
+including6 new CLI cases. [Installation record and rollback](releases/2026-11-25-control-ha-collector-activation.md).
+Actual console namespace reads succeed inside the existing container as UID10001 without host
+privilege escalation. A read-only PG sample finds1 published system message, no other sessions;
+this is not a drain or settlement proof. Working images/configuration remain unchanged so far.
+Next: safely activate and qualify the two workstation collectors, then remaining OWNER/RU/NL
+participants, coherent capture, independent custody/approval and final recovery. Replication
+PASS; same three gates partial. No product/client version change or completion estimate.
+
+At the preceding signing checkpoint:
 **25 November UTC — owner-facing offline checkpoint signing implemented.**
 The existing trust gate now has review/sign/verify CLI commands with independent request/public-key
 pins, explicit offline scope, external sequence floor, freshness and private-file checks. Existing

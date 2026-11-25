@@ -22,6 +22,7 @@ ENTRIES = {
     'control_plane/collect_inventory.py': ('a848b67feb86d8fa89722327c43539456ef20cb4cac60b4e2caefccc52e9b976',
                                          'd3ed036ccd4824e93c50ab8a5fcd26a243664671f8620e245f4b2adba8d16a4a'),
     'control_plane/probe_network.py': ('cabe6f1a49f80e6aa9afff8d8f813c921a191a40eb61f7313af110a8037e64eb',
+                                     '19ed2bf5e2769cc4f5f1b5bd2b94b4ac74212ecd0059d95f5ff8af6c6cd3f9bf',
                                      '0adde03f5dc2a01756c42c5335f8cf4ff53f8c9d8651a4a3f0b9fa36d8f4407a'),
 }
 ROLES = {

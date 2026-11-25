@@ -1,4 +1,5 @@
 """Independent local cycle: no SSH credentials, registry or VPN operations."""
+import argparse
 import json
 from pathlib import Path
 import subprocess
@@ -34,8 +35,18 @@ def cycle(base=BASE, probe=collect, run=subprocess.run):
 
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--runtime-base', type=Path, default=BASE,
+                        help='Existing control_plane directory containing Compose, .env and .local')
+    arguments = parser.parse_args()
     try:
-        receipt = cycle()
+        if not arguments.runtime_base.is_absolute() or not arguments.runtime_base.is_dir():
+            raise ValueError('Invalid runtime base')
+        base = arguments.runtime_base.resolve(strict=True)
+    except (OSError, ValueError):
+        parser.error('Runtime base must be an existing absolute directory')
+    try:
+        receipt = cycle(base=base)
     except BlockingIOError:
         print('Независимая сетевая проверка уже выполняется.')
         return 0
