@@ -8,6 +8,45 @@ Owner request selects all four existing HA-02 gates, not HA-03..05. The25 Novemb
 also authorizes participant installation and bounded operational work with documented rollback;
 earlier read-only/deployment-permission limitations in the historical sections are superseded.
 
+## Support managed-worker stop — 25 November
+
+[Authoritative source, native qualification, prestate and rollback](https://github.com/Joker20380/family_connect/blob/54d91ee35000df4825fd05a35073bfbdbf38fbe2/docs/releases/2026-11-25-control-ha-support-lifecycle.md).
+Feature54d91ee35000df4825fd05a35073bfbdbf38fbe2 is ordinarily pushed and remote-SHA verified.
+Main remains navigation-only. This is a qualified support source change, **not an installed
+support upgrade, fleet capture or new product release**.
+
+The existing support worker could exit normally when its single31s delivery join timed out,
+while systemd could signal its children and escalate after40s. New source waits for actual
+delivery/reader completion, completes admitted IPC, handles startup/repeated TERM/INT without
+reentrant handler locks, and waits for gate admission before closing the encrypted store.
+The paired candidate policy signals only main and has no forced timeout/SIGKILL escalation.
+Cleanup failures retain uncertainty; normal local exit is not independent remote settlement.
+
+Final106 focused tests PASS/0 skips,68.38s. An actual user-systemd service remains deactivating
+with its admitted child alive after41s, then finishes/commits/closes with exit0 after release.
+Independent encrypted-store readback passes. Earlier106 and11-case runs overlap, not extra
+distinct acceptance tests. All owned test units are removed. Four implementation documents/
+1115 local-link targets and whitespace pass; private evidence stays outside Git.
+
+Read-only15:23UTC prestate: system support PID2022541, active/running/0 restarts/no reload warning,
+no capture gate, old control-group/SIGKILL/40s policy; all three OWNER containers healthy with
+0 restarts. All19 installed support source hashes and runtime fields remain unchanged after
+qualification. RU receiver readback15:25:19UTC: same accepted PID476518, active/0 restarts.
+No NL connection, working support change, product/client/public artifact or signature change.
+
+Concrete installation blocker: `sudo -n true` returns `sudo: interactive authentication is required`.
+The owner's existing authorization remains valid, but the session lacks privileged execution
+for this root-owned service; another UID's `/proc/PID/exe` is also unreadable. No password or
+security bypass is used. Restore approved technical access before the guarded support transition.
+Do not stop the old service or apply only its new unit policy. Retain exact old sources/units/
+argv and every uncertainty marker; future rollback changes code/configuration only, not history.
+No production rollback is needed for this source-only checkpoint.
+
+Next remains installed-shape support activation and runtime/background persistence closure,
+manual writers, guarded OWNER integration and independent old external-outcome reconciliation;
+then complete fleet capture and independently approved trust/custody/combined recovery. Same
+three HA-02 gates partial, replication PASS in isolation; no HA-03/automatic failover/ETA claim.
+
 ## Paired RU receiver installed — 25 November
 
 [Authoritative controller, qualification, installed evidence and rollback](https://github.com/Joker20380/family_connect/blob/0394542a7c4f25ba527e27160ef6067ac1a9327e/docs/releases/2026-11-25-control-ha-receiver-replacement.md).

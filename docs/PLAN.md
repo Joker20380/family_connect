@@ -11,6 +11,19 @@ remains selected; this publication task does not advance its acceptance gates.
 [Reconciliation record](releases/2026-11-24-source-reconciliation.md).
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+25 November: support managed-worker/reader graceful-stop source slice COMPLETE at54d91ee3,
+pushed/remote-SHA verified.106 focused tests PASS/0 skips, including actual systemd stop past
+old31s/40s deadlines and encrypted-store readback. No working support deployment.
+[Support qualification and precise access blocker](releases/2026-11-24-control-ha-installed-recovery.md#support-managed-worker-stop--25-november).
+`sudo -n` currently requires interactive authentication on OWNER. Restore approved privileged
+execution for exact installed-shape support activation with checked rollback; do not install
+its kill policy alone or repeat the completed source slice. Exact runtime/background persistence,
+manual writer closure, guarded OWNER integration and old external outcomes remain. Fleet capture,
+independent trust/custody/approval and final recovery keep the same three HA-02 gates partial;
+replication PASS in isolation. RU receiver activation remains complete; no HA-03 or new ETA.
+
+At the preceding installed-receiver checkpoint:
+
 25 November15:09UTC: paired RU receiver qualification/activation/independent readback COMPLETE.
 Feature0394542a pushed and remote-SHA verified; source checkpoint05edd4be.88 focused checks
 plus the final24-case controller rerun PASS/0 skips. Actual old PID43082 exits naturally; new

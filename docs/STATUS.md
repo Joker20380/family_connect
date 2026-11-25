@@ -1,5 +1,20 @@
 # Текущее состояние / Current state
 
+**25 November — support graceful-stop source qualified, not installed.**
+Feature54d91ee3 is pushed/remote-SHA verified.106 focused checks PASS/0 skips on final source;
+actual systemd stop preserves delivery/child beyond the old31s/40s deadlines, then closes safely.
+The support-only reader now finishes inside admission; repeated termination and gate-busy store
+close do not bypass draining. [Qualification, technical blocker and rollback](releases/2026-11-24-control-ha-installed-recovery.md#support-managed-worker-stop--25-november).
+Working support PID2022541 remains active without a gate; three OWNER containers are healthy,
+0 restarts. Installation is not done: `sudo -n` requires interactive authentication. Already
+granted owner authorization does not supply that missing technical access. RU receiver remains
+active PID476518/0 restarts at15:25UTC; no NL/public-version changes. Next: privileged guarded
+support transition/runtime closure, manual writers and OWNER integration, then coherent fleet
+capture and independent trust/custody/recovery. Three HA-02 gates partial; isolated replication
+PASS. No automatic failover or newly supported ETA.
+
+At the preceding installed-receiver checkpoint:
+
 **25 November15:09UTC — RU receiver replacement installed; independent readback PASS.**
 Feature0394542a is pushed/remote-SHA verified; source qualification is05edd4be. At15:08:03UTC
 old PID43082 has exited naturally after local drain and new PID476518 serves the exact
