@@ -1,18 +1,18 @@
 # Текущее состояние / Current state
 
-**25 November — reversible legacy-support admission probe qualified; no working injection.**
-Feature0cfde800 is pushed/remote-SHA verified.55 checks PASS/0 skips,30 new bridge cases plus25
-packaging regressions. Installed Python runs the unchanged old main/delivery code with synthetic
-data: current delivery is not cancelled, route readers finish, and admission resumes even after
-deadline, receipt failure or controller exit. There is no stop mode or capture permission.
-[Scope, evidence and rollback](releases/2026-11-24-control-ha-installed-recovery.md#reversible-legacy-support-admission--25-november).
-At16:22:44UTC working support retains PID2022541/all19 sources, active/running/0 restarts and old40s
-policy. No working service/container change or RU/NL contact. The previous sudo timestamp expired;
-GUI reauthentication did not complete, so the live probe was not submitted. Next: authenticated
-bounded live probe, exact RNS periodic/queued/exit writer closure and supervised stop/replacement/
-rollback, then remaining installed manual/OWNER coverage and coherent fleet capture. Independent
-current trust/custody/approval and full recovery remain. Isolated replication PASS; same three
-HA-02 gates partial, no HA-03/automatic failover/public version change or new ETA.
+**25 November — working support admission probe PASS; no stop or replacement.**
+Featurea5d3af1e is pushed/remote-SHA verified.62 tests PASS/0 skips plus an actual fc-support
+PrivateTmp systemd fixture PASS. GUI authentication succeeded. At16:40:26UTC working support
+pauses/drains the checked application scope without cancellation and restores online admission.
+Malformed IPC works before/after; same PID2022541,19 source hashes,3 unit files/15 unit fields,
+active/running/0 restarts. Two prior refusals exposed invisible staging and multiple module loads;
+target namespace and unique active-frame/globals binding now qualify without relaxing source pins.
+[Actual result, failures and rollback](releases/2026-11-24-control-ha-installed-recovery.md#working-support-admission-probe--25-november).
+Four RNS background jobs remain live; capture forbidden, candidate not installed, old40s policy
+unchanged. Next: exact RNS periodic/queued/exit writer closure and supervised safe stop/replacement/
+rollback, then installed manual/OWNER coverage, coherent capture and independent current trust/
+custody/approval/full recovery. Isolated replication PASS; same three HA-02 gates partial.
+No RU/NL contact, container requalification, HA-03, public version change or new ETA.
 
 At the preceding installed-shape candidate checkpoint:
 

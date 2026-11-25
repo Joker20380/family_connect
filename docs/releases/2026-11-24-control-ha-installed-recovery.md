@@ -8,6 +8,57 @@ Owner request selects all four existing HA-02 gates, not HA-03..05. The25 Novemb
 also authorizes participant installation and bounded operational work with documented rollback;
 earlier read-only/deployment-permission limitations in the historical sections are superseded.
 
+## Working support admission probe — 25 November
+
+[Authoritative source, actual failures, qualification and rollout limits](https://github.com/Joker20380/family_connect/blob/a5d3af1e1efb8509281eef258987a05508ba0f65/docs/releases/2026-11-25-control-ha-support-live-probe.md).
+Featurea5d3af1e1efb8509281eef258987a05508ba0f65 is ordinarily pushed and remote-SHA verified.
+Main remains navigation-only. **Working reversible application admission/drain PASS; no runtime
+drain, safe stop, candidate install, coherent capture or stage2 acceptance.**
+
+Owner GUI sudo authentication succeeded; no password in chat/files/evidence, no sudoers/polkit
+change, permanent privileged shell or timestamp keepalive. Normal expiry/terminal scope applies.
+The earlier missing-authentication observation below is historical, not the current blocker.
+
+Two refused live attempts preserve working prestate: at16:31:25UTC the staged host `/var/tmp`
+launcher was invisible under service PrivateTmp; at16:33:40UTC shared runtime-directory staging
+reached the bridge but returned `RUNTIME_BINDING`. A metadata-only diagnostic found `__main__`/
+`__mp_main__` aliases plus a distinct named import. The bridge now validates target/host namespace
+identity before/after staging, rechecks process binding and selects the unique actual main frame
+with exact module/function globals. Inactive imports do not substitute for it; source/code/serial
+loop/delivery-owner checks remain. No sandbox relaxation, request replay or private frame dump.
+
+Final62 tests PASS/0 skips,77.82s:37 bridge cases and25 packaging regressions, including7 additions.
+The focused subset passed6. Actual installed interpreter, unchanged main/delivery source bytes,
+synthetic stores and native module entry/RNS threads participate. At16:40:23UTC a separate system
+unit under fc-support/fc-support-ipc with PrivateTmp/ProtectSystem/ProtectHome passes: invisible
+staging refuses before creation; shared runtime staging drains/restores. Only this synthetic
+unit is stopped and removed. Four feature documents/1125 local-link targets and whitespace PASS.
+
+At16:40:26UTC a fresh10s working request with0.25s post-drain hold passes. Application admission
+pauses/drains without cancellation and resumes. Before/after malformed IPC returns its expected
+rejection before mailbox refresh, without sending chat. Controller readback after callback return
+and another2s verifies same PID2022541/start/boot/command/cgroup,19 sources,3 original unit files
+and15 unit fields; active/running/0 restarts/no reload warning. Old control-group/SIGKILL/40s policy
+remains. No working signal/restart, unit/source/candidate install or product-store rewind occurs.
+
+Four RNS periodic/transport/traffic/inbound jobs continue. Results explicitly keep
+`runtime_drained=false`, `external_settlement_proven=false`, `capture_permitted=false`.
+OWNER containers and RU/NL were not contacted/requalified. No product/public installer/catalog,
+invitation-page version or signing change. Do not infer full runtime closure from application drain.
+
+Private locator `/tmp/fc-ha-support-live-20261125`; all failed/successful receipts retained outside
+Git. Final62 JUnit SHA256 `78529193b72950858c355af604a731ca0769691c3ff0b315f89b339bfa2d3df5`;
+native systemd receipt `6f3dc5780e9e80c5228eb4ecfc3871b54a8280ea107ca7411ad85e13528f129c`;
+working probe/readback `cb958948903438b73c50645b0fe35b856c8e29aec1da3c6fd2dec415e533c0a5`.
+Automatic application-admission restoration is verified; no persistent deployment needs rollback.
+Source revert removes optional probe fixes/tests/docs only. Do not replay requests or rewind stores.
+
+Next: exact pinned RNS periodic/queued/exit persistence closure and independently supervised safe
+old-process stop/replacement/rollback, then installed manual/OWNER coverage, coherent fleet capture,
+independent current-input trust/custody/approval and combined full post-ACK recovery. Candidate still
+not installed; same three HA-02 gates partial, isolated replication PASS. No unsafe old force-stop,
+uncertain-marker removal, HA-03, automatic failover, release acceptance or new ETA.
+
 ## Reversible legacy support admission — 25 November
 
 [Authoritative bridge, qualification, failure history and rollback](https://github.com/Joker20380/family_connect/blob/0cfde800b79a08dea279deb920510bccd2043623/docs/releases/2026-11-25-control-ha-support-bridge.md).
