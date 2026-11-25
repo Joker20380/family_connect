@@ -14,6 +14,25 @@
 
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+25 November18:39UTC: actual read-only OWNER/NL1 outcome census COMPLETE as OBSERVED_UNFENCED,
+not settlement/activation; feature5e898ad8 pushed and remote-SHA verified.12 messages/2 request
+links,7 outgoing envelopes absent on NL1,0 extra sender rows/retained incoming raw ACKs. Local
+status and stable snapshots do not prove old remote effects settled; historical unknowns retained.
+[Actual paired evidence and26 native/observer checks](releases/2026-11-24-control-ha-installed-recovery.md#independent-support-outcome-census--25-november).
+26 tests PASS/0 skips, including commit after sender disconnect/empty snapshot and indistinguishable
+absence after native purge/expiry. Working OWNER PID2022541 and NL1 mailbox PID3705 retain0 restarts;
+no injection/stop/replay/product write. Candidate9d7bf840 unchanged and NOT installed.
+Next in the existing old-work gate: qualify independent NL1 support-scoped admission/drain for
+delayed PUT and support-recipient purge callbacks, controller death/abort and unrelated-client
+continuity, bound to OWNER quiescent generation/replacement commit. Empty spool, closed TCP,
+local statuses or a SQLite lock are insufficient. Then authorized activation/readback, remaining
+manual/OWNER coverage, coherent capture and independent current trust/custody/approval/full recovery.
+Same three HA-02 gates partial; isolated replication PASS. GUI access works; no extra owner action
+now, no RU/NL2/container operation, HA-03 or version change. Main remains navigation-only.
+
+At the preceding replacement-supervisor checkpoint:
+
+**CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
 25 November18:24UTC: independent support replacement/rollback supervisor COMPLETE IN ISOLATION at
 feature76b32e35, ordinarily pushed/remote-SHA verified; not a working installation.16 user-systemd
 plus2 actual-root/fc-support tests PASS/0 skips: crash/resume, real old exit0 with RemainAfterExit=no,

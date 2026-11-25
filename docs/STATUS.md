@@ -10,6 +10,24 @@ REQUIREMENT_ACCEPTED / IMPLEMENTATION_PENDING: требуется рабочая
 Текущий HA-02 и четыре его результата сохраняются; сквозной ввод обязателен для итоговой
 приёмки всей модернизации.
 
+**25 November18:39UTC — read-only OWNER/NL1 support outcome census: OBSERVED_UNFENCED.**
+Feature5e898ad8 ordinarily pushed/remote-SHA verified.12 local messages/2 request links;
+7 retained outgoing envelopes absent from NL1,0 extra sender rows,0 retained incoming raw ACKs.
+Local recipient-stored/relayed statuses do not turn these absences into independent settlement.
+[Paired evidence,26 tests and native late-commit counterexample](releases/2026-11-24-control-ha-installed-recovery.md#independent-support-outcome-census--25-november).
+26 tests PASS/0 skips; native relay can commit after sender disconnect and an empty observation,
+while recipient purge/retention produce indistinguishable absence. Activation/capture gates remain unmet.
+OWNER PID2022541 and NL1 mailbox PID3705 retain0 restarts/source/unit bindings. No injection,
+stop, replay or product write; candidate9d7bf840 NOT installed. GUI access works, password not
+captured; terminal closed/sudo invalidated. No additional owner input requested now.
+Next: independent support-scoped NL1 admission/drain for delayed PUT/purge callbacks, bound to
+OWNER quiescent generation and replacement commit; preserve historical unknowns. This is the
+existing settlement gate, not a new stage. Then authorized activation/readback, remaining writers,
+coherent capture and independent trusted recovery. Three HA-02 gates partial; replication PASS
+in isolation. No RU/NL2/container operation, HA-03 or public-version change.
+
+At the preceding replacement-supervisor checkpoint:
+
 **25 November18:24UTC — independent support replacement/rollback supervisor qualified in isolation.**
 Feature76b32e35 is ordinarily pushed/remote-SHA verified; main remains navigation-only.
 16 user-systemd plus2 actual-root/fc-support tests PASS/0 skips: six crash boundaries, independent

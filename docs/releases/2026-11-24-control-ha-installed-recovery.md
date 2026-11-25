@@ -8,6 +8,62 @@ Owner request selects all four existing HA-02 gates, not HA-03..05. The25 Novemb
 also authorizes participant installation and bounded operational work with documented rollback;
 earlier read-only/deployment-permission limitations in the historical sections are superseded.
 
+## Independent support outcome census — 25 November
+
+[Authoritative observer, paired evidence and late-commit reproduction](https://github.com/Joker20380/family_connect/blob/5e898ad87a48ae2e2fae19d42a18f6b2c62c8daa/docs/releases/2026-11-25-control-ha-support-outcomes.md).
+Feature5e898ad87a48ae2e2fae19d42a18f6b2c62c8daa is ordinarily pushed/remote-SHA verified; main
+remains navigation-only. This checkpoint observes the existing settlement gap, not a new HA-02 gate.
+
+At18:39:39–18:39:40UTC the working encrypted OWNER support store is compared with an independent
+strict-pinned SSH read of the actual NL1 native mailbox spool. **OBSERVED_UNFENCED**, not settled,
+activation-ready or capture-permitted. Before/after local snapshots match, but neither service
+is fenced, stopped, injected or reconfigured. No delivery/replay/purge/product write is requested.
+
+OWNER has21 encrypted records/12 messages/2 request links: five incoming received messages and
+seven retained outgoing envelopes. Two ordinary outgoing messages are locally marked recipient_stored;
+five outgoing stored-receipt messages are marked relayed. No attempt token is active at sampling.
+The installed receive path verifies a stored ACK then updates status without retaining the incoming
+signed packed receipt. There are0 retained incoming raw ACK records for independent replay.
+
+NL1 contains0 exact matches for the seven retained ciphertext hashes and0 additional rows from
+that sender. **All seven absences remain unknown**, not lost/undelivered/delivered/canceled/settled.
+Recipient purge and retention expiration are indistinguishable from current absence; a delayed
+request may also commit after a sender disconnects. Historical application statuses and matching
+local snapshots do not supply the missing independent writer boundary. No uncertainty is cleared.
+
+The source observer uses bounded read-only/query-only SQLite, exact schema and private regular-file
+checks, source/node/UID/process bindings and a nonce-bearing request digest. It never opens the
+working Store/Spool application owner, changes journal mode or runs network delivery. Only public
+sender/ciphertext fingerprints go to NL1; keys/plaintext stay local and results contain counts.
+Installed relay/server/membership match their repository sources; the older installed codec has
+its own explicitly checked pin and is not substituted. Private evidence/manifests remain outside Git.
+
+**26 tests PASS/0 skips in0.35s**:22 new observer/native contracts and4 existing relay tests. The
+native TCP/SQLite counterexample closes the sender, observes the absent envelope, then commits the
+already admitted request through Spool.put. Both snapshots remain unfenced. Native purge/retention
+tests produce the same unknown absence. Binding/forged-receipt/unsafe-DB/privacy and no-write tests
+also pass. Preliminary19 is retained but not added to26; no failing acceptance is hidden.
+
+- Observer source SHA256: `26f3d492b3cd0d5cd2ea34b88471e9a8ce89ae93c4fb1b220369b510c99d2b03`.
+- Final26 JUnit SHA256: `9a1c2ac7739e20129979d9c5a733bf7f93f5fd076d6a06da0a4abd9933891c90`.
+- Actual paired readback SHA256: `f1aa5ca7624eb909126e355c2a453624d3e4f0198144b7bc77a5c4e5c2949495`.
+
+Working OWNER PID2022541/0 restarts, original19 sources/3 unit files/15 fields/process binding
+remain; NL1 mailbox PID3705/0 restarts and four source hashes remain, its node public pin matches
+OWNER input. Their old stop policies are untouched. Candidate
+9d7bf840f3455d0ef2e7653dc9289aac2f0d77c9f2a0a8e305c786f7ddb80489 is not rebuilt or installed.
+No working deployment needs rollback; observer failure releases only its read transaction.
+GUI sudo works without password capture/permanent privileges; terminal closed/timestamp invalidated.
+No RU/NL2/container/MicroTrader operation, retired host, HA-03 or public-version change.
+
+Next: qualify independent support-scoped NL1 mailbox admission/drain covering delayed PUT and
+support-recipient purge callbacks, controller-death/abort and unrelated-client continuity; bind
+it to the OWNER quiescent generation/replacement commit. A SQLite lock/empty spool/closed TCP is
+not sufficient. Keep historical unknowns; do not ask the owner to certify unknown delivery or erase
+uncertainty. No extra owner action is needed for the next qualification. Then authorized installed
+readback, remaining manual/OWNER writers, coherent capture and independent current trust/custody/
+approval/full recovery. Same three HA-02 gates partial; isolated replication PASS.
+
 ## Independent support replacement supervisor — 25 November
 
 [Authoritative controller,18 checks, retained failures and operational contract](https://github.com/Joker20380/family_connect/blob/76b32e35d07de53b21d09ca5b05cd27169f7189e/docs/releases/2026-11-25-control-ha-support-replacement.md).
