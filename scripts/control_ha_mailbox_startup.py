@@ -101,6 +101,7 @@ class Startup:
     def ticket(self):
         self.unchanged()
         return dict(schema=1, generation=self.manifest['generation'], manifest_sha256=self.digest,
+                    support_public_sha256=hashlib.sha256(bytes.fromhex(self.manifest['support_public'])).hexdigest(),
                     process=dict(self.process), challenge=self.challenge,
                     owner_binding_sha256=self.manifest['owner_binding_sha256'],
                     replacement_plan_sha256=self.manifest['replacement_plan_sha256'])

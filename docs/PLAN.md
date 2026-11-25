@@ -16,6 +16,29 @@
 
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+25 November20:39UTC: independent OWNER replacement witness CHECKPOINT, not combined admission acceptance.
+[Source, native-wire/systemd/root checks, rollback reservation and exact limits](releases/2026-11-25-control-ha-support-witness.md).
+57 distinct local checks and3 actual-root/fc-support cases pass across scoped runs/0 skips. One root
+attempt refuses irreversible WORKERS_REMAIN and is retained; successful recheck does not explain it.
+The sample binds old quiescence/commit/persistence, independent clean exit/no control process, old PID
+absence, accepted live candidate and legacy uncertainty to the mailbox ticket/plan/support identity.
+Same controller lock durably reserves this ticket before returning; controller death does not unlock
+legacy rollback. Another ticket/restarted candidate refuses; native RNS does not treat the sample as
+an opening command. No live mailbox verification or production permit is claimed.
+Next within the existing settlement gate: diagnose the retained native exit refusal without bypassing
+the worker check; then paired NL1 startup-unit/manifest installation and existing-PID
+hold adoption, authenticated transport/consumption of this OWNER witness with independent live mailbox
+hold/drain verification, and combined opening/reclosure/controller/crash recovery before activation.
+Do not remove the reservation or bypass guarded rollback; no reclosure/release executor exists yet.
+Candidate9d7bf840 NOT installed; seven unknowns retained. Working OWNER prestate unchanged in root
+qualification; NL1 observed PID3705/0 restarts. No working stop/injection/product write, RU/NL2/container,
+HA-03/version operation. Privilege GUI worked/sudo invalidated; no extra owner action now. Remaining
+writers/coherent capture/independent trust/custody/approval/full recovery keep the same three HA-02
+gates partial, isolated replication PASS; no new stage or onboarding implementation.
+
+At the preceding startup/restart checkpoint:
+
+**CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
 25 November20:12UTC: manifest-required restart fencing COMPLETE IN ISOLATION, not working installation.
 [104 checks, native RNS crash/restart, actual NL1 UID/systemd/readback and limits](releases/2026-11-25-control-ha-mailbox-startup.md).
 Native destination publication occurs only after guard installation. Required operator-owned manifest,

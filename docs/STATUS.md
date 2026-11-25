@@ -10,6 +10,29 @@
 Выбранный HA-02 и его четыре результата сохраняются; сквозной ввод узла обязателен
 для завершения модернизации.
 
+**25 November20:39UTC — OWNER witness/rollback reservation checkpoint; native exit refusal retained.**
+57 distinct local checks and3 actual-root/fc-support cases pass across scoped runs/0 skips; one failed
+root attempt is retained, not overwritten. Final witness/lock/root reruns and exact accounting recorded
+in the [evidence and remaining integration boundary](releases/2026-11-25-control-ha-support-witness.md).
+OWNER quiescent/commit/final-persistence receipts, independent manager exit0/no control process,
+old PID absence, exact live candidate and preserved uncertainty now bind to a mailbox ticket, including
+the actual support identity digest. A durable controller-locked reservation prevents legacy rollback
+after witness issuance, including controller death; a different mailbox generation cannot reuse it.
+Native RNS still refuses support after witnessing and after mailbox restart; another sender continues.
+This is an OWNER sample, NOT a mailbox opening permit: live remote hold/unit/adoption and authenticated
+delivery/consumption/reclosure are not yet integrated. Do not delete the reservation to make recovery pass.
+Next in the same settlement gate: diagnose retained irreversible WORKERS_REMAIN before persistence
+(root retry passes but does not explain the refusal), then pair NL1 startup unit/manifest and existing-PID hold adoption with
+this witness, independent live mailbox verification and combined controller/restart/rollback recovery;
+then authorized activation/readback. Candidate9d7bf840 unchanged/NOT installed; seven unknowns retained.
+Working OWNER PID2022541/19 sources/unit/process/interpreter prestate unchanged in actual root checks;
+NL1 observed PID3705/0 restarts. No working injection/stop/product write, RU/NL2/container/HA-03/version
+operation. GUI privilege worked, password not captured, sudo invalidated; no extra owner action now.
+Remaining writers, coherent capture and independent trust/custody/approval/full recovery still leave
+the same three HA-02 gates partial, isolated replication PASS.
+
+At the preceding startup/restart checkpoint:
+
 **25 November20:12UTC — manifest-required mailbox restart defaults closed, qualified in isolation.**
 104 tests PASS/0 skips; actual NL1 fc-mailbox UID996/GID982/systemd qualification at20:08:21–20:08:53UTC
 uses authenticated native RNS and one deliberately killed/restarted lab main process. Startup installs

@@ -39,6 +39,7 @@ def service(tmp_path, installed):
     initialize = ('import sys;from pathlib import Path;sys.path.insert(0,sys.argv[1]);'
                   'from messenger.store import Store;root=Path(sys.argv[2]);'
                   'store=Store(root/"store",b"s"*32,create=True);'
+                  'store.chat_identity().to_file(str(root/"synthetic.identity"));'
                   'print(store.chat_identity().get_public_key().hex());store.close();'
                   '(root/"key").write_bytes(b"s"*32);(root/"key").chmod(0o600)')
     interpreter = os.environ['FC_TEST_SUPPORT_PYTHON']

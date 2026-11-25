@@ -29,7 +29,7 @@ CONFIG = ('Type', 'Restart', 'User', 'Group', 'Environment', 'EnvironmentFiles',
           'PrivateTmp', 'ProtectHome', 'ProtectSystem', 'NoNewPrivileges', 'UMask', 'RootDirectory',
           'RootImage', 'DynamicUser', 'RuntimeDirectory', 'RuntimeDirectoryPreserve', 'StateDirectory',
           'ReadWritePaths', 'ReadOnlyPaths', 'RemainAfterExit', *SETTINGS)
-FIELDS = (*CONFIG, 'MainPID', 'ActiveState', 'SubState', 'ControlGroup', 'FragmentPath',
+FIELDS = (*CONFIG, 'MainPID', 'ControlPID', 'ActiveState', 'SubState', 'ControlGroup', 'FragmentPath',
           'DropInPaths', 'NeedDaemonReload', 'ExecMainCode', 'ExecMainStatus', 'NRestarts')
 SOURCES = ('scripts/control_ha_support_replace.py', 'scripts/control_ha_support_exit.py',
            'scripts/control_ha_support_quiesce.py', 'scripts/control_ha_legacy_support.py',
@@ -81,7 +81,7 @@ def environment_files(state):
 
 
 def empty(state, original_group):
-    require(state['MainPID'] == '0' and (state['ActiveState'] in ('inactive', 'failed') or
+    require(state['MainPID'] == state['ControlPID'] == '0' and (state['ActiveState'] in ('inactive', 'failed') or
             (state['ActiveState'], state['SubState']) == ('active', 'exited')), 'SERVICE_NOT_EMPTY')
     for name in {state['ControlGroup'], original_group} - {''}:
         group = Path('/sys/fs/cgroup') / name.lstrip('/')
@@ -121,6 +121,16 @@ def own(root, uid, gid):
 def pins(directory):
     return {name: [path.stat().st_dev, path.stat().st_ino] for name in
             ('.', 'admission.lock', 'operations.lock', 'pending') for path in [directory / name]}
+
+
+@contextmanager
+def controller_lock(root):
+    descriptor = os.open(root / 'controller.lock', os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW, 0o600)
+    try:
+        fcntl.flock(descriptor, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        yield
+    finally:
+        os.close(descriptor)
 
 
 def prepare(manager, baseline, candidate, root, participant, artifact, *, seconds=360):
@@ -232,7 +242,8 @@ class Replacement:
         self.drain = self.participant / 'drain'
 
     def has(self, name):
-        return (self.root / (name + '.json')).exists()
+        path = self.root / (name + '.json')
+        return path.exists() or path.is_symlink()
 
     def record(self, name, **value):
         if not self.has(name):
@@ -387,6 +398,11 @@ class Replacement:
         return binding
 
     def rollback(self):
+        with controller_lock(self.root):
+            return self._rollback_locked()
+
+    def _rollback_locked(self):
+        require(not self.has('handoff-reserved'), 'MAILBOX_RECLOSURE_REQUIRED')
         state = self.validate()
         if not self.dropin.exists() and state['MainPID'] != '0' and argv(int(state['MainPID'])) == self.plan['old_argv']:
             require(all(state[key] == self.plan['before'][key] for key in CONFIG), 'ORIGINAL_SETTINGS_NOT_RESTORED')
@@ -445,9 +461,9 @@ class Replacement:
         return 'ROLLED_BACK'
 
     def run(self, recover=False):
-        descriptor = os.open(self.root / 'controller.lock', os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW, 0o600)
-        try:
-            fcntl.flock(descriptor, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        with controller_lock(self.root):
+            require(not self.has('handoff-reserved') or not (recover or self.has('rollback-intent')),
+                    'MAILBOX_RECLOSURE_REQUIRED')
             state = self.validate()
             if recover:
                 self.record('rollback-intent', reason='EXPLICIT_RECOVERY', data_restore_allowed=False)
@@ -455,7 +471,7 @@ class Replacement:
                 self.live(state, self.plan['old_argv'])
                 return 'ROLLED_BACK'
             if self.has('rollback-intent'):
-                return self.rollback()
+                return self._rollback_locked()
             if self.has('aborted'):
                 return 'ABORTED'
             if self.has('accepted'):
@@ -493,9 +509,7 @@ class Replacement:
                 return 'ACCEPTED'
             except Exception as error:
                 self.record('rollback-intent', reason=type(error).__name__, data_restore_allowed=False)
-                return self.rollback()
-        finally:
-            os.close(descriptor)
+                return self._rollback_locked()
 
 
 def main():

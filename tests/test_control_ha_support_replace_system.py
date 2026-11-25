@@ -136,3 +136,30 @@ def test_independent_root_supervisor_real_uid_sandbox_and_current_data_rollback(
     assert replace.argv(int(manager.state()['MainPID'])) == plan['old_argv']
     assert not Path(plan['dropin']).exists()
     assert all((Path(plan['gate']) / 'pending' / name).exists() for name in plan['pending'])
+
+
+def test_root_witness_reservation_with_real_support_uid_and_private_tmp(system_service):
+    from scripts import control_ha_support_witness as witness
+    from test_control_ha_support_witness import ticket_for
+
+    manager, plan, root, data, guard_path = system_service
+    controller = Path(plan['root'])
+    ticket = ticket_for(controller, plan)
+    manager.call('daemon-reload')
+    manager.call('start', guard_path.name)
+    wait_for(lambda: (controller / 'accepted.json').exists(), seconds=35)
+    wait_for(lambda: not any(controller.glob('.receipt-*')))
+    manager.call('stop', guard_path.name)
+    result = witness.sample(controller, ticket)
+    assert result['controller_uid'] == 0
+    assert result['owner_exit_verified'] and result['fixture']
+    assert not result['opening_permitted'] and not result['mailbox_live_verified']
+    assert manager.state()['PrivateTmp'] == 'yes'
+    assert manager.state()['User'] == 'fc-support'
+    assert json.loads((controller / 'old-exited.json').read_bytes())['state']['RemainAfterExit'] == 'no'
+    with replace.effective_user(plan['uid'], plan['gid']):
+        assert not os.access(controller, os.W_OK, effective_ids=True)
+    with pytest.raises(ValueError, match='MAILBOX_RECLOSURE_REQUIRED'):
+        replace.Replacement(controller).run(recover=True)
+    assert not (controller / 'rollback-intent.json').exists()
+    assert all((Path(plan['gate']) / 'pending' / name).exists() for name in plan['pending'])
