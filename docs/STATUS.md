@@ -1,5 +1,21 @@
 # Текущее состояние / Current state
 
+**25 November — OWNER access restored; pinned support candidate qualified, not installed.**
+Owner authenticated through a local GUI password dialog; privileged readback and a separate system
+fixture now succeed. No password captured, permanent privilege or sudoers/polkit change; normal
+sudo expiry/session scope applies. Featurea2807348 is pushed/remote-SHA verified. The exact installed
+support shape preserves16 modules, changes3/adds3;36 tests PASS/0 skips plus installed-UID/interpreter
+systemd stop beyond41s and fresh encrypted-store readback PASS.
+[Candidate, evidence, failures and rollback limits](releases/2026-11-24-control-ha-installed-recovery.md#authenticated-owner-support-candidate--25-november).
+At16:00UTC working support retains PID2022541/all19 sources/original argv/3 unit files,0 restarts;
+the three OWNER containers remain healthy with unchanged PIDs/images. No working support deployment,
+RU/NL contact or public version change. Next: qualified legacy-support admission/drain with independent
+rollback supervision and Reticulum background persistence closure, not a force-stop or another
+authorization request. Installed manual/OWNER coverage, coherent capture and independent trust/custody/
+recovery remain; isolated replication PASS and the same three HA-02 gates partial. No HA-03/new ETA.
+
+At the preceding operator-CLI checkpoint:
+
 **25 November — three manual operator CLI admission boundaries qualified; not installed.**
 Feature171014ad is pushed/remote-SHA verified; all17 restricted/support/notices CLI actions gain
 admission before private/store access, retained through commits/publication/close, with uncertainty

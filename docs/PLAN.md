@@ -3,6 +3,22 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+25 November: OWNER GUI sudo authentication and exact installed-shape support candidate qualification
+COMPLETE at featurea2807348, pushed/remote-SHA verified.36 tests PASS/0 skips plus a separate actual
+installed-UID/interpreter systemd fixture and fresh encrypted-store readback PASS. Working support
+and the three OWNER containers remain unchanged at16:00UTC; support is not upgraded.
+[Exact candidate, retained prestate and transition limits](releases/2026-11-24-control-ha-installed-recovery.md#authenticated-owner-support-candidate--25-november).
+Technical privileged execution is available in the authenticated terminal with normal sudo expiry;
+no renewed owner authorization is needed. Next: qualify old-support main-loop admission/drain and
+independently supervised replacement/rollback, including Reticulum periodic/exit persistence closure.
+Do not stop the old worker using its unsafe TERM/40s policy or install the kill policy alone.
+Then installed/manual coverage and guarded OWNER integration, coherent fleet capture and independent
+current-input trust/custody/combined recovery. Three HA-02 gates partial; isolated replication PASS.
+No RU/NL contact, HA-03, public version change or new ETA in this candidate-only continuation.
+
+At the preceding operator-CLI checkpoint:
+
+**CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
 25 November: manual restricted/support/notices CLI source slice COMPLETE at171014ad, pushed and
 remote-SHA verified. All17 actions honor configured admission.211 checks PASS/0 skips,89 new, including
 native SQLite waits/process death, post-commit/rename/close uncertainty and isolated archives.

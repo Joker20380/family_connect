@@ -8,6 +8,56 @@ Owner request selects all four existing HA-02 gates, not HA-03..05. The25 Novemb
 also authorizes participant installation and bounded operational work with documented rollback;
 earlier read-only/deployment-permission limitations in the historical sections are superseded.
 
+## Authenticated OWNER support candidate — 25 November
+
+[Authoritative candidate, qualification, retained prestate and rollback limits](https://github.com/Joker20380/family_connect/blob/a2807348d6153e97f459b411a34909f2dbaa998e/docs/releases/2026-11-25-control-ha-support-overlay.md).
+Featurea2807348d6153e97f459b411a34909f2dbaa998e is ordinarily pushed and remote-SHA verified.
+Main remains navigation-only. This is source-only qualification, **not working support installation
+or HA-02 acceptance**.
+
+The owner entered the password in a local GUI sudo dialog. Privileged readback and a separate
+systemd fixture succeeded in the retained terminal. No password entered chat or evidence; no
+sudoers/polkit edit, permanent privilege grant or authentication bypass. Normal sudo expiry and
+terminal scope apply; the earlier missing-access statements below are historical.
+
+The pinned builder combines the exact19 installed Python sources with six checked inputs:
+3 changed/3 added/16 preserved/no removals. It rejects source drift, unsafe file types, invalid
+contracts and output replacement; archives contain sources only, not keys, product data or caches.
+Baseline SHA256 `3aeb6f2badd3172e1e8d9417df77d7c097bb822153dc65b18a8318a097f6dd28`;
+candidate SHA256 `ae30efc5271f53d1bbcfa49097f899831c31deb37a8bdabc536d19490f7765e6`.
+All17 installed provisioning/messenger dependency pins match. No dependency upgrade was performed.
+
+Final36 tests PASS/0 skips,58.85s:25 packaging cases and11 existing lifecycle cases repeated with
+archive-bound worker launches. An additional transient system unit runs the exact candidate under
+actual `fc-support`/`fc-support-ipc` and the installed interpreter, using only synthetic state/IPC.
+Main-only TERM/no forced timeout preserves an admitted child beyond41s; release permits commit,
+close and exit0. A fresh installed-interpreter process as the same UID reads the encrypted record
+and drains the synthetic gate. The fixture unit is removed; private evidence is retained.
+This is not all production sandbox settings, live remote outcomes or complete RNS writer closure.
+
+The initial28-pass/8-failure run remains recorded: seven failures were a provenance-fixture naming
+mistake, one was an overbroad import of an unchanged unused installed helper with a missing dependency.
+The helper is not used by the support worker and stays byte-identical. Final qualification verifies
+the worker's actual transitive imports; no unrelated installed defect is declared fixed.
+
+At16:00UTC working support is still active/running PID2022541,0 restarts, without a gate and with
+its old40s forced-stop policy. All19 source hashes, original command and3 unit files match retained
+prestate. The three exact OWNER containers remain healthy/running with unchanged PIDs/images and
+0 restarts. RU/NL were not contacted. No working service, product version, public installer/catalog,
+invitation page or signing change. Raw argv/unit bytes and all synthetic evidence remain outside Git.
+
+Private evidence directory `/tmp/fc-ha-support-authenticated-20261125`; final36 JUnit SHA256
+`1ee5ec717cd575ce4b8eb0d19bbc539059c181ee7dad80a5abc49c62ff518225`, system fixture SHA256
+`298386607d4601a529dfe18e41894347701dee665f27d8de4b4684f491373bbf`.
+No production rollback is required. The baseline archive is a code baseline, not a product-data
+rollback. Preserve current stores/feeds/pending markers and unresolved external outcomes.
+
+Next: qualify old-support main-loop admission/drain and independently supervised replacement/rollback,
+plus exact Reticulum periodic/cache/exit persistence closure. Do not use ordinary unsafe TERM/40s
+stop, apply only the kill policy or invent an empty gate for old work. Installed manual/OWNER coverage,
+coherent fleet capture, independent trust/custody/approval and final post-ACK recovery still remain.
+Replication PASS in isolation; same three HA-02 gates partial, no HA-03/automatic failover/new ETA.
+
 ## Manual operator admission — 25 November
 
 [Authoritative source,211 checks, unchanged prestate and rollback](https://github.com/Joker20380/family_connect/blob/171014ad39b08e424d5ce57dac0dd83dc9e5dca9/docs/releases/2026-11-25-control-ha-operator-capture.md).
