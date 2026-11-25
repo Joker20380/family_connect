@@ -1,0 +1,249 @@
+--- a/control/friends/chat_sync.py
++++ b/control/friends/chat_sync.py
+@@ -4,6 +4,7 @@
+ import ipaddress
+ from pathlib import Path
+ import subprocess
++from control.capture_gate import external_operation
+ 
+ ROOT=Path('/opt/apps/family_connect/friends-access')
+ 
+@@ -11,7 +12,8 @@
+ def synchronize(registry):
+     with (ROOT/'chat-sync.lock').open('a') as lock:
+         fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
+-        return _synchronize(registry)
++        with external_operation():
++            return _synchronize(registry)
+ 
+ 
+ def _synchronize(registry):
+--- a/control/friends/diagnostics.py
++++ b/control/friends/diagnostics.py
+@@ -6,7 +6,7 @@
+ import re
+ import sqlite3
+ from contextlib import closing
+-import threading
++from contextlib import nullcontext
+ import time
+ 
+ from .access import Rejected
+@@ -121,15 +121,15 @@
+             database.execute('DELETE FROM snapshots WHERE received<?', (now - RETENTION,))
+ 
+ 
+-def start_retention(path):
+-    stopped = threading.Event()
++def start_retention(path, *, capture_gate=None):
++    from control.friends.http_lifecycle import Retention
++    stopped = Retention()
+     def run():
+         while not stopped.is_set():
+             try:
+-                prune(path, int(time.time()))
++                with capture_gate.operation() if capture_gate is not None else nullcontext():
++                    prune(path, int(time.time()))
+             except (OSError, sqlite3.Error):
+                 pass
+             stopped.wait(60)
+-    worker = threading.Thread(target=run, name='support-retention', daemon=True)
+-    worker.start()
+-    return stopped
++    return stopped.start(run, name='support-retention')
+--- a/control/friends/technical_metadata.py
++++ b/control/friends/technical_metadata.py
+@@ -6,7 +6,7 @@
+ from pathlib import Path
+ import sqlite3
+ import stat
+-import threading
++from contextlib import nullcontext
+ import time
+ 
+ from .access import Rejected
+@@ -208,14 +208,15 @@
+             expire(database, now)
+ 
+ 
+-def start_retention(path):
+-    stopped = threading.Event()
++def start_retention(path, *, capture_gate=None):
++    from control.friends.http_lifecycle import Retention
++    stopped = Retention()
+     def run():
+         while not stopped.is_set():
+             try:
+-                prune(path, int(time.time()))
++                with capture_gate.operation() if capture_gate is not None else nullcontext():
++                    prune(path, int(time.time()))
+             except (OSError, sqlite3.Error):
+                 pass
+             stopped.wait(60)
+-    threading.Thread(target=run, name='technical-metadata-retention', daemon=True).start()
+-    return stopped
++    return stopped.start(run, name='technical-metadata-retention')
+--- a/control/friends/transport_membership.py
++++ b/control/friends/transport_membership.py
+@@ -3,6 +3,7 @@
+ import os
+ from pathlib import Path
+ import subprocess
++from control.capture_gate import external_operation
+ 
+ from . import paid_beta, transport_policy as policy
+ 
+@@ -25,8 +26,9 @@
+                 raise ValueError('INVALID_NODE_COMMAND')
+             request = dict(operation='prepare', token=token,
+                 paid=policy.read_snapshot(database, node, now, device=device))
+-            reply = subprocess.run(command, input=json.dumps(request).encode(), capture_output=True, timeout=12, check=True)
+-            if len(reply.stdout) > 1024 or json.loads(reply.stdout) != dict(schema=1,node=node,result='prepared',token=token):
+-                raise ValueError('INVALID_PREPARATION_ACK')
++            with external_operation():
++                reply = subprocess.run(command, input=json.dumps(request).encode(), capture_output=True, timeout=12, check=True)
++                if len(reply.stdout) > 1024 or json.loads(reply.stdout) != dict(schema=1,node=node,result='prepared',token=token):
++                    raise ValueError('INVALID_PREPARATION_ACK')
+     except (OSError, ValueError, subprocess.SubprocessError) as error:
+         raise paid_beta.PaidBetaError('TRANSPORT_PREPARATION_REQUIRED') from error
+--- a/friends_http.py
++++ b/friends_http.py
+@@ -9,8 +9,10 @@
+ from control.friends.chat_sync import synchronize
+ from control.friends.referrals import Referrals,Exhausted,RateLimited
+ from control.friends.subscription import Unsupported as SubscriptionUnsupported
++from control.capture_gate import Gate,Busy,external_operation
+ access=Access(ROOT/'access.db');slots=threading.BoundedSemaphore(4)
+ chat_access=ChatAccess(access)
++capture_gate=Gate()
+ 
+ def unique(pairs):
+  result={}
+@@ -44,6 +46,12 @@
+   self.connection.settimeout(5)
+   if self.path not in ('/friends/challenge','/friends/activate','/friends/restricted-readiness','/friends/restricted-readiness/challenge','/friends/restricted-readiness/ack-challenge','/friends/restricted-readiness/ack','/friends/configuration/ru','/friends/configuration/nl','/friends/gateway-configuration/nl-amsterdam-1','/friends/gateway-configuration/nl-amsterdam-2','/friends/chat/challenge','/friends/chat/register','/friends/referral/issue','/friends/referral/claim','/friends/device/status','/friends/device/subscription','/friends/device/support','/friends/device/diagnostics','/friends/device/technical-metadata/v1','/friends/notices/publish','/friends/notices/device/role','/friends/notices/device/publish','/friends/notices/device/list','/friends/notices/device/edit'):self.reply(404,{'error':'not-found'});return
+   if not slots.acquire(blocking=False):self.reply(429,{'error':'busy'});return
++  try:
++   with capture_gate.operation():self.admitted_post()
++  except Busy:self.reply(503,{'error':'capture-busy'})
++  except OSError:self.reply(503,{'error':'capture-unavailable'})
++  finally:slots.release()
++ def admitted_post(self):
+   phase='http_parse'
+   try:
+    size=int(self.headers.get('Content-Length','0'));assert 0<size<=(32768 if self.path in ('/friends/notices/publish','/friends/notices/device/publish','/friends/notices/device/list','/friends/notices/device/edit') else 8192) and self.headers.get('Content-Type','').split(';')[0]=='application/json'
+@@ -118,10 +126,11 @@
+     if node is not None:record=configuration_decision(access,ROOT,node,record)
+     if country=='ru':command=['/usr/bin/python3','/opt/apps/family_connect/friends-awg/awg-gateway.py','register']
+     else:command=['/usr/bin/ssh','-i','/opt/apps/family_connect/friends-awg/registration-key','-o','IdentitiesOnly=yes','-o','BatchMode=yes','-o','ConnectTimeout=5','-o','StrictHostKeyChecking=yes','-o','UserKnownHostsFile=/opt/apps/family_connect/friends-awg/known_hosts','root@'+host,'register']
+-    reply=subprocess.run(command,input=json.dumps(record).encode(),capture_output=True,timeout=15)
+-    if reply.returncode:raise RuntimeError('Gateway unavailable')
+-    assigned=json.loads(reply.stdout);assert assigned['public_key']==record['public_key'] and assigned['transport']=='amneziawg-3.1'
+-    result={'device':record['device'],'country':country,'address':assigned['address'],'tcp_id':record['tcp_id'],'catalog':catalog}
++    with external_operation():
++     reply=subprocess.run(command,input=json.dumps(record).encode(),capture_output=True,timeout=15)
++     if reply.returncode:raise RuntimeError('Gateway unavailable')
++     assigned=json.loads(reply.stdout);assert assigned['public_key']==record['public_key'] and assigned['transport']=='amneziawg-3.1'
++     result={'device':record['device'],'country':country,'address':assigned['address'],'tcp_id':record['tcp_id'],'catalog':catalog}
+     if explicit:result['gateway_id']=target
+    self.reply(200,result)
+   except SubscriptionUnsupported:self.reply(501,{'error':'subscription-unsupported'})
+@@ -133,17 +142,18 @@
+    if self.path=='/friends/restricted-readiness/challenge' and type(error).__name__!='ChallengeUnavailable':
+     logging.getLogger(__name__).warning('restricted_challenge stage=%s reason=%s',phase,'INTERNAL_DEPENDENCY_FAILURE' if phase=='handler_import' else 'INTERNAL_ERROR')
+    self.reply(503,{'error':'unavailable'})
+-  finally:slots.release()
+ def main():
+  import argparse
+- global ROOT,access,chat_access
++ global ROOT,access,chat_access,capture_gate
+  parser=argparse.ArgumentParser(description=__doc__)
+  parser.add_argument('--root',type=Path,default=ROOT)
+  parser.add_argument('--port',type=int,default=18084)
++ parser.add_argument('--capture-gate',type=Path)
+  parser.add_argument('--readiness-ack',metavar='CORRELATION_ID')
+  parser.add_argument('--material',type=Path)
+  parser.add_argument('--gateway-routing-request',type=Path)
+  args=parser.parse_args()
++ capture_gate=Gate(args.capture_gate)
+  ROOT=args.root.resolve();access=Access(ROOT/'access.db');chat_access=ChatAccess(access)
+  if args.gateway_routing_request is not None:
+   from control.friends.gateway_routing import administer,canonical,parse,private_read,require
+@@ -154,7 +164,7 @@
+    request_path=args.gateway_routing_request
+    require(request_path.is_absolute())
+    request=parse(private_read(request_path.parent,request_path.name,8192).decode())
+-   result=administer(access,ROOT,request)
++   with capture_gate.operation():result=administer(access,ROOT,request)
+   except Exception:
+    print(canonical(dict(result='REJECTED',cause='ROUTING_REQUEST_REJECTED')).decode());raise SystemExit(1) from None
+   print(canonical(result).decode());return
+@@ -165,10 +175,10 @@
+   except Exception:print(json.dumps(dict(version=1,status='UNKNOWN',reason='READBACK_UNAVAILABLE')));raise SystemExit(1) from None
+   return
+  from control.friends.diagnostics import start_retention
+- retention=start_retention(ROOT/'diagnostics.sqlite')
+  from control.friends.technical_metadata import start_retention as start_metadata_retention
+- metadata_retention=start_metadata_retention(ROOT/'technical-metadata.sqlite')
+- try:ThreadingHTTPServer(('127.0.0.1',args.port),Handler).serve_forever()
+- finally:retention.set();metadata_retention.set()
++ from control.friends.http_lifecycle import serve
++ serve(('127.0.0.1',args.port),Handler,(
++  lambda:start_retention(ROOT/'diagnostics.sqlite',capture_gate=capture_gate),
++  lambda:start_metadata_retention(ROOT/'technical-metadata.sqlite',capture_gate=capture_gate)))
+ 
+ if __name__=='__main__':main()
+--- a/scripts/service_notices.py
++++ b/scripts/service_notices.py
+@@ -17,6 +17,7 @@
+ import time
+ import uuid
+ from messenger.service_events import validate_feed, KINDS
++from control.capture_gate import external_operation
+ 
+ 
+ class Notices:
+@@ -133,22 +134,34 @@
+         return dict(version=version, events=events)
+ 
+     def export_all(self, path):
+-        self.export(path)
+-        self.export(Path(path).with_name('family-connect-events-v2.json'),version=2)
++        self._export_versions(((Path(path), 1), (Path(path).with_name('family-connect-events-v2.json'), 2)))
+ 
+     def export(self, path, version=1):
+-        path = Path(path)
+-        self.db.execute('BEGIN IMMEDIATE')
+-        data = json.dumps(self.feed(version=version), ensure_ascii=False, separators=(',', ':')).encode()
+-        fd, temporary = tempfile.mkstemp(prefix='.notices-', dir=path.parent)
++        self._export_versions(((Path(path), version),))
++
++    def _export_versions(self, targets):
++        with external_operation():
++            with self.db:
++                self.db.execute('BEGIN IMMEDIATE')
++                now = int(time.time())
++                for path, version in targets:
++                    self._write_feed(path, version, now)
++
++    def _write_feed(self, path, version, now):
++        data = json.dumps(self.feed(version=version, now=now), ensure_ascii=False, separators=(',', ':')).encode()
++        descriptor, temporary = tempfile.mkstemp(prefix='.notices-', dir=path.parent)
+         try:
+-            with os.fdopen(fd, 'wb') as output:
++            with os.fdopen(descriptor, 'wb') as output:
++                os.fchmod(output.fileno(), 0o644)
+                 output.write(data);output.flush();os.fsync(output.fileno())
+-            os.chmod(temporary, 0o644)
+             os.replace(temporary, path)
++            directory = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY)
++            try:
++                os.fsync(directory)
++            finally:
++                os.close(directory)
+         finally:
+             if os.path.exists(temporary): os.unlink(temporary)
+-            self.db.commit()
+ 
+ 
+ def main():

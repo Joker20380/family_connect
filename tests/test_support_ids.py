@@ -8,6 +8,7 @@ from control.friends import support_admin, support_ids
 from control.friends.access import Access, Rejected
 from control.friends.restricted import migrate
 from device_identity.device import DeviceIdentity
+from tests.fixtures.receiver_access import enroll, proof
 
 
 @pytest.fixture
@@ -16,19 +17,6 @@ def access(tmp_path):
     value.initialize()
     migrate(value)
     return value
-
-
-def proof(access, device, purpose, code=''):
-    challenge = access.challenge(device.public_identity, device.wireguard_public_key, purpose, code)
-    return device.prove_transport_key(challenge['challenge'])
-
-
-def enroll(access):
-    device = DeviceIdentity.generate()
-    access.complete(proof(access, device, 'activate', access.invite()), 'activate')
-    with access.db() as database:
-        support = support_ids.registered(database, device.reference)
-    return device, support
 
 
 def request(access, device):

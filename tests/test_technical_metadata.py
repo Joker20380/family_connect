@@ -7,7 +7,7 @@ import pytest
 from control.friends import technical_metadata as metadata
 from control.friends.access import Access, Rejected
 from control.friends.referrals import RateLimited
-from test_support_ids import enroll, proof
+from tests.fixtures.receiver_access import enroll, proof
 
 
 @pytest.fixture

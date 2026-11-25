@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 25 November: exact-installed receiver maintenance overlay;6 changed/2 added/no removals,171 focused tests and129 legacy cases per archive; qualified, not installed](releases/2026-11-25-control-ha-receiver-overlay.md).
+
 [CONTROL-HA · 25 November: receiving HTTP graceful stop,269 tests including native systemd/child completion; actual RU old archive inspected, candidate not installed](releases/2026-11-25-control-ha-http-drain.md).
 
 [CONTROL-HA · 25 November: receiving notice-export uncertainty fixed;146 tests, native HTTP/lost ACK/receiver death, single-snapshot durable outputs; candidate only, no working adoption](releases/2026-11-25-control-ha-notice-export.md).

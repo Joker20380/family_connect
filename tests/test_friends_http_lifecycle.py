@@ -20,6 +20,7 @@ from scripts.service_notices import Notices
 
 
 ROOT = Path(__file__).resolve().parents[1]
+RUNTIME = Path(os.environ.get('FC_TEST_HTTP_RUNTIME', str(ROOT)))
 CHILD = r'''
 import importlib.util, json, os, signal, subprocess, sys, time
 from pathlib import Path
@@ -99,7 +100,7 @@ def receiver(tmp_path):
     (tmp_path / 'public').mkdir(mode=0o700)
     processes = []
 
-    def launch(mode='export', source=ROOT):
+    def launch(mode='export', source=RUNTIME):
         process = subprocess.Popen([sys.executable, '-I', '-c', CHILD, str(tmp_path), str(source), mode],
                                    stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
         processes.append(process)
@@ -286,7 +287,7 @@ def test_real_systemd_stop_preserves_admitted_child_process(receiver):
     try:
         command = ['systemd-run', '--user', '--quiet', '--unit=' + unit, '--property=Type=exec',
                    '--property=Restart=no', *['--property=' + value for value in properties],
-                   sys.executable, '-I', '-c', CHILD, str(root), str(ROOT), 'child-process']
+                   sys.executable, '-I', '-c', CHILD, str(root), str(RUNTIME), 'child-process']
         result = subprocess.run(command, capture_output=True, timeout=10)
         assert result.returncode == 0, result.stderr.decode()
         wait_for(lambda: (root / 'port').exists())

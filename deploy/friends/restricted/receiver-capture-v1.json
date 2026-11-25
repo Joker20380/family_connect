@@ -1,0 +1,26 @@
+{
+  "added": {
+    "control/capture_gate.py": "da28d940e2e17e2dbb1fbbde8cc04c59d29cffc8762ada717135504e2ffa4906",
+    "control/friends/http_lifecycle.py": "3b25ad6378991ec9703aaf0b1ab8f9f1896e97cc4ddf2e52df7ab450eb5240de"
+  },
+  "after": {
+    "control/friends/chat_sync.py": "3f46d66eacab3b06c694499bcc3bdfaa4d033a141cc5e3f4a56eac179176f443",
+    "control/friends/diagnostics.py": "30d25321af38fef936f5ca98175a3a37ef233d4d4386d7dddfc83185cea61705",
+    "control/friends/technical_metadata.py": "5184697d2c3423c632acc69ac98e35f5b822a6e5ecf0a52b9245e832bb1cdb6d",
+    "control/friends/transport_membership.py": "0f4e7d35ee94045010cf19e36413bf24deab37ff23892cbbd82b28cdde61e75f",
+    "friends_http.py": "42032e6fb24d43694c2532f83d227dc0c6feba16ee5a2b552d67aeecd87f9570",
+    "scripts/service_notices.py": "ea17ba855f3c61cd23c83cbc1583338bf80e52bf483ac21febc492ab5b17d33d"
+  },
+  "baseline_sha256": "4e2df679761ba9e7af74128984ef2e19e8e7b228f1cc85b36d50be2b0bc24ce8",
+  "before": {
+    "control/friends/chat_sync.py": "f65d3efb5e68ac7248288050abe7761375048690372d5fa99c9e0e853433c97b",
+    "control/friends/diagnostics.py": "2a42cb9fce97f446083cb6f2c63be1059bdb195c8fcafa49f089d184dd0ad703",
+    "control/friends/technical_metadata.py": "58f4d5decd865f95eeaa47f39b41bd907bda5569cda51afbcb351c672173cd3a",
+    "control/friends/transport_membership.py": "ba248218fe8d60a7a4d49bd59815edac44b554a365f15155cfcfecccdf78075a",
+    "friends_http.py": "c506ed41bb34959ee4b24bc364d183b53e95d5c733d93b8c695246ecf4eda3e3",
+    "scripts/service_notices.py": "80df5a26b7121d40f6f180f17bbfe96e2e4d2b734c8230c78bafb6ee2ba31167"
+  },
+  "patch_sha256": "3d4f6aaa242532ae5789d4cf988a864fb06f14b7b1c1ee69aae64ee78c2fd34a",
+  "schema": 1,
+  "unit_sha256": "0775fb7f65a98218229862854c967de20c64d15dadf1ad1a5374dcf81f3cd044"
+}

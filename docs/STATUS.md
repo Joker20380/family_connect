@@ -1,5 +1,23 @@
 # Текущее состояние / Current state
 
+**25 November13:56UTC — installed-shape receiver candidate qualified, not installed.**
+Replaced the broad21-file candidate with a pinned maintenance overlay on the exact RU archive:
+6 existing members changed,2 added, none removed; all38 other archive entries byte-preserved.
+Legacy access/payment/routing/consent implementations remain installed-shaped, not replaced
+with canonical repository adapters.171 focused tests PASS/0 skips,35 new; two included runners
+each pass the same129 legacy cases against actual baseline/candidate imports, not checkout code.
+Native candidate stop/retention/export, real systemd child completion and lost external ACK
+cases pass. [Reviewed delta, qualification and rollback](releases/2026-11-25-control-ha-receiver-overlay.md).
+RU readback still has the same old PID/archive, active/0 restarts; OWNER healthy/0 restarts,
+both collector timers active. No working files, feeds, unit policy or public version changed.
+Installed-shape source qualification is done. Next: close legacy receiver admission and
+independently settle old handlers/children before activation of this exact candidate and unit
+settings. Gate initialization is not retroactive settlement; preserve old uncertainty. Support/
+manual coverage, guarded OWNER integration, fleet capture/custody/recovery remain. Replication
+PASS in isolation, the same three HA-02 gates partial; no HA-03 or automatic failover.
+
+At the preceding graceful-stop checkpoint:
+
 **25 November13:34UTC — receiving HTTP graceful stop qualified, not installed.**
 Read-only RU inspection binds the actual old archive and unit: active, no capture gate,
 default SIGTERM/control-group stop with90s escalation. A normal restart can interrupt both

@@ -3,6 +3,21 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+25 November13:56UTC: installed-shape receiver source qualification COMPLETE, not deployed.
+Pinned baseline plus reviewed delta changes6 members/adds2/removes0 and preserves all other
+38 entries, including existing access/payment/routing/consent code and transport reconciliation.
+171 focused tests PASS/0 skips,35 new; two included native archive runners each pass the same
+129 legacy cases. Candidate actual systemd/child, retention/export/failure boundaries pass.
+[Exact candidate, source pins, tests and rollback](releases/2026-11-25-control-ha-receiver-overlay.md).
+RU unchanged, active/0 restarts. Next is legacy receiver admission closure and independent
+old-work settlement before activating this exact archive with its paired effective unit settings;
+do not repeat broad repository-adapter preparation or treat an empty new gate as old settlement.
+Support/manual coverage, guarded OWNER integration, fleet participation, coherent capture,
+independent custody/trust/approval and final recovery remain within the same HA-02 gates:
+replication PASS in isolation, three partial. No HA-03, automatic failover or product release.
+
+At the preceding graceful-stop checkpoint:
+
 25 November13:34UTC: native receiving HTTP graceful stop qualified, not installed.
 Actual RU old archive/unit read back: no gate, SIGTERM/control-group,90s timeout; ordinary
 restart cannot establish old-work settlement. Candidate now joins admitted HTTP/retention
