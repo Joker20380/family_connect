@@ -11,20 +11,19 @@ remains selected; this publication task does not advance its acceptance gates.
 [Reconciliation record](releases/2026-11-24-source-reconciliation.md).
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Featurefa05f0da is pushed/remote-SHA verified. OWNER candidate gate integration passes across
-separate mount/PID namespaces at23:50:26–23:50:41UTC: same private ext4 inode pins, UID10001/1000,
-active-writer drain, both admissions closed/released and uncertainty retained after recreation.
-182 tests PASS/0 skips,46 new cases; owned containers removed. Installed bindings unchanged;
-no working gate, permission, service, RU/NL, image build or version change.
-[Cross-container proof and rollback boundary](releases/2026-11-24-control-ha-installed-recovery.md#owner-cross-container-gates--isolated-integration).
-Working console /proc namespaces are unreadable by the current account; do not bypass access
-with chmod or privileged host-PID helpers. This isolated stand is not installed binding approval.
-Next: independent candidate/config/runtime acceptance and authorized actual gate/namespace/
-guardian setup, existing-work settlement, remaining RU/NL/manual/transport coverage, then
-approved coherent interval and independent custody/recovery. The private configuration proposal
-remains uninstalled; no production gate paths created. Workstation packages remain uninstalled;
+Feature82dbcbc3 is pushed/remote-SHA verified. Exact OWNER added-layer contents now verify,
+not only metadata shape:25 November00:05:28.962–00:05:29.491UTC, both retained candidates match
+10 pinned sources and8 permitted parent directories with exact ownership/modes and OCI/diff-ID
+bindings.173 tests PASS/0 skips,56 new cases. No container dispatch, image build/load/tag, working
+gate, service, RU/NL or version change. [Offline proof and boundary](releases/2026-11-24-control-ha-installed-recovery.md#owner-overlay-content--25-november-offline-proof).
+This is not independent approval or full inherited-base/runtime qualification. Cross-mount proof
+is retained, not rerun. Working console namespace access remains unqualified; no chmod or
+privileged host-PID bypass. Next: independent candidate/config/runtime acceptance and authorized
+actual gate/guardian setup, existing-work settlement, remaining RU/NL/manual/transport coverage,
+then approved coherent interval and independent custody/recovery. The private configuration
+proposal remains uninstalled; no production gate paths created. Workstation packages remain uninstalled;
 preserve original source/data roots and known-hosts argv. Direct ORM/DB/SSH/Docker bypasses
-remain outside admission. Do not repeat completed cross-mount/config/build/collector/NL2 slices as
+remain outside admission. Do not repeat completed overlay/cross-mount/config/build/collector/NL2 slices as
 gates. Working-NL changes remain outside permission.
 A host-wide daemon-reload may run generators/rebuild dependencies; it is not a per-service or
 authorized read-only NL diagnostic. Its disposition still belongs to the exact activation scope.

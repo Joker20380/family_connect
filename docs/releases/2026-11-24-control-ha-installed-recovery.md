@@ -6,6 +6,39 @@ divergence is reconciled/pushed at2ae5c512; older publication-blocker statements
 historical, not active instructions or a current blocker.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## OWNER overlay content — 25 November offline proof
+
+[Authoritative checker, candidate evidence and limits](https://github.com/Joker20380/family_connect/blob/82dbcbc3ed9c98e2a5f2a2480a67a9cea6710eb0/docs/releases/2026-11-25-control-ha-owner-overlay.md)
+is pushed/remote-SHA verified at82dbcbc3ed9c98e2a5f2a2480a67a9cea6710eb0. Main is navigation only.
+The previous image metadata check did not inspect added-layer contents. The new offline checker
+binds exact OCI manifest/config/layer/diff-ID references, unchanged base/runtime configuration,
+only10 expected root-owned0644 source files and8 root-owned0755 parent directories. Extra files,
+links, whiteouts, special entries, unexpected permissions/metadata, source drift or invalid pins
+cannot produce a source-match result. No archive extraction, network fetch or Docker dispatch.
+
+At25 November00:05:28.961783–00:05:29.491192UTC both existing candidatesb62e6693/2162635c match
+the expected sources from committedfa05f0da. Their53,760-byte added layers contain no unexpected
+entries. A private69,692,416-byte Docker save covers only the four baseline/candidate images.
+No image build/pull/load/tag, container run/exec/replacement, database access, source/configuration,
+permission, service, RU/NL, version/catalog/signing or release change. Previous stands are not rerun.
+
+Archive SHA:`aaad36c23002d8b4939f17cae0ca65a5962fcdd52091a81f71eda636694cff44`.
+Source-manifest file SHA:`828d94899e66e586be582d6e7fc3fb3637024066db3905c035f8db8882b56639`.
+Console receipt SHA:`22690bbb6971ad7b647f62c72491377e48539baa96249732d781034d1c531bbe`.
+Publisher receipt SHA:`f0688650661cc02fde96688388ba3be9ac6b274423ccd897f33ca03328e13915`.
+Raw archive/config and private receipts stay outside Git; only sanitized evidence is published.
+173 focused tests PASS/0 skips/1.35s,56 new cases. Feature docs:4 files/1079 targets/zero errors;
+whitespace clean. The checker is read-only; stale sources return exit2, invalid input a sanitized
+exit1. Exit0 means source match, not deployment authority or full inherited-base validation.
+
+There is no working rollback. Keep original images/private config and all uncertainty markers;
+do not restore stale product data. The exact proposal remains uninstalled. Independent candidate/
+config/runtime acceptance and authorized actual gate/guardian setup, existing-work settlement,
+remaining RU/NL/manual/transport coverage, coherent capture and independent custody/final recovery
+remain. Console namespace access is still unqualified; no permission bypass. Working-NL deployment
+is outside current scope. Replication PASS; same three gates partial, no HA-03/new ETA. Do not
+repeat this accepted source-content check, config plan, cross-mount stand or other completed slices.
+
 ## OWNER cross-container gates — isolated integration
 
 [Authoritative fixture, evidence and limits](https://github.com/Joker20380/family_connect/blob/fa05f0da63c2d6a8abfd767ea4c6d52c64fe023c/docs/releases/2026-11-24-control-ha-owner-cross-mount.md)
