@@ -3,6 +3,19 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+25 November11:58UTC: console TCP admission/restore now qualified on the working runtime.
+Kernel-expiring scoped nft set, no worker pause/stop;175 focused tests/0 skips,63 new and four
+native cases. New HTTP request refused during observation, health200 before/after, original
+OWNER configurations/runtime healthy with0 restarts and both collector timers active.
+[Working result, rollback and limits](releases/2026-11-25-control-ha-console-ingress.md).
+Console ingress, publisher dispatcher hold and stopped replacement are complete components,
+not full drain or capture permission. Next: independently settle old publication/support/manual
+effects, then real gate/runtime attestation and guarded startup/abort. Continue remaining fleet
+writers, coherent all-store capture, independent custody/approval and combined current recovery.
+Replication PASS; same three partial gates, no HA-03/cutover or new stage/ETA. Do not repeat
+completed components or infer settlement from closed TCP/process exit/empty queues.
+
+At the preceding publisher-dispatcher checkpoint:
 25 November07:49UTC: publisher scheduler inhibition/resume is now qualified on the working
 runtime: one-second hold, no child interruption, unchanged healthy OWNER containers.159 focused
 tests/0 skips,47 new;4 native Docker cases plus real process-death/deadline tests. Separate

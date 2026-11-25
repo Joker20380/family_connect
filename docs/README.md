@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 25 November: working console TCP admission and automatic expiry,175 tests/four native cases; unchanged healthy OWNER runtime, no complete-drain claim](releases/2026-11-25-control-ha-console-ingress.md).
+
 [CONTROL-HA · 25 November: bounded working publisher dispatcher hold/resume,159 tests and4 native Docker cases; independent failure recovery, no container restart or settlement claim](releases/2026-11-25-control-ha-dispatcher-hold.md).
 
 [CONTROL-HA · 25 November: stopped OWNER replacement/revert executor,176 tests and6 native cases with5 actual coordinator deaths; data/pending preserved, no working deployment](releases/2026-11-25-control-ha-owner-replacement.md).

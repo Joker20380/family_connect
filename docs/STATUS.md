@@ -1,5 +1,21 @@
 # Текущее состояние / Current state
 
+**25 November11:58UTC — working console TCP admission/restore verified.**
+A scoped kernel-expiring lease rejects new connections in the console network namespace while
+established work can finish.175 focused tests PASS/0 skips,63 new; four native cases cover
+in-flight completion, actual controller SIGKILL, atomic table collision and lost helper response.
+Working `/health/` is200 before/after; rejected SYN observed. Both OWNER roles remain healthy,
+unchanged runtime/configuration and0 restarts; both collector timers active. Helpers/table removed.
+[Implementation, evidence, rollback and delayed-helper limit](releases/2026-11-25-control-ha-console-ingress.md).
+No permanent image/config install, container stop/start, remote change or client version bump.
+The console TCP admission, publisher dispatch-inhibition and stopped replacement components are
+qualified; independent publication/support/manual settlement and complete OWNER drain are not.
+Next: settlement, then real gate/runtime attestation and guarded startup/abort integration.
+Remaining fleet participation, coherent capture, independent custody/approval and final recovery
+remain the same HA-02 scope: replication PASS, three gates partial; no HA-03 or automatic failover.
+
+At the preceding publisher-dispatcher checkpoint:
+
 **25 November07:49UTC — working publisher dispatcher hold/resume verified.**
 A one-second hold affects only its exact scheduler shell; already dispatched children keep
 running. Two independent helpers restore scheduling on controller loss, guardian death/stall
