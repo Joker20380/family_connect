@@ -1,5 +1,21 @@
 # Текущее состояние / Current state
 
+**25 November13:14UTC — receiving notice-export uncertainty repaired and qualified.**
+Featureabdce540 is pushed/remote-SHA verified. Reproduced the old bug: a caught second-file
+export failure left v1 present/v2 absent but removed pending and incorrectly allowed drain.
+Both outputs now share one SQLite transaction/time, with file and directory fsync; any export/
+commit failure retains uncertainty.146 focused tests PASS/0 skips,18 new, including actual HTTP,
+TCP reset, receiver process death and isolated closed-package export. Candidate built, not installed.
+[Reproduction, evidence, rollout and rollback](releases/2026-11-24-control-ha-installed-recovery.md#receiving-notice-export--25-november).
+Working OWNER images remain healthy with0 restarts, both collector timers active. No remote
+hosts contacted, live notice files changed or main implementation merged. This fixes a receiving
+source gap, not settlement of old ungated work or complete capture. Next: receiver adoption with
+independent old-work settlement, remaining support/manual coverage and guarded OWNER integration.
+Fleet participation, coherent capture, custody/trust/approval and final recovery remain in HA-02:
+replication PASS in isolation, three gates partial. No HA-03, automatic failover or version bump.
+
+At the preceding publication-database checkpoint:
+
 **25 November12:31UTC — working publication database boundary verified with both admission guards.**
 Featureb7930ba4 is pushed/remote-SHA verified.226 focused tests PASS/0 skips,49 new. A dedicated
 PostgreSQL17 transaction refuses unfinished publication COMMIT, including after sender death;

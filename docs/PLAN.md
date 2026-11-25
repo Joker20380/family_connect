@@ -11,6 +11,18 @@ remains selected; this publication task does not advance its acceptance gates.
 [Reconciliation record](releases/2026-11-24-source-reconciliation.md).
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+25 November13:14UTC: featureabdce540 is pushed/remote-SHA verified. Receiving-export source
+now preserves pending on caught partial-file failures and durably writes both feeds from one
+SQLite snapshot/time.146 focused tests PASS/0 skips,18 new; native HTTP success/error/lost ACK,
+receiver process death and isolated closed-package export covered. Candidate not installed.
+[Reproduced bug, validation and rollback](releases/2026-11-24-control-ha-installed-recovery.md#receiving-notice-export--25-november).
+No remote changes or main implementation merge; working OWNER healthy with0 restarts.
+Next: qualify/adopt the receiver fix with independent old-work settlement and support/manual
+coverage, then gate/runtime attestation and guarded startup/abort. New source cannot retroactively
+fence old handlers. Fleet participation, coherent capture, independent custody/trust/approval and
+final recovery stay in HA-02: replication PASS, same three gates partial; no HA-03 or new ETA.
+
+At the preceding publication-database checkpoint:
 25 November12:31UTC: featureb7930ba4 is pushed/remote-SHA verified. The short publication
 PostgreSQL boundary is qualified and works with both existing admission guards.226 focused
 tests PASS/0 skips,49 new; native late COMMIT and independent server expiry after controller

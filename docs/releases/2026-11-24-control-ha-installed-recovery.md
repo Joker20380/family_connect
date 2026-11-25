@@ -8,6 +8,51 @@ Owner request selects all four existing HA-02 gates, not HA-03..05. The25 Novemb
 also authorizes participant installation and bounded operational work with documented rollback;
 earlier read-only/deployment-permission limitations in the historical sections are superseded.
 
+## Receiving notice export — 25 November
+
+[Authoritative source, reproduced defect, native evidence and rollback](https://github.com/Joker20380/family_connect/blob/abdce5404c3abd18eb2bcbd848b3e65e02de9563/docs/releases/2026-11-25-control-ha-notice-export.md).
+Featureabdce5404c3abd18eb2bcbd848b3e65e02de9563 is ordinarily pushed and remote-SHA verified.
+Main updates only STATUS/PLAN/this navigation report; no implementation merge or deployment.
+
+Found and reproduced an actual old-source defect with synthetic nonempty data: after failure
+of the second feed rename, the HTTP-style exception handler returns normally to the capture
+wrapper, which loses pending and incorrectly allows drain while only the first feed exists.
+The revised exporter keeps both versions in one SQLite transaction/time and records uncertainty
+around the complete export/commit. Each file gets0644 before file fsync, atomic rename and
+parent-directory fsync. Early errors no longer leak the SQLite export transaction. A successful
+later retry does not clear an earlier marker. The two renames remain non-atomic as a pair;
+partial output is preserved as uncertainty, not silently rolled back or accepted.
+
+Final focused run13:12:51.296022–13:14:10.003449UTC:146 PASS/0 skips,18 new cases. Real SQLite
+and disposable PostgreSQL17.11 contracts; Python3.14.4, pytest9.1.1, psycopg3.3.9 and26 matching
+control/identity pins. New native cases exercise a real HTTP handler, caught error503, successful
+ACK200 only after both outputs, real TCP reset/lost ACK, actual child SIGKILL between files and
+isolated closed-package export. Three extra lost-ACK repetitions pass. Synthetic PG removed.
+An earlier broader exploratory run had87 PASS/16 skips for missing nginx/TLS and pinned sync
+fixtures; those tests are not claimed passed, and this is not a release/ingress activation gate.
+
+Closed Friends HTTP candidate SHA256
+`cd33328c1159cbf5c3ebb3f0028ec4a91c969f08750458c1cf7189dadbb898c5` is built and import/export
+tested, **not installed or distributed**. Existing served-source pins and product versions remain
+unchanged. No installer/catalog/download-link or invitation-page changes. Read-only OWNER
+observation confirms original console/publisher/PostgreSQL images healthy,0 restarts, health200,
+both collector timers active. No remote hosts contacted or working notices modified.
+
+Private evidence locator `/tmp/fc-ha-notice-boundary-current`; final tests, old-source reproduction,
+candidate/health manifests and earlier logs retained. Only safe source/tests/docs and digests
+are committed; credentials, DBs, TLS material and runtime capsules remain outside Git/CI.
+There is no working deployment to roll back. A future installation needs its exact retained
+runtime/config prestate and independent old-work settlement; preserve current DBs/feeds/pending.
+Do not roll back product data or clear markers to make capture pass. Returning to the old unsafe
+source is not capture authorization. Filesystem stall/death and a client timeout never authorize
+killing the receiver. Fsync/process-death tests are not host-power-loss hardware qualification.
+
+This closes receiving-export source completion, not old installed handlers or arbitrary manual
+writers. Next is receiver adoption with independent old-work settlement and support/manual
+coverage, then actual gate/runtime attestation and guarded OWNER startup/abort. Remaining fleet
+participation, coherent capture, independent custody/trust/approval and combined current recovery
+stay in HA-02. Replication PASS in isolation; three gates partial, no HA-03 or automatic failover.
+
 ## Publication database boundary — 25 November
 
 [Authoritative implementation, tests, evidence digests and rollback](https://github.com/Joker20380/family_connect/blob/b7930ba4afcffcc7fb3e12f6090e1c0c7d5d8af6/docs/releases/2026-11-25-control-ha-publication-boundary.md).
