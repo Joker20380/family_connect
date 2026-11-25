@@ -12,6 +12,39 @@ from scripts import ci_android_fixture as android
 from scripts import ci_pytest_context as contexts
 
 
+def test_full_inventory_covers_every_explicit_native_file():
+    import configparser
+    config = configparser.ConfigParser()
+    config.read(android.ROOT / 'pytest.ini')
+    paths = [Path(value) for value in config['pytest']['testpaths'].split()]
+    for native in contexts.NATIVE314_FILES:
+        assert any(Path(native).is_relative_to(path) for path in paths), native
+
+
+def test_coverage_still_rejects_missing_duplicate_and_extra_tests(capsys):
+    from scripts import ci_full_pytest as full
+    expected = {name: ['fixture::test_case', 'fixture::test_case'] for name in contexts.CONTEXTS}
+    actual = dict(expected, native314=['fixture::test_case', 'fixture::test_extra'])
+    with pytest.raises(ValueError, match='native314'):
+        full.audit_coverage(expected, actual)
+    import json
+    detail = json.loads(capsys.readouterr().out)
+    assert detail['missing'] == ['fixture::test_case']
+    assert detail['extra'] == ['fixture::test_extra']
+    assert detail['incomplete'] is False
+    full.audit_coverage(expected, expected)
+
+
+def test_collection_evidence_survives_workspace_cleanup(tmp_path, monkeypatch):
+    import json
+    from scripts import ci_full_pytest as full
+    monkeypatch.setenv('FC_NATIVE_DIAGNOSTICS_DIR', str(tmp_path))
+    collection = {name: ['fixture::test_case'] for name in contexts.CONTEXTS}
+    with full.workspace():
+        full.retain_collection('inventory', collection)
+    assert json.loads((tmp_path / 'collections/inventory.json').read_text()) == collection
+
+
 def test_inventory_failure_keeps_collection_diagnostics(tmp_path):
     import inspect
     from scripts import ci_full_pytest

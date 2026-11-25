@@ -25,7 +25,12 @@ These are source corrections, not combined handoff or working installation; new 
 Checkpoint1c24d595 pushed/remote-SHA verified; new full CI is running, not accepted.
 Native support CI now has a separate zero-skip gate with the exact19-file public61b00409 baseline
 and unchanged9d7bf840 archive, protected314/GIL and disposable user-systemd. Fixture/export10 PASS,
-portable ptracer acceptance/terminal2 PASS. No host ptrace-policy relaxation; workflow itself still unqualified.
+portable ptracer acceptance/terminal2 PASS. No host ptrace-policy relaxation.
+22:20UTC exactf6c6171e native support CI45709174045 PASS:214 tests, zero skips; Windows control and
+readiness golden PASS. Full phase0/control FAIL at coverage audit, not a passing full gate: all execution
+contexts pass, but inventory omitted64 explicitly selected mailbox tests (26/13/25) outside pytest.ini
+testpaths. The declared full inventory now includes those files; mismatch assertions remain and retain
+collection diagnostics. Scoped inventory/audit regressions20 PASS. Exact corrected-SHA CI remains required.
 
 ## Retained checkpoints (historical, not simultaneous NEXTs)
 

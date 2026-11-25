@@ -1,5 +1,24 @@
 # 25 November 2026 — HA-02 support stabilization, not handoff acceptance
 
+## Exact f6c6171e CI outcome and coverage correction (22:20UTC)
+
+Native workflow45709174045 at `f6c6171e022fbf2b671e7c950671a556a7fdeb79` actually passed214 tests,
+zero skips. Artifact15068030347 SHA256 `055d07dc98a814c3156acbaece0c4a991788b14b174faffaca61138835bee082`
+is retained privately. Windows control conformance and readiness golden also PASS. Full phase0
+45709173975 and Linux control45709173914 FAIL, not accepted: execution contexts pass but final
+coverage audit refuses native314 inventory. The retained log proves exactly64 extra cases: mailbox
+fence26, links13, startup25. Explicit native selection included these files while default pytest.ini
+testpaths excluded messenger. Corrected full-suite discovery includes those same three files; no
+assertion or accepted hash is removed/rewritten. The audit still rejects missing, extra and duplicate
+cases, now retains sanitized collection inventories and bounded differences.20 scoped regressions PASS.
+
+Host artifact15068910400 SHA256 `a26b2fc72d9da2b13e782d4e7f6c61b807acba1116c8ef636bf452dcd99779f6`
+and Docker artifact15068505853 SHA256 `d020f376d193197de8b6a8934dbaaf037f3dfdfc4e90d26bc97fcc37496cedb1`
+are retained privately. Host execution:9448 passed/915 skipped/602 deselected; root258 passed;
+snapshot31498 passed; native314187 passed/123 skipped. Those skips are not native acceptance:
+the separate214-case native workflow requires zero skips. New exact-SHA full CI remains required.
+Combined executor and working installation remain incomplete; no production change or rollback.
+
 ## Scope and starting point
 
 Remote feature `595acebe72bc486ec9661bb68bc493a09e9863f8` and main

@@ -36,7 +36,10 @@ ready for new-SHA CI. Reviewed reversible announcement delta retains original pi
 No shared handoff/reclosure/recovery executor or working replacement is accepted yet.
 Native support's separate protected314/GIL zero-skip workflow must actually pass on the exact source;
 reconstructed public baseline/archive10 checks and portable user-systemd controller2 checks pass locally.
-Checkpoint1c24d595 is pushed; new CI remains in progress, not a replacement for the combined result.
+Exactf6c6171e native CI214 PASS/zero skips; full phase0/control FAIL because coverage inventory omitted64
+mailbox tests outside default testpaths. All execution contexts pass, but this does not waive coverage:
+declared inventory is corrected and collection diagnostics retained (20 scoped regressions PASS).
+Corrected exact-SHA full CI and the combined result remain outstanding; candidate remains NOT installed.
 The same three HA-02 criteria remain partial; isolated replication PASS. Onboarding remains mandatory.
 
 ## Retained HA-02 checkpoint history (not active NEXTs)

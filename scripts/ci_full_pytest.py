@@ -9,11 +9,31 @@ import subprocess
 import sys
 import tempfile
 from contextlib import contextmanager
+from collections import Counter
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from scripts.ci_pytest_context import CONTEXTS, NATIVE314_FILES, SNAPSHOT_FILE
 from scripts.ci_lifecycle import mark
+
+
+def retain_collection(name, collection):
+    destination = os.environ.get('FC_NATIVE_DIAGNOSTICS_DIR')
+    if destination:
+        folder = Path(destination) / 'collections'
+        folder.mkdir(parents=True, exist_ok=True)
+        (folder / (name + '.json')).write_text(json.dumps(collection, sort_keys=True) + '\n')
+
+
+def audit_coverage(expected, collections):
+    for name in CONTEXTS:
+        if collections[name] != expected[name]:
+            missing = list((Counter(expected[name]) - Counter(collections[name])).elements())
+            extra = list((Counter(collections[name]) - Counter(expected[name])).elements())
+            print(json.dumps(dict(context=name, missing=missing[:128], extra=extra[:128],
+                missing_count=len(missing), extra_count=len(extra),
+                incomplete=len(missing) > 128 or len(extra) > 128)), flush=True)
+            raise ValueError('Fixture collection changed between contexts: ' + name)
 
 
 @contextmanager
@@ -69,6 +89,7 @@ def main():
         mark('inventory_end', returncode=result.returncode)
         result.check_returncode()
         expected = json.loads(inventory.read_text())
+        retain_collection('inventory', expected)
         if set(expected) != set(CONTEXTS) or not all(expected.values()):
             raise ValueError('Incomplete fixture context inventory')
         failures = []
@@ -80,15 +101,14 @@ def main():
             result = subprocess.run(command(name, output), cwd=ROOT, env=environment)
             mark('context_end', context=name, returncode=result.returncode)
             actual = json.loads(output.read_text())
+            retain_collection(name, actual)
             collections[name] = actual[name]
             print(json.dumps(dict(context=name, tests=len(actual[name]), returncode=result.returncode,
                 collection_sha256=hashlib.sha256(json.dumps(actual[name]).encode()).hexdigest())), flush=True)
             if result.returncode:
                 failures.append(name)
         mark('coverage_start')
-        for name in CONTEXTS:
-            if collections[name] != expected[name]:
-                raise ValueError('Fixture collection changed between contexts: ' + name)
+        audit_coverage(expected, collections)
         if failures:
             raise SystemExit('Failed fixture contexts: ' + ', '.join(failures))
         print('Full-suite context coverage: PASS', flush=True)
