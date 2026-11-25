@@ -3,6 +3,20 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+25 November14:29UTC: legacy-loop drain source qualification COMPLETE; bounded RU probe PASS.
+CPython3.14 main-thread hook pauses application admission, joins existing handlers, and in stop
+mode joins retention before native loop exit.19 new native tests,64 focused PASS/0 skips.
+[Actual probe, failure handling and remaining deployment boundary](releases/2026-11-25-control-ha-legacy-http-bridge.md).
+Verified live probe restores the same PID/archive/unit and HTTP service,0 restarts; no stop or
+candidate activation. Private bridge/receipts retained; old external uncertainty is not cleared.
+Next: rollback-guarded paired receiver archive/unit replacement qualification and activation
+using this bridge, rather than default TERM or another broad source rebuild. Keep historical
+external outcomes unresolved until independently reconciled. Support/manual/OWNER integration,
+fleet coherent capture and independent custody/trust/approval/full recovery remain in HA-02.
+The same fixed gates remain: replication PASS in isolation, three partial. No measured ETA.
+
+At the preceding installed-shape checkpoint:
+
 25 November13:56UTC: installed-shape receiver source qualification COMPLETE, not deployed.
 Pinned baseline plus reviewed delta changes6 members/adds2/removes0 and preserves all other
 38 entries, including existing access/payment/routing/consent code and transport reconciliation.

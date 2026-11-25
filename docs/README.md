@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 25 November: native legacy HTTP drain bridge,64 tests; reversible RU main-thread admission probe passed, receiver not stopped/replaced](releases/2026-11-25-control-ha-legacy-http-bridge.md).
+
 [CONTROL-HA · 25 November: exact-installed receiver maintenance overlay;6 changed/2 added/no removals,171 focused tests and129 legacy cases per archive; qualified, not installed](releases/2026-11-25-control-ha-receiver-overlay.md).
 
 [CONTROL-HA · 25 November: receiving HTTP graceful stop,269 tests including native systemd/child completion; actual RU old archive inspected, candidate not installed](releases/2026-11-25-control-ha-http-drain.md).

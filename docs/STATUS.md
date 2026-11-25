@@ -1,5 +1,23 @@
 # Текущее состояние / Current state
 
+**25 November14:29UTC — native legacy drain bridge qualified; reversible RU probe PASS.**
+The actual RU interpreter is CPython3.14. Its supported main-thread remote-execution hook
+can pause the old accept loop and join admitted handlers without TERM, archive replacement
+or a new concurrent receiver.19 new native cases plus lifecycle/package regressions:64 PASS,
+0 skips. The stop path joins retention and returns through the existing server loop; tests
+cover child completion, partial feed failure, partial headers, timeout rollback and stale/replayed
+requests. It preserves explicit old external uncertainty; local exit is not capture acceptance.
+[Implementation, actual RU probe, failed prechecks and rollback](releases/2026-11-25-control-ha-legacy-http-bridge.md).
+At14:29:12UTC the live probe returns normally: identical PID43082/archive/unit settings,0
+restarts, HTTP501 from the unchanged GET-unsupported endpoint. No service stop or candidate
+activation; only private bridge/evidence files staged. No NL contact or product version change.
+Next: qualify rollback-guarded paired receiver replacement, then use the proven old-loop drain
+for activation. Support/manual coverage, guarded OWNER integration, fleet coherent capture,
+independent custody/trust/approval and final recovery remain. HA-02: replication PASS in
+isolation; three fixed gates partial. No supported finish date or automatic failover yet.
+
+At the preceding installed-shape checkpoint:
+
 **25 November13:56UTC — installed-shape receiver candidate qualified, not installed.**
 Replaced the broad21-file candidate with a pinned maintenance overlay on the exact RU archive:
 6 existing members changed,2 added, none removed; all38 other archive entries byte-preserved.
