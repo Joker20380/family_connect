@@ -3,17 +3,19 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-25 November06:37UTC: stopped OWNER stage/revert executor is implemented and qualified.
-176 focused tests/0 skips,59 new;6 native Docker cases, including5 real coordinator SIGKILLs
-and retained-journal recovery. Current SQLite writes and unknown markers survive rollback;
-old container identity, effective config/mounts/network policy preserved. No working deployment.
-Both working OWNER roles observed healthy at06:28:58 and refuse replacement while running.
-[Operational contract and exact limits](releases/2026-11-25-control-ha-owner-replacement.md).
-Next is controlled ingress/dispatcher drain with independent old publication/support/manual
-settlement, then actual gate/runtime attestation and guarded startup/abort integration; the
-remaining fleet participants and same three partial acceptance gates follow. A stopped-state
-check is not a drain. Do not reimplement the completed replacement component, force-stop
-writers, operate concurrent Compose lifecycle commands or rewind data to make rollback pass.
+25 November07:49UTC: publisher scheduler inhibition/resume is now qualified on the working
+runtime: one-second hold, no child interruption, unchanged healthy OWNER containers.159 focused
+tests/0 skips,47 new;4 native Docker cases plus real process-death/deadline tests. Separate
+guardian/rescue processes use pidfds; the watchdog kills only an owned stalled guardian before
+resuming the scheduler, never a workload. No image/config install or service stop/start.
+[Working evidence and explicit failure boundary](releases/2026-11-25-control-ha-dispatcher-hold.md).
+This completes the publisher dispatch-inhibition component, not old-work settlement. The
+[stopped replacement/revert executor](releases/2026-11-25-control-ha-owner-replacement.md)
+is also complete. Next is console ingress closure and independent publication/support/manual
+settlement, then gate/runtime attestation and guarded startup/abort integration. Remaining fleet
+participation, coherent capture, independent custody/approval and final recovery still follow.
+Replication PASS; same three partial gates. Do not repeat completed components, infer settlement
+from process exit/empty queues, force-stop workloads or rewind current data for rollback.
 
 At the preceding working-collector checkpoint:
 25 November continuation authorizes HA-02 participant installation/bounded OWNER/RU/NL work

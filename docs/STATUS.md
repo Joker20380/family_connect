@@ -1,18 +1,21 @@
 # Текущее состояние / Current state
 
-**25 November06:37UTC — stopped OWNER replacement/revert executor qualified.**
-Exact effective Config/HostConfig, mounts and network policy are preserved; old container ID
-and current data remain the rollback target, never a pre-upgrade DB snapshot.176 focused tests
-PASS/0 skips,59 new. Six native Docker cases pass, including5 real SIGKILL coordinator deaths
-with journal recovery. Candidate SQLite writes and an unknown gate marker survive revert.
-At06:28:58 both working OWNER containers remain running/healthy and refuse replacement;
-only GET observation, no deployment, image build, working stop or version change.
-[Executor, evidence, engine normalization and rollback limits](releases/2026-11-25-control-ha-owner-replacement.md).
-Next is controlled ingress/dispatcher drain and independent publication/support/manual
-settlement, followed by gate/runtime/startup/abort integration. This tool deliberately cannot
-stop or start a service; stopped state alone is not settlement. Then remaining fleet writers,
-coherent capture, independent custody/approval and final recovery. Replication PASS; same
-three gates partial. Do not repeat this completed stopped-replacement component as a new gate.
+**25 November07:49UTC — working publisher dispatcher hold/resume verified.**
+A one-second hold affects only its exact scheduler shell; already dispatched children keep
+running. Two independent helpers restore scheduling on controller loss, guardian death/stall
+or rescue loss.159 focused tests PASS/0 skips,47 new;4 native Docker cases preserve a child
+SQLite commit and resume the same runtime. Both working OWNER roles remain healthy at
+07:49:03, unchanged IDs/configs/PIDs/start times/restart counts; both collector timers active.
+[Working receipt, failure limits and rollback](releases/2026-11-25-control-ha-dispatcher-hold.md).
+No container stop/start, image/config installation, DB rewrite, remote change or version bump.
+This closes the bounded publisher dispatch-inhibition component, NOT publication settlement
+or complete OWNER drain. The stopped replacement/revert executor is also already qualified;
+[its retained data/config rollback contract](releases/2026-11-25-control-ha-owner-replacement.md)
+is unchanged. Do not repeat either completed component as another stage2 gate.
+Next: close console ingress and independently settle publication/support/manual effects, then
+integrate real gate/runtime attestation and guarded startup/abort. Remaining fleet writers,
+coherent capture, independent custody/approval and final recovery follow. Replication PASS;
+same three acceptance gates partial. No HA-03 cutover or automatic RU-independent failover.
 
 At the preceding working-collector checkpoint:
 **25 November01:00UTC — two working workstation collectors admitted and verified.**
