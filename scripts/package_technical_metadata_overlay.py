@@ -9,7 +9,8 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 EXISTING = {'friends_http.py': 'deploy/friends/access-api.py', 'control/friends/access.py': 'control/friends/access.py'}
-ADDED = ('control/friends/technical_metadata.py', 'control/friends/geoip.py')
+ADDED = ('control/friends/technical_metadata.py', 'control/friends/geoip.py',
+         'control/friends/http_lifecycle.py')
 
 
 def digest(raw):

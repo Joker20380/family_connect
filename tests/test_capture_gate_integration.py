@@ -95,7 +95,7 @@ def test_retention_obeys_gate_without_killing_thread(module, gate, monkeypatch, 
         instance = original(*args, **kwargs)
         threads.append(instance)
         return instance
-    monkeypatch.setattr(module.threading, 'Thread', launch)
+    monkeypatch.setattr(threading, 'Thread', launch)
     monkeypatch.setattr(module, 'prune', lambda *args: calls.append(args))
     with gate.drain(.2):
         stopped = module.start_retention(tmp_path / 'store', capture_gate=gate)

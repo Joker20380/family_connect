@@ -3,6 +3,22 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+25 November13:34UTC: native receiving HTTP graceful stop qualified, not installed.
+Actual RU old archive/unit read back: no gate, SIGTERM/control-group,90s timeout; ordinary
+restart cannot establish old-work settlement. Candidate now joins admitted HTTP/retention
+work after listener closure, with paired main-only/infinite-stop/no-SIGKILL unit settings.
+269 focused tests PASS/0 skips,12 new, including actual user-systemd stop preserving a child,
+native export success/failure/process death/TCP reset and isolated closed-package execution.
+[Source, evidence and rollback](releases/2026-11-25-control-ha-http-drain.md).
+Full candidate has21 changed/3 added/1 removed Python members versus installed RU; do not
+replace it blindly or install the unit drop-in alone on the old handler. Working services unchanged.
+Next: review/qualify the installed-shape delta and independently close legacy receiver admission/
+old work before activation; remaining support/manual coverage and guarded OWNER integration.
+Fleet participation, coherent capture, custody/trust/approval and final recovery remain in HA-02:
+replication PASS in isolation, three gates partial. No HA-03, automatic failover or new ETA.
+
+At the preceding receiving-export checkpoint:
+
 25 November13:14UTC: receiving-side export completion source gap fixed. Old code reproducibly
 allowed drain after a caught partial v1/v2 export; new code retains uncertainty and durably
 syncs both outputs from one SQLite snapshot/time.146 focused tests PASS/0 skips,18 new; real

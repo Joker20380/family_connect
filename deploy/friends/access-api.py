@@ -175,10 +175,10 @@ def main():
   except Exception:print(json.dumps(dict(version=1,status='UNKNOWN',reason='READBACK_UNAVAILABLE')));raise SystemExit(1) from None
   return
  from control.friends.diagnostics import start_retention
- retention=start_retention(ROOT/'diagnostics.sqlite',capture_gate=capture_gate)
  from control.friends.technical_metadata import start_retention as start_metadata_retention
- metadata_retention=start_metadata_retention(ROOT/'technical-metadata.sqlite',capture_gate=capture_gate)
- try:ThreadingHTTPServer(('127.0.0.1',args.port),Handler).serve_forever()
- finally:retention.set();metadata_retention.set()
+ from control.friends.http_lifecycle import serve
+ serve(('127.0.0.1',args.port),Handler,(
+  lambda:start_retention(ROOT/'diagnostics.sqlite',capture_gate=capture_gate),
+  lambda:start_metadata_retention(ROOT/'technical-metadata.sqlite',capture_gate=capture_gate)))
 
 if __name__=='__main__':main()

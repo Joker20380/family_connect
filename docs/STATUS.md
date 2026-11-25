@@ -1,5 +1,23 @@
 # Текущее состояние / Current state
 
+**25 November13:34UTC — receiving HTTP graceful stop qualified, not installed.**
+Read-only RU inspection binds the actual old archive and unit: active, no capture gate,
+default SIGTERM/control-group stop with90s escalation. A normal restart can interrupt both
+admitted handlers and their children; a three-thread sample is not settlement evidence.
+New receiver lifecycle closes the listener, stops scheduling retention, joins both retention
+writers and all admitted request threads; repeated TERM/INT do not cut the drain short.
+Paired candidate systemd settings signal only the main process and disable forced timeout kills.
+269 focused tests PASS/0 skips,12 new, including a real user-systemd stop with an admitted child,
+native partial export, caught failure, SIGKILL, TCP reset and closed-package execution.
+[Evidence, installed/candidate distinction and rollback](releases/2026-11-25-control-ha-http-drain.md).
+The full candidate differs from RU in21 existing Python members, adds3 and removes1; it is
+not a reviewed one-file production hotfix. No remote changes or working restart performed.
+Next: qualify the installed-shape delta and legacy receiver admission/old-work settlement before
+activation; support/manual coverage and guarded OWNER integration remain. Replication PASS
+in isolation; the same three HA-02 gates remain partial. No HA-03, failover or version change.
+
+At the preceding receiving-export checkpoint:
+
 **25 November13:14UTC — receiving notice-export uncertainty repaired and qualified.**
 Reproduced a concrete old-source bug: a caught second-file export failure left v1 published,
 v2 absent and no pending marker, incorrectly permitting drain. Both exports now share one

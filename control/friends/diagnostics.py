@@ -6,7 +6,6 @@ from pathlib import Path
 import re
 import sqlite3
 from contextlib import closing, nullcontext
-import threading
 import time
 
 from .access import Rejected
@@ -204,7 +203,8 @@ def prune(path, now):
 
 
 def start_retention(path, *, capture_gate=None):
-    stopped = threading.Event()
+    from control.friends.http_lifecycle import Retention
+    stopped = Retention()
     def run():
         while not stopped.is_set():
             try:
@@ -213,6 +213,4 @@ def start_retention(path, *, capture_gate=None):
             except (OSError, sqlite3.Error):
                 pass
             stopped.wait(60)
-    worker = threading.Thread(target=run, name='support-retention', daemon=True)
-    worker.start()
-    return stopped
+    return stopped.start(run, name='support-retention')

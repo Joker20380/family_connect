@@ -23,7 +23,7 @@ def build(output, source=ROOT):
         raise ValueError('Unsafe HTTP manifest')
     inputs = {'app/' + name: name for name in paths}
     inputs['app/friends_http.py'] = 'deploy/friends/access-api.py'
-    inputs.update({name: str(CONTRACT / name) for name in ('http-runtime.conf', 'http-runtime-files.json', 'access.conf', 'nginx-location.conf')})
+    inputs.update({name: str(CONTRACT / name) for name in ('http-runtime.conf', 'http-graceful-stop.conf', 'http-runtime-files.json', 'access.conf', 'nginx-location.conf')})
     inputs['gateway-selection-location.conf'] = 'deploy/friends/gateway-selection-location.conf'
     inputs['subscription-location.conf'] = 'deploy/friends/subscription-location.conf'
     inputs['technical-metadata-location.conf'] = 'deploy/friends/technical-metadata-location.conf'

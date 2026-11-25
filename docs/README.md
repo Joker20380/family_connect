@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 25 November: receiving HTTP graceful stop,269 tests including native systemd/child completion; actual RU old archive inspected, candidate not installed](releases/2026-11-25-control-ha-http-drain.md).
+
 [CONTROL-HA · 25 November: receiving notice-export uncertainty fixed;146 tests, native HTTP/lost ACK/receiver death, single-snapshot durable outputs; candidate only, no working adoption](releases/2026-11-25-control-ha-notice-export.md).
 
 [CONTROL-HA · 25 November: working PostgreSQL publication boundary composed with both admission guards;226 tests, late COMMIT and controller-death expiry, no external-settlement/capture claim](releases/2026-11-25-control-ha-publication-boundary.md).
