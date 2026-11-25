@@ -1,5 +1,15 @@
 # Deterministic physical gateway bootstrap
 
+## Required production outcome — 25 November
+
+The owner requires the complete workflow: prepared VPS → IP, protected access reference
+and roles → managed onboarding → verified active node.
+[FLEET-PRODUCTION-ONBOARDING-1](fleet-production-onboarding.md) defines the twelve acceptance
+criteria, including production enrollment/publication, dynamic serving membership and
+compatible-client discovery without a source edit or a new build for every node.
+Existing synthetic/disposable qualifications below retain their original scope.
+The outcome is REQUIREMENT_ACCEPTED / IMPLEMENTATION_PENDING; HA-02 remains the selected task.
+
 ## Current production MESH2 handoff
 
 Cleanup runtime delivery completed4 November18:07UTC on both nodes, preserving their

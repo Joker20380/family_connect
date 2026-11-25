@@ -2,6 +2,19 @@
 
 ## Current engineering priority / Текущий critical path
 
+**FLEET-PRODUCTION-ONBOARDING-1 — обязательный итог модернизации, принят 25 ноября.**
+Владелец подтвердил: подготовленный VPS → IP, защищённый доступ и роли → штатный ввод →
+проверенный активный узел. [Контракт и 12 критериев приёмки](fleet-production-onboarding.md).
+Статус REQUIREMENT_ACCEPTED / IMPLEMENTATION_PENDING. Новый допустимый gateway/IP должен
+проходить production enrollment, реальный трафик и публикацию без правки исходников и
+нового релиза совместимого клиента; повтор, замена и возврат сохраняют данные и сервис.
+Роли gateway/API не меняют кворум автоматически. [Решение и scope](releases/2026-11-25-fleet-onboarding-requirement.md).
+Это обязательный конечный результат общей модернизации, а не новый подпункт HA-02.
+Текущий CONTROL-HA-20261123 / HA-02 и его четыре результата остаются выбранной работой.
+После нужных зависимостей HA-03..05 связать fleet bootstrap, production issuance,
+исполнитель панели, динамический serving set и каталог; завершить сквозную ONB-01..12.
+
+
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
 25 November17:52UTC: isolated irreversible old-support final-persistence/exit mechanism COMPLETE;
 not an installed replacement supervisor.82 tests PASS/0 skips plus actual fc-support systemd fixture:

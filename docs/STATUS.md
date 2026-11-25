@@ -1,5 +1,15 @@
 # Текущее состояние / Current state
 
+**25 November — обязательный итог модернизации принят владельцем.**
+[FLEET-PRODUCTION-ONBOARDING-1](fleet-production-onboarding.md):
+подготовленный VPS → IP, защищённый доступ и роли → штатный ввод → проверенный
+активный узел. Требуются production enrollment, внешний VPN-трафик, публикация,
+динамический каталог без правки исходников/новой сборки совместимого клиента и безопасный
+повтор/возврат. **REQUIREMENT_ACCEPTED / IMPLEMENTATION_PENDING**, не новый runtime PASS.
+[Запись решения и scope](releases/2026-11-25-fleet-onboarding-requirement.md).
+Выбранный HA-02 и его четыре результата сохраняются; сквозной ввод узла обязателен
+для завершения модернизации.
+
 **25 November17:52UTC — isolated old-support final persistence/exit qualification PASS.**
 Two-phase exit now preserves the reversible boundary until an exact independent commit; afterward
 errors park admission closed, never resume the old handler or force-stop writers. RNS final writes,
