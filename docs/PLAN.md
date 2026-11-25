@@ -11,6 +11,19 @@ remains selected; this publication task does not advance its acceptance gates.
 [Reconciliation record](releases/2026-11-24-source-reconciliation.md).
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+25 November12:31UTC: featureb7930ba4 is pushed/remote-SHA verified. The short publication
+PostgreSQL boundary is qualified and works with both existing admission guards.226 focused
+tests PASS/0 skips,49 new; native late COMMIT and independent server expiry after controller
+SIGSTOP/SIGKILL covered. Working ROLLBACK acknowledged; original console/publisher/PostgreSQL
+healthy,0 restarts, six helpers absent and both collector timers active. No permanent install.
+[Result, first abort reconciliation and rollback](releases/2026-11-24-control-ha-installed-recovery.md#publication-database-boundary--25-november).
+This completes the short DB-boundary component, not external publication/support/manual
+settlement. Next is that external gap, then actual gate/runtime attestation and guarded startup/
+abort with already qualified ingress/dispatcher/stopped replacement. Remaining fleet writers,
+coherent capture, independent custody/trust/approval and combined current recovery stay in
+HA-02. Replication PASS; three gates partial, no HA-03 or new ETA. Main stays navigation-only.
+
+At the preceding console-ingress checkpoint:
 25 November11:58UTC: feature720a1a94 is pushed/remote-SHA verified. Working console TCP
 admission/restore qualified: kernel-expiring scoped rule,175 focused tests/0 skips,63 new and
 four native failure/rollback cases. Both OWNER roles healthy with original configuration/runtime

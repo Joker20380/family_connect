@@ -8,6 +8,56 @@ Owner request selects all four existing HA-02 gates, not HA-03..05. The25 Novemb
 also authorizes participant installation and bounded operational work with documented rollback;
 earlier read-only/deployment-permission limitations in the historical sections are superseded.
 
+## Publication database boundary — 25 November
+
+[Authoritative implementation, tests, evidence digests and rollback](https://github.com/Joker20380/family_connect/blob/b7930ba4afcffcc7fb3e12f6090e1c0c7d5d8af6/docs/releases/2026-11-25-control-ha-publication-boundary.md).
+Featureb7930ba4afcffcc7fb3e12f6090e1c0c7d5d8af6 is ordinarily pushed and remote-SHA verified.
+Main changes only STATUS/PLAN/this navigation report; no implementation merge or permanent
+deployment. No client/server product version, installer/catalog or invitation-page changes.
+
+226 focused tests PASS/0 skips,49 new:143 root (33 new composed-probe +63 ingress +47 dispatcher)
+and83 panel (16 new PostgreSQL fence +3 extended native HTTPS/COMMIT +44 messages +20 admission).
+Python3.14.4, pytest9.1.1; panel Django5.2.18/psycopg3.3.6 with17 matching lockfile pins;
+control psycopg3.3.9. Docker29.1.3/API1.52 and pinned PostgreSQL17.11. Native tests use only
+disposable synthetic data. The first panel run had three incorrect test expectations; corrected
+before the final83-test PASS, original failed evidence retained privately.
+
+EXCLUSIVE NOWAIT locks on the two publication authority tables conflict with SELECT FOR UPDATE
+before HTTP and with an unfinished COMMIT even after sender death. Ordinary reads remain
+possible; old writers are not canceled. PostgreSQL17 transaction_timeout bounds the dedicated
+transaction to2 seconds, independently of repeated queries, controller SIGSTOP or SIGKILL;
+those real-process cases pass. Unknown/unrecognized publication statuses refuse. No DML,
+COMMIT, marker deletion, foreign backend cancellation or product database restore.
+
+At12:31:37.763708–12:31:37.773484UTC the working DB locks are held for about9.8ms under the
+existing publisher dispatcher hold and console ingress lease; explicit ROLLBACK acknowledged.
+All three original runtime/configurations remain healthy with0 restarts; health200 before/after,
+scheduler resumes, guard helpers exit0/0, six ingress helpers absent, both collector timers active.
+Original console/publisher/PostgreSQL image pins are in the authoritative report, unchanged.
+Transient source exec is nonprivileged inside the console, with recorded ID/intent before start.
+
+The first composed working attempt at12:25UTC aborted before any database exec was created or
+dispatched; its exact refusal reason was not retained and is not retroactively inferred.
+Original runtime/config/health, resumed scheduler and all five helpers absent were independently
+verified before a new attempt. The runner now records a sanitized abort stage/reason and verifies
+publisher idle immediately after the hold, before console closure. No publishing child is killed.
+
+Rollback is the dedicated connection's ROLLBACK/close plus exact owned ingress-table removal
+and scheduler resume/reaping. Database2s, ingress5s and dispatcher12s limits begin at their own
+boundaries; delayed unknown Docker dispatch can execute later. Preserve intent/IDs and reconcile
+before retry or claiming restoration; do not repeat exec start, flush rules or reset databases.
+Private evidence locator `/tmp/fc-ha-publication-fence-current`; final panel/root receipts and
+`final/working-second/` are authoritative. First abort/readback remains in `final/working/`.
+Raw credentials/configs, product data and journals stay outside Git/CI; only sanitized digests
+are in the immutable implementation report.
+
+The short DB-boundary component is complete. Its success/zero unknown rows do not prove remote
+publication/support/manual settlement: receipts still deny external settlement and capture.
+Next is that external gap, then actual gate/runtime attestation and guarded startup/abort.
+Remaining fleet participation, coherent all-writer capture, independent custody/trust/approval
+and combined current recovery remain. Replication PASS; same three partial HA-02 gates, no
+HA-03 cutover or automatic RU-independent failover. Do not repeat completed components as stages.
+
 ## Console TCP admission — 25 November
 
 [Authoritative implementation, native/working receipts, limitations and rollback](https://github.com/Joker20380/family_connect/blob/720a1a943c816bcd8d61c4ffc48258f15de76009/docs/releases/2026-11-25-control-ha-console-ingress.md).

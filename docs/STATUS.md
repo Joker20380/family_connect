@@ -1,5 +1,21 @@
 # Текущее состояние / Current state
 
+**25 November12:31UTC — working publication database boundary verified with both admission guards.**
+Featureb7930ba4 is pushed/remote-SHA verified.226 focused tests PASS/0 skips,49 new. A dedicated
+PostgreSQL17 transaction refuses unfinished publication COMMIT, including after sender death;
+server-side expiry releases its locks on controller stall/death. The composed working publisher
+hold + console TCP lease + PG fence succeeds; explicit ROLLBACK, all three original OWNER
+runtimes healthy with0 restarts, six helpers removed, both collector timers active.
+[Evidence, reconciled first abort and rollback](releases/2026-11-24-control-ha-installed-recovery.md#publication-database-boundary--25-november).
+No product row updates, permanent install, main implementation merge, remote operation or version
+change. The short database boundary is complete, not remote publication/support/manual settlement
+or capture permission. Next: that external settlement gap, then real gate/runtime attestation and
+guarded startup/abort. Remaining fleet participation, coherent capture, independent custody/trust/
+approval and final current recovery remain. Replication PASS; same three partial HA-02 gates.
+No HA-03 cutover or automatic RU-independent failover.
+
+At the preceding console-ingress checkpoint:
+
 **25 November11:58UTC — working console TCP admission/restore verified.**
 Feature720a1a94 is pushed/remote-SHA verified.175 focused tests PASS/0 skips,63 new; four native
 cases cover in-flight completion, controller SIGKILL, table collision and lost helper response.
