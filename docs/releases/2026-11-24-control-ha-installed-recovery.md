@@ -6,6 +6,51 @@ divergence is reconciled/pushed at2ae5c512; older publication-blocker statements
 historical, not active instructions or a current blocker.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## Offline owner signing — 25 November workflow
+
+[Authoritative source, owner procedure, tests and limits](https://github.com/Joker20380/family_connect/blob/67d3909585e221385c5de02eb003bb3608dc3a3d/docs/releases/2026-11-25-control-ha-forward-signing.md)
+are pushed/remote-SHA verified at67d3909585e221385c5de02eb003bb3608dc3a3d. Main is navigation only.
+This implements the previously missing review/sign/verify workflow in the existing current-input
+trust gate, not a new stage, actual approval or authority enrolment.
+
+`scripts/control_ha_forward_signing.py` consumes the exact existing canonical request and domain.
+Separate request/public-key SHA256 pins, external minimum sequence, current validity and explicit
+offline-only confirmation precede signing. The explicitly selected32-byte private seed must match
+the trusted public key. No key generation/discovery, first-use trust, registry/floor mutation,
+network fetch, server dispatch, database access or deployment. The existing full checkpoint/archive
+verifiers and wire format are unchanged; detached signature64 bytes, not a new envelope format.
+
+Private inputs require owner0600/single-link/regular files and owner0700 parents. Descriptor-relative
+no-follow path traversal, bounded reads, mutation/replacement checks and exclusive/fsynced outputs
+prevent silent substitution/overwrite. Known release-key paths and issuer-key reuse refuse; copied
+key provenance still needs independent owner review. Core dumps disabled, no memory-zeroization or
+compromised-host protection claim. If output fsync/final freshness fails, preserve the possibly
+issued signature and reconcile; do not blindly retry or lower floors. Normal errors are sanitized.
+
+Every receipt explicitly leaves independent approval, trust enrolment, floor update, full material
+validation, capture/import/activation authority false. The caller must obtain pins/floors independently;
+the tool cannot establish that. A valid signature is not proof of coherent capture or complete DR.
+Actual signer registration, off-machine key/access custody and approval of a fresh coherent request
+remain unperformed. No real key was created/selected/read/enrolled or actual checkpoint signed.
+
+Focused suite started25 November00:36:05.127UTC:231 PASS/0 skips/54.91s,73 new checks. All26 distinct
+control/identity lock pins match. Native CLI roundtrip and unchanged full material verifier accept
+synthetic signatures; scope/key/pin/floor/time/file/uncertain-write failures refuse. Feature docs:
+5 files/1086 link targets/zero errors, clean whitespace. External URLs enumerated, not fetched.
+
+Source SHA:`ce3d0550951e46bc7ecaf16320b7f45b985a3f7b782250718a6ab6d8d4b0d2ab`.
+Tests SHA:`af2c06082b8af92a128badb3dcf825a624d2bca8e91ba4d2cd68d643a895313c`.
+Sanitized summary SHA:`224330542a92cc722398c85e2b757ed44e8bb641e741223b7f2eb0a8edc9b1c3`.
+JUnit SHA:`6e318adfeed285b3f36ccc7294e02a36c65c3de4db482e320cdc43a932efd92b`.
+Private evidence/fixture keys stay outside Git. No working OWNER/RU/NL, version/image/catalog change.
+
+Rollback: stop using this new offline CLI; existing verifier/services are unchanged. Do not remove
+signatures, lower replay floors or restore stale product DBs. The signing-tool code gap is closed;
+actual independent trust, installed participant bindings/existing-work settlement, coherent capture
+and final independent recovery remain. Console namespace access is still unqualified; no privilege
+bypass. Working-NL changes remain outside permission. Replication PASS; same three gates partial.
+Keep the completed publication/overlay/cross-mount evidence; no repeated stand, new stage or ETA.
+
 ## OWNER publication settlement — 25 November native proof
 
 [Authoritative tests, observed outcomes and boundaries](https://github.com/Joker20380/family_connect/blob/2a148477cfbe8fe37ec098f1522355ed1d0379b8/docs/releases/2026-11-25-control-ha-publication-settlement.md)

@@ -11,18 +11,19 @@ remains selected; this publication task does not advance its acceptance gates.
 [Reconciliation record](releases/2026-11-24-source-reconciliation.md).
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Feature2a148477 is pushed/remote-SHA verified. Nonempty native publication completion is tested:
-25 November00:22:26–00:23:08UTC, actual HTTPS plus PostgreSQL COMMIT. In-flight HTTP and blocked
-COMMIT prevent drain; lost reply persists unknown/pending. A killed sender's COMMIT completed
-after its death, while the preserved marker still refused capture.67 tests PASS/0 skips,three
-new native cases. [Exact proof and scope](releases/2026-11-24-control-ha-installed-recovery.md#owner-publication-settlement--25-november-native-proof).
-Test-only change, not settlement of existing production work. No working OWNER/RU/NL access/
-change, version/image change. All10 runtime sources/candidates are unchanged; previous overlay/
-cross-mount proofs retained, not rerun. Exit0/process death/HTTP return/new idle gate are not
-settlement. Console namespace access remains unqualified; no permission bypass. Next remains
-independent candidate/config/runtime acceptance and authorized actual gate/guardian setup,
-existing-work settlement, remaining RU/NL/manual/transport coverage, then approved coherent
-interval and independent custody/recovery. The private configuration
+Feature67d39095 is pushed/remote-SHA verified. Existing current-input trust gate now has an
+offline owner review/sign/verify CLI: independent request/public-key pins, external replay floor,
+fresh validity, explicit offline scope and private-file rules. Wire format/full verifier unchanged;
+231 tests PASS/0 skips,73 new signing cases, native CLI/full-verifier compatibility PASS.
+[Workflow and scope](releases/2026-11-24-control-ha-installed-recovery.md#offline-owner-signing--25-november-workflow).
+No real key created/read/enrolled, actual checkpoint signed, working OWNER/RU/NL service/config,
+image or version change. The signing-tool code gap is closed, not actual independent approval.
+Real signer/pin/floor custody and approval of a fresh coherent checkpoint remain unperformed.
+Next also retains independent candidate/config/runtime acceptance and authorized actual OWNER
+gate/guardian setup, existing-work settlement, RU/NL/manual/transport participation, coherent
+capture and final independent recovery. Console namespace access remains unqualified; no
+privilege bypass. Prior publication/overlay/cross-mount checks remain accepted, not repeat gates.
+The private configuration
 proposal remains uninstalled; no production gate paths created. Workstation packages remain uninstalled;
 preserve original source/data roots and known-hosts argv. Direct ORM/DB/SSH/Docker bypasses
 remain outside admission. Do not repeat completed overlay/cross-mount/config/build/collector/NL2 slices as

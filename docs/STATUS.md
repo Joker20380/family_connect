@@ -1,21 +1,19 @@
 # Текущее состояние / Current state
 
-**25 November UTC — nonempty OWNER publication completion tested, not deployed.**
-Feature2a148477 is pushed/remote-SHA verified. At00:22:26–00:23:08UTC the actual management/
-publisher path used native loopback HTTPS and PostgreSQL. Outstanding HTTP and blocked COMMIT
-prevent drain; a lost reply retains unknown/pending. PostgreSQL completed a write even after
-the sending process was killed; its uncertainty marker still prohibited capture and survived
-a later successful command.67 tests PASS/0 skips,three new native cases.
-[Observed late commit, exact evidence and limitations](releases/2026-11-24-control-ha-installed-recovery.md#owner-publication-settlement--25-november-native-proof).
-Test-only change; no working OWNER/RU/NL access/change, image build or version change. Disposable
-PG removed; private fixtures retained outside Git. All10 runtime sources/candidates unchanged;
-completed overlay/cross-mount proofs are not rerun. This closes the empty-queue test gap, not
-settlement of existing production operations. Exit0/process death/HTTP return/new idle gate
-cannot prove settlement. Next remains independent candidate/config/runtime acceptance and
-authorized actual OWNER gate/guardian setup, existing-work settlement and RU/NL/manual/transport
-coverage, then coherent capture and independent custody/final recovery. Console namespace
-access remains unqualified; no permission bypass. Working-NL changes remain outside scope.
-Replication PASS; same three gates partial, no new stage/ETA or repeated completed tests as gates.
+**25 November UTC — offline checkpoint owner-signing workflow implemented.**
+Feature67d39095 is pushed/remote-SHA verified. Review/sign/verify CLI checks independent request/
+public-key pins, explicit offline scope, external sequence floor, freshness and private files.
+Wire protocol/full verifier unchanged; native CLI and full material-verifier interoperability
+PASS.231 tests PASS/0 skips,73 new cases;26 control/identity pins match.
+[Workflow, failure handling and remaining trust boundary](releases/2026-11-24-control-ha-installed-recovery.md#offline-owner-signing--25-november-workflow).
+No real key created/read/enrolled, actual checkpoint signed, working OWNER/RU/NL service/config,
+image or version change. Signature validity does not establish independent approval, coherent
+capture or full material validation. No automatic authority enrolment or replay-floor update.
+The signing-tool code gap is closed; real signer/pin/floor custody and owner approval of a fresh
+coherent checkpoint remain unperformed. Installed participant bindings/work settlement, approved
+capture and final independent recovery remain. Console namespace access remains unqualified;
+no privilege bypass. Working-NL changes remain outside scope. Replication PASS; same three
+gates partial. Preserve prior publication/overlay/cross-mount evidence, not repeat stands/new ETA.
 
 At the preceding collector-admission checkpoint:
 **24 November — standalone OWNER collector admission implemented; activation matrix recorded.**
