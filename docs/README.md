@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 25 November: paired RU receiver replacement, independent controller recovery and data-preserving rollback; qualification and actual installation record](releases/2026-11-25-control-ha-receiver-replacement.md).
+
 [CONTROL-HA · 25 November: native legacy HTTP drain bridge,64 tests; reversible RU main-thread admission probe passed, receiver not stopped/replaced](releases/2026-11-25-control-ha-legacy-http-bridge.md).
 
 [CONTROL-HA · 25 November: exact-installed receiver maintenance overlay;6 changed/2 added/no removals,171 focused tests and129 legacy cases per archive; qualified, not installed](releases/2026-11-25-control-ha-receiver-overlay.md).

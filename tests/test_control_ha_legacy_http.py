@@ -202,7 +202,10 @@ def test_unfinished_handler_aborts_before_retention_or_listener_changes(receiver
     connection = publication(root, port)
     output = invoke(root, archive, process, mode='stop', seconds=1)
     wait_for(lambda: (output / 'error.json').exists())
-    assert read(output / 'error.json') == dict(reason='HANDLERS_UNFINISHED', irreversible=False, capture_permitted=False)
+    error = read(output / 'error.json')
+    assert error.pop('failure_site')['function'] == 'require'
+    assert error == dict(reason='HANDLERS_UNFINISHED', exception_type='ValueError',
+                         irreversible=False, capture_permitted=False)
     assert not (output / 'legacy-uncertainty.json').exists()
     assert response(port) == 501
     (root / 'release').touch()

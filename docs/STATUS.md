@@ -1,5 +1,19 @@
 # Текущее состояние / Current state
 
+**25 November — paired receiver controller qualified and privately prepared on RU; not activated.**
+88 focused checks PASS/0 skips, including native old-loop drain, paired archive/unit activation,
+data-preserving rollback and independent systemd recovery after controller SIGKILL. Three guard
+death scenarios pass; the final-controller rerun also passes all24 cases/0 skips.
+RU preparation preserves PID43082, the original archive and15 unit files; it stages a separate
+candidate/plan/gate with one persistent legacy-uncertainty marker, without stopping the receiver.
+[Controller, failure fixes, private staging and rollback](releases/2026-11-25-control-ha-receiver-replacement.md).
+Next is guarded activation of this exact pair, then readback; no forced old-process termination,
+database/feed rewind or uncertainty clearing. Support/manual/OWNER integration, complete fleet
+capture, independent custody/trust/approval and final recovery remain. HA-02 replication PASS
+in isolation; the same three gates partial. No product/public version or NL service change.
+
+At the preceding legacy-bridge checkpoint:
+
 **25 November14:29UTC — native legacy drain bridge qualified; reversible RU probe PASS.**
 The actual RU interpreter is CPython3.14. Its supported main-thread remote-execution hook
 can pause the old accept loop and join admitted handlers without TERM, archive replacement

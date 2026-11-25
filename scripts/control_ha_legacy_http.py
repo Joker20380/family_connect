@@ -100,13 +100,15 @@ def context(archive):
     require(threading.current_thread() is threading.main_thread(), 'MAIN_THREAD_REQUIRED')
     runtime = sys.modules.get('friends_http')
     require(runtime is not None and runtime.__file__ == archive + '/friends_http.py', 'RUNTIME_BINDING')
+    entry = getattr(runtime, 'main', None)
+    require(entry is not None and hasattr(entry, '__code__'), 'LEGACY_MAIN_NOT_READY')
     frame = sys._getframe()
     frames = []
     while frame is not None:
         frames.append(frame)
         frame = frame.f_back
     loops = [frame for frame in frames if frame.f_code is socketserver.BaseServer.serve_forever.__code__]
-    mains = [frame for frame in frames if frame.f_code is runtime.main.__code__]
+    mains = [frame for frame in frames if frame.f_code is entry.__code__]
     require(len(loops) == len(mains) == 1, 'LEGACY_LOOP_REQUIRED')
     loop, main = loops[0], mains[0]
     server = loop.f_locals['self']
@@ -190,8 +192,13 @@ def execute(request_path):
               exit_must_be_observed=True, capture_permitted=False))
     except BaseException as error:
         reason = str(error) if type(error) is ValueError and str(error).isupper() else 'BRIDGE_FAILURE'
+        trace = error.__traceback__
+        while trace.tb_next is not None:
+            trace = trace.tb_next
         try:
-            write(output / 'error.json', dict(reason=reason, irreversible=irreversible, capture_permitted=False))
+            write(output / 'error.json', dict(reason=reason, exception_type=type(error).__name__,
+                  failure_site=dict(function=trace.tb_frame.f_code.co_name, line=trace.tb_lineno),
+                  irreversible=irreversible, capture_permitted=False))
         except BaseException:
             pass
         if irreversible:

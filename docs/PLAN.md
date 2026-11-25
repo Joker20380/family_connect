@@ -3,6 +3,19 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+25 November: paired RU receiver controller qualification PASS; separate private preparation
+completed with original PID43082/archive/15 unit files unchanged.88 focused checks pass,
+including real systemd controller death/recovery and code-only rollback retaining newer data.
+The final-controller rerun also passes all24 cases/0 skips before guarded activation.
+[Paired replacement, explicit failure fixes and recovery](releases/2026-11-25-control-ha-receiver-replacement.md).
+Immediate task: activate this pinned pair under the independent supervisor and verify actual
+runtime/admission/rollback bindings. Keep the legacy uncertainty marker; activation is not
+historical external settlement or full capture acceptance. Support/manual/OWNER integration,
+fleet coherent capture, independent custody/trust/approval and final recovery remain within
+the same three partial HA-02 gates; replication PASS in isolation, no HA-03 or new ETA.
+
+At the preceding legacy-bridge checkpoint:
+
 25 November14:29UTC: legacy-loop drain source qualification COMPLETE; bounded RU probe PASS.
 CPython3.14 main-thread hook pauses application admission, joins existing handlers, and in stop
 mode joins retention before native loop exit.19 new native tests,64 focused PASS/0 skips.
