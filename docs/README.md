@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 25 November: working PostgreSQL publication boundary composed with both admission guards;226 tests, late COMMIT and controller-death expiry, no external-settlement/capture claim](releases/2026-11-25-control-ha-publication-boundary.md).
+
 [CONTROL-HA · 25 November: working console TCP admission and automatic expiry,175 tests/four native cases; unchanged healthy OWNER runtime, no complete-drain claim](releases/2026-11-25-control-ha-console-ingress.md).
 
 [CONTROL-HA · 25 November: bounded working publisher dispatcher hold/resume,159 tests and4 native Docker cases; independent failure recovery, no container restart or settlement claim](releases/2026-11-25-control-ha-dispatcher-hold.md).

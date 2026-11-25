@@ -25,6 +25,8 @@ import pytest
 
 from apps.console.models import AuditRecord, SystemMessage
 from control.capture_gate import Busy, GateError, initialize
+from tests.test_publication_fence import fence
+import psycopg
 
 
 CHILD = '''import os
@@ -212,6 +214,8 @@ def test_native_publication_settles_only_after_remote_and_postgres(root_path, ou
                 pytest.fail('in-flight HTTPS publication permitted capture')
             endpoint.release.set()
             wait_for_commit_lock(application, process)
+            with pytest.raises(psycopg.errors.LockNotAvailable), fence():
+                pytest.fail('HTTP acknowledgement is not PostgreSQL settlement')
             assert not AuditRecord.objects.filter(target=message.pk.hex).exists()
             with pytest.raises(Busy, match='DRAIN_TIMEOUT'), gate.drain(.05):
                 pytest.fail('remote success before PostgreSQL commit permitted capture')
@@ -220,6 +224,8 @@ def test_native_publication_settles_only_after_remote_and_postgres(root_path, ou
             if outcome == 'killed_during_commit':
                 process.kill()
                 assert process.wait(timeout=5) < 0
+                with pytest.raises(psycopg.errors.LockNotAvailable), fence():
+                    pytest.fail('sender death did not settle its still-blocked PostgreSQL backend')
         stdout, stderr = process.communicate(timeout=8)
         deadline = time.monotonic() + 5
         while time.monotonic() < deadline:
@@ -232,6 +238,14 @@ def test_native_publication_settles_only_after_remote_and_postgres(root_path, ou
             pytest.fail('owned publisher PostgreSQL backend did not settle')
         message.refresh_from_db()
         status_after_exit = message.status
+        if status_after_exit == 'unknown':
+            with pytest.raises(ValueError, match='UNRESOLVED_PUBLICATION'), fence():
+                pytest.fail('unknown external outcome was accepted')
+        else:
+            with fence() as boundary:
+                boundary.check()
+                assert not boundary.observation['external_settlement_proven']
+                assert not boundary.observation['capture_permitted']
         if outcome == 'success':
             assert process.returncode == 0 and b"'published': 1" in stdout and not stderr
             assert message.status == 'published' and not pending(gate)

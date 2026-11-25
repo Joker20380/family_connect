@@ -3,6 +3,19 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+25 November12:31UTC: the short PostgreSQL publication boundary is qualified and works together
+with the existing publisher hold and console ingress lease.226 focused tests PASS/0 skips,49 new;
+native unfinished COMMIT, controller SIGSTOP/SIGKILL and non-renewable server expiry tested.
+Working explicit ROLLBACK, unchanged healthy console/publisher/PostgreSQL,0 restarts, no product
+row updates, six helpers removed and both collector timers active.
+[Working result, first reconciled abort and rollback](releases/2026-11-25-control-ha-publication-boundary.md).
+Do not repeat this database-boundary component as another gate or infer remote settlement from
+its success/zero unknown rows. Next: independently settle external publication/support/manual
+effects; integrate real gate/runtime attestation and guarded startup/abort. Remaining fleet
+writers, coherent capture, independent custody/trust/approval and final combined current recovery
+remain the same HA-02 scope. Replication PASS, three acceptance gates partial; no HA-03 or ETA.
+
+At the preceding console-ingress checkpoint:
 25 November11:58UTC: console TCP admission/restore now qualified on the working runtime.
 Kernel-expiring scoped nft set, no worker pause/stop;175 focused tests/0 skips,63 new and four
 native cases. New HTTP request refused during observation, health200 before/after, original

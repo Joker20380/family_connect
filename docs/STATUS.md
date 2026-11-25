@@ -1,5 +1,22 @@
 # Текущее состояние / Current state
 
+**25 November12:31UTC — working PostgreSQL publication boundary verified with both admission guards.**
+A dedicated PostgreSQL17 transaction briefly locks both publication authority tables; it refuses
+an unfinished COMMIT even after sender exit/HTTP ACK. Server-side transaction expiry releases
+its locks if the controller dies or stalls.226 focused tests PASS/0 skips,49 new.
+The working composed dispatcher hold + console TCP lease + database fence succeeds; explicit
+ROLLBACK acknowledged, all three original OWNER runtimes healthy with0 restarts, six helpers
+removed, both collector timers active. No product row updates or permanent installation.
+[Exact evidence, first reconciled abort and rollback](releases/2026-11-25-control-ha-publication-boundary.md).
+This closes the short database-lock boundary component, not external publication/support/manual
+settlement, full OWNER drain or coherent capture. Next: close that external settlement gap, then
+integrate real gate/runtime attestation and guarded startup/abort with the already qualified
+ingress/dispatcher/stopped-replacement components. Remaining fleet participation, independent
+custody/approval and final current recovery stay in HA-02: replication PASS, three gates partial.
+No HA-03 cutover, automatic failover, remote deployment or client version/release change.
+
+At the preceding console-ingress checkpoint:
+
 **25 November11:58UTC — working console TCP admission/restore verified.**
 A scoped kernel-expiring lease rejects new connections in the console network namespace while
 established work can finish.175 focused tests PASS/0 skips,63 new; four native cases cover
