@@ -10,6 +10,26 @@
 Выбранный HA-02 и его четыре результата сохраняются; сквозной ввод узла обязателен
 для завершения модернизации.
 
+**25 November19:08UTC — support-scoped mailbox hold/drain qualified in isolation.**
+64 tests PASS/0 skips, plus an actual NL1 fc-mailbox UID996/GID982/systemd fixture and independent
+effective sandbox readback. Saved bound callbacks/methods and an already captured native RNS
+dispatch cannot bypass the hold. Old native PUT/purge transactions finish before drain; timeout
+and controller SIGKILL do not reopen admission. Unrelated identities continue; explicit matching
+abort restores original methods and retains two freshly reopened synthetic rows.
+[Source, qualification, retained verifier failures and limits](releases/2026-11-25-control-ha-mailbox-fence.md).
+This is a process-local primitive, NOT a working installation or cross-host handoff. Abort can
+allow a previously queued callback again; no commit/open transition is qualified. Next in the same
+settlement gate: bind OWNER quiescent/exit generation, late RNS link/callback exclusion and independent
+restart/death recovery to the replacement supervisor before activation. Seven historical unknowns
+remain; retention/other-recipient activity is not fenced for coherent capture by this primitive.
+Working NL1 PID3705/0 restarts, four source pins/unit/process bindings unchanged; OWNER observed
+active PID2022541/0 restarts. Both isolated transient units finished; synthetic evidence retained.
+Candidate9d7bf840 unchanged/NOT installed. No working injection/stop/policy/product write, RU/NL2/
+container operation, HA-03 or version change. No extra owner action now. Three HA-02 gates partial;
+isolated replication PASS. Remaining writers, coherent capture and independently trusted recovery remain.
+
+At the preceding outcome-census checkpoint:
+
 **25 November18:39UTC — independent OWNER/NL1 support outcome census: OBSERVED_UNFENCED.**
 Read-only paired observation:12 local messages/2 request links,7 retained outgoing envelopes;
 two local recipient-stored statuses and five relayed receipts, no retained incoming raw ACKs.

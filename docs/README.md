@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 25 November19:08UTC: support mailbox hold/drain,64 checks and isolated NL1 fc-mailbox systemd/readback PASS; working unchanged, cross-host handoff still unqualified](releases/2026-11-25-control-ha-mailbox-fence.md).
+
 [CONTROL-HA · 25 November18:39UTC: paired read-only OWNER/NL1 support outcome census,7 absent envelopes remain unknown;26 tests/native late-commit counterexample, no activation or service changes](releases/2026-11-25-control-ha-support-outcomes.md).
 
 [CONTROL-HA · 25 November18:24UTC: independent support replacement/rollback supervisor,16 user-systemd plus2 actual-root checks PASS; current data/uncertainty retained, working support unchanged, settlement/installation remain](releases/2026-11-25-control-ha-support-replacement.md).
