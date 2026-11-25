@@ -14,20 +14,20 @@
 
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-25 November19:08UTC: process-local support mailbox hold/drain COMPLETE IN ISOLATION; feature6dfbab82
-pushed/remote-SHA verified, no working deployment.64 tests PASS/0 skips plus actual NL1 fc-mailbox
-UID996/GID982/systemd fixture and independent effective-property readback. Saved/native RNS callbacks,
-PUT/purge drain without cancellation, controller death, other identities and matching abort/current
-synthetic-data retention are covered. [Evidence and explicit non-handoff boundary](releases/2026-11-24-control-ha-installed-recovery.md#support-mailbox-holddrain--25-november).
-Next in the existing settlement gate: bind the hold to independently checked OWNER quiescent/exit
-generation and replacement commit; exclude late old RNS link/callback work after reopening and qualify
-independent restart/controller-death recovery. Abort is not commit; local drained is not permission
-to activate/capture. Seven historical unknowns remain. Working NL1 PID3705/source/unit/process pins
-and0 restarts unchanged; OWNER observed PID2022541/0 restarts. Candidate NOT installed.
+25 November19:41UTC: old-link exclusion after local reopening COMPLETE IN ISOLATION; feature8b19f6a5
+pushed/remote-SHA verified, no working deployment.78 tests PASS/0 skips with authenticated native RNS
+and actual NL1 fc-mailbox UID996/GID982/systemd/effective readback. Old identified/unidentified/
+in-constructor links and captured callbacks stay refused, fresh links PUT/purge, unrelated old links
+continue; three synthetic rows reopen. [Evidence and explicit non-handoff boundary](releases/2026-11-24-control-ha-installed-recovery.md#support-mailbox-link-generations--25-november).
+Next within the same settlement gate: independent OWNER quiescent/exit generation/replacement-commit
+binding, durable mailbox restart/fail-closed recovery and combined controller-failure qualification.
+A fresh link is not proof of a fresh OWNER process; removing the post-open guard remains forbidden.
+Seven historical unknowns remain. NL1 PID3705/source/unit/process pins/0 restarts unchanged; OWNER
+observed PID2022541/0 restarts. Candidate9d7bf840 NOT installed; no activation/capture permit yet.
 Then authorized activation/readback, remaining manual/OWNER writers, coherent capture and independent
 trust/custody/approval/full recovery. Same three HA-02 gates partial, isolated replication PASS.
-No working injection/stop/product write, RU/NL2/container operation, HA-03/version change or extra
-owner action now. Main remains navigation-only; sandbox qualification does not satisfy activation.
+No working injection/stop/product write, RU/NL2/container operation, HA-03/version change or additional
+owner action now. Main stays navigation-only; this source checkpoint is not working installation.
 
 At the preceding outcome-census checkpoint:
 

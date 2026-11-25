@@ -8,6 +8,50 @@ Owner request selects all four existing HA-02 gates, not HA-03..05. The25 Novemb
 also authorizes participant installation and bounded operational work with documented rollback;
 earlier read-only/deployment-permission limitations in the historical sections are superseded.
 
+## Support mailbox link generations — 25 November
+
+[Authoritative source,78 checks, authenticated native RNS and actual NL1 qualification](https://github.com/Joker20380/family_connect/blob/8b19f6a52a5f45bf0cc7989b65181d1897ca800a/docs/releases/2026-11-25-control-ha-mailbox-links.md).
+Feature8b19f6a52a5f45bf0cc7989b65181d1897ca800a is ordinarily pushed/remote-SHA verified; main
+remains navigation-only. This closes the old-link exclusion subproblem inside the existing HA-02
+settlement gate, not independent OWNER exit, working installation or a new numbered gate.
+
+The process-lifetime guard pins RNS1.5.1 Link source/loaded functions and labels links before native
+constructor/key generation. Old identified/unidentified/in-progress links and saved callbacks cannot
+acquire the new generation after local opening. Only the exact native incoming-link/request context
+can admit support spool operations. Direct saved methods remain refused; native membership and
+quota/deny checks are retained. Abort restores original methods only before opening; afterward it
+refuses so old queued callbacks cannot regain access. No timeout or controller death opens admission.
+
+**78 tests PASS/0 skips in20.42s**.13 new contracts plus authenticated/encrypted native loopback RNS
+cover constructor/dispatch races, old-link purge, late identification, source/code/generation drift,
+membership refusal and exception/context cleanup. A real separate RPC controller installs the hold
+and is SIGKILLed; the mailbox keeps the hold for the independent continuation. A fresh support link
+PUTs/purges, an unrelated old link continues, and three synthetic rows reopen. Retained initial9-pass/
+2-failure import mistake is corrected and covered in the final selection;12/76 preliminary passes
+are not added to78. Full evidence and hashes are in the immutable source report.
+
+Actual NL1 **19:38:52–19:39:09UTC** fixture passes under fc-mailbox UID996/GID982 and the installed
+Python3.14.4/RNS1.5.1/LXMF1.1.1/native relay/codec. Independent readback verifies PrivateNetwork/
+PrivateTmp, ProtectHome, strict ProtectSystem, NoNewPrivileges, isolated writable runtime,0077,
+512MiB/96 tasks/400ms-per-second CPU quota, no SIGKILL stop and infinite stop timeout. Only public
+test/bridge sources were transferred; no working DB/identity was read. The lab exited0/PID0 with
+absent exact cgroup; its exited unit was stopped and final LoadState is not-found/inactive/PID0.
+
+Working NL1 PID3705/NRestarts0/17 effective fields/four native source pins/RNS Link/unit hashes/
+process binding are unchanged before/after. OWNER is read-only observed active PID2022541/0 restarts/
+no pending reload at19:40UTC, not a new full19-source attestation. Candidate9d7bf840 remains unchanged,
+NOT installed. No working injection/stop/policy/product write, RU/NL2/container/MicroTrader operation,
+retired host, public version/tag/catalog or persistent privilege change. No production rollback needed.
+
+**A fresh link is not proof of a new OWNER process**: the old process can create one while alive.
+All cross-host/restart/settlement/activation/capture flags remain false; OPEN_LOCAL_ONLY is not a
+permit. Next: independent OWNER quiescent/exit/replacement-commit binding, durable fail-closed mailbox
+restart/recovery and combined controller failure qualification. Never remove a post-open guard as
+rollback. Seven historical unknowns are preserved, not replayed/purged/relabelled. Then authorized
+activation/readback, remaining manual/OWNER writers, coherent capture, current independent trust/
+custody/approval and complete recovery. Same three HA-02 gates partial; isolated replication PASS.
+No new owner input is needed for the current implementation work.
+
 ## Support mailbox hold/drain — 25 November
 
 [Authoritative source,64 tests, actual NL1 qualification and retained failures](https://github.com/Joker20380/family_connect/blob/6dfbab82067eb796bc61f4c0dec4351120387165/docs/releases/2026-11-25-control-ha-mailbox-fence.md).
