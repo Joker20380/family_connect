@@ -1,5 +1,20 @@
 # Текущее состояние / Current state
 
+**25 November06:37UTC — stopped OWNER replacement/revert executor qualified.**
+Feature source6b9ec0c9 and final evidence/navigation9f7fe3ec are pushed/remote-SHA verified.
+176 focused tests PASS/0 skips,59 new;6 native Docker cases, including5 actual SIGKILL deaths
+of separate coordinators with journal recovery. The original container ID/configuration,
+current SQLite writes and unknown gate markers survive rollback. No database rewind.
+Working console/publisher remain original and healthy at06:28:58; running-state replacement
+refuses before mutation. No working stop/start, deployment, image build or version change.
+[Exact scope, evidence and rollback](releases/2026-11-24-control-ha-installed-recovery.md#stopped-owner-replacement--25-november).
+Next: controlled ingress/dispatcher drain and independent publication/support/manual settlement,
+then gate/runtime attestation and guarded startup/abort integration. The new component cannot
+stop or start services; stopped state is not settlement. Remaining fleet participation,
+coherent capture, independent custody/approval and final recovery stay open. Replication PASS;
+same three partial HA-02 gates, no new stage or ETA. Main implementation remains untouched.
+
+At the preceding working-collector checkpoint:
 **25 November01:00UTC — two working workstation collectors installed and verified.**
 Featurea1452aa1 is pushed/remote-SHA verified; source93f4ce3c adds probe runtime-base selection.
 Inventory updates5 files in its existing runtime; probe runs a9-file capsule with unchanged

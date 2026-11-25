@@ -8,6 +8,36 @@ Owner request selects all four existing HA-02 gates, not HA-03..05. The25 Novemb
 also authorizes participant installation and bounded operational work with documented rollback;
 earlier read-only/deployment-permission limitations in the historical sections are superseded.
 
+## Stopped OWNER replacement — 25 November
+
+[Authoritative executor, native faults, exact pins and rollback boundary](https://github.com/Joker20380/family_connect/blob/9f7fe3ec349f2a0a78db4ba18c0abe415d4f5239/docs/releases/2026-11-25-control-ha-owner-replacement.md).
+Source6b9ec0c9785541adb1aa1b0841002e46aa79db10 and documentation correction
+9f7fe3ec349f2a0a78db4ba18c0abe415d4f5239 are ordinarily pushed/remote-SHA verified.
+The correction binds the final176-test/06:37 source proof rather than the preceding174-test
+receipt; no published history or binary is rewritten. Main only updates navigation.
+
+176 focused tests/0 skips,59 new. Six native Docker cases at06:37:01.694861–06:37:05.954274UTC
+include5 real SIGKILL coordinator deaths and restart from retained journals. A candidate
+SQLite commit and unknown gate marker survive return to the same original container ID.
+Config, mounts, named-volume identity, network policy, health/restart/security/resource/port
+configuration are checked. All owned lab containers/networks/volumes removed,0/0/0 remaining.
+Dynamic endpoint addresses/IDs are not preserved policy; Docker's unset-to-false OOM default
+is narrowly normalized. The native role is publisher with synthetic data, not production
+publication/support settlement, console runtime acceptance or a host-power-loss proof.
+
+At06:28:58UTC both working original OWNER containers are running/healthy, with unchanged
+configuration/PIDs/start identities/restart counts. Actual running-state guards refuse before
+Docker mutations. No working stop/start, source/image/gate/unit change, server SSH operation,
+version, installer, catalog or release change. Installed collectors are not redeployed.
+
+The tool only stages/reverts already stopped roles. It neither proves settlement nor performs
+drain/startup. A timeout/unknown forward rename blocks rollback until its outcome is reconciled;
+no blind retry or data rewind. The retained original keeps Compose labels/restart policy:
+exclude concurrent Compose lifecycle actions and never run both old and new writers.
+Next: controlled ingress/dispatcher drain with independent publication/support/manual settlement,
+gate/runtime binding and guarded startup/abort, then remaining fleet participants, coherent
+capture, independent checkpoint/custody and final recovery. Replication PASS; same3 gates partial.
+
 ## Working collector installation — 25 November
 
 [Authoritative installed-state, failure handling, private receipt hashes and exact rollback](https://github.com/Joker20380/family_connect/blob/a1452aa175ec69afdfa4562266af7c0e1391328a/docs/releases/2026-11-25-control-ha-collector-activation.md)
