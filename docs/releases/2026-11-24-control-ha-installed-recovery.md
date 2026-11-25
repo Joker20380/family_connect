@@ -8,6 +8,54 @@ Owner request selects all four existing HA-02 gates, not HA-03..05. The25 Novemb
 also authorizes participant installation and bounded operational work with documented rollback;
 earlier read-only/deployment-permission limitations in the historical sections are superseded.
 
+## Paired RU receiver installed — 25 November
+
+[Authoritative controller, qualification, installed evidence and rollback](https://github.com/Joker20380/family_connect/blob/0394542a7c4f25ba527e27160ef6067ac1a9327e/docs/releases/2026-11-25-control-ha-receiver-replacement.md).
+Feature0394542a7c4f25ba527e27160ef6067ac1a9327e and source checkpoint
+05edd4beeb8265a1cd786b2a73a1e548fb87f6c6 are ordinarily pushed and remote-SHA verified.
+Main changes only STATUS/PLAN/this navigation report; implementation remains on the feature
+branch. This time the qualified pair **is installed**, not merely built, staged or pushed.
+
+The resumable controller pins original process/argv/source and all15 unit files. It drains the
+old main loop/handlers/retention without TERM/KILL and separately observes actual exit/empty
+unit cgroup before installing one additional owned drop-in and starting the new archive.
+Existing14 drop-ins and the original archive stay untouched. The new archive has SHA256
+`58c5fde9b91a8997a2ebe2c881c43d8032eb82899d1d3c510390dd61efdab627`; paired policy is main-only
+SIGTERM, `KillMode=mixed`, no SIGKILL escalation and infinite stop timeout. Stalled admitted
+work must be reconciled, not force-killed. A durable legacy remote-outcome marker is preserved.
+
+88 focused tests PASS/0 skips; final-controller rerun24 PASS/0 skips. The24 distinct new tests
+include real user-systemd service replacement, failures, code-only rollback retaining newer
+synthetic data, source/config drift refusal, incomplete-header abort, submitted/unsubmitted
+hook recovery and three independent supervisor recoveries after actual controller SIGKILL.
+Initial readiness/PID-exit observation races were fixed and rerun, not waived. CPython3.14.4,
+pytest9.1.1 and26 dependency pins verified; fixture units cleaned up.
+
+RU old PID43082 exits naturally at15:07:58.460300UTC; acceptance at15:08:03.236579UTC starts
+PID476518. Independent verification at15:09:39.619113UTC binds exact argv/archive/settings,
+old PID absence, original unit-file hashes, pending marker and HTTP400/503/400 across a gate
+hold/release, followed by30s unchanged active/running/0 restarts and normal invalid-request
+response. These probes do not mutate a user device or attest full client E2E behavior. The
+4.776s between exit/acceptance observations is not a measured customer outage.
+
+Independent controller `fc-ha02-receiver-replace-0d181404201b8d27.service` finishes active/exited,
+success/exit0/0 restarts. Receiver has no daemon-reload warning; one pending legacy marker
+remains. No production rollback is needed. The retained private activation root is
+`/opt/apps/family_connect/private-ha02-receiver-0d181404201b8d27/activation`; operational recovery
+uses its `controller.py --run <activation-root> --recover` after reconciling the existing guard,
+not an ordinary restart or stale database/feed restore. Original archive/unit settings, gate
+and private audit remain available. Source revert alone does not undo the installed pair.
+
+No schema migration, product/public version, installer/catalog/invitation-page change or NL/
+neighbouring service operation. Raw plan/unit environment/audit tar remain private. Evidence
+locator: `/tmp/fc-ha-receiver-replacement-current`; independent verification response SHA256
+`257575f49b69a5fb66a0a1b6b28b41325911b1a61bbcefdee944deb4b56cade0`.
+
+Receiver adoption is complete, not historical external settlement or stage2 acceptance.
+Next: support/manual and guarded OWNER integration, then complete fleet coherent capture,
+independent custody/trust/approval and final current/post-ACK recovery. Replication PASS in
+isolation; the same three gates partial. No HA-03/client failover or validated finish date.
+
 ## Legacy HTTP main-thread bridge — 25 November
 
 [Authoritative bridge, native tests, actual probe and rollback](https://github.com/Joker20380/family_connect/blob/ae1b9e5c41afb0a4cbd1a023e075d4c75ed54616/docs/releases/2026-11-25-control-ha-legacy-http-bridge.md).

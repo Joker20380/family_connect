@@ -11,6 +11,20 @@ remains selected; this publication task does not advance its acceptance gates.
 [Reconciliation record](releases/2026-11-24-source-reconciliation.md).
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+25 November15:09UTC: paired RU receiver qualification/activation/independent readback COMPLETE.
+Feature0394542a pushed and remote-SHA verified; source checkpoint05edd4be.88 focused checks
+plus the final24-case controller rerun PASS/0 skips. Actual old PID43082 exits naturally; new
+PID476518 is active on pinned58c5fde9, paired gate/graceful settings,0 restarts. Independent
+400/503/400 and30s stability probes pass; original archive/15 unit files/legacy marker retained.
+[Installed pair, independent deployment guard and data-preserving rollback](releases/2026-11-24-control-ha-installed-recovery.md#paired-ru-receiver-installed--25-november).
+Do not reopen receiver qualification/activation as the NEXT task. Next bounded work is
+support/manual and guarded OWNER integration plus old remote-effect reconciliation. Complete
+fleet capture, independent custody/trust/approval and final current/post-ACK recovery remain
+inside the same three partial HA-02 gates; replication PASS only in isolation. No HA-03,
+automatic failover, client E2E or completion-date claim; no version/public artifact/NL change.
+
+At the preceding legacy-bridge checkpoint:
+
 25 November14:29UTC: native legacy drain bridge qualification COMPLETE; reversible RU probe
 PASS. Featureae1b9e5c pushed/remote-SHA verified;64 focused tests PASS/0 skips,19 new.
 [Main-thread admission/exit bridge, live evidence and rollback](releases/2026-11-24-control-ha-installed-recovery.md#legacy-http-main-thread-bridge--25-november).

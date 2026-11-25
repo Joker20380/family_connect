@@ -1,5 +1,20 @@
 # Текущее состояние / Current state
 
+**25 November15:09UTC — RU receiver replacement installed; independent readback PASS.**
+Feature0394542a is pushed/remote-SHA verified; source qualification is05edd4be. At15:08:03UTC
+old PID43082 has exited naturally after local drain and new PID476518 serves the exact
+58c5fde9 maintenance overlay with its gate and paired graceful stop settings. Independent
+15:09:39UTC verification:400/503/400 admission probes,30s stable active/running,0 restarts,
+original archive/15 unit files retained, one unresolved legacy marker. No data rewind.
+[Actual installation,88 checks plus24-case final rerun, guard and rollback](releases/2026-11-24-control-ha-installed-recovery.md#paired-ru-receiver-installed--25-november).
+Native automatic rollback/controller-death tests pass; production rollback was not needed.
+This receiver task is COMPLETE, not all HA-02. Next: support/manual/OWNER integration and
+old remote-effect reconciliation; full fleet capture, independent custody/trust/approval and
+final recovery remain. Replication PASS in isolation, three gates partial. No NL/public version
+change, client E2E acceptance, automatic failover or newly validated completion date.
+
+At the preceding legacy-bridge checkpoint:
+
 **25 November14:29UTC — legacy drain bridge qualified; reversible RU admission probe PASS.**
 Featureae1b9e5c is pushed/remote-SHA verified. CPython3.14 main-thread execution pauses the old
 accept loop and joins existing handlers; native stop tests also join retention before loop exit.
