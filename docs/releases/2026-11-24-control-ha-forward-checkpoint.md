@@ -5,6 +5,11 @@ Historical source checkpoint38a3ac27. The unpublished contract is tightened by t
 gateway/delegation bindings are now mandatory and both publications are checked.
 The limitations/results below describe this earlier implementation, not active NEXTs.
 
+25 November follow-up: the [offline owner signing workflow](2026-11-25-control-ha-forward-signing.md)
+now implements review/sign/verify with independent pins and the unchanged signature domain.
+The historical absence of a signing tool below is superseded; real authority enrolment,
+independent custody and approval of an actual fresh checkpoint are still unperformed.
+
 ## Authorization and scope
 
 The owner answered «да» to development of the forward-only route **without stopping

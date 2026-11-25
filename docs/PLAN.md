@@ -3,20 +3,19 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Nonempty OWNER publication completion now has native HTTPS/PostgreSQL coverage25 November
-00:22:26–00:23:08UTC. Both outstanding HTTP and blocked COMMIT prevent drain. A lost reply
-persists unknown/pending; in the killed-sender case PostgreSQL completed the write after death,
-yet capture correctly refused and a later command preserved the marker.67 tests PASS/0 skips,
-three new native cases. [Observed results and settlement limits](releases/2026-11-25-control-ha-publication-settlement.md).
-Test-only, no working OWNER/RU/NL access/change or version/image change. All10 runtime sources
-and retained candidates are unchanged; previous overlay/cross-mount proofs are not rerun.
-This closes the empty-queue test gap, not actual production-work settlement. Exit0, process
-death, HTTP return or an idle new gate are not settlement. Next remains independent candidate/
-config/runtime acceptance and authorized actual OWNER gate/guardian setup, existing-work
-settlement, remaining RU/NL/manual/transport coverage, then approved coherent interval and
-independent custody/recovery. Console namespace access remains unqualified; no permission
-bypass. Working-NL changes remain outside permission. Replication PASS; same three gates
-partial. Do not repeat this native test or completed overlay/config/build/collector/NL2 slices.
+Existing current-input trust gate: owner-facing offline review/sign/verify CLI is implemented,
+without changing the signed request protocol or full verifier. Independently supplied request/
+key pins, external replay floor, fresh validity, explicit offline scope and private-file checks;
+no automatic authority enrolment or floor update.231 tests PASS/0 skips,73 new signing cases,
+including native CLI and full-verifier interoperability. [Procedure and limits](releases/2026-11-25-control-ha-forward-signing.md).
+No real key created/read/enrolled, actual checkpoint signed, working OWNER/RU/NL service/config,
+image or version change. The signing-tool code gap is closed, not actual independent approval.
+Next remains real signer/pin/floor custody and approval of a fresh coherent checkpoint, alongside
+independent candidate/config/runtime acceptance and authorized actual OWNER gate/guardian setup,
+existing-work settlement and RU/NL/manual/transport coverage, coherent capture and final recovery.
+Console namespace access remains unqualified; no privilege bypass. Working-NL changes remain
+outside permission. Replication PASS; same three gates partial. Do not repeat completed signing,
+publication/overlay/cross-mount/config/build/collector/NL2 checks as new gates or issue a new ETA.
 
 At the preceding collector-admission checkpoint:
 Standalone OWNER collector admission is implemented: complete inventory/probe cycles, manual

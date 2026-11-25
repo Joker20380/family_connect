@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 25 November: offline owner checkpoint review/sign/verify workflow;231 tests, existing protocol unchanged, no real authority enrolment or live approval](releases/2026-11-25-control-ha-forward-signing.md).
+
 [CONTROL-HA · 25 November UTC: nonempty HTTPS publication and native PG COMMIT settlement; killed sender can commit late, uncertainty still blocks capture;67 tests, no working changes](releases/2026-11-25-control-ha-publication-settlement.md).
 
 [CONTROL-HA · 25 November UTC: exact OWNER added-layer contents match10 pinned sources;173 tests, no image build or container dispatch](releases/2026-11-25-control-ha-owner-overlay.md).
