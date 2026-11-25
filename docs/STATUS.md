@@ -1,5 +1,15 @@
 # Текущее состояние / Current state
 
+**25 November — обязательный итог модернизации принят владельцем.**
+[FLEET-PRODUCTION-ONBOARDING-1](fleet-production-onboarding.md):
+подготовленный VPS → IP, защищённый доступ и роли → штатный ввод → проверенный
+активный узел. Требуются production enrollment, внешний VPN-трафик, публикация,
+динамический каталог без правки исходников/новой сборки совместимого клиента и безопасный
+повтор/возврат. **REQUIREMENT_ACCEPTED / IMPLEMENTATION_PENDING**, не новый runtime PASS.
+[Запись решения и scope](releases/2026-11-25-fleet-onboarding-requirement.md).
+Выбранный HA-02 и его четыре результата сохраняются; сквозной ввод узла обязателен
+для завершения модернизации.
+
 **25 November17:32UTC — working old-support application/RNS idle pause and restoration PASS.**
 The one-use probe waits51.464s without waking the existing periodic sleep or cancelling delivery;
 3 producers and1 inbound drainer park after queues/descendants finish. Original hooks and online

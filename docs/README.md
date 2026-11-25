@@ -1,5 +1,8 @@
 # Documentation
 
+[FLEET-PRODUCTION-ONBOARDING-1 · обязательный итог владельца 25 ноября: VPS → IP/доступ/роли → штатный ввод → проверенный активный узел; 12 критериев, реализация и приёмка открыты](fleet-production-onboarding.md).
+[Запись решения и границы изменения](releases/2026-11-25-fleet-onboarding-requirement.md).
+
 [CONTROL-HA · 25 November17:32UTC: working old-support application/RNS idle pause and restoration PASS,120 checks plus fc-support system fixture; same process/source/unit, no exit flush or upgrade](releases/2026-11-25-control-ha-support-quiesce.md).
 
 [CONTROL-HA · 25 November: pinned RNS runtime lifetime/drain candidate,169 checks and two actual systemd waits beyond41s; queued/asynchronous/exit writes retained, no working support upgrade](releases/2026-11-25-control-ha-support-runtime.md).
