@@ -1,19 +1,21 @@
 # Текущее состояние / Current state
 
-**25 November UTC — exact OWNER overlay contents match the pinned sources.**
-HA source82dbcbc3 is pushed/remote-SHA verified. At00:05:28.962–00:05:29.491UTC both retained
-candidatesb62e6693/2162635c contain exactly10 expected files and8 allowed parent directories in
-their added layers; bytes, modes/owners, manifest/config/layer/diff-ID pins and base/runtime
-preservation verify.173 tests PASS/0 skips,56 new cases. No container dispatch, image build/load/
-tag, working gate, service, RU/NL or version change; the private export is not extracted.
-[Offline source-content evidence and limits](releases/2026-11-24-control-ha-installed-recovery.md#owner-overlay-content--25-november-offline-proof).
-This is not independent approval, a full inherited-base audit or installed-runtime attestation.
-The private configuration proposal remains uninstalled; the prior cross-container proof is not
-rerun. Next: independent candidate/config/runtime acceptance and authorized actual gate/guardian
-setup, existing-work settlement and remaining RU/NL/manual/transport coverage, then approved
-coherent capture and independent custody/recovery. Working console namespace access remains
-unqualified; no permission bypass. Working-NL changes remain outside scope. Replication PASS;
-same three gates partial. Do not repeat completed overlay/cross-mount/config/build/collector/NL2 slices.
+**25 November UTC — nonempty OWNER publication completion tested, not deployed.**
+Feature2a148477 is pushed/remote-SHA verified. At00:22:26–00:23:08UTC the actual management/
+publisher path used native loopback HTTPS and PostgreSQL. Outstanding HTTP and blocked COMMIT
+prevent drain; a lost reply retains unknown/pending. PostgreSQL completed a write even after
+the sending process was killed; its uncertainty marker still prohibited capture and survived
+a later successful command.67 tests PASS/0 skips,three new native cases.
+[Observed late commit, exact evidence and limitations](releases/2026-11-24-control-ha-installed-recovery.md#owner-publication-settlement--25-november-native-proof).
+Test-only change; no working OWNER/RU/NL access/change, image build or version change. Disposable
+PG removed; private fixtures retained outside Git. All10 runtime sources/candidates unchanged;
+completed overlay/cross-mount proofs are not rerun. This closes the empty-queue test gap, not
+settlement of existing production operations. Exit0/process death/HTTP return/new idle gate
+cannot prove settlement. Next remains independent candidate/config/runtime acceptance and
+authorized actual OWNER gate/guardian setup, existing-work settlement and RU/NL/manual/transport
+coverage, then coherent capture and independent custody/final recovery. Console namespace
+access remains unqualified; no permission bypass. Working-NL changes remain outside scope.
+Replication PASS; same three gates partial, no new stage/ETA or repeated completed tests as gates.
 
 At the preceding collector-admission checkpoint:
 **24 November — standalone OWNER collector admission implemented; activation matrix recorded.**

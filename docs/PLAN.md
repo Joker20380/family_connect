@@ -11,16 +11,18 @@ remains selected; this publication task does not advance its acceptance gates.
 [Reconciliation record](releases/2026-11-24-source-reconciliation.md).
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-Feature82dbcbc3 is pushed/remote-SHA verified. Exact OWNER added-layer contents now verify,
-not only metadata shape:25 November00:05:28.962–00:05:29.491UTC, both retained candidates match
-10 pinned sources and8 permitted parent directories with exact ownership/modes and OCI/diff-ID
-bindings.173 tests PASS/0 skips,56 new cases. No container dispatch, image build/load/tag, working
-gate, service, RU/NL or version change. [Offline proof and boundary](releases/2026-11-24-control-ha-installed-recovery.md#owner-overlay-content--25-november-offline-proof).
-This is not independent approval or full inherited-base/runtime qualification. Cross-mount proof
-is retained, not rerun. Working console namespace access remains unqualified; no chmod or
-privileged host-PID bypass. Next: independent candidate/config/runtime acceptance and authorized
-actual gate/guardian setup, existing-work settlement, remaining RU/NL/manual/transport coverage,
-then approved coherent interval and independent custody/recovery. The private configuration
+Feature2a148477 is pushed/remote-SHA verified. Nonempty native publication completion is tested:
+25 November00:22:26–00:23:08UTC, actual HTTPS plus PostgreSQL COMMIT. In-flight HTTP and blocked
+COMMIT prevent drain; lost reply persists unknown/pending. A killed sender's COMMIT completed
+after its death, while the preserved marker still refused capture.67 tests PASS/0 skips,three
+new native cases. [Exact proof and scope](releases/2026-11-24-control-ha-installed-recovery.md#owner-publication-settlement--25-november-native-proof).
+Test-only change, not settlement of existing production work. No working OWNER/RU/NL access/
+change, version/image change. All10 runtime sources/candidates are unchanged; previous overlay/
+cross-mount proofs retained, not rerun. Exit0/process death/HTTP return/new idle gate are not
+settlement. Console namespace access remains unqualified; no permission bypass. Next remains
+independent candidate/config/runtime acceptance and authorized actual gate/guardian setup,
+existing-work settlement, remaining RU/NL/manual/transport coverage, then approved coherent
+interval and independent custody/recovery. The private configuration
 proposal remains uninstalled; no production gate paths created. Workstation packages remain uninstalled;
 preserve original source/data roots and known-hosts argv. Direct ORM/DB/SSH/Docker bypasses
 remain outside admission. Do not repeat completed overlay/cross-mount/config/build/collector/NL2 slices as

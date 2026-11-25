@@ -6,6 +6,49 @@ divergence is reconciled/pushed at2ae5c512; older publication-blocker statements
 historical, not active instructions or a current blocker.
 Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
 
+## OWNER publication settlement — 25 November native proof
+
+[Authoritative tests, observed outcomes and boundaries](https://github.com/Joker20380/family_connect/blob/2a148477cfbe8fe37ec098f1522355ed1d0379b8/docs/releases/2026-11-25-control-ha-publication-settlement.md)
+are pushed/remote-SHA verified at2a148477cfbe8fe37ec098f1522355ed1d0379b8. Main is navigation only.
+This fills the previous empty-publication-queue test gap; it does not settle existing production
+work or approve a live replacement. No runtime-source/image/version/deployment change.
+
+Final focused run25 November00:22:26.342340–00:23:08.720638UTC, including disposable PG startup/
+cleanup:67 tests PASS/0 skips/36.75s,three new cases. All17 panel lockfile pins match; application
+driver psycopg3.3.6, PostgreSQL17.11 pinned18cfe3ef. The actual management/publisher entrypoint
+runs in an owned child, with native loopback HTTPS and a separately persisted synthetic event.
+No substituted publisher, mocked database operation, real token or production data. A held actor
+row lock blocks the native audit-FK COMMIT, observed as active/Lock/COMMIT in pg_stat_activity.
+
+- Outstanding HTTPS and blocked PostgreSQL COMMIT both refuse drain with DRAIN_TIMEOUT.
+- Success commits remote/local state, removes its own marker and permits drain afterwards.
+- Lost reply after remote persistence exits0 with local unknown, retains one marker and refuses
+  capture. The command's successful exit is not successful publication/settlement.
+- Killing only the fixture sender during blocked COMMIT still resulted in local published state
+  after PostgreSQL finished. The marker survives and refuses capture. A later successful command
+  cannot erase the old uncertainty. Process disappearance is not a database rollback guarantee.
+- Actual outcomes contain one remote event/one POST each. An unknown message is not automatically
+  retried. Fixture idempotency is not installed gateway qualification or marker-clearing approval.
+
+Test source SHA:`2989ce333bcfcfef3e342549981e45e912d788257112f1ee848f4d2ae7357822`.
+Sanitized summary SHA:`9b929aa8777b1da4b05be2277af73f4ec098b8f4ffc567c779c7d8e40218a314`.
+JUnit SHA:`95864cb35033cbcb7a925fcfb85a690c71dcf56c81ca597cd86ae9eb90a4e87e`.
+Feature docs:4 files/1080 link targets/zero errors; whitespace clean. Private keys, logs, raw
+receipts and synthetic databases stay outside Git. The owned PG container/volumes are removed.
+No working OWNER container observation/exec/restart, RU/NL connection or service/policy change.
+All10 runtime sources and the existing candidates remain unchanged; previous overlay/cross-mount
+proofs are retained, not repeated. No new installed health result is claimed.
+
+There is no production rollback for this test-only change. Preserve original images/configs and
+current data/uncertainty evidence. Before any actual replacement, close new approved dispatch and
+settle existing publication/support/manual operations at both ends; if unproven, abort without
+killing working publishers or clearing markers. A newly created idle gate cannot retroactively
+cover ungated work. Independent candidate/config/runtime acceptance and authorized actual OWNER
+gate/guardian setup, remaining RU/NL/manual/transport participation, coherent capture and independent
+current checkpoint/key/access custody plus final recovery remain. Console namespace access is
+still unqualified; no privilege bypass. Working-NL deployment remains outside permission.
+Replication PASS; same three gates partial. Do not repeat this native test as a new prerequisite.
+
 ## OWNER overlay content — 25 November offline proof
 
 [Authoritative checker, candidate evidence and limits](https://github.com/Joker20380/family_connect/blob/82dbcbc3ed9c98e2a5f2a2480a67a9cea6710eb0/docs/releases/2026-11-25-control-ha-owner-overlay.md)
