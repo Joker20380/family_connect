@@ -11,6 +11,21 @@ remains selected; this publication task does not advance its acceptance gates.
 [Reconciliation record](releases/2026-11-24-source-reconciliation.md).
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+25 November13:56UTC: installed-shape source qualification COMPLETE; featuref9520616 pushed and
+remote-SHA verified. Pinned overlay changes6 members/adds2/removes0, preserving38 other entries;
+no canonical adapter/schema migration.171 focused PASS/0 skips; identical129 archive-bound
+legacy cases pass on both baseline and candidate, with native publication/child uncertainty and
+actual user-systemd graceful-stop coverage.
+[Closed delta, tests and rollback](releases/2026-11-24-control-ha-installed-recovery.md#installed-shape-receiver-candidate--25-november).
+No deployment: RU still runs the same old ungated PID/archive with control-group TERM/90s.
+Next: close legacy admission and independently settle old receiver handlers/children before
+paired archive/unit activation. An empty new gate or thread count is not old-work settlement.
+Remaining support/manual coverage and guarded OWNER integration precede complete fleet capture,
+independent custody/trust/approval and final recovery. Replication PASS in isolated rehearsal;
+the same three gates partial. HA-02 remains selected, no HA-03 or automatic failover.
+
+At the preceding HTTP-lifecycle checkpoint:
+
 25 November13:34UTC: featuread39881b is pushed/remote-SHA verified. Receiving HTTP graceful
 stop closes admission, joins requests/retention and preserves admitted children under paired
 systemd settings.269 focused tests PASS/0 skips,12 new, including actual user-systemd stop.

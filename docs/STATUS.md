@@ -1,5 +1,22 @@
 # Текущее состояние / Current state
 
+**25 November13:56UTC — installed-shape receiver candidate qualified, not installed.**
+Featuref9520616 is pushed/remote-SHA verified. The pinned maintenance overlay changes only6
+installed members and adds2 helpers, removes none and preserves the other38 entries byte-for-byte.
+Legacy access/payment/routing implementations and SQLite schemas are not replaced by current
+canonical adapters.171 focused tests PASS/0 skips, including two archive-bound runners with
+the same129 legacy cases passing on both installed baseline and candidate. Native exports,
+child-command/ACK uncertainty and actual user-systemd graceful stop also pass.
+[Exact scope, evidence and rollback](releases/2026-11-24-control-ha-installed-recovery.md#installed-shape-receiver-candidate--25-november).
+RU readback: same PID43082/archive, active/0 restarts, old ungated control-group TERM/90s policy;
+no install/restart. OWNER healthy/0 restarts and both collector timers active; no NL contact.
+Next: close legacy receiver admission and independently settle old handlers/children before
+activating the paired archive/unit. Support/manual coverage, guarded OWNER integration, fleet,
+coherent capture, independent custody/trust/approval and final recovery remain. Stage2 is not
+complete: replication PASS in isolation, three gates partial; no automatic failover/version change.
+
+At the preceding HTTP-lifecycle checkpoint:
+
 **25 November13:34UTC — receiving HTTP graceful stop qualified, not installed.**
 Featuread39881b is pushed/remote-SHA verified. Actual RU readback binds the old archive/unit:
 active, no capture gate, default SIGTERM/control-group stop with90s timeout. A restart could

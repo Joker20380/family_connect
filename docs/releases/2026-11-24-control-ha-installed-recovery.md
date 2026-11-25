@@ -8,6 +8,53 @@ Owner request selects all four existing HA-02 gates, not HA-03..05. The25 Novemb
 also authorizes participant installation and bounded operational work with documented rollback;
 earlier read-only/deployment-permission limitations in the historical sections are superseded.
 
+## Installed-shape receiver candidate — 25 November
+
+[Authoritative exact delta, native evidence and rollback](https://github.com/Joker20380/family_connect/blob/f95206163f05f4af0fc0e773371ffb5e1772f8de/docs/releases/2026-11-25-control-ha-receiver-overlay.md).
+Featuref95206163f05f4af0fc0e773371ffb5e1772f8de is ordinarily pushed and remote-SHA verified.
+Main changes only STATUS/PLAN/this navigation report; no implementation merge or deployment.
+
+The full candidate from the preceding checkpoint is not a narrow deployment input. The new
+builder applies a reviewed, pinned delta to the exact retained RU archive:6 modified members,
+2 added helpers,0 removed and38 entries byte-identical. It backports receiving capture/graceful
+stop and export/external uncertainty, without canonical access/payment/routing adapters or a
+SQLite schema migration. Baseline, member before/after, patch, helper and unit hashes are checked;
+unsafe inputs/scope drift are refused. Output is deterministic, private, exclusive and fsynced.
+It builds an archive, paired unit and receipt; it does not execute or install them.
+
+Final13:55:42.768948–13:56:33.503712UTC:171 PASS/0 skipped,35 new top-level tests. Included
+archive runners each pass the same129 legacy cases, with archive imports verified before and
+after execution. These nested runs are not258 additional top-level tests or extra acceptance
+gates. Native feed failures, real child side effects/nonzero exit/malformed ACK, HTTP lifecycle
+and actual user-systemd stop pass. Outbound tests use owned local subprocesses, not real remote
+mailbox/gateway acceptance. Python3.14.4/pytest9.1.1 and all26 control/identity pins verified.
+An initially rejected development candidate and exploratory collection failures remain in
+private evidence; corrected candidate-v2 passes the final suite. Test systemd units are absent.
+
+| Artifact | SHA256 |
+| --- | --- |
+| Retained installed archive | `4e2df679761ba9e7af74128984ef2e19e8e7b228f1cc85b36d50be2b0bc24ce8` |
+| Qualified installed-shape candidate | `58c5fde9b91a8997a2ebe2c881c43d8032eb82899d1d3c510390dd61efdab627` |
+| Final JUnit | `a8e04f14fad82cc547d6f42babf48ddd129ad7bbcb020ac7a4cceb1c7ad9918d` |
+
+Private evidence locator `/tmp/fc-ha-receiver-overlay-current`. Strict read-only RU observation
+at13:56:39.282490UTC confirms the same PID43082/installed hash, active/running,0 restarts,
+control-group SIGTERM/90s and no capture gate. OWNER original roles remain healthy/running with
+0 restarts and both collector timers active. No NL contact, server changes, client version,
+installer/catalog/feed or invitation-page change. Built/tested is not installed/distributed.
+
+No working installation needs rollback. Retain installed archive/unit prestate and all private
+evidence; source rollback is an ordinary revert. Before activation, close old admission and
+independently settle old handlers/children. Do not replace a running archive, install only the
+unit drop-in, force-stop unobserved work or initialize an empty gate as retroactive proof.
+If settlement is unknown, abort before replacement. Preserve live DB/feed/pending state and
+uncertainty; never restore stale data or erase markers to satisfy a gate.
+
+This closes installed-shape source qualification only. Old-work settlement/activation is next,
+then remaining support/manual coverage and guarded OWNER integration. Fleet participation,
+coherent capture, independent custody/trust/approval and final recovery remain in HA-02:
+replication PASS in isolation, three fixed gates partial. No HA-03 or automatic failover.
+
 ## Receiving HTTP drain — 25 November
 
 [Authoritative source, installed boundary, native evidence and rollback](https://github.com/Joker20380/family_connect/blob/ad39881b96af39944f9babd849e8faf924486701/docs/releases/2026-11-25-control-ha-http-drain.md).
