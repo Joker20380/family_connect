@@ -1,5 +1,21 @@
 # Текущее состояние / Current state
 
+**25 November — OWNER privileged access confirmed; exact support candidate qualified, not installed.**
+Owner authenticated in the local GUI sudo dialog; the same retained terminal successfully ran
+privileged readback and a separate systemd fixture as `fc-support`. No password entered chat,
+sudoers/polkit change or permanent privilege grant. Normal sudo expiry/session scope still applies.
+The installed19-source baseline yields a pinned candidate:3 changed/3 added/16 preserved, no removals.
+36 tests PASS/0 skips plus actual installed-UID/interpreter systemd stop beyond41s and independent
+encrypted-store readback PASS. [Exact candidate, failed fixture attempts and rollback limits](releases/2026-11-25-control-ha-support-overlay.md).
+At16:00UTC working support retains PID2022541/all19 sources/original command/3 unit files,0 restarts;
+three OWNER containers retain healthy state/PIDs/images. No working support deployment, RU/NL
+contact or public version change. Next is qualified legacy-support admission/drain and independent
+rollback supervision, plus Reticulum background persistence closure; not another permission request
+or a force-stop. Installed manual/OWNER coverage, coherent capture and independent trust/custody/
+recovery remain; same three HA-02 gates partial and isolated replication PASS.
+
+At the preceding operator-CLI checkpoint:
+
 **25 November — three manual operator entrypoints now honor capture admission; source only.**
 Restricted administration, support/FIELD administration and service notices accept an explicit
 `--capture-gate` before opening stores or private files. Admission covers commit, file publication

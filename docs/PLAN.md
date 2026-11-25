@@ -3,6 +3,22 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+25 November: local GUI authentication restores technical privileged execution in the retained
+terminal; root readback and isolated systemd qualification under the real `fc-support` UID PASS.
+Do not keep reporting the earlier missing-authentication observation as the current blocker;
+normal credential expiry remains and requires UI reauthentication if a later command refuses.
+Exact installed support candidate preparation COMPLETE:19 baseline sources,3 modified/3 added,
+16 untouched;36 tests PASS/0 skips plus one native system-unit/fresh-store verification.
+[Qualification, unchanged working service and remaining transition gates](releases/2026-11-25-control-ha-support-overlay.md).
+Not deployed. Next: qualified old support main-loop admission/drain without default TERM/40s kill,
+independent guarded replacement/rollback, and exact Reticulum background persistence closure.
+Preserve old argv/3 unit files/source baseline and every uncertain outcome; no broad kit overwrite.
+Then installed manual/OWNER coverage, coherent fleet capture, independent trust/custody/combined
+recovery. Same three HA-02 gates partial, isolated replication PASS; no HA-03/public version change.
+
+At the preceding operator-CLI checkpoint:
+
+**CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
 25 November: source admission for all17 actions of restricted/support/notices operator CLIs
 COMPLETE;211 focused tests PASS/0 skips,89 new. Configured gates refuse before private/store I/O,
 hold through completion and retain post-commit/process-death uncertainty. Closed native archives

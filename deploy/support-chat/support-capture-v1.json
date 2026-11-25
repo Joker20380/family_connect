@@ -1,0 +1,32 @@
+{
+  "baseline": {
+    "control/friends/pseudonyms.py": "ada9defd475c676e2f27398060ecbbe493a264b030385ae5ef83182b136ab6e9",
+    "messenger/__init__.py": "5276c4dec78953223d5bc4296242b30411baf74ae2e5de55471a7485effbf415",
+    "messenger/chat.py": "b8a9c34d40cffac7fda1f3d6af0f37bf80865a5202614dd37642c0acc7b5972c",
+    "messenger/codec.py": "2e876b5c0978f10d935e35af141aeafacb631e7dd3b69c71d47934fc7af3d6ed",
+    "messenger/delivery.py": "69f9ce7e202b9ac7d2720aec8c2f08792a09220ccfb650f580c6a34e6eefde08",
+    "messenger/mailbox.py": "aef9ba09e76775d6b77d2ef33091a88d01cca03efd58aab3226e5ad1d3426e16",
+    "messenger/notices.py": "31241b050755b8ce9e0523c99032a528e11306f0742bcbd205375a2d1b440890",
+    "messenger/routed.py": "21ce1899e9e6362ed88b310d642cbd6ee956373f82d83c316d95bb60f57c4163",
+    "messenger/store.py": "acda9e9c889c2a15ed0b51999663b584752337298744a847c1764e88bc190793",
+    "messenger/subscription_view.py": "bca7f4fb1c703019067c9d4bfe314993e61df019f3e59867510b9fa2a9c73b59",
+    "messenger/support.py": "a7681bd9f18acdd6445fd076c0e9fc33e9ee4c9380a20bc23f427a680680512e",
+    "provisioning/__init__.py": "a8d11b35f8be63395d505bcf0cf7774aa5c0dbffa5eee905eef911a8d3fdb905",
+    "provisioning/chat_bridge_protocol.py": "3c9121b8968d6a0a0933d4f122fd4aeda08d1f587249b473b8cf2c5c5c70f801",
+    "provisioning/chat_transport.py": "403c033da39b4c63e883c4db2ff07ccb70584ddcc3cab0c930c55ce213038a25",
+    "provisioning/subscription_collector.py": "6bfe32119ecfcfe40212c1bf3d588495dac9cf82671faf7beb182537add50955",
+    "provisioning/subscription_notifications.py": "3792bbbc37ace2188f04148e936bf44acb2fdd992285d134448e7be173ae839e",
+    "provisioning/support_bindings.py": "47d85678954ce07e7662a4da64fbbe117c60e69ba726e551c60934f555088372",
+    "provisioning/support_identity.py": "b2b60ef8e094b403183328cd9e5a9fed0099ba18a52e30c40a33fbe2e84d9d85",
+    "provisioning/support_worker.py": "0b90fd275ec09c0d9b1f54735062e20b55fb4a48707faaf56797fa9e1ef48a57"
+  },
+  "candidate": {
+    "control/capture_gate.py": "da28d940e2e17e2dbb1fbbde8cc04c59d29cffc8762ada717135504e2ffa4906",
+    "messenger/routed.py": "292fa339f148431798b9b7dfa248e39593f544216ae5cb5546e1edec62e9f5bf",
+    "provisioning/subscription_notifications.py": "dcdf4936ca211bebdf8bd408021439230529fed470088b5679447c8062cfaa95",
+    "provisioning/support_capture.py": "109643b32498279a799aaf72a3a55e74c9fcc9d0c978da0734bd578ea9c68492",
+    "provisioning/support_lifecycle.py": "00807e80958986a3fe13a3419f44f38c09d76a2962f0746dfd9f3358cb35dc57",
+    "provisioning/support_worker.py": "c9227a9fe267cd5aaf28e55b6582629bd630b2cfee4135df565cedc384f92a02"
+  },
+  "schema": 1
+}

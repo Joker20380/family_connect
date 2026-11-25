@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 25 November: OWNER GUI authentication confirmed; pinned installed-shape support candidate,36 tests and actual fc-support systemd/readback PASS; working service unchanged, safe old-process transition still required](releases/2026-11-25-control-ha-support-overlay.md).
+
 [CONTROL-HA · 25 November: manual restricted/support/notices CLI admission,211 checks including89 new native/failure cases; source only, installed coverage and privileged OWNER activation still open](releases/2026-11-25-control-ha-operator-capture.md).
 
 [CONTROL-HA · 25 November: support graceful worker/reader stop,106 focused checks and actual systemd child completion; source only, working privileged-access blocker](releases/2026-11-25-control-ha-support-lifecycle.md).

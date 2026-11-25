@@ -5,12 +5,26 @@ import subprocess
 import sys
 import time
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+archive = os.environ.get('FC_TEST_SUPPORT_ARCHIVE')
+sys.path.insert(0, archive or str(Path(__file__).resolve().parents[2]))
 
 from control.capture_gate import initialize
 from messenger.mailbox import ExchangeResult, SyncResult
 from provisioning import support_worker as worker
 
+if archive:
+    import json
+    import zipfile
+    with zipfile.ZipFile(archive) as package:
+        packaged = {(name[:-12] if name.endswith('/__init__.py') else name[:-3]).replace('/', '.')
+                    for name in json.loads(package.read('source-manifest.json'))}
+
+    def check_imports():
+        for name, module in tuple(sys.modules.items()):
+            if name in packaged:
+                assert module.__file__.startswith(archive + '/'), name
+
+    check_imports()
 
 root, mode = Path(sys.argv[1]), sys.argv[2]
 gate = initialize(root / 'gate')
@@ -107,3 +121,6 @@ worker.main(['--store', str(root / 'store'), '--key', str(root / 'store.key'),
              '--runtime', str(root / 'runtime'), '--socket', str(root / 'worker.sock'),
              '--capture-gate', str(root / 'gate'), '--snapshot-uid', str(os.getuid())])
 (root / 'finished').touch()
+if archive:
+    check_imports()
+    (root / 'archive-qualified').touch()

@@ -58,6 +58,8 @@ def assert_finished(process, root, *, committed=False):
     assert process.wait(10) == 0, (root / 'output').read_text()
     assert (root / 'finished').exists() and (root / 'store-closed').exists()
     assert not (root / 'worker.sock').exists()
+    if os.environ.get('FC_TEST_SUPPORT_ARCHIVE'):
+        assert (root / 'archive-qualified').exists()
     store = SupportStore(root / 'store', b's' * 32, create=False)
     try:
         assert store._get('lifecycle-synthetic') == ({'completed': True} if committed else None)
@@ -197,7 +199,9 @@ def test_actual_systemd_stop_preserves_child_beyond_old_deadlines(tmp_path):
     directory = Path(os.environ['XDG_RUNTIME_DIR']) / 'systemd/user'
     directory.mkdir(parents=True, exist_ok=True)
     unit_path = directory / unit
-    unit_path.write_text('[Service]\nType=exec\nRestart=no\n' + '\n'.join(paired) + '\nExecStart=' +
+    archive = os.environ.get('FC_TEST_SUPPORT_ARCHIVE')
+    environment = 'Environment=' + json.dumps('FC_TEST_SUPPORT_ARCHIVE=' + archive) + '\n' if archive else ''
+    unit_path.write_text('[Service]\nType=exec\nRestart=no\n' + environment + '\n'.join(paired) + '\nExecStart=' +
                          f'{sys.executable} -B {FIXTURE} {tmp_path} exchange\n')
 
     def systemctl(*args):
@@ -218,6 +222,8 @@ def test_actual_systemd_stop_preserves_child_beyond_old_deadlines(tmp_path):
         wait_for(lambda: (tmp_path / 'finished').exists())
         wait_for(lambda: 'MainPID=0' in systemctl('show', unit, '--property=MainPID'))
         assert (tmp_path / 'child-finished').exists() and (tmp_path / 'committed').exists()
+        if archive:
+            assert (tmp_path / 'archive-qualified').exists()
         assert 'ExecMainStatus=0' in systemctl('show', unit, '--property=ExecMainStatus')
         assert 'Result=success' in systemctl('show', unit, '--property=Result')
         store = SupportStore(tmp_path / 'store', b's' * 32, create=False)
