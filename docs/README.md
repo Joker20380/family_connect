@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 25 November20:39UTC: OWNER witness/rollback reservation checkpoint;57 local and3 root cases pass, one native WORKERS_REMAIN refusal retained; combined handoff remains](releases/2026-11-24-control-ha-installed-recovery.md#owner-replacement-witness-and-retained-exit-refusal--25-november).
+
 [CONTROL-HA · 25 November20:12UTC: manifest-required startup/restart fence,104 checks and actual NL1 systemd crash/restart/native RNS PASS; stale ticket refused, working installation/OWNER exit proof remain](releases/2026-11-24-control-ha-installed-recovery.md#mailbox-startup-and-restart-fence--25-november).
 
 [CONTROL-HA · 25 November19:41UTC: old RNS link exclusion after local reopening,78 checks/authenticated wire/actual NL1 UID/systemd PASS; OWNER exit binding and restart protection remain](releases/2026-11-24-control-ha-installed-recovery.md#support-mailbox-link-generations--25-november).

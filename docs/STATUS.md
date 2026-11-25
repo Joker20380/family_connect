@@ -10,6 +10,25 @@ REQUIREMENT_ACCEPTED / IMPLEMENTATION_PENDING: требуется рабочая
 Текущий HA-02 и четыре его результата сохраняются; сквозной ввод обязателен для итоговой
 приёмки всей модернизации.
 
+**25 November20:39UTC — OWNER witness/rollback reservation checkpoint; native exit refusal retained.**
+Feature595acebe pushed/remote-SHA verified.57 distinct local cases and3 actual-root/fc-support cases
+pass across scoped runs/0 skips; one failed root attempt remains retained, not hidden by its retry.
+[Exact evidence, failure and next selected work](releases/2026-11-24-control-ha-installed-recovery.md#owner-replacement-witness-and-retained-exit-refusal--25-november).
+Independent quiescent/commit/persistence/manager exit/live-candidate checks bind to the mailbox ticket,
+plan and support identity. Durable shared-lock reservation blocks legacy rollback after issuance,
+including controller death; neither an OWNER sample nor a restarted mailbox opens admission.
+Root recheck passes but the earlier irreversible WORKERS_REMAIN before final persistence is unexplained.
+Next: diagnose that retained native thread/task refusal, then pair live NL1 hold/startup/current-PID
+adoption with authenticated witness consumption and combined opening/reclosure/failure recovery.
+Working OWNER PID2022541/19 sources/unit/process/interpreter prestate unchanged; NL1 observed PID3705,
+both0 restarts. No working injection/stop/product write; candidate9d7bf840 NOT installed, seven unknowns
+retained. GUI authentication worked/sudo invalidated; no further owner action now. No RU/NL2/container,
+HA-03/version or onboarding implementation. Remaining activation/readback/writers/coherent capture/
+independent trust/custody/approval/recovery keep the same three HA-02 gates partial, replication PASS
+in isolation. Main remains navigation-only; do not remove reservation markers to bypass recovery.
+
+At the preceding startup/restart checkpoint:
+
 **25 November20:12UTC — mailbox startup/restart defaults closed, qualified in isolation.**
 Featurea39c74b9 pushed/remote-SHA verified.104 tests PASS/0 skips and actual NL1 fc-mailbox UID996/
 GID982/systemd/native-RNS qualification. Guard installation precedes destination publication; one

@@ -8,6 +8,63 @@ Owner request selects all four existing HA-02 gates, not HA-03..05. The25 Novemb
 also authorizes participant installation and bounded operational work with documented rollback;
 earlier read-only/deployment-permission limitations in the historical sections are superseded.
 
+## OWNER replacement witness and retained exit refusal — 25 November
+
+[Authoritative implementation, exact checks and failure evidence](https://github.com/Joker20380/family_connect/blob/595acebe72bc486ec9661bb68bc493a09e9863f8/docs/releases/2026-11-25-control-ha-support-witness.md).
+Feature595acebe72bc486ec9661bb68bc493a09e9863f8 is ordinarily pushed and remote-SHA verified.
+Main remains navigation-only. This is a source/lab checkpoint within the existing HA-02 settlement
+gate, not working installation, combined handoff acceptance or a production opening/capture permit.
+
+The independent OWNER witness checks the exact private replacement plan, quiescent READY/commit/
+irreversible/final-persistence receipts, independent supervisor exit0/MainPID=ControlPID=0/restart
+observation, current absence of the old PID, live accepted candidate/native runtime/gate/IPC and
+preserved legacy uncertainty. It binds those checks to a mailbox startup ticket and actual support
+identity digest. A pidfd and repeated evidence/manager checks bracket the sample. The ticket's remote
+mailbox liveness/hold is explicitly not independently verified by this local OWNER component.
+
+A durable shared-lock reservation is written before returning. The same ticket can be revalidated;
+another mailbox generation or restarted candidate cannot reuse acceptance. Both recovery and direct
+rollback refuse after reservation until independent mailbox reclosure is qualified. Final review also
+closes a direct-rollback lock race. Controller death does not remove the reservation; neither marker
+deletion nor an older controller is an authorized recovery shortcut. No reclosure/release executor
+exists yet. Native RNS refuses the witness as an opening command, keeps support denied, serves another
+sender and retains its row after mailbox SIGKILL/restart. All traffic/identities/state are synthetic.
+
+**57 distinct local cases plus3 actual-root/fc-support cases pass across scoped runs,0 skips.**
+The54-case combined run takes258.24s; expanded15-case witness rerun82.00s; final4-case lock/readback/
+rollback check19.72s. These overlap and are not added together. Root3-case runs pass in27.47s and,
+on final source recheck at20:38:02–20:38:29UTC,26.22s. Root tests use real fc-support/fc-support-ipc,
+PrivateTmp/ProtectSystem=strict/ProtectHome/NoNewPrivileges and RemainAfterExit=no; the service UID
+cannot write the controller root. Working OWNER prestate is independently checked before and after.
+
+**One intervening root attempt fails and is retained:** at20:35:51–20:36:35UTC the old synthetic
+bridge records irreversible WORKERS_REMAIN after commit, before final persistence/clean exit. The
+supervisor remains WAITING_OLD_EXIT and reaches its systemd start-rate limit; no candidate installation,
+witness or uncertainty clearing occurs. The fixture's teardown SIGKILL is scoped only to that lab,
+not a production recovery recipe. The receipt lacks a thread/native-task census, so the cause is not
+proven. A passing retry does not erase this failure or justify weakening the check/increasing timeouts.
+The private failed fixture/receipts are retained; all scoped lab units are removed by20:39UTC.
+
+Working OWNER stays PID2022541/0 restarts with19 sources/retained unit fields/files/process/interpreter
+pins unchanged in root checks. NL1 is observed PID3705/0 restarts/NeedDaemonReload=no; no fresh full
+NL1 source audit is claimed. No working injection/stop/policy/product write, RU/NL2/container,
+MicroTrader, HA-03 or public-version change. Candidate9d7bf840 remains unchanged/NOT installed;
+seven historical UNKNOWN outcomes are untouched. GUI privilege works, password is not captured,
+and sudo is invalidated after each bounded check. No extra owner action is requested now.
+
+Evidence SHA256: witness source `0f2ad862c042eee6efc07afaa0835e9e5d8de6d83cd2a5453697df9e0d512c7e`;
+replacement source `872d1dd6954188e7462b1d7909ef670909c1fa04eafe391d666d647e31e1bdf9`;
+failed-root JUnit `40fe8c267b11496ea2d85a4d66745015888a5f95b19b24c3b7afbf28d6d77c78`;
+final-root JUnit `a11a7a4269114bc452033d745fd82070fd70fdfac547e3809efad1b527b1e744`.
+Remaining source/test hashes and private evidence locations are in the immutable feature report.
+
+Next: diagnose the retained native worker/task refusal, then paired NL1 startup-unit/manifest and
+existing-PID hold adoption, authenticated witness delivery/consumption with independent live mailbox
+drain verification, and combined opening/reclosure/controller/deployment/crash recovery. Then
+authorized OWNER activation/readback, remaining writers, coherent capture and independent current
+trust/custody/approval/full recovery. Same three HA-02 gates partial; isolated replication PASS.
+The previous checkpoint follows as history, not another active NEXT.
+
 ## Mailbox startup and restart fence — 25 November
 
 [Authoritative source,104 tests, actual NL1 systemd restart and full evidence](https://github.com/Joker20380/family_connect/blob/a39c74b95d04cb2953f05476b6d0172988505570/docs/releases/2026-11-25-control-ha-mailbox-startup.md).

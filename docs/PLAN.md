@@ -14,6 +14,25 @@
 
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+25 November20:39UTC: OWNER witness/rollback reservation CHECKPOINT, feature595acebe pushed/remote-SHA
+verified.57 distinct local and3 actual-root cases pass across scoped runs/0 skips; a failed native
+WORKERS_REMAIN exit attempt is retained and not explained by the successful root retry.
+[Source, proof boundary, exact checks and failure](releases/2026-11-24-control-ha-installed-recovery.md#owner-replacement-witness-and-retained-exit-refusal--25-november).
+Independent OWNER quiescent/commit/persistence/clean exit/live-candidate evidence binds to a mailbox
+ticket/plan/support identity. Shared-lock durable reservation prevents legacy rollback after issuance;
+controller death, direct rollback races and restarted mailbox/candidate cannot silently reuse it.
+No production opening or capture permit is issued. Next: diagnose the retained native exit refusal
+with a thread/task census, then paired NL1 startup-unit/manifest/current-PID hold adoption, authenticated
+witness transport/consumption with live mailbox drain verification, and combined reclosure/recovery.
+Do not delete a reservation to make recovery pass. Then authorized OWNER activation/readback,
+remaining writers, coherent capture and independent trust/custody/approval/full recovery. Same three
+HA-02 gates partial, isolated replication PASS. Working OWNER prestate unchanged; NL1 observed
+PID3705/0 restarts. Candidate9d7bf840 NOT installed, seven unknowns retained. No working injection/stop/
+product write, RU/NL2/container/HA-03/version/onboarding operation or extra owner action now.
+
+At the preceding startup/restart checkpoint:
+
+**CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
 25 November20:12UTC: manifest-required restart fence COMPLETE IN ISOLATION; featurea39c74b9 pushed/
 remote-SHA verified, no working installation.104 tests PASS/0 skips; actual NL1 fc-mailbox UID996/GID982
 systemd crash/restart with authenticated native RNS keeps support closed, rejects the old root-owned
