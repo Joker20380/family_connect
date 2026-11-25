@@ -1,20 +1,21 @@
 # Текущее состояние / Current state
 
-**25 November UTC — exact OWNER overlay contents verified, not just image metadata.**
-At00:05:28.962–00:05:29.491UTC both retained candidatesb62e6693/2162635c match all10 source
-files pinned tofa05f0da. Each extra layer contains only these regular root-owned0644 files and
-their eight0755 parent directories; no extra file, link, whiteout or extended metadata. OCI
-manifest/config/compressed-layer/diff-ID references and unchanged runtime/base prefixes verify.
-173 focused tests PASS/0 skips,56 new cases. [Offline checker, receipts and limits](releases/2026-11-25-control-ha-owner-overlay.md).
-No container run/exec/replacement, image build/load/tag, working gate, service, RU/NL or version
-change. A private Docker save is evidence only; no archive extraction. This is source-content
-evidence, not independent approval, full base-image audit or installed-runtime attestation.
-Prior cross-container qualification remains accepted, not rerun. Working console namespace
-access remains unqualified; no permission bypass. Next: independent candidate/config/runtime
-acceptance and authorized actual OWNER gate/guardian setup, existing-work settlement and
-remaining RU/NL/manual/transport coverage, then approved coherent capture and independent
-custody/final recovery. Working-NL changes remain outside scope. Replication PASS; same three
-gates partial. Do not repeat completed overlay/cross-mount/config/build/collector/NL2 slices.
+**25 November UTC — nonempty OWNER publication completion boundary qualified in isolation.**
+At00:22:26–00:23:08UTC the actual publisher/management entrypoint exercised native loopback
+HTTPS plus PostgreSQL COMMIT, not a substituted publisher. In-flight HTTP and blocked COMMIT
+both prevent drain. Lost reply leaves unknown/pending; killing the sender during COMMIT still
+allowed PostgreSQL to finish the write, but pending remained and capture refused. Later
+successful commands cannot erase that marker.67 tests PASS/0 skips,three new native cases.
+[Exact scenarios, observed late commit and operational limits](releases/2026-11-25-control-ha-publication-settlement.md).
+Test-only change; no working OWNER/RU/NL access/change, image build or version change. Disposable
+PG removed; private fixtures/evidence retained outside Git. All10 runtime sources and existing
+candidates are unchanged; completed overlay/cross-mount proofs are not rerun. This closes the
+previous empty-queue test gap, not settlement of existing production operations. Do not infer
+settlement from exit0, process death, HTTP return or an idle freshly created gate. Next remains
+independent candidate/config/runtime acceptance and authorized actual OWNER gate/guardian setup,
+existing-work settlement and RU/NL/manual/transport coverage, then coherent capture and independent
+custody/final recovery. Console namespace access remains unqualified; no permission bypass.
+Working-NL changes remain outside scope. Replication PASS; same three gates partial, no new ETA.
 
 At the preceding collector-admission checkpoint:
 **24 November — standalone OWNER collectors admitted in source; activation proposal recorded.**

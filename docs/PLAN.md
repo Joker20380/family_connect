@@ -3,19 +3,20 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-OWNER candidate added-layer inspection now passes00:05:28.962–00:05:29.491UTC on25 November:
-both retained overlays match all10 source files pinned tofa05f0da, with only the eight permitted
-parent directories and exact ownership/modes. Manifest/config/layer/diff-ID pins and base/runtime
-preservation verify; unexpected entries or source drift cannot become acceptance.173 tests PASS/
-0 skips,56 new cases. No container dispatch, deployment, build/load/tag, service or version change.
-[Offline source-content proof and its boundary](releases/2026-11-25-control-ha-owner-overlay.md).
-This is not independent approval or full base/runtime qualification. The private config proposal
-remains uninstalled; prior cross-mount proof is retained, not rerun. Working console namespace
-access remains unqualified; no chmod/privileged host-PID bypass. Next: independent candidate/
-config/runtime acceptance and authorized actual gate/guardian setup, existing-work settlement,
-remaining RU/NL/manual/transport coverage, then approved coherent interval and independent
-custody/recovery. Working-NL changes remain outside permission. Replication PASS; same three
-gates partial. Do not repeat completed overlay/cross-mount/config/build/collector/NL2 slices.
+Nonempty OWNER publication completion now has native HTTPS/PostgreSQL coverage25 November
+00:22:26–00:23:08UTC. Both outstanding HTTP and blocked COMMIT prevent drain. A lost reply
+persists unknown/pending; in the killed-sender case PostgreSQL completed the write after death,
+yet capture correctly refused and a later command preserved the marker.67 tests PASS/0 skips,
+three new native cases. [Observed results and settlement limits](releases/2026-11-25-control-ha-publication-settlement.md).
+Test-only, no working OWNER/RU/NL access/change or version/image change. All10 runtime sources
+and retained candidates are unchanged; previous overlay/cross-mount proofs are not rerun.
+This closes the empty-queue test gap, not actual production-work settlement. Exit0, process
+death, HTTP return or an idle new gate are not settlement. Next remains independent candidate/
+config/runtime acceptance and authorized actual OWNER gate/guardian setup, existing-work
+settlement, remaining RU/NL/manual/transport coverage, then approved coherent interval and
+independent custody/recovery. Console namespace access remains unqualified; no permission
+bypass. Working-NL changes remain outside permission. Replication PASS; same three gates
+partial. Do not repeat this native test or completed overlay/config/build/collector/NL2 slices.
 
 At the preceding collector-admission checkpoint:
 Standalone OWNER collector admission is implemented: complete inventory/probe cycles, manual
