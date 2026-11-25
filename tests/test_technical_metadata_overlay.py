@@ -7,6 +7,7 @@ from scripts.package_technical_metadata_overlay import ADDED, EXISTING, ROOT, bu
 
 PINS = {'friends_http.py': '59d1a3cacc0baa6d064696bc415b9e660ee54728b3023a9b5e94665c6e439c32',
         'control/friends/access.py': '6f7755d5b0a98bf8cd40326904927e301c57d359ac2e99d162f309f2b91056d7'}
+OVERLAY_SOURCE = '430278008af38943de51cab8454614cb60b5837f'
 
 
 def baseline(tmp_path):
@@ -15,7 +16,7 @@ def baseline(tmp_path):
     for source in EXISTING.values():
         copied = stage / source
         copied.parent.mkdir(parents=True, exist_ok=True)
-        copied.write_bytes((ROOT / source).read_bytes())
+        copied.write_bytes(subprocess.check_output(['git', 'show', OVERLAY_SOURCE + ':' + source], cwd=ROOT))
     subprocess.run(['git', 'apply', '--reverse', str(ROOT / 'deploy/friends/technical-metadata-runtime.patch')],
                    cwd=stage, check=True, capture_output=True)
     with zipfile.ZipFile(path, 'w') as archive:

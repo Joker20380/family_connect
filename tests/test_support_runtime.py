@@ -51,7 +51,7 @@ def launch(tmp_path):
 def finished(process, root):
     assert process.wait(12) == 0, (root / 'output').read_text()
     result = json.loads((root / 'result.json').read_bytes())
-    assert result['threads'] == result['native_threads'] == 1
+    assert result['threads'] == result['native_threads'] == 1, result
     assert result['hooks_restored']
     return result
 

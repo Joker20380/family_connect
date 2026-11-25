@@ -6,12 +6,29 @@ import zipfile
 import pytest
 
 from scripts import package_paid_transport as kit
-from scripts.package_friends_http import build as build_http
+TRANSPORT_SOURCES = {
+    'paid': '299b4845e384e57f63d82d4acd5feccfc007fa25',
+    'diagnostic': '80b38d5510dab13c13d2a7c8e6280ae4ba6774a9',
+    'lifecycle': '1cc6c51044ac3409383db28b2c8abe2c15b55192',
+    'recovery': '5eb8cec57623fd8fa1c1e7346af9c15ba58c3c6b',
+}
+
+
+def historical_source(tmp_path, kind):
+    source = tmp_path / ('source-' + kind)
+    subprocess.run(['git', 'clone', '--shared', '--no-checkout', str(kit.ROOT), str(source)],
+                   check=True, capture_output=True)
+    subprocess.run(['git', 'checkout', '--detach', TRANSPORT_SOURCES[kind]], cwd=source,
+                   check=True, capture_output=True)
+    assert subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=source, text=True).strip() == TRANSPORT_SOURCES[kind]
+    return source
 
 
 def test_closed_overlay_modules_and_tamper(tmp_path, monkeypatch):
+    source = historical_source(tmp_path, 'paid')
     baseline_dir = tmp_path/'http'
-    build_http(baseline_dir)
+    subprocess.run([sys.executable, str(source / 'scripts/package_friends_http.py'),
+                    '--output', str(baseline_dir)], check=True, capture_output=True)
     baseline = baseline_dir/'friends-http.pyz'
     with zipfile.ZipFile(baseline) as package:
         inputs = {name: package.read(name) for name in package.namelist()}
@@ -26,7 +43,7 @@ def test_closed_overlay_modules_and_tamper(tmp_path, monkeypatch):
     monkeypatch.setattr(kit, 'BASELINE', kit.sha(baseline.read_bytes()))
     monkeypatch.setattr(kit, 'GATEWAY', kit.sha(gateway.read_bytes()))
     output = tmp_path/'kit'
-    receipt = kit.build(baseline, gateway, output)
+    receipt = kit.build(baseline, gateway, output, source=source)
     changed = {name for name, digest in receipt['http_after'].items() if receipt['http_before'].get(name) != digest}
     assert changed == {'friends_http.py', 'control/friends/transport_policy.py', 'control/friends/transport_reconcile.py',
                        'control/friends/transport_membership.py', 'control/friends/paid_beta.py'}
@@ -83,6 +100,7 @@ def test_lifetime_fences_and_disabled_default():
 
 def test_exact_ru_diagnostic_overlay_executes_pinned_package(tmp_path):
     from scripts import package_transport_diagnostics as diagnostic
+    source = historical_source(tmp_path, 'diagnostic')
     inputs = {name: subprocess.check_output(['git', '-C', str(kit.ROOT), 'show',
         diagnostic.BASE_SOURCE+':'+name]) for name in kit.MODULES}
     inputs.update({'control/': b'', 'control/friends/': b'', 'control/friends/__init__.py': b''})
@@ -93,7 +111,7 @@ def test_exact_ru_diagnostic_overlay_executes_pinned_package(tmp_path):
         diagnostic.BASE_SOURCE+':deploy/friends/awg-gateway.py']))
     assert kit.sha(node.read_bytes()) == diagnostic.BASE_NODE
     output = tmp_path/'candidate'
-    receipt = diagnostic.build(node, gateway, output)
+    receipt = diagnostic.build(node, gateway, output, source=source)
     assert {name for name in inputs if receipt['before_modules'][name] != receipt['after_modules'][name]} == {diagnostic.MODULE}
     code = '''import json,sys,tempfile
 from pathlib import Path
@@ -122,6 +140,7 @@ print(json.dumps({'result':'PASS','calls':len(operation.calls)}))
 
 def test_exact_pr15_lifecycle_package_rejects_drift(tmp_path):
     from scripts import package_ru_lifecycle as lifecycle
+    source = historical_source(tmp_path, 'lifecycle')
     def historical(name):
         return subprocess.check_output(['git','-C',str(kit.ROOT),'show',lifecycle.BASE_SOURCE+':'+name])
     inputs = {name:historical(name) for name in kit.MODULES}
@@ -130,7 +149,7 @@ def test_exact_pr15_lifecycle_package_rejects_drift(tmp_path):
     kit.archive(node, inputs)
     gateway.write_bytes(historical('deploy/friends/awg-gateway.py'))
     unit.write_bytes(historical('deploy/friends/paid-transport/'+lifecycle.UNIT))
-    receipt = lifecycle.build(node,gateway,unit,tmp_path/'candidate')
+    receipt = lifecycle.build(node,gateway,unit,tmp_path/'candidate', source=source)
     assert {name for name in inputs if receipt['before_modules'][name]!=receipt['after_modules'][name]}=={lifecycle.MODULE}
     assert set(receipt['files'])=={'paid-transport.pyz',lifecycle.UNIT}
     code = '''import sys,socket,json
@@ -153,6 +172,7 @@ print('PACKAGED_BOUNDS_AND_OUTPUT_PASS')
 
 def test_exact_v2_node_forward_package_and_inventory(tmp_path):
     from scripts import package_transport_node_recovery as recovery
+    source = historical_source(tmp_path, 'recovery')
     commit = recovery.PREVIOUS_SOURCE
     def historical(path):
         return subprocess.check_output(['git', '-C', str(kit.ROOT), 'show', commit+':'+path])
@@ -165,7 +185,7 @@ def test_exact_v2_node_forward_package_and_inventory(tmp_path):
     assert kit.sha(node.read_bytes()) == recovery.PREVIOUS_NODE
     assert kit.sha(gateway.read_bytes()) == recovery.PREVIOUS_GATEWAY
     output = tmp_path/'recovery'
-    receipt = recovery.build(node, gateway, output)
+    receipt = recovery.build(node, gateway, output, source=source)
     assert {name for name, digest in receipt['archives']['paid-transport.pyz'].items() if receipt['before'][name] != digest} == {'control/friends/transport_gateway.py'}
     assert not any(name in receipt['files'] for name in ('friends-http.pyz','paid-operator.pyz','paid-reconcile.pyz'))
     assert 'ExecStartPre=+' in (output/'paid-tcp-preflight.conf').read_text()

@@ -51,8 +51,11 @@ def test_required_git_objects_cover_the_real_native_and_renewal_inputs():
     from scripts.package_transport_node_recovery import PREVIOUS_SOURCE
     from scripts.package_transport_diagnostics import BASE_SOURCE
     from scripts.package_ru_lifecycle import BASE_SOURCE as LIFECYCLE_BASE
+    from test_technical_metadata_overlay import OVERLAY_SOURCE
+    from test_transport_package import TRANSPORT_SOURCES
     assert set(fixtures.REQUIRED_COMMITS) == {fixtures.HISTORICAL, ACCEPTED_API_SOURCE,
-        reference()['commit'], PREVIOUS_SOURCE, BASE_SOURCE, LIFECYCLE_BASE}
+        reference()['commit'], PREVIOUS_SOURCE, BASE_SOURCE, LIFECYCLE_BASE, OVERLAY_SOURCE,
+        *TRANSPORT_SOURCES.values()}
 
 
 def test_fixture_environment_rejects_modified_artifact_or_commit(tmp_path, monkeypatch):

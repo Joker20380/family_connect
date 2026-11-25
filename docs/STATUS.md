@@ -7,10 +7,15 @@ Controlled native-tail exclusion now waits for owned kernel retirement; three bo
 no payloads/locals. Irreversible errors latch original cause/evidence and exit78 without restart-loop.
 65 targeted,1 native terminal and3 actual fc-support tests pass; OWNER remains PID2022541/0 restarts,
 19 sources/unit/interpreter unchanged. Candidate9d7bf840 NOT installed; seven UNKNOWN retained.
-CI context/dependency/diagnostic and migration corrections are source-only; exact595acebe CI still
+Checkpoint762f2d65 pushed and remote-SHA verified. CI context/dependency/diagnostic and migration
+corrections are source-only; exact595acebe CI still
 fails, new-source CI and combined resumable OWNER/NL1 handoff/reclosure/recovery remain unaccepted.
 No mailbox opening, capture permit, working replacement, HA-03 or version change. Same three HA-02
 criteria remain partial; isolated replication PASS. PLAN has one current next result.
+Historical metadata-overlay pins are reproduced unchanged; its exact source now replaces moving
+HEAD in fixtures. Source-export/paid-bundle regression10 PASS; this is not full CI acceptance.
+Exact762f2d65 panel/messenger/notifications/golden CI PASS; full phase0/control still pending21:27UTC.
+NL1 read-only21:21:56UTC confirms PID3705/0 restarts and unchanged four source pins.
 
 ## Retained checkpoints (historical, not simultaneous NEXTs)
 

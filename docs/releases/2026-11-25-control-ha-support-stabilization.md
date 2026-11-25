@@ -94,6 +94,34 @@ observed after publication; a workflow that did not run is NOT_RUN.
 
 ## Installation, recovery and one next result
 
+### Source publication and following CI corrections
+
+Checkpoint `762f2d658360946ba2d07b15c335e6c39cd5fb90` was ordinarily pushed and the remote
+feature SHA independently matched. This publishes source only, not working deployment.
+The next bounded CI correction uses the exact metadata-overlay source
+`430278008af38943de51cab8454614cb60b5837f`, rather than reversing an old patch against moving HEAD.
+Both original baseline hashes were independently reproduced and remain unchanged. The closed
+Docker source export now includes that exact Git object; its strict inventory assertion is extended
+accordingly. The paid-boundary builder reads the committed graceful-stop template required by its
+HTTP packager, without adding runtime configuration/private state to the bundle. The route fixture
+now explicitly models the local enrollment-repository context. Lifecycle assertion failures retain
+their synthetic diagnostic result instead of hiding it behind only a thread-count comparison.
+
+Metadata-overlay/source-export/paid-bundle regression:10 passed in7.43s, no skips. A first run
+correctly exposed the newly required Git object missing from the exact expected inventory; its
+failed JUnit is retained. Assertions and contract hashes are not removed or replaced.
+The four transport-overlay candidates likewise use their original source commits299b4845,
+80b38d55,1cc6c510 and5eb8cec5 in disposable local checkouts; production packagers still refuse
+unrelated policy/gateway deltas.13 transport/export tests pass in6.60s and33 route/context/diagnostic
+tests pass in0.99s. These are overlapping scoped selections, not an inflated aggregate count.
+
+CI on exact762f2d658360946ba2d07b15c335e6c39cd5fb90: panel45703107722,
+messenger45703107736, notifications45703107887 and golden45703107911 PASS. Their conditional
+support-contract/Android jobs remain skipped. At21:27UTC phase045703107732 and Linux control
+45703107743 are still in progress, not accepted. Voice did not run at this SHA.
+NL1 independent read-only readback21:21:56UTC confirms PID3705,0 restarts, no pending daemon reload,
+and unchanged relay/server/codec/membership source hashes. No NL1 operation is performed.
+
 Installed support remains the original19-source OWNER runtime; candidate archive
 `9d7bf840f3455d0ef2e7653dc9289aac2f0d77c9f2a0a8e305c786f7ddb80489` is **NOT installed**.
 No working NL1 unit, mailbox, notification queue, product database or client version changes occur.

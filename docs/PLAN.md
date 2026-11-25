@@ -24,8 +24,12 @@ before code-only recovery, and loss/death/restart boundary qualification. Preser
 seven UNKNOWN outcomes and other clients. No reservation deletion, legacy bypass or HA-03 cutover.
 [25 November stabilization evidence and exact incomplete gates](releases/2026-11-25-control-ha-support-stabilization.md).
 Native-tail correction/terminal78 pass65 targeted+1 native terminal+3 actual-root checks; this is
-not combined acceptance. Historical WORKERS_REMAIN cause remains unproven. Existing head CI fails;
+not combined acceptance; checkpoint762f2d65 is pushed/remote-SHA verified. Historical WORKERS_REMAIN
+cause remains unproven. Exact overlay baseline/package inputs are corrected with10 regressions;
+existing head CI fails;
 partial CI environment/diagnostic corrections require exact new-SHA workflows. Candidate NOT installed.
+Exact762f2d65 panel/messenger/notifications/golden PASS, full phase0/control pending21:27UTC;
+historical transport-overlay/source-export corrections pass13 scoped tests, not combined acceptance.
 The same three HA-02 criteria remain partial; isolated replication PASS. Onboarding remains mandatory.
 
 ## Retained HA-02 checkpoint history (not active NEXTs)

@@ -71,7 +71,8 @@ def test_chat_sync_uses_configured_host_and_keeps_pinning(tmp_path, monkeypatch)
         return SimpleNamespace(returncode=0, stdout=json.dumps(dict(sequence=5, expires_at=1000, **node)).encode())
 
     monkeypatch.setattr(chat_sync.subprocess, 'run', run)
-    assert chat_sync._synchronize(SimpleNamespace(snapshot=lambda: snapshot)) == (snapshot, dict(sequence=5, expires_at=1000, **node))
+    registry = SimpleNamespace(snapshot=lambda: snapshot, access=SimpleNamespace(enrollment_repository=None))
+    assert chat_sync._synchronize(registry) == (snapshot, dict(sequence=5, expires_at=1000, **node))
     assert observed[0][-2:] == ['root@185.10.158.212', 'chat-sync']
     assert 'StrictHostKeyChecking=yes' in observed[0]
 

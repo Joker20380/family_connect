@@ -126,7 +126,7 @@ def build(output, ref='HEAD'):
                  'clients/android/app/src/main/assets/control-licenses/PySerial.txt'):
         sources[name] = committed(ref, name)
     templates = {contract + name: committed(ref, contract + name) for name in
-                 ('http-runtime.conf', 'access.conf', 'nginx-location.conf')}
+                 ('http-runtime.conf', 'http-graceful-stop.conf', 'access.conf', 'nginx-location.conf')}
     for name in ('gateway-selection-location.conf', 'subscription-location.conf', 'technical-metadata-location.conf'):
         location = 'deploy/friends/' + name
         templates[location] = committed(ref, location)
