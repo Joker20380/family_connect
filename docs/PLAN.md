@@ -3,6 +3,21 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+25 November: reversible old-support admission/drain probe source slice COMPLETE IN ISOLATION.
+55 checks PASS/0 skips:30 new native cases plus25 pinned packaging regressions. Exact installed
+Python runs unchanged legacy main/delivery code against synthetic stores and actual RNS threads.
+[Qualification and limits](releases/2026-11-25-control-ha-support-bridge.md). This is not the stop/
+replacement supervisor or complete runtime drain; every result keeps capture forbidden. No live
+injection, support replacement or RU/NL contact. Support remains PID2022541/0 restarts at16:22UTC.
+The previous sudo timestamp expired; GUI reauthentication did not complete. Next: authenticated
+bounded live probe, exact RNS periodic/queued/exit persistence closure, supervised stop/replacement/
+rollback, then installed manual/OWNER coverage and coherent fleet capture. Independent current-input
+trust/custody/approval and full post-ACK recovery remain. Replication PASS in isolation; the same
+three HA-02 gates partial. Do not replace these gates with ordinary TERM/40s force-stop or HA-03.
+
+At the preceding installed-shape candidate checkpoint:
+
+**CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
 25 November: local GUI authentication restores technical privileged execution in the retained
 terminal; root readback and isolated systemd qualification under the real `fc-support` UID PASS.
 Do not keep reporting the earlier missing-authentication observation as the current blocker;

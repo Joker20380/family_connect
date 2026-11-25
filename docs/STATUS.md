@@ -1,5 +1,21 @@
 # Текущее состояние / Current state
 
+**25 November — reversible legacy-support admission probe qualified; not run on production.**
+The pinned CPython3.14 bridge pauses only an idle main loop, lets delivery finish without cancelling
+it, joins leftover route readers and restores admission on success, deadline or controller exit.
+It has no stop mode; RNS jobs remain live and capture is always refused.55 checks PASS/0 skips,
+including30 new cases under the installed interpreter with synthetic stores/IPC and fresh readback.
+[Exact scope, failed attempts and rollout boundary](releases/2026-11-25-control-ha-support-bridge.md).
+At16:22:44UTC working support remains active PID2022541/0 restarts, all19 source hashes unchanged,
+old40s policy/no reload warning. No live injection, working service change or RU/NL connection.
+The prior terminal's sudo timestamp expired; the requested GUI reauthentication did not complete.
+Next: reauthenticate for the bounded live probe, close RNS background persistence, then qualify the
+independently supervised stop/replacement/rollback. No renewed authorization is needed. Installed
+manual/OWNER coverage, coherent capture and independent trust/custody/recovery still remain; the
+same three HA-02 gates partial and isolated replication PASS, not a new numbered stage or ETA.
+
+At the preceding installed-shape candidate checkpoint:
+
 **25 November — OWNER privileged access confirmed; exact support candidate qualified, not installed.**
 Owner authenticated in the local GUI sudo dialog; the same retained terminal successfully ran
 privileged readback and a separate systemd fixture as `fc-support`. No password entered chat,

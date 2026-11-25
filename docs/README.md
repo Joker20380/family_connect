@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 25 November: reversible legacy-support admission probe,55 checks PASS; no cancellation, forced stop or capture permission; production probe awaits renewed technical authentication](releases/2026-11-25-control-ha-support-bridge.md).
+
 [CONTROL-HA · 25 November: OWNER GUI authentication confirmed; pinned installed-shape support candidate,36 tests and actual fc-support systemd/readback PASS; working service unchanged, safe old-process transition still required](releases/2026-11-25-control-ha-support-overlay.md).
 
 [CONTROL-HA · 25 November: manual restricted/support/notices CLI admission,211 checks including89 new native/failure cases; source only, installed coverage and privileged OWNER activation still open](releases/2026-11-25-control-ha-operator-capture.md).
