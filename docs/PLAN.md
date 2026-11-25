@@ -16,6 +16,24 @@
 
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+25 November18:24UTC: resumable independent support replacement/rollback supervisor COMPLETE IN
+ISOLATION, not installed.16 user-systemd plus2 actual-root/fc-support systemd tests PASS/0 skips;
+six crash boundaries, independent guard restart, actual old exit0 with RemainAfterExit=no,
+paired archive/kill policy, native write beyond41s and code/config rollback preserving new data.
+[Controller, retained failures, exact evidence and rollback](releases/2026-11-25-control-ha-support-replacement.md).
+Working PID2022541/19 sources/3 unit files/15 fields/interpreter digest/0 restarts unchanged;
+candidate9d7bf840 unchanged, NOT installed. GUI access works; no permanent privilege/password capture.
+Next: independent old-support external-outcome reconciliation and fresh working prestate, then
+authorized OWNER activation with the retained supervisor and installed UID/source/gate/sandbox
+readback. Do not equate preserved uncertainty, local exit0 or a test PASS with external settlement
+or capture approval. Do not repeat the working reversible probe or deploy kill-policy changes alone.
+Remaining manual/OWNER writers, coherent capture, independent current trust/custody/approval/full
+recovery remain; same three HA-02 gates partial, isolated replication PASS. No RU/NL/container
+operation, HA-03, version change or new ETA. No additional owner input requested now.
+
+At the preceding isolated-final-exit checkpoint:
+
+**CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
 25 November17:52UTC: isolated irreversible old-support final-persistence/exit mechanism COMPLETE;
 not an installed replacement supervisor.82 tests PASS/0 skips plus actual fc-support systemd fixture:
 native final write retained beyond41s, exit0/0 restarts, empty cgroup and fresh decrypted/native readback.

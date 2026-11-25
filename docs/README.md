@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 25 November18:24UTC: independent support replacement/rollback supervisor,16 user-systemd plus2 actual-root checks PASS; current data/uncertainty retained, working support unchanged, settlement/installation remain](releases/2026-11-25-control-ha-support-replacement.md).
+
 [CONTROL-HA · 25 November17:52UTC: isolated legacy support final persistence/exit0,82 checks plus fc-support systemd41s/fresh-readback fixture; working unchanged, replacement supervisor/installation still next](releases/2026-11-25-control-ha-support-exit.md).
 
 [FLEET-PRODUCTION-ONBOARDING-1 · обязательный итог владельца 25 ноября: VPS → IP/доступ/роли → штатный ввод → проверенный активный узел; 12 критериев, реализация и приёмка открыты](fleet-production-onboarding.md).

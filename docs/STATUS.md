@@ -10,6 +10,25 @@
 Выбранный HA-02 и его четыре результата сохраняются; сквозной ввод узла обязателен
 для завершения модернизации.
 
+**25 November18:24UTC — independent support replacement/rollback supervisor qualified in isolation.**
+16 user-systemd plus2 actual-root/fc-support systemd tests PASS/0 skips. The retained controller
+survives six crash boundaries, pairs archive and no-forced-kill policy after attested old exit,
+and rolls back code/config only while retaining new encrypted data and legacy uncertainty.
+Native candidate writes remain awaited beyond41s. Actual system tests retain old exit0 without
+changing its RemainAfterExit=no, including an independent supervisor crash/restart.
+[Exact evidence, failed attempts, operational contract and rollback](releases/2026-11-25-control-ha-support-replacement.md).
+Working PID2022541/19 sources/3 unit files/15 fields/interpreter digest/0 restarts unchanged;
+candidate9d7bf840 unchanged and NOT installed. No working injection, signal, stop or upgrade.
+GUI sudo works; password not captured, terminal closed/timestamp invalidated, no permanent access.
+Next: independent old-support external-outcome reconciliation and fresh prestate, then authorized
+OWNER activation with this supervisor and installed UID/source/gate/sandbox readback. Preserving
+uncertainty is not settlement or capture permission. Remaining manual/OWNER coverage, coherent
+capture and independent current trust/custody/approval/full recovery remain. Same three HA-02
+gates partial, isolated replication PASS. No RU/NL/container operation, HA-03 or version change.
+No additional owner input requested; technical privileged access is not the current blocker.
+
+At the preceding isolated-final-exit checkpoint:
+
 **25 November17:52UTC — isolated old-support final persistence/exit qualification PASS.**
 Two-phase exit now preserves the reversible boundary until an exact independent commit; afterward
 errors park admission closed, never resume the old handler or force-stop writers. RNS final writes,
