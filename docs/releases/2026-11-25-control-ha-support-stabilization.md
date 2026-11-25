@@ -142,3 +142,43 @@ installed schemas/all-writer capture; complete independent custody/final recover
 remains PASS in isolation. FLEET-PRODUCTION-ONBOARDING-1 remains mandatory and unimplemented:
 VPS → IP/access/roles → ordinary enrollment → verified active node. Support migration alone cannot
 close that requirement or all of HA-02.
+
+## 21:48UTC — native CI root cause and bounded environment correction
+
+Checkpoint `a6f7c730f26cc8ca5092376cb00af4e4f374be5b` was ordinarily pushed and the remote
+SHA matched. Its phase0 tests45705013013 FAIL; no full-CI acceptance is inferred. The prior
+762f2d65 phase0 artifact15064657864 now contains the actual native fixture stderr:
+Docker exit125, **No such image sha256:89598610ee266cf1efa164092d1193479069784f1c94493c46fcff82f5a6736f**.
+That local-only image dependency accounts for the common native-fixture failures on this exact SHA;
+the old a39/595 logs had no retained internal stderr, so this is not retroactively claimed as direct
+observation on those historical runners.762 phase0 standard context:39 failed,9009 passed,521 errors;
+root258 passed; snapshot31498 passed; native31485 passed/123 skipped. Linux control was CANCELLED,
+not PASS. Public unauthenticated API hit rate403 during later inspection; authenticated job reads
+were used instead, never interpreting an empty combined-status list as success.
+
+The new CI recipe builds from only six explicit public recipe/lockfiles, verifies Python3.13.15 and
+cryptography46.0.7, and supplies an immutable built image ID. The original local fixture image pin
+and all native assertions remain. On host runners, execution retains network-none/read-only source,
+root UID, capability/resource restrictions and bounded stderr. Inside the existing full Docker build,
+where a sibling Docker daemon is unavailable, a single fixed sudo command runs an immutable root-owned
+source snapshot in a network-none build step, a fresh `/run` lab and a bounded child process. It rejects
+the wrong installed path, non-root or any network interface other than loopback. It is a CI-only fixture,
+not a host maintenance entrypoint or a production deployment. The complete Docker test gate remains.
+
+Local portable-image run of all ten affected test families: **592 passed,31 skipped in208.03s**.
+The31 explicit PostgreSQL qualification skips are not PG acceptance. Native helper separately passes
+actual UID0/network-none/settled-vs-pending and all twelve existing maintenance behavior assertions.
+Private evidence: `ci-native-image.xml`, `maintenance-helper.json` under the retained session root.
+The launcher tests move to the existing root-owned CPython3.14/GIL context because Actions' toolcache
+executable fails the unchanged LAUNCH_RUNTIME_PERMISSIONS contract; no ownership assertion is removed.
+Launcher/context/diagnostic tests131 PASS; final context/preparation tests29 PASS after the build guard
+adjustment. Full new-SHA CI and the actual full Docker pipeline are still required.
+
+Announcement reference review identifies only the already-existing HA server-authority changes:
+transactional repository adapter, fail-closed canonical-file refusal, paired durable exports and
+operator capture admission. Original Android106 hashes, wire actions/bounds and fresh proof/admin
+checks remain. A separate source-only delta pins the two reviewed current modules and must reverse
+byte-for-byte to the original accepted hashes. Reference/authorization/publication regressions:
+83 PASS/40 explicit PG skips, not client rollout or complete PG acceptance. No new runtime logic is
+introduced by this contract bookkeeping. The combined executor, queue-pause qualification and working
+installation remain part of the **same single next result**, not displaced by these CI corrections.

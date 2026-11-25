@@ -2,6 +2,7 @@
   "schema": 1,
   "reference": "android106-native105",
   "source_inventory_sha256": "8574228fc809fdbd67b3d92680e09c979fe930599a47e4ed1b47fd30f872ed0c",
+  "subsequent_deltas": ["clients/shared/control-ha-notices.json"],
   "accepted_sources": {
     "clients/android/app/src/main/java/com/familyconnect/app/ChatActivity.java": "1c5a15bd62b0b57367e7f214503efa8523e775a65e5599de3151db6b927300fa",
     "clients/android/app/src/main/java/com/familyconnect/app/FriendsAccessAndroid.java": "b9c30b6f1c33dd135d06e0caef8650d8eded7aba8fd474428354b468ec30d270",

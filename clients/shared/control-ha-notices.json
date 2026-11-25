@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "reference": "control-ha-notice-authority",
+  "status": "source-only",
+  "base_commit": "ccb52578fb514467abd0bbc7577c9eae869cf790",
+  "reason": "Reviewed HA-only deltas: transactional notice repository, fail-closed canonical-file refusal, durable paired exports and operator capture admission. Existing fresh device proof, server-owned administrator role, wire actions, bounds and accepted Android106 hashes remain unchanged; this is not client or working-server acceptance.",
+  "patch": "clients/shared/control-ha-notices.patch",
+  "patch_sha256": "6b39d8302c310ee1088d2972b5d64672f7bd4101457672617573698af10fc0aa",
+  "modules": {
+    "control/friends/notices.py": {
+      "before_sha256": "3f2c88c7984fa9d0a4d8857d342057b31ba1445f3aa8eea2df9007d35f67c3a7",
+      "sha256": "a0f636255c1706bddfd5f1514e4fe14794119b4db99fdf46e185e9917b0cf288"
+    },
+    "scripts/service_notices.py": {
+      "before_sha256": "80df5a26b7121d40f6f180f17bbfe96e2e4d2b734c8230c78bafb6ee2ba31167",
+      "sha256": "f388e40768729d4f5db92f98a83e80d614555cdec3b000eb857c689418dd10fc"
+    }
+  }
+}

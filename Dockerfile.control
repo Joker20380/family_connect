@@ -11,13 +11,15 @@ COPY --from=test-go /usr/local/go /usr/local/go
 COPY --from=test-python314 /usr/local /usr/local/lib/fc-ci-python314
 ENV PATH=/usr/local/go/bin:$PATH
 ENV GOPATH=/opt/fc-go
-RUN apt-get update && apt-get install -y --no-install-recommends git nginx iproute2 keepassxc ca-certificates curl python3 util-linux gcc pkg-config libcairo2-dev libgirepository1.0-dev gir1.2-gtk-4.0 gir1.2-adw-1 zstd default-jdk-headless && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends git nginx iproute2 keepassxc ca-certificates curl python3 util-linux sudo gcc pkg-config libcairo2-dev libgirepository1.0-dev gir1.2-gtk-4.0 gir1.2-adw-1 zstd default-jdk-headless && rm -rf /var/lib/apt/lists/*
 ADD .ci-release-source/current.tar /app/
 COPY .ci-release-source/current.commit .ci-release-source/tracked.paths .ci-release-source/historical.tar .ci-release-source/fixture-objects.pack /opt/fc-ci-source/
 RUN python scripts/ci_release_fixtures.py restore-git --commit-file /opt/fc-ci-source/current.commit --paths-file /opt/fc-ci-source/tracked.paths --objects-file /opt/fc-ci-source/fixture-objects.pack
 ENV LD_LIBRARY_PATH=/usr/local/lib/fc-ci-python314/lib
 RUN /usr/local/lib/fc-ci-python314/bin/python3.14 -m venv /usr/local/lib/fc-ci-python314/test-env && /usr/local/lib/fc-ci-python314/test-env/bin/python -m pip install -r control/requirements.lock -r provisioning/requirements.lock -r device_identity/requirements.lock -r deploy/control-ha/requirements.lock && /usr/local/lib/fc-ci-python314/test-env/bin/python -m pip install --no-deps --require-hashes -r messenger/requirements.lock
 RUN bash scripts/ci_python313_env.sh /opt/fc-python313-env
+RUN /opt/fc-python313-env/bin/python -c 'from pathlib import Path; from scripts.control_ha_maintenance_fixture import source_snapshot; root=Path("/opt/fc-ci-maintenance-source"); root.mkdir(); source_snapshot(root)' && chmod -R go-w /opt/fc-ci-maintenance-source && printf '%s\n' 'runner ALL=(root) NOPASSWD: /opt/fc-python313-env/bin/python -I -B /opt/fc-ci-maintenance-source/scripts/ci_maintenance_fixture.py --root' > /etc/sudoers.d/fc-native-fixture && chmod 0440 /etc/sudoers.d/fc-native-fixture && visudo -cf /etc/sudoers.d/fc-native-fixture
+ENV FC_TEST_MAINTENANCE_BUILD_HELPER=1
 ENV PATH=/opt/fc-python313-env/bin:$PATH
 RUN cd carrier && go mod download
 ENV GOPROXY=off
@@ -27,7 +29,7 @@ RUN git config --global --add safe.directory /app
 RUN install -d -m 0755 -o runner /usr/local/lib/fc-ci-snapshot-fixtures
 ENV FC_TEST_SNAPSHOT_ROOT=/usr/local/lib/fc-ci-snapshot-fixtures
 RUN runuser -u runner -- python -m pytest -q clients/desktop/tests/test_chat_host_registration.py clients/desktop/tests/test_mesh_chat_host.py clients/desktop/tests/test_support_service.py clients/desktop/tests/test_chat_service.py -ra --tb=short
-RUN python scripts/ci_release_fixtures.py run --fixtures /opt/fc-release-fixtures --go /usr/local/go/bin/go --nginx /usr/sbin/nginx -- python scripts/ci_full_pytest.py --python314 /usr/local/lib/fc-ci-python314/test-env/bin/python --unprivileged-user runner && touch /tmp/tests-passed
+RUN --network=none python scripts/ci_release_fixtures.py run --fixtures /opt/fc-release-fixtures --go /usr/local/go/bin/go --nginx /usr/sbin/nginx -- python scripts/ci_full_pytest.py --python314 /usr/local/lib/fc-ci-python314/test-env/bin/python --unprivileged-user runner && touch /tmp/tests-passed
 
 FROM base AS runtime
 COPY --from=tests /tmp/tests-passed /app/tests-passed

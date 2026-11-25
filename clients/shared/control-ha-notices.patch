@@ -1,0 +1,403 @@
+diff --git a/control/friends/notices.py b/control/friends/notices.py
+index 9f09fb45..3d0f8c8b 100644
+--- a/control/friends/notices.py
++++ b/control/friends/notices.py
+@@ -1,7 +1,7 @@
+ """Administrator-authenticated notices. Grant/revoke is an operator-only CLI."""
+ import re
+ from pathlib import Path
+-from scripts.service_notices import Notices
++from scripts.service_notices import Notices, refuse_canonical
+ 
+ class NoticeDenied(Exception): pass
+ class NoticeConflict(Exception): pass
+@@ -27,6 +27,8 @@ def publish(registry, output, authorization, value):
+ 
+ def device_request(access, registry, output, action, value):
+     """Fresh device proof; the operator registry alone grants publishing rights."""
++    refuse_canonical(access.path)
++    refuse_canonical(registry)
+     if action not in ('role','publish','list','edit') or type(value) is not dict or set(value) != ({'proof'} if action=='role' else {'proof','offset'} if action=='list' else {'proof','notice'}):
+         raise ValueError('Invalid device notice request')
+     record=access.complete(value['proof'],'notices-'+action)
+@@ -53,3 +55,70 @@ def device_request(access, registry, output, action, value):
+         publisher.export_all(output)
+         return dict(id=ident,status='published')
+     finally: publisher.db.close()
++
++
++def device_request_repository(access, action, value):
++    if action not in ('role', 'publish', 'list', 'edit') or type(value) is not dict or set(value) != (
++            {'proof'} if action == 'role' else {'proof', 'offset'} if action == 'list' else {'proof', 'notice'}):
++        raise ValueError('Invalid device notice request')
++    with access.enrollment() as enrollment:
++        publisher = enrollment.notices()
++        publisher.require_schema()
++        record = access.complete(value['proof'], 'notices-' + action, transaction=enrollment)
++        invitation = enrollment.device_invitation(record['device'])
++        if invitation is None or invitation['revoked']:
++            from .access import Rejected
++            raise Rejected()
++        if action == 'role':
++            return dict(device=record['device'], **publisher.device_role(record['device']))
++        try:
++            if action == 'list':
++                return publisher.list_device(record['device'], value['offset'])
++            if action == 'edit':
++                return publisher.edit_device(record['device'], value['notice'], now=int(access.clock()))
++            return publish_value(publisher, '', value['notice'], now=int(access.clock()), device=record['device'])
++        except ValueError as error:
++            if str(error) == 'Publisher access denied': raise NoticeDenied() from None
++            if str(error) == 'Stale notice revision': raise NoticeConflict() from None
++            raise
++
++
++def publish_value(publisher, token, value, *, now, device=None):
++    if type(value) is not dict or set(value) != {'id', 'kind', 'title', 'body', 'platforms', 'days'} or type(value['days']) is not int or not 1 <= value['days'] <= 365:
++        raise ValueError('Invalid notice request')
++    if type(value['id']) is not str or re.fullmatch('[a-f0-9]{32}', value['id']) is None:
++        raise ValueError('Invalid notice id')
++    ident = publisher.publish(token, device=device, ident=value['id'], kind=value['kind'], title=value['title'],
++        body=value['body'], platforms=value['platforms'], lifetime=value['days'] * 86400, now=now)
++    return dict(id=ident, status='stored')
++
++
++def publish_repository(access, authorization, value):
++    if type(authorization) is not str or re.fullmatch(r'Bearer [a-f0-9]{64}', authorization) is None:
++        raise NoticeDenied()
++    with access.enrollment() as enrollment:
++        publisher = enrollment.notices()
++        publisher.require_schema()
++        try:
++            return publish_value(publisher, authorization[7:], value, now=int(access.clock()))
++        except ValueError as error:
++            if str(error) == 'Publisher access denied': raise NoticeDenied() from None
++            raise
++
++
++def grant_device_repository(access, device, name):
++    with access.enrollment() as enrollment:
++        publisher = enrollment.notices()
++        publisher.require_schema()
++        record = enrollment.device(device)
++        invitation = enrollment.device_invitation(device)
++        if record is None or record['revoked'] or invitation is None or invitation['revoked']:
++            raise ValueError('Device not active')
++        publisher.assign_device(device, name)
++
++
++def feed_repository(access, version=1):
++    with access.read_enrollment() as enrollment:
++        publisher = enrollment.notices()
++        publisher.require_schema()
++        return publisher.feed(now=int(access.clock()), version=version)
+diff --git a/scripts/service_notices.py b/scripts/service_notices.py
+index a427f5d4..63824ccb 100644
+--- a/scripts/service_notices.py
++++ b/scripts/service_notices.py
+@@ -5,6 +5,7 @@ boundary; administrator credentials only authorize publication, not delegation.
+ No network requests are performed and no secrets are printed.
+ """
+ import argparse
++from contextlib import closing, contextmanager
+ import hashlib
+ import hmac
+ import json
+@@ -17,62 +18,85 @@ import tempfile
+ import time
+ import uuid
+ from messenger.service_events import validate_feed, KINDS
++from control.capture_gate import Busy, Gate, external_operation
+ 
+ 
+-class Notices:
+-    def __init__(self, path):
+-        path = Path(path)
+-        path.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
+-        fd = os.open(path, os.O_RDWR | os.O_CREAT | os.O_NOFOLLOW, 0o600)
+-        os.close(fd)
+-        if path.stat().st_mode & 0o077: raise ValueError('Registry must be private')
+-        self.db = sqlite3.connect(path)
+-        self.db.executescript('CREATE TABLE IF NOT EXISTS admins(name TEXT PRIMARY KEY, digest TEXT NOT NULL, active INTEGER NOT NULL); CREATE TABLE IF NOT EXISTS events(id TEXT PRIMARY KEY, value TEXT NOT NULL); CREATE TABLE IF NOT EXISTS device_admins(device TEXT PRIMARY KEY, name TEXT NOT NULL, active INTEGER NOT NULL); CREATE TABLE IF NOT EXISTS revisions(id TEXT PRIMARY KEY,value TEXT NOT NULL); CREATE TABLE IF NOT EXISTS edit_operations(id TEXT PRIMARY KEY,request TEXT NOT NULL,result TEXT NOT NULL,device TEXT NOT NULL,before_value TEXT NOT NULL,after_value TEXT NOT NULL);')
++REPOSITORY_PURPOSE = 'family-connect/ha-notices-synthetic/v1/db-only'
+ 
+-    def grant(self, name, token_file):
++
++def refuse_canonical(path):
++    if path is None:
++        raise NotImplementedError('Canonical notices cannot use legacy files')
++    path = Path(path)
++    if path.exists():
++        with closing(sqlite3.connect(path.resolve().as_uri() + '?mode=ro', uri=True)) as database:
++            if database.execute("SELECT 1 FROM sqlite_master WHERE name='ha_notices_schema'").fetchone():
++                raise NotImplementedError('Canonical notices require fenced publication')
++
++
++class NoticeTransaction:
++    def __init__(self, database, placeholder='?', order='position'):
++        self.db = database
++        self.placeholder = placeholder
++        self.order = order
++
++    @contextmanager
++    def transaction(self):
++        yield self
++
++    def execute(self, query, values=()):
++        return self.db.execute(query.replace('?', self.placeholder), values)
++
++    def rows(self, query, values=()):
++        cursor = self.execute(query, values)
++        fields = [description[0] for description in cursor.description]
++        return [tuple(row[field] for field in fields) if hasattr(row, 'keys') else tuple(row)
++                for row in cursor.fetchall()]
++
++    def one(self, query, values=()):
++        rows = self.rows(query, values)
++        return rows[0] if rows else None
++
++    def require_schema(self):
++        if self.rows('SELECT version,purpose FROM ha_notices_schema') != [(1, REPOSITORY_PURPOSE)]:
++            raise RuntimeError('Notices rehearsal schema mismatch')
++
++    def grant_digest(self, name, digest):
+         if not name.strip() or len(name) > 80: raise ValueError('Invalid administrator name')
+-        token = secrets.token_hex(32)
+-        fd = os.open(token_file, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
+-        with os.fdopen(fd, 'w') as output: output.write(token)
+-        try:
+-            with self.db: self.db.execute('INSERT INTO admins VALUES(?,?,1)', (name, hashlib.sha256(token.encode()).hexdigest()))
+-        except Exception:
+-            Path(token_file).unlink()
+-            raise
++        if type(digest) is not str or re.fullmatch('[a-f0-9]{64}', digest) is None:
++            raise ValueError('Invalid credential digest')
++        with self.transaction():
++            self.execute('INSERT INTO admins VALUES(?,?,1)', (name, digest))
+         return name
+ 
+     def revoke(self, name):
+-        with self.db:
+-            if not self.db.execute('UPDATE admins SET active=0 WHERE name=?', (name,)).rowcount: raise ValueError('Unknown administrator')
++        with self.transaction():
++            if not self.execute('UPDATE admins SET active=0 WHERE name=?', (name,)).rowcount: raise ValueError('Unknown administrator')
+ 
+-    def grant_device(self, access, device, name):
++    def assign_device(self, device, name):
+         if not re.fullmatch('[a-f0-9]{32}', device) or not name.strip() or len(name)>80 or any(ord(c)<32 for c in name):
+             raise ValueError('Invalid administrator')
+-        with access.db() as db:
+-            row=db.execute('SELECT revoked FROM devices WHERE device=?',(device,)).fetchone()
+-            if row is None or row['revoked']: raise ValueError('Device not active')
+-            with self.db:
+-                self.db.execute('INSERT INTO device_admins VALUES(?,?,1) ON CONFLICT(device) DO UPDATE SET name=excluded.name,active=1',(device,name))
++        with self.transaction():
++            self.execute('INSERT INTO device_admins VALUES(?,?,1) ON CONFLICT(device) DO UPDATE SET name=excluded.name,active=1',(device,name))
+ 
+     def revoke_device(self, device):
+-        with self.db:
+-            if not self.db.execute('UPDATE device_admins SET active=0 WHERE device=?',(device,)).rowcount:
++        with self.transaction():
++            if not self.execute('UPDATE device_admins SET active=0 WHERE device=?',(device,)).rowcount:
+                 raise ValueError('Unknown administrator')
+ 
+     def device_role(self, device):
+-        row=self.db.execute('SELECT name FROM device_admins WHERE device=? AND active=1',(device,)).fetchone()
++        row=self.one('SELECT name FROM device_admins WHERE device=? AND active=1',(device,))
+         return dict(role='administrator' if row else 'member', name=row[0] if row else '')
+ 
+     def publish(self, token, *, kind, title, body, platforms, lifetime=30*86400, now=None, ident=None, device=None):
+         now = int(time.time()) if now is None else now
+         digest = hashlib.sha256(token.strip().encode()).hexdigest()
+-        with self.db:
+-            self.db.execute('BEGIN IMMEDIATE')
+-            names = ([row[0] for row in self.db.execute('SELECT name FROM device_admins WHERE device=? AND active=1',(device,))] if device is not None else [name for name, saved in self.db.execute('SELECT name,digest FROM admins WHERE active=1') if hmac.compare_digest(digest, saved)])
++        with self.transaction():
++            names = ([row[0] for row in self.rows('SELECT name FROM device_admins WHERE device=? AND active=1',(device,))] if device is not None else [name for name, saved in self.rows('SELECT name,digest FROM admins WHERE active=1') if hmac.compare_digest(digest, saved)])
+             if len(names) != 1: raise ValueError('Publisher access denied')
+             event = dict(id=ident or uuid.uuid4().hex, kind=kind, title=title, body=body, platforms=platforms, created=now, expires=now+lifetime, author=names[0])
+             if not validate_feed(dict(version=1, events=[event]), now=now): raise ValueError('Invalid expiration')
+-            old = self.db.execute('SELECT value FROM events WHERE id=?', (event['id'],)).fetchone()
++            old = self.one('SELECT value FROM events WHERE id=?', (event['id'],))
+             if old:
+                 old = json.loads(old[0])
+                 if any(old[k] != event[k] for k in ('author','kind','title','body','platforms')) or old['expires']-old['created'] != lifetime:
+@@ -82,22 +106,25 @@ class Notices:
+             if len(current) >= 200: raise ValueError('Active notice quota reached')
+             validate_feed(dict(version=1,events=current+[event]),now=now)
+             validate_feed(dict(version=2,events=self.feed(now=now,version=2)['events']+[dict(event,revision=1,updated=now,editor=event['author'])]),now=now)
+-            self.db.execute('INSERT INTO events VALUES(?,?)', (event['id'], json.dumps(event, ensure_ascii=False)))
++            self.save_event(event)
+             return event['id']
+ 
++    def save_event(self, event):
++        self.execute('INSERT INTO events(id,value,position) SELECT ?,?,COALESCE(MAX(position),0)+1 FROM events',
++                     (event['id'], json.dumps(event, ensure_ascii=False)))
++
+     def current_event(self, ident):
+-        row=self.db.execute('SELECT value FROM revisions WHERE id=?',(ident,)).fetchone()
++        row=self.one('SELECT value FROM revisions WHERE id=?',(ident,))
+         if row:return json.loads(row[0])
+-        row=self.db.execute('SELECT value FROM events WHERE id=?',(ident,)).fetchone()
++        row=self.one('SELECT value FROM events WHERE id=?',(ident,))
+         if row is None:raise ValueError('Unknown notice')
+         event=json.loads(row[0]);return dict(event,revision=1,updated=event['created'],editor=event['author'])
+ 
+     def list_device(self, device, offset=0):
+-        with self.db:
+-            self.db.execute('BEGIN IMMEDIATE')
++        with self.transaction():
+             if self.device_role(device)['role']!='administrator':raise ValueError('Publisher access denied')
+             if type(offset) is not int or offset<0:raise ValueError('Invalid offset')
+-            rows=list(self.db.execute('SELECT id FROM events ORDER BY rowid DESC LIMIT 51 OFFSET ?',(offset,)))
++            rows=self.rows('SELECT id FROM events ORDER BY ' + self.order + ' DESC LIMIT 51 OFFSET ?',(offset,))
+             return dict(events=[self.current_event(row[0]) for row in rows[:50]],next_offset=offset+50 if len(rows)>50 else None)
+ 
+     def edit_device(self, device, value, now=None):
+@@ -107,11 +134,10 @@ class Notices:
+             if type(value[key]) is not str or re.fullmatch('[a-f0-9]{32}',value[key]) is None:raise ValueError('Invalid edit id')
+         now=int(time.time()) if now is None else now
+         request=json.dumps(value,sort_keys=True,ensure_ascii=False)
+-        with self.db:
+-            self.db.execute('BEGIN IMMEDIATE')
++        with self.transaction():
+             role=self.device_role(device)
+             if role['role']!='administrator':raise ValueError('Publisher access denied')
+-            prior=self.db.execute('SELECT request,result,device FROM edit_operations WHERE id=?',(value['request_id'],)).fetchone()
++            prior=self.one('SELECT request,result,device FROM edit_operations WHERE id=?',(value['request_id'],))
+             if prior:
+                 if prior[0]!=request or prior[2]!=device:raise ValueError('Conflicting edit')
+                 return json.loads(prior[1])
+@@ -122,38 +148,101 @@ class Notices:
+             active=self.feed(now=now,version=2)['events'];active=[after if item['id']==after['id'] else item for item in active]
+             validate_feed(dict(version=2,events=active),now=now)
+             result=dict(id=after['id'],revision=after['revision'],status='updated')
+-            self.db.execute('INSERT INTO revisions VALUES(?,?) ON CONFLICT(id) DO UPDATE SET value=excluded.value',(after['id'],json.dumps(after,ensure_ascii=False)))
+-            self.db.execute('INSERT INTO edit_operations VALUES(?,?,?,?,?,?)',(value['request_id'],request,json.dumps(result),device,json.dumps(before,ensure_ascii=False),json.dumps(after,ensure_ascii=False)))
++            self.save_edit(device, value, request, before, after, result)
+             return result
+ 
++    def save_edit(self, device, value, request, before, after, result):
++        self.execute('INSERT INTO revisions VALUES(?,?) ON CONFLICT(id) DO UPDATE SET value=excluded.value',
++                     (after['id'], json.dumps(after, ensure_ascii=False)))
++        self.execute('INSERT INTO edit_operations VALUES(?,?,?,?,?,?)',
++                     (value['request_id'], request, json.dumps(result), device,
++                      json.dumps(before, ensure_ascii=False), json.dumps(after, ensure_ascii=False)))
++
+     def feed(self, now=None, version=1):
+         now = int(time.time()) if now is None else now
+-        events=[event for row in self.db.execute('SELECT value FROM events ORDER BY rowid') if (event := json.loads(row[0]))['expires'] > now]
++        events=[event for row in self.rows('SELECT value FROM events ORDER BY ' + self.order) if (event := json.loads(row[0]))['expires'] > now]
+         if version==2:events=[self.current_event(event['id']) for event in events]
+         return dict(version=version, events=events)
+ 
+     def export_all(self, path):
+-        self.export(path)
+-        self.export(Path(path).with_name('family-connect-events-v2.json'),version=2)
++        raise NotImplementedError('Canonical notices require fenced publication')
+ 
+     def export(self, path, version=1):
++        raise NotImplementedError('Canonical notices require fenced publication')
++
++
++class Notices(NoticeTransaction):
++    def __init__(self, path):
++        refuse_canonical(path)
+         path = Path(path)
+-        self.db.execute('BEGIN IMMEDIATE')
+-        data = json.dumps(self.feed(version=version), ensure_ascii=False, separators=(',', ':')).encode()
+-        fd, temporary = tempfile.mkstemp(prefix='.notices-', dir=path.parent)
++        path.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
++        descriptor = os.open(path, os.O_RDWR | os.O_CREAT | os.O_NOFOLLOW, 0o600)
++        os.close(descriptor)
++        if path.stat().st_mode & 0o077: raise ValueError('Registry must be private')
++        super().__init__(sqlite3.connect(path), order='rowid')
++        self.db.executescript('CREATE TABLE IF NOT EXISTS admins(name TEXT PRIMARY KEY, digest TEXT NOT NULL, active INTEGER NOT NULL); CREATE TABLE IF NOT EXISTS events(id TEXT PRIMARY KEY, value TEXT NOT NULL); CREATE TABLE IF NOT EXISTS device_admins(device TEXT PRIMARY KEY, name TEXT NOT NULL, active INTEGER NOT NULL); CREATE TABLE IF NOT EXISTS revisions(id TEXT PRIMARY KEY,value TEXT NOT NULL); CREATE TABLE IF NOT EXISTS edit_operations(id TEXT PRIMARY KEY,request TEXT NOT NULL,result TEXT NOT NULL,device TEXT NOT NULL,before_value TEXT NOT NULL,after_value TEXT NOT NULL);')
++
++    @contextmanager
++    def transaction(self):
++        with self.db:
++            self.db.execute('BEGIN IMMEDIATE')
++            yield self
++
++    def save_event(self, event):
++        self.execute('INSERT INTO events VALUES(?,?)', (event['id'], json.dumps(event, ensure_ascii=False)))
++
++    def grant(self, name, token_file):
++        if not name.strip() or len(name) > 80: raise ValueError('Invalid administrator name')
++        token = secrets.token_hex(32)
++        descriptor = os.open(token_file, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
++        with os.fdopen(descriptor, 'w') as output: output.write(token)
+         try:
+-            with os.fdopen(fd, 'wb') as output:
++            return self.grant_digest(name, hashlib.sha256(token.encode()).hexdigest())
++        except Exception:
++            Path(token_file).unlink()
++            raise
++
++    def grant_device(self, access, device, name):
++        refuse_canonical(access.path)
++        with access.db() as database:
++            row = database.execute('SELECT revoked FROM devices WHERE device=?', (device,)).fetchone()
++            if row is None or row['revoked']: raise ValueError('Device not active')
++            self.assign_device(device, name)
++
++    def export_all(self, path):
++        self._export_versions(((Path(path), 1), (Path(path).with_name('family-connect-events-v2.json'), 2)))
++
++    def export(self, path, version=1):
++        self._export_versions(((Path(path), version),))
++
++    def _export_versions(self, targets):
++        with external_operation():
++            with self.transaction():
++                now = int(time.time())
++                for path, version in targets:
++                    self._write_feed(path, version, now)
++
++    def _write_feed(self, path, version, now):
++        data = json.dumps(self.feed(version=version, now=now), ensure_ascii=False, separators=(',', ':')).encode()
++        descriptor, temporary = tempfile.mkstemp(prefix='.notices-', dir=path.parent)
++        try:
++            with os.fdopen(descriptor, 'wb') as output:
++                os.fchmod(output.fileno(), 0o644)
+                 output.write(data);output.flush();os.fsync(output.fileno())
+-            os.chmod(temporary, 0o644)
+             os.replace(temporary, path)
++            directory = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY)
++            try:
++                os.fsync(directory)
++            finally:
++                os.close(directory)
+         finally:
+             if os.path.exists(temporary): os.unlink(temporary)
+-            self.db.commit()
+ 
+ 
+-def main():
++def main(argv=None):
+     parser = argparse.ArgumentParser(description=__doc__)
+     parser.add_argument('--registry', required=True)
++    parser.add_argument('--capture-gate', type=Path)
+     commands = parser.add_subparsers(dest='command', required=True)
+     grant = commands.add_parser('grant');grant.add_argument('--name', required=True);grant.add_argument('--token-file', required=True)
+     device = commands.add_parser('grant-device');device.add_argument('--access-db', required=True);device.add_argument('--device', required=True);device.add_argument('--name', required=True)
+@@ -161,7 +250,17 @@ def main():
+     revoke = commands.add_parser('revoke');revoke.add_argument('--name', required=True)
+     send = commands.add_parser('publish');send.add_argument('--token-file', required=True);send.add_argument('--kind', choices=sorted(KINDS), required=True);send.add_argument('--title', required=True);send.add_argument('--body-file', required=True);send.add_argument('--platform', action='append', choices=['android','windows','linux'], required=True);send.add_argument('--days', type=int, default=30)
+     export = commands.add_parser('export');export.add_argument('--output', required=True)
+-    args = parser.parse_args();store = Notices(args.registry)
++    args = parser.parse_args(argv)
++    try:
++        with Gate(args.capture_gate).operation():
++            operate(args)
++    except Busy:
++        print(json.dumps(dict(error='CAPTURE_BUSY')))
++        raise SystemExit(75) from None
++
++
++def operate(args):
++    store = Notices(args.registry)
+     try:
+         if args.command == 'grant': print('Administrator created:', store.grant(args.name, args.token_file))
+         elif args.command == 'grant-device':

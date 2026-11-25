@@ -1,0 +1,9 @@
+FROM python:3.13.15-slim-bookworm
+WORKDIR /fixture
+COPY control/requirements.lock control/requirements.lock
+COPY provisioning/requirements.lock provisioning/requirements.lock
+COPY device_identity/requirements.lock device_identity/requirements.lock
+COPY deploy/control-ha/requirements.lock deploy/control-ha/requirements.lock
+COPY messenger/requirements.lock messenger/requirements.lock
+RUN pip install --no-cache-dir -r control/requirements.lock -r provisioning/requirements.lock -r device_identity/requirements.lock -r deploy/control-ha/requirements.lock && pip install --no-cache-dir --no-deps --require-hashes -r messenger/requirements.lock
+RUN python -c 'import sys, cryptography; assert sys.version.split()[0] == "3.13.15"; assert cryptography.__version__ == "46.0.7"'

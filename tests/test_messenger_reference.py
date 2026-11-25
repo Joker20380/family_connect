@@ -94,13 +94,29 @@ def test_gtk_chat_strings_are_verbatim_accepted_resource_values():
         assert values == (contract['strings']['ru'][name], contract['strings']['en'][name])
 
 
-def test_announcement_contract_pins_existing_server_authority_and_exact_actions():
+def test_announcement_contract_pins_existing_server_authority_and_exact_actions(tmp_path):
     contract = json.loads((ROOT / 'clients/shared/android106-announcements.json').read_text())
+    assert contract['subsequent_deltas'] == ['clients/shared/control-ha-notices.json']
+    delta = json.loads((ROOT / contract['subsequent_deltas'][0]).read_text())
+    assert delta['status'] == 'source-only'
+    assert set(delta['modules']) == {'control/friends/notices.py', 'scripts/service_notices.py'}
+    assert hashlib.sha256((ROOT / delta['patch']).read_bytes()).hexdigest() == delta['patch_sha256']
     assert contract['source_inventory_sha256'] == '8574228fc809fdbd67b3d92680e09c979fe930599a47e4ed1b47fd30f872ed0c'
     assert len(contract['accepted_sources']) == 7
     for name, expected in contract['accepted_sources'].items():
         if not name.startswith('clients/android/'):
-            assert hashlib.sha256((ROOT / name).read_bytes()).hexdigest() == expected
+            current = (ROOT / name).read_bytes()
+            if name in delta['modules']:
+                assert delta['modules'][name]['before_sha256'] == expected
+                assert hashlib.sha256(current).hexdigest() == delta['modules'][name]['sha256']
+            target = tmp_path / name
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(current)
+    subprocess.run(['git', 'apply', '--reverse', str(ROOT / delta['patch'])],
+                   cwd=tmp_path, check=True, capture_output=True)
+    for name, expected in contract['accepted_sources'].items():
+        if not name.startswith('clients/android/'):
+            assert hashlib.sha256((tmp_path / name).read_bytes()).hexdigest() == expected
     assert contract['actions'] == ['list', 'publish', 'edit']
     assert contract['publication'] == dict(kind='information', platforms=['android', 'windows', 'linux'], days=30)
     assert set(contract['edit_fields']) == {'id', 'revision', 'request_id', 'title', 'body'}

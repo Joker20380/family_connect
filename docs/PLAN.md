@@ -28,8 +28,12 @@ not combined acceptance; checkpoint762f2d65 is pushed/remote-SHA verified. Histo
 cause remains unproven. Exact overlay baseline/package inputs are corrected with10 regressions;
 existing head CI fails;
 partial CI environment/diagnostic corrections require exact new-SHA workflows. Candidate NOT installed.
-Exact762f2d65 panel/messenger/notifications/golden PASS, full phase0/control pending21:27UTC;
+Exact762f2d65 panel/messenger/notifications/golden PASS, full phase0 tests FAIL/control CANCELLED;
 historical transport-overlay/source-export corrections pass13 scoped tests, not combined acceptance.
+Checkpointa6f7c730 is pushed but phase0 tests still FAIL. Missing local native image is now proved by
+retained stderr; reproducible fixture592 PASS/31 PG skips and protected314 launcher corrections are
+ready for new-SHA CI. Reviewed reversible announcement delta retains original pins (83 PASS/40 PG skips).
+No shared handoff/reclosure/recovery executor or working replacement is accepted yet.
 The same three HA-02 criteria remain partial; isolated replication PASS. Onboarding remains mandatory.
 
 ## Retained HA-02 checkpoint history (not active NEXTs)

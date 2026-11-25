@@ -3,6 +3,7 @@ import base64
 import json
 import os
 from pathlib import Path
+import re
 import secrets
 import shutil
 import subprocess
@@ -157,9 +158,13 @@ def create_node(root, node, issuer):
     return settled, pending
 
 
-def root_fixture(issuer):
+def root_fixture(issuer, *, lab=Path('/lab')):
     manifest = parse((ROOT / 'deploy/control-ha/rehearsal-maintenance.json').read_bytes())
-    require(os.geteuid() == 0 and Path('/.dockerenv').exists() and Path('/lab').is_dir(), 'ISOLATED_ROOT_REQUIRED')
+    if lab != Path('/lab'):
+        from scripts.ci_maintenance_fixture import validate_root
+        validate_root()
+    require(os.geteuid() == 0 and lab.is_dir() and (lab != Path('/lab') or Path('/.dockerenv').exists()),
+            'ISOLATED_ROOT_REQUIRED')
     require(sys.version.split()[0] == manifest['python'] and cryptography.__version__ == manifest['cryptography'],
             'ROOT_FIXTURE_VERSION')
     settled, pending = {}, {}
@@ -167,7 +172,7 @@ def root_fixture(issuer):
     settled['capture.json'] = packed(capture)
     pending['capture.json'] = packed(capture)
     for node in NODES:
-        complete, unfinished = create_node(Path('/lab') / node, node, issuer)
+        complete, unfinished = create_node(lab / node, node, issuer)
         settled[node + '.json'] = packed(encoded(complete))
         pending[node + '.json'] = packed(encoded(unfinished if node == 'gateway-ru' else complete))
     return dict(settled=settled, pending=pending, behavior=dict(native_prepare=True, native_commit=True,
@@ -208,6 +213,11 @@ def source_snapshot(destination):
 
 
 def native_capture(issuer):
+    if os.environ.get('FC_TEST_MAINTENANCE_BUILD_HELPER') == '1':
+        from scripts.ci_maintenance_fixture import HELPER
+        result = run_capture(['sudo', '-n', '/opt/fc-python313-env/bin/python', '-I', '-B',
+                              str(HELPER), '--root'], issuer)
+        return capture_result(result)
     with tempfile.TemporaryDirectory(prefix='fc-ha-maintenance-source-') as temporary:
         source = Path(temporary)
         source_snapshot(source)
@@ -227,8 +237,19 @@ def retain_failure(stderr, outcome):
     return output.name
 
 
+def run_capture(arguments, issuer, **kwargs):
+    try:
+        return subprocess.run(arguments, input=encoded({name: packed(raw) for name, raw in issuer.items()}),
+                              capture_output=True, timeout=45, **kwargs)
+    except subprocess.TimeoutExpired as error:
+        output = retain_failure(error.stderr, 'timeout')
+        raise ValueError('NATIVE_ROOT_FIXTURE_TIMEOUT: ' + output) from None
+
+
 def capture_container(issuer, source):
     manifest = parse((ROOT / 'deploy/control-ha/rehearsal-maintenance.json').read_bytes())
+    image = os.environ.get('FC_TEST_MAINTENANCE_IMAGE', manifest['image'])
+    require(re.fullmatch('sha256:[0-9a-f]{64}', image) is not None, 'IMMUTABLE_FIXTURE_IMAGE_REQUIRED')
     token = uuid.uuid4().hex
     name = 'fc-ha-maintenance-' + token
     environment = {key: value for key, value in os.environ.items() if not key.startswith(('DOCKER_', 'PG', 'FC_HA_'))}
@@ -238,22 +259,11 @@ def capture_container(issuer, source):
         '--security-opt', 'no-new-privileges', '--memory', '512m', '--cpus', '1', '--pids-limit', '128',
         '--tmpfs', '/lab:rw,nosuid,nodev,size=33554432,mode=755', '--tmpfs', '/tmp:rw,nosuid,nodev,size=16777216',
         '--mount', 'type=bind,src=' + str(source) + ',dst=/src,readonly', '--workdir', '/src',
-        '--env', 'PYTHONDONTWRITEBYTECODE=1', '--entrypoint', 'python', manifest['image'],
+        '--env', 'PYTHONDONTWRITEBYTECODE=1', '--entrypoint', 'python', image,
         '-m', 'scripts.control_ha_maintenance_fixture']
     try:
-        try:
-            result = subprocess.run(arguments, input=encoded({name: packed(raw) for name, raw in issuer.items()}),
-                                    capture_output=True, timeout=45, env=environment)
-        except subprocess.TimeoutExpired as error:
-            output = retain_failure(error.stderr, 'timeout')
-            raise ValueError('NATIVE_ROOT_FIXTURE_TIMEOUT: ' + output) from None
-        if result.returncode:
-            output = retain_failure(result.stderr, 'exit-' + str(result.returncode))
-            raise ValueError('NATIVE_ROOT_FIXTURE_FAILED: ' + output)
-        value = parse(result.stdout)
-        return dict(settled={name: base64.b64decode(raw, validate=True) for name, raw in value['settled'].items()},
-                    pending={name: base64.b64decode(raw, validate=True) for name, raw in value['pending'].items()},
-                    behavior=value['behavior'])
+        result = run_capture(arguments, issuer, env=environment)
+        return capture_result(result)
     finally:
         inspection = subprocess.run([*docker, 'inspect', '--format', '{{json .Config.Labels}}', name],
                                     capture_output=True, timeout=15, env=environment)
@@ -261,6 +271,16 @@ def capture_container(issuer, source):
             require(parse(inspection.stdout).get(LABEL) == token, 'ROOT_FIXTURE_NOT_OWNED')
             cleanup = subprocess.run([*docker, 'rm', '--force', name], capture_output=True, timeout=15, env=environment)
             require(cleanup.returncode == 0, 'ROOT_FIXTURE_CLEANUP_FAILED')
+
+
+def capture_result(result):
+    if result.returncode:
+        output = retain_failure(result.stderr, 'exit-' + str(result.returncode))
+        raise ValueError('NATIVE_ROOT_FIXTURE_FAILED: ' + output)
+    value = parse(result.stdout)
+    return dict(settled={name: base64.b64decode(raw, validate=True) for name, raw in value['settled'].items()},
+                pending={name: base64.b64decode(raw, validate=True) for name, raw in value['pending'].items()},
+                behavior=value['behavior'])
 
 
 def artifacts_for_maintenance(fixture, *, sqlite_preflight=preflight_sqlite):

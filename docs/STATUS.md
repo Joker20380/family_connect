@@ -14,8 +14,14 @@ No mailbox opening, capture permit, working replacement, HA-03 or version change
 criteria remain partial; isolated replication PASS. PLAN has one current next result.
 Historical metadata-overlay pins are reproduced unchanged; its exact source now replaces moving
 HEAD in fixtures. Source-export/paid-bundle regression10 PASS; this is not full CI acceptance.
-Exact762f2d65 panel/messenger/notifications/golden CI PASS; full phase0/control still pending21:27UTC.
+Exact762f2d65 panel/messenger/notifications/golden CI PASS; full phase0 tests FAIL, control CANCELLED.
 NL1 read-only21:21:56UTC confirms PID3705/0 restarts and unchanged four source pins.
+Checkpointa6f7c730 pushed/remote-SHA verified; its phase0 tests also FAIL, not accepted.
+21:48UTC native fixture stderr proves missing local-only Docker image on762f2d65. Portable version-pinned
+image qualification:592 PASS/31 explicit PG skips across all ten affected families; root networkless
+build-helper qualification PASS. Secure314 launcher/context regression131 PASS, final context29 PASS.
+Announcement original pins remain unchanged; reviewed HA-only reversible delta83 PASS/40 PG skips.
+These are source corrections, not combined handoff or working installation; new exact-SHA CI remains required.
 
 ## Retained checkpoints (historical, not simultaneous NEXTs)
 

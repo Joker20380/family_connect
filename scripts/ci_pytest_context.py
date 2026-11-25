@@ -11,6 +11,7 @@ ROOT_FILES = frozenset(('tests/test_profile_store.py', 'tests/test_profile_snaps
 ROOT_CLASS = 'tests/test_gateway_credential_publication.py::IsolatedRootTests::'
 SNAPSHOT_FILE = 'tests/test_profile_snapshot_launcher.py'
 NATIVE314_FILES = frozenset((
+    'tests/test_capture_launch.py', 'tests/test_capture_renewal_state.py',
     'messenger/tests/test_control_ha_mailbox_fence.py',
     'messenger/tests/test_control_ha_mailbox_links.py',
     'messenger/tests/test_control_ha_mailbox_startup.py',
