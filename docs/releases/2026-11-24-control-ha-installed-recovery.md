@@ -8,6 +8,51 @@ Owner request selects all four existing HA-02 gates, not HA-03..05. The25 Novemb
 also authorizes participant installation and bounded operational work with documented rollback;
 earlier read-only/deployment-permission limitations in the historical sections are superseded.
 
+## Support RNS lifecycle candidate — 25 November
+
+[Authoritative runtime mechanism, failed attempts, qualification and transition limits](https://github.com/Joker20380/family_connect/blob/ba1e4991aaa3f8f513e67cc233c5207f08f63576/docs/releases/2026-11-25-control-ha-support-runtime.md).
+Featureba1e4991aaa3f8f513e67cc233c5207f08f63576 is ordinarily pushed and remote-SHA verified.
+Main remains navigation-only. **Pinned standalone RNS lifecycle candidate qualified in isolation;
+working support not installed/upgraded, stopped or capture-ready. Stage2 is not complete.**
+
+The optional captured worker now holds admission for its entire lifetime, before store access
+through delivery drain, RNS writer/final persistence/fsync completion and encrypted-store close.
+Scoped startup hooks validate pinned RNS1.5.1 source/critical code and supported standalone shape;
+they drain periodic producers, inbound queues and asynchronous descendants without cancellation or
+forced deadline. Failures retain uncertainty. No vendor/dependency files change. Idle runtime
+capture is forbidden: this candidate requires a managed stopped interval. It deliberately refuses
+an already-running RNS instance and cannot be injected as an old-process adoption mechanism.
+
+Final169 tests PASS/0 skips:165 archive-bound runtime/lifecycle/packaging/admission tests plus4
+commissioning-kit regressions. Two actual **user-systemd** fixtures retain an admitted delivery
+child and a native asynchronous ratchet writer beyond41s, then exit0 with fresh encrypted-store/
+RNS readback and clean gate drain. These are not new installed fc-support-UID/full sandbox checks
+or external-network settlement. Failed permission-fixture/hidden-diagnostic attempts are retained
+in the authoritative report; only final qualified runs count. Main documentation checks are separate.
+
+The23-source candidate preserves16 baseline modules, modifies3 and adds4, with no removals:
+
+- Baseline archive SHA256: `3aeb6f2badd3172e1e8d9417df77d7c097bb822153dc65b18a8318a097f6dd28`.
+- Final candidate SHA256: `b930197d315f5081ebc1b274e50f499622f11f200b08789957d511e5c53f5a8f`.
+- Final165 JUnit SHA256: `2f8cf693f916b787f1db4fd77877fbad62ac5353ffac27e19cf3e4bb8308afbc`.
+- Kit4 JUnit SHA256: `405496ad7c8602c9bb92cac32607bc891d79ea456ca9efe76142e09d639d9863`.
+- Working readback SHA256: `71c9d6b716f9db6dfef15bc00c9f916bbb7ad8e7d97b45ab86b4f2403bfa2839`.
+
+At17:07:01UTC working support is active/running PID2022541/0 restarts, no reload warning;
+all19 installed source hashes match baseline, UMask0077 and old control-group/SIGKILL/40s policy
+remain. This is read-only source/unit-field observation, not new private unit-byte/interpreter-memory
+attestation. No working hooks/signals/install, privileged authentication, container/RU/NL contact,
+product-data or public version/catalog/signing change occurred. The prior16:40 working application
+probe remains PASS only in its original scope. No production deployment needs rollback; source
+rollback affects the optional candidate/builder, never old store restoration or uncertainty removal.
+
+Next: independently supervised old-process drain/transition/rollback and independent external-work
+settlement before activation. The old periodic loop can sleep300s; the15s application probe is not
+a full runtime drain. Do not use ordinary old TERM/40s force-stop or a kill-policy-only replacement.
+Then actual installed UID/source/gate/sandbox readback, remaining manual/OWNER writer coverage,
+coherent fleet capture and independent current-input trust/custody/approval/full post-ACK recovery.
+Same three HA-02 gates partial; isolated replication PASS. No HA-03, automatic failover or new ETA.
+
 ## Working support admission probe — 25 November
 
 [Authoritative source, actual failures, qualification and rollout limits](https://github.com/Joker20380/family_connect/blob/a5d3af1e1efb8509281eef258987a05508ba0f65/docs/releases/2026-11-25-control-ha-support-live-probe.md).

@@ -1,18 +1,20 @@
 # Текущее состояние / Current state
 
-**25 November — working support admission probe PASS; no stop or replacement.**
-Featurea5d3af1e is pushed/remote-SHA verified.62 tests PASS/0 skips plus an actual fc-support
-PrivateTmp systemd fixture PASS. GUI authentication succeeded. At16:40:26UTC working support
-pauses/drains the checked application scope without cancellation and restores online admission.
-Malformed IPC works before/after; same PID2022541,19 source hashes,3 unit files/15 unit fields,
-active/running/0 restarts. Two prior refusals exposed invisible staging and multiple module loads;
-target namespace and unique active-frame/globals binding now qualify without relaxing source pins.
-[Actual result, failures and rollback](releases/2026-11-24-control-ha-installed-recovery.md#working-support-admission-probe--25-november).
-Four RNS background jobs remain live; capture forbidden, candidate not installed, old40s policy
-unchanged. Next: exact RNS periodic/queued/exit writer closure and supervised safe stop/replacement/
-rollback, then installed manual/OWNER coverage, coherent capture and independent current trust/
-custody/approval/full recovery. Isolated replication PASS; same three HA-02 gates partial.
-No RU/NL contact, container requalification, HA-03, public version change or new ETA.
+**25 November — pinned support RNS lifecycle candidate qualified; not installed.**
+Featureba1e4991 is pushed/remote-SHA verified.169 tests PASS/0 skips include two actual user-systemd
+fixtures preserving delivery/native asynchronous persistence beyond41s, followed by fresh saved-data
+readback. The candidate owns a new pinned RNS runtime, drains periodic/queued/descendant writers,
+runs final persistence/fsync and closes the encrypted store before releasing lifetime admission.
+It does not adopt the old process; an idle managed worker is not capture-ready and must stop first.
+[Qualification, working state and rollback](releases/2026-11-24-control-ha-installed-recovery.md#support-rns-lifecycle-candidate--25-november).
+At17:07UTC working support remains active/running PID2022541/0 restarts, with all19 baseline source
+hashes and old40s stop policy unchanged. No working hook, signal, installation or privileged
+authentication occurred in this checkpoint; earlier application-probe PASS remains scope-limited.
+Next: independently supervised old-process drain/transition/rollback and external-outcome settlement,
+then candidate activation/installed UID/source/gate/sandbox readback, remaining manual/OWNER writers,
+coherent capture and independent current trust/custody/approval/full recovery. Same three HA-02 gates
+partial; isolated replication PASS. No RU/NL contact, container requalification, HA-03, public version
+change or new ETA. Stage2 remains incomplete.
 
 At the preceding installed-shape candidate checkpoint:
 

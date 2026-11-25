@@ -3,18 +3,20 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-25 November16:40UTC: working reversible support admission probe COMPLETE at featurea5d3af1e,
-pushed/remote-SHA verified; candidate still not installed. GUI authentication succeeded.62 tests
-PASS/0 skips plus actual fc-support PrivateTmp systemd fixture. Target-visible staging and unique
-active-main frame/globals binding correct two observed refusals without weakening exact pins.
-[Working result and remaining boundary](releases/2026-11-24-control-ha-installed-recovery.md#working-support-admission-probe--25-november).
-Application admission resumes without cancellation; malformed IPC works, PID2022541/0 restarts,
-19 source hashes/3 unit files/15 fields unchanged. Four RNS jobs remain live; no stop or capture
-permission. Next: exact RNS periodic/queued/exit persistence closure and independently supervised
-safe stop/replacement/rollback, then installed manual/OWNER coverage and coherent fleet capture.
+25 November: pinned standalone support RNS lifecycle candidate qualified at featureba1e4991,
+pushed/remote-SHA verified; NOT installed.169 tests PASS/0 skips include two actual user-systemd
+fixtures preserving delivery/native asynchronous persistence beyond41s and fresh saved-data readback.
+[Candidate qualification and remaining boundary](releases/2026-11-24-control-ha-installed-recovery.md#support-rns-lifecycle-candidate--25-november).
+Runtime lifetime admission now encloses periodic/queued/descendant/final persistence and store close;
+managed capture requires a stopped worker. Startup-only hooks cannot adopt the existing old process.
+At17:07UTC working support remains PID2022541/0 restarts, all19 baseline source hashes/old40s policy
+unchanged. No working mutation or privileged authentication in this checkpoint;16:40 application
+probe PASS remains limited to its checked scope. Next: independently supervised old-process drain/
+transition/rollback and external-outcome settlement before candidate activation, then installed
+UID/source/gate/sandbox readback, remaining manual/OWNER coverage and coherent fleet capture.
 Independent trust/custody/approval and full post-ACK recovery remain. Same three HA-02 gates partial;
 isolated replication PASS. No RU/NL contact, HA-03, public version change or new ETA. Do not repeat
-the completed live probe or substitute ordinary old TERM/40s force-stop for remaining closure.
+completed candidate/probe work or substitute ordinary old TERM/40s force-stop for remaining closure.
 
 At the preceding installed-shape candidate checkpoint:
 
