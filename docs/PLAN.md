@@ -11,17 +11,17 @@ remains selected; this publication task does not advance its acceptance gates.
 [Reconciliation record](releases/2026-11-24-source-reconciliation.md).
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-25 November06:37UTC: stopped OWNER replacement/revert component is qualified and pushed
-on feature6b9ec0c9; final proof pins/report9f7fe3ec verified remotely.176 focused tests/0 skips,
-59 new;6 native Docker cases with5 real coordinator SIGKILLs. Retained-journal recovery
-preserves the original container/configuration, current SQLite writes and pending markers.
-[Execution contract and limits](releases/2026-11-24-control-ha-installed-recovery.md#stopped-owner-replacement--25-november).
-No working deployment or stop/start: both OWNER roles observed healthy and refuse replacement
-while running. Next is controlled ingress/dispatcher drain with independently settled old
-publication/support/manual work, then actual gate/runtime/startup/abort integration. Do not
-repeat the replacement implementation or treat a stopped-state check as a drain. Remaining
-fleet participation, coherent capture, independent custody/approval and final recovery retain
-the same three partial gates; replication PASS. No HA-03 cutover, new stage or ETA.
+25 November07:49UTC: bounded publisher scheduler inhibition/resume is qualified on the working
+runtime. Feature4597e672 is pushed/remote-SHA verified:159 tests/0 skips,47 new,4 native Docker
+cases. A one-second working hold resumes with unchanged healthy containers; no child workload
+is stopped, no image/config installation or container restart. Main remains navigation-only.
+[Working evidence and failure boundary](releases/2026-11-24-control-ha-installed-recovery.md#publisher-dispatcher-hold--25-november).
+Publisher dispatch inhibition and the prior stopped replacement/revert component are complete;
+do not repeat them as new acceptance gates. Next is console ingress closure and independent
+publication/support/manual completion, then actual gate/runtime/startup/abort integration.
+Remaining fleet participation, coherent capture, independent custody/approval and final recovery
+retain the same three partial gates; replication PASS. A dispatcher pause is not settlement,
+and process death/empty queues do not authorize replacement. No HA-03 cutover, new stage or ETA.
 
 At the preceding working-collector checkpoint:
 25 November: owner authorizes selected HA-02 participant installation and bounded operational

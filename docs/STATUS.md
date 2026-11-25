@@ -1,18 +1,19 @@
 # Текущее состояние / Current state
 
-**25 November06:37UTC — stopped OWNER replacement/revert executor qualified.**
-Feature source6b9ec0c9 and final evidence/navigation9f7fe3ec are pushed/remote-SHA verified.
-176 focused tests PASS/0 skips,59 new;6 native Docker cases, including5 actual SIGKILL deaths
-of separate coordinators with journal recovery. The original container ID/configuration,
-current SQLite writes and unknown gate markers survive rollback. No database rewind.
-Working console/publisher remain original and healthy at06:28:58; running-state replacement
-refuses before mutation. No working stop/start, deployment, image build or version change.
-[Exact scope, evidence and rollback](releases/2026-11-24-control-ha-installed-recovery.md#stopped-owner-replacement--25-november).
-Next: controlled ingress/dispatcher drain and independent publication/support/manual settlement,
-then gate/runtime attestation and guarded startup/abort integration. The new component cannot
-stop or start services; stopped state is not settlement. Remaining fleet participation,
+**25 November07:49UTC — working publisher dispatcher hold/resume verified.**
+Feature4597e672 is pushed/remote-SHA verified.159 focused tests PASS/0 skips,47 new;4 native
+Docker cases preserve an in-flight child commit and recover from guardian death/stall or
+rescue death. Real-process controller SIGKILL and timeout/rollback cases also pass.
+The working publisher scheduler pauses for one second and resumes; its children are not
+stopped. Both OWNER containers remain healthy with unchanged configuration/runtime and0
+restarts; both collector timers active. No image/config install, container stop/start or
+version change. Main implementation remains untouched.
+[Working receipt, limitations and rollback](releases/2026-11-24-control-ha-installed-recovery.md#publisher-dispatcher-hold--25-november).
+Publisher dispatch inhibition and stopped replacement/revert are complete components, not
+complete OWNER drain. Next: close console ingress and independently settle publication/support/
+manual effects, then gate/runtime/startup/abort integration. Remaining fleet participation,
 coherent capture, independent custody/approval and final recovery stay open. Replication PASS;
-same three partial HA-02 gates, no new stage or ETA. Main implementation remains untouched.
+same three partial HA-02 gates, no HA-03 cutover or automatic RU-independent failover.
 
 At the preceding working-collector checkpoint:
 **25 November01:00UTC — two working workstation collectors installed and verified.**

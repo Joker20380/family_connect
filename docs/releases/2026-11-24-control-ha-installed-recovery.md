@@ -8,6 +8,38 @@ Owner request selects all four existing HA-02 gates, not HA-03..05. The25 Novemb
 also authorizes participant installation and bounded operational work with documented rollback;
 earlier read-only/deployment-permission limitations in the historical sections are superseded.
 
+## Publisher dispatcher hold — 25 November
+
+[Authoritative source, working receipt, failure tests and exact evidence pins](https://github.com/Joker20380/family_connect/blob/4597e672ed2bb7ee41e54081dc64c904fd2684e3/docs/releases/2026-11-25-control-ha-dispatcher-hold.md).
+Feature4597e672ed2bb7ee41e54081dc64c904fd2684e3 is ordinarily pushed and remote-SHA verified.
+Main changes only STATUS/PLAN/this navigation report; no source deployment is implied.
+
+159 focused tests PASS/0 skips,47 new. Four native Docker cases at07:48:48–07:49:02UTC
+use the original publisher image/command with a synthetic SQLite workload and network none.
+Already dispatched work commits during a scheduler-only hold; another cycle starts after
+release. Guardian SIGKILL, rescue SIGKILL and frozen-guardian deadline recovery pass.
+Real-process tests additionally cover controller SIGKILL, both-helper death with surviving
+controller, early abort, identity/lock refusal and allocation failures. Owned fixture removed.
+
+At07:49:02.726787–07:49:03.731041UTC the actual working publisher scheduler pauses for one
+second and resumes, helper exits0/0. Both original OWNER containers remain healthy, unchanged
+ID/configuration/PID/start identity and restart counts0. Collector timers remain active. Only
+the exact UID1000 scheduler shell receives SIGSTOP/SIGCONT via pidfd; children and console
+are not signalled. No container stop/start, image/config installation, DB rewrite, remote
+operation, product/client version, public installer or signed catalog change.
+
+The bounded guardian/rescue protocol restores scheduling on one helper failure or controller
+loss. It is not a guarantee against losing all helpers/controller or a host/OS failure. Normal
+rollback closes the control pipe, reaps helpers and verifies resumed runtime; no prior DB is
+restored. Keep private evidence; unknown outcome is not a successful drain. Exact caveats and
+identity-checked emergency recovery are in the authoritative report.
+
+Publisher new-dispatch inhibition is complete, not old-work settlement or console ingress
+closure. Next remains console ingress plus independently settled publication/support/manual
+effects, real gate/runtime/startup/abort integration, remaining RU/NL participation, coherent
+capture, independent custody/approval and final recovery. Replication PASS; same three partial
+HA-02 gates. Do not repeat this component or the preceding stopped replacement as new stages.
+
 ## Stopped OWNER replacement — 25 November
 
 [Authoritative executor, native faults, exact pins and rollback boundary](https://github.com/Joker20380/family_connect/blob/9f7fe3ec349f2a0a78db4ba18c0abe415d4f5239/docs/releases/2026-11-25-control-ha-owner-replacement.md).
