@@ -8,6 +8,55 @@ Owner request selects all four existing HA-02 gates, not HA-03..05. The25 Novemb
 also authorizes participant installation and bounded operational work with documented rollback;
 earlier read-only/deployment-permission limitations in the historical sections are superseded.
 
+## Receiving HTTP drain — 25 November
+
+[Authoritative source, installed boundary, native evidence and rollback](https://github.com/Joker20380/family_connect/blob/ad39881b96af39944f9babd849e8faf924486701/docs/releases/2026-11-25-control-ha-http-drain.md).
+Featuread39881b96af39944f9babd849e8faf924486701 is ordinarily pushed/remote-SHA verified.
+Main changes only STATUS/PLAN/this navigation report; no implementation merge or deployment.
+
+Read-only strict SSH inspection at13:22:32.721405UTC binds the actual RU HTTP unit and archive:
+active/running, PID43082,0 restarts, no capture gate, `KillMode=control-group`, SIGTERM,90s stop
+timeout. Installed source uses daemon request/retention threads without a signal drain protocol.
+Ordinary restart can kill old admitted work; three observed threads do not attest settlement.
+Installed archive SHA256 `4e2df679761ba9e7af74128984ef2e19e8e7b228f1cc85b36d50be2b0bc24ce8`
+is retained privately. No credentials, private profiles, databases or raw capsules enter Git.
+
+New lifecycle closes the listener on TERM/INT, signals retention to stop scheduling, then joins
+both retention workers and admitted non-daemon request threads. Repeated stop signals do not
+interrupt those joins. The socket inactivity deadline now starts before header parsing. Partial
+startup failure cleans workers/listener and restores signal handlers. The separate candidate
+unit drop-in uses mixed kill mode, main-only TERM, no SIGKILL and infinite stop timeout, preserving
+admitted subprocesses. A stalled writer remains stopping; it is not permission for forced kill.
+This drop-in alone does not repair the old installed handler or retroactively cover old requests.
+
+Final13:33:49.940875–13:34:53.114172UTC run:269 PASS/0 skips,12 new lifecycle cases. Native
+request/export/retention/closed-package paths, caught failure, actual SIGKILL, repeated signals,
+TCP reset and partial startup covered. A uniquely owned real user-systemd service verifies the
+packaged effective properties: stop closes admission while a child survives in the same cgroup,
+then native publication returns200 and child/main finish. Existing services are not stopped.
+Python3.14.4/pytest9.1.1/psycopg3.3.9; disposable pinned PostgreSQL17.11 contracts also pass.
+Synthetic PG and systemd fixtures are independently confirmed absent after cleanup.
+
+Full candidate SHA256 `25763b05fa15c660be6c35e5e26364146133a5cb5f7b8de202beee6b4f8fd7c1`
+is built/tested, **not installed/distributed**. Versus installed RU it changes21 Python members,
+adds3 and removes1: not a reviewed minimal production hotfix. Follow-up RU readback shows the
+same PID/archive, active/0 restarts; OWNER console/publisher/PostgreSQL healthy/0 restarts,
+both collector timers active. No NL contact, public feed, client version, installer/catalog or
+invitation-page change. No full TLS release/activation gate is claimed.
+
+Private locator `/tmp/fc-ha-http-adoption-current` retains runtime/candidate/test/cleanup/health
+receipts. Final JUnit SHA256 `9d59c43a845d25eb5a262d3bf3cb195d75eaf19e5f8aa68dd4eebdd127c2fb7b`.
+No working installation requires rollback; retain old archive/unit prestate. Source rollback is
+an ordinary revert. Future activation must first close legacy admission and independently settle
+old work, qualify the installed-shape delta, and verify paired effective settings. Abort before
+replacement if settlement is unknown. Preserve current DB/feed/pending state after any new writes;
+never erase uncertainty or restore stale data to satisfy a gate.
+
+That adoption boundary is next, followed by remaining support/manual coverage and guarded OWNER
+integration. Fleet participation, coherent capture, independent custody/trust/approval and final
+recovery remain in HA-02. Replication PASS in isolation, three fixed acceptance gates partial;
+no HA-03 or automatic RU-independent failover.
+
 ## Receiving notice export — 25 November
 
 [Authoritative source, reproduced defect, native evidence and rollback](https://github.com/Joker20380/family_connect/blob/abdce5404c3abd18eb2bcbd848b3e65e02de9563/docs/releases/2026-11-25-control-ha-notice-export.md).

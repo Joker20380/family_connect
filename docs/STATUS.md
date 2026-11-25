@@ -1,5 +1,22 @@
 # Текущее состояние / Current state
 
+**25 November13:34UTC — receiving HTTP graceful stop qualified, not installed.**
+Featuread39881b is pushed/remote-SHA verified. Actual RU readback binds the old archive/unit:
+active, no capture gate, default SIGTERM/control-group stop with90s timeout. A restart could
+interrupt admitted requests and child commands; a thread-count sample is not settlement.
+New lifecycle closes the listener and joins admitted requests and both retention workers;
+paired candidate systemd settings preserve children and disable forced timeout termination.
+269 focused tests PASS/0 skips,12 new; actual user-systemd stop, child completion, native exports,
+failure/death/lost ACK, retention and closed-package lifecycle tested.
+[Actual installed boundary, evidence and rollback](releases/2026-11-24-control-ha-installed-recovery.md#receiving-http-drain--25-november).
+No RU restart/deployment: full candidate differs in21 existing Python members, adds3/removes1.
+Follow-up RU PID/archive unchanged, active/0 restarts; OWNER healthy/0 restarts, timers active.
+Next: installed-shape delta qualification and legacy admission/old-work settlement before
+activation; support/manual coverage and guarded OWNER integration remain. Replication PASS
+in isolation, three HA-02 gates partial. No HA-03, automatic failover or version change.
+
+At the preceding receiving-export checkpoint:
+
 **25 November13:14UTC — receiving notice-export uncertainty repaired and qualified.**
 Featureabdce540 is pushed/remote-SHA verified. Reproduced the old bug: a caught second-file
 export failure left v1 present/v2 absent but removed pending and incorrectly allowed drain.

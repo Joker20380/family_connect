@@ -11,6 +11,20 @@ remains selected; this publication task does not advance its acceptance gates.
 [Reconciliation record](releases/2026-11-24-source-reconciliation.md).
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+25 November13:34UTC: featuread39881b is pushed/remote-SHA verified. Receiving HTTP graceful
+stop closes admission, joins requests/retention and preserves admitted children under paired
+systemd settings.269 focused tests PASS/0 skips,12 new, including actual user-systemd stop.
+[Installed RU boundary, source qualification and rollback](releases/2026-11-24-control-ha-installed-recovery.md#receiving-http-drain--25-november).
+Read-only RU inspection confirms an old ungated daemon-threaded archive and control-group TERM
+policy; no restart performed. Full candidate changes21 Python members/adds3/removes1, so it
+cannot be installed as a one-file hotfix. Follow-up installed PID/archive/health unchanged.
+Next: qualify the installed-shape delta and independently settle old receiver work after closing
+legacy admission; remaining support/manual coverage and guarded OWNER startup/abort integration.
+Fleet, coherent capture, custody/trust/approval and final recovery remain in HA-02: replication
+PASS in isolation, the same three gates partial. No HA-03, automatic failover or version change.
+
+At the preceding receiving-export checkpoint:
+
 25 November13:14UTC: featureabdce540 is pushed/remote-SHA verified. Receiving-export source
 now preserves pending on caught partial-file failures and durably writes both feeds from one
 SQLite snapshot/time.146 focused tests PASS/0 skips,18 new; native HTTP success/error/lost ACK,
