@@ -11,6 +11,19 @@ remains selected; this publication task does not advance its acceptance gates.
 [Reconciliation record](releases/2026-11-24-source-reconciliation.md).
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+25 November: owner authorizes selected HA-02 participant installation and bounded operational
+work with rollback, superseding previous NL read-only scope. No HA-03 cutover or unsafe bypass.
+Feature97202eda is pushed/remote-SHA verified: both workstation collectors installed01:00UTC,
+real cycles succeed with0 pending markers, original timers restored. Probe source stays in its
+own capsule; original runtime/config/state base and main source preserved. First-attempt actual
+rollback verified;68 source checks,6 filesystem fault/revert and5 isolated rollback cases PASS.
+[Installed/rollback record](releases/2026-11-24-control-ha-installed-recovery.md#working-collector-installation--25-november).
+Console namespace read access is observed from inside its existing unprivileged container.
+Next: OWNER container-side admission and remaining RU/NL/manual/transport participation, actual
+coherent capture, independent signer/pin/floor custody and approval, final recovery. Replication
+PASS; same3 gates partial. Do not repeat completed collector implementation as a new gate.
+
+At the preceding signing checkpoint:
 Feature67d39095 is pushed/remote-SHA verified. Existing current-input trust gate now has an
 offline owner review/sign/verify CLI: independent request/public-key pins, external replay floor,
 fresh validity, explicit offline scope and private-file rules. Wire format/full verifier unchanged;

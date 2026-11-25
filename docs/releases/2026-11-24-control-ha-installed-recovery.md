@@ -4,7 +4,48 @@ Authoritative implementation remains `/home/joker/.codex/worktrees/dad9/family_c
 on `feature/device-technical-metadata-20261115`, separately from main. The earlier main
 divergence is reconciled/pushed at2ae5c512; older publication-blocker statements below are
 historical, not active instructions or a current blocker.
-Owner request selects all four existing HA-02 gates, not HA-03..05 or deployment.
+Owner request selects all four existing HA-02 gates, not HA-03..05. The25 November continuation
+also authorizes participant installation and bounded operational work with documented rollback;
+earlier read-only/deployment-permission limitations in the historical sections are superseded.
+
+## Working collector installation — 25 November
+
+[Authoritative installed-state, failure handling, private receipt hashes and exact rollback](https://github.com/Joker20380/family_connect/blob/97202eda4387d2ec2b0dbe38df39464481132e82/docs/releases/2026-11-25-control-ha-collector-activation.md)
+is pushed/remote-SHA verified at97202eda4387d2ec2b0dbe38df39464481132e82. Source preparation
+93f4ce3c precedes installation. Main is still navigation-only; no implementation copied here.
+
+At01:00:32.902740UTC five inventory source changes are installed in the existing collector
+runtime. A fresh9-file network-probe capsule uses its original main control_plane runtime base
+through the new explicit CLI option; .local/.env/Compose, data and credentials are not relocated.
+Two user drop-ins add separate private gates and only the probe ExecStart override. Original
+other environment, inventory argv/known-hosts, KillMode and timeout values are checked unchanged.
+Both originally active timers resume after installation; no VPN/paid-watch/database service stop.
+
+Actual services run01:00:50.439377–01:01:00.237839UTC and both finish Result=success/status0
+with zero pending markers. A later normal inventory cycle imports all three authorized gateway
+sources and technical metadata. Existing OWNER console/publisher remain healthy on original
+images, not restarted/reconfigured. No remote service, product/client version or public release.
+
+68 source/package checks (6 new CLI cases),6 filesystem fault/revert cases and5 isolated
+rollback cases PASS. The first real installation attempt refuses because daemon-reload resets
+dynamic last-execution fields within ExecStart. Its automatic rollback restores exact original
+source, absent new drop-ins and both timer activity states; verified before retry. Retry compares
+full command configuration separately from strictly parsed result metadata, not weaker argv.
+
+Private evidence and the tested standalone rollback helper remain under
+`~/.local/share/family-connect/control-ha/20261125-collector-activation-4sc56eop/`.
+With no capture active, invoke `rollback.py --confirm-no-capture` with `/usr/bin/python3`.
+It verifies pins, stops only those timers, waits without killing existing work, refuses pending
+uncertainty/conflicts, restores only owned source/drop-in deltas and resumes original timers.
+No data rewind, marker erasure or private evidence deletion. A refusal after timer stop requires
+inspection before restoring dispatch; the authoritative report documents this limitation.
+
+Owner's current instruction grants operational scope, not independent cryptographic acceptance
+of a checkpoint that does not exist yet. Console namespace observation succeeds inside the
+actual container as UID10001, no sudo/host-PID helper/permission change. Remaining work is other
+OWNER/RU/NL/manual/transport participation, coherent capture, independent trust/custody/approval
+and final recovery. Host collector admission does not automatically fence its Docker exec imports.
+Replication remains PASS; the same three HA-02 gates partial, no percentage or new deadline.
 
 ## Offline owner signing — 25 November workflow
 

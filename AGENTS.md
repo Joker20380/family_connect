@@ -71,7 +71,13 @@ Owner confirmation, 2026-11-24: current NL1 `185.10.158.212:/opt/apps/family_con
 and NL2 `185.10.158.196:/opt/apps/family_connect` are authorized for HA-02 checks and
 isolated recovery without changes to working services. Use existing strict SSH pins.
 `186.246.45.246` is retired; do not contact it. `186.246.51.201` remains excluded.
-This does not authorize production cutover or deployment. Never operate neighbouring MicroTrader services. Client
+Owner continuation, 2026-11-25: "делай все что надо. все разрешения у тебя есть" authorizes
+the selected HA-02 participant installation and bounded operational work on OWNER/RU/NL1/NL2,
+with checked prestate, rollback and documentation. This supersedes the earlier read-only NL
+scope for this task, not missing technical access, key custody or acceptance requirements.
+Do not expand to HA-03 production database cutover, disable paid-watch/deny enforcement, erase
+uncertain operations or treat this as independent approval of a checkpoint not yet captured.
+Never operate neighbouring MicroTrader services. Client
 private keys/profiles, product DB, backups and release signing secrets stay out of Git,
 CI and command output. Public anchors and signed catalogs may be committed.
 

@@ -1,5 +1,21 @@
 # Текущее состояние / Current state
 
+**25 November01:00UTC — two working workstation collectors installed and verified.**
+Feature97202eda is pushed/remote-SHA verified; source93f4ce3c adds probe runtime-base selection.
+Inventory updates5 files in its existing runtime; probe runs a9-file capsule with unchanged
+main runtime/config/state base. Main implementation sources remain untouched. Both actual user
+services succeed01:00:50–01:01:00 with0 pending markers; both timers active again. Follow-up
+RU/NL1/NL2 inventory and technical metadata imports succeed.68 source/package checks plus6
+filesystem fault/revert cases and5 isolated rollback cases PASS. A first real attempt rolls
+back completely on dynamic systemd ExecStart metadata; source/drop-in/timer restoration verified.
+[Installed versions, failures, receipts and exact rollback](releases/2026-11-24-control-ha-installed-recovery.md#working-collector-installation--25-november).
+Owner's latest continuation authorizes HA-02 installation/bounded operational changes; older
+NL read-only restrictions below are historical. Existing console namespaces read successfully
+inside the unprivileged container, no host escalation. No container restart/image change or
+remote service/client version change. Next: remaining OWNER/RU/NL/manual/transport participants,
+coherent capture, independent custody/approval and final recovery. Replication PASS;3 gates partial.
+
+At the preceding signing checkpoint:
 **25 November UTC — offline checkpoint owner-signing workflow implemented.**
 Feature67d39095 is pushed/remote-SHA verified. Review/sign/verify CLI checks independent request/
 public-key pins, explicit offline scope, external sequence floor, freshness and private files.
