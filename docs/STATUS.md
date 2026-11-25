@@ -10,6 +10,22 @@ REQUIREMENT_ACCEPTED / IMPLEMENTATION_PENDING: требуется рабочая
 Текущий HA-02 и четыре его результата сохраняются; сквозной ввод обязателен для итоговой
 приёмки всей модернизации.
 
+**25 November19:08UTC — support mailbox hold/drain qualified in isolation.**
+Feature6dfbab82 pushed/remote-SHA verified.64 tests PASS/0 skips plus actual NL1 fc-mailbox
+UID996/GID982/systemd qualification and independent effective sandbox readback. Saved callbacks,
+old native PUT/purge transactions, controller SIGKILL, unrelated-client continuity and matching
+abort/data retention are covered. [Evidence, retained verifier failures and limits](releases/2026-11-24-control-ha-installed-recovery.md#support-mailbox-holddrain--25-november).
+This is process-local, NOT deployed or cross-host-bound; abort can permit a queued old callback
+again. Next within the same settlement gate: bind OWNER quiescent/exit generation and replacement
+commit, exclude old RNS link/callback work after reopening, qualify independent restart/death recovery.
+Seven historical unknowns remain. Working NL1 PID3705/0 restarts/source/unit/process pins unchanged;
+OWNER observed active PID2022541/0 restarts. Lab units finished; candidate9d7bf840 NOT installed.
+No working injection/stop/policy/data write, RU/NL2/container operation, HA-03 or version change.
+No additional owner action now. Then authorized activation/readback, remaining writers, coherent
+capture and independent trusted recovery; same three HA-02 gates partial, isolated replication PASS.
+
+At the preceding outcome-census checkpoint:
+
 **25 November18:39UTC — read-only OWNER/NL1 support outcome census: OBSERVED_UNFENCED.**
 Feature5e898ad8 ordinarily pushed/remote-SHA verified.12 local messages/2 request links;
 7 retained outgoing envelopes absent from NL1,0 extra sender rows,0 retained incoming raw ACKs.

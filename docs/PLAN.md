@@ -14,6 +14,24 @@
 
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+25 November19:08UTC: process-local support mailbox hold/drain COMPLETE IN ISOLATION; feature6dfbab82
+pushed/remote-SHA verified, no working deployment.64 tests PASS/0 skips plus actual NL1 fc-mailbox
+UID996/GID982/systemd fixture and independent effective-property readback. Saved/native RNS callbacks,
+PUT/purge drain without cancellation, controller death, other identities and matching abort/current
+synthetic-data retention are covered. [Evidence and explicit non-handoff boundary](releases/2026-11-24-control-ha-installed-recovery.md#support-mailbox-holddrain--25-november).
+Next in the existing settlement gate: bind the hold to independently checked OWNER quiescent/exit
+generation and replacement commit; exclude late old RNS link/callback work after reopening and qualify
+independent restart/controller-death recovery. Abort is not commit; local drained is not permission
+to activate/capture. Seven historical unknowns remain. Working NL1 PID3705/source/unit/process pins
+and0 restarts unchanged; OWNER observed PID2022541/0 restarts. Candidate NOT installed.
+Then authorized activation/readback, remaining manual/OWNER writers, coherent capture and independent
+trust/custody/approval/full recovery. Same three HA-02 gates partial, isolated replication PASS.
+No working injection/stop/product write, RU/NL2/container operation, HA-03/version change or extra
+owner action now. Main remains navigation-only; sandbox qualification does not satisfy activation.
+
+At the preceding outcome-census checkpoint:
+
+**CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
 25 November18:39UTC: actual read-only OWNER/NL1 outcome census COMPLETE as OBSERVED_UNFENCED,
 not settlement/activation; feature5e898ad8 pushed and remote-SHA verified.12 messages/2 request
 links,7 outgoing envelopes absent on NL1,0 extra sender rows/retained incoming raw ACKs. Local

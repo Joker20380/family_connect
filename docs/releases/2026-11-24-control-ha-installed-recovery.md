@@ -8,6 +8,58 @@ Owner request selects all four existing HA-02 gates, not HA-03..05. The25 Novemb
 also authorizes participant installation and bounded operational work with documented rollback;
 earlier read-only/deployment-permission limitations in the historical sections are superseded.
 
+## Support mailbox hold/drain — 25 November
+
+[Authoritative source,64 tests, actual NL1 qualification and retained failures](https://github.com/Joker20380/family_connect/blob/6dfbab82067eb796bc61f4c0dec4351120387165/docs/releases/2026-11-25-control-ha-mailbox-fence.md).
+Feature6dfbab82067eb796bc61f4c0dec4351120387165 is ordinarily pushed/remote-SHA verified; main
+remains navigation-only. This is the same HA-02 old-support settlement gate, not a new numbered stage.
+
+The process-local primitive pins the native relay source, loaded methods, request-handler registry,
+concrete spool/relay and CPython3.14/process binding. Existing function objects are guarded so a
+previously saved bound method or a response generator already captured inside RNS cannot bypass
+the hold. Support-origin PUT and support-recipient GET/purge refuse new admission; already entered
+native transactions finish before drain. Unrelated identities/spool instances continue normally.
+Timeout/controller SIGKILL does not reopen; matching explicit abort restores exact original methods
+and retains the dispatcher until paused wrappers return, without restoring/rewinding data.
+
+**64 tests PASS/0 skips in1.51s**, including26 new contracts. Native RNS dispatch uses a synthetic
+link and intercepted response send, not an authenticated wire acceptance. A native mailbox child
+survives controller SIGKILL, keeps support closed, serves another sender, refuses a stale generation,
+then retains both synthetic rows after matching abort and a fresh SQLite reopen. Preliminary21 is
+not added. Retained fixture failures (missing Link `mdu`, duplicated RNS singleton setup) were fixed;
+the final64 includes all cases without skips or hidden exclusions.
+
+At19:04:22–19:04:30UTC the synthetic fixture also passes on NL1 with the installed interpreter/modules,
+actual fc-mailbox UID996/GID982, CPython3.14.4/RNS1.5.1/LXMF1.1.1. A repeated isolated oneshot provides
+independent effective sandbox readback: PrivateTmp/PrivateNetwork, ProtectHome, ProtectSystem=strict,
+NoNewPrivileges, only a dedicated writable runtime,256MiB/64-task/30%-CPU limits, no forced-kill stop.
+The initial root verifier's empty-ControlGroup assertion incorrectly read the host-root cgroup;
+no process was signaled. Corrected19:07:58UTC verification checks PID/ControlPID0, exit0 and absence
+of the exact lab cgroup, then stops only the exited lab unit. Both lab units finish; original failed
+readback and corrected evidence are retained, not silently turned into a pass.
+
+Working NL1 PID3705/0 restarts,17 effective fields, original unit hashes, four installed source hashes
+and process start/command/cgroup binding remain unchanged. OWNER is observed active/running
+PID2022541/0 restarts/no pending reload; no new full OWNER source/key audit is claimed. Candidate
+9d7bf840f3455d0ef2e7653dc9289aac2f0d77c9f2a0a8e305c786f7ddb80489 is not rebuilt or installed.
+No working node identity/spool read, injection, stop, policy/product write or replay in this continuation.
+No RU/NL2/container/MicroTrader operation, retired host, HA-03/public-version or persistent-privilege change.
+
+- Fence source SHA256: `6bac997f0cbc21c8ed67fca15a8c7659e3dfdaea1d5c592f6aef7ac845a54c12`.
+- Final64 JUnit SHA256: `d50446dde711be2c347effe9c6a5dd75a1b335c5f1038d7202882c9deac5b380`.
+- Independent corrected NL1 result SHA256: `b0c308ec123e9af37c6c6ab82d00add2a63639968b5d52f670d8461157213a45`.
+- Effective sandbox readback SHA256: `f3244973d08f0dc8077c2964ff593b3df9c1b0668fa895218445b46b1939b8bb`.
+
+**NOT activation-ready:** no cross-host OWNER attestation, safe commit/open transition or durable
+mailbox-restart protection. Explicit abort can allow an old queued callback again; retention/other
+recipients and remaining writers are outside this scoped hold. Seven historical unknowns remain.
+Next: bind OWNER quiescent/exit generation to the remote hold and replacement commit, exclude late
+old RNS link/callback writes after reopening, and qualify independent restart/death/abort recovery.
+Do not use abort/local drained as successful handoff. Then authorized activation/readback, remaining
+writers, coherent capture and independent trust/custody/approval/full recovery. No extra owner action
+now. Three HA-02 gates remain partial; isolated replication PASS. No production rollback is needed;
+synthetic/private evidence stays out of Git and is retained locally and in the isolated remote root.
+
 ## Independent support outcome census — 25 November
 
 [Authoritative observer, paired evidence and late-commit reproduction](https://github.com/Joker20380/family_connect/blob/5e898ad87a48ae2e2fae19d42a18f6b2c62c8daa/docs/releases/2026-11-25-control-ha-support-outcomes.md).
