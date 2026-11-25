@@ -1,20 +1,20 @@
 # Текущее состояние / Current state
 
-**24 November UTC — OWNER locks qualified across separate container mount/PID namespaces.**
-At23:50:26–23:50:41UTC the existing candidate imagesb62e6693/2162635c use private ext4 bind gates
-as10001/1000; separate guardians see the same four inode identities with unchanged0700/0600
-permissions. An active writer delays drain, both writers refuse inside the joint interval and
-resume after release. Container replacement retains an uncertain marker; later success cannot
-make drain pass.182 focused tests PASS/0 skips,46 new cases; all owned containers removed.
-Installed OWNER configuration/identity bindings remain unchanged; no RU/NL, live gate, service,
-image build or version change. [Cross-container evidence and limits](releases/2026-11-24-control-ha-owner-cross-mount.md).
-This is isolated kernel integration, not installed namespace/inode approval or full capture.
-Current-user /proc access refuses the working console namespace; no permission widening or
-privileged host-PID helper is attempted. The retained private configuration proposal remains
-uninstalled. Next: independently accepted OWNER runtime/config/gate setup and current-work
-settlement, remaining RU/NL/manual/transport coverage, then approved coherent capture and
-independent custody/final recovery. Working-NL changes remain outside scope. Replication PASS;
-same three gates partial. Do not repeat accepted cross-mount/config/build/collector/NL2 slices.
+**25 November UTC — exact OWNER overlay contents verified, not just image metadata.**
+At00:05:28.962–00:05:29.491UTC both retained candidatesb62e6693/2162635c match all10 source
+files pinned tofa05f0da. Each extra layer contains only these regular root-owned0644 files and
+their eight0755 parent directories; no extra file, link, whiteout or extended metadata. OCI
+manifest/config/compressed-layer/diff-ID references and unchanged runtime/base prefixes verify.
+173 focused tests PASS/0 skips,56 new cases. [Offline checker, receipts and limits](releases/2026-11-25-control-ha-owner-overlay.md).
+No container run/exec/replacement, image build/load/tag, working gate, service, RU/NL or version
+change. A private Docker save is evidence only; no archive extraction. This is source-content
+evidence, not independent approval, full base-image audit or installed-runtime attestation.
+Prior cross-container qualification remains accepted, not rerun. Working console namespace
+access remains unqualified; no permission bypass. Next: independent candidate/config/runtime
+acceptance and authorized actual OWNER gate/guardian setup, existing-work settlement and
+remaining RU/NL/manual/transport coverage, then approved coherent capture and independent
+custody/final recovery. Working-NL changes remain outside scope. Replication PASS; same three
+gates partial. Do not repeat completed overlay/cross-mount/config/build/collector/NL2 slices.
 
 At the preceding collector-admission checkpoint:
 **24 November — standalone OWNER collectors admitted in source; activation proposal recorded.**

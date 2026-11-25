@@ -3,20 +3,19 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
-OWNER candidate kernel integration now passes across separate container mount/PID namespaces,
-not only within one container:23:50:26–23:50:41UTC, same private ext4 gate inodes as10001/1000,
-active-writer drain, both admissions closed, release and persistent uncertainty after recreation.
-182 tests PASS/0 skips,46 new cases; owned containers removed. Installed bindings unchanged;
-no working gate, permission, service, RU/NL, image build or version change.
-[Cross-container evidence and rollback boundary](releases/2026-11-24-control-ha-owner-cross-mount.md).
-Working console /proc namespaces are not readable by the current user; do not bypass access
-with permission changes or a privileged host-PID container. Isolated agreement is not actual
-installed binding approval. The exact private configuration proposal remains uninstalled.
-Next: independent candidate/config/runtime acceptance and authorized actual gate/namespace/
-guardian setup, existing-work settlement and remaining RU/NL/manual/transport coverage, then
-approved coherent interval and independent custody/recovery. Workstation packages remain
-uninstalled; working-NL changes outside permission. Replication PASS; same three gates partial.
-Do not repeat accepted cross-mount/config-plan/build/collector/NL2 slices as new gates.
+OWNER candidate added-layer inspection now passes00:05:28.962–00:05:29.491UTC on25 November:
+both retained overlays match all10 source files pinned tofa05f0da, with only the eight permitted
+parent directories and exact ownership/modes. Manifest/config/layer/diff-ID pins and base/runtime
+preservation verify; unexpected entries or source drift cannot become acceptance.173 tests PASS/
+0 skips,56 new cases. No container dispatch, deployment, build/load/tag, service or version change.
+[Offline source-content proof and its boundary](releases/2026-11-25-control-ha-owner-overlay.md).
+This is not independent approval or full base/runtime qualification. The private config proposal
+remains uninstalled; prior cross-mount proof is retained, not rerun. Working console namespace
+access remains unqualified; no chmod/privileged host-PID bypass. Next: independent candidate/
+config/runtime acceptance and authorized actual gate/guardian setup, existing-work settlement,
+remaining RU/NL/manual/transport coverage, then approved coherent interval and independent
+custody/recovery. Working-NL changes remain outside permission. Replication PASS; same three
+gates partial. Do not repeat completed overlay/cross-mount/config/build/collector/NL2 slices.
 
 At the preceding collector-admission checkpoint:
 Standalone OWNER collector admission is implemented: complete inventory/probe cycles, manual

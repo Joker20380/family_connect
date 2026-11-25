@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 25 November UTC: exact OWNER added-layer contents match10 pinned sources;173 tests, no image build or container dispatch](releases/2026-11-25-control-ha-owner-overlay.md).
+
 [CONTROL-HA · 24 November UTC: OWNER cross-container gate/inode integration,182 tests and persistent-marker recreation proof; working services unchanged](releases/2026-11-24-control-ha-owner-cross-mount.md).
 
 [CONTROL-HA · 24 November UTC: exact private OWNER configuration/rollback proposal;159 tests, current bindings preserved, no deployment](releases/2026-11-24-control-ha-owner-activation-plan.md).
