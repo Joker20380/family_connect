@@ -10,8 +10,9 @@ earlier read-only/deployment-permission limitations in the historical sections a
 
 ## Working collector installation — 25 November
 
-[Authoritative installed-state, failure handling, private receipt hashes and exact rollback](https://github.com/Joker20380/family_connect/blob/97202eda4387d2ec2b0dbe38df39464481132e82/docs/releases/2026-11-25-control-ha-collector-activation.md)
-is pushed/remote-SHA verified at97202eda4387d2ec2b0dbe38df39464481132e82. Source preparation
+[Authoritative installed-state, failure handling, private receipt hashes and exact rollback](https://github.com/Joker20380/family_connect/blob/a1452aa175ec69afdfa4562266af7c0e1391328a/docs/releases/2026-11-25-control-ha-collector-activation.md)
+is pushed/remote-SHA verified ata1452aa175ec69afdfa4562266af7c0e1391328a. Installation record
+97202eda and source preparation
 93f4ce3c precedes installation. Main is still navigation-only; no implementation copied here.
 
 At01:00:32.902740UTC five inventory source changes are installed in the existing collector
@@ -46,6 +47,19 @@ actual container as UID10001, no sudo/host-PID helper/permission change. Remaini
 OWNER/RU/NL/manual/transport participation, coherent capture, independent trust/custody/approval
 and final recovery. Host collector admission does not automatically fence its Docker exec imports.
 Replication remains PASS; the same three HA-02 gates partial, no percentage or new deadline.
+
+At01:12:34.455336–01:12:45.669963UTC, the real installed collector service processes are
+observed with matching UID/GID/groups, mnt/pid/user/time namespaces/maps, interpreter SHA,
+gate environment and active-operation markers. Normal service cycles settle successfully before
+drain. The existing sealed two-guardian protocol then confirms a120.510967ms overlapping hold;
+both installed collector CLIs refuse75/CAPTURE_BUSY inside it. Guardians are reaped, markers0,
+both original timers active afterward. No data copied or other participant implicitly fenced.
+Private joint receipt SHA256:babe68ebc31f3caacab1ee08b3e1191e2a2b143b009c5f774b14724c5cc7b3b4.
+
+The next technical gap is the controlled OWNER drain/replacement/revert executor over retained
+effective configs and independent settlement of old publication/support/manual work before stop.
+Permission is granted; lack of that qualified mechanism is not solved by a forced kill or default
+Compose (which invokes seeding). Then complete the remaining participants and three open gates.
 
 ## Offline owner signing — 25 November workflow
 

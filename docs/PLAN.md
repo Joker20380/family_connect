@@ -13,13 +13,17 @@ remains selected; this publication task does not advance its acceptance gates.
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
 25 November: owner authorizes selected HA-02 participant installation and bounded operational
 work with rollback, superseding previous NL read-only scope. No HA-03 cutover or unsafe bypass.
-Feature97202eda is pushed/remote-SHA verified: both workstation collectors installed01:00UTC,
+Featurea1452aa1 is pushed/remote-SHA verified: both workstation collectors installed01:00UTC,
 real cycles succeed with0 pending markers, original timers restored. Probe source stays in its
 own capsule; original runtime/config/state base and main source preserved. First-attempt actual
 rollback verified;68 source checks,6 filesystem fault/revert and5 isolated rollback cases PASS.
 [Installed/rollback record](releases/2026-11-24-control-ha-installed-recovery.md#working-collector-installation--25-november).
 Console namespace read access is observed from inside its existing unprivileged container.
-Next: OWNER container-side admission and remaining RU/NL/manual/transport participation, actual
+Installed joint guardian integration at01:12UTC also passes: real running identities/runtime/
+gates,120.511ms joint hold, both CLIs refused75, clean guardian exit and original timers restored.
+Next: controlled OWNER drain/replacement/revert over retained effective configs; independently
+settle old publication/support/manual work before stopping writers, never use default Compose
+seeding or force-kill as settlement. Then remaining RU/NL/manual/transport participation, actual
 coherent capture, independent signer/pin/floor custody and approval, final recovery. Replication
 PASS; same3 gates partial. Do not repeat completed collector implementation as a new gate.
 

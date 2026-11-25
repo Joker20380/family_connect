@@ -1,13 +1,17 @@
 # Текущее состояние / Current state
 
 **25 November01:00UTC — two working workstation collectors installed and verified.**
-Feature97202eda is pushed/remote-SHA verified; source93f4ce3c adds probe runtime-base selection.
+Featurea1452aa1 is pushed/remote-SHA verified; source93f4ce3c adds probe runtime-base selection.
 Inventory updates5 files in its existing runtime; probe runs a9-file capsule with unchanged
 main runtime/config/state base. Main implementation sources remain untouched. Both actual user
 services succeed01:00:50–01:01:00 with0 pending markers; both timers active again. Follow-up
 RU/NL1/NL2 inventory and technical metadata imports succeed.68 source/package checks plus6
-filesystem fault/revert cases and5 isolated rollback cases PASS. A first real attempt rolls
-back completely on dynamic systemd ExecStart metadata; source/drop-in/timer restoration verified.
+filesystem fault/revert cases and5 isolated rollback cases PASS. At01:12:34–01:12:45UTC actual
+running collector identities/runtime/gates match; two sealed guardians confirm a120.511ms joint
+interval, both installed CLIs refuse75, guardians reaped, pending0, original timers restored.
+No data copied; this qualifies only the two host collectors, not arbitrary container imports.
+A first real attempt rolls back completely on dynamic systemd ExecStart metadata;
+source/drop-in/timer restoration verified before retry.
 [Installed versions, failures, receipts and exact rollback](releases/2026-11-24-control-ha-installed-recovery.md#working-collector-installation--25-november).
 Owner's latest continuation authorizes HA-02 installation/bounded operational changes; older
 NL read-only restrictions below are historical. Existing console namespaces read successfully
