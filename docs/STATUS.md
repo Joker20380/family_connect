@@ -10,6 +10,25 @@
 Выбранный HA-02 и его четыре результата сохраняются; сквозной ввод узла обязателен
 для завершения модернизации.
 
+**25 November18:39UTC — independent OWNER/NL1 support outcome census: OBSERVED_UNFENCED.**
+Read-only paired observation:12 local messages/2 request links,7 retained outgoing envelopes;
+two local recipient-stored statuses and five relayed receipts, no retained incoming raw ACKs.
+NL1 has0 matching ciphertext rows/0 additional sender rows. Seven absences remain UNKNOWN,
+not delivered/lost/settled. Matching before/after local snapshots are not a writer fence.
+[Actual evidence,26 tests, native late-commit reproduction and next boundary](releases/2026-11-25-control-ha-support-outcomes.md).
+26 tests PASS/0 skips: native relay commits after sender disconnect and an absent snapshot;
+purge/expiry yield the same absence. Observer never grants activation/capture permission.
+Working OWNER PID2022541/0 restarts/19 sources/3 units/15 fields and NL1 mailbox PID3705/0 restarts
+remain unchanged. No injection/stop/replay/product write; candidate9d7bf840 NOT installed.
+GUI access works; password not captured, terminal closed/timestamp invalidated. No owner action now.
+Next: qualify independent support-scoped NL1 admission/drain for delayed PUT/purge callbacks and
+bind it to the OWNER quiescent generation/replacement commit, preserving historical unknowns.
+This is the existing external-settlement gate, not an additional stage. Then authorized activation,
+installed readback, remaining writers, coherent capture and independent trusted recovery.
+Same three HA-02 gates partial; isolated replication PASS. No RU/NL2/container operation or version change.
+
+At the preceding replacement-supervisor checkpoint:
+
 **25 November18:24UTC — independent support replacement/rollback supervisor qualified in isolation.**
 16 user-systemd plus2 actual-root/fc-support systemd tests PASS/0 skips. The retained controller
 survives six crash boundaries, pairs archive and no-forced-kill policy after attested old exit,
