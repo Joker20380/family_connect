@@ -18,7 +18,7 @@ import tempfile
 import time
 import uuid
 from messenger.service_events import validate_feed, KINDS
-from control.capture_gate import external_operation
+from control.capture_gate import Busy, Gate, external_operation
 
 
 REPOSITORY_PURPOSE = 'family-connect/ha-notices-synthetic/v1/db-only'
@@ -239,9 +239,10 @@ class Notices(NoticeTransaction):
             if os.path.exists(temporary): os.unlink(temporary)
 
 
-def main():
+def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--registry', required=True)
+    parser.add_argument('--capture-gate', type=Path)
     commands = parser.add_subparsers(dest='command', required=True)
     grant = commands.add_parser('grant');grant.add_argument('--name', required=True);grant.add_argument('--token-file', required=True)
     device = commands.add_parser('grant-device');device.add_argument('--access-db', required=True);device.add_argument('--device', required=True);device.add_argument('--name', required=True)
@@ -249,7 +250,17 @@ def main():
     revoke = commands.add_parser('revoke');revoke.add_argument('--name', required=True)
     send = commands.add_parser('publish');send.add_argument('--token-file', required=True);send.add_argument('--kind', choices=sorted(KINDS), required=True);send.add_argument('--title', required=True);send.add_argument('--body-file', required=True);send.add_argument('--platform', action='append', choices=['android','windows','linux'], required=True);send.add_argument('--days', type=int, default=30)
     export = commands.add_parser('export');export.add_argument('--output', required=True)
-    args = parser.parse_args();store = Notices(args.registry)
+    args = parser.parse_args(argv)
+    try:
+        with Gate(args.capture_gate).operation():
+            operate(args)
+    except Busy:
+        print(json.dumps(dict(error='CAPTURE_BUSY')))
+        raise SystemExit(75) from None
+
+
+def operate(args):
+    store = Notices(args.registry)
     try:
         if args.command == 'grant': print('Administrator created:', store.grant(args.name, args.token_file))
         elif args.command == 'grant-device':

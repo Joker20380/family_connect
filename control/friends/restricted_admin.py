@@ -288,15 +288,28 @@ def publish_crl(service, path, *, lifetime=900):
     return number
 
 
-def main():
+def main(argv=None):
+    from control.capture_gate import Busy, Gate
+
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--db', type=Path, required=True)
+    parser.add_argument('--capture-gate', type=Path)
     parser.add_argument('action', choices=['migrate', 'grant', 'revoke-device', 'publish-crl', 'gateway-certificate'])
     parser.add_argument('--device')
     parser.add_argument('--expires', type=int)
     parser.add_argument('--public-identity')
     parser.add_argument('--output', type=Path)
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
+    try:
+        with Gate(args.capture_gate).operation():
+            operate(args)
+    except Busy:
+        print(json.dumps(dict(error='CAPTURE_BUSY')))
+        raise SystemExit(75) from None
+    print('Restricted operator operation complete')
+
+
+def operate(args):
     access = Access(args.db)
     if args.action == 'migrate':
         migrate(access)
@@ -326,7 +339,6 @@ def main():
                     os.fsync(output.fileno())
         else:
             publish_crl(service, Path(os.environ['FC_FRIENDS_RESTRICTED_DIR']) / 'revocations.pem')
-    print('Restricted operator operation complete')
 
 
 if __name__ == '__main__':

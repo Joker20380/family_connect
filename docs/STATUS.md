@@ -1,5 +1,20 @@
 # Текущее состояние / Current state
 
+**25 November — three manual operator entrypoints now honor capture admission; source only.**
+Restricted administration, support/FIELD administration and service notices accept an explicit
+`--capture-gate` before opening stores or private files. Admission covers commit, file publication
+and store close; process death/partial-success failures retain uncertainty.211 focused tests PASS,
+0 skips, including89 new cases and native isolated archives. [Scope, evidence and remaining gates](releases/2026-11-25-control-ha-operator-capture.md).
+No installation: existing invocations without the option remain ungated. At15:39UTC all19 support
+sources/unit fields match the preceding checkpoint, PID2022541/0 restarts; three OWNER containers
+remain healthy with unchanged PIDs/images. `sudo -n` still requires interactive authentication.
+No RU/NL contact or working service/version/public artifact change in this continuation. Next:
+privileged guarded support activation/runtime closure, installed CLI/forced-command census and
+binding, remaining manual paths and guarded OWNER integration; then coherent fleet capture and
+independent trust/custody/full recovery. Same three HA-02 gates partial; isolated replication PASS.
+
+At the preceding support-lifecycle checkpoint:
+
 **25 November — support termination source fixed; working installation unchanged.**
 The remaining OWNER support writer is active without a gate; its old31s worker close and40s
 systemd force-stop can interrupt delivery. The candidate now waits for actual delivery/reader

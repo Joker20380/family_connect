@@ -3,6 +3,22 @@
 ## Current engineering priority / Текущий critical path
 
 **CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
+25 November: source admission for all17 actions of restricted/support/notices operator CLIs
+COMPLETE;211 focused tests PASS/0 skips,89 new. Configured gates refuse before private/store I/O,
+hold through completion and retain post-commit/process-death uncertainty. Closed native archives
+pass outside checkout. [Qualification and explicit installed-coverage limits](releases/2026-11-25-control-ha-operator-capture.md).
+This is not deployment or complete manual-writer closure: omitted gates remain legacy behavior;
+installed invocation/source census, forced-command and remaining writer bindings are still needed.
+Support source/units and all three OWNER containers unchanged at15:39UTC; `sudo -n` again requires
+interactive authentication. Already authorized support activation needs technical privileged access,
+not renewed permission or a force-stop. Next: that guarded transition/runtime closure, remaining
+installed/manual coverage and OWNER integration, followed by coherent fleet capture and independent
+trust/custody/combined recovery. Replication PASS in isolation, same three gates partial. No HA-03,
+RU/NL operation, version/public release or new ETA. Do not repeat the completed CLI source slice.
+
+At the preceding support-lifecycle checkpoint:
+
+**CONTROL-HA-20261123 — selected implementation IN_PROGRESS.**
 25 November: support managed-worker/reader termination source slice COMPLETE;106 focused
 checks PASS/0 skips. Actual user-systemd stop preserves a child beyond old31s/40s deadlines,
 then finishes without forced kill; gate-busy close waits and failures keep uncertainty.

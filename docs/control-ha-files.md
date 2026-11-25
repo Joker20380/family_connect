@@ -110,6 +110,27 @@ Node watchdogs/deny enforcement must continue; stopping the only authority while
 short leases expire can interrupt traffic. Qualify the bounded barrier and recovery
 before production, keeping8s operation /12s watchdog /paid lease≤120s unchanged.
 
+### Manual operator admission — 25 November source checkpoint
+
+`control.friends.restricted_admin`, `control.friends.support_admin` and
+`scripts.service_notices` now accept `--capture-gate /absolute/private/gate` before
+the action/subcommand. The existing gate must belong to the executing UID and satisfy
+its pinned directory/lock permissions; commands never create it or silently ignore an
+invalid path. Closed admission returns exit75/`CAPTURE_BUSY` before store or private-file
+I/O. The operation remains admitted through commits, file publication and store close;
+failed or interrupted work leaves the existing durable uncertainty marker. A later
+successful command does not erase that marker. Help/argument parsing is not a writer.
+
+This is opt-in source coverage, **not installed manual-writer closure**. Without the
+option existing commands still work without admission; library callers still need their
+outer boundary. Installing a new archive alone does not bind old launchers or already
+running work. Pin each effective CLI/forced-command/queue/source/UID to its correct gate,
+independently settle old work, and account for the remaining support sender/routing/alias/
+offline deployment paths before claiming a coherent barrier. No SSH forced command,
+working unit or installed archive is changed by this checkpoint. Gate permission checks
+must not be relaxed to share a gate across unrelated UIDs.
+[211 checks, actual unchanged prestate and rollback](releases/2026-11-25-control-ha-operator-capture.md).
+
 ## Import and recovery input contract
 
 The [24 November installed census](releases/2026-11-24-control-ha-installed-census.md)

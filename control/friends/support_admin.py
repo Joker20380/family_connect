@@ -95,40 +95,49 @@ def change(access, path, support, enabled, expires=None):
         return support_ids.lookup(access, support, devices)
 
 
-def main():
+def main(argv=None):
+    from control.capture_gate import Busy, Gate
+
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--db', type=Path, required=True)
+    parser.add_argument('--capture-gate', type=Path)
     parser.add_argument('--admission', type=Path)
     parser.add_argument('--support-id')
     parser.add_argument('--expires', type=int)
     parser.add_argument('action', choices=('backfill', 'inventory', 'lookup', 'enable-field', 'disable-field', 'audit'))
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     try:
-        if not args.db.is_file():
-            raise ValueError('Existing registration DB required')
-        access = Access(args.db)
-        if args.action == 'backfill':
-            result = support_ids.backfill(access)
-        elif args.action == 'inventory':
-            result = support_ids.inventory(access)
-        elif args.action == 'audit':
-            with access.db() as database:
-                result = [dict(row) for row in database.execute('SELECT timestamp,support_id,previous_state,new_state,outcome FROM field_support_audit ORDER BY id DESC LIMIT 100')]
-        else:
-            if args.admission is None or args.support_id is None:
-                raise ValueError('Admission file and Support ID required')
-            if args.action == 'lookup':
-                eligible_devices, all_activated = admission_policy(bounded_file(args.admission, 16384))
-                result = support_ids.lookup(access, args.support_id, eligible_devices or (), all_activated=all_activated)
-            else:
-                expected = Path(os.environ['FC_FRIENDS_RESTRICTED_DIR']) / 'admission.json'
-                if args.admission.resolve() != expected.resolve():
-                    raise ValueError('Admission authority mismatch')
-                result = change(access, args.admission, args.support_id, args.action == 'enable-field', args.expires)
+        with Gate(args.capture_gate).operation():
+            result = operate(args)
         print(json.dumps(result, sort_keys=True))
+    except Busy:
+        print(json.dumps(dict(error='CAPTURE_BUSY')))
+        raise SystemExit(75) from None
     except Exception:
         print(json.dumps(dict(error='SUPPORT_OPERATION_FAILED', hint='No credentials are printed; inspect configuration and safe audit.')))
         raise SystemExit(1) from None
+
+
+def operate(args):
+    if not args.db.is_file():
+        raise ValueError('Existing registration DB required')
+    access = Access(args.db)
+    if args.action == 'backfill':
+        return support_ids.backfill(access)
+    if args.action == 'inventory':
+        return support_ids.inventory(access)
+    if args.action == 'audit':
+        with access.db() as database:
+            return [dict(row) for row in database.execute('SELECT timestamp,support_id,previous_state,new_state,outcome FROM field_support_audit ORDER BY id DESC LIMIT 100')]
+    if args.admission is None or args.support_id is None:
+        raise ValueError('Admission file and Support ID required')
+    if args.action == 'lookup':
+        eligible_devices, all_activated = admission_policy(bounded_file(args.admission, 16384))
+        return support_ids.lookup(access, args.support_id, eligible_devices or (), all_activated=all_activated)
+    expected = Path(os.environ['FC_FRIENDS_RESTRICTED_DIR']) / 'admission.json'
+    if args.admission.resolve() != expected.resolve():
+        raise ValueError('Admission authority mismatch')
+    return change(access, args.admission, args.support_id, args.action == 'enable-field', args.expires)
 
 
 if __name__ == '__main__':
