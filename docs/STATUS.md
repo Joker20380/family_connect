@@ -10,23 +10,21 @@
 Выбранный HA-02 и его четыре результата сохраняются; сквозной ввод узла обязателен
 для завершения модернизации.
 
-**25 November19:08UTC — support-scoped mailbox hold/drain qualified in isolation.**
-64 tests PASS/0 skips, plus an actual NL1 fc-mailbox UID996/GID982/systemd fixture and independent
-effective sandbox readback. Saved bound callbacks/methods and an already captured native RNS
-dispatch cannot bypass the hold. Old native PUT/purge transactions finish before drain; timeout
-and controller SIGKILL do not reopen admission. Unrelated identities continue; explicit matching
-abort restores original methods and retains two freshly reopened synthetic rows.
-[Source, qualification, retained verifier failures and limits](releases/2026-11-25-control-ha-mailbox-fence.md).
-This is a process-local primitive, NOT a working installation or cross-host handoff. Abort can
-allow a previously queued callback again; no commit/open transition is qualified. Next in the same
-settlement gate: bind OWNER quiescent/exit generation, late RNS link/callback exclusion and independent
-restart/death recovery to the replacement supervisor before activation. Seven historical unknowns
-remain; retention/other-recipient activity is not fenced for coherent capture by this primitive.
-Working NL1 PID3705/0 restarts, four source pins/unit/process bindings unchanged; OWNER observed
-active PID2022541/0 restarts. Both isolated transient units finished; synthetic evidence retained.
-Candidate9d7bf840 unchanged/NOT installed. No working injection/stop/policy/product write, RU/NL2/
-container operation, HA-03 or version change. No extra owner action now. Three HA-02 gates partial;
-isolated replication PASS. Remaining writers, coherent capture and independently trusted recovery remain.
+**25 November19:41UTC — old RNS link exclusion survives local reopening, qualified in isolation.**
+78 tests PASS/0 skips, including authenticated native loopback RNS, plus actual NL1 fc-mailbox
+UID996/GID982/systemd qualification at19:38:52–19:39:09UTC with independent sandbox/source/unit readback.
+Old identified/unidentified links, captured callbacks and direct saved spool methods remain refused;
+fresh authenticated links can PUT/purge, unrelated old links continue, three synthetic rows reopen.
+[Mechanism, exact evidence and remaining trust boundary](releases/2026-11-25-control-ha-mailbox-links.md).
+This does NOT prove a fresh OWNER process: a still-running old process can create a fresh link.
+Next within the existing settlement gate: independently bind OWNER quiescence/exit and replacement
+commit, and add durable fail-closed mailbox restart/recovery before working activation. The guard
+must remain installed after local opening; abort is allowed only beforehand. Seven historical
+unknowns remain; full writer/capture scope and independent trust/custody/approval/recovery remain.
+Working NL1 PID3705/0 restarts/four relay sources/RNS Link/unit/process pins unchanged; OWNER
+observed active PID2022541/0 restarts at19:40UTC. Lab unit exited0 and was removed. Candidate9d7bf840
+unchanged/NOT installed. No working injection/stop/policy/product write, RU/NL2/container operation,
+HA-03 or version change. No extra owner action now. Three HA-02 gates partial; isolated replication PASS.
 
 At the preceding outcome-census checkpoint:
 
