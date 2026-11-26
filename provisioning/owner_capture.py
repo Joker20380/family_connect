@@ -9,7 +9,7 @@ import threading
 from control.capture_gate import CURRENT, Gate, external_operation, require
 
 
-INSTALLED_GATE = Path('/var/lib/family-connect/capture/owner-collectors')
+INSTALLED_GATE = Path('/var/lib/fc-support-bindings/capture-owner-collectors')
 SCOPE = ContextVar('owner_collector_admission', default=None)
 
 

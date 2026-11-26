@@ -1,9 +1,9 @@
 name: HA-02 native support qualification
 on:
   push:
-    paths: ['scripts/control_ha_*.py', 'scripts/ci_*.py', 'scripts/ci_python314_context.sh', 'provisioning/**', 'messenger/**', 'control/capture*', 'deploy/support-chat/**', 'tests/test_control_ha_support*', 'tests/test_control_ha_legacy_support.py', 'tests/test_ci_support_fixture.py', 'tests/fixtures/support*', '.github/workflows/ha02-native.yml']
+    paths: ['scripts/control_ha_*.py', 'scripts/ci_*.py', 'scripts/ci_python314_context.sh', 'provisioning/**', 'messenger/**', 'control/capture*', 'deploy/support-chat/**', 'tests/test_control_ha_support*', 'tests/test_control_ha_legacy_support.py', 'tests/test_ci_support_fixture.py', 'tests/test_owner_collector_capture.py', 'tests/fixtures/support*', 'tests/fixtures/owner_collector_sandbox.py', '.github/workflows/ha02-native.yml']
   pull_request:
-    paths: ['scripts/control_ha_*.py', 'scripts/ci_*.py', 'scripts/ci_python314_context.sh', 'provisioning/**', 'messenger/**', 'control/capture*', 'deploy/support-chat/**', 'tests/test_control_ha_support*', 'tests/test_control_ha_legacy_support.py', 'tests/test_ci_support_fixture.py', 'tests/fixtures/support*', '.github/workflows/ha02-native.yml']
+    paths: ['scripts/control_ha_*.py', 'scripts/ci_*.py', 'scripts/ci_python314_context.sh', 'provisioning/**', 'messenger/**', 'control/capture*', 'deploy/support-chat/**', 'tests/test_control_ha_support*', 'tests/test_control_ha_legacy_support.py', 'tests/test_ci_support_fixture.py', 'tests/test_owner_collector_capture.py', 'tests/fixtures/support*', 'tests/fixtures/owner_collector_sandbox.py', '.github/workflows/ha02-native.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -37,6 +37,8 @@ jobs:
         shell: bash
         run: |
           systemctl --user show --property=Version
+          sudo --preserve-env=LD_LIBRARY_PATH "$FC_TEST_SUPPORT_PYTHON" tests/fixtures/owner_collector_sandbox.py --output "$RUNNER_TEMP/collector-sandbox.json"
+          sudo chown "$(id -u):$(id -g)" "$RUNNER_TEMP/collector-sandbox.json"
           "$FC_TEST_SUPPORT_PYTHON" -m pytest -q tests/test_owner_collector_capture.py tests/test_support_collector.py tests/test_support_package.py
           "$FC_TEST_SUPPORT_PYTHON" -c 'import sys; assert sys.version_info[:2] == (3,14) and sys._is_gil_enabled()'
           "$FC_TEST_SUPPORT_PYTHON" -m pytest -q --tb=short --junitxml="$RUNNER_TEMP/support-native.xml" tests/test_control_ha_legacy_support.py tests/test_control_ha_support_quiesce.py tests/test_control_ha_support_exit.py tests/test_control_ha_support_replace.py tests/test_control_ha_support_witness.py tests/test_control_ha_support_terminal.py tests/test_control_ha_support_terminal_native.py tests/test_control_ha_support_handoff.py tests/test_support_runtime.py tests/test_package_support_capture.py messenger/tests/test_control_ha_mailbox_fence.py messenger/tests/test_control_ha_mailbox_links.py messenger/tests/test_control_ha_mailbox_startup.py tests/test_control_ha_support_entry.py tests/test_control_ha_support_resume.py tests/test_control_ha_mailbox_rollover.py messenger/tests/test_control_ha_mailbox_generation.py tests/test_control_ha_support_stopped.py 2>&1 | tee "$RUNNER_TEMP/support-native.log"
@@ -63,4 +65,5 @@ jobs:
             ${{ runner.temp }}/support-native.xml
             ${{ runner.temp }}/support-native.log
             ${{ runner.temp }}/support-native-receipt.json
+            ${{ runner.temp }}/collector-sandbox.json
           if-no-files-found: error
