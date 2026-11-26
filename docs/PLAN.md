@@ -15,6 +15,31 @@
 исполнитель панели, динамический serving set и каталог; завершить сквозную ONB-01..12.
 
 
+**CONTROL-HA-20261123 / HA-02 — coupled support result ACCEPTED; HA-02 IN_PROGRESS.**
+На26 November01:29UTC завершены общий resumable handoff, применимый CI на точном source SHA
+`57c19b1ccc5f97b650ed1e2382c40286bec7c950`, actual-root OWNER/NL1 qualification и рабочая установка/readback.
+Старый OWNER2022541: exit0/workers0, три complete/non-atomic census. Candidate v2 621009b8 установлен,
+PID3790078; NL1 PID3705 без рестарта, persistent closed-on-restart guard. Reservation/witness/open
+подтверждены независимо. Capture=false;7UNKNOWN,21 records и notification cursor4 сохранены.
+Terminal78 не выдаёт witness/open/capture/candidate и не запускает старый writer повторно.
+Reclosure/drain/invalidation до code-only recovery, потеря ответа/контроллера и рестарты квалифицированы;
+непустая очередь паузы проверена синтетически, реальная очередь пуста. Рабочий rollback не выполнялся.
+[Точные CI, установка, retained failures и безопасный recovery](releases/2026-11-26-control-ha-joint-support.md).
+
+**Один актуальный следующий результат:** доказанная готовность актуальных inputs и всех installed/manual/
+OWNER writers к coherent capture в существующем HA-02, с независимыми trust/custody/authorization/journal
+доказательствами и явным сохранением UNKNOWN до допустимого разрешения. Это следующая работа,
+не начатая автоматически после support migration; capture permit пока запрещён.
+Три прежних критерия остаются partial: (1) актуальные inputs и независимое доверие/полномочия/журнал;
+(2) installed schemas, все writers и coherent capture; (3) independent machine-loss custody и полный
+current-state post-ACK recovery. Isolated replication PASS. HA-03, DB cutover и data rollback не разрешаются
+этим checkpoint. FLEET-PRODUCTION-ONBOARDING-1 отдельно OPEN: VPS → IP/access/roles → штатный ввод →
+проверенный активный узел. Исторические разделы ниже не являются дополнительными NEXT.
+
+## Retained HA-02 checkpoint history (not active NEXTs)
+
+### Qualification checkpoint through26 November00:34UTC
+
 **CONTROL-HA-20261123 / HA-02 — one selected result, IN_PROGRESS.**
 Finish and install the coupled resumable OWNER ↔ NL1 handoff/reclosure/recovery after applicable
 exact-SHA CI and actual cross-host/root/service-UID qualification, then independently read back.
@@ -39,7 +64,6 @@ One remaining selected result: final exact-SHA applicable CI, guarded working in
 No reservation/legacy-controller bypass, HA-03, data restoration or paid-watch/deny relaxation.
 Same three HA-02 criteria remain partial; isolated replication PASS. Onboarding remains separately open.
 
-## Retained HA-02 checkpoint history (not active NEXTs)
 
 ### Selected-result checkpoint through25 November22:56UTC
 Finish the combined resumable OWNER ↔ NL1 handoff/reclosure/recovery and its applicable CI,

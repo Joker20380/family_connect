@@ -1,0 +1,133 @@
+{
+  "admission": "OPEN_LOCAL_ONLY",
+  "applicable_ci": [
+    {
+      "conclusion": "success",
+      "head_sha": "57c19b1ccc5f97b650ed1e2382c40286bec7c950",
+      "name": "HA-02 native support qualification",
+      "run_id": 45729728028,
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "head_sha": "57c19b1ccc5f97b650ed1e2382c40286bec7c950",
+      "name": "phase0",
+      "run_id": 45729728055,
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "head_sha": "57c19b1ccc5f97b650ed1e2382c40286bec7c950",
+      "name": "Linux control preview",
+      "run_id": 45729728141,
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "head_sha": "57c19b1ccc5f97b650ed1e2382c40286bec7c950",
+      "name": "Android Friends readiness wire contract",
+      "run_id": 45729728043,
+      "status": "completed"
+    }
+  ],
+  "candidate_pid": 3790078,
+  "candidate_sha256": "621009b8df9baffb81e0d9069cfa52b3781e7dd7bf4e435dd89740e38cae5739",
+  "capture_permitted": false,
+  "census": [
+    {
+      "atomic": false,
+      "complete": true,
+      "counts": {
+        "native": 1,
+        "owners": 6,
+        "python": 1
+      },
+      "errors": [],
+      "last_completed_step": "owned-native-tasks-reaped",
+      "native_without_known_owner": [],
+      "native_without_python": [],
+      "phase": "before-persistence",
+      "python_without_native": []
+    },
+    {
+      "atomic": false,
+      "complete": true,
+      "counts": {
+        "native": 1,
+        "owners": 6,
+        "python": 1
+      },
+      "errors": [],
+      "last_completed_step": "persistence-workers-joined",
+      "native_without_known_owner": [],
+      "native_without_python": [],
+      "phase": "after-persistence",
+      "python_without_native": []
+    },
+    {
+      "atomic": false,
+      "complete": true,
+      "counts": {
+        "native": 1,
+        "owners": 6,
+        "python": 1
+      },
+      "errors": [],
+      "last_completed_step": "socket-parent-synced",
+      "native_without_known_owner": [],
+      "native_without_python": [],
+      "phase": "before-exit",
+      "python_without_native": []
+    }
+  ],
+  "elapsed_entered_to_ready_seconds": 256.81029057502747,
+  "evidence_kind": "sanitized installation manifest; raw operational receipts remain private",
+  "handoff_receipts": {
+    "accepted": "9a7a60816d014cf487d724baf26775c3f1725f9940f857b5ba16cf3d91a4806a",
+    "handoff-open": "8ae371e13d74106ee66071a751e63db69e4084fb9d876ac041ac6676c709956a",
+    "handoff-reserved": "b680f858276e5ed2821e48789e513f80e5e44478d1981b0aecc4ed0731978c8c",
+    "handoff-witness": "dcc73f1b7fbb7377c6a49d767baaeeffd753d71ad0d4c5b3405c9de413036f78",
+    "old-exited": "43c98b0acc51a62450daa76f848472b9c9427618c07a872f5738ad377d5ff52b"
+  },
+  "history": {
+    "active_historical_attempts": 0,
+    "capture_permitted": false,
+    "current_records": 21,
+    "current_status_counts": {
+      "incoming:received": 5,
+      "outgoing:recipient_stored": 2,
+      "outgoing:relayed": 5
+    },
+    "external_settlement_proven": false,
+    "historical_unknown_preserved": 7,
+    "notification_cursor": 4,
+    "notification_history_preserved": true,
+    "notification_jobs": 0
+  },
+  "independent_readback_sha256": "19b9735594a5301c56960275ead8fe85054a6e3949e35461d48537b307bf0f62",
+  "mailbox_pid": 3705,
+  "nl1_operational_limits": {
+    "control_deadline_seconds": 5,
+    "cpu_quota_percent": 100,
+    "mailbox_restarted": false,
+    "memory_max_mib": 768,
+    "previous_cpu_quota_percent": 25,
+    "previous_memory_max_mib": 512
+  },
+  "observed_utc": "2026-11-26T01:29:31.574786+00:00",
+  "old_exit_code": 0,
+  "old_pid": 2022541,
+  "old_workers": 0,
+  "qualification_limits": {
+    "fleet_production_onboarding_complete": false,
+    "historical_workers_remain_cause": "UNPROVEN",
+    "nonempty_notification_queue_preservation": "qualified with synthetic identities",
+    "production_recovery_exercised": false,
+    "root_cross_host_synthetic_recovery_pass": true,
+    "whole_ha02_complete": false,
+    "working_notification_jobs_after": 0,
+    "working_notification_jobs_before": 0
+  },
+  "result": "WORKING_HANDOFF_ACCEPTED",
+  "source_sha": "57c19b1ccc5f97b650ed1e2382c40286bec7c950"
+}
