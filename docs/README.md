@@ -1,6 +1,6 @@
 # Documentation
 
-[HA-02 joint support checkpoint: v2 lifecycle, resumable handoff/reclosure/recovery, actual-root qualification; CI and working installation remain open](releases/2026-11-26-control-ha-joint-support.md).
+[CONTROL-HA · 26 November01:29UTC: working OWNER/NL1 support handoff accepted, exact57c19b1c CI PASS, v2 installed/read back; recovery qualified, capture denied, broader HA-02/onboarding open](releases/2026-11-26-control-ha-joint-support.md).
 
 [CONTROL-HA · 25 November21:59UTC: shutdown/terminal correction and CI stabilization; historical WORKERS_REMAIN cause unproven, shared handoff and working installation incomplete](releases/2026-11-25-control-ha-support-stabilization.md).
 

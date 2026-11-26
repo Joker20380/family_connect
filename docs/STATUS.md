@@ -1,5 +1,28 @@
 # Текущее состояние / Current state
 
+**26 November01:29UTC — рабочий OWNER ↔ NL1 support handoff принят независимым readback.**
+Исполняемый source/CI SHA `57c19b1ccc5f97b650ed1e2382c40286bec7c950`: все четыре применимых
+workflow PASS, включая CPython3.14/GIL native275 PASS/0 skips. Старый OWNER2022541 штатно
+завершился с exit0, workers0; три полных non-atomic census содержат только main, без расхождений.
+Установлен отдельный v2 archive621009b8, candidate PID3790078; NL1 PID3705 не перезапускался.
+Reservation/witness аутентифицированно потреблён, admission=OPEN_LOCAL_ONLY, capture=false.
+Сохранены21 records,7 исторических UNKNOWN, notification cursor4; рабочая очередь была и остаётся пустой.
+[Приёмка, CI, rollback и пределы доказательств](releases/2026-11-26-control-ha-joint-support.md).
+Историческая причина WORKERS_REMAIN не доказана; controlled native-tail/join-start исправления
+не выдаются за её восстановление. Необратимый отказ фиксируется как terminal78, не вечный waiting75.
+Перед handoff два отказа NL1 deadline сохранены; ограниченные ресурсы mailbox увеличены с25% CPU/512MiB
+до100% CPU/768MiB при проверенном запасе RAM, без рестарта и увеличения5s deadline. Старые планы сохранены.
+Совместные interruption/reclosure/recovery и pause с непустой очередью квалифицированы на изолированных
+actual-root OWNER/NL1 identities; рабочий rollback не выполнялся, текущие данные не откатывались.
+Выбранная миграция support завершена; три прежних критерия HA-02 остаются partial, isolated replication PASS.
+Единственный следующий результат: доказанная готовность актуальных inputs/all writers к coherent capture
+в существующем HA-02, без обхода UNKNOWN/authorization gates. Он в этой сессии не начат.
+FLEET-PRODUCTION-ONBOARDING-1 остаётся OPEN; HA-03/public release/catalog/signing не выполнялись.
+
+Feature docs checkpoint `ede03b9f4f27a38747fad42ef412515850b22575` pushed/remote-SHA verified; tested/installed source remains57c19b1c. Main is documentation-only.
+
+## Previous working queue — history, not an active NEXT
+
 **26 November00:22UTC — root OWNER ↔ NL1 joint qualification PASS; working namespace/wakeup qualified.**
 Exact9a1a5509 native CI45726816731 PASS; other applicable checks still pending, not accepted as PASS.
 Working NL1 read-only probe proves main-loop scheduling delay54.483s. A PID/start-bound, caught-handler
