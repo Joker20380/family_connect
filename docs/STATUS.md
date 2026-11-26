@@ -9,6 +9,8 @@ custody не ограничена USB и не блокирует engineering.
 Direct-ORM guard подготовлен, НЕ установлен:382 panel +329 OWNER/gate checks PASS;
 native image activation/revert PASS, два source-only candidates. Exact-source CI ещё требуется.
 Текущие support bindings и cursor/queue повторно проверены; рабочие контейнеры не изменены.
+Root collectors gate также подготовлен:69 focused/native-package и6 actual-root PASS;
+bindings/notifications CLI и direct API покрыты исходниками, установка ещё не заявлена.
 
 **26 November18:52UTC — real stopped-support snapshot verified; linked resume complete.**
 Joker назначен HA signer/хранителем independent pins/floors; NL2 parent

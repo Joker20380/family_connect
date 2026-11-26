@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 MESSENGER = ('__init__', 'chat', 'codec', 'delivery', 'mailbox', 'notices', 'routed',
              'store', 'subscription_view', 'support')
 PROVISIONING = ('__init__', 'chat_transport', 'chat_bridge_protocol', 'support_worker', 'support_capture', 'support_lifecycle', 'support_runtime', 'support_bindings', 'support_identity',
-                'subscription_notifications', 'subscription_collector')
+                'subscription_notifications', 'subscription_collector', 'owner_capture')
 UNITS = ('family-connect-support.service', 'family-connect-support-bindings.service',
          'family-connect-support-bindings.timer', 'family-connect-subscription-notifications.service',
          'family-connect-subscription-notifications.timer')

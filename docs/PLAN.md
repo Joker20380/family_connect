@@ -35,6 +35,8 @@ OWNER gate пока НЕ установлен; последний source census2
 Direct-ORM source checkpoint квалифицирован локально:382 panel/329 OWNER-gate tests,
 native image activation/revert PASS. Новые12-file candidates не установлены; exact-source
 CI, установленное закрытие остальных writer paths и общий интервал остаются в этом же NEXT.
+Root collector source gate квалифицирован69 focused/native-package +6 actual-root;
+ещё требуется bounded installation/readback обоих oneshots и их manual API.
 [Принятый компонент и ограничения](releases/2026-11-26-control-ha-stopped-support.md).
 
 Joker назначен HA signer/хранителем независимого реестра pins/floors; ciphertext destination

@@ -70,3 +70,24 @@ Ten current unit/effective-settings records were durably preserved before any ch
 systemd reports NeedDaemonReload; both collector units/timers are byte-identical to
 their retained prestate. Support has the expected later linked-resume drop-in; no
 blind daemon-reload or service restart was performed by this checkpoint.
+
+## Root collector admission source checkpoint
+
+`provisioning.owner_capture` guards the root binding projection collector and the
+subscription collector before cursor IPC/SSH/file replacement. The direct `collect()`
+API is guarded as well as the CLI. Once installed, the root-owned fixed gate at
+`/var/lib/family-connect/capture/owner-collectors` is discovered without relying on
+inherited environment; a conflicting override refuses. Nested work shares one live
+process/thread-bound context; stale context refuses. Existing output stays untouched
+on closed admission. Failed/disappeared admitted work keeps UNKNOWN and cannot drain.
+
+69 focused collector/closed-package/gate tests PASS with the native archive check
+enabled;6 additional actual-root collector cases PASS. The prior run with one skipped
+archive check is not substituted for this complete result. The commissioning kit
+includes the new module, and native CI explicitly exercises collector/package tests.
+Installed readback found both current collector modules equal to their preceding
+source; neither `owner_capture.py` nor `control/capture_gate.py` exists in that app yet.
+This source checkpoint alone does not claim an installed collector or all-writer gate.
+The bounded installation must preserve originals, wait for existing oneshots, verify
+new source bindings and closed behavior, restore only its own timer holds, then check
+normal oneshot completion. No support archive/authority changes are required.

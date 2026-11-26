@@ -10,12 +10,14 @@ import subprocess
 import tempfile
 import time
 from control.friends.pseudonyms import unseal
+from provisioning.owner_capture import admitted
 
 
 def limit_output():
     resource.setrlimit(resource.RLIMIT_FSIZE, (512 * 1024 + 1, 512 * 1024 + 1))
 
 
+@admitted
 def collect(host, key, known_hosts, output, *, command='support-bindings'):
     host = str(ipaddress.IPv4Address(host))
     for path in (key, known_hosts):

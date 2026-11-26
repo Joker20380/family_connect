@@ -6,6 +6,7 @@ import re
 import socket
 
 from provisioning.support_bindings import collect
+from provisioning.owner_capture import operation
 
 
 def command(path):
@@ -33,7 +34,8 @@ def main():
         parser.add_argument('--'+name, required=True, type=Path)
     args = parser.parse_args()
     try:
-        collect(args.host, args.key, args.known_hosts, args.output, command=command(args.socket))
+        with operation():
+            collect(args.host, args.key, args.known_hosts, args.output, command=command(args.socket))
     except Exception:
         parser.exit(1, 'Subscription source unavailable; checkpoint and queue retained.\n')
 
