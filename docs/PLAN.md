@@ -15,8 +15,43 @@
 исполнитель панели, динамический serving set и каталог; завершить сквозную ONB-01..12.
 
 
+**CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
+**Один NEXT:** установить и независимо проверить OWNER/all-writer barrier, затем получить
+один свежий общий RU/NL1/NL2/OWNER capture → independent verify → normal resume.
+После принятого комплекта — source-host-free isolated restore с current/post-ACK/stale-state checks.
+Console/publisher, services/timers, CLI/manual/direct-ORM и dispatchers входят в обязательный охват.
+Повторный drain работающего lifetime support writer не выполняется; Gate.drain не ослабляется.
+
+Владелец принял stopped-support stop/capture/forward-resume как завершённый компонент
+в заявленном scope. e4eace1a… остаётся историческим sensitive local snapshot, НЕ свежим
+fleet kit: общий цикл требует нового снимка внутри доказанного порядком действий и
+состояниями всех участников интервала. UNKNOWN, markers, очереди/cursor и floors сохраняются.
+Последний independently observed runtime: OWNER PID1051719, authority04fb7553…,
+linked operation ha02-forward-20261126-stop01/source2f4f83dd, generation0b21197a…;
+NL1 PID3705,100%CPU/768MiB. Эти pins — observation, не разрешение будущему процессу.
+Support/IPC working; notifications timer-driven18:58:46–47UTC success/0,
+timer enabled/active/waiting. Перед изменениями необходим свежий runtime readback.
+OWNER gate пока НЕ установлен; последний source census2/10 в console/publisher.
+[Принятый компонент и ограничения](releases/2026-11-26-control-ha-stopped-support.md).
+
+Joker назначен HA signer/хранителем независимого реестра pins/floors; ciphertext destination
+NL2 `/opt/apps/family_connect/ha-recovery/`. Эти решения не открываются повторно и не
+утверждают ещё не созданный checkpoint. На OWNER есть программа-сейф: название, внешняя
+копия и проверенное восстановление после потери ноутбука уточняются без чтения секретов.
+Допустимая custody не ограничена USB; каталог на OWNER сам по себе не независим.
+Ключ HA не создан; off-origin custody не подтверждена. Это не блокирует engineering.
+[Текущий all-writer checkpoint](releases/2026-11-26-control-ha-owner-all-writer.md).
+
+Isolated replication PASS; остальные три прежних HA-02 критерия partial:
+current inputs/trust/journal, installed all-writer coherent capture, independent full recovery.
+WORKERS_REMAIN UNPROVEN с прежними evidence. HA-03 не начат; onboarding остаётся OPEN.
+
+## 26 November component/resume observations — history only
+
+Ниже сохранены прежние observation pins, не действующие разрешения или дополнительные NEXT.
+
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS; продолжение после обрыва26 ноября.**
-**Один NEXT:** один актуальный coherent encrypted capture RU/NL1/NL2/OWNER, независимый reader
+**Тогдашний NEXT (история):** один актуальный coherent encrypted capture RU/NL1/NL2/OWNER, независимый reader
 точных bytes/полноты/связей и штатное возобновление всех участников; после принятия — полный
 isolated machine-loss restore с current/post-ACK/stale-state проверкой. Инвентаризация промежуточна.
 18:52UTC: actual stopped-support component e4eace1a… independently verified,86 entries/494713 bytes,

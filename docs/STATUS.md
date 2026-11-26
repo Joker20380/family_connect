@@ -1,5 +1,12 @@
 # Текущее состояние / Current state
 
+**HA-02 continuation:** stopped-support принят владельцем в заявленном scope.
+Ближайший результат — установленный OWNER/all-writer barrier, затем свежий общий
+capture → independent verify → normal resume; e4eace1a — только история.
+Программа-сейф на OWNER: уточняются название, off-laptop copy и laptop-loss recovery;
+custody не ограничена USB и не блокирует engineering.
+[Текущий checkpoint](releases/2026-11-26-control-ha-owner-all-writer.md).
+
 **26 November18:52UTC — real stopped-support snapshot verified; linked resume complete.**
 Joker назначен HA signer/хранителем independent pins/floors; NL2 parent
 `/opt/apps/family_connect/ha-recovery/` выбран для ciphertext. Это не одобрение checkpoint.
