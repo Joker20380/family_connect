@@ -42,6 +42,7 @@ def system_service(request):
     initialize = ('import sys;from pathlib import Path;sys.path.insert(0,sys.argv[1]);'
                   'from messenger.store import Store;root=Path(sys.argv[2]);'
                   'store=Store(root/"store",b"s"*32,create=True);'
+                  'store.chat_identity().to_file(str(root/"sender.identity"));'
                   'print(store.chat_identity().get_public_key().hex());store.close();'
                   '(root/"key").write_bytes(b"s"*32);(root/"key").chmod(0o600)')
     public = subprocess.check_output([interpreter, '-I', '-c', initialize, str(source), str(data)],

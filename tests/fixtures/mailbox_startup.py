@@ -24,7 +24,7 @@ root, manifest, allowed = Path(root), Path(manifest), Path(allowed)
 if os.environ.get('FC_TEST_PTRACER_ANY') == '1':
     assert ctypes.CDLL(None, use_errno=True).prctl(0x59616d61, ctypes.c_ulong(-1), 0, 0, 0) == 0
 os.umask(0o077)
-startup = Startup(manifest, owner_uid=int(owner_uid))
+startup = Startup(manifest, owner_uid=int(owner_uid), fixture=os.environ.get('FC_TEST_ROOT_HANDOFF') == '1')
 bootstrap.ACTIVE = startup
 publics = [bytes.fromhex(value) for value in json.loads(allowed.read_text())]
 with socket.socket() as reservation:

@@ -6,6 +6,7 @@ import shutil
 import signal
 import subprocess
 import sys
+import threading
 import time
 import uuid
 
@@ -73,6 +74,10 @@ def service(tmp_path, installed, request):
         (root / 'plan.json').write_text(json.dumps(plan))
         yield manager, plan, root, data
     finally:
+        if 'root' in locals():
+            for name in ('candidate-wait-observed', 'rollback-intent', 'terminal-failure'):
+                if (root / (name + '.json')).exists():
+                    print('BOUNDED_REPLACEMENT_DIAGNOSTIC ' + json.dumps(read(root / (name + '.json'))), flush=True)
         (data / 'release').touch()
         manager.call('stop', '--no-block', unit)
         deadline = time.monotonic() + 5
@@ -103,6 +108,43 @@ def test_handoff_candidate_restart_cannot_reuse_process_start_authority(service)
     assert not (root / 'rollback-intent.json').exists()
     assert all((Path(plan['gate']) / 'pending' / name).exists() for name in plan['pending'])
     assert eventually(root, recover=True) == 'ROLLED_BACK'
+
+
+@pytest.mark.parametrize('service', [True], indirect=True)
+def test_start_authority_waits_for_controlled_exec_boundary(service):
+    manager, plan, root, data = service
+    barrier = data / 'exec-barrier'
+    os.mkfifo(barrier, 0o600)
+    config = root / 'support.conf'
+    config.write_bytes(config.read_bytes().replace(b'support_ptracer.py ',
+        ('support_ptracer.py --barrier ' + str(barrier) + ' ').encode()))
+    plan['dropin_sha256'] = replace.digest(config)
+    (root / 'plan.json').write_text(json.dumps(plan))
+    errors = []
+    def release_exec():
+        try:
+            wait_for(lambda: barrier.with_name(barrier.name + '.entered').exists())
+            wait_for(lambda: (root / 'candidate-wait-observed.json').exists())
+            assert read(root / 'candidate-wait-observed.json')['reason'] == 'LIVE_COMMAND_MISMATCH'
+            assert not Path(plan['start_authority']).exists()
+            assert not (root / 'rollback-intent.json').exists()
+            descriptor = os.open(barrier, os.O_WRONLY | os.O_NONBLOCK)
+            try:
+                assert os.write(descriptor, b'1') == 1
+            finally:
+                os.close(descriptor)
+        except BaseException as error:
+            errors.append(error)
+    release = threading.Thread(target=release_exec)
+    release.start()
+    try:
+        assert eventually(root) == 'ACCEPTED'
+        release.join(5)
+        assert not release.is_alive() and not errors
+        assert read(Path(plan['start_authority']))['binding']['command'] == replace.admission.binding(
+            int(manager.state()['MainPID']))['command']
+    finally:
+        release.join(5)
 
 
 def test_actual_systemd_install_and_code_only_rollback_preserve_uncertainty(service):

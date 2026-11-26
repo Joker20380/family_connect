@@ -40,6 +40,7 @@ def create_node(root, node, issuer):
     material = root / 'profile'
     material.mkdir(mode=0o750)
     os.chown(material, 0, 41003)
+    material.chmod(0o750)
     control = root / 'control'
     control.mkdir(mode=0o700)
     operations = control / 'operations'

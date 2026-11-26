@@ -22,6 +22,19 @@ OLD_BINDING = dict(pid=123, start='10', boot='00000000-0000-0000-0000-0000000000
                    command='e' * 64, cgroup='f' * 64)
 
 
+def test_root_fixture_authority_requires_exact_lab_path_and_service_cgroup():
+    unit = 'fc-ha-mailbox-handoff-fixture-' + 'a' * 32 + '.service'
+    manifest = bootstrap.Path('/opt/apps/family_connect/state-ha02') / unit.removesuffix('.service') / 'manifest.json'
+    assert bootstrap.fixture_scope(manifest, unit)
+    assert not bootstrap.fixture_scope(manifest, 'family-connect-mailbox.service')
+    assert not bootstrap.fixture_scope('/tmp/manifest.json', unit)
+    assert not bootstrap.fixture_scope(manifest.with_name('other.json'), unit)
+    with pytest.raises(ValueError, match='ROOT_FIXTURE_SCOPE'):
+        bootstrap.Startup(manifest, owner_uid=0, fixture=True)
+    with pytest.raises(ValueError, match='ROOT_FIXTURE_SCOPE'):
+        bootstrap.Startup('/tmp/manifest.json', owner_uid=0, fixture=True)
+
+
 def write(path, value):
     path.write_text(json.dumps(value))
     path.chmod(0o600)

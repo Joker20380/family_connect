@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+**26 November00:07UTC — actual root OWNER ↔ NL1 synthetic joint procedure PASS; working installation pending.**
+The coupled executor completes authenticated handoff/open, selected-identity pause, mailbox restart,
+reclosure and code-only recovery across actual fc-support/fc-mailbox UIDs using the existing pinned SSH
+channel. Queue/cursor, current data, reservation and UNKNOWN are preserved; capture remains forbidden.
+Working OWNER2022541 and NL13705 remain unchanged/0 restarts. Authorized NL1 manager reload at00:03UTC
+cleared a stale reload flag after exact loaded/configured equivalence checks; no service restart or config delta.
+Exactc4cc510f Linux-control PASS; native and Docker FAIL. Bounded diagnostics expose a root-umask
+profile-directory defect and a separate controlled Type=simple pre-exec authority race; both corrected,
+assertions unchanged. New exact-SHA CI and guarded working installation/readback remain the one next result.
+[Current evidence and remaining gates](releases/2026-11-26-control-ha-joint-support.md).
+
+## Earlier qualification checkpoint — history
+
 **25 November23:36UTC — joint v2 native qualification PASS; working acceptance remains open.**
 [Coupled procedure, controlled causes, exact CI and installed state](releases/2026-11-26-control-ha-joint-support.md).
 42 joint/native runtime tests PASS/0 skips on v2; actual-root/fc-support5 PASS with working OWNER unchanged.

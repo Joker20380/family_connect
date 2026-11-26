@@ -2,6 +2,7 @@
 import argparse
 import json
 import os
+import pwd
 from pathlib import Path
 import secrets
 import re
@@ -25,19 +26,26 @@ class SSHMailbox:
     def __init__(self, path):
         admission.require(os.geteuid() == 0, 'ROOT_HANDOFF_REQUIRED')
         value = json.loads(owned(path, 0), object_pairs_hook=unique)
-        admission.require(set(value) == {'host', 'interpreter', 'entry', 'plan'} and
+        admission.require(set(value) == {'host', 'interpreter', 'entry', 'plan', 'local_uid'} and
                           value['host'] == 'root@185.10.158.212', 'NL1_CHANNEL_SCOPE')
+        admission.require(type(value['local_uid']) is int and value['local_uid'] >= 0, 'NL1_TRANSPORT_UID')
+        account = pwd.getpwuid(value['local_uid'])
+        environment = dict(PATH='/usr/bin:/bin', HOME=account.pw_dir, USER=account.pw_name, LOGNAME=account.pw_name)
+        if 'SSH_AUTH_SOCK' in os.environ:
+            environment['SSH_AUTH_SOCK'] = os.environ['SSH_AUTH_SOCK']
+        self.transport = dict(user=account.pw_uid, group=account.pw_gid, extra_groups=[], env=environment)
         for name in ('entry', 'plan', 'interpreter'):
             path = Path(value[name])
             admission.require(path.is_absolute() and '..' not in path.parts and
                               str(path).startswith('/opt/apps/family_connect/'), 'NL1_PATH_SCOPE')
-        self.command = ['ssh', '-oBatchMode=yes', '-oStrictHostKeyChecking=yes', value['host'],
+        self.command = ['/usr/bin/ssh', '-oBatchMode=yes', '-oStrictHostKeyChecking=yes', value['host'],
                         shlex.join([value['interpreter'], '-I', '-B', value['entry'], '--plan', value['plan']])]
 
     def call(self, action, payload=None):
         nonce = secrets.token_hex(32)
         value = dict(action=action, nonce=nonce, payload=payload)
-        result = subprocess.run(self.command, input=encoded(value), capture_output=True, timeout=20)
+        result = subprocess.run(self.command, input=encoded(value), capture_output=True, timeout=20,
+                                **getattr(self, 'transport', {}))
         if result.returncode not in (0, 75, 78) or not result.stdout:
             raise ConnectionError('NL1_RESPONSE_UNKNOWN')
         admission.require(len(result.stdout) <= 65536, 'NL1_RESPONSE_SIZE')

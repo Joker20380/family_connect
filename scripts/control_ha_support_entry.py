@@ -3,6 +3,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import re
 import runpy
 import stat
 import sys
@@ -54,5 +55,9 @@ def main():
 if __name__ == '__main__':
     try:
         main()
-    except Exception:
+    except Exception as error:
+        reason = str(error)
+        print(json.dumps(dict(result='START_AUTHORITY_REFUSED', capture_permitted=False,
+              reason=reason if re.fullmatch('[A-Z][A-Z0-9_]{1,80}', reason) else type(error).__name__)),
+              file=sys.stderr, flush=True)
         raise SystemExit(78) from None

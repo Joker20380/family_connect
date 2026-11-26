@@ -1,4 +1,5 @@
 import io
+import os
 from pathlib import Path
 import tarfile
 
@@ -48,3 +49,27 @@ def test_privileged_runtime_probes_use_the_root_owned_gil_interpreter():
     from scripts.ci_pytest_context import context
     for name in ('tests/test_capture_launch.py', 'tests/test_capture_renewal_state.py'):
         assert context(name + '::test_native') == 'native314'
+
+
+def test_native_profile_parent_mode_is_independent_of_restrictive_caller_umask(tmp_path, monkeypatch):
+    from scripts.control_ha_receiver_fixture import artifacts_for_receivers
+    from scripts.control_ha_sqlite_fixture import joint_fixture
+    fixture_root = tmp_path / 'source'
+    fixture_root.mkdir()
+    issuer = artifacts_for_receivers(joint_fixture(fixture_root))['issuer_material']
+    ownership = []
+    monkeypatch.setattr(capture.os, 'chown', lambda path, uid, gid: ownership.append((Path(path), uid, gid)))
+    class Checked(Exception):
+        pass
+    def validate_parent(path):
+        parent = path.parent.parent / 'profile'
+        assert parent.stat().st_mode & 0o777 == 0o750
+        assert (parent, 0, 41003) in ownership
+        raise Checked()
+    monkeypatch.setattr(capture.profile_store.Locator, 'load', validate_parent)
+    previous = os.umask(0o077)
+    try:
+        with pytest.raises(Checked):
+            capture.create_node(tmp_path / 'native', 'nl-amsterdam-1', issuer)
+    finally:
+        os.umask(previous)

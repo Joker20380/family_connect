@@ -24,6 +24,12 @@ CREATION = threading.RLock()
 ACTIVE = None
 
 
+def fixture_scope(manifest, unit):
+    return (re.fullmatch('fc-ha-mailbox-handoff-fixture-[0-9a-f]{32}\\.service', unit) is not None and
+            Path(manifest).absolute() == Path('/opt/apps/family_connect/state-ha02') /
+            unit.removesuffix('.service') / 'manifest.json')
+
+
 def unique(pairs):
     result = {}
     for key, value in pairs:
@@ -72,9 +78,16 @@ class PersistentLinkFence(SupportLinkFence):
 
 
 class Startup:
-    def __init__(self, manifest, *, owner_uid=0):
+    def __init__(self, manifest, *, owner_uid=0, fixture=False):
         self.path = Path(manifest).absolute()
         self.owner_uid = owner_uid
+        self.fixture = owner_uid != 0
+        if fixture:
+            unit = self.path.parent.name + '.service'
+            admission.require(owner_uid == 0 and fixture_scope(self.path, unit) and
+                              any(line.rsplit('/', 1)[-1] == unit for line in
+                                  Path('/proc/self/cgroup').read_text().splitlines()), 'ROOT_FIXTURE_SCOPE')
+            self.fixture = True
         raw = owned(self.path, owner_uid)
         self.manifest = json.loads(raw, object_pairs_hook=unique)
         admission.require(type(self.manifest) is dict and set(self.manifest) ==
@@ -221,7 +234,7 @@ class Startup:
                               witness.get('rollback_requires_mailbox_reclosure') is True and
                               witness.get('opening_permitted') is False and witness.get('capture_permitted') is False,
                               'OWNER_EXIT_WITNESS')
-            admission.require(witness.get('fixture') is (self.owner_uid != 0) and
+            admission.require(witness.get('fixture') is self.fixture and
                               witness.get('controller_uid') == self.owner_uid, 'WITNESS_AUTHORITY')
             admission.require(witness.get('ticket_sha256') == sha(ticket) and
                               witness.get('plan_sha256') == ticket['replacement_plan_sha256'] and

@@ -36,6 +36,23 @@ def test_joint_supervisor_retains_unit_accounting_and_terminal_stop():
         handoff.supervisor_unit(plan, '/opt/support/bin/python', '/root/channel\nInjected=true')
 
 
+def test_root_controller_uses_existing_owner_ssh_custody_without_copying_keys(monkeypatch):
+    account = handoff.pwd.getpwuid(os.getuid())
+    value = dict(host='root@185.10.158.212', local_uid=account.pw_uid,
+                 interpreter='/opt/apps/family_connect/venv/bin/python',
+                 entry='/opt/apps/family_connect/handoff/entry.py', plan='/opt/apps/family_connect/handoff/plan.json')
+    monkeypatch.setattr(handoff.os, 'geteuid', lambda: 0)
+    monkeypatch.setattr(handoff, 'owned', lambda *args: encoded(value))
+    channel = handoff.SSHMailbox('/root/channel.json')
+    assert channel.transport['user'] == account.pw_uid and channel.transport['group'] == account.pw_gid
+    assert channel.transport['extra_groups'] == [] and channel.transport['env']['HOME'] == account.pw_dir
+    assert '-oStrictHostKeyChecking=yes' in channel.command and '-oBatchMode=yes' in channel.command
+    assert not any('IdentityFile' in item or 'StrictHostKeyChecking=no' in item for item in channel.command)
+    value['local_uid'] = True
+    with pytest.raises(ValueError, match='NL1_TRANSPORT_UID'):
+        handoff.SSHMailbox('/root/channel.json')
+
+
 class Mailbox:
     def __init__(self, root, plan):
         self.root, self.plan = root, plan
@@ -122,6 +139,7 @@ def notice_snapshot(data, pid, *, seed=False):
              '"status":value["job"]["status"],"cursor":value["cursor"]["cursor"]}\n'
              f' Path({str(output)!r}).write_text(json.dumps(result))\n')
     probe.write_text(code)
+    probe.chmod(0o644)
     sys.remote_exec(pid, str(probe))
     wait_for(output.exists)
     return read(output)

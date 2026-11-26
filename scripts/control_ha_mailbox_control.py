@@ -11,7 +11,7 @@ import sys
 import time
 
 from scripts import control_ha_legacy_support as admission
-from scripts.control_ha_mailbox_startup import encoded, owned, unique
+from scripts.control_ha_mailbox_startup import encoded, fixture_scope, owned, unique
 
 
 def sha(path):
@@ -26,10 +26,12 @@ class MailboxControl:
                     'interpreter_sha256', 'runtime', 'uid', 'gid'}
         admission.require(set(self.plan) == expected and self.plan['schema'] == 1, 'MAILBOX_CONTROL_PLAN')
         unit = self.plan['unit']
+        fixture = (fixture_scope(self.plan['manifest'], unit) and
+                   Path(plan).absolute() == Path(self.plan['manifest']).with_name('control.json'))
         admission.require((self.plan['user'] is True and self.owner != 0 and
                            re.fullmatch('fc-ha-mailbox-handoff-test-[0-9a-f]{32}\\.service', unit)) or
                           (self.plan['user'] is False and self.owner == 0 and
-                           unit == 'family-connect-mailbox.service'), 'MAILBOX_CONTROL_SCOPE')
+                           (unit == 'family-connect-mailbox.service' or fixture)), 'MAILBOX_CONTROL_SCOPE')
         self.command = ['systemctl', *(['--user'] if self.plan['user'] else [])]
         self.runtime = Path(self.plan['runtime'])
 
@@ -43,6 +45,8 @@ class MailboxControl:
         raw = subprocess.check_output([*self.command, 'show', self.plan['unit'],
                                        '--property=' + ','.join(fields)], text=True, timeout=10)
         state = dict(line.split('=', 1) for line in raw.splitlines())
+        self.observed_state = {key: state.get(key, '')[:128] for key in
+                               ('MainPID', 'ControlPID', 'ActiveState', 'SubState', 'NeedDaemonReload')}
         admission.require(set(state) == set(fields) and state['MainPID'] not in ('', '0') and
                           state['ControlPID'] == '0' and state['ActiveState'] == 'active' and
                           state['SubState'] == 'running' and state['NeedDaemonReload'] == 'no', 'MAILBOX_UNIT_NOT_LIVE')
@@ -51,6 +55,8 @@ class MailboxControl:
         commands = re.findall(r'argv\[\]=(.*?) ; ignore_errors=', state['ExecStart'])
         admission.require(commands == [' '.join(self.plan['restart_argv'])], 'MAILBOX_RESTART_COMMAND')
         process = admission.binding(int(state['MainPID']))
+        admission.require(os.readlink(Path('/proc') / state['MainPID'] / 'exe') == self.plan['interpreter'],
+                          'MAILBOX_EXECUTABLE_CHANGED')
         arguments = [os.fsdecode(value) for value in admission.read(
             Path('/proc') / state['MainPID'] / 'cmdline').split(b'\0') if value]
         admission.require(arguments in (self.plan['argv'], self.plan['restart_argv']), 'MAILBOX_GUARDED_COMMAND')
@@ -138,14 +144,17 @@ def main():
     raw = sys.stdin.buffer.read(65537)
     admission.require(len(raw) <= 65536, 'MAILBOX_REQUEST_TOO_LARGE')
     value = json.loads(raw, object_pairs_hook=unique)
+    controller = None
     try:
-        result = MailboxControl(args.plan).call(value)
+        controller = MailboxControl(args.plan)
+        result = controller.call(value)
     except ValueError as error:
         reason = str(error)
         reason = reason if re.fullmatch('[A-Z][A-Z0-9_]{1,80}', reason) else type(error).__name__
         waiting = reason in ('MAILBOX_PROBE_UNAVAILABLE', 'MAILBOX_RESPONSE_UNKNOWN', 'MAILBOX_READBACK_CHANGED')
         print(encoded(dict(nonce=value['nonce'], controller_uid=os.geteuid(), result='REFUSED',
-                           reason=reason, incomplete=True, retryable=waiting)).decode())
+                           reason=reason, incomplete=True, retryable=waiting,
+                           state=getattr(controller, 'observed_state', {}))).decode())
         raise SystemExit(75 if waiting else 78) from None
     print(encoded(result).decode())
 

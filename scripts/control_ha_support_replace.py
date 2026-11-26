@@ -597,14 +597,17 @@ class Replacement:
                     empty(state, self.plan['before']['ControlGroup'])
                     self.record('candidate-start-intent')
                     self.manager.call('start', self.manager.unit)
-                if self.plan.get('handoff'):
-                    self.admit_candidate()
                 deadline = time.monotonic() + 5
                 while True:
                     try:
+                        if self.plan.get('handoff'):
+                            self.admit_candidate()
                         bound = self.verify(self.validate())
                         break
-                    except (OSError, ValueError):
+                    except (OSError, ValueError) as error:
+                        reason = str(error)
+                        self.record('candidate-wait-observed', capture_permitted=False,
+                                    reason=reason if re.fullmatch('[A-Z][A-Z0-9_]{1,80}', reason) else type(error).__name__)
                         if time.monotonic() >= deadline:
                             raise
                         time.sleep(.05)
@@ -612,7 +615,9 @@ class Replacement:
                             data_restored=False, legacy_uncertainty_preserved=True, capture_permitted=False)
                 return 'ACCEPTED'
             except Exception as error:
-                self.record('rollback-intent', reason=type(error).__name__, data_restore_allowed=False)
+                reason = str(error)
+                self.record('rollback-intent', exception_type=type(error).__name__, data_restore_allowed=False,
+                            reason=reason if re.fullmatch('[A-Z][A-Z0-9_]{1,80}', reason) else type(error).__name__)
                 return self._rollback_locked()
 
 
