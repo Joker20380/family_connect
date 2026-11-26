@@ -11,6 +11,8 @@ native image activation/revert PASS, два source-only candidates. Exact-source
 Текущие support bindings и cursor/queue повторно проверены; рабочие контейнеры не изменены.
 Root collectors gate также подготовлен:69 focused/native-package и6 actual-root PASS;
 bindings/notifications CLI и direct API покрыты исходниками, установка ещё не заявлена.
+Collector CLI теперь различает закрытый gate(75), invalid gate(78) и source/IPC failure(1);
+69 focused и6 root checks повторены. Код сам по себе не заменяет source/runtime readback.
 
 **26 November18:52UTC — real stopped-support snapshot verified; linked resume complete.**
 Joker назначен HA signer/хранителем independent pins/floors; NL2 parent

@@ -10,6 +10,7 @@ import subprocess
 import tempfile
 import time
 from control.friends.pseudonyms import unseal
+from control.capture_gate import Busy, GateError
 from provisioning.owner_capture import admitted
 
 
@@ -72,6 +73,10 @@ def main():
     args = parser.parse_args()
     try:
         collect(args.host, args.key, args.known_hosts, args.output)
+    except Busy:
+        parser.exit(75, 'OWNER_CAPTURE_CLOSED; previous projection retained.\n')
+    except GateError:
+        parser.exit(78, 'OWNER_CAPTURE_INVALID; previous projection retained.\n')
     except Exception:
         parser.exit(1, 'Support binding refresh unavailable; previous lease is not extended.\n')
 

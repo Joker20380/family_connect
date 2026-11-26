@@ -91,3 +91,7 @@ This source checkpoint alone does not claim an installed collector or all-writer
 The bounded installation must preserve originals, wait for existing oneshots, verify
 new source bindings and closed behavior, restore only its own timer holds, then check
 normal oneshot completion. No support archive/authority changes are required.
+Collector CLI refusal is distinguishable even with the existing null stderr sink:
+closed admission exits75, invalid gate exits78, source/IPC/collection failure retains
+the original exit1. These codes are interpreted only with exact installed source and
+gate bindings, not as an unqualified diagnosis from a numeric exit code alone.

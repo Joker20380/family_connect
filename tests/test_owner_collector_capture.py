@@ -54,7 +54,7 @@ def test_notifications_refuses_before_cursor_or_ssh(setup, monkeypatch):
     with gate.drain(.1):
         with pytest.raises(SystemExit) as refused:
             subscription_collector.main()
-    assert refused.value.code == 1 and not calls and output.read_bytes() == b'original-projection'
+    assert refused.value.code == 75 and not calls and output.read_bytes() == b'original-projection'
 
 
 def test_failed_dispatch_preserves_pending_and_original_projection(setup, monkeypatch):

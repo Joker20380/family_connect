@@ -5,6 +5,7 @@ from pathlib import Path
 import re
 import socket
 
+from control.capture_gate import Busy, GateError
 from provisioning.support_bindings import collect
 from provisioning.owner_capture import operation
 
@@ -36,6 +37,10 @@ def main():
     try:
         with operation():
             collect(args.host, args.key, args.known_hosts, args.output, command=command(args.socket))
+    except Busy:
+        parser.exit(75, 'OWNER_CAPTURE_CLOSED; checkpoint and queue retained.\n')
+    except GateError:
+        parser.exit(78, 'OWNER_CAPTURE_INVALID; checkpoint and queue retained.\n')
     except Exception:
         parser.exit(1, 'Subscription source unavailable; checkpoint and queue retained.\n')
 
