@@ -7,7 +7,10 @@ START_AUTHORITY_CHANGED — authority предыдущего boot/PID3790078; ф
 Notifications отдельно: отсутствует IPC socket (ENOENT) до SSH collection; timer active/waiting.
 Source-only bounded refusal receipt различает authority/candidate phase, сохраняет безопасные bindings.
 16 новых tests PASS; вместе с handoff24 PASS/18 native skips — НЕ native qualification.
-Установка/recovery NOT_RUN; точный source CI ожидается. [Причины и gate](releases/2026-11-26-control-ha-owner-boot-resume.md).
+Diagnostic source889ef66e: все4 применимых exact-SHA CI PASS. Forward resume реализован;
+actual-root OWNER/NL1 synthetic qualification PASS, включая повтор/remote restart/stale authority.
+Рабочая установка/recovery ещё NOT_RUN; CI нового transition source обязателен перед установкой.
+[Причины, retained failures и gate](releases/2026-11-26-control-ha-owner-boot-resume.md).
 **Один NEXT:** forward support/notifications resume с новой linked generation; затем coherent
 encrypted RU/NL1/NL2/OWNER capture и independent reader. Historical handoff принят, WORKERS_REMAIN UNPROVEN.
 

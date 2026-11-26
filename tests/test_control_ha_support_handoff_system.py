@@ -21,6 +21,7 @@ from test_control_ha_support_handoff import notice_snapshot
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCES = ('scripts/control_ha_mailbox_control.py', 'scripts/control_ha_mailbox_startup.py',
+           'scripts/control_ha_mailbox_generation.py',
            'scripts/control_ha_mailbox_fence.py', 'scripts/control_ha_mailbox_links.py',
            'scripts/control_ha_legacy_support.py', 'tests/fixtures/mailbox_startup.py',
            'tests/fixtures/mailbox_links_system.py', 'messenger/tests/mailbox_links_peer.py')

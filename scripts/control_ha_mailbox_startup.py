@@ -47,9 +47,10 @@ def arm_control_wakeup(directory):
 
 
 def fixture_scope(manifest, unit):
+    manifest = Path(manifest).absolute()
     return (re.fullmatch('fc-ha-mailbox-handoff-fixture-[0-9a-f]{32}\\.service', unit) is not None and
-            Path(manifest).absolute() == Path('/opt/apps/family_connect/state-ha02') /
-            unit.removesuffix('.service') / 'manifest.json')
+            manifest.parent == Path('/opt/apps/family_connect/state-ha02') / unit.removesuffix('.service') and
+            re.fullmatch('manifest(?:-[0-9a-f]{64})?\\.json', manifest.name) is not None)
 
 
 def unique(pairs):

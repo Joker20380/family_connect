@@ -38,6 +38,15 @@ def wake_control(process, directory, uid):
 
 
 class MailboxControl:
+    actions = ('observe', 'consume', 'reclose')
+
+    def invocation(self, action, request):
+        return 'startup.observe()' if action == 'observe' else f'startup.{action}({str(request)!r})'
+
+    def fixture_plan(self, path):
+        return (fixture_scope(self.plan['manifest'], self.plan['unit']) and
+                Path(path).absolute() == Path(self.plan['manifest']).with_name('control.json'))
+
     def __init__(self, plan):
         self.owner = os.geteuid()
         self.plan = json.loads(owned(plan, self.owner), object_pairs_hook=unique)
@@ -46,8 +55,7 @@ class MailboxControl:
         admission.require(set(self.plan) >= expected and set(self.plan) <= expected | {'response_directory', 'wakeup_directory'} and
                           self.plan['schema'] == 1, 'MAILBOX_CONTROL_PLAN')
         unit = self.plan['unit']
-        fixture = (fixture_scope(self.plan['manifest'], unit) and
-                   Path(plan).absolute() == Path(self.plan['manifest']).with_name('control.json'))
+        fixture = self.fixture_plan(plan)
         admission.require((self.plan['user'] is True and self.owner != 0 and
                            re.fullmatch('fc-ha-mailbox-handoff-test-[0-9a-f]{32}\\.service', unit)) or
                           (self.plan['user'] is False and self.owner == 0 and
@@ -85,7 +93,7 @@ class MailboxControl:
     def call(self, value):
         admission.require(type(value) is dict and set(value) == {'action', 'nonce', 'payload'} and
                           re.fullmatch('[0-9a-f]{64}', value['nonce']) and value['action'] in
-                          ('observe', 'consume', 'reclose'), 'MAILBOX_CONTROL_REQUEST')
+                          self.actions, 'MAILBOX_CONTROL_REQUEST')
         process = self.validate()
         manifest = Path(self.plan['manifest'])
         raw = owned(manifest, self.owner)
@@ -117,15 +125,15 @@ class MailboxControl:
         admission.write(request, value['payload'])
         os.chown(request, self.owner, self.plan['gid'])
         request.chmod(0o640)
-        invocation = 'startup.observe()' if action == 'observe' else f'startup.{action}({str(request)!r})'
+        invocation = self.invocation(action, request)
         code = ('import os,time\nfrom scripts import control_ha_mailbox_startup as mailbox\n'
                 'from scripts import control_ha_legacy_support as admission\n'
                 f'assert time.monotonic() < {time.monotonic() + 5!r}\n'
                 f'assert admission.binding(os.getpid()) == {process!r}\n'
                 f'assert os.getuid() == {self.plan["uid"]!r}\n'
                 'startup=mailbox.ACTIVE\n'
-                f'assert str(startup.path) == {str(manifest)!r}\n'
                 'try:\n'
+                f' admission.require(str(startup.path) == {str(manifest)!r},"MAILBOX_ACTIVE_MANIFEST")\n'
                 f' observed={invocation}\n'
                 f' result=dict(nonce={nonce!r},observed=observed)\n'
                 'except Exception as error:\n'

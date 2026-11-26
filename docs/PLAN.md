@@ -24,7 +24,8 @@ isolated machine-loss restore с current/post-ACK/stale-state проверкой
 failed. Теперь root-readback выполнен после локального password prompt в той же PTY;60 исходных
 root-plan files сохранены. Проверена START_AUTHORITY_CHANGED: старый boot/PID3790078, до candidate.
 Notifications не находит IPC socket (ENOENT) до SSH collection; timer active/waiting.
-Source-only bounded reason/phase/bindings receipt:16 tests PASS; native CI и recovery не завершены.
+Diagnostic source889ef66e:16 tests и все4 exact-SHA CI PASS. Новый resumable forward transition
+прошёл actual-root synthetic OWNER/NL1 qualification; рабочий recovery NOT_RUN до нового source CI.
 [Incident evidence и recovery gate](releases/2026-11-26-control-ha-owner-boot-resume.md).
 Нужна допустимая новая linked generation; не удалять reservation/UNKNOWN,
 не запускать прежний writer по старому разрешению. Archive621009b8 неизменён; NL1 PID3705,

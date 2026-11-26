@@ -49,7 +49,57 @@ exclusive0600 files at most2048 bytes, fsynced, never overwrite old evidence. Di
 cannot admit or change the refusal outcome. This option is not yet installed in working service.
 
 Local locked Python3.14:16 diagnostic tests PASS; with handoff checks24 PASS/18 SKIP in0.42s.
-Native skips are NOT qualification. Exact-source CI pending; native workflow includes these tests.
+Native skips are NOT qualification. Diagnostic commit889ef66e0e6dd36c5a5bdbc1d47b1647a9f4c5d9:
+all four applicable exact-SHA CI SUCCESS (native45849023762, Android45849023698,
+Linux control45849023662, phase045849023655). New transition source requires its own CI.
+
+## Forward transition qualification (not working installation)
+
+`control_ha_support_resume` creates a new immutable root operation, entry/authority paths and
+linked plan, retaining old authority/reservations and pending markers. It distinguishes new-boot
+absence from proven clean same-boot exit; neither settles historical uncertainty. Independent NL1
+reclosure/drain/invalidation is mandatory before starting any new writer. `control_ha_mailbox_rollover`
+stages a new closed-on-restart manifest and advances the existing installed native fence without
+restarting working NL1 or admitting old links. Its limits remain100% CPU/768MiB; fresh memory preflight
+requires at least256MiB available. Busy/changed inputs refuse with retained evidence.
+
+Fresh process authority is issued once through the checked existing startup procedure. A distinct
+OWNER_FORWARD_RESUME witness does not misrepresent the old graceful handoff witness. Response loss
+is reconciled through independent readback; repeated same operation is idempotent. Terminal failure
+cannot restart or open. Controller interruption before authority expiry resumes the same process;
+after expiry, START_AUTHORITY_MISSING plus exact absent-process evidence permits a new linked
+attempt in another root/generation, retaining the ended attempt and every marker/receipt.
+
+Focused locked native final selection48 PASS/0 skips in225.52s.
+Actual-root OWNER/NL1 disposable fixture: root-forward-native-02 PASS/1 in50.33s;
+extended root-forward-native-03 PASS/1 in76.63s. Includes genuine new OWNER PID, immutable old
+authority, nonempty synthetic notification queue/cursor42 unchanged, authenticated fresh NL1
+generation without process restart, duplicate resume, synthetic support/peer packets, remote
+restart closing admission/new ticket, stale ticket refusal and OWNER restart refusing old authority
+with a persisted START_AUTHORITY_CHANGED receipt. No real users received qualification messages.
+Working NL1 PID3705/source/config unchanged; fixtures stopped and scoped cleanup verified.
+
+Retained first root-forward-native failure is fixture accounting, not WORKERS_REMAIN: old process
+exited0 with workers0/stores closed, but unreferenced systemd unit accounting was garbage-collected
+before sampling. Harness now uses the existing accepted supervisor/RemainAfterExit lifetime.
+No exit-proof condition was weakened; failed evidence remains private alongside successful runs.
+
+Stopped OWNER private state readback:21 encrypted records, notification cursor4/jobs0;
+incoming received5, outgoing relayed5/recipient_stored2. Historical7 UNKNOWN retained in original
+evidence, not reclassified by these counters. Snapshot manifest15 files/213687bytes SHA256
+`6af197e022ef0cbc59478e62736c7b99fd50de1c29bbeb13eea1b776ebfd77c8`;
+store DB SHA256 `2e557d3d2dc811461f349b004d4979790698c324097fe091a552f523740c8109`.
+Temporary duplicate key removed after equality check; original untouched. This stopped snapshot
+is incident preparation, not a coherent all-participant kit or independent custody.
+
+Subsequent boot procedure: first preserve records and prove accepted predecessor process absent;
+prepare a new OWNER root/participant with `--prepare-from`/`--participant`; construct fresh NL1
+manifest from that exact new plan and prior accepted binding; stage rollover then activate with
+independent readback. Copy retained predecessor-reclosure and verified channel into new OWNER root;
+run resume with `--root`/`--mailbox-channel`, then independently verify IPC/runtime and normal
+notifications oneshot/timer. Reuse the same operation only while its bound process/ticket survives;
+otherwise fail closed and prepare a qualifying linked new attempt. Never edit old authority, delete
+markers, auto-retry terminal failure, restore old data or use remote pause as local-store barrier.
 
 ## Recovery gate and remaining HA-02
 

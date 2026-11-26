@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 import pwd
 import re
+import secrets
 import shlex
 import socket
 import subprocess
@@ -75,6 +76,14 @@ def ready(unit, runtime):
             pass
         time.sleep(.05)
     raise ValueError('LAB_STARTUP_INCOMPLETE')
+
+
+def controlled(entry, plan, action, payload=None):
+    result = subprocess.run([PYTHON, '-I', '-B', str(entry), '--plan', str(plan)],
+        input=json.dumps(dict(action=action, payload=payload, nonce=secrets.token_hex(32))),
+        text=True, capture_output=True, timeout=15)
+    assert result.returncode == 0, result.stdout[-4096:]
+    return json.loads(result.stdout)
 
 
 def main():
@@ -170,6 +179,44 @@ def main():
         write(root / 'control.json', json.dumps(plan).encode(), gid=account.pw_gid)
         result = dict(entry=str(entry), plan=str(root / 'control.json'), interpreter=PYTHON, observed=observed,
                       manager_state=state(unit, ('MainPID', 'ControlPID', 'ActiveState', 'SubState', 'NeedDaemonReload')))
+    elif action == 'generation':
+        assert working() == json.loads((root / 'working-before.json').read_bytes())
+        manifest = value['manifest']
+        generation = manifest['generation']
+        assert re.fullmatch('[0-9a-f]{64}', generation)
+        original = json.loads((root / 'control.json').read_bytes())
+        observed = controlled(root / 'control-entry.py', root / 'control.json', 'observe')
+        controlled(root / 'control-entry.py', root / 'control.json', 'reclose',
+                   dict(action='RECLOSE', ticket=observed['observed']['ticket']))
+        reclosure = controlled(root / 'control-entry.py', root / 'control.json', 'observe')
+        fence = reclosure['observed']['fence']
+        assert fence['opening_invalidated'] and fence['in_process_drained'] and fence['accepted_target_work'] == 0
+        new_manifest = root / ('manifest-' + generation + '.json')
+        write(new_manifest, json.dumps(manifest).encode(), gid=account.pw_gid)
+        entry = root / 'generation-entry.py'
+        write(entry, ('import sys\nsys.path[:0]=' + repr([str(root), APP]) + '\n'
+              'from scripts.control_ha_mailbox_generation import main\nmain()\n').encode(), gid=account.pw_gid)
+        arguments = list(original['restart_argv'])
+        arguments[4] = str(new_manifest)
+        dropins = Path('/run/systemd/system') / (unit + '.d')
+        dropins.mkdir(mode=0o755)
+        dropin = dropins / 'zz-generation.conf'
+        content = ('[Service]\nExecStart=\nExecStart=' + ' '.join(arguments) + '\n').encode()
+        write(dropin, content, mode=0o644)
+        write(root / 'retained-generation.conf', content)
+        transition = dict(original, restart_argv=arguments,
+                          files={**original['files'], str(dropin): digest(dropin)},
+                          sources={**original['sources'], str(entry): digest(entry)})
+        transition_path = root / ('transition-' + generation + '.json')
+        current_path = root / ('control-' + generation + '.json')
+        write(transition_path, json.dumps(transition).encode(), gid=account.pw_gid)
+        write(current_path, json.dumps(dict(transition, manifest=str(new_manifest))).encode(), gid=account.pw_gid)
+        subprocess.run(['systemctl', 'daemon-reload'], check=True)
+        controlled(entry, transition_path, 'advance', dict(action='ADVANCE_CLOSED_GENERATION',
+                   ticket=reclosure['observed']['ticket'], manifest=str(new_manifest), manifest_sha256=digest(new_manifest)))
+        result = dict(entry=str(entry), plan=str(current_path), interpreter=PYTHON,
+                      predecessor_reclosure=reclosure, observed=controlled(entry, current_path, 'observe'))
+        write(root / 'generation-result.json', json.dumps(result).encode())
     elif action in ('status', 'support', 'peer'):
         assert working() == json.loads((root / 'working-before.json').read_bytes())
         result = request(runtime, action)
@@ -185,6 +232,12 @@ def main():
         assert current['MainPID'] == current['ControlPID'] == '0'
         path = Path('/run/systemd/system') / unit
         assert path.read_bytes() == (root / 'retained-unit.conf').read_bytes()
+        dropins = path.with_name(path.name + '.d')
+        if dropins.exists():
+            assert list(dropins.iterdir()) == [dropins / 'zz-generation.conf']
+            assert (dropins / 'zz-generation.conf').read_bytes() == (root / 'retained-generation.conf').read_bytes()
+            (dropins / 'zz-generation.conf').unlink()
+            dropins.rmdir()
         path.unlink()
         subprocess.run(['systemctl', 'daemon-reload'], check=True)
         result = dict(stopped=True, data_retained=True)

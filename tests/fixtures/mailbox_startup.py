@@ -64,6 +64,7 @@ try:
             with connection:
                 connection.settimeout(30)
                 request = json.loads(connection.makefile('rb').readline(16384))
+                startup = bootstrap.ACTIVE
                 try:
                     action = request['action']
                     if action == 'status':
