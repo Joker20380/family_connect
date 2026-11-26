@@ -95,3 +95,41 @@ Collector CLI refusal is distinguishable even with the existing null stderr sink
 closed admission exits75, invalid gate exits78, source/IPC/collection failure retains
 the original exit1. These codes are interpreted only with exact installed source and
 gate bindings, not as an unqualified diagnosis from a numeric exit code alone.
+
+## Full-suite refusal and correction
+
+Exact94fe9760 CI: native342/0 skips PASS; the downloaded artifact15152202498 independently
+matches SHA256a6d816e3a7622626b05855390dff7fc30ca4cec5c97f55bb3850fa951f401da9 and its source receipt/XML.
+The separate collector/package step and subscription route pass. Linux preview45891195584
+FAILS with20 related standalone-collector/package cases, not an unrelated UI failure:
+the new cleanup imported Django where no Django dependency exists; the closed packager
+correctly refused its obsolete helper pin. Failed artifact15152507211 is retained,
+SHA256599e7feb640b28e65e52f02bc43fd1effb04d5ea8fe2e3436523e329d2abc50c.
+No working installation or timer hold was performed through this failed gate.
+
+The correction inspects Django only when it is already loaded/configured. Admission
+scope now belongs to the shared gate operation, so both existing import namespaces
+(`fc_control_plane.capture` and `control_plane.fc_control_plane.capture`) cannot create
+inconsistent nested database lifetimes. Stale/thread/fork checks remain. The collector
+packager has a new exact helper pin and explicitly retains only the previously reviewed
+old hash for exact rollback; arbitrary helper bytes still refuse.
+Corrected local validation:383 panel tests,101 standalone collector/package/gate tests,
+and repeated real isolated image activation/revert PASS. New candidate images are
+console3af9fbf9…/publisher35158514…; the earlier779303d3…/a6b697ba… candidates are history,
+not approved installation inputs. Exact corrected-source CI is still required.
+
+## Fresh installed user-collector observation
+
+The existing user monitor and network-probe timers already have installed gate bindings;
+they are not newly installed by this work. One bounded readback of each actual gate:
+probe drains locally with0 pending; inventory refuses `UNSETTLED_OPERATION` with3 markers,
+all3 byte-identical before/after. No markers were removed and no repeated drain was used
+to seek a pass. This is a separate inventory uncertainty, not WORKERS_REMAIN. Full common
+capture must retain that history and prove stopped/drained external dispatch, including
+any Docker-side import, rather than assuming that an expired client or HTTP response
+means completion. Private gate inode/runtime/marker evidence is retained.
+
+Read-only application metadata identifies KeePassXC2.7.10+dfsg1-2ubuntu1 (root-owned
+executable; package verification reports no differences), plus system Seahorse. No vault
+was opened. Which vault is intended, off-laptop copy and laptop-loss recovery are still
+unconfirmed; neither installed software nor a local directory proves independent custody.

@@ -13,8 +13,11 @@ ROOT = Path(__file__).resolve().parents[1]
 LIMIT = 256 * 1024
 ADMISSION = {
     'control/capture_gate.py': 'da28d940e2e17e2dbb1fbbde8cc04c59d29cffc8762ada717135504e2ffa4906',
-    'control_plane/fc_control_plane/capture.py': 'd4f5a258232d505f3ded09b7ce16a58f013a48dd451fa878d2a191c42ac7d60d',
+    'control_plane/fc_control_plane/capture.py': '0cb1ad0190ddc0d0043c93df80a72f751627a29d054ef104fcf5d1732dca434b',
     'control_plane/collector_admission.py': '1e2e52abb618b620f9ba1e38dc9011d0143021d98cb3e5bfa535a3f79669808f',
+}
+ADMISSION_HISTORY = {
+    'control_plane/fc_control_plane/capture.py': ('d4f5a258232d505f3ded09b7ce16a58f013a48dd451fa878d2a191c42ac7d60d',),
 }
 ENTRIES = {
     'control_plane/monitor_inventory.py': ('2b56e0c3504e28bf644e17cf0cc4c14d5106c9862a9af80e97c8d7d62b490fd7',
@@ -94,7 +97,8 @@ def build(baseline, role, pins, output, source=ROOT):
     require(pins == {name: digest(raw) for name, raw in before.items()}, 'BASELINE_PIN')
     require(all(before[name] is None for name in NAMESPACE_FILES), 'UNREVIEWED_NAMESPACE_INITIALIZER')
     require(all(pins[name] in ENTRIES[name] for name in ROLES[role]), 'UNREVIEWED_ENTRYPOINT')
-    require(all(pins[name] in (None, expected) for name, expected in ADMISSION.items()), 'UNREVIEWED_ADMISSION')
+    require(all(pins[name] in (None, expected, *ADMISSION_HISTORY.get(name, ()))
+                for name, expected in ADMISSION.items()), 'UNREVIEWED_ADMISSION')
     replacements = dict(ADMISSION) | {name: ENTRIES[name][1] for name in ROLES[role]}
     after = {name: raw for name, raw in before.items() if raw is not None}
     for name, expected in replacements.items():

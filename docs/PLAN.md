@@ -32,18 +32,21 @@ NL1 PID3705,100%CPU/768MiB. Эти pins — observation, не разрешени
 Support/IPC working; notifications timer-driven18:58:46–47UTC success/0,
 timer enabled/active/waiting. Перед изменениями необходим свежий runtime readback.
 OWNER gate пока НЕ установлен; последний source census2/10 в console/publisher.
-Direct-ORM source checkpoint квалифицирован локально:382 panel/329 OWNER-gate tests,
-native image activation/revert PASS. Новые12-file candidates не установлены; exact-source
-CI, установленное закрытие остальных writer paths и общий интервал остаются в этом же NEXT.
+Full94fe9760 CI FAIL:20 related standalone/package cases; no working install. Corrected helper
+and reviewed pins:383 panel/101 standalone + native image activation/revert PASS;
+329 OWNER-gate tests ранее PASS. Новые12-file candidates не установлены; exact corrected CI,
+установленное закрытие остальных writer paths и общий интервал остаются в этом же NEXT.
 Root collector source gate квалифицирован69 focused/native-package +6 actual-root;
 ещё требуется bounded installation/readback обоих oneshots и их manual API.
 Closed-gate qualification проверяет exact-source exit75 отдельно от invalid gate78/source failure1.
+Installed user inventory gate отдельно отказал UNSETTLED_OPERATION/3 unchanged markers;
+probe drain PASS/0. Нужен сохранённый stopped/external-dispatch proof, не удаление UNKNOWN.
 [Принятый компонент и ограничения](releases/2026-11-26-control-ha-stopped-support.md).
 
 Joker назначен HA signer/хранителем независимого реестра pins/floors; ciphertext destination
 NL2 `/opt/apps/family_connect/ha-recovery/`. Эти решения не открываются повторно и не
-утверждают ещё не созданный checkpoint. На OWNER есть программа-сейф: название, внешняя
-копия и проверенное восстановление после потери ноутбука уточняются без чтения секретов.
+утверждают ещё не созданный checkpoint. На OWNER найден KeePassXC2.7.10; выбранный vault,
+внешняя копия и восстановление после потери ноутбука уточняются без чтения секретов.
 Допустимая custody не ограничена USB; каталог на OWNER сам по себе не независим.
 Ключ HA не создан; off-origin custody не подтверждена. Это не блокирует engineering.
 [Текущий all-writer checkpoint](releases/2026-11-26-control-ha-owner-all-writer.md).

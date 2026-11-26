@@ -1,15 +1,14 @@
 """Opt-in OWNER admission; the directory must be pre-created and shared by all participants."""
 from contextlib import contextmanager
-from contextvars import ContextVar
 from functools import lru_cache
 import os
 from pathlib import Path
+import sys
 import threading
 
 from control.capture_gate import CURRENT, Gate, GateError, external_operation, require
 
 
-SCOPE = ContextVar('owner_database_admission', default=None)
 MOUNTED_GATE = Path('/run/family-connect-capture')
 
 
@@ -41,7 +40,7 @@ def database_admission():
     gate = configured_gate()
     if gate.directory is None:
         return None
-    scope = SCOPE.get()
+    scope = getattr(CURRENT.get(), 'owner_database_scope', None)
     require(scope is not None and scope.active and scope.process == os.getpid() and
             scope.thread == threading.get_ident() and CURRENT.get() is scope.operation and
             scope.operation.gate.pins == gate.pins, 'CAPTURE_DATABASE_ADMISSION_REQUIRED')
@@ -50,8 +49,8 @@ def database_admission():
 
 
 def close_databases(admitted):
-    from django.conf import settings
-    if not settings.configured:
+    configuration = sys.modules.get('django.conf')
+    if configuration is None or not configuration.settings.configured:
         return
     from django.db import connections
     unsettled = False
@@ -82,13 +81,13 @@ def operation():
         if admitted.gate.directory is None:
             yield admitted
             return
-        previous = SCOPE.get()
+        previous = getattr(admitted, 'owner_database_scope', None)
         if previous is not None:
             database_admission()
             yield admitted
             return
         scope = Admission(admitted)
-        token = SCOPE.set(scope)
+        admitted.owner_database_scope = scope
         try:
             yield admitted
         finally:
@@ -96,4 +95,3 @@ def operation():
                 close_databases(admitted)
             finally:
                 scope.active = False
-                SCOPE.reset(token)

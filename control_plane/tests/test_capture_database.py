@@ -66,6 +66,17 @@ def test_nested_manual_orm_commit_and_close_inside_admission(gate):
         pass
 
 
+def test_both_collector_and_django_module_paths_share_admission(gate):
+    from control_plane.fc_control_plane import capture as collector_capture
+    with collector_capture.operation():
+        with operation():
+            get_user_model().objects.create(username='shared-capture-context')
+        database = connection.connection
+        assert database is not None and not database.closed
+        assert get_user_model().objects.filter(username='shared-capture-context').exists()
+    assert database.closed and not markers(gate)
+
+
 @pytest.mark.parametrize('raw_begin', [False, True])
 def test_escaped_transaction_is_rolled_back_and_preserved_unknown(gate, raw_begin):
     with pytest.raises(GateError, match='CAPTURE_DATABASE_TRANSACTION_UNSETTLED'):

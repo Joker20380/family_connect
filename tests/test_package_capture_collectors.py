@@ -27,6 +27,20 @@ def pins_for(root, role):
     return {name: package.digest(raw) for name, raw in package.snapshot(root, role).items()}
 
 
+def test_previous_reviewed_helper_is_preserved_for_exact_rollback(baseline, tmp_path):
+    root, role = baseline
+    name = 'control_plane/fc_control_plane/capture.py'
+    previous = (package.ROOT / 'tests/fixtures/owner_upgrade/capture_before_orm.py').read_bytes()
+    assert package.digest(previous) in package.ADMISSION_HISTORY[name]
+    (root / name).write_bytes(previous)
+    output = tmp_path / 'updated.zip'
+    receipt = package.build(root, role, pins_for(root, role), output)
+    assert receipt['restore_on_rollback'][name] == package.digest(previous)
+    with zipfile.ZipFile(output) as archive:
+        assert archive.read('rollback/' + name) == previous
+        assert package.digest(archive.read(name)) == package.ADMISSION[name]
+
+
 def test_candidate_is_reproducible_closed_and_preserves_baseline(baseline, tmp_path):
     root, role = baseline
     private = root / 'control_plane/.local/private.key'
