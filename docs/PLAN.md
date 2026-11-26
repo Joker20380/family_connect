@@ -32,6 +32,9 @@ NL1 PID3705,100%CPU/768MiB. Эти pins — observation, не разрешени
 Support/IPC working; notifications timer-driven18:58:46–47UTC success/0,
 timer enabled/active/waiting. Перед изменениями необходим свежий runtime readback.
 OWNER gate пока НЕ установлен; последний source census2/10 в console/publisher.
+Direct-ORM source checkpoint квалифицирован локально:382 panel/329 OWNER-gate tests,
+native image activation/revert PASS. Новые12-file candidates не установлены; exact-source
+CI, установленное закрытие остальных writer paths и общий интервал остаются в этом же NEXT.
 [Принятый компонент и ограничения](releases/2026-11-26-control-ha-stopped-support.md).
 
 Joker назначен HA signer/хранителем независимого реестра pins/floors; ciphertext destination

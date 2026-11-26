@@ -22,6 +22,8 @@ SOURCES = (
     'control/capture_gate.py',
     'control_plane/manage.py',
     'control_plane/fc_control_plane/capture.py',
+    'control_plane/fc_control_plane/db_backend/__init__.py',
+    'control_plane/fc_control_plane/db_backend/base.py',
     'control_plane/fc_control_plane/middleware.py',
     'control_plane/fc_control_plane/settings.py',
     'control_plane/fc_control_plane/wsgi.py',
@@ -30,7 +32,9 @@ SOURCES = (
     'control_plane/apps/console/system_publisher.py',
     'control_plane/apps/console/management/commands/publish_system_messages.py',
 )
-OPTIONAL = {'control/capture_gate.py', 'control_plane/fc_control_plane/capture.py'}
+OPTIONAL = {'control/capture_gate.py', 'control_plane/fc_control_plane/capture.py',
+            'control_plane/fc_control_plane/db_backend/__init__.py',
+            'control_plane/fc_control_plane/db_backend/base.py'}
 IMAGES = dict(zip(preflight.NAMES, (
     'sha256:5ce824159e9f206c27ba92185097857382aa5fec71678ce5e728423509d1446a',
     'sha256:50de6f25a04c1127b127b3278314619c69eddeec229d0d4ad9b7e67c1d2ffeab',

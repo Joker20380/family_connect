@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 
 from control.capture_gate import CURRENT
-from .capture import configured_gate
+from .capture import configured_gate, operation
 
 
 class CaptureAdmission:
@@ -22,7 +22,7 @@ class CaptureAdmission:
         if self.gate.directory is None:
             return self.get_response(request)
         try:
-            with self.gate.operation() as admitted:
+            with operation() as admitted:
                 response = self.get_response(request)
                 if response.streaming:
                     admitted.uncertain()

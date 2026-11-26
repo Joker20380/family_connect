@@ -38,6 +38,7 @@ with tempfile.TemporaryDirectory(prefix='prepared-owner-') as directory:
 sources = (
     'control/capture_gate.py', 'control_plane/manage.py',
     'control_plane/fc_control_plane/capture.py', 'control_plane/fc_control_plane/middleware.py',
+    'control_plane/fc_control_plane/db_backend/__init__.py', 'control_plane/fc_control_plane/db_backend/base.py',
     'control_plane/fc_control_plane/settings.py', 'control_plane/fc_control_plane/wsgi.py',
     'control_plane/apps/console/backend.py', 'control_plane/apps/console/support.py',
     'control_plane/apps/console/system_publisher.py',

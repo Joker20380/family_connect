@@ -42,7 +42,7 @@ TEMPLATES = [{
 }]
 WSGI_APPLICATION = 'fc_control_plane.wsgi.application'
 DATABASES = {'default': {
-    'ENGINE': 'django.db.backends.postgresql', 'NAME': 'fc_control_plane', 'USER': 'fc_control_plane',
+    'ENGINE': 'fc_control_plane.db_backend', 'NAME': 'fc_control_plane', 'USER': 'fc_control_plane',
     'PASSWORD': database_password, 'HOST': database_host, 'PORT': os.environ.get('POSTGRES_PORT', '5432'),
     'CONN_MAX_AGE': 0, 'OPTIONS': {'connect_timeout': 5},
 }}

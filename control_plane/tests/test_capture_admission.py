@@ -199,11 +199,14 @@ def test_real_request_commit_and_response_session_write_share_gate(gate, setting
         return execute(sql, parameters, many, context)
     with connection.execute_wrapper(check):
         assert Client().get('/write/').status_code == 200
-    assert writes and get_user_model().objects.filter(username='capture-synthetic').exists()
-    assert Session.objects.get().get_decoded()['committed'] is True and not pending(gate)
+    with operation():
+        assert writes and get_user_model().objects.filter(username='capture-synthetic').exists()
+        assert Session.objects.get().get_decoded()['committed'] is True
+    assert not pending(gate)
     with gate.drain(.2):
         assert Client().get('/write/').status_code == 503
-    assert get_user_model().objects.filter(username='capture-synthetic').count() == 1
+    with operation():
+        assert get_user_model().objects.filter(username='capture-synthetic').count() == 1
 
 
 @pytest.mark.django_db(transaction=True)
@@ -213,7 +216,8 @@ def test_django_converted_exception_keeps_pending_marker(gate, settings):
     settings.MIDDLEWARE = ['fc_control_plane.middleware.CaptureAdmission']
     response = Client(raise_request_exception=False).get('/failure/')
     assert response.status_code == 500 and len(pending(gate)) == 1
-    assert get_user_model().objects.filter(username='capture-before-failure').exists()
+    with operation():
+        assert get_user_model().objects.filter(username='capture-before-failure').exists()
 
 
 def test_synthetic_writer_busy_precedes_directory_and_caught_failure(gate, tmp_path, monkeypatch):
@@ -240,9 +244,10 @@ def test_caught_support_ipc_failure_preserves_uncertainty(gate, settings, tmp_pa
 
 @pytest.mark.django_db(transaction=True)
 def test_publisher_remote_ack_and_queue_commit_remain_inside_gate(gate):
-    actor = get_user_model().objects.create_superuser(username='publisher-synthetic')
-    message = SystemMessage.objects.create(created_by=actor, title='Synthetic', body='Not production',
-                                          kind='information', platforms=['android'], days=1, status='queued')
+    with operation():
+        actor = get_user_model().objects.create_superuser(username='publisher-synthetic')
+        message = SystemMessage.objects.create(created_by=actor, title='Synthetic', body='Not production',
+                                              kind='information', platforms=['android'], days=1, status='queued')
     calls = []
     def publish(value):
         calls.append(value['id'])
@@ -256,10 +261,11 @@ def test_publisher_remote_ack_and_queue_commit_remain_inside_gate(gate):
     assert publish_next(sender) == 'unknown'
     retained = pending(gate)
     assert len(retained) == 1
-    message.refresh_from_db()
-    assert message.status == 'unknown'
-    message.status = 'queued'
-    message.save(update_fields=['status'])
+    with operation():
+        message.refresh_from_db()
+        assert message.status == 'unknown'
+        message.status = 'queued'
+        message.save(update_fields=['status'])
     def successful(value):
         assert CURRENT.get() is not None and len(pending(gate)) == 2
         transaction.on_commit(lambda: calls.append('committed' if CURRENT.get() is not None else 'outside'))

@@ -6,6 +6,9 @@ capture → independent verify → normal resume; e4eace1a — только ис
 Программа-сейф на OWNER: уточняются название, off-laptop copy и laptop-loss recovery;
 custody не ограничена USB и не блокирует engineering.
 [Текущий checkpoint](releases/2026-11-26-control-ha-owner-all-writer.md).
+Direct-ORM guard подготовлен, НЕ установлен:382 panel +329 OWNER/gate checks PASS;
+native image activation/revert PASS, два source-only candidates. Exact-source CI ещё требуется.
+Текущие support bindings и cursor/queue повторно проверены; рабочие контейнеры не изменены.
 
 **26 November18:52UTC — real stopped-support snapshot verified; linked resume complete.**
 Joker назначен HA signer/хранителем independent pins/floors; NL2 parent

@@ -59,7 +59,7 @@ def candidate():
 
 def test_sources_are_observed_twice_without_authorization(reader, candidate):
     result = source.collect(reader, candidate)
-    assert result['observations_equal'] and len(reader.calls) == 44
+    assert result['observations_equal'] and len(reader.calls) == 4 + 4 * len(source.SOURCES)
     assert len(result['containers']) == 2
     for item in result['containers']:
         assert len(item['sources']) == len(source.SOURCES)
