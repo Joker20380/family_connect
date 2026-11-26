@@ -15,7 +15,29 @@
 исполнитель панели, динамический serving set и каталог; завершить сквозную ONB-01..12.
 
 
-**CONTROL-HA-20261123 / HA-02 — coupled support result ACCEPTED; HA-02 IN_PROGRESS.**
+**CONTROL-HA-20261123 / HA-02 — IN_PROGRESS; продолжение после обрыва26 ноября.**
+**Один NEXT:** один актуальный coherent encrypted capture RU/NL1/NL2/OWNER, независимый reader
+точных bytes/полноты/связей и штатное возобновление всех участников; после принятия — полный
+isolated machine-loss restore с current/post-ACK/stale-state проверкой. Инвентаризация промежуточна.
+Новая непосредственная предпосылка: OWNER reboot12:04:08UTC, support failed/exit78 и notifications
+failed. Root plan/причина отказа недоступны: `sudo -n` требует интерактивную аутентификацию.
+Нужны root-readback и допустимая новая linked generation; не удалять reservation/UNKNOWN,
+не запускать прежний writer по старому разрешению. Archive621009b8 неизменён; NL1 PID3705,
+лимиты100%/768MiB, свежий independent observe OPEN_LOCAL_ONLY/work0/capture=false.
+Свежий census14:38–14:47UTC сверяет4 RU schema,32/9/5 remote units,11 OWNER units и panel sources;
+в OWNER common gate не установлен, match2/10 source/container. Manual/direct ORM/all-writer
+и общий интервал ещё не доказаны. Source-only отказ guard с evidence:55 PASS/0 skips.
+Private preparation24 files проверена отдельно, не является полным зашифрованным комплектом.
+Доступные custody records не подтверждают HA signer/independent pins/floors/off-origin destination;
+сначала дочитать root records, затем запросить только реально отсутствующий выбор владельца.
+[Точные препятствия, scope, custody proposal, rollback и tests](releases/2026-11-26-control-ha-coherent-resume.md).
+Принятый support handoff не переоткрывается как незавершённый компонент; новый restart refusal
+разбирается отдельно. WORKERS_REMAIN UNPROVEN. Isolated replication PASS; три прежних HA-02
+критерия partial. HA-03 не начат, FLEET-PRODUCTION-ONBOARDING-1 остаётся обязательным OPEN итогом.
+
+## Accepted support checkpoint — history, not another NEXT
+
+**CONTROL-HA-20261123 / HA-02 — coupled support result ACCEPTED at01:29UTC.**
 На26 November01:29UTC завершены общий resumable handoff, применимый CI на точном source SHA
 `57c19b1ccc5f97b650ed1e2382c40286bec7c950`, actual-root OWNER/NL1 qualification и рабочая установка/readback.
 Старый OWNER2022541: exit0/workers0, три complete/non-atomic census. Candidate v2 621009b8 установлен,

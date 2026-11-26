@@ -1,5 +1,25 @@
 # Текущее состояние / Current state
 
+**26 November14:49UTC — HA-02 продолжен после обрыва; новый OWNER restart отказ, capture не принят.**
+Ветки сверены: featureede03b9f/main4307401c совпали с remote, обе копии чистые на входе.
+Сохранён прежний census10:45–10:47UTC и свежие RU/NL1/NL2/OWNER observations14:38–14:47UTC.
+OWNER reboot12:04:08UTC: support failed/exit78, notifications failed; прежний PID3790078 не жив.
+Archive621009b8 совпадает; три panel containers healthy. NL1 PID3705,100% CPU/768MiB,
+аутентифицированный readback OPEN_LOCAL_ONLY/work0/capture=false. Четыре RU схемы совпадают
+с v1+handoff-v2; это не полная writer coverage. OWNER common gate не установлен; source match2/10
+в каждом console/publisher. `sudo -n` требует интерактивную аутентификацию; root plan недоступен.
+Source-only guard diagnostic сохраняет конкретный отказ и bounded evidence:55 PASS/0 skips,
+26 lockfile pins совпадают. Установленный runtime не изменён. Private preparation manifest24 files
+проверен отдельным reader; это НЕ coherent/encrypted kit и НЕ независимое доверие.
+[Точные данные, retained history, custody proposal и recovery prerequisite](releases/2026-11-26-control-ha-coherent-resume.md).
+**Один NEXT:** актуальный coherent encrypted RU/NL1/NL2/OWNER capture с независимой проверкой
+и штатным resume; ближайшая предпосылка — root-readback и guarded OWNER recovery в новой
+допустимой generation без обхода reservation/UNKNOWN. Полный isolated restore ещё NOT_RUN.
+Принятый handoff остаётся принятым компонентом; WORKERS_REMAIN UNPROVEN. Новый refusal требует
+разбора, не повторения всей исторической приёмки. Три критерия HA-02 partial; onboarding OPEN.
+
+## Accepted support checkpoint — historical observation, not current liveness
+
 **26 November01:29UTC — рабочий OWNER ↔ NL1 support handoff принят независимым readback.**
 Исполняемый source/CI SHA `57c19b1ccc5f97b650ed1e2382c40286bec7c950`: все четыре применимых
 workflow PASS, включая CPython3.14/GIL native275 PASS/0 skips. Старый OWNER2022541 штатно
