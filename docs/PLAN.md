@@ -13,7 +13,29 @@
 сохраняет свои четыре результата и выбранный runtime-шаг; новый подпункт HA-02 не создаётся.
 
 
-**CONTROL-HA-20261123 / HA-02 — coupled support result ACCEPTED; HA-02 IN_PROGRESS.**
+**CONTROL-HA-20261123 / HA-02 — IN_PROGRESS; продолжение после обрыва26 ноября.**
+**Один NEXT:** актуальный coherent encrypted RU/NL1/NL2/OWNER capture, независимая проверка
+точного комплекта и штатное возобновление; затем полный isolated machine-loss restore с
+current/post-ACK/stale-state проверкой. Readiness inventory остаётся промежуточным результатом.
+Новая предпосылка: OWNER reboot12:04:08UTC; support failed/exit78, notifications failed.
+Root plan/причина отказа недоступны: `sudo -n` требует интерактивную аутентификацию.
+Нужны original-record readback и допустимая новая linked generation; не удалять reservation,
+не очищать UNKNOWN, не запускать прежний writer по старому разрешению. Archive621009b8
+неизменён; NL1 PID3705,100%CPU/768MiB, fresh observe OPEN_LOCAL_ONLY/work0/capture=false.
+Census14:38–14:47UTC: RU4 schemas/32 units, NL1/2 units9/5, OWNER11 units и panel sources.
+OWNER common gate не установлен, source match2/10/container; общий writer interval не доказан.
+Source-only refusal evidence:55 PASS/0 skips; feature `d35db9d97a5088b15183c26ce4e0459053f71cb8`
+pushed/remote-SHA verified. Private preparation24 files не является coherent kit.
+Доступные records не подтверждают HA signer/independent pins/floors/off-origin destination;
+сначала дочитать root records, затем запросить только отсутствующий выбор владельца.
+[Точные scope, блокеры, custody proposal и rollback](releases/2026-11-26-control-ha-coherent-resume.md).
+Принятый handoff сохраняется; новый restart refusal требует отдельного разбора.
+WORKERS_REMAIN UNPROVEN. Isolated replication PASS; три прежних HA-02 критерия partial.
+HA-03 не начат, FLEET-PRODUCTION-ONBOARDING-1 остаётся обязательным OPEN итогом.
+
+## Accepted support checkpoint — history, not another NEXT
+
+**CONTROL-HA-20261123 / HA-02 — coupled support result ACCEPTED at01:29UTC.**
 На26 November01:29UTC завершены общий resumable handoff, применимый CI на точном source SHA
 `57c19b1ccc5f97b650ed1e2382c40286bec7c950`, actual-root OWNER/NL1 qualification и рабочая установка/readback.
 Старый OWNER2022541: exit0/workers0, три complete/non-atomic census. Candidate v2 621009b8 установлен,

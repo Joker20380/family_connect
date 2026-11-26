@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 26 November14:49UTC: resumed census, OWNER post-reboot support exit78 and missing root access;55 guard checks PASS, no coherent kit/resume/restore acceptance](releases/2026-11-26-control-ha-coherent-resume.md).
+
 [CONTROL-HA · 26 November01:29UTC: working OWNER/NL1 support handoff accepted, exact57c19b1c CI PASS, v2 installed/read back; recovery qualified, capture denied, broader HA-02/onboarding open](releases/2026-11-26-control-ha-joint-support.md).
 
 [CONTROL-HA · 25 November21:59UTC: shutdown/terminal correction and CI stabilization; historical WORKERS_REMAIN cause unproven, shared handoff and working installation incomplete](releases/2026-11-25-control-ha-support-stabilization.md).

@@ -1,5 +1,23 @@
 # Текущее состояние / Current state
 
+**26 November14:49UTC — HA-02 продолжен; новый OWNER restart отказ, coherent capture не принят.**
+Прежний census10:45–10:47 сохранён, свежие RU/NL1/NL2/OWNER observations14:38–14:47 получены.
+OWNER reboot12:04:08UTC: support failed/exit78, notifications failed; PID3790078 больше не жив.
+Archive621009b8 совпадает; три panel containers healthy. NL1 PID3705,100%CPU/768MiB,
+readback OPEN_LOCAL_ONLY/work0/capture=false. RU4 schemas совпадают с v1+handoff-v2;
+OWNER common gate не установлен, match2/10 source/container. Root plan недоступен:
+`sudo -n` требует интерактивную аутентификацию. Разрешение есть, технического root-доступа нет.
+Feature diagnostic конкретного отказа+bounded evidence:55 PASS/0 skips,26 lockfile pins совпадают.
+Checkpoint `d35db9d97a5088b15183c26ce4e0459053f71cb8` pushed/remote-SHA verified; main docs only.
+Private preparation24 files проверена отдельным reader, НЕ coherent encrypted kit/independent trust.
+[Отчёт, точные препятствия, custody proposal и rollback](releases/2026-11-26-control-ha-coherent-resume.md).
+**Один NEXT:** актуальный coherent encrypted RU/NL1/NL2/OWNER capture с независимым reader
+и штатным resume; ближайшая предпосылка — root-readback и guarded OWNER recovery в новой
+допустимой generation, без обхода reservation/UNKNOWN. Full isolated restore ещё NOT_RUN.
+Принятый handoff сохраняется; WORKERS_REMAIN UNPROVEN. Три HA-02 критерия partial; onboarding OPEN.
+
+## Accepted support checkpoint — historical observation, not current liveness
+
 **26 November01:29UTC — рабочий OWNER ↔ NL1 support handoff принят независимым readback.**
 Исполняемый source/CI SHA `57c19b1ccc5f97b650ed1e2382c40286bec7c950`: все четыре применимых
 workflow PASS, включая CPython3.14/GIL native275 PASS/0 skips. Старый OWNER2022541 штатно
