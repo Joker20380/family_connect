@@ -1,6 +1,6 @@
 # Текущее состояние / Current state
 
-**26 November16:57UTC — OWNER support/notifications возобновлены на текущем boot.**
+**26 November17:38UTC — OWNER support/notifications возобновлены, повторный readback успешен.**
 Штатный локальный password dialog и root-readback выполнены в одной PTY; sudoers/polkit неизменны.
 Сохранены60 root-plan files, units/journals и startup records. Read-only probe под fc-support:
 START_AUTHORITY_CHANGED — authority предыдущего boot/PID3790078; файл доступен, archive621009b8 совпал.
@@ -12,7 +12,11 @@ artifact bytes проверены отдельно. Actual-root synthetic OWNER/
 NL1 PID3705 не перезапускался; лимиты100%/768MiB сохранены, remote admission OPEN_LOCAL_ONLY.
 21 records/12 сообщений, cursor4/jobs0 и исторические markers сохранены; обновился только support-bindings.
 Все60 прежних root records неизменны. Startup refusal receipt установлен. Два controller refusal
-сохранены и reconciled; source correction пути staged helper/публикации ответа квалифицируется отдельно.
+сохранены и reconciled. Corrected source0e4e85b5:7 exact-SHA CI PASS/native331 PASS/0 skips;
+370 source files сверены на OWNER/NL1, только для следующей новой операции; working pins14d4dfad сохранены.
+Повторный independent readback17:35UTC подтверждает те же PID/authority/generation и IPC.
+Notifications: позднейший timer-driven run17:38:19–17:38:20UTC success/0; timer active/waiting.
+Отдельно проверены28 recovery evidence files и preparation44 references; это НЕ coherent backup/HA trust.
 [Причины, retained failures и gate](releases/2026-11-26-control-ha-owner-boot-resume.md).
 **Один NEXT:** coherent encrypted RU/NL1/NL2/OWNER capture, independent reader и штатный resume;
 до него закрыть OWNER/manual writer coverage и подтвердить independent trust/custody.

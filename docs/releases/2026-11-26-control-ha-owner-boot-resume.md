@@ -20,7 +20,7 @@ This is incident evidence, not a coherent backup or independent trust acceptance
 ## Proven causes
 
 Support attempted PID4509 at12:04:20UTC on boot `2c09aa6c-4e1c-4ee9-98aa-d636ad9462f0`:
-exit78/NRestarts0, now MainPID0. Root-owned0644 authority binds accepted PID3790078/start130682912
+exit78/NRestarts0, MainPID0 at the initial incident snapshot. Root-owned0644 authority binds accepted PID3790078/start130682912
 on old boot `edabe487-c37c-4dae-8c98-8b56fef2bd46`. Its SHA256 is
 `afb1c670d8f66dcfab17c5b7d8a6547114ef1bcfa8ad77b759a32eacd22316af`; entry SHA256
 `2578ce989b24ddfce49c600d480001aa7babe0925a235b7dcc7fb6d9d66d4b19`. Both predate reboot;
@@ -36,8 +36,8 @@ Notifications failed/1; timer active/waiting. Installed collector equals reposit
 notification_cursor through the support UNIX socket, before SSH source collection. Socket absent;
 bounded root connect probe returns ENOENT. Generic journal “Subscription source unavailable;
 checkpoint and queue retained” therefore does not establish an SSH failure. No real message
-or collector write was generated. After recovery, actual oneshot success must still be verified;
-permanent active/running is not required for this service.
+or collector write was generated during diagnosis. Actual post-recovery oneshot success is
+recorded below; permanent active/running is not required for this service.
 
 ## Source-only diagnostic and checks
 
@@ -159,14 +159,67 @@ window to close; no unsafe bytes are consumed. Persistent extra links, wrong own
 missing response and changed inputs remain refused/unknown. Fresh regression checks cover both
 advance/resume from a separate tools path, staged drift, transient/persistent publication and unsafe
 response files. This follow-up is not silently substituted into the accepted operation's source pins.
-Final focused locked/native follow-up selection56 PASS/0 skips in95.04s; its exact-source CI is
-pending at this source checkpoint (the working14d4dfad nine-workflow result remains separate).
+Final focused locked/native follow-up selection56 PASS/0 skips in95.04s. Exact follow-up source
+`0e4e85b5cbf122c959af21490a906c723b6e3412`: all seven applicable workflows SUCCESS,
+native45864481816, phase045864481774, Linux candidate45864481681, messenger45864481766,
+notifications45864481692, console45864481737 and voice45864481797. Downloaded native
+artifact15140422744 SHA256 `20a19eb820d13aa559bcaba157d36c38ffc8f3126c84f3f5ac4044d05915f786`
+independently verifies exact source and331 tests/0 failures/errors/skips. The working14d4dfad
+nine-workflow result remains separate; no retagging or substituted working-operation pins.
+
+Corrected source capsule SHA256 `73b3b81181599e6100c5c01a0b16bce697590f1347861ed7d54e485cc14e9a97`:
+all370 files independently match the commit on OWNER and NL1; source-map SHA256
+`0062ee85ac007e06b8e6695e719d4e8ac4b6b84ea4be3723530418366f2e1bc8`.
+These tools are staged for a future fresh operation only. The repeatable
+[boot/resume procedure](../operators/support-boot-resume.md) uses new linked records, never
+marker deletion or startup-authority editing.
 
 Rollback is code-only with independently reclosed/drained/invalidated mailbox and retained current
 data, never an older store restore or direct old-process restart. An already accepted support
 instance must not be interrupted merely to install the controller follow-up. Future boot/resume
 uses a fresh linked operation with the corrected tooling after its exact-source CI. Terminal failure
 remains explicit and closed; old --recover remains code rollback and --pause remains remote-only.
+
+### Independent final verification and preparation request
+
+A separate reader verifies the exact28-file recovery evidence set and cross-bindings between
+OWNER plan/authority/accepted/witness and NL1 manifest/ticket/consumed request. Manifest SHA256
+`746ba4a820897babcd8d11646a3a4a26d2d6e90446f28e1383f904760b8e6433`, result
+EXACT_RECOVERY_EVIDENCE_AND_BINDINGS_VERIFIED_NOT_BACKUP. This verifies incident evidence,
+not all-component capture completeness or an independent HA signer.
+
+Final17:35UTC process/store/IPC/authenticated-NL1 readback again confirms OWNER757814,
+NL13705, unchanged new authority/generation,21 records/12 retained messages, cursor4/jobs0
+and all60 original root records. All five pre-existing plan markers remain; nine current
+markers are not relabeled as the historical seven UNKNOWN. An earlier final observer attempt
+received a nonzero NL1 response but did not retain its raw response: its cause is unproven.
+The separately retained authenticated observe and subsequent full readback succeed without
+restart, opening request, authority edit or marker removal. This is not a new WORKERS_REMAIN
+finding or proof that the failed observation never happened.
+
+Final17:38UTC service readback observes a later timer-driven notifications run completed
+17:38:19–17:38:20UTC with success/0 and inactive/dead afterward; timer enabled/active/waiting.
+An earlier sample caught its normal activating phase and was not counted as completed success.
+Support remains757814/running/NRestarts0; no manual restart or test message was needed.
+
+Private `custody-preparation-manifest.json` binds44 direct evidence references, the original
+24-file preparation and the28-file nested recovery set; SHA256
+`cf1f609fc790d7cf62aea60071fa0cfe918c52d5ea7db0d8320ccc71306c8d50`.
+Private `custody-allocation-request.json` SHA256
+`c9dd8b4b062555bc129407930d65b6ff97f430ba99615c3f205ed405586de06b` asks for the missing
+dedicated HA signer, independent pins/floors custodian and exact off-origin destination.
+A separate reader checks exact request/manifest bytes and all44 direct plus28 nested files:
+PREPARATION_REQUEST_BYTES_VERIFIED_ONLY. `coherent_bundle=null`, `forward_signing_request=null`,
+capture/trust flags false; this is neither a flat self-contained kit nor capture approval.
+Final17:38UTC separate readback revalidates both original hashes and every direct/nested file;
+later liveness/CI observations are retained separately, not inserted into an immutable manifest.
+
+Concrete proposed custody: encrypted complete kit on dedicated offline medium A away from
+originating OWNER; wrapping key plus separately reviewed HA signer fingerprint/request/floors
+on distinct medium B with the designated custodian. Restore only on an isolated replacement
+machine from the transferred kit, without access to original participants. Actual signer,
+custodian and destination remain unselected; no transfer/signing/key generation or release-key
+reuse is claimed. No private key is requested in chat. These choices did not delay support recovery.
 
 ## Remaining HA-02
 

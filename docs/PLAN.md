@@ -24,6 +24,8 @@ native323/0 skips; actual-root OWNER/NL1 synthetic qualification PASS. Сохр�
 21 records/12 сообщений, cursor4/jobs0 и UNKNOWN. Повтор recovery idempotent, без нового PID.
 Controller source-pin refusal и post-effect response refusal reconciled по staged endpoint и свежему
 readback без изменения authority/markers; follow-up исправляет путь helper и publication race.
+Source0e4e85b5:7 exact-SHA CI PASS/native331 PASS/0 skips;370 files на OWNER/NL1 совпали.
+Working operation остаётся14d4dfad; corrected tools и repeatable boot/resume runbook — для новой операции.
 [Incident evidence и recovery gate](releases/2026-11-26-control-ha-owner-boot-resume.md).
 Новая linked generation98aaff11… действительна; старые reservation/UNKNOWN не удалены.
 Archive621009b8 неизменён; NL1 PID3705,
@@ -35,6 +37,8 @@ Archive621009b8 неизменён; NL1 PID3705,
 Private preparation24 files проверена отдельно, не является полным зашифрованным комплектом.
 Доступные private и прочитанные root custody records не подтверждают HA signer/independent
 pins/floors/off-origin destination; нужен конкретный отсутствующий выбор владельца.
+Private custody manifest44 references и точный allocation request проверены отдельным reader,
+включая28 nested recovery records; предложены два раздельных offline media, выбор/transfer не выполнены.
 [Точные препятствия, scope, custody proposal, rollback и tests](releases/2026-11-26-control-ha-coherent-resume.md).
 Принятый support handoff не переоткрывается как незавершённый компонент; новый restart refusal
 разобран и восстановлен отдельно. WORKERS_REMAIN UNPROVEN. Isolated replication PASS; три прежних HA-02
