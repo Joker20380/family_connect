@@ -1,14 +1,22 @@
 # Текущее состояние / Current state
 
-**26 November — непосредственный приоритет HA-02: OWNER boot/resume.**
+**26 November16:57UTC — OWNER support/notifications возобновлены на текущем boot.**
 Штатный локальный password dialog и root-readback выполнены в одной PTY; sudoers/polkit неизменны.
 Сохранены60 root-plan files, units/journals и startup records. Read-only probe под fc-support:
 START_AUTHORITY_CHANGED — authority предыдущего boot/PID3790078; файл доступен, archive621009b8 совпал.
-Notifications отдельно: отсутствует IPC socket (ENOENT) до SSH collection; timer active/waiting.
-Diagnostic source889ef66e0e6dd36c5a5bdbc1d47b1647a9f4c5d9 pushed/verified;16 tests и native CI45849023762 PASS.
-Рабочая установка/recovery ещё NOT_RUN. [Причины и gate](releases/2026-11-26-control-ha-owner-boot-resume.md).
-**Один NEXT:** forward support/notifications resume с новой linked generation; затем coherent
-encrypted RU/NL1/NL2/OWNER capture и independent reader. Historical handoff принят, WORKERS_REMAIN UNPROVEN.
+Причина notifications — отсутствующий IPC socket (ENOENT) до SSH collection; после resume штатный
+oneshot завершён success/0, timer enabled/active/waiting. Support PID757814 active/running/NRestarts0,
+новая process authority и linked generation98aaff11…; повтор recovery без рестарта подтверждён.
+Archive621009b8 неизменён. Source14d4dfad: все9 exact-SHA CI PASS; native323 PASS/0 skips,
+artifact bytes проверены отдельно. Actual-root synthetic OWNER/NL1 qualification PASS.
+NL1 PID3705 не перезапускался; лимиты100%/768MiB сохранены, remote admission OPEN_LOCAL_ONLY.
+21 records/12 сообщений, cursor4/jobs0 и исторические markers сохранены; обновился только support-bindings.
+Все60 прежних root records неизменны. Startup refusal receipt установлен. Два controller refusal
+сохранены и reconciled; source correction пути staged helper/публикации ответа квалифицируется отдельно.
+[Причины, retained failures и gate](releases/2026-11-26-control-ha-owner-boot-resume.md).
+**Один NEXT:** coherent encrypted RU/NL1/NL2/OWNER capture, independent reader и штатный resume;
+до него закрыть OWNER/manual writer coverage и подтвердить independent trust/custody.
+Historical handoff принят, WORKERS_REMAIN UNPROVEN; полный machine-loss restore ещё NOT_RUN.
 
 ## Earlier census checkpoint — retained preparation, not current liveness
 

@@ -14,28 +14,31 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS; продолжение после обрыва26 ноября.**
-**Один NEXT:** актуальный coherent encrypted RU/NL1/NL2/OWNER capture, независимая проверка
-точного комплекта и штатное возобновление; затем полный isolated machine-loss restore с
-current/post-ACK/stale-state проверкой. Readiness inventory остаётся промежуточным результатом.
-Новая предпосылка: OWNER reboot12:04:08UTC; support failed/exit78, notifications failed.
-Root-readback теперь выполнен после локального password prompt в той же PTY;60 исходных plan files
-сохранены. Подтверждены START_AUTHORITY_CHANGED (old boot/PID3790078) и notifications IPC ENOENT.
-Diagnostic source889ef66e pushed/verified,16 tests/native CI45849023762 PASS; live recovery NOT_RUN.
-Непосредственный приоритет — штатный forward support/notifications resume, затем coherent capture.
-[Причины и recovery gate](releases/2026-11-26-control-ha-owner-boot-resume.md).
-Нужна допустимая новая linked generation; не удалять reservation,
-не очищать UNKNOWN, не запускать прежний writer по старому разрешению. Archive621009b8
-неизменён; NL1 PID3705,100%CPU/768MiB, fresh observe OPEN_LOCAL_ONLY/work0/capture=false.
-Census14:38–14:47UTC: RU4 schemas/32 units, NL1/2 units9/5, OWNER11 units и panel sources.
-OWNER common gate не установлен, source match2/10/container; общий writer interval не доказан.
-Source-only refusal evidence:55 PASS/0 skips; feature `d35db9d97a5088b15183c26ce4e0459053f71cb8`
-pushed/remote-SHA verified. Private preparation24 files не является coherent kit.
-Доступные records не подтверждают HA signer/independent pins/floors/off-origin destination;
-сначала дочитать root records, затем запросить только отсутствующий выбор владельца.
-[Точные scope, блокеры, custody proposal и rollback](releases/2026-11-26-control-ha-coherent-resume.md).
-Принятый handoff сохраняется; новый restart refusal требует отдельного разбора.
-WORKERS_REMAIN UNPROVEN. Isolated replication PASS; три прежних HA-02 критерия partial.
-HA-03 не начат, FLEET-PRODUCTION-ONBOARDING-1 остаётся обязательным OPEN итогом.
+**Один NEXT:** один актуальный coherent encrypted capture RU/NL1/NL2/OWNER, независимый reader
+точных bytes/полноты/связей и штатное возобновление всех участников; после принятия — полный
+isolated machine-loss restore с current/post-ACK/stale-state проверкой. Инвентаризация промежуточна.
+Непосредственная предпосылка выполнена16:57UTC: support PID757814 active/running с новой authority,
+notifications oneshot success/0, timer enabled/active/waiting. Root-readback в той же аутентифицированной
+PTY доказал старую boot authority и отсутствующий IPC. Source14d4dfad:9 exact-SHA CI PASS,
+native323/0 skips; actual-root OWNER/NL1 synthetic qualification PASS. Сохранены60 root records,
+21 records/12 сообщений, cursor4/jobs0 и UNKNOWN. Повтор recovery idempotent, без нового PID.
+Controller source-pin refusal и post-effect response refusal reconciled по staged endpoint и свежему
+readback без изменения authority/markers; follow-up исправляет путь helper и publication race.
+[Incident evidence и recovery gate](releases/2026-11-26-control-ha-owner-boot-resume.md).
+Новая linked generation98aaff11… действительна; старые reservation/UNKNOWN не удалены.
+Archive621009b8 неизменён; NL1 PID3705,
+лимиты100%/768MiB, свежий independent observe OPEN_LOCAL_ONLY/work0/capture=false.
+Свежий census16:35UTC и post-resume OWNER сверяют4 RU schema,32/9/5 remote units и11 OWNER units;
+в OWNER common gate не установлен, match2/10 source/container. Manual/direct ORM/all-writer
+и общий интервал ещё не доказаны. Реальный100ms support local-store barrier даёт DRAIN_TIMEOUT
+с evidence, без рестарта/оставленной блокировки; remote pause его не заменяет.
+Private preparation24 files проверена отдельно, не является полным зашифрованным комплектом.
+Доступные private и прочитанные root custody records не подтверждают HA signer/independent
+pins/floors/off-origin destination; нужен конкретный отсутствующий выбор владельца.
+[Точные препятствия, scope, custody proposal, rollback и tests](releases/2026-11-26-control-ha-coherent-resume.md).
+Принятый support handoff не переоткрывается как незавершённый компонент; новый restart refusal
+разобран и восстановлен отдельно. WORKERS_REMAIN UNPROVEN. Isolated replication PASS; три прежних HA-02
+критерия partial. HA-03 не начат, FLEET-PRODUCTION-ONBOARDING-1 остаётся обязательным OPEN итогом.
 
 ## Accepted support checkpoint — history, not another NEXT
 
