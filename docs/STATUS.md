@@ -3,9 +3,20 @@
 **HA-02 continuation:** stopped-support принят владельцем в заявленном scope.
 Ближайший результат — установленный OWNER/all-writer barrier, затем свежий общий
 capture → independent verify → normal resume; e4eace1a — только история.
-Программа-сейф на OWNER: уточняются название, off-laptop copy и laptop-loss recovery;
+На OWNER найден KeePassXC2.7.10; уточняются выбранный vault, off-laptop copy и laptop-loss recovery;
 custody не ограничена USB и не блокирует engineering.
 [Текущий checkpoint](releases/2026-11-26-control-ha-owner-all-writer.md).
+Direct-ORM guard подготовлен, НЕ установлен. Full94fe9760 CI выявил20 связанных standalone/package
+отказов; установка не выполнялась. Исправлены Django-free cleanup, общий scope двух import paths
+и reviewed helper pins:383 panel/101 standalone + native image activation/revert PASS;
+329 OWNER/gate checks ранее PASS. Corrected exact-source CI требуется.
+Текущие support bindings и cursor/queue повторно проверены; рабочие контейнеры не изменены.
+Root collectors gate также подготовлен:69 focused/native-package и6 actual-root PASS;
+bindings/notifications CLI и direct API покрыты исходниками, установка ещё не заявлена.
+Collector CLI теперь различает закрытый gate(75), invalid gate(78) и source/IPC failure(1);
+69 focused и6 root checks повторены. Код сам по себе не заменяет source/runtime readback.
+Actual inventory gate: UNSETTLED_OPERATION/3 unchanged markers; probe gate: local drain PASS/0.
+Сейф не открывался; внешний backup/recovery не подтверждён.
 
 **26 November18:52UTC — real stopped-support snapshot verified; linked resume complete.**
 Joker назначен HA signer/хранителем independent pins/floors; NL2 parent
