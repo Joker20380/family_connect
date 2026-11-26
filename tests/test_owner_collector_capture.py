@@ -35,6 +35,19 @@ def pending(gate):
     return {path.name: path.read_bytes() for path in (gate.directory / 'pending').iterdir()}
 
 
+def installed_binding(gate, monkeypatch):
+    application = Path(owner_capture.__file__).resolve().parents[1]
+    binding = gate.directory.parent / 'installed-binding.json'
+    binding.write_text(json.dumps(dict(schema=1, application=str(application), gate=str(gate.directory),
+                                     pins=gate.pins), sort_keys=True, separators=(',', ':')) + '\n')
+    binding.chmod(0o600)
+    monkeypatch.setattr(owner_capture, 'INSTALLED_APP', application)
+    monkeypatch.setattr(owner_capture, 'INSTALLED_BINDING', binding)
+    monkeypatch.setattr(owner_capture, 'INSTALLED_GATE', gate.directory)
+    monkeypatch.delenv('FC_OWNER_CAPTURE_GATE')
+    return binding
+
+
 def test_manual_collect_refuses_before_dispatch_and_preserves_projection(setup):
     gate, key, hosts, output, calls = setup
     with gate.drain(.1):
@@ -84,8 +97,7 @@ def test_nested_collect_shares_gate_but_stale_copy_refuses(setup):
 
 def test_installed_gate_cannot_be_unset_or_redirected(setup, monkeypatch):
     gate, key, hosts, output, calls = setup
-    monkeypatch.setattr(owner_capture, 'INSTALLED_GATE', gate.directory)
-    monkeypatch.delenv('FC_OWNER_CAPTURE_GATE')
+    installed_binding(gate, monkeypatch)
     with gate.drain(.1):
         with pytest.raises(Busy):
             support_bindings.collect('127.0.0.1', key, hosts, output)
@@ -93,6 +105,69 @@ def test_installed_gate_cannot_be_unset_or_redirected(setup, monkeypatch):
     with pytest.raises(GateError, match='OWNER_CAPTURE_CONFIGURATION_CHANGED'):
         support_bindings.collect('127.0.0.1', key, hosts, output)
     assert not calls and output.read_bytes() == b'original-projection'
+
+
+@pytest.mark.parametrize('entrypoint', ['direct', 'bindings', 'notifications'])
+@pytest.mark.parametrize('damage', ['missing', 'replaced', 'symlink', 'permissions', 'missing-lock',
+                                   'missing-binding', 'invalid-binding', 'binding-permissions', 'binding-pins'])
+def test_installed_gate_damage_refuses_without_environment_before_io(setup, monkeypatch, entrypoint, damage):
+    gate, key, hosts, output, calls = setup
+    binding = installed_binding(gate, monkeypatch)
+    original = gate.directory
+    saved = original.with_name('saved-gate')
+    if damage in ('missing', 'replaced', 'symlink'):
+        original.rename(saved)
+        if damage == 'replaced':
+            initialize(original)
+        elif damage == 'symlink':
+            original.symlink_to(saved, target_is_directory=True)
+    elif damage == 'permissions':
+        original.chmod(0o755)
+    elif damage == 'missing-lock':
+        (original / 'admission.lock').rename(original / 'saved-admission.lock')
+    elif damage == 'missing-binding':
+        binding.rename(binding.with_suffix('.saved'))
+    elif damage == 'invalid-binding':
+        binding.write_text('{}')
+    elif damage == 'binding-permissions':
+        binding.chmod(0o644)
+    else:
+        document = json.loads(binding.read_bytes())
+        document['pins']['.'][1] += 1
+        binding.write_text(json.dumps(document, sort_keys=True, separators=(',', ':')) + '\n')
+    owner_capture.gate_for.cache_clear()
+    monkeypatch.setattr(subscription_collector, 'command', lambda path: pytest.fail('IPC before admission'))
+    monkeypatch.setattr(support_bindings.os, 'replace', lambda *args: pytest.fail('write before admission'))
+    if entrypoint == 'direct':
+        with pytest.raises(GateError):
+            support_bindings.collect('127.0.0.1', key, hosts, output)
+    else:
+        arguments = ['collector', '--host', '127.0.0.1', '--key', str(key),
+                     '--known-hosts', str(hosts), '--output', str(output)]
+        if entrypoint == 'notifications':
+            arguments.extend(['--socket', '/synthetic/unreachable'])
+        monkeypatch.setattr(sys, 'argv', arguments)
+        with pytest.raises(SystemExit) as refused:
+            (subscription_collector if entrypoint == 'notifications' else support_bindings).main()
+        assert refused.value.code == 78
+    assert not calls and output.read_bytes() == b'original-projection'
+    assert not list((saved if saved.exists() else original).joinpath('pending').iterdir())
+    if damage == 'replaced':
+        assert not list(original.joinpath('pending').iterdir())
+
+
+def test_installed_binding_rechecks_cached_gate_before_nested_io(setup, monkeypatch):
+    gate, key, hosts, output, calls = setup
+    installed_binding(gate, monkeypatch)
+    with owner_capture.operation():
+        original_pending = pending(gate)
+        gate.directory.rename(gate.directory.with_name('saved-gate'))
+        initialize(gate.directory)
+        with pytest.raises(GateError):
+            support_bindings.collect('127.0.0.1', key, hosts, output)
+        assert not calls and output.read_bytes() == b'original-projection'
+        assert not pending(gate)
+        assert original_pending
 
 
 def test_busy_and_killed_collector_refuse_drain(tmp_path, monkeypatch):

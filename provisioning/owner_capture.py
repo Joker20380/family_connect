@@ -2,27 +2,74 @@
 from contextlib import contextmanager
 from contextvars import ContextVar
 from functools import lru_cache, wraps
+import json
 import os
 from pathlib import Path
+import stat
 import threading
 
-from control.capture_gate import CURRENT, Gate, external_operation, require
+from control.capture_gate import CURRENT, Gate, GateError, external_operation, require
 
 
 INSTALLED_GATE = Path('/var/lib/fc-support-bindings/capture-owner-collectors')
+INSTALLED_APP = Path('/opt/family-connect-support/app')
+INSTALLED_BINDING = Path('/opt/family-connect-support/owner-collectors-capture.json')
 SCOPE = ContextVar('owner_collector_admission', default=None)
 
 
 @lru_cache(maxsize=8)
 def gate_for(directory):
-    return Gate(directory)
+    try:
+        return Gate(directory)
+    except OSError:
+        raise GateError('OWNER_CAPTURE_UNAVAILABLE') from None
+
+
+def installed_pins():
+    try:
+        require(all(not parent.is_symlink() for parent in INSTALLED_BINDING.parents),
+                'OWNER_CAPTURE_BINDING_PATH')
+        descriptor = os.open(INSTALLED_BINDING, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK | os.O_CLOEXEC)
+        with os.fdopen(descriptor, 'rb') as stream:
+            info = os.fstat(stream.fileno())
+            require(stat.S_ISREG(info.st_mode) and info.st_uid == os.geteuid() and
+                    stat.S_IMODE(info.st_mode) == 0o600 and info.st_nlink == 1 and
+                    0 < info.st_size <= 4096, 'OWNER_CAPTURE_BINDING_PERMISSIONS')
+            raw = stream.read(4097)
+        binding = json.loads(raw)
+        require(type(binding) is dict and set(binding) == {'schema', 'application', 'gate', 'pins'} and
+                type(binding['schema']) is int and binding['schema'] == 1 and
+                binding['application'] == str(INSTALLED_APP) and binding['gate'] == str(INSTALLED_GATE),
+                'OWNER_CAPTURE_BINDING_INVALID')
+        pins = binding['pins']
+        require(type(pins) is dict and set(pins) == {'.', 'admission.lock', 'operations.lock', 'pending'} and
+                all(type(value) is list and len(value) == 2 and
+                    all(type(number) is int and number >= 0 for number in value) for value in pins.values()),
+                'OWNER_CAPTURE_BINDING_INVALID')
+        require(raw == (json.dumps(binding, sort_keys=True, separators=(',', ':')) + '\n').encode(),
+                'OWNER_CAPTURE_BINDING_ENCODING')
+        return {name: tuple(value) for name, value in pins.items()}
+    except GateError:
+        raise
+    except (OSError, ValueError, TypeError, RecursionError):
+        raise GateError('OWNER_CAPTURE_BINDING_UNAVAILABLE') from None
 
 
 def configured_gate():
     directory = os.environ.get('FC_OWNER_CAPTURE_GATE') or None
-    if os.path.lexists(INSTALLED_GATE) and (os.geteuid() == 0 or INSTALLED_GATE.stat().st_uid == os.geteuid()):
+    source = Path(__file__).absolute()
+    if INSTALLED_APP in (source.parent.parent, source.resolve().parent.parent):
         require(directory in (None, str(INSTALLED_GATE)), 'OWNER_CAPTURE_CONFIGURATION_CHANGED')
-        directory = str(INSTALLED_GATE)
+        pins = installed_pins()
+        gate = gate_for(str(INSTALLED_GATE))
+        require(gate.pins == pins, 'OWNER_CAPTURE_BINDING_CHANGED')
+        try:
+            with gate.opened():
+                return gate
+        except GateError:
+            raise
+        except OSError:
+            raise GateError('OWNER_CAPTURE_UNAVAILABLE') from None
     return gate_for(directory)
 
 
