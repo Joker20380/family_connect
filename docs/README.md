@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 27 November00:05CET: post-power-loss checkpoint; b7f4cbd2 exact5 CI/native342/5 sandbox independently verified,12-file candidates reverified, mandatory binding still uninstalled; support/console recovery requires root authentication, two user timers held, UNKNOWN retained](releases/2026-11-27-control-ha-owner-resume.md).
+
 [CONTROL-HA · 26 November18:52UTC: real stopped-support component e4eace1a independently verified and normally resumed; source2f4f83dd4 CI/native342 PASS, notifications success/timer restored; OWNER/all-writer/full kit/custody/restore still open](releases/2026-11-26-control-ha-stopped-support.md).
 
 [CONTROL-HA · 26 November17:38UTC: OWNER support/notifications recovered and independently reread; working14d4dfad native323 and corrected0e4e85b5 native331/exact CI PASS; coherent capture/custody remain open](releases/2026-11-26-control-ha-owner-boot-resume.md). [Repeatable boot/resume procedure](operators/support-boot-resume.md).

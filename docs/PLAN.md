@@ -16,6 +16,18 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
+**27 November00:05CET reboot checkpoint:** support failed/78, console stopped/127
+(missing support runtime mount); earlier live PID/authority readbacks below are history.
+Current prerequisite inside this NEXT: restore technical root access, inspect retained
+refusal/prestate and perform the qualified linked boot recovery. `sudo -n` currently refuses.
+User readonly-monitor/network-probe timers are held, still enabled; services exited without
+signals. Keep original3 inventory UNKNOWN separate from12 additional inventory and14 probe
+markers; both strict drains refuse, none cleared. Empty Docker ExecIDs is not settlement.
+Exactb7f4cbd2 all5 CI and independent native342/0 skips +5 sandbox PASS;34 local checks PASS.
+Mandatory collector binding remains uninstalled. Both12-file candidate overlays reverified
+against7a91d127; no activation/common capture/normal-resume claim.
+[Recovery ordering and held-unit restoration](releases/2026-11-27-control-ha-owner-resume.md).
+
 **Один NEXT:** установить и независимо проверить OWNER/all-writer barrier, затем получить
 один свежий общий RU/NL1/NL2/OWNER capture → independent verify → normal resume.
 После принятого комплекта — source-host-free isolated restore с current/post-ACK/stale-state checks.
@@ -24,7 +36,7 @@ Console/publisher, services/timers, CLI/manual/direct-ORM и dispatchers вхо�
 Непосредственная поправка этого NEXT: закрыть воспроизведённый192343eb missing-gate fail-open
 независимым обязательным installed binding, проверить fresh process/no environment/invalid pins,
 установить и независимо сверить до продолжения console/publisher. Source34 narrow/5 native checks PASS;
-installation/CI ещё pending. Принятый прежний collector scope не переоткрывается.
+installation pending; exactb7f4cbd2 CI/independent artifact PASS. Принятый прежний collector scope не переоткрывается.
 
 Владелец принял stopped-support stop/capture/forward-resume как завершённый компонент
 в заявленном scope. e4eace1a… остаётся историческим sensitive local snapshot, НЕ свежим
