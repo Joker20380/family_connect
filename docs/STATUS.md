@@ -1,5 +1,23 @@
 # Текущее состояние / Current state
 
+**27 November00:05CET /26 November23:05UTC — continuation after laptop power loss.**
+Reboot invalidates the earlier live-process observations: support is failed/78 (cause not
+yet independently read), notifications failed; console5ce82415 is stopped/127 with a Docker
+mount error for missing `/run/family-connect-support`. Publisher50de6f25 and PostgreSQL are healthy.
+Root access is unavailable: `sudo -n` requires interactive authentication; no privileged
+recovery, collector replacement or console/publisher activation was attempted this turn.
+Installed collector source remains192343eb; mandatory binding file is absent, not commissioned.
+Exactb7f4cbd2: all5 CI PASS; downloaded native artifact15158386237 independently verifies
+342 tests/0 skips and5 disposable sandbox cases;34 narrow local checks PASS.
+Both12-file candidates3af9fbf9/35158514 independently match7a91d127; installed census remains2/12.
+Two user timers (readonly-monitor/network-probe) are deliberately held, still enabled,
+to stop accumulating failures during the outage; their services exited without signals.
+Inventory retains the original3 UNKNOWN byte/mtime-identical plus12 additional markers;
+probe retains14. Both strict drains refuse UNSETTLED_OPERATION, no markers changed.
+This is NOT external-dispatch settlement, normal resume or common capture. Root authentication
+and linked boot recovery are prerequisites within the same OWNER/all-writer NEXT.
+[Exact state, evidence and resume order](releases/2026-11-27-control-ha-owner-resume.md).
+
 **HA-02 continuation:** stopped-support принят владельцем в заявленном scope.
 Ближайший результат — установленный OWNER/all-writer barrier, затем свежий общий
 capture → independent verify → normal resume; e4eace1a — только история.
@@ -31,7 +49,7 @@ Inventory drain остаётся UNSETTLED_OPERATION; это НЕ общий OWN
 Installed source теперь требует отдельный root-owned inode binding независимо от наличия gate;
 missing/replaced/invalid gate/binding отказывает до I/O, включая новый процесс без unit environment.
 34 narrow checks PASS также под root;99 focused PASS/2 context skips.5 actual systemd sandbox
-cases PASS, без production gate/dispatch; CI и controlled installation pending.
+cases PASS, без production gate/dispatch; exactb7f4cbd2 CI/artifact PASS, controlled installation pending.
 
 **26 November18:52UTC — real stopped-support snapshot verified; linked resume complete.**
 Joker назначен HA signer/хранителем independent pins/floors; NL2 parent

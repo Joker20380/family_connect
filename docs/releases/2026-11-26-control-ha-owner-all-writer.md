@@ -1,5 +1,10 @@
 # HA-02 OWNER/all-writer continuation — 26 November 2026
 
+**Subsequent reboot observation:** [27 November continuation](2026-11-27-control-ha-owner-resume.md)
+supersedes live health/PID observations below. Mandatory installed binding is still absent;
+exactb7f4cbd2 CI is independently verified. Two user timers are held after reboot failures;
+the original3 inventory UNKNOWN remain separate from additional inventory/probe markers.
+
 The owner accepts the stopped-support stop/capture/forward-resume component in its
 stated scope. Source2f4f83dd, exact-SHA CI/native342 PASS and snapshot e4eace1a remain
 historical evidence, not the fresh common RU/NL1/NL2/OWNER recovery kit.
@@ -14,8 +19,8 @@ The ordinary gate drain semantics and retained UNKNOWN/history must not change.
 
 ## Custody
 
-Joker and the NL2 ciphertext parent are assigned. The laptop vault application's
-name, off-laptop copy and laptop-loss recovery evidence are being requested. USB is
+Joker, the NL2 ciphertext parent and KeePassXC are known; project history identifies
+Family-Connect.kdbx. Only actual off-laptop copy and laptop-loss recovery access remain unconfirmed. USB is
 not the only permissible option. No vault contents or secrets are requested or
 published. No HA private key, checkpoint approval or independent custody is claimed.
 
