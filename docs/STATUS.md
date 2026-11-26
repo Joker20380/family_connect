@@ -3,7 +3,8 @@
 **HA-02 continuation:** stopped-support принят владельцем в заявленном scope.
 Ближайший результат — установленный OWNER/all-writer barrier, затем свежий общий
 capture → independent verify → normal resume; e4eace1a — только история.
-На OWNER найден KeePassXC2.7.10; уточняются выбранный vault, off-laptop copy и laptop-loss recovery;
+Custody: Joker, NL2 и KeePassXC известны; история проекта называет Family-Connect.kdbx.
+Уточняются только фактическая off-laptop copy и laptop-loss recovery;
 custody не ограничена USB и не блокирует engineering.
 [Текущий checkpoint](releases/2026-11-26-control-ha-owner-all-writer.md).
 Direct-ORM guard подготовлен, НЕ установлен. Full94fe9760 CI выявил20 связанных standalone/package
@@ -25,6 +26,12 @@ Collector CLI теперь различает закрытый gate(75), invalid
 Host inventory/probe CLI: fresh admission-only75; markers3/0 unchanged, timer holds не вводились.
 Inventory drain остаётся UNSETTLED_OPERATION; это НЕ общий OWNER/all-writer или coherent capture.
 Сейф не открывался; внешний backup/recovery не подтверждён.
+**Текущая поправка, ещё не установлена:** на source192343eb подтверждён fail-open при
+исчезновении fixed gate и unset environment. Принятый installed scope не включал этот случай.
+Installed source теперь требует отдельный root-owned inode binding независимо от наличия gate;
+missing/replaced/invalid gate/binding отказывает до I/O, включая новый процесс без unit environment.
+34 narrow checks PASS также под root;99 focused PASS/2 context skips.5 actual systemd sandbox
+cases PASS, без production gate/dispatch; CI и controlled installation pending.
 
 **26 November18:52UTC — real stopped-support snapshot verified; linked resume complete.**
 Joker назначен HA signer/хранителем independent pins/floors; NL2 parent

@@ -230,6 +230,36 @@ Support was never stopped by this collector installation. No new real messages w
 | Completed component |434a510b3f405e0dc6adb58af4a737262de091c49a2f1dc46ed0116a353f60b4|
 | Idempotent repeat readback |5446617cc5af80e5d868bb431c7ee2d6e9d99c66c09ae85c49574c612588c46d|
 
+## Mandatory installed binding correction — source qualification
+
+The owner's192343eb reproduction exposes a real fail-open: directory-existence discovery
+selected Gate(None) after the fixed gate was renamed and the environment was unset. The
+accepted collector component remains accepted only in its stated, existing-gate scope.
+Installed entrypoints are now recognized from their installed source location, not the
+presence of gate state. They must read the separate root-owned0600
+`/opt/family-connect-support/owner-collectors-capture.json` before gate admission. Missing,
+invalid, unsafe or redirected bindings refuse; no initialization or repinning occurs at runtime.
+The canonical schema1 JSON binds application path, fixed gate path and all four device/inode
+pairs (`.`, admission.lock, operations.lock, pending). The file must be commissioned from
+independently observed existing gate pins while the collectors are held, not from whatever
+replacement directory a new writer finds. It is not a checkpoint signature or startup authority.
+
+Every installed call rechecks this binding; a fresh process cannot bless a replaced directory.
+Direct collect and both CLIs refuse before cursor IPC, SSH or projection changes without unit
+environment; unrelated source-only laboratory callers retain the explicit optional-gate API.
+This distinction is not a claim that arbitrary old source copies/native SQL/manual dispatches
+are covered. Gate.drain and UNKNOWN semantics are unchanged.34 narrow tests PASS, including27
+entrypoint/damage combinations, repeated as root;99 focused tests PASS/2 context skips. Five actual
+root/systemd sandbox cases PASS: read-only filesystem refusal, normal settle, closed75, missing78,
+fresh-process replacement78 without environment. Disposable gates only, no production I/O.
+Exact-source CI and controlled installation/readback are pending; installed source is still192343eb.
+Fresh22:28UTC independent support readback confirms the same process/authority/generation,
+21 records/12 messages,19 original records, cursor4/jobs0 and notifications success/timer ready.
+
+Custody correction: Joker, NL2 and KeePassXC are settled facts; project history identifies
+Family-Connect.kdbx. Only the actual external copy and recovery access after laptop loss need
+owner confirmation. No vault contents were read, no keys generated and no custody PASS claimed.
+
 ## Current coverage and the one remaining NEXT
 
 | Actual writer path | Installed restriction and observed result | Remaining boundary |

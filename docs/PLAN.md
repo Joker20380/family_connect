@@ -19,6 +19,10 @@
 После принятого комплекта — source-host-free isolated restore с current/post-ACK/stale-state checks.
 Console/publisher, services/timers, CLI/manual/direct-ORM и dispatchers входят в обязательный охват.
 Повторный drain работающего lifetime support writer не выполняется; Gate.drain не ослабляется.
+Непосредственная поправка этого NEXT: закрыть воспроизведённый192343eb missing-gate fail-open
+независимым обязательным installed binding, проверить fresh process/no environment/invalid pins,
+установить и независимо сверить до продолжения console/publisher. Source34 narrow/5 native checks PASS;
+installation/CI ещё pending. Принятый прежний collector scope не переоткрывается.
 
 Владелец принял stopped-support stop/capture/forward-resume как завершённый компонент
 в заявленном scope. e4eace1a… остаётся историческим sensitive local snapshot, НЕ свежим
@@ -48,8 +52,8 @@ manual paths без unit environment и Docker-side completion не считаю
 
 Joker назначен HA signer/хранителем независимого реестра pins/floors; ciphertext destination
 NL2 `/opt/apps/family_connect/ha-recovery/`. Эти решения не открываются повторно и не
-утверждают ещё не созданный checkpoint. На OWNER найден KeePassXC2.7.10; выбранный vault,
-внешняя копия и восстановление после потери ноутбука уточняются без чтения секретов.
+утверждают ещё не созданный checkpoint. KeePassXC известен; в истории Family-Connect.kdbx.
+Уточняются только фактическая внешняя копия и восстановление доступа без ноутбука, без чтения секретов.
 Допустимая custody не ограничена USB; каталог на OWNER сам по себе не независим.
 Ключ HA не создан; off-origin custody не подтверждена. Это не блокирует engineering.
 [Текущий all-writer checkpoint](releases/2026-11-26-control-ha-owner-all-writer.md).
