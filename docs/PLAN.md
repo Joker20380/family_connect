@@ -29,20 +29,23 @@ fleet kit: общий цикл требует нового снимка внут
 Последний independently observed runtime: OWNER PID1051719, authority04fb7553…,
 linked operation ha02-forward-20261126-stop01/source2f4f83dd, generation0b21197a…;
 NL1 PID3705,100%CPU/768MiB. Эти pins — observation, не разрешение будущему процессу.
-Support/IPC working; notifications timer-driven18:58:46–47UTC success/0,
+Support/IPC independently rechecked21:43UTC; notifications штатно success/0,
 timer enabled/active/waiting. Перед изменениями необходим свежий runtime readback.
 OWNER/all-writer gate пока НЕ установлен; свежий source census2/12 в console/publisher.
 Full94fe9760 CI FAIL:20 related standalone/package cases; тогда без installation. Corrected helper
 and reviewed pins:383 panel/101 standalone + native image activation/revert PASS;
 329 OWNER-gate tests ранее PASS; все4 workflow7a91d127 PASS. Новые12-file candidates не установлены;
 установленное закрытие остальных writer paths и общий интервал остаются в этом же NEXT.
-Root collector install: closed75 PASS, normal1/EROFS из-за ProtectSystem=strict и gate вне
-ReadWritePaths; исходные модули возвращены, штатные oneshots0/timers waiting подтверждены.
-Исправление размещения gate квалифицировано44 focused +6 root +3 native sandbox;
-новая bounded installation/readback обоих oneshots/manual API требует exact исправленного CI.
+Root collector component192343eb установлен21:42UTC:4 files, fixed gate внутри
+/var/lib/fc-support-bindings; native342/0 skips +3 sandbox CI PASS, independent bytes/readback PASS.
+Оба oneshot/direct API при закрытии75; normal0 и timers waiting восстановлены;
+повтор завершённой operation без redispatch. Первый EROFS/refusal/rollback сохранён как история.
+Все5 workflow точного192343eb PASS, включая phase0 и Linux internal/preview.
 Closed-gate qualification проверяет exact-source exit75 отдельно от invalid gate78/source failure1.
 Installed user inventory gate отдельно отказал UNSETTLED_OPERATION/3 unchanged markers;
-probe drain PASS/0. Нужен сохранённый stopped/external-dispatch proof, не удаление UNKNOWN.
+probe local drain PASS/0. Fresh admission-only CLI refusal75 подтверждён для обоих;
+manual paths без unit environment и Docker-side completion не считаются закрытыми.
+Нужен сохранённый stopped/external-dispatch proof, не удаление UNKNOWN.
 [Принятый компонент и ограничения](releases/2026-11-26-control-ha-stopped-support.md).
 
 Joker назначен HA signer/хранителем независимого реестра pins/floors; ciphertext destination

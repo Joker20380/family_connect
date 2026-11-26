@@ -12,14 +12,18 @@ Direct-ORM guard подготовлен, НЕ установлен. Full94fe9760
 329 OWNER/gate checks ранее PASS. Все4 workflow точного7a91d127 PASS;
 full-pytest artifact15153881426 независимо сверён, failure/error IDs пусты.
 Текущие support bindings и cursor/queue повторно проверены; рабочие контейнеры не изменены.
-Первый root collector install сохранил отказ: закрытие75 PASS, normal start1 из-за
-EROFS — новый gate вне ReadWritePaths при ProtectSystem=strict. Исходные модули восстановлены,
-оба oneshot success/0 и timers active/waiting; рабочий support не останавливался.
-Исправленный gate внутри существующего writable-каталога:44 focused +6 root +3 native sandbox PASS;
-новая установка и exact-source CI этого исправления ещё требуются. Marker/history не удалялись.
+**21:42–21:43UTC: root collector barrier установлен и независимо проверен.**
+4 exact files192343eb; gate внутри /var/lib/fc-support-bindings, без изменения unit permissions.
+Оба oneshot и direct API отказали75 при закрытии; exact projection bytes совпали.
+Затем оба oneshot success/0, timers enabled/active/waiting; повтор operation без redispatch.
+Native CI192343eb:342/0 skips +3 sandbox PASS, артефакт отдельно сверён;
+Все5 workflow точного192343eb PASS, включая phase0 и Linux internal/preview.
+Первый отказ EROFS и проверенный откат сохранены как история, не замаскированы.
+Support/IPC21:43 PASS: прежняя authority/generation,21 records/12 messages, cursor4/jobs0.
 Collector CLI теперь различает закрытый gate(75), invalid gate(78) и source/IPC failure(1);
 69 focused и6 root checks повторены. Код сам по себе не заменяет source/runtime readback.
-Actual inventory gate: UNSETTLED_OPERATION/3 unchanged markers; probe gate: local drain PASS/0.
+Host inventory/probe CLI: fresh admission-only75; markers3/0 unchanged, timer holds не вводились.
+Inventory drain остаётся UNSETTLED_OPERATION; это НЕ общий OWNER/all-writer или coherent capture.
 Сейф не открывался; внешний backup/recovery не подтверждён.
 
 **26 November18:52UTC — real stopped-support snapshot verified; linked resume complete.**
