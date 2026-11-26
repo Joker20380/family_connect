@@ -1,18 +1,24 @@
 # Текущее состояние / Current state
 
-**26 November — stopped-support capture qualified locally; custody roles allocated.**
+**26 November18:52UTC — real stopped-support snapshot verified; linked resume complete.**
 Joker назначен HA signer/хранителем independent pins/floors; NL2 parent
 `/opt/apps/family_connect/ha-recovery/` выбран для ciphertext. Это не одобрение checkpoint.
 Read-only preflight: root0700,37.5GB free, historical kit сохранён. Внешнего носителя
 не обнаружено; только внутренний Micron2300 NVMe. Ключи не создавались, transfer не выполнен.
-Отдельный stopped-support контракт сохраняет pre-stop UNKNOWN/pending и текущие данные,
-требует clean bound exit + NL1 reclosure и проверяет bytes отдельным reader под обоими locks.
-Обычный Gate.drain неизменён.11 native synthetic checks PASS/0 skips, включая SIGKILL
-контроллера/partial copy/retry/linked resume с непустой queue; exact-source CI ещё ожидается.
-Working support/notifications не останавливались; установленный OWNER/all-writer gate ещё открыт.
+Получен private component e4eace1a…:86 entries/494713 bytes,16 pre-stop/current markers,
+UNKNOWN сохранён; closed/drained lock interval18:46:52.496839–18:46:53.730133UTC.
+Отдельный reader точных bytes/полноты/связей PASS; это НЕ full/encrypted fleet kit.
+Source2f4f83dd:4 exact-SHA CI PASS, native342/0 skips, artifact bytes отдельно сверены.
+Штатный stop после remote reclosure сохранён; первый post-exit UNSAFE_CONTROL_FILE отказ
+retained/reconciled без повторного signal. Ordinary Gate.drain неизменён.
+Support PID1051719 active/running, новая authority04fb7553…/generation0b21197a…;
+повтор resume не изменил PID. NL1 PID3705/100%/768MiB сохранён, IPC/readback PASS.
+21 records/12 сообщений, cursor4/jobs0, прежние markers/authority и60 original records сохранены.
+Notifications18:50:15–16UTC success/0; timer enabled/active/waiting. Собственные EX locks сняты.
+OWNER common gate всё ещё не установлен: свежий GET-only readback2/10 matches; manual/direct ORM open.
 [Контракт, ограничения и retained failures](releases/2026-11-26-control-ha-stopped-support.md).
 **Один NEXT:** реальный coherent encrypted RU/NL1/NL2/OWNER capture, independent reader и normal resume;
-его prerequisites — установленный OWNER/all-writer gate и stopped-support integration, не повтор live drain.
+его prerequisites — установленный OWNER/all-writer gate и общий интервал с проверенным stopped support.
 External key medium нужен для custody, но не блокирует engineering. Full isolated restore NOT_RUN.
 
 ## Accepted working resume — retained baseline

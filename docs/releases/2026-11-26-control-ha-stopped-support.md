@@ -83,14 +83,81 @@ added rather than weakening drain. Intermediate10PASS and final11PASS logs remai
 Focused stopped/resume/rollover/startup regression:43 PASS/0 skips in109.56s.
 Operation directories reject unrelated contents while retaining interrupted atomic
 receipt temporaries; resuming never deletes those partial records.
-Exact changed-source CI and production installation have not yet been accepted.
+Final directory-reuse/partial-receipt regression:11 PASS/0 skips in38.37s.
+Exact source `2f4f83dd51cd3814a2da631cb3d95140af5c2a90` is ordinarily pushed and remote-SHA
+verified. All four triggered workflows PASS: phase0, Linux control preview, Android
+readiness contract and native support. Native run45875688212 has342 PASS/0 skips,
+including all11 stopped-support cases. Artifact15145396353 exact ZIP SHA256
+`396275282464f190b04ab6b9e77d8aea25f8c3c016784e798627825156586ccb` and its exact-SHA
+receipt/XML were independently checked.373 staged source files match on OWNER/NL1.
 
 Before operational changes,47 root-prestate files were retained privately; manifest
 SHA256 `e2103e712fc05094b55d5bc6dc763c6a479997f51414932139520a38e0a80d40`.
-17:57UTC support remains PID757814 active/running; notifications last completion
-success/0 and timer waiting. No working stop/capture/restart occurred in this slice.
-No common OWNER gate activation, full encrypted kit, independent custody transfer
-or full isolated machine-loss restore is claimed.
+17:57UTC prestate support PID757814 was active/running; notifications success/0 and
+timer waiting. Subsequent bounded working operation is recorded below.
+
+## Actual component stop, capture and forward resume
+
+The operation owns only its temporarily stopped notifications timer and its capture
+locks. Its before/intent/stop/run/restore receipts remain private. The already-running
+notification oneshot was allowed to finish successfully before support shutdown.
+The accepted support runtime was verified, NL1 recloses/drains/invalidates the old
+ticket, and PID757814 exits normally with status0 after bound SIGTERM. No SIGKILL,
+marker removal, authority edit, old-data restore or ordinary live drain is performed.
+
+First controller result is `STOPPED_SUPPORT_REFUSED / UNSAFE_CONTROL_FILE` after
+stop-intent and normal exit, before the final stopped receipt. This failure is retained,
+not silently replaced with success. Independent absence readback proves clean same-boot
+exit; the same operation reconciles closed NL1 and records the stopped proof without
+another signal. The exact transient file causing this refusal is **not established**
+by the retained original response; do not claim a unique root cause from exit78 or
+attribute this to historical WORKERS_REMAIN. No terminal failure is erased or restarted.
+
+Real component SHA256:
+`e4eace1a5e37fdc2914fa5e8eaf495bf21026932bd55b68b3faf88160cb0d264`.
+It contains86 entries and494713 file bytes across the declared exact roots, including
+16 pre-stop/current marker records. Closed/drained lock interval is
+**18:46:52.496839–18:46:53.730133UTC**,1.233294391s. Root descriptor/shared-mapping
+census reports no continuing observed writer; service/cgroup/account absence and
+closed invalidated NL1 are checked before/after the interval. The standalone reader
+passes inside the barrier and again independently before resume. This remains a
+private sensitive local support component, not a full encrypted fleet kit. It includes
+the store key and must not be uploaded to NL2 or Git in plaintext.
+
+Fresh OWNER plan SHA256 `8bab4157c43c6864d0e6f7db6933ce221e529d33c7d6bf79df86f64f86c095d9`
+and mailbox manifest `08bcc151c61b3e19fdab7b4606432d3188271e14f51597fa8ab659caf73db570`
+bind new generation `0b21197a2582b9ae3ce2f6449907890343f71dea8cca87a283bc4c66c5e24824`.
+The authenticated predecessor-reclosure bytes are retained with SHA256
+`482b927b22290187bc949cd5fcd7b8d226467127614108c0515e848da23d6f38`.
+New NL1 resource preflight preserves100%/768MiB; the earlier fresh sample has738640KiB
+available. Rollover performs its own fresh minimum256MiB check. NL1 PID3705 never restarts.
+
+Existing linked resume returns `FORWARD_RESUME_OPEN_CAPTURE_DENIED`; repeated same
+operation returns the same result without restarting. At18:52:14UTC separate readback
+proves support **PID1051719**, start2431377, active/running/NRestarts0 on the current
+boot, exact archive621009b8 and new authority SHA256
+`04fb7553363830e2b873b019e173cd82ccecf92be0b78f31e71964b8dfa57a86`.
+IPC works; authenticated NL1 ticket/consumed-request/OPEN_LOCAL_ONLY bindings agree.
+All21 logical records/12 messages are retained;19 non-binding/non-cursor records compare
+exactly, cursor4 and its anchor are preserved, jobs0. The old accepted operation,
+authority and16 captured markers compare byte-for-byte; all60 original root records
+also remain unchanged. New successful runtime admission does not settle old UNKNOWN.
+
+Normal existing notifications invocation **18:50:15–18:50:16UTC** completes success/0,
+inactive/dead as expected for oneshot. Timer is restored enabled/active/waiting.
+No real test messages are created. `/proc/locks` confirms no exclusive admission or
+operation lock remains; only the new support PID's normal shared lifetime lock exists.
+RU/NL2 working services, OWNER panel containers, enforcement and resource limits are
+unchanged. Current GET-only OWNER source/admission census still reports2/10 matching
+source files per console/publisher and unresolved manual/direct-ORM admission.
+
+Private allocation follow-up request SHA256
+`5082fe64b0e27cfcbb985984e6cffe890b44e198bac2f8908b0db444d9dfa390` binds the selected
+roles/destination and four exact prior/preflight references; a separate reader verifies
+those bytes. It explicitly has no actual checkpoint manifest/signature request, key
+creation or custody acceptance. A real request must bind the still-uncreated full kit.
+No common OWNER gate activation, full encrypted kit, independent custody transfer or
+full isolated machine-loss restore is claimed.
 
 ## Remaining gate / one NEXT
 
