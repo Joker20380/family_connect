@@ -16,19 +16,19 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS; продолжение после обрыва26 ноября.**
-**Один NEXT:** сначала штатный OWNER support/notifications resume с новой linked generation;
-затем один актуальный coherent encrypted capture RU/NL1/NL2/OWNER, независимый reader
+**Один NEXT:** один актуальный coherent encrypted capture RU/NL1/NL2/OWNER, независимый reader
 точных bytes/полноты/связей и штатное возобновление всех участников; после принятия — полный
 isolated machine-loss restore с current/post-ACK/stale-state проверкой. Инвентаризация промежуточна.
-Новая непосредственная предпосылка: OWNER reboot12:04:08UTC, support failed/exit78 и notifications
-failed. Теперь root-readback выполнен после локального password prompt в той же PTY;60 исходных
-root-plan files сохранены. Проверена START_AUTHORITY_CHANGED: старый boot/PID3790078, до candidate.
-Notifications не находит IPC socket (ENOENT) до SSH collection; timer active/waiting.
-Diagnostic source889ef66e:16 tests и все4 exact-SHA CI PASS. Новый resumable forward transition
-прошёл actual-root synthetic OWNER/NL1 qualification; рабочий recovery NOT_RUN до нового source CI.
+Непосредственная предпосылка выполнена16:57UTC: support PID757814 active/running с новой authority,
+notifications oneshot success/0, timer enabled/active/waiting. Root-readback в той же аутентифицированной
+PTY доказал старую boot authority и отсутствующий IPC. Source14d4dfad:9 exact-SHA CI PASS,
+native323/0 skips; actual-root OWNER/NL1 synthetic qualification PASS. Сохранены60 root records,
+21 records/12 сообщений, cursor4/jobs0 и UNKNOWN. Повтор recovery idempotent, без нового PID.
+Controller source-pin refusal и post-effect response refusal reconciled по staged endpoint и свежему
+readback без изменения authority/markers; follow-up исправляет путь helper и publication race.
 [Incident evidence и recovery gate](releases/2026-11-26-control-ha-owner-boot-resume.md).
-Нужна допустимая новая linked generation; не удалять reservation/UNKNOWN,
-не запускать прежний writer по старому разрешению. Archive621009b8 неизменён; NL1 PID3705,
+Новая linked generation98aaff11… действительна; старые reservation/UNKNOWN не удалены.
+Archive621009b8 неизменён; NL1 PID3705,
 лимиты100%/768MiB, свежий independent observe OPEN_LOCAL_ONLY/work0/capture=false.
 Свежий census14:38–14:47UTC сверяет4 RU schema,32/9/5 remote units,11 OWNER units и panel sources;
 в OWNER common gate не установлен, match2/10 source/container. Manual/direct ORM/all-writer

@@ -119,8 +119,8 @@ class GenerationControl(MailboxControl):
     def invocation(self, action, request):
         if action not in ('advance', 'resume'):
             return super().invocation(action, request)
-        source = str(Path(__file__).resolve())
-        admission.require(self.plan['sources'].get(source) == sha(source), 'GENERATION_SOURCE_PIN')
+        source = str(Path(self.plan['runtime']).parent / 'scripts/control_ha_mailbox_generation.py')
+        admission.require(self.plan['sources'].get(source) == sha(source) == sha(__file__), 'GENERATION_SOURCE_PIN')
         if action == 'advance':
             value = json.loads(owned(request, self.owner), object_pairs_hook=unique)
             arguments = self.plan['restart_argv']

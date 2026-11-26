@@ -1,6 +1,6 @@
 # Documentation
 
-[CONTROL-HA · 26 November: preserved root records, proven stale-boot support authority and missing notification IPC; bounded source-only startup diagnostics, forward recovery not yet qualified](releases/2026-11-26-control-ha-owner-boot-resume.md).
+[CONTROL-HA · 26 November16:57UTC: OWNER support forward-resumed with new authority/generation; notifications success and timer ready, exact14d4dfad CI/native323 PASS, retained refusals and broader capture/custody remainder](releases/2026-11-26-control-ha-owner-boot-resume.md).
 
 [CONTROL-HA · 26 November14:49UTC: resumed census, OWNER post-reboot support exit78 and missing root access;55 guard checks PASS, no coherent kit/resume/restore acceptance](releases/2026-11-26-control-ha-coherent-resume.md).
 

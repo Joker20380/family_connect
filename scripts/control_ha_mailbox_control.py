@@ -7,6 +7,7 @@ from pathlib import Path
 import re
 import signal
 import shlex
+import stat
 import subprocess
 import sys
 import time
@@ -17,6 +18,21 @@ from scripts.control_ha_mailbox_startup import encoded, fixture_scope, owned, un
 
 def sha(path):
     return hashlib.sha256(admission.read(path, 64 * 1024 * 1024)).hexdigest()
+
+
+def response_bytes(path, uid, deadline):
+    while True:
+        try:
+            info = path.lstat()
+        except FileNotFoundError:
+            pass
+        else:
+            publishing = (stat.S_ISREG(info.st_mode) and info.st_uid == uid and
+                          info.st_nlink == 2 and not info.st_mode & 0o022)
+            if not publishing:
+                return owned(path, uid)
+        admission.require(time.monotonic() < deadline, 'MAILBOX_RESPONSE_UNKNOWN')
+        time.sleep(.01)
 
 
 def wake_control(process, directory, uid):
@@ -154,10 +170,7 @@ class MailboxControl:
         if 'wakeup_directory' in self.plan:
             wake_control(process, self.plan['wakeup_directory'], self.plan['uid'])
         deadline = time.monotonic() + 5
-        while not output.exists():
-            admission.require(time.monotonic() < deadline, 'MAILBOX_RESPONSE_UNKNOWN')
-            time.sleep(.01)
-        result = json.loads(owned(output, self.plan['uid']), object_pairs_hook=unique)
+        result = json.loads(response_bytes(output, self.plan['uid'], deadline), object_pairs_hook=unique)
         admission.require(result.get('nonce') == nonce and self.validate() == process, 'MAILBOX_READBACK_CHANGED')
         if 'error' in result:
             raise ValueError(result['error'])

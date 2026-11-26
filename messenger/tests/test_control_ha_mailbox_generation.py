@@ -1,6 +1,9 @@
 import copy
 import hashlib
 import os
+from pathlib import Path
+import threading
+import time
 
 import pytest
 
@@ -9,6 +12,7 @@ from messenger.tests.test_control_ha_mailbox_fence import envelope
 from messenger.tests.test_control_ha_mailbox_links import dispatch, native_link
 from scripts import control_ha_mailbox_generation as generation
 from scripts import control_ha_mailbox_startup as mailbox
+from scripts import control_ha_mailbox_control as control
 
 
 def sealed(startup, tmp_path):
@@ -131,3 +135,55 @@ def test_lost_response_is_reconciled_by_current_observation_not_old_retry(create
     with pytest.raises(ValueError, match='STALE_PREDECESSOR'):
         generation.advance(startup, request)
     assert mailbox.ACTIVE.observe() == current
+
+
+@pytest.mark.parametrize('drift', [False, True])
+@pytest.mark.parametrize('action', ['advance', 'resume'])
+def test_separate_tools_controller_injects_exact_staged_source(tmp_path, drift, action):
+    staged = tmp_path / 'staged/scripts/control_ha_mailbox_generation.py'
+    staged.parent.mkdir(parents=True)
+    staged.write_bytes(Path(generation.__file__).read_bytes() + (b'\n' if drift else b''))
+    controller = object.__new__(generation.GenerationControl)
+    destination = str(tmp_path / 'new-manifest.json')
+    controller.plan = dict(runtime=str(tmp_path / 'staged/control'), sources={str(staged): control.sha(staged)},
+                           restart_argv=['python', '-I', '-B', 'startup.py', '--manifest', destination],
+                           manifest=str(tmp_path / 'old-manifest.json'), unit='family-connect-mailbox.service')
+    controller.owner = os.getuid()
+    request = write(tmp_path / 'request.json', dict(manifest=destination))
+    if drift:
+        with pytest.raises(ValueError, match='GENERATION_SOURCE_PIN'):
+            controller.invocation(action, request)
+    else:
+        invocation = controller.invocation(action, request)
+        assert repr(str(staged)) in invocation and repr(str(Path(generation.__file__).resolve())) not in invocation
+
+
+def test_response_waits_for_exclusive_hardlink_publication(tmp_path):
+    original = tmp_path / 'temporary'
+    output = tmp_path / 'response.json'
+    original.write_bytes(b'{"result":"synthetic"}')
+    original.chmod(0o600)
+    os.link(original, output)
+    release = threading.Timer(.04, original.unlink)
+    release.start()
+    try:
+        assert control.response_bytes(output, os.getuid(), time.monotonic() + 1) == b'{"result":"synthetic"}'
+        assert output.stat().st_nlink == 1
+    finally:
+        release.join()
+
+
+@pytest.mark.parametrize('unsafe', ['hardlink', 'owner', 'permissions'])
+def test_unsafe_or_unfinished_response_never_becomes_evidence(tmp_path, unsafe):
+    original = tmp_path / 'temporary'
+    output = tmp_path / 'response.json'
+    original.write_bytes(b'{"result":"synthetic"}')
+    original.chmod(0o600)
+    os.link(original, output)
+    uid = os.getuid() + (1 if unsafe == 'owner' else 0)
+    if unsafe == 'permissions':
+        original.chmod(0o666)
+    reason = {'hardlink': 'MAILBOX_RESPONSE_UNKNOWN', 'owner': 'UNSAFE_CONTROL_(PARENT|FILE)',
+              'permissions': 'UNSAFE_CONTROL_FILE'}[unsafe]
+    with pytest.raises(ValueError, match=reason):
+        control.response_bytes(output, uid, time.monotonic() + .03)
