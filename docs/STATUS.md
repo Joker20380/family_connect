@@ -7,12 +7,16 @@ capture → independent verify → normal resume; e4eace1a — только ис
 custody не ограничена USB и не блокирует engineering.
 [Текущий checkpoint](releases/2026-11-26-control-ha-owner-all-writer.md).
 Direct-ORM guard подготовлен, НЕ установлен. Full94fe9760 CI выявил20 связанных standalone/package
-отказов; установка не выполнялась. Исправлены Django-free cleanup, общий scope двух import paths
+отказов; тогда установка не выполнялась. Исправлены Django-free cleanup, общий scope двух import paths
 и reviewed helper pins:383 panel/101 standalone + native image activation/revert PASS;
-329 OWNER/gate checks ранее PASS. Corrected exact-source CI требуется.
+329 OWNER/gate checks ранее PASS. Все4 workflow точного7a91d127 PASS;
+full-pytest artifact15153881426 независимо сверён, failure/error IDs пусты.
 Текущие support bindings и cursor/queue повторно проверены; рабочие контейнеры не изменены.
-Root collectors gate также подготовлен:69 focused/native-package и6 actual-root PASS;
-bindings/notifications CLI и direct API покрыты исходниками, установка ещё не заявлена.
+Первый root collector install сохранил отказ: закрытие75 PASS, normal start1 из-за
+EROFS — новый gate вне ReadWritePaths при ProtectSystem=strict. Исходные модули восстановлены,
+оба oneshot success/0 и timers active/waiting; рабочий support не останавливался.
+Исправленный gate внутри существующего writable-каталога:44 focused +6 root +3 native sandbox PASS;
+новая установка и exact-source CI этого исправления ещё требуются. Marker/history не удалялись.
 Collector CLI теперь различает закрытый gate(75), invalid gate(78) и source/IPC failure(1);
 69 focused и6 root checks повторены. Код сам по себе не заменяет source/runtime readback.
 Actual inventory gate: UNSETTLED_OPERATION/3 unchanged markers; probe gate: local drain PASS/0.

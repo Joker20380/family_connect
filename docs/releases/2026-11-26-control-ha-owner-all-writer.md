@@ -133,3 +133,52 @@ Read-only application metadata identifies KeePassXC2.7.10+dfsg1-2ubuntu1 (root-o
 executable; package verification reports no differences), plus system Seahorse. No vault
 was opened. Which vault is intended, off-laptop copy and laptop-loss recovery are still
 unconfirmed; neither installed software nor a local directory proves independent custody.
+
+## Exact CI and retained sandbox refusal
+
+All four workflows for7a91d1278eda8594e448e5794e183e313aed8440 PASS: Control panel45894442083,
+Android45894442059, Linux preview45894442047 and phase045894442051. The independent download
+of phase0 full-pytest artifact15153881426 matches SHA256
+06b90b47112661f4c3fb9573fcc0b26da7cfd98d9b52c42f98e9fdd1aaa1633b. Exact-source receipt reports
+coverage_pass=true, no failure/error IDs and all four context exit codes0 (collections10440,
+258,98,352). The native context's144 intentional context skips are not called zero-skips.
+The previously accepted separate native342/0-skips receipt remains distinct historical evidence.
+
+A bounded root collector installation then passed real closed admission: both effective
+oneshots returned75 before IPC/SSH/projection writes; direct collect refused and projections
+were unchanged. Normal resume failed with exit1. Original failure, plans, source preimages,
+closed receipts and effective units are retained; the controller did not silently retry or
+restore timers after failure. The two services use ProtectSystem=strict with the sole
+ReadWritePaths=/var/lib/fc-support-bindings. The proposed gate at
+/var/lib/family-connect/capture/owner-collectors was outside that writable subtree. A disposable
+system unit with those effective sandbox settings reproduced errno30/EROFS before dispatch;
+the gate filesystem was read-only and its pending directory stayed empty. Exit1 alone was
+not used to diagnose the cause.
+
+Exact original collector modules were restored, only the two newly added source modules
+were removed, and product data was not rewound. The unused original gate and all evidence
+remain. Both original oneshots completed normally with exit0; both timers returned to
+enabled/active/waiting. No support archive, startup authority, unit configuration or system
+daemon-reload changed. This attempt is NOT an installed-barrier acceptance.
+
+The corrected source uses /var/lib/fc-support-bindings/capture-owner-collectors, within the
+existing writable subtree, without widening service permissions.44 focused cases and6
+actual-root cases PASS. A new disposable root/systemd fixture passes3 cases: an outside gate
+refuses EROFS, an inside gate admits/settles, and closed admission returns75 without pending
+changes. It never uses the installed gate or dispatches product work. Native CI now executes
+and retains this exact sandbox receipt. Six synthetic operator-controller phase cases also
+verify retained failures and refusal to silently repeat failed operations; this does not
+qualify live controller loss for a coherent fleet capture. Corrected-source CI and a fresh
+installed qualification remain required.
+
+Fresh GET-only console/publisher census is2/12 matching source files, not the older2/10
+denominator. The new12-file overlay archive independently verifies against7a91d127 with SHA256
+42ffb2afbe8e0752507ecf6c9842c19a7e3ab1b308d568f9082320b71cf4b6d1. A fresh private effective-config
+proposal preserves startup commands, existing volumes/network/restart policy and all other
+configuration; only image, gate environment and mount change. It is not a stop permit,
+deployment or all-writer proof. Inventory UNKNOWN markers date from25 November18:02 and21:40;
+they remain unchanged and cannot be cleared on the basis of later successful timer cycles.
+
+KeePassXC configuration metadata has no explicit values for the reviewed backup-option
+allowlist. This is not proof that no backup exists. No vault was opened; intended vault,
+external copy and laptop-loss recovery still need the owner's actual facts, not a USB-only choice.

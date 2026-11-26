@@ -29,13 +29,15 @@ linked operation ha02-forward-20261126-stop01/source2f4f83dd, generation0b21197a
 NL1 PID3705,100%CPU/768MiB. Эти pins — observation, не разрешение будущему процессу.
 Support/IPC working; notifications timer-driven18:58:46–47UTC success/0,
 timer enabled/active/waiting. Перед изменениями необходим свежий runtime readback.
-OWNER gate пока НЕ установлен; последний source census2/10 в console/publisher.
-Full94fe9760 CI FAIL:20 related standalone/package cases; no working install. Corrected helper
+OWNER/all-writer gate пока НЕ установлен; свежий source census2/12 в console/publisher.
+Full94fe9760 CI FAIL:20 related standalone/package cases; тогда без installation. Corrected helper
 and reviewed pins:383 panel/101 standalone + native image activation/revert PASS;
-329 OWNER-gate tests ранее PASS. Новые12-file candidates не установлены; exact corrected CI,
+329 OWNER-gate tests ранее PASS; все4 workflow7a91d127 PASS. Новые12-file candidates не установлены;
 установленное закрытие остальных writer paths и общий интервал остаются в этом же NEXT.
-Root collector source gate квалифицирован69 focused/native-package +6 actual-root;
-ещё требуется bounded installation/readback обоих oneshots и их manual API.
+Root collector install: closed75 PASS, normal1/EROFS из-за ProtectSystem=strict и gate вне
+ReadWritePaths; исходные модули возвращены, штатные oneshots0/timers waiting подтверждены.
+Исправление размещения gate квалифицировано44 focused +6 root +3 native sandbox;
+новая bounded installation/readback обоих oneshots/manual API требует exact исправленного CI.
 Closed-gate qualification проверяет exact-source exit75 отдельно от invalid gate78/source failure1.
 Installed user inventory gate отдельно отказал UNSETTLED_OPERATION/3 unchanged markers;
 probe drain PASS/0. Нужен сохранённый stopped/external-dispatch proof, не удаление UNKNOWN.
