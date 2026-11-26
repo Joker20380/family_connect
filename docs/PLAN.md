@@ -17,6 +17,15 @@
 **Один NEXT:** один актуальный coherent encrypted capture RU/NL1/NL2/OWNER, независимый reader
 точных bytes/полноты/связей и штатное возобновление всех участников; после принятия — полный
 isolated machine-loss restore с current/post-ACK/stale-state проверкой. Инвентаризация промежуточна.
+18:52UTC: actual stopped-support component e4eace1a… independently verified,86 entries/494713 bytes,
+16 original/current markers. Closed interval18:46:52.496839–18:46:53.730133UTC, UNKNOWN не закрыт.
+Linked resume source2f4f83dd: support PID1051719/new authority04fb7553…/generation0b21197a…,
+NL1 PID3705 unchanged, IPC/data/cursor4/jobs0/history preserved. Normal notifications18:50:15–16UTC
+success/0, timer restored; own EX locks absent.4 exact-SHA CI/native342 PASS/0 skips.
+Первый post-exit UNSAFE_CONTROL_FILE retained; same-operation reconciliation без нового signal.
+Это sensitive local component, НЕ full/encrypted kit. Common OWNER gate/manual/direct-ORM paths
+остаются открыты: свежий GET-only source census2/10 matches в каждом console/publisher.
+Предыдущая принятая предпосылка и её evidence:
 Непосредственная предпосылка выполнена16:57UTC: support PID757814 active/running с новой authority,
 notifications oneshot success/0, timer enabled/active/waiting. Root-readback в той же аутентифицированной
 PTY доказал старую boot authority и отсутствующий IPC. Source14d4dfad:9 exact-SHA CI PASS,
@@ -40,11 +49,12 @@ NL2 `/opt/apps/family_connect/ha-recovery/` для ciphertext. Назначен�
 Parent root0700/37.5GB free, история сохранена. Внешнего носителя не обнаружено: только
 внутренний Micron2300 NVMe. Не хватает выбора/подключения конкретного внешнего носителя
 для ключей/реестра/backup access; HA key ещё не создан. Это не блокирует engineering.
-Stopped-support capture теперь отдельно квалифицирован:11 native synthetic checks/0 skips,
+Stopped-support capture отдельно квалифицирован и выполнен:11 native synthetic checks/0 skips,
 pre-stop markers/current UNKNOWN сохраняются, clean exit+remote reclosure+exclusive locks,
 отдельный exact-byte reader, partial copy/SIGKILL/retry и linked forward resume с queue.
 Обычный Gate.drain не ослаблен; повтор live drain не выполнялся. Root FD census не является
-ограждением будущих privileged/manual writers. Working installation и exact-source CI ещё не приняты.
+ограждением будущих privileged/manual writers.373 tool files сверены на OWNER/NL1;
+working linked resume2f4f83dd принят в своём scope, но не заменяет all-writer coverage.
 [Контракт и текущие ограничения](releases/2026-11-26-control-ha-stopped-support.md).
 Private custody manifest44 references и точный allocation request проверены отдельным reader,
 включая28 nested recovery records; предложены два раздельных offline media, выбор/transfer не выполнены.

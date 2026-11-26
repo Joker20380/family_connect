@@ -7,12 +7,13 @@ Do not run it against the currently accepted, active support merely to refresh t
 
 ## Inputs and prestate
 
-Use the exact qualified controller source `0e4e85b5cbf122c959af21490a906c723b6e3412`
+Use the exact qualified controller source `2f4f83dd51cd3814a2da631cb3d95140af5c2a90`
 for a **new** operation. Its retained source capsules are
-`/opt/family-connect-support/ha02-tools-0e4e85b5` on OWNER and
-`/opt/apps/family_connect/state-ha02/tools-0e4e85b5` on NL1. All370 capsule files were
+`/opt/family-connect-support/ha02-tools-2f4f83dd` on OWNER and
+`/opt/apps/family_connect/state-ha02/tools-2f4f83dd` on NL1. All373 capsule files were
 independently compared to the source commit. Revalidate their bytes before reuse.
-The working26November operation remains pinned to14d4dfad; never replace its source files.
+The18:52UTC working operation is pinned to2f4f83dd. Its14d4dfad predecessor and the
+earlier0e4e85b5 tool capsule remain immutable; never replace old operation source files.
 
 Obtain root using the normal local password prompt in the same execution session.
 No permanent sudoers/polkit changes. Retain private copies of effective units, journals,
@@ -20,9 +21,9 @@ plan, authority, reservation, terminal/recovery records, pending markers and cur
 store/notification state before mutation. Do not print keys, message contents or environment.
 
 Identify the **last accepted operation** from the installed entry/authority and its
-accepted binding, not from the directory's date. Immediately after the26November recovery
-it is `/opt/family-connect-support/ha02-forward-20261126-01`; its linked NL1 control plan is
-`/opt/apps/family_connect/state-ha02/forward-support-20261126-01/control.json`.
+accepted binding, not from the directory's date. After the26November stopped-capture resume
+it is `/opt/family-connect-support/ha02-forward-20261126-stop01`; its linked NL1 control plan is
+`/opt/apps/family_connect/state-ha02/forward-support-20261126-stop01/control.json`.
 These are predecessor examples, not paths to overwrite on a later boot.
 
 Check the current process/boot/cgroup/argv, source and archive hashes, unit settings,
