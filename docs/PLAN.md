@@ -16,12 +16,17 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS; продолжение после обрыва26 ноября.**
-**Один NEXT:** один актуальный coherent encrypted capture RU/NL1/NL2/OWNER, независимый reader
+**Один NEXT:** сначала штатный OWNER support/notifications resume с новой linked generation;
+затем один актуальный coherent encrypted capture RU/NL1/NL2/OWNER, независимый reader
 точных bytes/полноты/связей и штатное возобновление всех участников; после принятия — полный
 isolated machine-loss restore с current/post-ACK/stale-state проверкой. Инвентаризация промежуточна.
 Новая непосредственная предпосылка: OWNER reboot12:04:08UTC, support failed/exit78 и notifications
-failed. Root plan/причина отказа недоступны: `sudo -n` требует интерактивную аутентификацию.
-Нужны root-readback и допустимая новая linked generation; не удалять reservation/UNKNOWN,
+failed. Теперь root-readback выполнен после локального password prompt в той же PTY;60 исходных
+root-plan files сохранены. Проверена START_AUTHORITY_CHANGED: старый boot/PID3790078, до candidate.
+Notifications не находит IPC socket (ENOENT) до SSH collection; timer active/waiting.
+Source-only bounded reason/phase/bindings receipt:16 tests PASS; native CI и recovery не завершены.
+[Incident evidence и recovery gate](releases/2026-11-26-control-ha-owner-boot-resume.md).
+Нужна допустимая новая linked generation; не удалять reservation/UNKNOWN,
 не запускать прежний writer по старому разрешению. Archive621009b8 неизменён; NL1 PID3705,
 лимиты100%/768MiB, свежий independent observe OPEN_LOCAL_ONLY/work0/capture=false.
 Свежий census14:38–14:47UTC сверяет4 RU schema,32/9/5 remote units,11 OWNER units и panel sources;

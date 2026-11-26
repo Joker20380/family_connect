@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+**26 November — непосредственный приоритет HA-02: OWNER boot/resume.**
+Штатный локальный password dialog и root-readback выполнены в одной PTY; sudoers/polkit неизменны.
+Сохранены60 root-plan files, units/journals и startup records. Read-only probe под fc-support:
+START_AUTHORITY_CHANGED — authority предыдущего boot/PID3790078; файл доступен, archive621009b8 совпал.
+Notifications отдельно: отсутствует IPC socket (ENOENT) до SSH collection; timer active/waiting.
+Source-only bounded refusal receipt различает authority/candidate phase, сохраняет безопасные bindings.
+16 новых tests PASS; вместе с handoff24 PASS/18 native skips — НЕ native qualification.
+Установка/recovery NOT_RUN; точный source CI ожидается. [Причины и gate](releases/2026-11-26-control-ha-owner-boot-resume.md).
+**Один NEXT:** forward support/notifications resume с новой linked generation; затем coherent
+encrypted RU/NL1/NL2/OWNER capture и independent reader. Historical handoff принят, WORKERS_REMAIN UNPROVEN.
+
+## Earlier census checkpoint — retained preparation, not current liveness
+
 **26 November14:49UTC — HA-02 продолжен после обрыва; новый OWNER restart отказ, capture не принят.**
 Ветки сверены: featureede03b9f/main4307401c совпали с remote, обе копии чистые на входе.
 Сохранён прежний census10:45–10:47UTC и свежие RU/NL1/NL2/OWNER observations14:38–14:47UTC.
@@ -12,7 +25,7 @@ Source-only guard diagnostic сохраняет конкретный отказ 
 26 lockfile pins совпадают. Установленный runtime не изменён. Private preparation manifest24 files
 проверен отдельным reader; это НЕ coherent/encrypted kit и НЕ независимое доверие.
 [Точные данные, retained history, custody proposal и recovery prerequisite](releases/2026-11-26-control-ha-coherent-resume.md).
-**Один NEXT:** актуальный coherent encrypted RU/NL1/NL2/OWNER capture с независимой проверкой
+Тогдашний следующий результат: актуальный coherent encrypted RU/NL1/NL2/OWNER capture с независимой проверкой
 и штатным resume; ближайшая предпосылка — root-readback и guarded OWNER recovery в новой
 допустимой generation без обхода reservation/UNKNOWN. Полный isolated restore ещё NOT_RUN.
 Принятый handoff остаётся принятым компонентом; WORKERS_REMAIN UNPROVEN. Новый refusal требует
