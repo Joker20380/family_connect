@@ -131,3 +131,34 @@ Do not remove markers, overwrite authority, restore old data or weaken gates to 
 resume/capture pass. Retain failed attempts and publish only sanitized evidence outside
 the private records. Restore independent trust/custody separately; service restoration
 does not choose a signer, approve floors or create an off-origin recovery kit.
+
+## Separate stopped-support component capture
+
+Do not retry ordinary `Gate.drain` against the running lifetime support writer.
+After exact-source qualification and preserved root prestate, use a new root-owned0700
+operation outside all source roots, with the accepted predecessor and its current pinned
+NL1 channel. Keep the normal linked forward-resume inputs and corrected tools ready.
+
+```text
+python -m scripts.control_ha_support_stopped --previous ACCEPTED_ROOT \
+  --operation NEW_STOP_ROOT --mailbox-channel CURRENT_CHANNEL --stop
+python -m scripts.control_ha_support_stopped --previous ACCEPTED_ROOT \
+  --operation NEW_STOP_ROOT --mailbox-channel CURRENT_CHANNEL
+```
+
+First invocation verifies loaded runtime, recloses/drains/invalidates NL1, retains
+pre-stop marker bytes and sends only identity-bound SIGTERM. A timeout is a retained
+closed operation, not permission for SIGKILL or a restart. Repeat the same operation
+to reconcile a lost response/clean exit. Terminal or cold-boot absence refuses capture.
+The second invocation holds both existing gate locks, captures private exact bytes
+and invokes a separate reader. Partial output remains private and unaccepted; retry
+does not clear history. Busy or unknown writers refuse. Ordinary drain remains strict.
+
+This is a **sensitive local component**, including the store-key file: never copy it to
+NL2/Git/CI in plaintext. It is not a coherent full fleet backup or startup permission.
+The local reader requires the stopped original filesystem; a full independent kit needs
+the separate offline reader/restore gate. Root FD census is not a fence against future
+privileged writers. Integrate the proven all-writer boundary before fleet acceptance.
+Then follow the fresh linked generation/authority procedure above; never reopen the
+invalidated old ticket or edit old authority. Confirm notifications success and timer
+readiness, and compare original history/queue/cursor/floors after normal resume.

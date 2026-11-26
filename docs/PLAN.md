@@ -37,8 +37,17 @@ Archive621009b8 неизменён; NL1 PID3705,
 и общий интервал ещё не доказаны. Реальный100ms support local-store barrier даёт DRAIN_TIMEOUT
 с evidence, без рестарта/оставленной блокировки; remote pause его не заменяет.
 Private preparation24 files проверена отдельно, не является полным зашифрованным комплектом.
-Доступные private и прочитанные root custody records не подтверждают HA signer/independent
-pins/floors/off-origin destination; нужен конкретный отсутствующий выбор владельца.
+26 ноября владелец назначил Joker HA signer/хранителем independent pins/floors и выбрал
+NL2 `/opt/apps/family_connect/ha-recovery/` для ciphertext. Назначение не утверждает checkpoint.
+Parent root0700/37.5GB free, история сохранена. Внешнего носителя не обнаружено: только
+внутренний Micron2300 NVMe. Не хватает выбора/подключения конкретного внешнего носителя
+для ключей/реестра/backup access; HA key ещё не создан. Это не блокирует engineering.
+Stopped-support capture теперь отдельно квалифицирован:11 native synthetic checks/0 skips,
+pre-stop markers/current UNKNOWN сохраняются, clean exit+remote reclosure+exclusive locks,
+отдельный exact-byte reader, partial copy/SIGKILL/retry и linked forward resume с queue.
+Обычный Gate.drain не ослаблен; повтор live drain не выполнялся. Root FD census не является
+ограждением будущих privileged/manual writers. Working installation и exact-source CI ещё не приняты.
+[Контракт и текущие ограничения](releases/2026-11-26-control-ha-stopped-support.md).
 Private custody manifest44 references и точный allocation request проверены отдельным reader,
 включая28 nested recovery records; предложены два раздельных offline media, выбор/transfer не выполнены.
 [Точные препятствия, scope, custody proposal, rollback и tests](releases/2026-11-26-control-ha-coherent-resume.md).

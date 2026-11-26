@@ -1,5 +1,22 @@
 # Текущее состояние / Current state
 
+**26 November — stopped-support capture qualified locally; custody roles allocated.**
+Joker назначен HA signer/хранителем independent pins/floors; NL2 parent
+`/opt/apps/family_connect/ha-recovery/` выбран для ciphertext. Это не одобрение checkpoint.
+Read-only preflight: root0700,37.5GB free, historical kit сохранён. Внешнего носителя
+не обнаружено; только внутренний Micron2300 NVMe. Ключи не создавались, transfer не выполнен.
+Отдельный stopped-support контракт сохраняет pre-stop UNKNOWN/pending и текущие данные,
+требует clean bound exit + NL1 reclosure и проверяет bytes отдельным reader под обоими locks.
+Обычный Gate.drain неизменён.11 native synthetic checks PASS/0 skips, включая SIGKILL
+контроллера/partial copy/retry/linked resume с непустой queue; exact-source CI ещё ожидается.
+Working support/notifications не останавливались; установленный OWNER/all-writer gate ещё открыт.
+[Контракт, ограничения и retained failures](releases/2026-11-26-control-ha-stopped-support.md).
+**Один NEXT:** реальный coherent encrypted RU/NL1/NL2/OWNER capture, independent reader и normal resume;
+его prerequisites — установленный OWNER/all-writer gate и stopped-support integration, не повтор live drain.
+External key medium нужен для custody, но не блокирует engineering. Full isolated restore NOT_RUN.
+
+## Accepted working resume — retained baseline
+
 **26 November17:38UTC — OWNER support/notifications возобновлены, повторный readback успешен.**
 Штатный локальный password dialog и root-readback выполнены в одной PTY; sudoers/polkit неизменны.
 Сохранены60 root-plan files, units/journals и startup records. Read-only probe под fc-support:
@@ -18,8 +35,7 @@ NL1 PID3705 не перезапускался; лимиты100%/768MiB сохр�
 Notifications: позднейший timer-driven run17:38:19–17:38:20UTC success/0; timer active/waiting.
 Отдельно проверены28 recovery evidence files и preparation44 references; это НЕ coherent backup/HA trust.
 [Причины, retained failures и gate](releases/2026-11-26-control-ha-owner-boot-resume.md).
-**Один NEXT:** coherent encrypted RU/NL1/NL2/OWNER capture, independent reader и штатный resume;
-до него закрыть OWNER/manual writer coverage и подтвердить independent trust/custody.
+Предпосылки coherent capture: OWNER/manual writer coverage и independent trust/custody.
 Historical handoff принят, WORKERS_REMAIN UNPROVEN; полный machine-loss restore ещё NOT_RUN.
 
 ## Earlier census checkpoint — retained preparation, not current liveness
