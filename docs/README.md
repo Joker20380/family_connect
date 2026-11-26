@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 26 November: separate stopped-support component/independent reader,11 native checks including controller death and linked resume; Joker/NL2 allocation, external medium absent; no coherent backup yet](releases/2026-11-26-control-ha-stopped-support.md).
+
 [CONTROL-HA · 26 November17:38UTC: OWNER support/notifications recovered and independently reread; working14d4dfad native323 and corrected0e4e85b5 native331/exact CI PASS; coherent capture/custody remain open](releases/2026-11-26-control-ha-owner-boot-resume.md). [Repeatable boot/resume procedure](operators/support-boot-resume.md).
 
 [CONTROL-HA · 26 November14:49UTC: resumed census, OWNER post-reboot support exit78 and missing root access;55 guard checks PASS, no coherent kit/resume/restore acceptance](releases/2026-11-26-control-ha-coherent-resume.md).
