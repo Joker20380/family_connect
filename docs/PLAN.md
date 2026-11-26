@@ -18,8 +18,12 @@
 точного комплекта и штатное возобновление; затем полный isolated machine-loss restore с
 current/post-ACK/stale-state проверкой. Readiness inventory остаётся промежуточным результатом.
 Новая предпосылка: OWNER reboot12:04:08UTC; support failed/exit78, notifications failed.
-Root plan/причина отказа недоступны: `sudo -n` требует интерактивную аутентификацию.
-Нужны original-record readback и допустимая новая linked generation; не удалять reservation,
+Root-readback теперь выполнен после локального password prompt в той же PTY;60 исходных plan files
+сохранены. Подтверждены START_AUTHORITY_CHANGED (old boot/PID3790078) и notifications IPC ENOENT.
+Diagnostic source889ef66e pushed/verified,16 tests/native CI45849023762 PASS; live recovery NOT_RUN.
+Непосредственный приоритет — штатный forward support/notifications resume, затем coherent capture.
+[Причины и recovery gate](releases/2026-11-26-control-ha-owner-boot-resume.md).
+Нужна допустимая новая linked generation; не удалять reservation,
 не очищать UNKNOWN, не запускать прежний writer по старому разрешению. Archive621009b8
 неизменён; NL1 PID3705,100%CPU/768MiB, fresh observe OPEN_LOCAL_ONLY/work0/capture=false.
 Census14:38–14:47UTC: RU4 schemas/32 units, NL1/2 units9/5, OWNER11 units и panel sources.
