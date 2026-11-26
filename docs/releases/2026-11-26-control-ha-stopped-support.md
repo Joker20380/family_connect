@@ -150,6 +150,10 @@ operation lock remains; only the new support PID's normal shared lifetime lock e
 RU/NL2 working services, OWNER panel containers, enforcement and resource limits are
 unchanged. Current GET-only OWNER source/admission census still reports2/10 matching
 source files per console/publisher and unresolved manual/direct-ORM admission.
+The component predates the new authority/generation and is now retained history.
+Do not combine it with later RU/NL1/NL2 captures and call that a common checkpoint.
+The actual fleet cycle needs a fresh support snapshot bound to that cycle's current
+predecessor and overlapping closed interval, followed by another normal linked resume.
 
 Private allocation follow-up request SHA256
 `5082fe64b0e27cfcbb985984e6cffe890b44e198bac2f8908b0db444d9dfa390` binds the selected
