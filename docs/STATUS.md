@@ -1,5 +1,21 @@
 # Текущее состояние / Current state
 
+**27 November00:38CET /26 November23:38UTC — existing panel restored; dependency recovery in progress.**
+Local sudo dialog succeeded in the operator execution session, without sudoers/polkit changes.
+Post-boot prestate/refusals/authority/terminal and incomplete collector-install records retained privately.
+Support refused START_AUTHORITY_CHANGED on the new boot; accepted predecessor remains unchanged.
+`/run/family-connect-support` now exists, fc-support:fc-support-ipc0750, systemd RuntimeDirectoryPreserve=yes.
+Docker mount failure22:48:12.937UTC preceded directory creation22:48:14.302UTC; no manual mkdir/chmod needed.
+Started only the existing console5ce82415 container with its exact installed configuration:34 migrations
+already applied,0 pending, no seed_demo. PostgreSQL/publisher IDs/start times/config unchanged.
+Real browser login, overview/subscriptions/payments and2 existing device cards HTTP200, normal logout PASS.
+No messages or business mutations. Full normal baseline is NOT yet accepted: qualified support resume
+refused SOURCE_CLOSURE because the previously accepted192343eb collector install adds2/changes2 baseline files.
+A narrowly pinned recovery-source correction is under qualification; no guard bypass or collector change.
+Notifications recovery and restoration of only our two user timer holds remain pending;15/14 markers retained.
+New console/publisher overlays, mandatory collector binding and common HA capture are deferred until baseline PASS.
+[Recovery evidence](releases/2026-11-27-control-ha-owner-resume.md).
+
 **27 November00:05CET /26 November23:05UTC — continuation after laptop power loss.**
 Reboot invalidates the earlier live-process observations: support is failed/78 (cause not
 yet independently read), notifications failed; console5ce82415 is stopped/127 with a Docker

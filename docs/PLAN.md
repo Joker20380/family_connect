@@ -16,6 +16,15 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
+**Owner override,27 November00:38CET:** immediate priority is panel/dependency normal-baseline recovery.
+Existing console5ce82415 restored without recreation; real login and5 authenticated page checks PASS.
+PostgreSQL/publisher unchanged. Sudo obtained through local dialog; actual support refusal is
+START_AUTHORITY_CHANGED. Qualified resume separately refuses SOURCE_CLOSURE after accepted collector drift.
+Qualify the exact bounded baseline transition, recover support/NL1/notifications, then restore only our
+two user timer holds and verify completed service invocations. Preserve3+12 inventory and14 probe markers.
+Defer new overlays, mandatory collector binding and common capture until that normal baseline is recorded.
+KeePassXC backup questions do not block restoration. [Evidence](releases/2026-11-27-control-ha-owner-resume.md).
+
 **27 November00:05CET reboot checkpoint:** support failed/78, console stopped/127
 (missing support runtime mount); earlier live PID/authority readbacks below are history.
 Current prerequisite inside this NEXT: restore technical root access, inspect retained
