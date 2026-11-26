@@ -1,5 +1,58 @@
 # HA-02 OWNER continuation after laptop power loss — 27 November 2026
 
+## Panel restoration — 26 November23:38UTC /27 November00:38CET
+
+The owner's immediate priority supersedes the earlier activation sequence below: restore
+the existing panel and dependencies first. New overlays, collector binding and HA capture
+are deferred. Local sudo authentication succeeded through a local Zenity password dialog
+into the same privileged execution session. No password was recorded or printed; no
+sudoers/polkit changes or Docker privilege workaround was used.
+
+Fresh root-only prestate contains effective units/journals, container configuration,
+the last accepted predecessor, participant/refusal/terminal records, original authority,
+support history and gate markers, and the unfinished bound collector-install phase files.
+The latter contains preparation/source/plan records only; no activation is inferred.
+Actual support refusal is `START_AUTHORITY_CHANGED` at the authority phase, with admission
+false and a different boot. Original authority still exactly matches the accepted predecessor;
+no terminal failure was found. This is not a diagnosis inferred from exit78 alone.
+
+Docker's missing-mount failure is dated22:48:12.937179608UTC. The runtime directory now
+exists and has ctime22:48:14.302085UTC, owner997(fc-support), group980(fc-support-ipc),0750.
+The installed unit owns its lifecycle (`RuntimeDirectory=family-connect-support`,
+`RuntimeDirectoryMode=0750`, `RuntimeDirectoryPreserve=yes`). The current directory was
+empty before restoration. No directory creation, permission change or lifecycle override
+was necessary: absence at the Docker startup attempt is distinct from its current state.
+
+After checking the actual installed command/config and34 already-applied migrations
+(0 pending), only the existing console container was started by exact ID. Its image
+remains5ce82415; ID/Config/HostConfig match prestate. Its installed command has no seed_demo;
+repository Compose was not used. PostgreSQL and publisher were not recreated/restarted;
+their IDs, image/config and start times remain unchanged.
+
+A fresh Chromium session used the existing local operator credentials through the normal
+login form, not a forged session or an account/password reset. Overview, subscriptions,
+payments and2 existing subscription-device cards return HTTP200 with authenticated content;
+normal logout succeeds. No messages or business mutations were requested. Only standard
+login/session bookkeeping occurred. Initial test-harness handling of a same-document anchor
+returned no navigation Response; that diagnostic is retained and the URL-normalized repeat
+passes. It was not a panel/authentication failure.
+
+Normal dependencies are still under recovery, not PASS. The qualified2f4f83dd resume
+preflight refused `SOURCE_CLOSURE`: the accepted192343eb collector component added
+`control/capture_gate.py` and `provisioning/owner_capture.py`, and changed the two collector
+modules in the shared application baseline. All other baseline source bytes remain pinned.
+No new operation/authority/ticket was created by that refused preflight. A source correction
+is being qualified to admit only that exact closed four-file source transition, explicitly
+selected for new resume preparation, retaining all original baseline pins/history and
+every other source/process/authority/gate check. Collectors themselves are not changed.
+
+Private restoration evidence is at `/mnt/data/fc-ha02-panel-restore-20261127`; sensitive root
+prestate is in its root-only `root` child. Browser screenshots/credentials are not published.
+Notifications and the two held user timers remain pending support recovery. The separate
+3 original +12 additional inventory markers,14 probe markers and support history are retained.
+
+## Earlier continuation checkpoint — retained history
+
 Observed26 November22:57–23:05UTC /27 November00:05CET. This is an incomplete
 operational checkpoint, not a release, installed all-writer PASS or coherent capture.
 The selected OWNER/all-writer NEXT is unchanged; HA-03 has not started.
