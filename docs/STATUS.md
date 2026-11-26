@@ -1,6 +1,11 @@
 # Текущее состояние / Current state
 
 **26 November00:22UTC — root OWNER ↔ NL1 joint qualification PASS; working namespace/wakeup qualified.**
+Update00:34UTC: exact9a1a5509 phase0 host and native PASS, Docker FAIL on one cold-recovery assertion;
+Linux-control CANCELLED, not PASS. Docker now passes native fixtures: the remaining test confused
+the deliberate tmpfs mask at /app with a host bind source when checkout itself is /app. The corrected
+test checks exact permitted host inputs and both masks at three cwd layouts;7 focused checks PASS.
+Runtime isolation and source/contract hashes are unchanged. Final exact-SHA CI still blocks working installation.
 Exact9a1a5509 native CI45726816731 PASS; other applicable checks still pending, not accepted as PASS.
 Working NL1 read-only probe proves main-loop scheduling delay54.483s. A PID/start-bound, caught-handler
 wakeup now services the existing SSH/remote_exec channel without increasing its5s deadline; controlled

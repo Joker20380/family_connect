@@ -171,6 +171,22 @@ finished00:22:09UTC, working OWNER/NL1 unchanged. Receipts are privately retaine
 `actual-root-nl1-separated-response.*`, `actual-root-nl1-wakeup.*`, `mailbox-wakeup-native.*`.
 These counts overlap and do not substitute for final exact-SHA CI or working installation.
 
+## Remaining Docker assertion,00:34UTC
+
+Exact9a1a5509 native and phase0 host tests PASS. Linux-control45726816678 is CANCELLED, not PASS.
+Docker45726816727 fails one standard-context case with9452 PASS/921 skips/705 deselections; root,
+snapshot314 and native314 contexts succeed. Native fixture PermissionError/PROFILE_PARENT_METADATA
+no longer obscure or fail this run. Original artifact15074998105 is retained privately as9a1-failover.zip,
+SHA256 `c25606f80b1034f05acc9f691391102a71bc0226dbb16228dc13c1c23ec135de`.
+
+`test_cold_execution_is_offline_and_uses_only_explicit_restored_inputs` compared the cwd to every
+argument, including mount destinations. In Docker cwd=/app, the deliberate `--tmpfs /app` source-hiding
+mask triggers that assertion. The assertion now checks host bind inputs, with additional exact six-input
+allowlist and two-mask assertions, parametrized over /app, / and /home/runner/work/family_connect.
+No runtime command, isolation setting, contract hash or assertion is removed.7 focused tests PASS0.53s,
+including the wakeup refusal to replace any existing signal handler. Full applicable final-SHA CI remains
+mandatory; installer staging scripts refuse activation without its complete success receipt.
+
 ## Earlier installed-state observation (superseded only by manager reload above)
 
 OWNER23:28:31UTC: original PID2022541/0 restarts, original19 sources, unit/process/interpreter pins

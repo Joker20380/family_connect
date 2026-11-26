@@ -32,6 +32,9 @@ Controlled pre-exec startup authority and restrictive-root-umask fixture correct
 Exact9a1a5509 native CI45726816731 PASS. Working NL1 read-only main-loop delay54.483s is independently
 observed; bounded PID/start-bound wakeup and separated service-owned response directory pass controlled
 tests and actual-root cross-host joint qualification (1 PASS78.50s), working services unchanged.
+Exact9a1a5509 phase0 host PASS, Docker has one cold-recovery test false positive at cwd=/app;
+Linux-control CANCELLED, not PASS. Host-input allowlist and tmpfs-mask assertions are now separately
+checked at three cwd layouts (7 scoped checks PASS); runtime isolation/contract pins unchanged.
 One remaining selected result: final exact-SHA applicable CI, guarded working installation and independent readback.
 No reservation/legacy-controller bypass, HA-03, data restoration or paid-watch/deny relaxation.
 Same three HA-02 criteria remain partial; isolated replication PASS. Onboarding remains separately open.

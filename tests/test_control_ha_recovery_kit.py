@@ -163,12 +163,17 @@ def test_only_committed_regular_source_is_collected(sources, tmp_path):
     assert kit.collect_sources(tmp_path, commit) == sources
 
 
-def test_cold_execution_is_offline_and_uses_only_explicit_restored_inputs():
+@pytest.mark.parametrize('checkout', ['/app', '/', '/home/runner/work/family_connect'])
+def test_cold_execution_is_offline_and_uses_only_explicit_restored_inputs(monkeypatch, checkout):
+    monkeypatch.setattr(Path, 'cwd', classmethod(lambda cls: Path(checkout)))
     arguments = cold.command('/retained/rootfs', '/owned/work', '/input/kit', '/pins/checkpoint', '/pins/bootstrap', '/input/custody')
     assert '--unshare-all' in arguments and '--clearenv' in arguments and '--cap-drop' in arguments
     assert '--no-index' in cold.SHELL and '--require-hashes' in cold.SHELL and '--only-binary=:all:' in cold.SHELL
     assert 'PYTHONPATH=/tmp/fc-work/restored/source' in cold.SHELL and '-m venv' in cold.SHELL
-    assert not any(name in arguments for name in ('/home', '/run', '/var/run/docker.sock', str(Path.cwd())))
+    host_inputs = [arguments[index + 1] for index, value in enumerate(arguments) if value in ('--bind', '--ro-bind')]
+    assert not any(name in host_inputs for name in ('/home', '/run', '/var/run/docker.sock', str(Path.cwd())))
+    assert host_inputs == ['/retained/rootfs', '/owned/work', '/input/kit', '/pins/checkpoint', '/pins/bootstrap', '/input/custody']
+    assert [arguments[index + 1] for index, value in enumerate(arguments) if value == '--tmpfs'] == ['/app', '/tmp']
     assert len(cold.CUSTODY_FILES) == 21
     assert 'node-NL2.aesgcm' in cold.CUSTODY_FILES and 'worker.checkpoint.json' in cold.CUSTODY_FILES
 

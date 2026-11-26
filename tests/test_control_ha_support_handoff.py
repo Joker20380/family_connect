@@ -68,6 +68,16 @@ def test_mailbox_wakeup_refuses_missing_stale_and_uncaught_readiness(tmp_path, m
         wake_control(process, tmp_path, os.getuid())
 
 
+def test_mailbox_wakeup_does_not_replace_an_existing_signal_handler(tmp_path, monkeypatch):
+    from scripts import control_ha_mailbox_startup as startup
+    tmp_path.chmod(0o700)
+    monkeypatch.setattr(startup.signal, 'getsignal', lambda signum: startup.signal.SIG_IGN)
+    monkeypatch.setattr(startup.signal, 'signal', lambda *args: pytest.fail('must preserve the existing handler'))
+    with pytest.raises(ValueError, match='CONTROL_WAKEUP_HANDLER'):
+        startup.arm_control_wakeup(tmp_path)
+    assert not list(tmp_path.iterdir())
+
+
 def test_joint_supervisor_retains_unit_accounting_and_terminal_stop():
     plan = dict(handoff=True, unit='family-connect-support.service', root='/root/handoff')
     unit = handoff.supervisor_unit(plan, '/opt/support/bin/python', '/root/channel.json')
