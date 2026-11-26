@@ -1,6 +1,6 @@
 # HA-02 — joint support handoff qualification, not working acceptance
 
-Local date26 November; observations below use UTC25 November. This is a source/qualification
+Local date26 November; observations below use UTC25–26 November. This is a source/qualification
 checkpoint, not a release, deployed result, capture authorization or HA-02 completion.
 
 ## One selected result
@@ -105,7 +105,73 @@ Retained CI archives (private `/tmp/fc-ha02-stabilize-20261125/ci`):
 | actual-root-entry-v2.xml |7701589cc44744ac9003dae4671eae84ba7e99318c908806f2f65fbdf4330354|
 | v2-contract-runtime.xml |f80e563953c70a1a2c7d4d3694b8441475be9270bc9204aafa8e8a422c2b246c|
 
-## Installed state and remainder
+## Cross-host qualification and CI follow-up,26 November00:07UTC
+
+Exact `c4cc510f83e3ae3d3dc667c307dabebed150b5f1`: Linux-control45722668604 PASS;
+native45722668667 FAIL (17 handoff failures/252 passes), Docker in phase045722668631 FAIL
+(18 failures/8943 passes/891 skips/521 setup errors). Other completed applicable workflows pass;
+explicitly skipped jobs are not acceptance. Native failed artifact did not retain the candidate's
+underlying reason, so that historical failure is not assigned a proven unique cause.
+
+Controlled Type=simple exec publication exposes a concrete handoff defect: manager start returns while
+the fixture exec shim still owns argv. Candidate authority was attempted outside the existing5s verification
+loop and prematurely rolled back. Admission now occurs inside that same bounded loop with all PID/argv/
+executable assertions intact; no timeout increases. A FIFO holds the pre-exec boundary, proves no authority
+or rollback yet, then releases exec (1 PASS9.64s). First bounded candidate refusal and original safe rollback
+reason are retained; private native diagnostic logs no longer hide the inner failure.
+
+Corrected diagnostic custody reveals Docker's original `PROFILE_PARENT_METADATA`: root umask077 reduced
+the newly created material directory from0750 to0700. Explicit chmod restores the required contract before
+ownership/reader validation.32 scoped tests PASS2.45s; an actual root networkless maintenance container with
+umask077 passes settled/pending refusal and native behavior checks. No assertion/contract hash is weakened.
+New exact-SHA CI must still pass before working installation.
+
+Actual-root trusted-channel qualification PASS at00:07:28UTC:1 test77.14s, actual fc-support OWNER and
+fc-mailbox NL1 synthetic services. It verifies closed/drained mailbox, old exit, candidate binding,
+reservation/witness consumption/open, real RNS stored work, selected-identity pause with notice queue/cursor
+retained, other-client traffic, mailbox restart sealed, reclosure/code-only recovery, reservation unchanged,
+UNKNOWN preserved and4 current mailbox rows. Capture remains false. Original working services are unchanged.
+SSH uses the existing owner's UID/pins; root credentials are not copied and no new trust anchor is installed.
+
+Failed attempts remain private and intact: `actual-root-nl1.xml` (AF_UNIX path119 bytes; controlled bind
+reproduces the limit), `actual-root-nl1-short-path.xml` (canonical interpreter NOFOLLOW refusal),
+`actual-root-nl1-canonical-exe.xml` (transient unit reload-state refusal). Corrections use a short runtime
+path, canonical executable with independent /proc/exe check, and a pinned file-backed synthetic unit.
+No failure is hidden by retry-to-PASS; working unit-state and source assertions remain strict.
+Final receipt/JUnit: `actual-root-nl1-loaded-unit.json/xml` under the private qualification directory.
+
+At00:03:49UTC an authorized NL1 daemon-reload cleared NeedDaemonReload=yes after every configured Service
+directive was verified equivalent to its loaded value. Exact3 unit hashes, all settings, PID3705/start/
+command/cgroup and zero restarts remain unchanged afterward. No working code, service restart or data change.
+Receipt: private `nl1-reload-result.json`, remote root-only `state-ha02/nl1-reload-20261126.json`.
+
+CI archives retained: c4cc-native.zip SHA256
+`c00a184400c3e694da9770cbe462eea1b50d164831cb5296576bb5e2d1d43740`;
+c4cc-failover.zip SHA256 `163365d6f9210a1dd275f6370ae9201bfed76f402a1b8e0e1f9a74aa585928f7`.
+
+## Working namespace and main-loop qualification,00:22UTC
+
+Exact `9a1a5509cbded1f075763922918732b4528dbf2c` native CI45726816731 PASS; Linux-control/phase0
+are still pending at this observation. Their success is not inferred from native PASS.
+
+Working NL1 remains PID3705. A bounded read-only probe records only UID/known-relay count and timing:
+one expected relay, unchanged command/cgroup, callback latency54.483s while the original main thread
+waits in the60s server loop. This is a separate proven mailbox-control scheduling gap, not WORKERS_REMAIN.
+The existing5s control deadline is unchanged. A dedicated caught SIGUSR1 handler enables a safe point;
+the root endpoint requires service-owned PID/start/boot/command/cgroup readiness, checks the caught bit,
+revalidates identity after pidfd_open and signals only that pidfd. Missing/stale/uncaught readiness refuses.
+The controlled child remains blocked in its original Event.wait(60) after its remote callback completes;
+two native checks PASS0.88s. No service stop, arbitrary thread cancellation or added network listener.
+
+Root-owned requests/code remain outside the service-writable state. Responses use an explicitly named
+service-owned0700 directory in the existing ReadWritePaths, with unchanged ownership/symlink/read checks.
+No writable-root relaxation or service restart is needed. Cross-host separated-response procedure:
+1 PASS82.49s; final root/actual-UID wakeup + restart + handoff/reclosure/recovery:1 PASS78.50s,
+finished00:22:09UTC, working OWNER/NL1 unchanged. Receipts are privately retained as
+`actual-root-nl1-separated-response.*`, `actual-root-nl1-wakeup.*`, `mailbox-wakeup-native.*`.
+These counts overlap and do not substitute for final exact-SHA CI or working installation.
+
+## Earlier installed-state observation (superseded only by manager reload above)
 
 OWNER23:28:31UTC: original PID2022541/0 restarts, original19 sources, unit/process/interpreter pins
 unchanged before/after actual-root qualification. Neither candidate was installed in the working service.
@@ -114,8 +180,7 @@ NeedDaemonReload=yes is now observed. Every configured Service directive matches
 after systemd unit/time normalization; there is no demonstrated configuration delta. No reload,
 working injection, fence/open, stop/restart or data rollback was performed. Recheck before operations.
 
-Remaining before the selected result: pass exact-SHA CI; qualify the combined
-trusted channel across actual OWNER/NL1 UIDs; install the guarded working participants with checked
+Remaining before the selected result: pass new exact-SHA CI; install the guarded working participants with checked
 prestate/rollback, then independent readback. No additional owner permission is needed, but actual
 system authentication and acceptance gates still apply.
 

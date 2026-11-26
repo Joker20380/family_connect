@@ -1,5 +1,17 @@
 # Текущее состояние / Current state
 
+**26 November00:22UTC — root OWNER ↔ NL1 joint qualification PASS; working namespace/wakeup qualified.**
+Exact9a1a5509 native CI45726816731 PASS; other applicable checks still pending, not accepted as PASS.
+Working NL1 read-only probe proves main-loop scheduling delay54.483s. A PID/start-bound, caught-handler
+wakeup now services the existing SSH/remote_exec channel without increasing its5s deadline; controlled
+blocked-Event tests2 PASS, actual-root OWNER/NL1 complete procedure1 PASS78.50s. Root requests remain
+separate from service-owned responses within the existing writable namespace. Working services unchanged.
+New exact-SHA CI and guarded working installation/readback remain mandatory; no capture permission.
+
+Feature `351f5e34277bb2e2929b36c282f036f0d86874c6` pushed/remote-SHA verified; main is documentation-only.
+
+## Previous checkpoint — history, not a second NEXT
+
 **25 November23:38UTC — joint v2 native qualification PASS; working acceptance remains open.**
 [Coupled procedure, controlled causes, exact CI and installed state](releases/2026-11-26-control-ha-joint-support.md).
 42 joint/native runtime tests PASS/0 skips on v2; actual-root/fc-support5 PASS with working OWNER unchanged.

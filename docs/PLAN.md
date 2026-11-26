@@ -21,14 +21,20 @@ reservation-bound witness consumption, confirmed opening, selected-identity noti
 reclosure/drain/permit invalidation before code-only recovery. Preserve current data, UNKNOWN and others.
 [Current combined evidence, CI failures and installation remainder](releases/2026-11-26-control-ha-joint-support.md).
 v2 candidate621009b8:42 joint/native runtime PASS/0 skips, actual-root5 PASS; original v1/baseline retained.
-Neither candidate is installed. Earlier248 full native PASS applies before v2. Original WORKERS_REMAIN
-cause stays unproven; distinct CI limbo-thread and systemd collection scenarios are controlled/proven.
-Exacteb86e856 native/readiness/phase0-host PASS; Linux-control and Docker FAIL. New exact-SHA CI,
-actual OWNER/NL1 boundary qualification and guarded working installation/readback remain mandatory.
+Actual-root cross-host OWNER/NL1 joint synthetic procedure PASS at26 November00:07UTC (77.14s):
+handoff/open, queue-preserving identity pause, mailbox restart, reclosure and current-data code-only recovery.
+Working services remain unchanged; neither candidate is installed. Authorized NL1 manager reload only
+clears a stale flag with exact loaded/configured equivalence, no process restart or configuration delta.
+Original WORKERS_REMAIN cause stays unproven. Exactc4cc510f Linux-control PASS; native and Docker FAIL.
+Controlled pre-exec startup authority and restrictive-root-umask fixture corrections are qualified locally.
+Exact9a1a5509 native CI45726816731 PASS. Working NL1 read-only main-loop delay54.483s is independently
+observed; bounded PID/start-bound wakeup and separated service-owned response directory pass controlled
+tests and actual-root cross-host joint qualification (1 PASS78.50s), working services unchanged.
+One remaining selected result: final exact-SHA applicable CI, guarded working installation and independent readback.
 No reservation/legacy-controller bypass, HA-03, data restoration or paid-watch/deny relaxation.
 Same three HA-02 criteria remain partial; isolated replication PASS. Onboarding remains separately open.
 
-Feature `c4cc510f83e3ae3d3dc667c307dabebed150b5f1` pushed/verified; main remains documentation-only.
+Feature `351f5e34277bb2e2929b36c282f036f0d86874c6` pushed/verified; main remains documentation-only.
 
 ## Сохранённые HA-02 checkpoint — история, не активные NEXT
 
