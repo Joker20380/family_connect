@@ -124,9 +124,12 @@ def main():
         control = root / 'control-runtime'
         control.mkdir(mode=0o750)
         os.chown(control, 0, account.pw_gid)
-        responses = control / 'responses'
+        responses = runtime / 'control-responses'
         responses.mkdir(mode=0o700)
         os.chown(responses, account.pw_uid, account.pw_gid)
+        wakeup = runtime / 'control-ready'
+        wakeup.mkdir(mode=0o700)
+        os.chown(wakeup, account.pw_uid, account.pw_gid)
         entry = root / 'control-entry.py'
         write(entry, ('import sys\nsys.path[:0]=' + repr([str(root), APP]) + '\n'
                      'from scripts.control_ha_mailbox_control import main\nmain()\n').encode(), gid=account.pw_gid)
@@ -135,10 +138,11 @@ def main():
         properties = dict(Type='simple', Restart='no', User='fc-mailbox', Group='fc-mailbox',
                           PrivateNetwork='yes', PrivateTmp='yes', ProtectSystem='strict', ProtectHome='yes',
                           NoNewPrivileges='yes', UMask='0077', MemoryMax='512M', TasksMax='96', CPUQuota='40%',
-                          ReadWritePaths=str(runtime) + ' ' + str(responses), WorkingDirectory=str(runtime),
+                          ReadWritePaths=str(runtime), WorkingDirectory=str(runtime),
                           SendSIGKILL='no', TimeoutStopSec='infinity', RemainAfterExit='yes')
         content = '[Service]\n' + ''.join(name + '=' + item + '\n' for name, item in properties.items())
-        content += 'Environment=PYTHONPATH=' + APP + ' FC_TEST_ROOT_HANDOFF=1 PYTHONDONTWRITEBYTECODE=1\n'
+        content += ('Environment=PYTHONPATH=' + APP + ' FC_TEST_ROOT_HANDOFF=1 PYTHONDONTWRITEBYTECODE=1 ' +
+                    'FC_TEST_CONTROL_READY=' + str(wakeup) + '\n')
         content += 'ExecStart=' + ' '.join(arguments) + '\n'
         write(root / 'retained-unit.conf', content.encode())
         write(Path('/run/systemd/system') / unit, content.encode(), mode=0o644)
@@ -161,7 +165,8 @@ def main():
         sources.update({str(Path(APP) / 'messenger' / (name + '.py')): fingerprint for name, fingerprint in before['sources'].items()})
         plan = dict(schema=1, unit=unit, user=False, manifest=str(root / 'manifest.json'), argv=arguments,
                     restart_argv=arguments, files=files, sources=sources, interpreter=str(Path(PYTHON).resolve()),
-                    interpreter_sha256=digest(PYTHON), runtime=str(control), uid=account.pw_uid, gid=account.pw_gid)
+                    interpreter_sha256=digest(PYTHON), runtime=str(control), response_directory=str(responses),
+                    wakeup_directory=str(wakeup), uid=account.pw_uid, gid=account.pw_gid)
         write(root / 'control.json', json.dumps(plan).encode(), gid=account.pw_gid)
         result = dict(entry=str(entry), plan=str(root / 'control.json'), interpreter=PYTHON, observed=observed,
                       manager_state=state(unit, ('MainPID', 'ControlPID', 'ActiveState', 'SubState', 'NeedDaemonReload')))

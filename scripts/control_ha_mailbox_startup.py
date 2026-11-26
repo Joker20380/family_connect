@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 import re
 import secrets
+import signal
 import stat
 import sys
 import threading
@@ -22,6 +23,27 @@ TRANSPORT_SHA256 = '97224d31475741e2d943779ce497853140344f5c9898afcaa9b87ddc937b
 DESTINATION_SHA256 = '7db80f04e8bac330d1c8a8e57f33c49b7df99798f54c74aae3e2d8e5b3bffbde'
 CREATION = threading.RLock()
 ACTIVE = None
+
+
+def control_wakeup(signum, frame):
+    pass
+
+
+def arm_control_wakeup(directory):
+    directory = Path(directory)
+    admission.require(directory.is_absolute() and directory.is_dir() and not directory.is_symlink() and
+                      directory.stat().st_uid == os.geteuid() and not directory.stat().st_mode & 0o077,
+                      'CONTROL_WAKEUP_DIRECTORY')
+    admission.require(threading.current_thread() is threading.main_thread() and
+                      signal.getsignal(signal.SIGUSR1) in (signal.SIG_DFL, control_wakeup), 'CONTROL_WAKEUP_HANDLER')
+    signal.signal(signal.SIGUSR1, control_wakeup)
+    process = admission.binding(os.getpid())
+    path = directory / (str(process['pid']) + '-' + process['start'] + '.json')
+    value = dict(schema=1, process=process, signal=int(signal.SIGUSR1))
+    if path.exists():
+        admission.require(json.loads(owned(path, os.geteuid())) == value, 'CONTROL_WAKEUP_CHANGED')
+    else:
+        admission.write(path, value)
 
 
 def fixture_scope(manifest, unit):
@@ -78,9 +100,10 @@ class PersistentLinkFence(SupportLinkFence):
 
 
 class Startup:
-    def __init__(self, manifest, *, owner_uid=0, fixture=False):
+    def __init__(self, manifest, *, owner_uid=0, fixture=False, control_ready=None):
         self.path = Path(manifest).absolute()
         self.owner_uid = owner_uid
+        self.control_ready = control_ready
         self.fixture = owner_uid != 0
         if fixture:
             unit = self.path.parent.name + '.service'
@@ -172,6 +195,8 @@ class Startup:
                 RNS.Transport.register_destination = descriptor
             registration(relay.destination)
             self.published = True
+            if self.control_ready is not None:
+                arm_control_wakeup(self.control_ready)
             return relay
 
     def observe(self):
@@ -203,6 +228,8 @@ class Startup:
                 self.check_seal()
                 self.fence.reclose(self.manifest['generation'])
             self.published = True
+            if self.control_ready is not None:
+                arm_control_wakeup(self.control_ready)
             return self.observe()
 
     def check_seal(self):
@@ -277,9 +304,10 @@ def main():
     global ACTIVE
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--manifest', required=True, type=Path)
+    parser.add_argument('--control-ready', type=Path)
     parser.add_argument('server_arguments', nargs=argparse.REMAINDER)
     arguments = parser.parse_args()
-    startup = Startup(arguments.manifest)
+    startup = Startup(arguments.manifest, control_ready=arguments.control_ready)
     from messenger import server
     source = admission.read(server.__file__)
     admission.require(hashlib.sha256(source).hexdigest() == SERVER_SHA256, 'SERVER_SOURCE_PIN')

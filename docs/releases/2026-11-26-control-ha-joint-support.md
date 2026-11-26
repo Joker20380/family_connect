@@ -149,6 +149,28 @@ CI archives retained: c4cc-native.zip SHA256
 `c00a184400c3e694da9770cbe462eea1b50d164831cb5296576bb5e2d1d43740`;
 c4cc-failover.zip SHA256 `163365d6f9210a1dd275f6370ae9201bfed76f402a1b8e0e1f9a74aa585928f7`.
 
+## Working namespace and main-loop qualification,00:22UTC
+
+Exact `9a1a5509cbded1f075763922918732b4528dbf2c` native CI45726816731 PASS; Linux-control/phase0
+are still pending at this observation. Their success is not inferred from native PASS.
+
+Working NL1 remains PID3705. A bounded read-only probe records only UID/known-relay count and timing:
+one expected relay, unchanged command/cgroup, callback latency54.483s while the original main thread
+waits in the60s server loop. This is a separate proven mailbox-control scheduling gap, not WORKERS_REMAIN.
+The existing5s control deadline is unchanged. A dedicated caught SIGUSR1 handler enables a safe point;
+the root endpoint requires service-owned PID/start/boot/command/cgroup readiness, checks the caught bit,
+revalidates identity after pidfd_open and signals only that pidfd. Missing/stale/uncaught readiness refuses.
+The controlled child remains blocked in its original Event.wait(60) after its remote callback completes;
+two native checks PASS0.88s. No service stop, arbitrary thread cancellation or added network listener.
+
+Root-owned requests/code remain outside the service-writable state. Responses use an explicitly named
+service-owned0700 directory in the existing ReadWritePaths, with unchanged ownership/symlink/read checks.
+No writable-root relaxation or service restart is needed. Cross-host separated-response procedure:
+1 PASS82.49s; final root/actual-UID wakeup + restart + handoff/reclosure/recovery:1 PASS78.50s,
+finished00:22:09UTC, working OWNER/NL1 unchanged. Receipts are privately retained as
+`actual-root-nl1-separated-response.*`, `actual-root-nl1-wakeup.*`, `mailbox-wakeup-native.*`.
+These counts overlap and do not substitute for final exact-SHA CI or working installation.
+
 ## Earlier installed-state observation (superseded only by manager reload above)
 
 OWNER23:28:31UTC: original PID2022541/0 restarts, original19 sources, unit/process/interpreter pins

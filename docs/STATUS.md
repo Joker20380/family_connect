@@ -1,6 +1,14 @@
 # Текущее состояние / Current state
 
-**26 November00:07UTC — actual root OWNER ↔ NL1 synthetic joint procedure PASS; working installation pending.**
+**26 November00:22UTC — root OWNER ↔ NL1 joint qualification PASS; working namespace/wakeup qualified.**
+Exact9a1a5509 native CI45726816731 PASS; other applicable checks still pending, not accepted as PASS.
+Working NL1 read-only probe proves main-loop scheduling delay54.483s. A PID/start-bound, caught-handler
+wakeup now services the existing SSH/remote_exec channel without increasing its5s deadline; controlled
+blocked-Event tests2 PASS, actual-root OWNER/NL1 complete procedure1 PASS78.50s. Root requests remain
+separate from service-owned responses within the existing writable namespace. Working services unchanged.
+New exact-SHA CI and guarded working installation/readback remain mandatory; no capture permission.
+
+###00:07UTC qualification checkpoint
 The coupled executor completes authenticated handoff/open, selected-identity pause, mailbox restart,
 reclosure and code-only recovery across actual fc-support/fc-mailbox UIDs using the existing pinned SSH
 channel. Queue/cursor, current data, reservation and UNKNOWN are preserved; capture remains forbidden.

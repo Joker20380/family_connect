@@ -20,9 +20,52 @@ from scripts import control_ha_mailbox_links as lineage
 from scripts import control_ha_support_replace as replace
 from scripts import control_ha_support_witness as witness
 from scripts.control_ha_mailbox_startup import Startup, encoded
-from scripts.control_ha_mailbox_control import MailboxControl
+from scripts.control_ha_mailbox_control import MailboxControl, wake_control
 from test_control_ha_legacy_support import installed, read, wait_for
 from test_control_ha_support_replace import service
+
+
+def test_mailbox_wakeup_interrupts_blocked_main_without_completing_wait(tmp_path):
+    directory = tmp_path / 'ready'
+    directory.mkdir(mode=0o700)
+    source = Path(__file__).resolve().parents[1]
+    script = ('import sys,threading\nfrom pathlib import Path\nsys.path.insert(0,sys.argv[1])\n'
+              'from scripts.control_ha_mailbox_startup import arm_control_wakeup\n'
+              'arm_control_wakeup(sys.argv[2])\n'
+              'threading.Event().wait(60)\nPath(sys.argv[3]).touch()\n')
+    completed, output = tmp_path / 'wait-completed', tmp_path / 'callback'
+    process = subprocess.Popen([sys.executable, '-I', '-B', '-c', script, str(source), str(directory), str(completed)])
+    try:
+        wait_for(lambda: list(directory.glob('*.json')))
+        bound = replace.admission.binding(process.pid)
+        wait_for(lambda: 'futex' in Path(f'/proc/{process.pid}/wchan').read_text())
+        probe = tmp_path / 'callback.py'
+        probe.write_text('from pathlib import Path\n' + f'Path({str(output)!r}).touch()\n')
+        sys.remote_exec(process.pid, str(probe))
+        assert not output.exists()
+        wake_control(bound, directory, os.getuid())
+        wait_for(output.exists)
+        assert not completed.exists() and process.poll() is None
+    finally:
+        process.terminate()
+        process.wait(timeout=5)
+
+
+def test_mailbox_wakeup_refuses_missing_stale_and_uncaught_readiness(tmp_path, monkeypatch):
+    from scripts import control_ha_mailbox_control as control
+    process = replace.admission.binding(os.getpid())
+    with pytest.raises(ValueError, match='MAILBOX_WAKEUP_NOT_READY'):
+        wake_control(process, tmp_path, os.getuid())
+    path = tmp_path / (str(process['pid']) + '-' + process['start'] + '.json')
+    path.write_bytes(encoded(dict(schema=1, process=dict(process, start='stale'), signal=10)))
+    path.chmod(0o600)
+    monkeypatch.setattr(control.os, 'pidfd_open', lambda *args: pytest.fail('must not signal before validation'))
+    with pytest.raises(ValueError, match='MAILBOX_WAKEUP_BINDING'):
+        wake_control(process, tmp_path, os.getuid())
+    path.write_bytes(encoded(dict(schema=1, process=process, signal=int(control.signal.SIGUSR1))))
+    monkeypatch.setattr(control.admission, 'read', lambda *args: b'SigCgt:\t00000000\n')
+    with pytest.raises(ValueError, match='MAILBOX_WAKEUP_NOT_CAUGHT'):
+        wake_control(process, tmp_path, os.getuid())
 
 
 def test_joint_supervisor_retains_unit_accounting_and_terminal_stop():

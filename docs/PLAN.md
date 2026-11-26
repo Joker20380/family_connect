@@ -29,7 +29,10 @@ Working services remain unchanged; neither candidate is installed. Authorized NL
 clears a stale flag with exact loaded/configured equivalence, no process restart or configuration delta.
 Original WORKERS_REMAIN cause stays unproven. Exactc4cc510f Linux-control PASS; native and Docker FAIL.
 Controlled pre-exec startup authority and restrictive-root-umask fixture corrections are qualified locally.
-One remaining selected result: exact-SHA applicable CI, guarded working installation and independent readback.
+Exact9a1a5509 native CI45726816731 PASS. Working NL1 read-only main-loop delay54.483s is independently
+observed; bounded PID/start-bound wakeup and separated service-owned response directory pass controlled
+tests and actual-root cross-host joint qualification (1 PASS78.50s), working services unchanged.
+One remaining selected result: final exact-SHA applicable CI, guarded working installation and independent readback.
 No reservation/legacy-controller bypass, HA-03, data restoration or paid-watch/deny relaxation.
 Same three HA-02 criteria remain partial; isolated replication PASS. Onboarding remains separately open.
 

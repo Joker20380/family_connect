@@ -5,6 +5,7 @@ import json
 import os
 from pathlib import Path
 import re
+import signal
 import shlex
 import subprocess
 import sys
@@ -18,13 +19,32 @@ def sha(path):
     return hashlib.sha256(admission.read(path, 64 * 1024 * 1024)).hexdigest()
 
 
+def wake_control(process, directory, uid):
+    path = Path(directory) / (str(process['pid']) + '-' + process['start'] + '.json')
+    try:
+        ready = json.loads(owned(path, uid), object_pairs_hook=unique)
+    except FileNotFoundError:
+        raise ValueError('MAILBOX_WAKEUP_NOT_READY') from None
+    admission.require(ready == dict(schema=1, process=process, signal=int(signal.SIGUSR1)), 'MAILBOX_WAKEUP_BINDING')
+    status = admission.read(Path('/proc') / str(process['pid']) / 'status').decode()
+    caught = next(line.split()[1] for line in status.splitlines() if line.startswith('SigCgt:'))
+    admission.require(int(caught, 16) & (1 << (signal.SIGUSR1 - 1)), 'MAILBOX_WAKEUP_NOT_CAUGHT')
+    descriptor = os.pidfd_open(process['pid'])
+    try:
+        admission.require(admission.binding(process['pid']) == process, 'MAILBOX_WAKEUP_PROCESS_CHANGED')
+        signal.pidfd_send_signal(descriptor, signal.SIGUSR1)
+    finally:
+        os.close(descriptor)
+
+
 class MailboxControl:
     def __init__(self, plan):
         self.owner = os.geteuid()
         self.plan = json.loads(owned(plan, self.owner), object_pairs_hook=unique)
         expected = {'schema', 'unit', 'user', 'manifest', 'argv', 'restart_argv', 'files', 'sources', 'interpreter',
                     'interpreter_sha256', 'runtime', 'uid', 'gid'}
-        admission.require(set(self.plan) == expected and self.plan['schema'] == 1, 'MAILBOX_CONTROL_PLAN')
+        admission.require(set(self.plan) >= expected and set(self.plan) <= expected | {'response_directory', 'wakeup_directory'} and
+                          self.plan['schema'] == 1, 'MAILBOX_CONTROL_PLAN')
         unit = self.plan['unit']
         fixture = (fixture_scope(self.plan['manifest'], unit) and
                    Path(plan).absolute() == Path(self.plan['manifest']).with_name('control.json'))
@@ -74,7 +94,8 @@ class MailboxControl:
         admission.require(self.runtime.is_dir() and not self.runtime.is_symlink() and
                           self.runtime.stat().st_uid == self.owner and not self.runtime.stat().st_mode & 0o022,
                           'MAILBOX_CONTROL_DIRECTORY')
-        responses = self.runtime / 'responses'
+        responses = Path(self.plan.get('response_directory', self.runtime / 'responses'))
+        admission.require(responses.is_absolute() and '..' not in responses.parts, 'MAILBOX_RESPONSE_PATH')
         admission.require(responses.is_dir() and not responses.is_symlink() and
                           responses.stat().st_uid == self.plan['uid'] and not responses.stat().st_mode & 0o077,
                           'MAILBOX_RESPONSE_DIRECTORY')
@@ -122,6 +143,8 @@ class MailboxControl:
             sys.remote_exec(process['pid'], str(probe))
         except RuntimeError:
             raise ValueError('MAILBOX_PROBE_UNAVAILABLE') from None
+        if 'wakeup_directory' in self.plan:
+            wake_control(process, self.plan['wakeup_directory'], self.plan['uid'])
         deadline = time.monotonic() + 5
         while not output.exists():
             admission.require(time.monotonic() < deadline, 'MAILBOX_RESPONSE_UNKNOWN')
@@ -151,7 +174,8 @@ def main():
     except ValueError as error:
         reason = str(error)
         reason = reason if re.fullmatch('[A-Z][A-Z0-9_]{1,80}', reason) else type(error).__name__
-        waiting = reason in ('MAILBOX_PROBE_UNAVAILABLE', 'MAILBOX_RESPONSE_UNKNOWN', 'MAILBOX_READBACK_CHANGED')
+        waiting = reason in ('MAILBOX_PROBE_UNAVAILABLE', 'MAILBOX_RESPONSE_UNKNOWN', 'MAILBOX_READBACK_CHANGED',
+                             'MAILBOX_WAKEUP_NOT_READY')
         print(encoded(dict(nonce=value['nonce'], controller_uid=os.geteuid(), result='REFUSED',
                            reason=reason, incomplete=True, retryable=waiting,
                            state=getattr(controller, 'observed_state', {}))).decode())
