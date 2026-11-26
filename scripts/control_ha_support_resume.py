@@ -62,8 +62,9 @@ def unadmitted_absence(previous):
                 service_empty=True, graceful_exit_proven=False, settlement_proven=False, capture_permitted=False)
 
 
-def absence(previous):
+def absence(previous, *, installed_collectors=False):
     replace.require(not previous.terminal_failure(), 'PREDECESSOR_TERMINAL_FAILURE')
+    replace.require(not installed_collectors or previous.has('accepted'), 'ACCEPTED_COLLECTOR_PREDECESSOR_REQUIRED')
     if not previous.has('accepted'):
         return unadmitted_absence(previous)
     accepted = document(previous.root / 'accepted.json')
@@ -71,7 +72,7 @@ def absence(previous):
     replace.require(accepted['archive_sha256'] == replace.CANDIDATE and
                     opened['candidate_binding'] == accepted['binding'] and
                     accepted['legacy_uncertainty_preserved'] is True, 'ACCEPTED_PREDECESSOR_REQUIRED')
-    state = previous.validate()
+    state = previous.validate(installed_collectors=installed_collectors)
     replace.empty(state, previous.plan['before']['ControlGroup'])
     boot = Path('/proc/sys/kernel/random/boot_id').read_text().strip()
     cold = boot != accepted['binding']['boot']
@@ -96,7 +97,7 @@ def absence(previous):
                 graceful_exit_proven=not cold, settlement_proven=False, capture_permitted=False)
 
 
-def prepare(previous_root, root, participant):
+def prepare(previous_root, root, participant, *, installed_collectors=False):
     previous = replace.Replacement(previous_root)
     root, participant = Path(root).absolute(), Path(participant).absolute()
     replace.require(os.geteuid() == 0 or previous.plan['user'], 'ROOT_RESUME_REQUIRED')
@@ -104,7 +105,7 @@ def prepare(previous_root, root, participant):
         replace.require(root.parent == Path('/opt/family-connect-support') and
                         participant.parent == Path('/var/lib/family-connect-support'), 'RESUME_PATH_SCOPE')
     with replace.controller_lock(previous.root):
-        proof = absence(previous)
+        proof = absence(previous, installed_collectors=installed_collectors)
         before = previous.manager.state()
         original = previous.plan
         root.mkdir(mode=0o700)
@@ -149,6 +150,11 @@ def prepare(previous_root, root, participant):
                     sources={name: replace.digest(root / name) for name in sources}, dropin=str(dropin),
                     dropin_sha256=hashlib.sha256(content).hexdigest(), handoff=True,
                     pending=sorted(path.name for path in (Path(original['gate']) / 'pending').iterdir()))
+        if installed_collectors:
+            plan['baseline_variant'] = replace.admission.COLLECTOR_BASELINE
+            proof['baseline_transition'] = dict(variant=replace.admission.COLLECTOR_BASELINE,
+                                               source_pins=replace.admission.COLLECTOR_SOURCES)
+        previous.validate(installed_collectors=installed_collectors)
         replace.require(previous.manager.state() == before, 'PRESTATE_CHANGED')
         replace.admission.write(root / 'plan.json', plan)
         replace.admission.write(root / 'predecessor.json', dict(root=str(previous.root), absence=proof))
@@ -313,10 +319,12 @@ def main():
     parser.add_argument('--prepare-from', type=Path)
     parser.add_argument('--participant', type=Path)
     parser.add_argument('--mailbox-channel', type=Path)
+    parser.add_argument('--installed-collectors', action='store_true')
     args = parser.parse_args()
+    replace.require(not args.installed_collectors or args.prepare_from is not None, 'COLLECTOR_PREPARE_ONLY')
     if args.prepare_from:
         replace.require(args.participant is not None, 'PARTICIPANT_REQUIRED')
-        prepare(args.prepare_from, args.root, args.participant)
+        prepare(args.prepare_from, args.root, args.participant, installed_collectors=args.installed_collectors)
         result = 'RESUME_PREPARED_NOT_AUTHORIZED'
     else:
         replace.require(args.mailbox_channel is not None, 'MAILBOX_CHANNEL_REQUIRED')

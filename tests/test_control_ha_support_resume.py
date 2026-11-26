@@ -12,7 +12,7 @@ from scripts import control_ha_support_resume as resume
 from scripts import control_ha_support_replace as replace
 from test_control_ha_support_handoff import paired, run, notice_snapshot, chat_runtime
 from test_control_ha_support_replace import service
-from test_control_ha_legacy_support import installed, wait_for, read
+from test_control_ha_legacy_support import installed, wait_for, read, install_collector_sources
 
 
 class Channel:
@@ -32,7 +32,7 @@ class Channel:
         return dict(observed=observed, controller_uid=os.getuid(), unit_verified=True, restart_guard_verified=True)
 
 
-def prepared(paired, monkeypatch):
+def prepared(paired, monkeypatch, installed_collectors=False):
     manager, plan, root, data, mailbox = paired
     assert run(root, mailbox) == 'HANDOFF_OPEN_CAPTURE_DENIED'
     before = notice_snapshot(data, int(manager.state()['MainPID']), seed=True)
@@ -46,12 +46,17 @@ def prepared(paired, monkeypatch):
     assert stopped['ExecMainCode'] == '1' and stopped['ExecMainStatus'] == '0', {
         name: stopped[name] for name in ('ActiveState', 'SubState', 'MainPID', 'ExecMainCode', 'ExecMainStatus')}
     newer = root.with_name(root.name + '-resume')
-    stage_generation(root, newer, data / 'resume', mailbox, reclosure, monkeypatch)
+    if installed_collectors:
+        install_collector_sources(Path(plan['baseline']))
+        with pytest.raises(ValueError, match='SOURCE_CLOSURE'):
+            resume.absence(replace.Replacement(root))
+    stage_generation(root, newer, data / 'resume', mailbox, reclosure, monkeypatch,
+                     installed_collectors=installed_collectors)
     return newer, Channel(mailbox), before, authority, history
 
 
-def stage_generation(previous, newer, participant, mailbox, reclosure, monkeypatch):
-    next_plan = resume.prepare(previous, newer, participant)
+def stage_generation(previous, newer, participant, mailbox, reclosure, monkeypatch, installed_collectors=False):
+    next_plan = resume.prepare(previous, newer, participant, installed_collectors=installed_collectors)
     interpreter = os.environ['FC_TEST_SUPPORT_PYTHON']
     wrapper = Path(__file__).parent / 'fixtures/support_ptracer.py'
     raw = (newer / 'support.conf').read_bytes().replace(('ExecStart=' + interpreter).encode(),
@@ -75,9 +80,10 @@ def stage_generation(previous, newer, participant, mailbox, reclosure, monkeypat
 
 @pytest.mark.parametrize('service', [True], indirect=True)
 @pytest.mark.parametrize('lost', [False, True])
-def test_forward_resume_new_process_retains_nonempty_queue_and_old_authority(paired, monkeypatch, lost):
+@pytest.mark.parametrize('installed_collectors', [False, True])
+def test_forward_resume_new_process_retains_nonempty_queue_and_old_authority(paired, monkeypatch, lost, installed_collectors):
     manager, plan, root, data, mailbox = paired
-    newer, channel, before, authority, history = prepared(paired, monkeypatch)
+    newer, channel, before, authority, history = prepared(paired, monkeypatch, installed_collectors)
     channel.lose_response = lost
     controller = resume.Resume(newer, channel)
     if lost:

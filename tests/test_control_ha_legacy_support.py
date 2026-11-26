@@ -43,6 +43,51 @@ def installed(tmp_path):
     return source
 
 
+def install_collector_sources(baseline):
+    for name, expected in bridge.COLLECTOR_SOURCES.items():
+        raw = subprocess.check_output(['git', 'show', '192343eb7433a98eb8ec3f92c0d0c78f8b49f845:' + name], cwd=ROOT)
+        assert bridge.digest(raw) == expected
+        target = baseline / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(raw)
+
+
+def test_installed_collectors_require_explicit_exact_closed_source_variant(installed):
+    expected = read(ROOT / 'deploy/support-chat/support-capture-v1.json')['baseline']
+    original = dict(expected)
+    install_collector_sources(installed)
+    with pytest.raises(ValueError, match='SOURCE_CLOSURE'):
+        bridge.sources(installed, expected)
+    observed = bridge.sources(installed, expected, installed_collectors=True)
+    assert set(observed) == expected.keys() | bridge.COLLECTOR_SOURCES.keys()
+    assert expected == original
+    assert all(bridge.digest(raw) == (expected | bridge.COLLECTOR_SOURCES)[name] for name, raw in observed.items())
+
+
+@pytest.mark.parametrize('damage', ['extra', 'missing', 'changed-collector', 'changed-support', 'symlink', 'pins'])
+def test_installed_collector_variant_never_accepts_unreviewed_source(installed, damage):
+    expected = read(ROOT / 'deploy/support-chat/support-capture-v1.json')['baseline']
+    install_collector_sources(installed)
+    collector = installed / 'provisioning/owner_capture.py'
+    if damage == 'extra':
+        (installed / 'extra.py').write_text('value = True\n')
+    elif damage == 'missing':
+        collector.unlink()
+    elif damage == 'changed-collector':
+        collector.write_text('value = True\n')
+    elif damage == 'changed-support':
+        other = next(name for name in expected if name not in bridge.COLLECTOR_SOURCES)
+        (installed / other).write_text('value = True\n')
+    elif damage == 'symlink':
+        saved = collector.with_suffix('.saved')
+        collector.rename(saved)
+        collector.symlink_to(saved)
+    else:
+        expected['provisioning/support_bindings.py'] = bridge.COLLECTOR_SOURCES['provisioning/support_bindings.py']
+    with pytest.raises(ValueError):
+        bridge.sources(installed, expected, installed_collectors=True)
+
+
 @pytest.fixture
 def running(tmp_path, installed):
     processes, peers = [], []

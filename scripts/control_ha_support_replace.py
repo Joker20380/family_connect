@@ -295,11 +295,14 @@ class Replacement:
             return 'MANUAL_RECONCILIATION_REQUIRED'
         return 'ABORTED' if self.has('aborted') else 'WAITING_OLD_EXIT'
 
-    def validate(self):
+    def validate(self, *, installed_collectors=False):
         plan = self.plan
         require(all(digest(self.root / name) == value for name, value in plan['sources'].items()), 'SUPERVISOR_PIN')
         require(digest(plan['artifact']) == CANDIDATE and digest(plan['executable']) == plan['executable_sha256'], 'SOURCE_PIN')
-        admission.sources(plan['baseline'], plan['baseline_pins'])
+        variant = plan.get('baseline_variant')
+        require(variant in (None, admission.COLLECTOR_BASELINE), 'BASELINE_VARIANT')
+        admission.sources(plan['baseline'], plan['baseline_pins'],
+                          installed_collectors=installed_collectors or variant == admission.COLLECTOR_BASELINE)
         require(all(digest(path) == value for path, value in plan['files'].items()), 'ORIGINAL_UNIT_CHANGED')
         require(all(digest(path) == value for path, value in plan['env_files'].items()), 'ENVIRONMENT_CHANGED')
         require(pins(Path(plan['gate'])) == plan['gate_pins'], 'GATE_REPLACED')

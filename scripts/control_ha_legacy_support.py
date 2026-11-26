@@ -69,9 +69,21 @@ def write(path, value):
         os.close(descriptor)
 
 
-def sources(root, expected):
+COLLECTOR_BASELINE = 'owner-collectors-192343eb'
+COLLECTOR_SOURCES = {
+    'control/capture_gate.py': 'da28d940e2e17e2dbb1fbbde8cc04c59d29cffc8762ada717135504e2ffa4906',
+    'provisioning/owner_capture.py': '1997f1bf5da19ad1a2d11b16d83a71c217d1ea1f5f4cc440ef59db9e07e737cf',
+    'provisioning/support_bindings.py': 'afba534e17ec3a57f5431bd611d66b94a56f7e5f969e167ca5afe2834d430bc2',
+    'provisioning/subscription_collector.py': '3bb9954c8edfba64f4b2aeb63fb174669fa2fc8e37f71c193c9a18da895193cb',
+}
+
+
+def sources(root, expected, *, installed_collectors=False):
     require(digest(json.dumps(expected, sort_keys=True, separators=(',', ':')).encode()) == BASELINE,
             'BASELINE_PIN')
+    require(type(installed_collectors) is bool, 'COLLECTOR_BASELINE_OPTION')
+    if installed_collectors:
+        expected = expected | COLLECTOR_SOURCES
     root = Path(root).absolute()
     require(not any(path.is_symlink() for path in (root, *root.parents)), 'SOURCE_SYMLINK')
     require({path.relative_to(root).as_posix() for path in root.rglob('*.py')} == set(expected),
