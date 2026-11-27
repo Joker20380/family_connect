@@ -41,6 +41,44 @@ build/plugin/device-management operations are not qualified by the simple neighb
 
 ## Installation/recovery plan — NOT EXECUTED
 
+### Enrolled-domain composition, source-only q7
+
+`DomainAdmission` now requires the configured dedicated CgroupParent, private cgroup namespace,
+ordinary runc and restart=no for protected resource containers. New resource aliases/IDs cannot
+choose another parent or enable automatic restart. Privileged exec and unproven old exec privileges
+refuse; host control/cgroup/proc/device/socket/config mounts are not treated as harmless neighbors.
+Every mount is checked, including mounts after the first protected one. This is intentionally a
+finite supported runtime, not a claim to cover arbitrary Docker plugins/runtime extensions.
+
+`ExecutorBoundary` composes that admission with the existing launch keeper and recursive ClosedCgroup.
+It waits boundedly for tracked API callbacks before clean domain termination; pending uncertainty
+refuses, it never becomes a drain permit. The actual empty cgroup is frozen and the same admission,
+daemon/config, cgroup inode/freeze and keeper leases must remain valid. Release is ordered and recorded;
+a completed same-process release is idempotent. An incomplete release requires reconciliation, not
+another acquisition. It does not restart product services or adopt a dead controller's capture lease.
+
+Exact-binary q7 qualifies a real container plus detached exec child retaining writable FD/shared mmap:
+both finish before HELD, then direct start/new-ID create refuse and data remains unchanged. Automatic
+restart policy is rejected before holding. Normal container restart and clean stop after release pass.
+Enforcer hang/death makes check refuse within its timeout while the physical freeze remains; controller
+death also leaves it in place. Explicit same-identity reconciliation thaws only the empty lab domain;
+none of these fault cases is labeled a completed capture or normal application resume.
+
+q5/q6 did not accept cleanup: during hook removal GET /version returned HTTP200 with an empty body;
+the fixture dereferenced None. q6 preserves the exact traceback. q7 retains the empty-read observation,
+never treats it as readiness, then performs only bounded idempotent readback until a valid response.
+Cleanup confirms all own children exited and no own freeze remains. The observation does not prove
+the deeper Engine/response cause. The earlier q3 missing PYTHONPATH fixture failure is also retained.
+
+**Still missing at production cutover:** `/containers/create` or `/containers/{id}/start` admitted by
+the existing daemon **before the hook was installed** may still target a protected volume outside
+the new parent. The new policy and a later census cannot retroactively fence that request. Installed
+console/publisher remain in their old default scopes with unless-stopped. Initial enrollment must
+prove a no-bypass boundary for those requests and move the existing images/config into the enrolled
+domain without affecting unrelated workloads. Neither the component nor q7 sets
+`initial_admission_coverage_proven=true`. This is the next concrete integration gate, followed by
+the accepted stopped-support/independent reader/native-pair/custody lifetime and remote receiver rows.
+
 Read-only working prestate21:20UTC: dockerd PID4386/invocation
 `849e0a8de257429892b378bcfc482fcf`; ExecStart uses `-H fd://` and the installed containerd socket;
 ExecReload sends SIGHUP. `/etc/docker/daemon.json` contains `runtimes`, no authz and no live-restore.

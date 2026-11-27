@@ -14,6 +14,7 @@ import time
 class API:
     def __init__(self, socket_path):
         self.path = str(socket_path)
+        self.observations = []
 
     def call(self, method, route, value=None, *, raw=None, content_type=None, headers=None):
         connection = http.client.HTTPConnection('localhost', timeout=10)
@@ -34,6 +35,10 @@ class API:
     def json(self, method, route, value=None, expected=200):
         status, raw = self.call(method, route, value)
         assert status == expected, (method, route, status)
+        if method == 'GET' and not raw:
+            self.observations.append(dict(method=method, route=route, status=status,
+                category='EMPTY_JSON_RESPONSE', at_ns=time.time_ns()))
+            raise AssertionError('LAB_EMPTY_JSON_RESPONSE')
         return json.loads(raw) if raw else None
 
 

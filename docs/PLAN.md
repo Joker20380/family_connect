@@ -16,7 +16,17 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
-Current21:21UTC: keep one engineering NEXT, Docker executor admission plus real OWNER composition.
+Current21:45UTC: same Docker executor/integration NEXT. Source-only enrolled-domain composition q7
+passes real clean child/FD/mmap termination, retained physical freeze on enforcer/controller loss and
+normal lab resume. It is NOT an installed OWNER adapter. Next prove initial attachment/enrollment:
+pre-hook Docker create/start with protected volumes must not run outside the configured parent.
+The installed empty CgroupParent/unless-stopped pair is unchanged; no policy hook is installed.
+Do not replace that missing guarantee with census/pending0 or capture a source-only component.
+Existing-key native PRESTATE_EXPORT refusal still needs successful local read-only preservation and
+consumer validation; no repeated activation. Full stopped-support/custody and remote rows remain required.
+
+Historical21:21UTC:
+Keep one engineering NEXT, Docker executor admission plus real OWNER composition.
 Exact isolated Engine29.1.3 admission experiment q2 succeeds, but proves automatic restart and old
 permitted FD/mmap/detached work bypass admission-only containment. Next bind the resource policy to
 a non-escapable, continuously held executor domain and qualified project resume. Shared management

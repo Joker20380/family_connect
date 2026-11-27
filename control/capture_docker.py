@@ -67,6 +67,10 @@ class Scope:
         require(all(path.is_absolute() and path != Path('/') and path.exists() for path in self.paths),
                 'DOCKER_SCOPE_PATH')
         self.pins = [physical(path) for path in self.paths]
+        self.control_paths = [Path(path) for path in ('/proc', '/sys', '/sys/fs/cgroup', '/dev', '/run/docker.sock',
+            '/var/run/docker.sock', '/run/containerd', '/run/docker/plugins')]
+        if getattr(engine, 'path', None):
+            self.control_paths.append(Path(engine.path))
 
     def overlaps(self, value):
         require(isinstance(value, str) and value.startswith('/'), 'DOCKER_RESOURCE_PATH')
@@ -75,6 +79,20 @@ class Scope:
         return any(device == expected_device and (path == expected or path in expected.parents or
             expected in path.parents) for expected_device, expected in self.pins)
 
+    def bind(self, value):
+        require(isinstance(value, str) and value.startswith('/'), 'DOCKER_RESOURCE_PATH')
+        resolved = Path(value).resolve()
+        device, path = physical(resolved)
+        for control in self.control_paths:
+            target = control.resolve()
+            require(not (resolved == target or resolved in target.parents or target in resolved.parents),
+                    'DOCKER_INDIRECT_CONTROL_MOUNT')
+            if control.exists():
+                expected_device, expected = physical(control)
+                require(not (device == expected_device and (path == expected or path in expected.parents or
+                    expected in path.parents)), 'DOCKER_INDIRECT_CONTROL_MOUNT')
+        return self.overlaps(value)
+
     def volume(self, name):
         value = self.engine.get('/volumes/' + name)
         require(value['Driver'] == 'local', 'DOCKER_VOLUME_DRIVER_UNKNOWN')
@@ -82,39 +100,41 @@ class Scope:
         if options:
             require(options.get('type') == 'none' and options.get('o') in ('bind', 'bind,rw', 'bind,ro'),
                     'DOCKER_VOLUME_OPTIONS_UNKNOWN')
-            return self.overlaps(options['device'])
-        return self.overlaps(value['Mountpoint'])
+            return self.bind(options['device'])
+        return self.bind(value['Mountpoint'])
 
     def container(self, identifier):
         value = self.engine.get('/containers/' + identifier + '/json')
         config = value['HostConfig']
         require(not config.get('Privileged') and config.get('PidMode') != 'host' and
                 not config.get('Devices') and not config.get('CapAdd'), 'DOCKER_DOMAIN_PRIVILEGE_UNKNOWN')
+        selected = False
         for mount in value['Mounts']:
             require(mount['Type'] in ('bind', 'volume', 'tmpfs'), 'DOCKER_MOUNT_TYPE_UNKNOWN')
-            if mount['Type'] != 'tmpfs' and self.overlaps(mount['Source']):
-                return True
-        return False
+            if mount['Type'] != 'tmpfs' and self.bind(mount['Source']):
+                selected = True
+        return selected
 
     def create(self, value):
         host = value.get('HostConfig') or {}
         require(not host.get('Privileged') and host.get('PidMode') != 'host' and not host.get('Devices') and
                 not host.get('CapAdd') and not host.get('DeviceRequests'), 'DOCKER_CREATE_PRIVILEGE_UNKNOWN')
+        selected = False
         for entry in host.get('VolumesFrom') or []:
             if self.container(entry.split(':', 1)[0]):
-                return True
+                selected = True
         for entry in host.get('Binds') or []:
             parts = entry.split(':')
             require(len(parts) in (2, 3), 'DOCKER_BIND_FORM')
-            if self.overlaps(parts[0]) if parts[0].startswith('/') else self.volume(parts[0]):
-                return True
+            if self.bind(parts[0]) if parts[0].startswith('/') else self.volume(parts[0]):
+                selected = True
         for mount in host.get('Mounts') or []:
             kind, source = mount['Type'], mount.get('Source', '')
             require(kind in ('bind', 'volume', 'tmpfs'), 'DOCKER_MOUNT_TYPE_UNKNOWN')
             require(not mount.get('VolumeOptions', {}).get('DriverConfig'), 'DOCKER_INLINE_VOLUME_DRIVER_UNKNOWN')
-            if kind == 'bind' and self.overlaps(source) or kind == 'volume' and source and self.volume(source):
-                return True
-        return False
+            if kind == 'bind' and self.bind(source) or kind == 'volume' and source and self.volume(source):
+                selected = True
+        return selected
 
 
 def route(request):
@@ -136,6 +156,9 @@ class Admission:
         self.lock = threading.RLock()
         self.phase, self.pending, self.serial = 'OPEN', {}, 0
         self.config = Path(config) if config is not None else None
+        self.scope.control_paths.extend([self.pidfile, self.journal])
+        if self.config is not None:
+            self.scope.control_paths.append(self.config)
         self.plugin, self.watch, self.released = plugin, None, None
         self.lease = os.urandom(32).hex()
         record(self.journal, 'started', dict(generation=self.generation, resource_admission_only=True))

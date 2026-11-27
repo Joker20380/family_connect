@@ -10,6 +10,7 @@ import subprocess
 import sys
 import threading
 import time
+import traceback
 import uuid
 
 from docker_authz_checks import API
@@ -59,12 +60,16 @@ def main():
     handles, processes, plugins = [], [], []
     results = dict(engine_binary_sha256=DOCKER_SHA, production_modified=False, owner_adapter_installed=False,
                    common_kit=False, runtime=str(runtime))
-    sources = ['control/capture_docker.py', 'tests/fixtures/run_docker_authz.py',
+    sources = ['control/capture_docker.py', 'control/capture_docker_domain.py', 'control/capture_domain.py',
+               'control/capture_native.py', 'tests/fixtures/run_docker_authz.py',
+               'tests/fixtures/docker_domain_checks.py',
                'tests/fixtures/docker_authz_checks.py', 'tests/fixtures/docker_authz_server.py']
     results['source'] = dict(head=subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
         files={name: hashlib.sha256(Path(name).read_bytes()).hexdigest() for name in sources})
     installed = json.loads(subprocess.check_output(['docker', 'image', 'inspect', IMAGE], timeout=10))
-    assert len(installed) == 1 and installed[0]['Id'] == IMAGE_SHA
+    assert len(installed) == 1 and any(digest.endswith('@' + IMAGE_SHA)
+                                      for digest in installed[0].get('RepoDigests', []))
+    results['fixture_image'] = dict(manifest=IMAGE_SHA, local_id=installed[0]['Id'])
     def spawn(command, name):
         output = (root / (name + '.log')).open('wb')
         handles.append(output)
@@ -74,6 +79,8 @@ def main():
         return process
     engine = API(runtime / 'docker.sock')
     daemon = None
+    parent = 'fc' + uuid.uuid4().hex + '.slice'
+    unit = Path('/run/systemd/system') / parent
     try:
         containerd = spawn([args.containerd, '--config', str(root / 'containerd.toml')], 'containerd')
         wait(lambda: (runtime / 'containerd.sock').exists())
@@ -194,6 +201,37 @@ def main():
         assert status == 503 and daemon.pid != old_pid
         assert json.loads((journal / 'failed').read_bytes())['reason'] == 'DOCKER_DAEMON_GENERATION_CHANGED'
         results['daemon_generation'] = 'OLD_LEASE_FAILED'
+        configuration([])
+        daemon.send_signal(signal.SIGHUP)
+        wait(lambda: engine.json('GET', '/version')['Version'] == '29.1.3')
+        for row in engine.json('GET', '/containers/json?all=1'):
+            assert all(name.startswith('/fc-authz-') for name in row['Names'])
+            engine.call('DELETE', '/containers/' + row['Id'] + '?force=1')
+        unit.write_text('[Unit]\nDescription=Disposable FC Docker domain qualification\n[Slice]\n')
+        subprocess.run(['systemctl', 'daemon-reload'], check=True, timeout=10)
+        subprocess.run(['systemctl', 'start', parent], check=True, timeout=10)
+        results['domain'] = {}
+        for mode in ('normal', 'enforcer-hang', 'enforcer-death', 'controller-death'):
+            name = 'fc-domain-' + uuid.uuid4().hex
+            path = Path('/run/docker/plugins') / (name + '.sock')
+            plugins.append(path)
+            enforcer = spawn([sys.executable, '-m', 'control.capture_docker_domain', '--socket', str(path),
+                '--engine', str(runtime / 'docker.sock'), '--pidfile', str(runtime / 'docker.pid'),
+                '--daemon-config', str(config), '--journal', str(root / ('domain-plugin-' + mode)),
+                '--protect', str(root / 'protected'), '--parent', parent], 'domain-plugin-' + mode)
+            domain_client = API(path)
+            wait(lambda: domain_client.json('POST', '/Plugin.Activate', {})['Implements'] == ['authz'])
+            configuration([name])
+            daemon.send_signal(signal.SIGHUP)
+            time.sleep(.2)
+            subprocess.run([sys.executable, 'tests/fixtures/docker_domain_checks.py', '--engine', str(runtime / 'docker.sock'),
+                '--plugin', str(path), '--root', str(root), '--parent', parent, '--mode', mode,
+                '--enforcer', str(enforcer.pid)], check=True, timeout=45,
+                env={**os.environ, 'PYTHONPATH': str(Path.cwd()), 'PYTHONDONTWRITEBYTECODE': '1'})
+            results['domain'][mode] = json.loads((root / ('domain-' + mode + '.json')).read_bytes())
+            configuration([])
+            daemon.send_signal(signal.SIGHUP)
+            wait(lambda: engine.json('GET', '/version')['Version'] == '29.1.3')
         (root / 'qualification.json').write_text(json.dumps(results, sort_keys=True))
         print(json.dumps(results, sort_keys=True))
     finally:
@@ -213,6 +251,7 @@ def main():
                     daemon.terminate()
                     daemon.wait(35)
         except BaseException as error:
+            traceback.print_exc()
             cleanup_errors.append(type(error).__name__)
         for process in reversed(processes):
             try:
@@ -220,14 +259,27 @@ def main():
                     process.terminate()
                     process.wait(10)
             except BaseException as error:
+                traceback.print_exc()
                 cleanup_errors.append(type(error).__name__)
         for path in plugins:
             path.unlink(missing_ok=True)
         for handle in handles:
             handle.close()
+        try:
+            if unit.exists():
+                frozen = Path('/sys/fs/cgroup') / parent / 'cgroup.freeze'
+                if frozen.exists():
+                    frozen.write_text('0')
+                subprocess.run(['systemctl', 'stop', parent], check=True, timeout=10)
+                unit.unlink()
+                subprocess.run(['systemctl', 'daemon-reload'], check=True, timeout=10)
+        except BaseException as error:
+            traceback.print_exc()
+            cleanup_errors.append(type(error).__name__)
         (root / 'cleanup.json').write_text(json.dumps(dict(errors=cleanup_errors,
             primary=type(primary).__name__ if primary is not None else None,
             own_children_exited=all(process.poll() is not None for process in processes))))
+        (root / 'readback-observations.json').write_text(json.dumps(engine.observations))
         if cleanup_errors:
             if primary is not None:
                 primary.add_note('LAB_CLEANUP_RECONCILIATION_REQUIRED')

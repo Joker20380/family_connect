@@ -1,5 +1,20 @@
 # Текущее состояние / Current state
 
+**27 November21:45UTC — enrolled Docker domain composition qualified locally; NOT_INSTALLED.**
+Source adds a mandatory resource→CgroupParent/restart=no policy and ExecutorBoundary composition with
+the existing continuous empty/frozen cgroup. Exact Engine29.1.3 q7 proves clean termination of real
+detached FD/mmap children, direct late-create/start denials, normal lab resume, and explicit physical
+cleanup after enforcer hang/death or controller death. A separate reader matches all local source
+hashes;36 focused tests PASS. This is not an installed OWNER adapter or fleet capture permit.
+Next close the initial-cutover channel: Docker create/start accepted **before** AuthZ attachment can
+still reference protected volumes outside the new parent. Production console/publisher retain their
+old scopes/unless-stopped; no code/image/daemon hook or service state was changed. q5/q6 cleanup
+failures and q7 empty-read evidence remain separate. Exact-source CI follows this change's push.
+Panel real login/five pages/logout PASS21:36:48; user natural monitor/probe cycles complete0 and
+timers enabled/active/waiting21:40–41. Existing HA-key read still lacks accepted PRESTATE_EXPORT;
+no further vault mutation/unlock was attempted. Common encrypted kit/verify/linked resume remain absent.
+
+**Historical21:21UTC:**
 **27 November21:21UTC — Docker direct admission qualified in isolation, not installed.**
 Exact Engine29.1.3 q2 denies protected exec/create/start/restart/unpause/update/archive and resource
 aliases/new IDs, while a normal neighbor exec succeeds. Actual counterexamples preserve the next

@@ -1,5 +1,43 @@
 # HA-02 common capture preparation — 27 November2026
 
+## Resource-enrolled Docker domain composition — 21:45UTC
+
+`control.capture_docker_domain` combines mandatory parent/private-namespace/restart=no admission
+with the existing launch keeper and continuously held recursive cgroup. Every resource mount is
+classified, including indirect host control mounts after a protected bind. Old exec privileges must
+be proven; new elevated exec refuses. The actual q7 container and detached old-FD/shared-mmap child
+exit cleanly before the same cgroup is frozen. Direct late create/start deny, normal lab container
+resume/clean stop pass. Separate fault operations retain the physical freeze after enforcer death,
+enforcer hang or controller death and require explicit same-identity cleanup; no new process adopts
+a capture lease or repeats unknown effects.36 focused tests/0 skips pass. Independent local reader
+matches all eight source/fixture hashes in q7; own-child cleanup has no errors, no own freeze remains.
+
+Preserved failures: q3 child fixture lacked PYTHONPATH; q5/q6 completed assertions but refused cleanup
+with TypeError. q6 locates the exact dereference: GET /version returned HTTP200/empty during hook
+removal. q7 records that transient observation and refuses readiness until bounded read-only polling
+gets a valid JSON response; it does not claim the deeper Engine cause. First source10581ad7 native CI
+46069889311 FAILED and artifact15231874281 (22 passing unit cases only) is retained privately. Its
+missing native qualification is not repaired by local q7; current exact-source CI is required. The
+fixture now verifies the public image RepoDigest, not equality of store-dependent local Id with a
+registry manifest digest. No unobserved cause of the earlier CI failure is asserted.
+
+Commits already remote-verified: abd4b7f80fcca64fb08a6f4808d80e5b1abc28f5 (vault diagnostics; all four
+applicable workflows SUCCESS),10581ad702d8106f39db02e5bfa190c0493a1962 (admission checkpoint;
+phase0/Android/native-support SUCCESS, Docker FAILED, Linux pending at21:41). Main unchanged da94566a.
+No product reinstallation/shared daemon reload/stop/admission hold occurred. Panel real login/five
+existing pages/logout PASS21:36:48, no test messages/business mutations. User monitor invocation
+9c7c6869019047ba87eee03bea7b72d6 exits0 at21:41:09; probe74589cfae519470f99da7ee59d81a00e exits0
+at21:40:42; both timers enabled/active/waiting. Current vault consumer remains NOT_ACCEPTED at
+PRESTATE_EXPORT/NATIVE_EXIT/status1; no repeated activation or secret output.
+
+One next concrete channel is initial pre-hook `/containers/create`/start still able to reference
+protected resources outside the new parent. The installed console/publisher remain un-enrolled;
+q7 explicitly refuses to certify initial production admission coverage. A safe initial cutover must
+close this channel before full OWNER native/PG/stopped-support/independent-reader composition and
+the remaining RU notice/peer receiver rows. There is no common operation ID, new stopped component,
+encrypted kit, kit verify or linked normal resume to report. HA-02 and independent custody,
+source-host-free restore, reboot startup and FLEET-PRODUCTION-ONBOARDING-1 all remain open.
+
 ## Docker direct admission / actual containment counterexamples — 21:21UTC
 
 Source-only `control.capture_docker` and reproducible exact-Engine native harness added; no installed
