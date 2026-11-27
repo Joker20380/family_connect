@@ -7,9 +7,9 @@ on:
         type: boolean
         default: false
   push:
-    paths: ['control_plane/**', 'messenger/**', 'provisioning/support_worker.py', 'control/friends/support.py', '.github/workflows/control-panel.yml']
+    paths: ['control_plane/**', 'messenger/**', 'provisioning/support_worker.py', 'control/friends/support.py', 'control/friends/technical_metadata.py', 'control/friends/geoip.py', 'tests/test_control_ha_owner_runtime*.py', 'tests/fixtures/owner_upgrade/**', '.github/workflows/control-panel.yml']
   pull_request:
-    paths: ['control_plane/**', 'messenger/**', 'provisioning/support_worker.py', 'control/friends/support.py', '.github/workflows/control-panel.yml']
+    paths: ['control_plane/**', 'messenger/**', 'provisioning/support_worker.py', 'control/friends/support.py', 'control/friends/technical_metadata.py', 'control/friends/geoip.py', 'tests/test_control_ha_owner_runtime*.py', 'tests/fixtures/owner_upgrade/**', '.github/workflows/control-panel.yml']
   pull_request_review:
     types: [submitted]
 permissions:
