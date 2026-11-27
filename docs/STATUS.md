@@ -3,7 +3,7 @@
 **27 November — host/manual successor SOURCE QUALIFIED; installation pending.**
 Separate owner-user-collectors-mandatory-v1 covers the three observed installed host source roots without
 relying on unit environment or gate existence. Root-owned per-scope bindings pin both existing role gates
-and17/17/8 source files; direct technical metadata enters the inventory gate.152 narrow tests/0 skips
+and17/17/8 source files; direct technical metadata enters the inventory gate.154 narrow tests/0 skips
 and64 isolated mount+network-namespace fresh-process cases PASS, including normal and closed CLIs.
 Accepted root collector and12-file console/publisher runtime are unchanged; this source checkpoint is
 not all-writer acceptance or a capture permit. [Transition and remaining installation gate](releases/2026-11-27-owner-user-collectors.md).

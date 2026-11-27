@@ -110,6 +110,9 @@ def main():
                 shutil.copyfile(ROOT / name, target)
                 os.chown(target, 1000, 1000)
                 target.chmod(0o644)
+            if installed_app == binding.INSTALLED_APP:
+                target = application / 'control_plane/collect_technical_metadata.py'
+                target.write_bytes((ROOT / 'tests/fixtures/owner_upgrade/technical_metadata_legacy_mandatory.py').read_bytes())
             gates = {role: initialize(directory / role) for role in binding.ROLES}
             for gate in gates.values():
                 for target in [gate.directory, *gate.directory.iterdir()]:

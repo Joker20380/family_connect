@@ -15,7 +15,7 @@ ADMISSION = {
     'control/capture_gate.py': 'da28d940e2e17e2dbb1fbbde8cc04c59d29cffc8762ada717135504e2ffa4906',
     'control_plane/fc_control_plane/capture.py': '0cb1ad0190ddc0d0043c93df80a72f751627a29d054ef104fcf5d1732dca434b',
     'control_plane/collector_admission.py': 'bdb9e7711cb21a889a42f663bea49fc2bab371aba5b74eacdce9c4b849954721',
-    'control_plane/collector_binding.py': 'f29de5251582210cd25287cc8f2ed37df3e9993da4c5b0ff2e10b71be67f84d6',
+    'control_plane/collector_binding.py': '19d90668a3d261ceb361e244c6932aa4843f1c9fa3f7bc0d93450250b3dec1b9',
 }
 ADMISSION_HISTORY = {
     'control_plane/fc_control_plane/capture.py': ('d4f5a258232d505f3ded09b7ce16a58f013a48dd451fa878d2a191c42ac7d60d',),
@@ -28,7 +28,9 @@ ENTRIES = {
                                          '92650e6c8863945c20816a4c2e0b93bdb6b23e136c83c514bdd98f6031c4cfb1',
                                          'd3ed036ccd4824e93c50ab8a5fcd26a243664671f8620e245f4b2adba8d16a4a'),
     'control_plane/collect_technical_metadata.py': ('6442b9463082a7f2b19914a1e8df8e51ad3d6c85ccdc37c710bf8f323f806423',
-                                                 '3c8495b7fc1a025f5fd4496d1d0ce341e50d43ccc86de5b1c4c7df9a0d066913'),
+                                                 '3c8495b7fc1a025f5fd4496d1d0ce341e50d43ccc86de5b1c4c7df9a0d066913',
+                                                 '29c8bf3ccfeb708e614f2ac5e0bcc5bbcf8e950301c646e06fe54078388cee4c',
+                                                 'b4e024dff980b70d00d2d013b7236e16bd71e95933f7efc6b0ca4c9c09abe5ef'),
     'control_plane/probe_network.py': ('cabe6f1a49f80e6aa9afff8d8f813c921a191a40eb61f7313af110a8037e64eb',
                                      '19ed2bf5e2769cc4f5f1b5bd2b94b4ac74212ecd0059d95f5ff8af6c6cd3f9bf',
                                      '0adde03f5dc2a01756c42c5335f8cf4ff53f8c9d8651a4a3f0b9fa36d8f4407a'),
@@ -108,7 +110,11 @@ def build(baseline, role, pins, output, source=ROOT):
     replacements = dict(ADMISSION) | {name: ENTRIES[name][1] for name in ROLES[role]}
     after = {name: raw for name, raw in before.items() if raw is not None}
     for name, expected in replacements.items():
-        raw = read_source(source / name)
+        candidate = name
+        if name == 'control_plane/collect_technical_metadata.py' and pins[name] in ENTRIES[name][2:]:
+            candidate = 'tests/fixtures/owner_upgrade/technical_metadata_legacy_mandatory.py'
+            expected = ENTRIES[name][3]
+        raw = read_source(source / candidate)
         require(digest(raw) == expected, 'CANDIDATE_PIN')
         compile(raw, name, 'exec')
         after[name] = raw

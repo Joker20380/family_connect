@@ -41,6 +41,48 @@ def test_previous_reviewed_helper_is_preserved_for_exact_rollback(baseline, tmp_
         assert package.digest(archive.read(name)) == package.ADMISSION[name]
 
 
+def test_legacy_manual_metadata_keeps_original_dispatch_contract(tmp_path, monkeypatch):
+    monkeypatch.syspath_prepend(str(package.ROOT / 'control_plane'))
+    monkeypatch.delenv('FC_CONTROL_CAPTURE_GATE', raising=False)
+    monkeypatch.delenv('FC_PSEUDONYM_ALIASES', raising=False)
+    root = tmp_path / 'baseline'
+    for name in set(package.ROLES['inventory']) | set(package.COMMON) | set(package.DEPENDENCIES['inventory']):
+        target = root / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(package.ROOT / name, target)
+    name = 'control_plane/collect_technical_metadata.py'
+    previous = (package.ROOT / 'tests/fixtures/owner_upgrade/technical_metadata_legacy.py').read_bytes()
+    assert package.digest(previous) == package.ENTRIES[name][2]
+    (root / name).write_bytes(previous)
+    receipt = package.build(root, 'inventory', pins_for(root, 'inventory'), tmp_path / 'legacy.zip')
+    with zipfile.ZipFile(tmp_path / 'legacy.zip') as archive:
+        candidate = archive.read(name)
+        assert archive.read('rollback/' + name) == previous
+    assert receipt['after'][name] == package.digest(candidate) == package.ENTRIES[name][3]
+    runtime = tmp_path / 'runtime'
+    local = runtime / '.local'
+    local.mkdir(parents=True)
+    values = [('technical-metadata-source.json', json.dumps(dict(python='/isolated/python',
+        archive='/isolated/source.pyz', archive_sha256='a' * 64)).encode()), ('inventory-hmac.key', b'x' * 32)]
+    for filename, raw in values:
+        target = local / filename
+        target.write_bytes(raw)
+        target.chmod(0o600)
+    script = runtime / 'apps/console/technical_metadata_collector.py'
+    script.parent.mkdir(parents=True)
+    script.write_text('')
+    results = []
+    for raw in (previous, candidate):
+        calls = []
+        def run(command, **options):
+            calls.append((command, options))
+            return subprocess.CompletedProcess(command, 0, stdout=b'{"source":"gateway-ru","devices":[]}')
+        namespace = dict(__name__='isolated_legacy', __file__=str(package.ROOT / name))
+        exec(compile(raw, name, 'exec'), namespace)
+        results.append((namespace['collect'](base=runtime, run=run), calls))
+    assert len(results[0][1]) == 1 and results[0] == results[1]
+
+
 def test_candidate_is_reproducible_closed_and_preserves_baseline(baseline, tmp_path):
     root, role = baseline
     private = root / 'control_plane/.local/private.key'

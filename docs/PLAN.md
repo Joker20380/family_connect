@@ -16,7 +16,7 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
-Host/manual continuation: owner-user-collectors-mandatory-v1 is source-qualified (152 tests,64 isolated
+Host/manual continuation: owner-user-collectors-mandatory-v1 is source-qualified (154 tests,64 isolated
 namespace cases), not yet installed. Next within this task: exact-source CI, fresh held installation of
 the host binding/code without replacing historical role gates, then normal service cycles and observer8b.
 The accepted root collector and installed12-file images must not be reinstalled for this host-only change.

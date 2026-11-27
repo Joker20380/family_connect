@@ -101,8 +101,11 @@ def configured_gate(role):
     try:
         require(role in ROLES, 'COLLECTOR_ROLE')
         directory = os.environ.get('FC_CONTROL_CAPTURE_GATE') or None
-        application = Path(__file__).resolve().parent.parent
-        scope = installed_scopes().get(application)
+        source = Path(__file__).absolute()
+        scopes = installed_scopes()
+        application = next((path for path in (source.parent.parent, source.resolve().parent.parent)
+                            if path in scopes), None)
+        scope = scopes.get(application)
         if scope is not None:
             filename, names, roles = scope
             require(role in roles, 'COLLECTOR_INSTALLED_ROLE')

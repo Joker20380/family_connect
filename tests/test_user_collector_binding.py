@@ -87,6 +87,14 @@ def test_actual_installed_source_scopes_and_symlink_alias(installed, monkeypatch
             binding.configured_gate('inventory' if role == 'probe' else 'probe')
 
 
+def test_replaced_application_symlink_does_not_fall_back_to_opt_in(installed):
+    retained = installed.application.with_name('retained-application')
+    installed.application.rename(retained)
+    installed.application.symlink_to(retained, target_is_directory=True)
+    with pytest.raises(GateError, match='BINDING_PATH'):
+        binding.configured_gate('inventory')
+
+
 @pytest.mark.parametrize('entry', ['monitor', 'inventory', 'metadata', 'probe'])
 def test_direct_entry_refuses_before_io(installed, monkeypatch, tmp_path, entry):
     def forbidden(*args, **kwargs):

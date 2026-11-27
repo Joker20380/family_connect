@@ -26,7 +26,7 @@ hashes/exact rollback bytes; old capsules and root baseline meanings remain immu
 
 ## Qualification
 
-- Local CPython3.14.4:152 tests,0 skips across user binding, complete collector cycles,
+- Local CPython3.14.4:154 tests,0 skips across user binding, complete collector cycles,
   pinned packaging and technical metadata. Normal/negative paths and history retention,
   including a swallowed remote timeout followed by a successful export retaining UNKNOWN.
 -64 disposable root-created mount+network namespace cases: fresh UID1000 processes,
@@ -47,6 +47,12 @@ is a symlink to the canonical `/mnt/data` checkout, not another deployment. The 
 source-only4cc9adff single-root draft is superseded before any live installation; it
 would not bind both actual unit entrypoints. The corrected guard resolves the symlink,
 requires independent per-root source closure, and rejects role crossover.
+The manual checkout still has an older single-export metadata collector29c8bf3c,
+unlike the installed inventory runtime's6442b946 multi-node collector. Its explicit
+guard-only candidateb4e024df preserves the exact outbound command and sealed output;
+it does not activate the newer business collector protocol. Both predecessor and
+candidate fixtures are pinned, packaged with exact rollback and tested. Replacing an
+installed application directory with a symlink also refuses rather than losing scope.
 
 ## Installation and completion gate
 
