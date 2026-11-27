@@ -1,5 +1,16 @@
 # Текущее состояние / Current state
 
+**27 November02:31UTC — fresh panel/MESH checks; OWNER/all-writer continues.**
+Real panel login/five existing pages/logout PASS; compatible read-only observer8b9355db preserves
+supportPID240065/authorityb0c470dc/NL1 generationb75ef2a2. NL1 traffic4HTTPS/3DNS/expected exit PASS.
+Its exact failed invocation81d9b8d records WebSocket CONNECTION_RESET with active context, exit1;
+not SIGTERM, and the initiator of the reset is not proven. NL2 initially fails two bounded MESH
+traffic checks while identical direct HTTPS succeeds. One guarded unchanged-runtime restart yields
+PID2786473/new validated directory, normal RU sync and4HTTPS/3DNS/expected NL2 exit PASS.
+Earlier failures remain retained; bounded recovery is not sustained-stability proof.
+Exact12-file candidates and effective activation proposal independently rechecked, not yet activated
+at this checkpoint. [Evidence, pins and continuing installation gate](releases/2026-11-27-owner-all-writer-next.md).
+
 **27 November01:53UTC — mandatory collector installed and maintenance compatibility qualified.**
 New baseline `owner-collectors-b7f4cbd2`; original192343eb meaning/pins and panel01 records unchanged.
 Exact companion tooling8b9355db: all4 CI PASS; independently downloaded artifact15165334024 verifies
@@ -47,9 +58,11 @@ completed-operation repeat PASS without restart. All21 records retained, cursor4
 Notifications and both user collectors have completed successful normal and automatic invocations; only our
 holds removed, all three timers enabled/active/waiting. Separate3+12 inventory,14 probe and33 support markers
 remain unchanged, NOT settled. Gate.drain remains strict; no common HA capture or new overlay was installed.
-Active NEXT returns to mandatory collector binding / OWNER all-writer using fresh post-recovery bindings.
-Before changing collector baseline192343eb, qualify its matching forward-recovery source variant; never edit
-this accepted operation or reuse the interrupted pre-boot install plan. Custody remains separate and nonblocking.
+That restoration handoff is complete: mandatory owner-collectors-b7f4cbd2 and compatible8b9355db tooling
+are installed and accepted. Current NEXT is console/publisher and remaining manual/external writers.
+Do not edit the accepted panel01 operation or reuse the pre-boot plan. Console verification must check
+the support runtime-directory mount before startup; restoration did NOT fix or prove automatic reboot startup.
+Custody remains separate and nonblocking.
 [Recovery evidence](releases/2026-11-27-control-ha-owner-resume.md).
 
 **Historical27 November00:05CET /26 November23:05UTC — continuation after laptop power loss.**
@@ -96,12 +109,8 @@ Collector CLI теперь различает закрытый gate(75), invalid
 Host inventory/probe CLI: fresh admission-only75; markers3/0 unchanged, timer holds не вводились.
 Inventory drain остаётся UNSETTLED_OPERATION; это НЕ общий OWNER/all-writer или coherent capture.
 Сейф не открывался; внешний backup/recovery не подтверждён.
-**Текущая поправка, ещё не установлена:** на source192343eb подтверждён fail-open при
-исчезновении fixed gate и unset environment. Принятый installed scope не включал этот случай.
-Installed source теперь требует отдельный root-owned inode binding независимо от наличия gate;
-missing/replaced/invalid gate/binding отказывает до I/O, включая новый процесс без unit environment.
-34 narrow checks PASS также под root;99 focused PASS/2 context skips.5 actual systemd sandbox
-cases PASS, без production gate/dispatch; exactb7f4cbd2 CI/artifact PASS, controlled installation pending.
+The former192343eb missing-gate/source-only checkpoint is [history](releases/2026-11-26-control-ha-owner-all-writer.md#mandatory-installed-binding-correction--source-qualification).
+It is superseded by the accepted b7f4cbd2/8b9355db installation at the top of this status.
 
 **26 November18:52UTC — real stopped-support snapshot verified; linked resume complete.**
 Joker назначен HA signer/хранителем independent pins/floors; NL2 parent

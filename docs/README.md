@@ -1,5 +1,9 @@
 # Documentation
 
+[CONTROL-HA · 27 November02:31UTC: fresh panel/MESH traffic checks, exact NL1 failure correlation, bounded NL2 recovery; accepted mandatory baseline unchanged, exact12-file OWNER activation continues](releases/2026-11-27-owner-all-writer-next.md).
+
+[CONTROL-HA · 27 November01:53UTC: mandatory owner-collectors-b7f4cbd2 installed; compatible observer/stopped capture/forward recovery8b9355db accepted](releases/2026-11-27-mandatory-collector-transition.md).
+
 [CONTROL-HA · 27 November01:39CET: panel/dependencies NORMAL BASELINE PASS; exact39caf062 native351/0 skips, new linked support resume independently verified, notifications and user collectors successful, timers restored; separate UNKNOWN/history retained; mandatory binding/all-writer NEXT resumes](releases/2026-11-27-control-ha-owner-resume.md).
 
 [CONTROL-HA · 26 November18:52UTC: real stopped-support component e4eace1a independently verified and normally resumed; source2f4f83dd4 CI/native342 PASS, notifications success/timer restored; OWNER/all-writer/full kit/custody/restore still open](releases/2026-11-26-control-ha-stopped-support.md).
