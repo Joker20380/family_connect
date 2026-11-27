@@ -16,6 +16,9 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
+17:43UTC renewal recovery committed; independent9/8/8 archives PASS and normal renewal NOOP.
+Directory read failures still require its own bounded-connect qualification before releasing own
+RU timer holds. No common capture is permitted while that dependency remains abnormal.
 17:26UTC first TCP recovery wrapper refuses before RPC on a data-ancestor ownership assumption;
 retain this failure and correct only the data check before a distinct fresh attempt.
 17:20UTC bounded renewal incident reconciliation takes operational priority within the same NEXT.

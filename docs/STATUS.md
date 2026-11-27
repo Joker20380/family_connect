@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+**27 November17:43UTC — renewal COMMITTED and independently verified; directory timer still held.**
+New operation ha02-connect-20261127-1729-e28a771d completes COMMITTED without first_cause.
+Independent RU/NL1/NL2 terminal ledgers/exact archives verify9/8/8 files; no owner records remain.
+Normal original renewal invocation d0c39213 returns NOOP/0. Original directory-sync twice refuses
+NL2 read with zero file changes; do not release either own RU timer hold yet. Both current gateway
+read-only inspections succeed separately. A scoped SSH connection-only unit namespace wrapper is
+being qualified; no RPC replay, source/config replacement, key or firewall/policy change.
+Panel authentication/five pages PASS17:31; NL1 traffic PASS17:32, NL2 first17:33 fails then17:37
+bounded confirmation passes without intervention. Retain both failures; no stability/root-cause claim.
+Support observer PAIRED_SETTINGS refusal is specifically NeedDaemonReload=yes; unchanged unit
+bytes/settings reloaded without restart, observer again PASS with original PID/archive/authority/
+generation/cursor/history. No kit/common capture/stopped snapshot/capture-linked resume exists.
+
 **27 November17:20UTC — renewal connectivity incident; bounded recovery prepared, NOT run.**
 17:26 update: d583 recovery unit refuses RECOVERY_PARENT before importing runtime/RPC; the
 root-owned transaction lives below the existing ubuntu-owned application ancestor. Exact data

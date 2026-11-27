@@ -1,0 +1,2 @@
+#!/bin/sh
+exec /run/family-connect-ssh-original -o ConnectionAttempts=3 "$@"

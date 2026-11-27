@@ -1,5 +1,45 @@
 # HA-02 common capture preparation — 27 November2026
 
+## Renewal committed; directory dependency reconciliation — 17:43UTC
+
+Corrected e28a771d79c7d49b2fedfd2e5180b55f97976d59 launcher SHA
+af6fdf10c4fb6d3cef7db6bcbe75b6ff224d9010f6fd70e5a0e17596242f38af runs once in transient
+invocation82fcf10e75a54aa4bffc066336956f5d. Operation ha02-connect-20261127-1729-e28a771d
+commits with first_cause=null. Existing runtime source e9fd31754bdf50c95842a1644f86ddb328b839ec1e0c9454daf08d3e9d17f0cc
+and controller config a3fae10e013b770bf4edf1e18ceec3046c4670feee784f3f567ea0a256c30801
+remain unchanged. Independently read completed ledgers and exact9/8/8-file archives, no owner.json;
+manifest hashes RU1c1b2225013c4a13bd5f7ceb3ecff5a037f8b2232434c23714dab2a246c14251,
+NL1 449aea284f9f51ffe704471fc0a824ff593c0f75fb0e7fd3bcdd42bf5376647b,
+NL2 d7e7682dcdf760c09ecbb75b311e0c2edd1de59a69f04a106793e4f2e78b37cf.
+Previous completed operation remains in every ledger. Normal original renewal invocation
+d0c392134c9a4c07b4ea50acb0ac86b0 returns NOOP/0. This is credential maintenance recovery,
+not a capture-linked resume or evidence of unrelated historical request completion.
+
+Directory invocations8dbcc2b1263445278169b4054f2c390b and f97bbd1a229249e983006bd0e1ec4a0e
+return GATEWAY_CHECK_REQUIRED/NL2 GATEWAY_READ_UNAVAILABLE with zero changed files. A fresh
+separate read-only inspection of both gateways returns NOOP with over3h credential headroom.
+Both own RU timers remain held; no repeated automatic failing cycle is resumed. A two-line
+SSH connection wrapper is qualified in a private service mount namespace to retain original
+ExecStart, runtime/config, strict SSH pins, key paths and all receiver/RPC rules. The original
+SSH binary is bound read-only at /run/family-connect-ssh-original; only /usr/bin/ssh inside the
+two selected units is wrapped with ConnectionAttempts=3. Host SSH and unrelated services are
+unchanged. This is not installed yet. Code-only rollback removes only the two owned drop-ins;
+it never restores product databases, old authority, credential profiles or transaction history.
+Any installed wrapper/unit source closure must be included and qualified before the common kit.
+
+Post-renewal NL1 traffic passes17:32; NL2 fails all4 HTTP reads17:33 after verified end-site TLS,
+then one17:37 confirmation passes4 HTTPS/3 DNS/expected egress. Same NL2 invocation
+9f62619fc83f45ddb21134293540fb95 stays active/NRestarts0. Its17:34 RELIABLE_FRAME_TIMEOUT is
+later than client17:33 failure and not proof of the initiating cause. No MESH restart or provider
+blocking/SIGTERM explanation is asserted. Panel login/five existing pages/logout PASS17:31.
+
+Support observer first refuses PAIRED_SETTINGS: actual protected settings match, but systemd
+reports NeedDaemonReload=yes for support/dependencies. Saved unit bytes are unchanged; one
+manager daemon-reload (no service restart) restores observer PASS. Original PID240065, archive,
+authority, cursor, NL1 generation and five historical receipt hashes compare equal. Original33
+support marker names remain; current215 names include182 additional records saved separately.
+An initial exact-count33 assertion is retained as a failed assumption, not a deletion or settlement.
+
 ## Bounded operational continuation — 17:20UTC
 
 First recovery-wrapper invocation b11394dbba1c42a38988993659b92744 refuses RECOVERY_PARENT
