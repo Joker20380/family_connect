@@ -62,6 +62,24 @@ Exact-source native qualification remains the activation gate. Notifications.tim
 temporarily held by this recovery execution, still enabled, to avoid dependency-failure loops;
 restore this additional hold only after one completed successful normal notification invocation.
 
+At27 November00:15UTC, source39caf062cf6b6b58977dfb7d7a3428246aac852c is pushed and
+independently materialized as373-file root-owned source-only capsules on OWNER and NL1.
+All files match Git; neither installed app nor an operation/authority/generation was changed.
+Corrected read-only preflight independently returns PREVIOUS_PROCESS_ABSENT / BOOT_CHANGED.
+The focused repeat passes8 native resume cases;7 source negatives/selection checks also pass.
+Android readiness, Linux preview and phase0 CI at that exact source all pass.
+Native run45913167010 attempt1 completed349 PASS/2 failures,0 skips, not acceptance.
+Artifact15162010234 SHA256541b18a7d41ee414906a8164d50d758e5585e51afa13276c6020dfc9d7b838d8
+is downloaded and independently parsed. The failures are OLD_RUNTIME_CHANGED in the legacy
+fixture's initial exit and MANUAL_RECONCILIATION_REQUIRED in initial handoff, both before
+the new baseline transition. Their initiating causes are not inferred from those labels.
+No tests or guards were weakened; one complete same-SHA native repeat is running. A private
+read-only diagnostic repeat of the two prerequisite cases also runs independently.
+The full qualification gate remains required before production recovery activation.
+Independent marker readback confirms exact names/body hashes/mtimes of3 original and12
+additional inventory markers plus14 probe markers. All33 prestate support markers remain
+unchanged separately. No old dispatch settlement or coherent capture is claimed.
+
 Private restoration evidence is at `/mnt/data/fc-ha02-panel-restore-20261127`; sensitive root
 prestate is in its root-only `root` child. Browser screenshots/credentials are not published.
 Notifications and the two held user timers remain pending support recovery. The separate
