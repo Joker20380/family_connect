@@ -16,6 +16,9 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
+16:36UTC dedicated participant callback/death bounds qualify130 focused cases. This closes a
+process-execution prerequisite, not OWNER native-file/receiver coverage. Existing-journal fresh
+process refuses; reconciliation/new operation is still required. No production capture permit.
 16:31UTC dedicated HA vault consumer/preparation qualifies21 checks on disposable vaults. The
 existing application/roles/destination are unchanged; live key availability/activation still needs
 the protected local workflow, not a key path or secret in chat. Production physical adapters and

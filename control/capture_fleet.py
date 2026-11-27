@@ -218,6 +218,7 @@ class Participant:
         self.deadline = time.monotonic() + seconds
         self.state, self.responses, self.requests = 'NEW', {}, {}
         self.entered = False
+        self.release_attempted = False
         private_write(self.root, 'contract.json', encoded(expected))
 
     def check(self):
@@ -307,9 +308,14 @@ class Participant:
         seal_hash = sealed(payload['seals'], self.ready, self.snapshots, self.manifest, self.expected)
         require(payload['seals'][self.slot] == self.responses['SEALED'], 'FLEET_LOCAL_SEAL')
         self.check()
+        self.release_once()
+        return self.sign(phase, digest(encoded(self.responses['SEALED'])), dict(seal_set=seal_hash))
+
+    def release_once(self):
+        require(not self.release_attempted, 'FLEET_RELEASE_ALREADY_ATTEMPTED')
+        self.release_attempted = True
         self.barrier.__exit__(None, None, None)
         self.entered = False
-        return self.sign(phase, digest(encoded(self.responses['SEALED'])), dict(seal_set=seal_hash))
 
     def abort(self, reason, original=None):
         if self.state in ('FAILED', 'RELEASED'):
@@ -326,8 +332,7 @@ class Participant:
         if self.entered:
             self.barrier_release = 'UNKNOWN'
             try:
-                self.barrier.__exit__(None, None, None)
-                self.entered = False
+                self.release_once()
                 self.barrier_release = 'RELEASED'
             except BaseException as error:
                 self.cleanup_errors.append('BARRIER_' + type(error).__name__)
@@ -377,13 +382,19 @@ def send(descriptor, value, deadline):
 
 
 def serve(participant, incoming, outgoing):
-    try:
-        while participant.state != 'RELEASED':
-            request = receive(incoming, participant.deadline)
-            response = participant.run(request)
-            send(outgoing, response, participant.deadline)
-    finally:
-        participant.abort('CHANNEL_ENDED_WITHOUT_COMPLETE_RELEASE')
+    from .capture_process import hard_deadline
+    with hard_deadline(max(.001, participant.deadline - time.monotonic()) + .25):
+        try:
+            while participant.state != 'RELEASED':
+                request = receive(incoming, participant.deadline)
+                response = participant.run(request)
+                send(outgoing, response, participant.deadline)
+        except BaseException as error:
+            reason = str(error)
+            participant.abort(reason if re.fullmatch('[A-Z][A-Z0-9_]{0,95}', reason) else type(error).__name__, error)
+            raise
+        finally:
+            participant.abort('CHANNEL_ENDED_WITHOUT_COMPLETE_RELEASE')
 
 
 @contextmanager

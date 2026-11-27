@@ -100,6 +100,36 @@ some5.00/full3.41 avg10. No recovery action or root-cause claim. NL1/NL2 preflig
 processes; this is not fresh traffic PASS. Local normal monitor/probe latest invocations exit0.
 Local sudo dialog is pending, not substituted by Docker; no support observer result yet this turn.
 
+### Dedicated process deadline and release ambiguity
+
+Dedicated `capture_fleet.serve` now arms a CLOCK_MONOTONIC POSIX timer delivering SIGKILL;
+Python exception interception cannot prolong a hanging acquisition, snapshot or cleanup.250ms
+is reserved only for cleanup after the protocol deadline; it does not extend the signed lease.
+This API must run in a dedicated process, not a shared service/interpreter. It does not kill or
+prove completion of downstream descendants; their independent physical fences remain mandatory.
+Remote PostgreSQL server-side transaction deadlines are still required independently of controller
+liveness. Adapter source closure must include `control/capture_process.py` as well as the protocol.
+
+130 focused cases PASS, including real subprocesses hung in each callback, forced process death,
+independent kernel-lock readback and refusal to reconstruct a participant on its existing journal.
+A killed process can leave only partial journal evidence; it is not a completed operation or
+fresh-process recovery. Preserve it and use safe reconciliation/new operation after proving old
+physical restrictions absent/retained. For a hung cleanup after changed replay, failed.json retains
+FLEET_REPLAY_CHANGED before process death. An ambiguous release callback is attempted once only;
+no automatic second effect is hidden inside abort. UNKNOWN cleanup is explicitly not normal resume.
+Two initial channel-timeout tests exposed a deadline/cleanup race and are retained; the bounded
+cleanup allowance fixes this without extending valid capture time. Exact-source CI follows push.
+
+An isolated NL2 inode-flag feasibility experiment (only a new synthetic file under
+`/root/fc-ha02-inode-fence-lab-04jentm_`) lost its terminal response. Readback found its immutable
+flag still set; byte/UID/path checks preceded clearing exactly that owned flag. Independent receipt
+records before/after flags and unchanged synthetic SHA256
+8649d1a112971044db74efd7a67be996e8f110ef74cda0417906384deebe7e6d.
+No product file was opened and no production fence was set. The experiment is NOT qualification:
+its missing terminal reason and outstanding old-mapping guarantees prohibit adopting it as the
+native-file fence. Receipt is retained privately as `inode-probe-cleanup.json`; nothing is settled
+by absent processes or a successful later command.
+
 ## Finite writer/endpoint matrix
 
 “Required” below is an outstanding production adapter obligation, not a claim of a held fence.

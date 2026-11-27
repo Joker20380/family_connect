@@ -254,6 +254,33 @@ def test_changed_completed_replay_preserves_valid_completed_repeat(lab):
     assert barriers['OWNER'].exits == counts['OWNER'] == 1
 
 
+def test_ambiguous_release_is_not_repeated_by_abort(lab, monkeypatch):
+    expected, members, barriers, _, files = lab
+    ready = ready_all(members)
+    snapshots = capture_all(members, ready)
+    manifest = fleet.verified_manifest(expected, ready, snapshots, files)
+    seals = {slot: member.run(request(member, 'SEALED', snapshots=snapshots, manifest=manifest))
+             for slot, member in members.items()}
+    original = Barrier.__exit__
+    calls = []
+
+    def uncertain_exit(barrier, *args):
+        calls.append(barrier)
+        original(barrier, *args)
+        raise RuntimeError('FLEET_EXIT_UNCERTAIN')
+
+    monkeypatch.setattr(Barrier, '__exit__', uncertain_exit)
+    member = members['OWNER']
+    with pytest.raises(RuntimeError, match='FLEET_EXIT_UNCERTAIN'):
+        member.run(request(member, 'RELEASED', seals=seals))
+    assert member.state == 'FAILED' and calls == [barriers['OWNER']]
+    assert member.failure == 'FLEET_EXIT_UNCERTAIN' and member.barrier_release == 'UNKNOWN'
+    with pytest.raises(ValueError, match='FLEET_TERMINAL_FAILURE'):
+        member.run(request(member, 'RELEASED', seals=seals))
+    assert calls == [barriers['OWNER']]
+    monkeypatch.setattr(Barrier, '__exit__', original)
+
+
 def test_incomplete_writers_and_late_policy_require_distinct_pins(lab):
     expected, _, _, _, _ = lab
     for name in ('coverage_sha256', 'late_policy_sha256'):

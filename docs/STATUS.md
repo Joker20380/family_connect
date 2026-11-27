@@ -1,5 +1,13 @@
 # Текущее состояние / Current state
 
+**27 November16:36UTC — bounded participant execution qualified; common capture still refused.**
+130 focused checks PASS. Dedicated `serve` uses a Linux kernel SIGKILL deadline around acquisition,
+snapshot and cleanup, with250ms cleanup allowance that does not extend capture validity. Hanging
+callbacks/process death release synthetic kernel locks; existing journals refuse fresh-process replay.
+An ambiguous release is never retried automatically. No production OWNER adapter is installed.
+Isolated NL2 inode-flag experiment has no terminal receipt and is NOT qualified; its one synthetic
+flag was independently cleared, with no product paths touched. Normal production remains unmodified.
+
 **27 November16:31UTC — dedicated HA vault consumer qualified on disposable data.**
 21 native/unit tests PASS, including existing signing consumers. Exact Family-Connect.kdbx/
 HA encryption entry/attachment/member/purpose/32-byte AES contract; reader reuses memfd archive
