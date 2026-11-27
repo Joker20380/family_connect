@@ -1,5 +1,46 @@
 # HA-02 common capture preparation — 27 November2026
 
+## Lock ownership refinement and live readback — 20:05UTC
+
+Corrected digest fixture sourcebe35becc9a66c12af7c747da6b06452814259237 has native CI46059788659
+SUCCESS,34/0 skips. Separate reader downloads artifact15228850142, verifies ZIP SHA256
+8f4db57e8ce033f6dca5724bc644de42723a75345fd134d74125bdd3f3b6f7dd, exact three-member set,
+source binding and both XML case sets. This is independent **test-artifact** verification, not a
+kit verifier PASS. Original6f942ec7 failure stays retained; its missing daemon diagnostics preclude
+claiming an exact original cause just because the corrected fixture is green.
+
+One further lifetime gap is removed before integrating the OWNER adapter: the launch-lock owner
+is now a dedicated spawned, one-acquisition keeper, not a descriptor accessible to snapshot
+callbacks. The lease binds process start/boot/nonce, and the cgroup checks the original lease.
+A successor may obtain the file lock for explicit cleanup but cannot impersonate the old lease.
+Native tests prove keeper death/replacement refusal, bounded hung keeper cleanup and actual kernel
+lock release after controller death; no external mount/cgroup cleanup is inferred. Local37 PASS,
+0 skips. Only the lock-only helper can receive forced cleanup; product writer-domain shutdown still
+uses clean SIGTERM with explicit refusal on timeout. Exact-source CI follows this refinement.
+
+The vault follow-upc3086a0a8f29d126dc87cbe0d29af10cd40695a8 has purpose-separated consumer CI
+46059386437 SUCCESS (26 local native/unit cases); actual working-vault reconciliation is still NOT_PASS.
+No more unlock retry loop or vault writes are running. See the retained classified native-read refusal.
+
+Actual traffic evidence: NL1 first19:39 family authentication and TLS verification pass but only2/4
+HTTPS; its one bounded confirmation fails earlier during readiness TCP connect. NL2 first19:46 and
+one19:49 confirmation each reach family authentication and3/4HTTPS, then fail before accepted DNS/
+egress checks. No intervention/restart or hidden repeat converts these to PASS. NL1 bootstrap process
+3282978/invocation1a3caa9f0ae443d689ba1ec78bb0cee9 and NL2 3444074/5acf3f590bee4865bcb51f97a3d10ec8
+are active, each reportsNRestarts1; process status is not traffic acceptance. No current fatal cause
+is inferred from these client failures and no speculative restart changes their evidence.
+
+Observer8b19:35 matches the accepted previous readback exactly for binding/PID, archive, authority,
+generation, historical receipts, cursor, source pins and baseline variant. Panel login/five pages/
+logout and all four local timers/services pass as recorded below. RU19:52 resource read:79% storage,
+6170396KiB available, IO pressure some4.21/full2.60 avg10; no node owner/reconciliation file observed.
+These resource symptoms do not prove a transport root cause. The legacy restricted-sync timer is
+disabled in its existing configuration; it is not the actual credential-renewal timer and was not
+enabled as a speculative repair. No production hold, service stop or support reclosure occurred.
+The actual `family-connect-credential-renewal` invocation628ef22868bc42f1a59b6a031ecc9f45 ends0
+at19:51:27UTC and directory-sync7758e747f3a34bcfa96d3602e3b36284 at20:00:02UTC; both actual timers
+are enabled/active/waiting. RU Friends HTTP remains active205305c289954cd9a2817f994c21617d.
+
 ## OWNER finite maintenance source checkpoint — 19:45UTC
 
 Chosen implementation: close actual admission/launch paths, cleanly finish whole writer domains,

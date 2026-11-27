@@ -31,6 +31,11 @@ late start and namespace views before production maintenance. Empty ExecIDs is n
 
 ## Implemented lifetime components
 
+- `LaunchLock`: a dedicated spawned keeper owns the flock, never the callback/controller. It
+  acquires once and cannot unlock/reacquire; PID/start/boot/nonce bind its lease. A successor gets
+  a different lease and cannot satisfy the old cgroup boundary. Parent-death SIGTERM closes only
+  this keeper's lock; external mounts/freezes still require reconciliation. Hung-keeper checking
+  and cleanup are bounded; killing this lock-only helper is not writer-domain completion.
 - `UnitLaunchHold`: operation-owned system start condition, effective sd-bus readback on one
   connection, inode/content/inotify continuity, own-only removal. It does not stop a writer or
   implement a user-manager/Docker authority. The same operation can own distinct unit holds.

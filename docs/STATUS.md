@@ -1,5 +1,24 @@
 # Текущее состояние / Current state
 
+**27 November20:05UTC — same NEXT, kit NOT_CREATED; no production holds.**
+Native sourcebe35becc qualifies in independent CI46059788659:34/0 skips; exact artifact15228850142
+verified. The first6f942ec7 failed artifact remains history. Additional local refinement moves the
+launch flock into a one-acquisition spawned keeper, preventing a dead/replaced keeper from satisfying
+the old lease;37 local tests pass. This remains source-only and does not close actual Docker authority.
+Vault diagnostic sourcec3086a0a CI46059386437 SUCCESS; live read-only reconciliation still refuses
+HA_RECONCILE_NATIVE_READ_REFUSED, with original encrypted prestate and first comparison refusal saved.
+
+Panel/support/collector checks passed19:33–19:35; observer binding/archive/authority/generation/history/
+cursor/source pins exactly match the accepted18:12 readback. No production service was stopped or
+reinstalled. MESH full traffic is NOT_PASS: NL1 partial2/4HTTPS then a readiness TCP timeout; NL2
+two partial3/4HTTPS attempts. DNS/expected egress were not accepted. Processes remain active; no
+SIGTERM/provider root cause or successful recovery is inferred. Bounded probes stopped, not retried
+in a loop. RU19:52 has79% disk/5.9GiB available and observed IO pressure; no conflicting node owner
+or reconciliation file. Local lab containers/cgroups/unit markers were cleaned, no product fence set.
+Actual RU credential renewal628ef22868bc42f1a59b6a031ecc9f45 completes0 at19:51 and directory sync
+7758e747f3a34bcfa96d3602e3b36284 at20:00; their timers are enabled/active/waiting.
+
+**Historical19:45UTC — finite OWNER boundary components qualified; common kit NOT_CREATED.**
 **27 November19:45UTC — finite OWNER boundary components qualified; common kit NOT_CREATED.**
 The selected stop-writers/hold-native-files implementation now has scoped unit launch conditions,
 recursive cgroup clean-exit/late-attachment containment, mount-identity/event continuity, explicit

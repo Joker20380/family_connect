@@ -1,6 +1,7 @@
 """A finite cgroup-v2 writer domain, behind its already closed launch admission."""
 import fcntl
 import ctypes
+import multiprocessing
 import os
 from pathlib import Path
 import signal
@@ -10,38 +11,102 @@ import time
 from control.capture_native import fingerprint, require, record, read
 
 
+def launch_keeper(path, expected, parent, channel):
+    descriptor = None
+    try:
+        require(ctypes.CDLL(None).prctl(1, signal.SIGTERM, 0, 0, 0) == 0 and os.getppid() == parent,
+                'DOMAIN_KEEPER_PARENT')
+        descriptor = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_CLOEXEC)
+        info = os.fstat(descriptor)
+        require(stat.S_ISREG(info.st_mode) and info.st_nlink == 1 and info.st_size == 0 and
+                [info.st_dev, info.st_ino, info.st_uid, stat.S_IMODE(info.st_mode)] == expected,
+                'DOMAIN_LAUNCH_BINDING')
+        fcntl.flock(descriptor, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        lease = fingerprint(dict(pin=expected, pid=os.getpid(),
+            start=Path('/proc/self/stat').read_text().rsplit(')', 1)[1].split()[19],
+            boot=Path('/proc/sys/kernel/random/boot_id').read_text(), nonce=os.urandom(32).hex()))
+        channel.send(('HELD', lease))
+        while True:
+            command = channel.recv()
+            if command == 'RELEASE':
+                return
+            require(command == 'CHECK', 'DOMAIN_KEEPER_PROTOCOL')
+            current = Path(path).stat()
+            require([current.st_dev, current.st_ino, current.st_uid, stat.S_IMODE(current.st_mode)] == expected and
+                    current.st_nlink == 1 and current.st_size == 0, 'DOMAIN_LAUNCH_LOST')
+            locks = Path(f'/proc/self/fdinfo/{descriptor}').read_text()
+            require(' FLOCK ' in locks and ' WRITE ' in locks, 'DOMAIN_LAUNCH_LOST')
+            channel.send(('HELD', lease))
+    except BaseException:
+        try:
+            channel.send(('FAILED', 'DOMAIN_KEEPER_REFUSED'))
+        except (OSError, EOFError):
+            pass
+    finally:
+        if descriptor is not None:
+            os.close(descriptor)
+        channel.close()
+
+
 class LaunchLock:
     def __init__(self, path, expected):
         self.path, self.expected = Path(path), expected
-        self.descriptor = None
+        self.process = self.channel = None
+        self.attempted = self.active = False
 
     def __enter__(self):
-        require(self.descriptor is None and not self.path.is_symlink(), 'DOMAIN_LAUNCH_REENTRY')
-        descriptor = os.open(self.path, os.O_RDONLY | os.O_NOFOLLOW | os.O_CLOEXEC)
+        require(not self.attempted and not self.path.is_symlink(), 'DOMAIN_LAUNCH_REENTRY')
+        self.attempted = True
+        context = multiprocessing.get_context('spawn')
+        self.channel, child = context.Pipe()
+        self.process = context.Process(target=launch_keeper,
+            args=(str(self.path), self.expected, os.getpid(), child), daemon=True)
+        self.process.start()
+        child.close()
         try:
-            info = os.fstat(descriptor)
-            require(stat.S_ISREG(info.st_mode) and info.st_nlink == 1 and info.st_size == 0 and
-                    [info.st_dev, info.st_ino, info.st_uid, stat.S_IMODE(info.st_mode)] == self.expected,
-                    'DOMAIN_LAUNCH_BINDING')
-            fcntl.flock(descriptor, fcntl.LOCK_EX | fcntl.LOCK_NB)
-            self.descriptor = descriptor
+            require(self.channel.poll(2), 'DOMAIN_KEEPER_ACQUIRE_TIMEOUT')
+            state, self.lease = self.channel.recv()
+            require(state == 'HELD' and self.process.is_alive(), 'DOMAIN_KEEPER_ACQUIRE_REFUSED')
+            self.active = True
             return self
-        except BaseException:
-            os.close(descriptor)
+        except BaseException as error:
+            self.__exit__(type(error), error, None)
             raise
 
     def check(self):
-        require(self.descriptor is not None, 'DOMAIN_LAUNCH_LOST')
-        info = self.path.stat()
-        require([info.st_dev, info.st_ino, info.st_uid, stat.S_IMODE(info.st_mode)] == self.expected and
-                ' FLOCK ' in Path(f'/proc/self/fdinfo/{self.descriptor}').read_text() and
-                ' WRITE ' in Path(f'/proc/self/fdinfo/{self.descriptor}').read_text(), 'DOMAIN_LAUNCH_LOST')
-        return fingerprint(self.expected)
+        try:
+            require(self.active and self.process.is_alive(), 'DOMAIN_LAUNCH_LOST')
+            self.channel.send('CHECK')
+            require(self.channel.poll(1) and self.channel.recv() == ('HELD', self.lease), 'DOMAIN_LAUNCH_LOST')
+            return self.lease
+        except BaseException:
+            self.active = False
+            raise
 
     def __exit__(self, error_type, error, traceback):
-        if self.descriptor is not None:
-            os.close(self.descriptor)
-            self.descriptor = None
+        self.active = False
+        try:
+            if self.process is not None:
+                if self.process.is_alive():
+                    try:
+                        self.channel.send('RELEASE')
+                    except (OSError, EOFError):
+                        pass
+                    self.process.join(1)
+                if self.process.is_alive():
+                    self.process.terminate()
+                    self.process.join(1)
+                if self.process.is_alive():
+                    self.process.kill()
+                    self.process.join(1)
+                require(not self.process.is_alive(), 'DOMAIN_KEEPER_RELEASE_UNCONFIRMED')
+        except Exception as cleanup:
+            if error is None:
+                raise
+            error.add_note('DOMAIN_KEEPER_CLEANUP_' + type(cleanup).__name__)
+        finally:
+            if self.channel is not None:
+                self.channel.close()
 
 
 class ClosedCgroup:
@@ -53,6 +118,7 @@ class ClosedCgroup:
                 'DOMAIN_CGROUP_PATH')
         require(isinstance(launch, LaunchLock) and 0 < seconds <= 20, 'DOMAIN_LAUNCH_REQUIRED')
         self.launch, self.seconds = launch, seconds
+        self.launch_lease = launch.check()
         self.directory_fd = os.open(self.directory, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
         info = os.fstat(self.directory_fd)
         self.pin = [info.st_dev, info.st_ino]
@@ -74,7 +140,7 @@ class ClosedCgroup:
         info = self.directory.stat()
         require([info.st_dev, info.st_ino] == self.pin and os.fstat(self.directory_fd).st_nlink > 0,
                 'DOMAIN_CGROUP_REPLACED')
-        self.launch.check()
+        require(self.launch.check() == self.launch_lease, 'DOMAIN_LAUNCH_LEASE_CHANGED')
 
     def __enter__(self):
         try:
@@ -196,7 +262,7 @@ def reconcile_domain(journal, plan_hash, launch):
     require(fingerprint(plan) == plan_hash, 'DOMAIN_RECONCILE_PLAN')
     if (root / 'released.json').exists():
         return read(root, 'released.json')
-    require(isinstance(launch, LaunchLock) and launch.check() == fingerprint(plan['launch_pin']) and
+    require(isinstance(launch, LaunchLock) and launch.check() and launch.expected == plan['launch_pin'] and
             str(launch.path) == plan['launch'] and plan['boot'] ==
             Path('/proc/sys/kernel/random/boot_id').read_text(), 'DOMAIN_RECONCILE_AUTHORITY')
     directory = Path(plan['directory'])

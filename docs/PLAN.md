@@ -16,6 +16,14 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
+Current20:05UTC: common capture is still prohibited by real Docker executor/launch and stopped-support
+integration plus remote file rows. Native CIbe35becc34/0 skips is independently verified; a local
+37-case refinement isolates launch-lock ownership and rejects replacement keepers. No component
+installation or production hold. Full MESH traffic is not currently accepted (bounded partial HTTPS
+failures/readiness timeout); do not claim the panel/support PASS is complete normal baseline. Keep
+the existing-key read-only native-read refusal separate; no further key creation or vault writes.
+
+Historical19:45UTC:
 Current19:45UTC: finite maintenance components qualify34 local cases, not production OWNER closure.
 Exact-source native CI6f942ec7 failed3 fixture setup cases; require corrected digest binding and
 fresh CI rather than counting the local PASS as CI acceptance. Preserve the original failed artifact.

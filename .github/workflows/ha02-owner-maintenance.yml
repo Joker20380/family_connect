@@ -37,7 +37,7 @@ jobs:
           root = Path(os.environ['RUNNER_TEMP'])
           cases = [case for name in ('owner-held.xml', 'owner-native.xml')
                    for case in ET.parse(root / name).iter('testcase')]
-          assert len(cases) >= 34
+          assert len(cases) >= 37
           assert all(not any(case.find(kind) is not None for kind in ('skipped', 'failure', 'error')) for case in cases)
           source = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
           assert source == os.environ['GITHUB_SHA']

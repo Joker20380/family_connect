@@ -336,6 +336,65 @@ def test_launch_lock_rejects_new_manual_admission(domain):
         os.close(descriptor)
 
 
+def test_new_lock_keeper_cannot_reconstitute_old_lease(tmp_path):
+    path = tmp_path / 'launch.lock'
+    path.touch(mode=0o600)
+    old = LaunchLock(path, identity(path))
+    with old:
+        first = old.check()
+        old.process.kill()
+        old.process.join(3)
+        with LaunchLock(path, identity(path)) as successor:
+            assert successor.check() != first
+            with pytest.raises(ValueError, match='DOMAIN_LAUNCH_LOST'):
+                old.check()
+    with pytest.raises(ValueError, match='DOMAIN_LAUNCH_REENTRY'):
+        old.__enter__()
+
+
+def test_hung_keeper_is_bounded_and_only_its_lock_is_cleaned(tmp_path):
+    import fcntl
+    path = tmp_path / 'launch.lock'
+    path.touch(mode=0o600)
+    with LaunchLock(path, identity(path)) as launch:
+        os.kill(launch.process.pid, signal.SIGSTOP)
+        started = time.monotonic()
+        with pytest.raises(ValueError, match='DOMAIN_LAUNCH_LOST'):
+            launch.check()
+        assert time.monotonic() - started < 2
+    assert not launch.process.is_alive()
+    with path.open() as stream:
+        fcntl.flock(stream, fcntl.LOCK_EX | fcntl.LOCK_NB)
+
+
+def keeper_parent(path, channel):
+    with LaunchLock(path, identity(path)) as launch:
+        channel.send(launch.check())
+        signal.pause()
+
+
+def test_controller_death_releases_only_keeper_lock_not_external_fences(tmp_path):
+    import fcntl
+    path = tmp_path / 'launch.lock'
+    path.touch(mode=0o600)
+    parent, child = multiprocessing.Pipe()
+    process = multiprocessing.Process(target=keeper_parent, args=(path, child))
+    process.start()
+    assert parent.poll(4)
+    parent.recv()
+    process.kill()
+    process.join(3)
+    deadline = time.monotonic() + 3
+    with path.open() as stream:
+        while True:
+            try:
+                fcntl.flock(stream, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                break
+            except BlockingIOError:
+                assert time.monotonic() < deadline
+                time.sleep(.01)
+
+
 def test_freeze_loss_then_reacquisition_is_terminal(domain, tmp_path):
     directory, launch = domain
     boundary = ClosedCgroup(directory, launch, tmp_path / 'domain-journal')
