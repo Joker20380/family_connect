@@ -1,5 +1,7 @@
 # Documentation
 
+[CONTROL-HA · 27 November05:05UTC: committed-current MESH forward reconciliation and independent terminal archives; both traffic probes/panel/normal dependencies PASS, old intents and marker partitions retained](releases/2026-11-27-mesh-forward-reconciliation.md).
+
 [CONTROL-HA · 27 November04:40UTC: explicit new-image/host-source custody successor,188 tests and isolated native readback; current MESH outage takes priority, no capture permit](releases/2026-11-27-owner-runtime-current.md).
 
 [CONTROL-HA · 27 November04:14UTC: host/manual mandatory bindings installed on three actual roots; no-env negative/normal paths, automatic timers and seven live Docker terminals PASS; historical external fencing and common capture remain](releases/2026-11-27-owner-user-collectors.md).

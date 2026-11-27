@@ -16,7 +16,15 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
-04:40UTC fresh MESH process readback finds NL1 inactive/NL2 failed. Restore current availability first,
+05:05UTC bounded current-profile MESH forward reconciliation COMMITTED; independent three-node terminal
+archives/absent owners/retained intents PASS. Both NL fresh4HTTPS/3DNS/expected egress and real panel
+five pages/logout PASS; normal dependencies0 and only own timer holds removed, enabled/active/waiting.
+Observer8b support identity/history unchanged. Root119+41+11, inventory3+12+6+8+2, probe14/support33
+retained separately. Source d7d8b9a9 explicit custody successor passes188 local checks/native image and
+independent CI artifact101/0 skips. Existing installed components remain installed. Continue external/
+historical-dispatch fencing and held common-cycle integration; no full all-writer or fresh capture PASS.
+[Exact recovery, cause limits and remaining NEXT](releases/2026-11-27-mesh-forward-reconciliation.md).
+Historical04:40UTC fresh MESH process readback found NL1 inactive/NL2 failed. Restore current availability first,
 using exact failed-invocation diagnostics and current renewal/profile authority, not speculative provider
 blocking or blind restart. Panel fresh authenticated five-page check04:25 PASS. Independent preparation:
 explicit owner-all-writer-runtime-20261127-v1 custody successor,188 tests/0 skips and isolated native
@@ -29,7 +37,8 @@ Normal+automatic monitor/probe0, own holds removed, both timers enabled/active/w
 Docker import terminals0; real panel five pages/logout and observer8b support preservation PASS.
 The accepted root collector and installed12-file images were not reinstalled. Remaining NEXT is external/
 historical-dispatch fencing and common-cycle integration of the new explicit OWNER custody policy,
-then the held common cycle, after current MESH availability is restored.
+then the held common cycle. The intervening MESH outage is now boundedly recovered above; sustained
+stability and initiating provider/network cause are not inferred from this successful recovery.
 Retain original root119 plus41 later markers, inventory3+12+6 plus8 later, probe14 and support33 separately.
 Intervening RU pressure/collection failures and successful bounded panel recovery are not erased or
 misrepresented as sustained stability. Strict drain still refuses; no capture permit or new common kit.

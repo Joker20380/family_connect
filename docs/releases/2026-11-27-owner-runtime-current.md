@@ -1,9 +1,13 @@
 # Explicit installed OWNER custody successor — 27 November2026
 
+Source checkpoint: d7d8b9a939a9b7d4aed548bf6f1d09b196fee437, pushed and remote SHA verified.
+The intervening outage is [boundedly recovered](2026-11-27-mesh-forward-reconciliation.md);
+its original failure evidence below remains history, not a current stopped-service claim.
+
 Selected task remains CONTROL-HA-20261123 / HA-02. Installed mandatory root collector,
 compatible observer8b9355db, console/publisher12-file component and three host/manual
 bindings retain their accepted/installed status. No reinstallation or product version
-change occurs here. The current MESH outage below takes precedence over common capture.
+change occurs here. The MESH outage below took precedence over common capture.
 
 ## Explicit source policy
 
@@ -40,18 +44,20 @@ explicitly says capture_permitted=false and external_work_settled=false.
 
 ## Qualification
 
--188 focused tests PASS,0 skips: legacy/current custody, manual binding and packager.
+- 188 focused tests PASS,0 skips: legacy/current custody, manual binding and packager.
   A broader run has214 PASS plus one existing opt-in real-PG joint-import skip; that
   skip is not represented as a real PostgreSQL integration PASS.
--Actual pinned new console image executes the offline native qualifier with network
+- Actual pinned new console image executes the offline native qualifier with network
   none, read-only root, dropped capabilities and one newly created synthetic-only mount.
   No installed database, private profile or user data is mounted. Encrypted roundtrip,
   native source pins, projection/alias/paid-denial reads and unchanged SQLite PASS;
   dispatch calls0. The owned disposable container is removed.
--Fresh installed host-only readback verifies all42 source pins and bindings. It is not
+- Fresh installed host-only readback verifies all42 source pins and bindings. It is not
   a common capture, loaded-code attestation of every running process, or external fence.
--New CI artifact records exact source commit and old/new custody tests. CI results
-  for the forthcoming source commit are pending until separately observed.
+- Control panel, Android readiness and HA-02 native support CI pass on exact d7d8b9a9.
+  Independently downloaded artifact15172353434 has101 tests/0 skips, exact source and
+  SHA25630a1cfca43f20d41b42f3076f8ab03f999c6486b5b4e54b88f6da1e4fab817a4.
+  Linux preview and phase0 were still in progress at05:04; no all-workflow PASS is claimed.
 
 Local private evidence: `/mnt/data/fc-owner-next-20261127/owner-runtime-current-*`.
 Earlier negative tests correctly refused duplicate JSON; an initial test expected the
