@@ -53,6 +53,14 @@ room URLs, customer records or private keys are included here.
 
 ## Independent result and limits
 
+Follow-up01:51:46UTC: both units remain active, but NL1 is no longer the original
+recovery invocation. Its01:32:57 fatal receipt is SIGNAL_READ/SEED_READ with11166s
+credential headroom and completed cleanup; systemd performs one normal automatic
+restart01:33:27. NewPID2011396, invocationb50a80b0768b44939d46483267bd594b,
+NRestarts1; no second manual start or credential/runtime change. NL2 remains
+PID2732173/NRestarts0. The earlier bounded recovery observation remains history;
+sustained stability and initiating provider/network cause are NOT established.
+
 At01:18:30/31UTC the same NL PIDs/invocations remain active/running, NRestarts0,
 success. RU at01:18:32UTC has the exact newly validated directory hashes:
 

@@ -1,6 +1,24 @@
 # Текущее состояние / Current state
 
-**27 November01:19UTC — both Amsterdam MESH services recovered on unchanged installed bytes.**
+**27 November01:53UTC — mandatory collector installed and maintenance compatibility qualified.**
+New baseline `owner-collectors-b7f4cbd2`; original192343eb meaning/pins and panel01 records unchanged.
+Exact companion tooling8b9355db: all4 CI PASS; independently downloaded artifact15165334024 verifies
+360 tests/0 skips plus5 root sandbox cases. New375-file capsules independently checked on OWNER/NL1.
+Fresh panel01 collector operation installs the pinned mandatory binding and exact wrapper only.
+Both real services and direct collect refuse closed admission;12 fresh no-environment installed-path
+namespace negatives refuse missing/replaced/invalid gate/binding before IPC/SSH/projection writes.
+Closed projections unchanged; normal and later automatic collector invocations success0; own two timer
+holds removed, enabled/active/waiting. Compatible read-only observer preserves supportPID240065/archive/
+authorityb0c470dc and NL1 generationb75ef2a2; authenticated panel five pages/logout PASS.
+119 previously unreported root-collector markers remain byte/mtime/inode-identical: strict drain still
+refuses UNSETTLED_OPERATION. Source-only exclusive maintenance is NOT drain/capture/dispatch settlement.
+Original inventory3+12 and probe14 retained;6 additional inventory markers dated00:43–01:10UTC are separately
+retained (before this install), not folded into the original UNKNOWN3. Support33 remains separate.
+NEXT: exact12-file console/publisher candidates, remaining manual/ORM/CLI and external dispatch settlement,
+then fresh common capture/independent verify/normal resume. No all-writer/common-capture PASS yet.
+[Installed result, exact pins, tests and limits](releases/2026-11-27-mandatory-collector-transition.md).
+
+**Historical01:19UTC — both Amsterdam MESH services recovered on unchanged installed bytes.**
 The owner-reported stopped rows were real: both bootstrap services exhausted their restart limits.
 NL1 retained first SIGNAL_READ, subsequent seed_join_failed/provider_timeout receipts; NL2's initiating
 application cause remains unproven. This is separate from accepted panel01/support recovery.
@@ -9,8 +27,9 @@ normal start per node produced new validated READY directories on unchanged70e6c
 NL1 PID1990396 and NL2 PID2732173 remain active/NRestarts0; RU directory sync succeeded and exact hashes
 match both gateways. Only our brief RU timer holds removed; enabled/active/waiting restored.
 Real panel login/read/logout confirms both Amsterdam MESH rows “Процесс работает”; this is not phone E2E.
-Collector compatibility source is in progress, unqualified/uninstalled; panel01 records and192343eb
-installed collector remain unchanged. [Incident and recovery](releases/2026-11-27-mesh-recovery.md).
+Follow-up01:51UTC: both active; NL1 restarted automatically once after SIGNAL_READ/SEED_READ at01:32:57,
+nowPID2011396/NRestarts1, NL2 unchanged/NRestarts0. Sustained stability/root cause remain unproven.
+[Incident, recovery and follow-up](releases/2026-11-27-mesh-recovery.md).
 
 **27 November01:39CET /00:39UTC — panel and dependencies NORMAL BASELINE PASS.**
 Normal sudo dialog obtained root; post-boot refusals/authority/history/incomplete install phases preserved.

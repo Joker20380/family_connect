@@ -14,10 +14,21 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
+Mandatory successor INSTALLED01:53UTC: owner-collectors-b7f4cbd2 with exact8b9355db compatible observer,
+stopped-capture and new-operation recovery tooling;all4 CI PASS/native360/0 skips plus5 sandbox cases.
+New375-file OWNER/NL1 capsules independently verified; fresh panel01 operation installs mandatory binding,
+12 installed no-environment negative cases PASS, preserved projections/support/authority/generation,
+normal+automatic collector invocations and timer resume PASS; real authenticated panel remains available.
+119 root-collector markers retained separately; strict drain still refuses. Source-only exclusive
+maintenance does not settle external work or authorize capture. Original inventory3+12/probe14/support33
+remain;6 later inventory markers00:43–01:10UTC also retained separately, predating this installation.
+Continue exact12-file console/publisher installation, manual/ORM/CLI and external-dispatch completion,
+then fresh common capture/independent verify/normal resume. Never replay old completed Resume.run as health.
+[Coherent transition and installed acceptance gate](releases/2026-11-27-mandatory-collector-transition.md).
 27 November01:19UTC operational interruption: both Amsterdam MESH services recovered on their existing
 installed70e6c0fc runtime; fresh directories validated and replicated, authenticated panel rows working.
 Own RU renewal/directory timer holds removed. No collector/console/publisher candidate activation.
-Continue the same mandatory-collector compatibility/installation NEXT; unfinished tooling is not accepted.
+This interruption did not activate candidates; the subsequent mandatory-collector result is recorded above.
 [MESH evidence and cause limits](releases/2026-11-27-mesh-recovery.md).
 **Owner restoration override completed,27 November01:39CET:** existing console5ce82415 and dependencies
 NORMAL BASELINE PASS. Fresh real login/5 pages/logout, independent IPC/NL1/history and normal notifications
@@ -25,12 +36,11 @@ PASS; both user collectors also completed normal and automatic cycles. Only our 
 enabled/active/waiting. PostgreSQL/publisher unchanged. Exact39caf062 all4 CI PASS, native351/0 skips;
 new accepted support operation ha02-forward-20261127-panel01, fresh generation/authority, no data rollback.
 All3+12 inventory,14 probe and33 support history markers remain separately unchanged, NOT settled.
-**Active NEXT resumes mandatory collector binding / OWNER all-writer.** Prepare a fresh operation against
-this accepted post-recovery baseline, never replay pre-boot collector-operation-bound. Qualify the exact
-forward-recovery baseline variant for the next collector source before installing it:39caf062 accepts
-only the reviewed192343eb baseline, not an arbitrary newer file set. Then continue exact12-file console/
-publisher bindings, manual/external-dispatch closure and fresh common capture → independent verify → normal
-resume. No new overlays or common capture occurred during restoration. KeePassXC custody remains nonblocking.
+**Restoration handoff, now completed for mandatory collectors:** fresh panel01 operation with exact8b9355db
+tooling, not pre-boot collector-operation-bound or39caf062 on the new baseline. Current NEXT continues
+exact12-file console/publisher bindings, manual/external-dispatch closure and fresh common capture →
+independent verify → normal resume. No new overlays/common capture occurred during panel restoration
+or collector installation. KeePassXC custody remains nonblocking.
 [Evidence and retained failures](releases/2026-11-27-control-ha-owner-resume.md).
 
 **Historical00:05CET reboot checkpoint:** support refusal, missing runtime mount at Docker
