@@ -1,6 +1,10 @@
 # Текущее состояние / Current state
 
 **27 November17:20UTC — renewal connectivity incident; bounded recovery prepared, NOT run.**
+17:26 update: d583 recovery unit refuses RECOVERY_PARENT before importing runtime/RPC; the
+root-owned transaction lives below the existing ubuntu-owned application ancestor. Exact data
+hash/regular-file/root-owner checks remain; root-owned ancestor checks apply to executable
+source/config, not to data. A corrected source/new attempt is required, never replay this refusal.
 RU normal renewal fails before a new transaction is acquired; the previous14:12 COMMITTED
 transaction and all three terminal ledgers are retained. Own RU renewal/directory timer holds
 remain enabled/inactive; no capture barrier or support stop was acquired. A separate read-only

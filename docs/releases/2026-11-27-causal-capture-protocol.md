@@ -2,6 +2,16 @@
 
 ## Bounded operational continuation — 17:20UTC
 
+First recovery-wrapper invocation b11394dbba1c42a38988993659b92744 refuses RECOVERY_PARENT
+before its intent journal/runtime import/any RPC. The actual transaction is root-owned0600 under
+root-owned0700 renewal directories, but `/opt/apps/family_connect` is historically ubuntu-owned0775.
+Do not change those permissions or bypass the code check. Corrected helper keeps exact data hash,
+canonical path, regular-file/root-owner/mode/size checks; root-owned ancestor restrictions remain
+mandatory for all executable sources/config. The first unit and unchanged predecessor are retained;
+only a new invocation/operation can follow. d583 TCP-only CI46041238861 SUCCESS; native isolated
+SSH and116 focused renewal/serialization tests PASS. Initial missing-RNS test collection is retained,
+then the existing pinned support dependency environment supplies the module (no runtime pip install).
+
 Review source commits da50370ed19221598935c98c8609c832aec4b6ad,
 4dddd5ec73a76244f8d2447555a3fea19ab4b602 and b87397a55637972a2feaa74c149418fb0d880764
 are pushed and remote SHA verified. No accepted console/publisher/collector/manual component

@@ -16,6 +16,8 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
+17:26UTC first TCP recovery wrapper refuses before RPC on a data-ancestor ownership assumption;
+retain this failure and correct only the data check before a distinct fresh attempt.
 17:20UTC bounded renewal incident reconciliation takes operational priority within the same NEXT.
 Two own RU timer holds remain until normal dependencies are demonstrated. A one-shot pinned TCP
 establishment-only recovery is prepared/isolated-qualified, not yet executed; no RPC retry or old

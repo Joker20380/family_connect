@@ -76,7 +76,11 @@ def invocation(tmp_path, monkeypatch):
     monkeypatch.setattr(sys, 'path', list(sys.path))
     monkeypatch.setattr(recovery.os, 'geteuid', lambda: 0)
     monkeypatch.setattr(recovery.resource, 'setrlimit', lambda *args: None)
-    monkeypatch.setattr(recovery, 'pinned', lambda path: values[path])
+    def pinned(path, *, code_parents=True):
+        assert code_parents == (path.name != 'transaction.json')
+        return values[path]
+
+    monkeypatch.setattr(recovery, 'pinned', pinned)
     monkeypatch.setattr(recovery, 'quiescent_units', lambda: None)
 
     def run():

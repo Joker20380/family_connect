@@ -25,9 +25,9 @@ def digest(raw):
     return hashlib.sha256(raw).hexdigest()
 
 
-def pinned(path):
+def pinned(path, *, code_parents=True):
     require(path.is_absolute() and path.resolve() == path, 'RECOVERY_PATH')
-    for parent in path.parents:
+    for parent in path.parents if code_parents else ():
         metadata = parent.stat()
         require(metadata.st_uid == 0 and not metadata.st_mode & 0o022, 'RECOVERY_PARENT')
     metadata = path.stat()
@@ -95,7 +95,7 @@ def main():
             digest(canonical(sources)) == node['source_sha256'] == args.source_sha256 and
             {'runtime_controller.py', 'production_transport.py'} <= sources.keys(),
             'RECOVERY_SOURCE_CHANGED')
-    transaction = pinned(Path(config['coordinator_state']) / 'transaction.json')
+    transaction = pinned(Path(config['coordinator_state']) / 'transaction.json', code_parents=False)
     previous = json.loads(transaction)
     require(digest(transaction) == args.transaction_sha256 and previous['state'] == 'COMMITTED'
             and previous['commit_decided'] is True
