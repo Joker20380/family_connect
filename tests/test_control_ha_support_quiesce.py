@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 import subprocess
 import sys
+import threading
 import time
 
 import pytest
@@ -27,6 +28,59 @@ def invoke(root, installed, process, *, seconds=8, hold=.25, change=None):
     return output
 
 
+def hook_receipt_source(receipt):
+    return ('import os,tempfile\n'
+            f'with tempfile.NamedTemporaryFile(mode="w", dir={str(receipt.parent)!r}, delete=False) as staged:\n'
+            '    json.dump(dict(threads=len(threading.enumerate())), staged)\n'
+            '    staged.flush()\n'
+            '    os.fsync(staged.fileno())\n'
+            f'os.replace(staged.name, {str(receipt)!r})\n')
+
+
+@pytest.mark.parametrize('atomic', [False, True])
+def test_hook_receipt_publication_with_writer_paused_before_complete_json(tmp_path, monkeypatch, atomic):
+    receipt = tmp_path / 'hooks.json'
+    entered = threading.Event()
+    release = threading.Event()
+    errors = []
+    original_dump = json.dump
+
+    def paused_dump(value, output):
+        output.write('')
+        output.flush()
+        entered.set()
+        assert release.wait(3)
+        original_dump(value, output)
+
+    monkeypatch.setattr(json, 'dump', paused_dump)
+
+    def writer():
+        try:
+            if atomic:
+                exec(hook_receipt_source(receipt), dict(json=json, threading=threading))
+            else:
+                with receipt.open('w') as output:
+                    json.dump(dict(threads=6), output)
+        except BaseException as error:
+            errors.append(error)
+
+    worker = threading.Thread(target=writer)
+    worker.start()
+    try:
+        assert entered.wait(3)
+        if atomic:
+            assert not receipt.exists()
+        else:
+            assert receipt.exists()
+            with pytest.raises(json.JSONDecodeError):
+                read(receipt)
+    finally:
+        release.set()
+        worker.join(3)
+    assert not worker.is_alive() and not errors
+    assert read(receipt)['threads'] > 0
+
+
 def check_hooks(root, process):
     receipt = root / 'hooks.json'
     code = (f'import importlib,json,threading,time;from pathlib import Path\n'
@@ -38,7 +92,7 @@ def check_hooks(root, process):
             'assert "wait" not in vars(RNS.Transport.inbound_queues._cond)\n'
             'assert RNS.log.__module__=="RNS"\n'
             'assert threading.excepthook is threading.__excepthook__\n'
-            f'Path({str(receipt)!r}).write_text(json.dumps(dict(threads=len(threading.enumerate()))))\n')
+            + hook_receipt_source(receipt))
     launcher = root / 'check-hooks.py'
     launcher.write_text(code)
     sys.remote_exec(process.pid, str(launcher))

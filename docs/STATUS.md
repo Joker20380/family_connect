@@ -1,5 +1,17 @@
 # Текущее состояние / Current state
 
+**27 November22:18UTC — A receipt-publication correction; B separately authorized, not yet implemented.**
+Branch and remote matched fa273145 at entry. On111866ae native-support46072376405 failed
+359/360 with hooks.json JSONDecodeError before threads==6; failed artifact15234561169 retained
+and digest checked. The fixture now publishes complete JSON by same-directory atomic replace;
+a controlled paused writer reproduces the old visibility window and excludes it with the fix.
+47 focused native tests PASS. Exact-source CI follows push; no support installation change.
+phase0/Linux on111866ae also failed, not pending; their causes remain separately unclassified.
+Same A NEXT: initial pre-hook Docker transition, then OWNER/remote integration and actual kit.
+Shared production Docker shutdown is not authorized by project maintenance. No holds acquired.
+[Current A/B report](releases/2026-11-27-ha02-and-basic-metadata.md).
+
+**Historical21:52UTC:**
 **27 November21:52UTC — source checkpoint111866ae; common kit NOT_CREATED.**
 Exact Docker native CI46072376420 SUCCESS; independent reader verifies artifact15234245063:
 20 members, all8 source hashes at111866ae9f212765ca534a3bcf48befc85ba9031,36 tests/0 skips,

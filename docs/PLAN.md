@@ -16,6 +16,17 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
+Current22:18UTC: fix the native hook-receipt publication race with deterministic pause coverage
+and atomic publication;47 focused native checks PASS, exact-source CI required after push.
+Keep failed111866ae native-support artifact15234561169 and separately failed phase0/Linux.
+Then qualify initial Docker generation transition before installed OWNER/capture. Shared daemon
+stoppage needs explicit expansion of scope; do not substitute pending0/census for old-handler fencing.
+Existing encrypted prestate/read-only HA consumer remains a separate prerequisite.
+Part B is explicitly authorized source-only work while A awaits a concrete external action:
+automatic basic metadata v2, separate commits/candidate, no production schema/writer changes.
+It is not implemented by the preceding checkpoints. HA-02/custody/reboot/onboarding stay open.
+
+Historical21:52UTC:
 Current21:52UTC: source111866ae9f212765ca534a3bcf48befc85ba9031 is pushed/remote-matched;
 native Docker CI46072376420 and independent artifact15234245063 verification PASS (20 members,
 36/0 skips, exact8-file closure). Keep the same initial-cutover/enrollment integration NEXT below.
