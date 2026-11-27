@@ -1,5 +1,16 @@
 # Текущее состояние / Current state
 
+**27 November22:25UTC — existing HA consumer accepted; initial Docker transition still blocks A.**
+One local unlock reads the retained encrypted prestate natively; full read-only reconciliation
+accepts prior entries/history/attachments, candidate/working consumers and unchanged encrypted files.
+No new key/import/replacement. External custody remains open. Stock Engine29.1.3 pre-hook q4:
+new protected create denied403 after CLOSE, but old accepted create/start complete201/204 with
+a real protected write. Shared stop would affect3 FC plus14 excluded MicroTrader containers;
+it was NOT performed. [Unqualified plan and scope](operators/docker-initial-transition.md).
+Receipt fix894ffed37d21553dfb508609002227aa3c7949df pushed/remote-matched; native CI46075423497
+in progress. B source candidate is in development. No OWNER install, kit, linked resume or holds.
+
+**Historical22:18UTC:**
 **27 November22:18UTC — A receipt-publication correction; B separately authorized, not yet implemented.**
 Branch and remote matched fa273145 at entry. On111866ae native-support46072376405 failed
 359/360 with hooks.json JSONDecodeError before threads==6; failed artifact15234561169 retained

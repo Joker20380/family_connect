@@ -25,12 +25,35 @@ At entry,111866ae Docker46072376420 and Android46072376388 succeeded;
 native-support46072376405, phase046072376425 and Linux46072376409 failed.
 The latter two failures are not explained by the native fixture trace without their evidence.
 
+## A: prestate reconciliation and pre-hook counterexample
+
+Prestate identity is retained privately (306750 bytes, KDBX signature, inode/mode/SHA256).
+Original activation records contain no independent prestate digest; this new identity receipt is
+not a historical integrity anchor. One fresh local unlock gives PRESTATE_FD_NATIVE_READ exit0;
+the existing full staged reconciliation then passes both exports, both real consumers and preservation
+comparison. Prestate and working encrypted bytes remain unchanged. The existing journal now contains
+reconciled.json, alongside all original failed records. No XML, stderr, record contents or keys are
+reported; no new key, activation/import or whole-vault replacement. External custody is not proved.
+
+Isolated stock Engine29.1.3 q4 delays actual pre-hook Create/Mount handlers inside a disposable volume
+driver, not an AuthZ proxy. Original containers use empty parent/unless-stopped. After hook/CLOSE,
+new protected create gets403, while the two released old handlers complete201/204 with an actual
+protected write. Own containers/processes are cleaned up. q1 driver-method parsing failure, q2 probe
+timeout against the in-flight container and q3 incorrect reload-log expectation remain preserved.
+New native CI records exact source closure; this is a counterexample, not a shared-window PASS.
+
+Read-only daemon prestate shows17 running containers:3 FC plus14 MicroTrader; live-restore=false.
+The [concrete proposed transition](../operators/docker-initial-transition.md) needs expanded scope
+approval and isolated old runtime-generation/recovery qualification. No shared stop/reload, product
+hold or application recreation occurred. Native-support fix894ffed3 is pushed/remote-matched;
+run46075423497 is in progress, Android46075423494 SUCCESS, other applicable runs pending.
+
 ## Outstanding acceptance
 
 Initial pre-hook create/start outside the enrolled parent remains unclosed. A shared Docker
 generation maintenance window is not automatically authorized; first qualify its exact impact,
-old runtime completion and bounded recovery. Existing HA key needs native encrypted-prestate
-read and full preservation/real-consumer reconciliation, not a new key or another activation.
+old runtime completion and bounded recovery. Existing HA key reconciliation now passes;
+independent external custody remains open.
 No installed OWNER adapter, coherent encrypted kit, independent kit verification or linked resume.
 Part B has no implementation acceptance yet. External custody, source-host-free restore,
 console reboot-startup and FLEET-PRODUCTION-ONBOARDING-1 remain separate and open.

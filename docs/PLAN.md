@@ -16,6 +16,13 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
+Current22:25UTC: existing HA key reconciliation/real consumers PASS; external custody remains open.
+Initial Docker pre-hook create/start race is reproduced on exact Engine. Next A: qualify old runtime
+generation retirement and bounded recovery; shared-window scope includes14 excluded neighbors,
+so no shared stop is authorized. [Impact and unqualified transition sequence](operators/docker-initial-transition.md).
+Continue separately authorized B source candidate while this A prerequisite is unresolved.
+
+Historical22:18UTC:
 Current22:18UTC: fix the native hook-receipt publication race with deterministic pause coverage
 and atomic publication;47 focused native checks PASS, exact-source CI required after push.
 Keep failed111866ae native-support artifact15234561169 and separately failed phase0/Linux.

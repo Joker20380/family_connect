@@ -1,0 +1,62 @@
+name: HA-02 initial Docker pre-hook counterexample
+on:
+  push:
+    paths: ['tests/fixtures/docker_prehook_transition.py', '.github/workflows/ha02-docker-prehook.yml']
+  pull_request:
+    paths: ['tests/fixtures/docker_prehook_transition.py', '.github/workflows/ha02-docker-prehook.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      - run: python -m pip install -r control/requirements.lock -r device_identity/requirements.lock
+      - name: Obtain exact isolated Engine without installing a daemon
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/docker-runtime"
+          cd "$RUNNER_TEMP/docker-runtime"
+          curl --fail --location --max-time 120 -o docker.deb https://be.archive.ubuntu.com/ubuntu/pool/universe/d/docker.io-app/docker.io_29.1.3-0ubuntu4.1_amd64.deb
+          curl --fail --location --max-time 120 -o containerd.deb https://be.archive.ubuntu.com/ubuntu/pool/main/c/containerd-app/containerd_2.2.2-0ubuntu1.2_amd64.deb
+          echo '7a77548bd669f232ec8852092623303be32c55538401ff047b4d1e0bb5ea721d  docker.deb' | sha256sum -c -
+          echo '0ae213a9640206f12edb11cf0aa7fd90f42de0a22a73883f06da002e4381eecc  containerd.deb' | sha256sum -c -
+          dpkg-deb -x docker.deb .
+          dpkg-deb -x containerd.deb .
+          docker pull python@sha256:935c3c5b12357a7e10caa9c1e6ca5692344d97cf229832ef584be2cec9fc03df
+          docker tag python@sha256:935c3c5b12357a7e10caa9c1e6ca5692344d97cf229832ef584be2cec9fc03df python:3.12-slim-bookworm
+      - name: Actual pre-hook handlers on isolated stock Engine
+        run: |
+          sudo timeout -k10 180 env PATH="$RUNNER_TEMP/docker-runtime/usr/bin:$PATH" PYTHONDONTWRITEBYTECODE=1 \
+            /usr/bin/python3 tests/fixtures/docker_prehook_transition.py --root "$RUNNER_TEMP/fc-owner-executor-prehook" \
+            --dockerd "$RUNNER_TEMP/docker-runtime/usr/bin/dockerd" \
+            --containerd "$RUNNER_TEMP/docker-runtime/usr/bin/containerd"
+      - name: Independent source and counterexample readback
+        if: always()
+        run: |
+          sudo chmod -R a+rX "$RUNNER_TEMP/fc-owner-executor-prehook" || true
+          python - <<'PY'
+          import hashlib, json, os
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP']) / 'fc-owner-executor-prehook'
+          result = json.loads((root / 'result.json').read_bytes())
+          assert result['source']['head'] == os.environ['GITHUB_SHA']
+          assert all(hashlib.sha256(Path(name).read_bytes()).hexdigest() == value for name, value in result['source']['files'].items())
+          assert result['post_hook_direct_denied'] and result['pre_hook_create_after_close'] and result['pre_hook_start_effect_after_close']
+          assert not result['production_modified'] and not result['initial_admission_coverage_proven']
+          assert json.loads((root / 'cleanup.json').read_bytes()) == dict(own_processes_exited=True, production_modified=False, capture_lease_adopted=False)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: docker-prehook-transition
+          path: |
+            ${{ runner.temp }}/fc-owner-executor-prehook/result.json
+            ${{ runner.temp }}/fc-owner-executor-prehook/cleanup.json
+            ${{ runner.temp }}/fc-owner-executor-prehook/*.log
+          if-no-files-found: error
