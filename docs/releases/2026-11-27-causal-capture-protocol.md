@@ -42,6 +42,41 @@ maintenance lock and must be refreshed when the actual operation starts.
 No production hold is acquired by this iteration. Root authentication uses the ordinary
 local sudo dialog; sudoers/polkit are unchanged, and Docker is not used to obtain host root.
 
+## Review follow-up
+
+27 November16:25UTC, continued from exact ab902e274d9a208fbde16481c794c80fc58c80ef;
+remote feature matched and main remained da94566acb770dc758a1e057f02bfef784585a75.
+This is source-only review correction, not a production capture or installation.
+
+- Reproduced five failures: changed HELD replay, request shape, operation, command, and cleanup
+  preservation. All active request validation is now inside terminal handling; FAILED retains the
+  first sanitized cause, a separate cleanup record distinguishes RELEASED/UNKNOWN, and later CAPTURED
+  refuses. A correct completed replay remains idempotent even after an invalid completed replay.
+  118 focused causal/local-gate tests PASS. Cleanup failure is not evidence of physical release.
+- Production PostgreSQL17.11 was inspected with read-only transactions before code changes:
+  zero event triggers; information_schema contains65 stock views and four stock persistent tables
+  (sql_features, sql_implementation_info, sql_parts, sql_sizing), no sequences. No production boundary
+  acquired. The narrow PG17 contract checks this explicit composition and column types/owner and
+  includes the four tables in held locks; unknown/changed persistent objects refuse.
+- pg_event_trigger is locked before scope validation and any ALTER SEQUENCE; any event handler
+  (including disabled handlers) is unsupported. The isolated ddl_command_start/setval regression
+  proves refusal with unchanged sequence/history; a subsequent control ALTER proves the handler
+  really would change the sequence. Concurrent trigger installation is physically blocked.
+- Retained pre-fix PostgreSQL5 failures/21 passes; exact console3af9fbf9 and PG18cfe3ef now pass26
+  native cases. Operation f22454fc7d9436d7df77048ac1dbbc25 also fences an already-created Docker exec,
+  dumps/restores independently, and reconciles its late effect exactly once. Boundary SHA256
+  e6179b25be861c6d266eba0b712c3a71fd99ed94ba36f47355c23ddf319c45d5;
+  test SHA256 cfe272d99af26955cffe897632850aa68419adbc49e6663ae897abc5dfe8bea2.
+  These are synthetic, unencrypted objects; no product mounts. Private evidence is retained under
+  `/mnt/data/fc-ha02-review-20261127/`; no private data is committed.
+
+No accepted installed component, original marker, authority or support operation was changed.
+No production common interval, stopped-support snapshot, encrypted kit or linked resume is claimed.
+Outstanding OWNER native-file and remote receiver rows below still prohibit acceptance. Acquisition/
+callback death and physical continuity integration must qualify before production; in-memory protocol
+replay is not fresh-process recovery. HA-02/custody/source-host-free restore/reboot/onboarding stay open.
+Applicable exact-source CI is pending the review-fix push; no pending run is counted as PASS.
+
 ## Finite writer/endpoint matrix
 
 “Required” below is an outstanding production adapter obligation, not a claim of a held fence.

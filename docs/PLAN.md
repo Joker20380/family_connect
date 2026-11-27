@@ -16,6 +16,15 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
+16:25UTC review fixes: active causal validation/replay failures are terminal (118 focused PASS),
+cleanup cannot replace the original cause. PG17 event-trigger refusal precedes sequence DDL;
+explicit information_schema scope and physical locks qualify26 native checks plus Docker dispatch/
+dump/independent restore/replay. Actual production prerequisites inspected read-only; no triggers,
+four stock tables. No production adapter installation/capture permit. Next within this task:
+bounded OWNER physical integration and remote-file/receiver coverage, dedicated in-memory KeePassXC
+HA consumer, then complete capture/verify/resume. Source qualification is not the kit acceptance.
+
+Historical readback:
 13:54UTC source010d8c6c/948978bb pushed/remote verified; all four applicable948978bb CI SUCCESS,
 independent artifacts112/26 zero-skips,
 native four-kernel causal cycle and exact-image20-case logical DB boundary plus actual Docker exec,

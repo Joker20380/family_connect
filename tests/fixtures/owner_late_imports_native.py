@@ -91,7 +91,7 @@ sys.exit(result)
         assert execution.returncode == 0, 'ISOLATED_CONSOLE_TEST_FAILED'
         final = json.loads(command(['inspect', console]).stdout)[0]
         assert final['State']['Status'] == 'exited' and final['State']['ExitCode'] == 0
-        count = 20 if pg_boundary else 6
+        count = 26 if pg_boundary else 6
         assert str(count).encode() + b' passed' in execution.stdout, 'INCOMPLETE_NATIVE_CHECKS'
         loaded = execution.stdout.split(b'NATIVE_LOADED_SOURCES=', 1)[1].splitlines()[0]
         sources = json.loads(loaded)

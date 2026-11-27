@@ -7,6 +7,28 @@ from psycopg import sql
 from psycopg.pq import TransactionStatus
 
 
+INFORMATION_VIEWS = frozenset('''_pg_foreign_data_wrappers _pg_foreign_servers _pg_foreign_table_columns
+_pg_foreign_tables _pg_user_mappings administrable_role_authorizations applicable_roles attributes
+character_sets check_constraint_routine_usage check_constraints collation_character_set_applicability
+collations column_column_usage column_domain_usage column_options column_privileges column_udt_usage
+columns constraint_column_usage constraint_table_usage data_type_privileges domain_constraints
+domain_udt_usage domains element_types enabled_roles foreign_data_wrapper_options foreign_data_wrappers
+foreign_server_options foreign_servers foreign_table_options foreign_tables information_schema_catalog_name
+key_column_usage parameters referential_constraints role_column_grants role_routine_grants role_table_grants
+role_udt_grants role_usage_grants routine_column_usage routine_privileges routine_routine_usage
+routine_sequence_usage routine_table_usage routines schemata sequences table_constraints table_privileges
+tables transforms triggered_update_columns triggers udt_privileges usage_privileges user_defined_types
+user_mapping_options user_mappings view_column_usage view_routine_usage view_table_usage views'''.split())
+INFORMATION_TABLES = {
+    'sql_features': ('feature_id', 'feature_name', 'sub_feature_id', 'sub_feature_name',
+                     'is_supported', 'is_verified_by', 'comments'),
+    'sql_implementation_info': ('implementation_info_id', 'implementation_info_name',
+                                'integer_value', 'character_value', 'comments'),
+    'sql_parts': ('feature_id', 'feature_name', 'is_supported', 'is_verified_by', 'comments'),
+    'sql_sizing': ('sizing_id', 'sizing_name', 'supported_value', 'comments'),
+}
+
+
 def require(condition, reason):
     if not condition:
         raise ValueError(reason)
@@ -18,16 +40,33 @@ def fingerprint(value):
 
 def scope(connection):
     require(170000 <= connection.info.server_version < 180000, 'PG_BOUNDARY_VERSION')
+    require(not connection.execute('SELECT oid FROM pg_catalog.pg_event_trigger').fetchall(),
+            'PG_BOUNDARY_EVENT_TRIGGERS')
     binding = connection.execute('SELECT current_database(), oid, pg_postmaster_start_time()::text '
         'FROM pg_catalog.pg_database WHERE datname=current_database()').fetchone()
     relations = connection.execute("SELECT namespace.nspname, relation.relname, relation.oid, "
         'relation.relkind, relation.relpersistence, relation.relrowsecurity, relation.relowner '
         'FROM pg_catalog.pg_class relation JOIN pg_catalog.pg_namespace namespace '
         "ON namespace.oid=relation.relnamespace WHERE namespace.nspname NOT LIKE 'pg_toast%' "
-        "AND namespace.nspname NOT LIKE 'pg_temp_%' AND namespace.nspname <> 'information_schema' "
+        "AND namespace.nspname NOT LIKE 'pg_temp_%' "
         "AND relation.relkind NOT IN ('i','I') ORDER BY relation.oid").fetchall()
-    catalogs = [row for row in relations if row[0] == 'pg_catalog' and row[3] == 'r']
-    user = [row for row in relations if row[0] != 'pg_catalog']
+    information = [row for row in relations if row[0] == 'information_schema']
+    require({row[1] for row in information} == INFORMATION_VIEWS | INFORMATION_TABLES.keys() and
+            all(row[3] == ('r' if row[1] in INFORMATION_TABLES else 'v') and
+                row[4] == 'p' and not row[5] and row[6] == 10 for row in information),
+            'PG_BOUNDARY_INFORMATION_SCHEMA')
+    information_attributes = connection.execute('SELECT relation.relname, attribute.attnum, attribute.attname, '
+        'attribute.atttypid::regtype::text, attribute.attnotnull FROM pg_catalog.pg_attribute attribute '
+        'JOIN pg_catalog.pg_class relation ON attribute.attrelid=relation.oid '
+        "WHERE relation.relnamespace='information_schema'::regnamespace AND relation.relkind='r' "
+        'AND attribute.attnum>0 ORDER BY relation.relname,attribute.attnum').fetchall()
+    expected_attributes = [(table, index, name, 'information_schema.' +
+        ('cardinal_number' if name in ('integer_value', 'sizing_id', 'supported_value') else
+         'yes_or_no' if name == 'is_supported' else 'character_data'), False)
+        for table, names in sorted(INFORMATION_TABLES.items()) for index, name in enumerate(names, 1)]
+    require(information_attributes == expected_attributes, 'PG_BOUNDARY_INFORMATION_SCHEMA')
+    catalogs = [row for row in relations if row[0] in ('pg_catalog', 'information_schema') and row[3] == 'r']
+    user = [row for row in relations if row[0] not in ('pg_catalog', 'information_schema')]
     require(catalogs and user and all(row[0] == 'public' and row[3] in ('r', 'S') and
             row[4] == 'p' and not row[5] for row in user), 'PG_BOUNDARY_UNSUPPORTED_RELATION')
     sequences = connection.execute('SELECT sequence.* FROM pg_catalog.pg_sequence sequence '
@@ -40,7 +79,8 @@ def scope(connection):
         'ON attribute.attrelid=value.adrelid AND attribute.attnum=value.adnum '
         'WHERE attribute.attrelid=ANY(%s::oid[]) AND attribute.attnum>0 '
         'ORDER BY attribute.attrelid, attribute.attnum', ([row[2] for row in user],)).fetchall()
-    return dict(binding=binding, catalogs=catalogs, relations=user, sequences=sequences, attributes=attributes)
+    return dict(binding=binding, catalogs=catalogs, relations=user, sequences=sequences, attributes=attributes,
+                information_schema=information, information_attributes=information_attributes)
 
 
 class PostgresBoundary:
@@ -49,7 +89,8 @@ class PostgresBoundary:
         require(connection.autocommit and connection.info.transaction_status == TransactionStatus.IDLE,
                 'PG_BOUNDARY_FRESH_CONNECTION')
         require(type(expected) is dict and set(expected) == {
-            'binding', 'catalogs', 'relations', 'sequences', 'attributes'}, 'PG_BOUNDARY_COVERAGE')
+            'binding', 'catalogs', 'relations', 'sequences', 'attributes',
+            'information_schema', 'information_attributes'}, 'PG_BOUNDARY_COVERAGE')
         self.connection = connection
         self.expected = json.loads(json.dumps(expected))
         self.coverage = fingerprint(self.expected)
@@ -74,7 +115,7 @@ class PostgresBoundary:
                 'WHERE rolname=current_user').fetchone() == (True,), 'PG_BOUNDARY_PRIVILEGE')
             self.deadline = time.monotonic() + self.milliseconds / 1000
             connection.execute('BEGIN ISOLATION LEVEL READ COMMITTED')
-            self.lock([('pg_catalog', 'pg_class'), ('pg_catalog', 'pg_namespace')])
+            self.lock([('pg_catalog', name) for name in ('pg_class', 'pg_namespace', 'pg_event_trigger')])
             observed = scope(connection)
             require(fingerprint(observed) == self.coverage, 'PG_BOUNDARY_COVERAGE_CHANGED')
             self.lock(observed['catalogs'])

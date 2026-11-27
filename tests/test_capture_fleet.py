@@ -197,6 +197,63 @@ def test_forged_proof_and_replay_changed_are_rejected(lab):
         members['OWNER'].run(request(members['OWNER'], 'HELD', extra=True))
 
 
+@pytest.mark.parametrize('fault,reason', [
+    ('replay', 'FLEET_REPLAY_CHANGED'), ('shape', 'FLEET_REQUEST'),
+    ('operation', 'FLEET_REQUEST'), ('command', 'FLEET_COMMAND'),
+])
+def test_active_request_error_is_terminal(lab, fault, reason):
+    _, members, barriers, counts, _ = lab
+    ready = ready_all(members)
+    member = members['OWNER']
+    changed = request(member, 'HELD')
+    if fault == 'replay':
+        changed['payload']['extra'] = True
+    elif fault == 'shape':
+        changed = []
+    else:
+        changed[fault] = 'unknown'
+    with pytest.raises(ValueError, match=reason):
+        member.run(changed)
+    assert member.state == 'FAILED'
+    assert barriers['OWNER'].exits == 1 and not member.entered
+    assert fleet.document((member.root / 'failed.json').read_bytes())['error_type'] == reason
+    with open(barriers['OWNER'].location, 'rb') as independent:
+        fcntl.flock(independent, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    with pytest.raises(ValueError, match='FLEET_TERMINAL_FAILURE'):
+        member.run(request(member, 'CAPTURED', ready=ready))
+    assert counts['OWNER'] == 0
+
+
+def test_cleanup_error_does_not_replace_active_request_failure(lab, monkeypatch):
+    _, members, barriers, _, _ = lab
+    ready_all(members)
+    member = members['OWNER']
+    original = Barrier.__exit__
+
+    def failing_exit(barrier, *args):
+        original(barrier, *args)
+        raise RuntimeError('private cleanup detail')
+
+    monkeypatch.setattr(Barrier, '__exit__', failing_exit)
+    with pytest.raises(ValueError, match='FLEET_REPLAY_CHANGED') as failure:
+        member.run(request(member, 'HELD', extra=True))
+    assert member.state == 'FAILED' and barriers['OWNER'].exits == 1
+    assert fleet.document((member.root / 'failed.json').read_bytes())['error_type'] == 'FLEET_REPLAY_CHANGED'
+    assert 'private cleanup detail' not in str(failure.value.__notes__)
+    monkeypatch.setattr(Barrier, '__exit__', original)
+
+
+def test_changed_completed_replay_preserves_valid_completed_repeat(lab):
+    expected, members, barriers, counts, files = lab
+    ready, _, _, _ = roundtrip(expected, members, files)
+    member = members['OWNER']
+    with pytest.raises(ValueError, match='FLEET_REPLAY_CHANGED'):
+        member.run(request(member, 'HELD', extra=True))
+    assert member.state == 'RELEASED'
+    assert member.run(request(member, 'HELD')) == ready['OWNER']
+    assert barriers['OWNER'].exits == counts['OWNER'] == 1
+
+
 def test_incomplete_writers_and_late_policy_require_distinct_pins(lab):
     expected, _, _, _, _ = lab
     for name in ('coverage_sha256', 'late_policy_sha256'):

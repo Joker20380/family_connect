@@ -1,6 +1,17 @@
 # Текущее состояние / Current state
 
-**27 November13:54UTC — two source mechanisms qualified; requested production kit still NOT_CREATED.**
+**27 November16:25UTC — review fixes qualified, production integration still incomplete.**
+Checkpoint ab902e27 preserved. Direct active-request/replay faults now terminalize the causal
+participant, preserve the first refusal, and record cleanup outcome separately; correct completed
+replay remains read-only. Focused118 PASS (retained pre-fix5 failures). PostgreSQL read-only preflight
+finds no event triggers and the four stock information_schema tables. The boundary now rejects event
+handlers before DDL, checks explicit PG17 information_schema composition and holds its persistent
+tables. Exact installed-image isolated26 PASS plus pre-existing Docker-exec/dump/restore/late replay;
+pre-fix5 failures retained. No accepted component reinstalled; no production locks or new kit.
+OWNER physical adapter, remaining receiver/native-file fences and dedicated vault HA consumer remain
+the same NEXT. [Review evidence and limitations](releases/2026-11-27-causal-capture-protocol.md#review-follow-up).
+
+**Historical27 November13:54UTC — two source mechanisms qualified; production kit NOT_CREATED.**
 Causal010d8c6c and logical-DB948978bb are pushed/remote verified, not installed. Independent CI
 artifacts verify112 and26 tests/0 skips; all four applicable948978bb workflows now SUCCESS.
 Native four-kernel causal cycle and pinned-image Docker-exec,

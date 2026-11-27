@@ -89,6 +89,57 @@ def test_reacquired_transaction_is_not_same_barrier(database):
         normal.execute("INSERT INTO effects(operation,value) VALUES ('normal','resumed')")
 
 
+def test_event_trigger_setval_refuses_before_sequence_ddl(database):
+    held = boundary(database)
+    with psycopg.connect(**database) as administrator:
+        administrator.execute("CREATE FUNCTION ddl_sequence_effect() RETURNS event_trigger LANGUAGE plpgsql "
+            "AS $$ BEGIN PERFORM setval('public.effects_id_seq',777); END $$")
+        administrator.execute("CREATE EVENT TRIGGER capture_ddl ON ddl_command_start "
+            "WHEN TAG IN ('ALTER SEQUENCE') EXECUTE FUNCTION ddl_sequence_effect()")
+        original = administrator.execute('SELECT last_value,is_called FROM effects_id_seq').fetchone()
+        try:
+            with pytest.raises(ValueError, match='PG_BOUNDARY_EVENT_TRIGGERS'):
+                held.__enter__()
+        finally:
+            held.release()
+        assert administrator.execute('SELECT last_value,is_called FROM effects_id_seq').fetchone() == original
+        assert administrator.execute('SELECT operation,value FROM effects').fetchall() == [('history','unchanged')]
+        administrator.execute('ALTER SEQUENCE effects_id_seq CACHE 1')
+        assert administrator.execute('SELECT last_value FROM effects_id_seq').fetchone() == (777,)
+
+
+@pytest.mark.parametrize('statement', [
+    'CREATE TABLE information_schema.unexpected (value int)',
+    'CREATE SEQUENCE information_schema.unexpected',
+    'ALTER TABLE information_schema.sql_features ADD COLUMN unexpected int',
+])
+def test_unknown_information_schema_persistent_scope_refuses(database, statement):
+    with psycopg.connect(**database) as administrator:
+        administrator.execute(statement)
+        with pytest.raises(ValueError, match='PG_BOUNDARY_INFORMATION_SCHEMA'):
+            scope(administrator)
+
+
+def test_stock_information_schema_tables_are_physically_held(database):
+    with boundary(database) as held, psycopg.connect(**database) as late:
+        late.execute("SET lock_timeout='80ms'")
+        for name in ('sql_features', 'sql_implementation_info', 'sql_parts', 'sql_sizing'):
+            with pytest.raises(psycopg.errors.LockNotAvailable):
+                late.execute(sql.SQL('DELETE FROM information_schema.{}').format(sql.Identifier(name)))
+        held.check()
+
+
+def test_event_trigger_installation_is_blocked_while_held(database):
+    with psycopg.connect(**database) as administrator:
+        administrator.execute('CREATE FUNCTION empty_ddl() RETURNS event_trigger LANGUAGE plpgsql '
+                              'AS $$ BEGIN END $$')
+    with boundary(database) as held, psycopg.connect(**database) as late:
+        late.execute("SET lock_timeout='80ms'")
+        with pytest.raises(psycopg.errors.LockNotAvailable):
+            late.execute('CREATE EVENT TRIGGER late_ddl ON ddl_command_start EXECUTE FUNCTION empty_ddl()')
+        held.check()
+
+
 def test_deadline_releases_locks_without_controller_cleanup(database):
     held = boundary(database, milliseconds=300)
     held.__enter__()

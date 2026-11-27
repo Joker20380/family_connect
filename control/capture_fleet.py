@@ -240,30 +240,26 @@ class Participant:
         return receipt
 
     def run(self, request):
-        require(type(request) is dict and set(request) == {'command', 'operation', 'payload'} and
-                request['operation'] == self.expected['operation'] and type(request['payload']) is dict,
-                'FLEET_REQUEST')
-        phase = request['command']
-        require(phase in ('HELD', 'CAPTURED', 'SEALED', 'RELEASED'), 'FLEET_COMMAND')
-        request_hash = digest(encoded(request))
-        require(self.state != 'FAILED', 'FLEET_TERMINAL_FAILURE')
-        if phase in self.responses:
-            require(self.requests[phase] == request_hash, 'FLEET_REPLAY_CHANGED')
-            if self.state != 'RELEASED':
-                try:
-                    self.check()
-                except BaseException as error:
-                    self.abort(str(error))
-                    raise
-            return self.responses[phase]
-        require(self.state != 'RELEASED', 'FLEET_COMPLETED')
         try:
+            require(self.state != 'FAILED', 'FLEET_TERMINAL_FAILURE')
+            require(type(request) is dict and set(request) == {'command', 'operation', 'payload'} and
+                    request['operation'] == self.expected['operation'] and type(request['payload']) is dict,
+                    'FLEET_REQUEST')
+            phase = request['command']
+            require(phase in ('HELD', 'CAPTURED', 'SEALED', 'RELEASED'), 'FLEET_COMMAND')
+            request_hash = digest(encoded(request))
+            if phase in self.responses:
+                require(self.requests[phase] == request_hash, 'FLEET_REPLAY_CHANGED')
+                if self.state != 'RELEASED':
+                    self.check()
+                return self.responses[phase]
+            require(self.state != 'RELEASED', 'FLEET_COMPLETED')
             result = self.execute(phase, request['payload'])
             self.requests[phase], self.responses[phase], self.state = request_hash, result, phase
             return result
         except BaseException as error:
             reason = str(error)
-            self.abort(reason if re.fullmatch('[A-Z][A-Z0-9_]{0,95}', reason) else type(error).__name__)
+            self.abort(reason if re.fullmatch('[A-Z][A-Z0-9_]{0,95}', reason) else type(error).__name__, error)
             raise
 
     def execute(self, phase, payload):
@@ -315,17 +311,34 @@ class Participant:
         self.entered = False
         return self.sign(phase, digest(encoded(self.responses['SEALED'])), dict(seal_set=seal_hash))
 
-    def abort(self, reason):
+    def abort(self, reason, original=None):
         if self.state in ('FAILED', 'RELEASED'):
             return
         self.state = 'FAILED'
+        self.failure = reason
+        self.cleanup_errors = []
         try:
             private_write(self.root, 'failed.json', encoded(dict(result='FAILED', error_type=reason,
                 operation=self.expected['operation'], capture_permitted=False)))
-        finally:
-            if self.entered:
+        except BaseException as error:
+            self.cleanup_errors.append('JOURNAL_' + type(error).__name__)
+        self.barrier_release = 'NOT_ENTERED'
+        if self.entered:
+            self.barrier_release = 'UNKNOWN'
+            try:
                 self.barrier.__exit__(None, None, None)
                 self.entered = False
+                self.barrier_release = 'RELEASED'
+            except BaseException as error:
+                self.cleanup_errors.append('BARRIER_' + type(error).__name__)
+        try:
+            private_write(self.root, 'cleanup.json', encoded(dict(barrier=self.barrier_release,
+                errors=self.cleanup_errors, operation=self.expected['operation'])))
+        except BaseException as error:
+            self.cleanup_errors.append('CLEANUP_JOURNAL_' + type(error).__name__)
+        if original is not None:
+            for detail in self.cleanup_errors:
+                original.add_note('FLEET_CLEANUP_' + detail)
 
 
 def receive(descriptor, deadline):
