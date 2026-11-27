@@ -1,5 +1,103 @@
 # HA-02 OWNER continuation after laptop power loss — 27 November 2026
 
+## Completed restoration — 27 November00:39UTC /01:39CET
+
+**PANEL_AND_DEPENDENCIES_NORMAL_BASELINE_PASS.** This accepts restoration of the existing
+panel and its normal dependencies only. It is not installed all-writer acceptance, old
+dispatch settlement, a coherent HA capture or off-origin custody/restore acceptance.
+
+### Qualified source and linked support transition
+
+Exact39caf062cf6b6b58977dfb7d7a3428246aac852c now has all4 relevant CI workflows successful.
+Native run45913167010 attempt2 passes351 tests,0 failures/errors/skips. Downloaded
+artifact15162651612 SHA25668f5f604555ef7402134c3c753c84bc2144273d30d2476347448c4e0bd55e327
+was independently checked against its receipt and every XML case;5 disposable collector
+sandbox cases also pass. Attempt1 artifact15162010234 and local prerequisite failures
+remain retained below. No guard/test was weakened to obtain the complete repeat. The two
+failed prerequisite cases additionally passed three local diagnostic repeats,6 cases total.
+
+All373 source-only capsule files were independently compared to Git on OWNER and NL1,
+including again before activation. The only baseline extension admits the exact four
+already-installed192343eb collector hashes; other files and original baseline pins remain
+strict. Neither collectors nor the support archive621009b8 were replaced during recovery.
+
+New OWNER operation: `/opt/family-connect-support/ha02-forward-20261127-panel01`.
+New participant: `/var/lib/family-connect-support/ha02-forward-20261127-panel01`.
+Linked NL1 operation: `/opt/apps/family_connect/state-ha02/forward-support-20261127-panel01`.
+New generation: `b75ef2a28d49fe1ace03ed4eca1133a9f08747e006a4520e5611b15e7a59593e`.
+Preparation independently proves BOOT_CHANGED/empty predecessor account and preserves the
+accepted stop01 plan/authority/history. NL1 recloses/drains/invalidates the predecessor,
+advances a fresh generation and verifies the exact new closed ticket before OWNER starts.
+Its PID3705 and100% CPU/768MiB limits are unchanged; resource preflight passes and no mailbox
+or other-service restart is performed. Support starts as PID240065 with a newly created authority bound to the actual
+boot/start/argv/cgroup, never an edited old PID or ticket. Result is
+`FORWARD_RESUME_OPEN_CAPTURE_DENIED`. Repeating the completed operation returns the same
+result with identical accepted bytes and no support restart.
+
+Separate readback checks actual process/authority/archive, IPC cursor, fresh authenticated
+NL1 ticket/consumed request and OPEN_LOCAL_ONLY admission with accepted work0. SQLite
+quick_check is OK before resume. All21 records remain,19 immutable records match the fresh
+post-boot copy, cursor remains4 and jobs0. All72 checked predecessor/participant/pending
+files and old authority bytes remain unchanged. No key or secret-record contents are reported.
+
+Two standalone observer attempts timed out and remain in private evidence. Direct SSH was
+healthy; an own observer endpoint was found waiting for stdin, before RPC dispatch. Fresh
+EOF-bounded readbacks pass independently; no opening was retried to manufacture that proof.
+The leftover read-only endpoint was identified by its exact argv/start and our attempt time
+window, then terminated through a checked pidfd with SIGTERM. Exit and absence of remaining
+new-operation observer endpoints were verified; mailbox PID/state did not change. This is
+cleanup of our observer only, not settlement of any historical writer uncertainty.
+
+### User-visible panel and normal service cycles
+
+Console remains the existing5ce82415 container, exact ID/Config/HostConfig/image preserved.
+PostgreSQL18cfe3ef and publisher50de6f25 remain the same running containers/start times.
+No candidate image, Compose recreation or seed_demo was used. The runtime mount has the
+same host/container directory inode, owner997:980 and0750; installed console UID10001
+successfully reads notification_cursor through the socket0660/group980.
+
+A fresh browser session after dependency restoration repeats normal form login,
+overview/subscriptions/payments, two existing subscription-device cards (all HTTP200,
+authenticated content), and normal logout. No synthetic session, test message or manual
+business mutation is used. Routine auth/session bookkeeping and normal collector projection
+updates are distinct from those read-only verification requests.
+
+Notifications completes a normal invocation at00:32:47UTC with exit0; only then is our
+temporary notifications.timer hold removed. A later automatic invocation completes at
+00:39:12UTC, also success/0. Inventory and probe complete at00:34:51/00:35:00UTC, both
+success/0; each imports3 sources, and inventory technical metadata is IMPORTED. Only then
+are our two user timer holds removed. Subsequent automatic invocations finish successfully
+at00:38:51/00:38:34UTC. Final readback shows all three timers enabled/active/waiting.
+No masks, permanent unit-policy changes or repeated failed dependency loop was introduced.
+
+The original3 inventory UNKNOWN,12 additional inventory markers and14 probe markers match
+their retained names/body hashes/mtimes. The33 prestate support markers remain separately
+preserved. A snapshot during an ordinary running inventory cycle temporarily observed its
+own extra marker; after the successful invocation it disappeared normally and the original
+15/14 sets again matched exactly. No historical marker was deleted or declared settled.
+Ordinary Gate.drain is unchanged and remains strict. Live normal cycles may have in-flight
+Docker execs; the restoration readbacks do not claim a global all-writer drain.
+
+Private evidence remains `/mnt/data/fc-ha02-panel-restore-20261127`, with root-only records
+under `root`, the final browser receipt under `final-browser`, and user invocation/timer/
+marker receipts alongside. No rollback was needed. Retain the same installed console image;
+for a later boot/process loss use a new qualified linked operation from accepted panel01,
+not the old authority/generation. Code-only recovery is distinct from data rollback; never
+restore old data or erase uncertain operations to make a restart succeed.
+
+### Active continuation
+
+The restoration override is complete. Resume mandatory collector binding / OWNER all-writer
+with a fresh prestate and new operation bound to this accepted support process/generation.
+The pre-boot collector-operation-bound directory remains history and must not be replayed.
+Before installing the next collector source, qualify its exact forward-recovery baseline
+variant too:39caf062 intentionally accepts192343eb, not an arbitrary replacement. Continue
+the exact12-file console/publisher bindings and remaining manual/external-dispatch closure,
+then a fresh common capture with held barriers, independent verification and normal resume.
+No such installation/capture happened during restoration; e4eace1a remains historical only.
+Joker, NL2, KeePassXC and historical Family-Connect.kdbx remain recorded custody context;
+actual external copy and laptop-loss access restoration are separate, nonblocking checks.
+
 ## Panel restoration — 26 November23:38UTC /27 November00:38CET
 
 The owner's immediate priority supersedes the earlier activation sequence below: restore

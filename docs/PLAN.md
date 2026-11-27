@@ -16,30 +16,25 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
-**Owner override,27 November00:38CET:** immediate priority is panel/dependency normal-baseline recovery.
-Existing console5ce82415 restored without recreation; real login and5 authenticated page checks PASS.
-PostgreSQL/publisher unchanged. Sudo obtained through local dialog; actual support refusal is
-START_AUTHORITY_CHANGED. Qualified resume separately refuses SOURCE_CLOSURE after accepted collector drift.
-Qualify the exact bounded baseline transition, recover support/NL1/notifications, then restore only our
-two user timer holds and verify completed service invocations. Preserve3+12 inventory and14 probe markers.
-Source correction adds explicit new-preparation selection plus closed-set negative/native resume tests;
-require exact-source native CI before activating recovery tooling, not a collector overlay.
-39caf062:3 CI PASS; native attempt1 retained349/2, same-SHA full repeat pending. No production transition.
-373-file OWNER/NL1 capsules staged/verified only; all3+12/14 user and33 support history markers unchanged.
-Defer new overlays, mandatory collector binding and common capture until that normal baseline is recorded.
-KeePassXC backup questions do not block restoration. [Evidence](releases/2026-11-27-control-ha-owner-resume.md).
+**Owner restoration override completed,27 November01:39CET:** existing console5ce82415 and dependencies
+NORMAL BASELINE PASS. Fresh real login/5 pages/logout, independent IPC/NL1/history and normal notifications
+PASS; both user collectors also completed normal and automatic cycles. Only our holds removed; three timers
+enabled/active/waiting. PostgreSQL/publisher unchanged. Exact39caf062 all4 CI PASS, native351/0 skips;
+new accepted support operation ha02-forward-20261127-panel01, fresh generation/authority, no data rollback.
+All3+12 inventory,14 probe and33 support history markers remain separately unchanged, NOT settled.
+**Active NEXT resumes mandatory collector binding / OWNER all-writer.** Prepare a fresh operation against
+this accepted post-recovery baseline, never replay pre-boot collector-operation-bound. Qualify the exact
+forward-recovery baseline variant for the next collector source before installing it:39caf062 accepts
+only the reviewed192343eb baseline, not an arbitrary newer file set. Then continue exact12-file console/
+publisher bindings, manual/external-dispatch closure and fresh common capture → independent verify → normal
+resume. No new overlays or common capture occurred during restoration. KeePassXC custody remains nonblocking.
+[Evidence and retained failures](releases/2026-11-27-control-ha-owner-resume.md).
 
-**27 November00:05CET reboot checkpoint:** support failed/78, console stopped/127
-(missing support runtime mount); earlier live PID/authority readbacks below are history.
-Current prerequisite inside this NEXT: restore technical root access, inspect retained
-refusal/prestate and perform the qualified linked boot recovery. `sudo -n` currently refuses.
-User readonly-monitor/network-probe timers are held, still enabled; services exited without
-signals. Keep original3 inventory UNKNOWN separate from12 additional inventory and14 probe
-markers; both strict drains refuse, none cleared. Empty Docker ExecIDs is not settlement.
-Exactb7f4cbd2 all5 CI and independent native342/0 skips +5 sandbox PASS;34 local checks PASS.
-Mandatory collector binding remains uninstalled. Both12-file candidate overlays reverified
-against7a91d127; no activation/common capture/normal-resume claim.
-[Recovery ordering and held-unit restoration](releases/2026-11-27-control-ha-owner-resume.md).
+**Historical00:05CET reboot checkpoint:** support refusal, missing runtime mount at Docker
+startup and unavailable root authentication are resolved by the normal baseline above.
+Refusals, prestate, held-unit records and unfinished installation phases remain retained;
+empty Docker ExecIDs never establishes historical dispatch settlement.
+[Recovery and preserved history](releases/2026-11-27-control-ha-owner-resume.md).
 
 **Один NEXT:** установить и независимо проверить OWNER/all-writer barrier, затем получить
 один свежий общий RU/NL1/NL2/OWNER capture → independent verify → normal resume.
@@ -55,10 +50,10 @@ installation pending; exactb7f4cbd2 CI/independent artifact PASS. Приняты
 в заявленном scope. e4eace1a… остаётся историческим sensitive local snapshot, НЕ свежим
 fleet kit: общий цикл требует нового снимка внутри доказанного порядком действий и
 состояниями всех участников интервала. UNKNOWN, markers, очереди/cursor и floors сохраняются.
-Последний independently observed runtime: OWNER PID1051719, authority04fb7553…,
-linked operation ha02-forward-20261126-stop01/source2f4f83dd, generation0b21197a…;
+Последний independently observed runtime: OWNER PID240065, authorityb0c470dc…,
+linked operation ha02-forward-20261127-panel01/source39caf062, generationb75ef2a2…;
 NL1 PID3705,100%CPU/768MiB. Эти pins — observation, не разрешение будущему процессу.
-Support/IPC independently rechecked21:43UTC; notifications штатно success/0,
+Support/IPC/NL1/history independently rechecked27November00:36:59UTC; notifications success/0 at00:39:12UTC,
 timer enabled/active/waiting. Перед изменениями необходим свежий runtime readback.
 OWNER/all-writer gate пока НЕ установлен; свежий source census2/12 в console/publisher.
 Full94fe9760 CI FAIL:20 related standalone/package cases; тогда без installation. Corrected helper
@@ -71,7 +66,7 @@ Root collector component192343eb установлен21:42UTC:4 files, fixed gat
 повтор завершённой operation без redispatch. Первый EROFS/refusal/rollback сохранён как история.
 Все5 workflow точного192343eb PASS, включая phase0 и Linux internal/preview.
 Closed-gate qualification проверяет exact-source exit75 отдельно от invalid gate78/source failure1.
-Installed user inventory gate отдельно отказал UNSETTLED_OPERATION/3 unchanged markers;
+Историческая квалификация25–26November: user inventory gate отказал UNSETTLED_OPERATION/3 unchanged markers;
 probe local drain PASS/0. Fresh admission-only CLI refusal75 подтверждён для обоих;
 manual paths без unit environment и Docker-side completion не считаются закрытыми.
 Нужен сохранённый stopped/external-dispatch proof, не удаление UNKNOWN.

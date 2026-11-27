@@ -1,28 +1,27 @@
 # Текущее состояние / Current state
 
-**27 November01:15CET /00:15UTC — existing panel restored; dependency qualification pending.**
-Local sudo dialog succeeded in the operator execution session, without sudoers/polkit changes.
-Post-boot prestate/refusals/authority/terminal and incomplete collector-install records retained privately.
-Support refused START_AUTHORITY_CHANGED on the new boot; accepted predecessor remains unchanged.
-`/run/family-connect-support` now exists, fc-support:fc-support-ipc0750, systemd RuntimeDirectoryPreserve=yes.
-Docker mount failure22:48:12.937UTC preceded directory creation22:48:14.302UTC; no manual mkdir/chmod needed.
-Started only the existing console5ce82415 container with its exact installed configuration:34 migrations
-already applied,0 pending, no seed_demo. PostgreSQL/publisher IDs/start times/config unchanged.
-Real browser login, overview/subscriptions/payments and2 existing device cards HTTP200, normal logout PASS.
-No messages or business mutations. Full normal baseline is NOT yet accepted: qualified support resume
-refused SOURCE_CLOSURE because the previously accepted192343eb collector install adds2/changes2 baseline files.
-A narrowly pinned recovery-source correction39caf062 is under qualification; no guard bypass or collector change.
-It records only the exact192343eb baseline transition in a new operation, never edits predecessor pins.
-All373 source files match the exact commit on OWNER/NL1; read-only absence preflight proves BOOT_CHANGED.
-Three exact-source CI PASS; native attempt1 has349 PASS/2 prerequisite failures, retained and not accepted.
-The same-SHA complete native repeat is pending; focused8 native resume cases and7 source checks PASS locally.
-No new production operation/authority/generation was prepared. Notifications.timer is additionally held,
-still enabled, to stop failed dependency retries. Restore it and our two user holds only after success.
-The3+12 inventory,14 probe and33 prestate support markers remain separately preserved, not settled.
-New console/publisher overlays, mandatory collector binding and common HA capture are deferred until baseline PASS.
+**27 November01:39CET /00:39UTC — panel and dependencies NORMAL BASELINE PASS.**
+Normal sudo dialog obtained root; post-boot refusals/authority/history/incomplete install phases preserved.
+Actual support refusal START_AUTHORITY_CHANGED and later source-preflight SOURCE_CLOSURE were diagnosed separately.
+Runtime directory is systemd-owned fc-support:fc-support-ipc0750, Preserve=yes; Docker's earlier missing-mount
+failure preceded its creation. The running console sees the same directory inode and reads support IPC as UID10001.
+Existing console5ce82415 only was started; exact ID/config/image retained, no seed_demo or pending migration.
+PostgreSQL and publisher50de6f25 were not recreated/restarted. Fresh real login, overview/subscriptions/payments,
+two existing cards and normal logout PASS; no test messages or manual business mutations.
+Exact39caf062 recovery source: all4 CI PASS; native attempt2 artifact independently verifies351 tests/0 skips
+and5 sandbox cases. Attempt1's349/2 prerequisite refusals remain evidence, not erased or counted as PASS.
+373-file capsules independently verified on OWNER/NL1. New operation ha02-forward-20261127-panel01 opens only
+the fresh generation/authority; support archive621009b8 is unchanged. Independent IPC/NL1/history readback and
+completed-operation repeat PASS without restart. All21 records retained, cursor4, queue0; no data rollback.
+Notifications and both user collectors have completed successful normal and automatic invocations; only our
+holds removed, all three timers enabled/active/waiting. Separate3+12 inventory,14 probe and33 support markers
+remain unchanged, NOT settled. Gate.drain remains strict; no common HA capture or new overlay was installed.
+Active NEXT returns to mandatory collector binding / OWNER all-writer using fresh post-recovery bindings.
+Before changing collector baseline192343eb, qualify its matching forward-recovery source variant; never edit
+this accepted operation or reuse the interrupted pre-boot install plan. Custody remains separate and nonblocking.
 [Recovery evidence](releases/2026-11-27-control-ha-owner-resume.md).
 
-**27 November00:05CET /26 November23:05UTC — continuation after laptop power loss.**
+**Historical27 November00:05CET /26 November23:05UTC — continuation after laptop power loss.**
 Reboot invalidates the earlier live-process observations: support is failed/78 (cause not
 yet independently read), notifications failed; console5ce82415 is stopped/127 with a Docker
 mount error for missing `/run/family-connect-support`. Publisher50de6f25 and PostgreSQL are healthy.
@@ -40,7 +39,7 @@ This is NOT external-dispatch settlement, normal resume or common capture. Root 
 and linked boot recovery are prerequisites within the same OWNER/all-writer NEXT.
 [Exact state, evidence and resume order](releases/2026-11-27-control-ha-owner-resume.md).
 
-**HA-02 continuation:** stopped-support принят владельцем в заявленном scope.
+**HA-02 component/candidate history (current runtime above):** stopped-support принят владельцем в заявленном scope.
 Ближайший результат — установленный OWNER/all-writer barrier, затем свежий общий
 capture → independent verify → normal resume; e4eace1a — только история.
 Custody: Joker, NL2 и KeePassXC известны; история проекта называет Family-Connect.kdbx.
