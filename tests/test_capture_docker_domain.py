@@ -5,7 +5,7 @@ from pathlib import Path
 import pytest
 
 from control.capture_docker_domain import DomainAdmission
-from test_capture_docker import FakeEngine, request
+from test_capture_docker import FakeEngine, isolate_engine_controls, request
 
 
 class EnrolledEngine(FakeEngine):
@@ -31,8 +31,8 @@ def policy(tmp_path):
     config = tmp_path / 'daemon.json'
     config.write_text('{"authorization-plugins":["domain"]}')
     config.chmod(0o600)
-    return DomainAdmission(EnrolledEngine(tmp_path), [tmp_path / 'protected'], pidfile, tmp_path / 'journal',
-        config=config, plugin='domain', parent='fcfixture.slice')
+    return isolate_engine_controls(DomainAdmission(EnrolledEngine(tmp_path), [tmp_path / 'protected'], pidfile,
+        tmp_path / 'journal', config=config, plugin='domain', parent='fcfixture.slice'), tmp_path)
 
 
 @pytest.mark.parametrize('field,value', [('CgroupParent', ''), ('RestartPolicy', dict(Name='always')),

@@ -16,7 +16,14 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
-Current22:25UTC: existing HA key reconciliation/real consumers PASS; external custody remains open.
+Current22:54UTC: native receipt894ffed3 and pre-hookda551d55 exact-source CI SUCCESS. Preserve
+the original native failure plus phase0/Linux's14 fixture permission failures. Isolate fake Engine
+runtime paths without weakening production fail-closed checks;37 focused checks PASS, broad CI
+must requalify this source. Same A NEXT: initial old Docker runtime-generation retirement plus
+bounded recovery, still not installed/qualified as a shared window. No production holds or kit.
+B is separate source/candidate work, no installed schema/writer changes.
+
+Historical22:25UTC: existing HA key reconciliation/real consumers PASS; external custody remains open.
 Initial Docker pre-hook create/start race is reproduced on exact Engine. Next A: qualify old runtime
 generation retirement and bounded recovery; shared-window scope includes14 excluded neighbors,
 so no shared stop is authorized. [Impact and unqualified transition sequence](operators/docker-initial-transition.md).

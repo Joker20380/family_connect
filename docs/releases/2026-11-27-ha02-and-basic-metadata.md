@@ -50,6 +50,27 @@ run46075423497 is in progress, Android46075423494 SUCCESS, other applicable runs
 
 ## Outstanding acceptance
 
+### Exact-source follow-up and distinct broad-CI failure
+
+894ffed37d21553dfb508609002227aa3c7949df native-support46075423497 SUCCESS;
+independent ZIP reader checks artifact15234942307 SHA256
+9595597e7edde17eb7faa9c43ddb1d52e19ad19dffbceaa3d7aa8053329e96b4,
+362 tests/zero skips and exact receipt source. Android46075423494 SUCCESS.
+da551d55fd3b2289d6b373048f39ef54c47445c5 pushed/remote-matched;
+native pre-hook46076761745 and Android46076761677 SUCCESS. Native pre-hook artifact15235576433
+is retained by CI with exact source closure; this does not qualify shared generation retirement.
+
+Original111866ae phase0 artifact15233678699 (SHA256
+9563fa078cd23a95754dcdd535a18a5f00091d04e787578602cbea0d1ccb0283)
+and Linux artifact15234710775 (SHA256
+5cc3505a913e047d756f8e75c130e8954cf2ca51e18e99b5efc92266c27c487e)
+are independently retained/read. Their14 failures are Docker unit fixtures traversing the host's
+root-owned /run/docker/plugins; Python3.13 raises PermissionError, so neighboring/allowed requests
+are refused before their expected result. This is separate from the support JSON race and is not
+a production AuthZ bypass. Fake Engine fixtures now use disposable control-runtime paths, keeping
+/proc,/sys,/dev and testing inaccessible control paths still refuse.37 focused checks PASS on3.14;
+exact broad CI on its own3.13 context remains required. No production code or installation changed.
+
 Initial pre-hook create/start outside the enrolled parent remains unclosed. A shared Docker
 generation maintenance window is not automatically authorized; first qualify its exact impact,
 old runtime completion and bounded recovery. Existing HA key reconciliation now passes;

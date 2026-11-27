@@ -1,5 +1,17 @@
 # Текущее состояние / Current state
 
+**27 November22:54UTC — exact native receipt and pre-hook CI PASS; A transition still blocked.**
+894ffed3 native-support46075423497 SUCCESS, independently checked artifact15234942307:
+362 tests, zero skips, exact source. da551d55 native pre-hook46076761745 SUCCESS; the reproduced
+old create/start effect remains a counterexample, not initial coverage. Original111866ae
+phase0/Linux artifacts independently retain14 Docker unit failures: an unprivileged fixture
+traverses /run/docker/plugins (PermissionError), turning neighbor requests into refusals.
+Fixtures now isolate Engine control paths;37 checks pass, including explicit unreadable-path
+refusal. Production permission checks are unchanged. Exact-source broad CI follows push.
+Existing HA consumer/preservation accepted; no OWNER installation, kit, production holds or shared
+Docker stop. B candidate is built/tested separately and remains uncommitted source work here.
+
+**Historical22:25UTC:**
 **27 November22:25UTC — existing HA consumer accepted; initial Docker transition still blocks A.**
 One local unlock reads the retained encrypted prestate natively; full read-only reconciliation
 accepts prior entries/history/attachments, candidate/working consumers and unchanged encrypted files.

@@ -33,6 +33,14 @@ def request(route, body=None, method='POST'):
                 RequestBody=base64.b64encode(json.dumps(body or {}).encode()).decode())
 
 
+def isolate_engine_controls(policy, root):
+    controls = root / 'engine-control'
+    controls.mkdir()
+    policy.scope.control_paths = [controls / str(index) if str(path).startswith(('/run/', '/var/run/'))
+        else path for index, path in enumerate(policy.scope.control_paths)]
+    return policy
+
+
 @pytest.fixture
 def admission(tmp_path):
     (tmp_path / 'protected').mkdir()
@@ -42,8 +50,19 @@ def admission(tmp_path):
     config = tmp_path / 'daemon.json'
     config.write_text('{"authorization-plugins":["test-plugin"]}')
     config.chmod(0o600)
-    return Admission(FakeEngine(tmp_path), [tmp_path / 'protected'], pidfile, tmp_path / 'journal',
-                     config=config, plugin='test-plugin')
+    return isolate_engine_controls(Admission(FakeEngine(tmp_path), [tmp_path / 'protected'], pidfile,
+        tmp_path / 'journal', config=config, plugin='test-plugin'), tmp_path)
+
+
+def test_unreadable_control_path_still_refuses_admission(admission, monkeypatch):
+    control = admission.scope.control_paths[-1]
+    original = Path.exists
+    def exists(path):
+        if path == control:
+            raise PermissionError('DISPOSABLE_UNREADABLE_CONTROL')
+        return original(path)
+    monkeypatch.setattr(Path, 'exists', exists)
+    assert not admission.request(request('/containers/neighbor/exec'))['Allow']
 
 
 @pytest.mark.parametrize('route,method', [('/containers/protected/exec', 'POST'),
