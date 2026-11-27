@@ -16,7 +16,15 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
-Current20:38UTC: keep one engineering NEXT, Docker executor admission plus real OWNER composition.
+Current21:21UTC: keep one engineering NEXT, Docker executor admission plus real OWNER composition.
+Exact isolated Engine29.1.3 admission experiment q2 succeeds, but proves automatic restart and old
+permitted FD/mmap/detached work bypass admission-only containment. Next bind the resource policy to
+a non-escapable, continuously held executor domain and qualified project resume. Shared management
+failure/reload impact and unexecuted install/recovery plan are explicit in
+[Docker boundary](operators/docker-executor-boundary.md). No production hook/adapter/common kit.
+
+Historical20:38UTC:
+Keep one engineering NEXT, Docker executor admission plus real OWNER composition.
 Fresh both-NL MESH traffic PASS20:30–20:31; previous failures remain unexplained history, not erased.
 Stage-specific read-only existing-key reconciliation qualifies31 tests; the bounded live attempt refuses
 PRESTATE_EXPORT/NATIVE_EXIT/status1, not a permission to repeat activation. Qualify AuthZ/reload/failure effects on a separate exact29.1.3

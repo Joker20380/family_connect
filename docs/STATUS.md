@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+**27 November21:21UTC — Docker direct admission qualified in isolation, not installed.**
+Exact Engine29.1.3 q2 denies protected exec/create/start/restart/unpause/update/archive and resource
+aliases/new IDs, while a normal neighbor exec succeeds. Actual counterexamples preserve the next
+integration gap: already permitted delayed work, detached FD/mmap/rename and automatic restart
+continue after admission close. They require an enrolled, continuously held executor domain, not
+pending0 or another census. Hook/remove-restore and daemon-generation loss invalidate old leases;
+enforcement death also blocks neighbor management. No shared production daemon change is authorized
+by this qualification alone. [Exact impact/install/recovery gate](operators/docker-executor-boundary.md).
+22 focused tests PASS; q2 own-child cleanup confirmed. Exact-source CI follows push. MESH20:30–31
+PASS and existing-vault PRESTATE_EXPORT/NATIVE_EXIT/status1 remain the current bounded readbacks;
+no vault write or new unlock retry. OWNER adapter/kit/linked resume remain absent. Same integration NEXT.
+
+**Historical20:38UTC:**
 **27 November20:38UTC — same Docker executor/integration NEXT; common kit NOT_CREATED.**
 Fresh authorized MESH probes accept both NL1 and NL2:4HTTPS/3DNS/expected egress, family authentication
 and mux PASS at20:30–20:31. Both current invocations started20:07 with NRestarts0; bounded preceding

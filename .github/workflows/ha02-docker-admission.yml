@@ -1,0 +1,72 @@
+name: HA-02 exact Docker executor admission
+on:
+  push:
+    paths: ['control/capture_docker.py', 'tests/test_capture_docker.py', 'tests/fixtures/docker_authz*.py', 'tests/fixtures/run_docker_authz.py', '.github/workflows/ha02-docker-admission.yml']
+  pull_request:
+    paths: ['control/capture_docker.py', 'tests/test_capture_docker.py', 'tests/fixtures/docker_authz*.py', 'tests/fixtures/run_docker_authz.py', '.github/workflows/ha02-docker-admission.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      - run: python -m pip install -r control/requirements.lock -r device_identity/requirements.lock
+      - name: Obtain exact isolated Engine without installing a daemon
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/docker-runtime"
+          cd "$RUNNER_TEMP/docker-runtime"
+          curl --fail --location --max-time 120 -o docker.deb https://be.archive.ubuntu.com/ubuntu/pool/universe/d/docker.io-app/docker.io_29.1.3-0ubuntu4.1_amd64.deb
+          curl --fail --location --max-time 120 -o containerd.deb https://be.archive.ubuntu.com/ubuntu/pool/main/c/containerd-app/containerd_2.2.2-0ubuntu1.2_amd64.deb
+          echo '7a77548bd669f232ec8852092623303be32c55538401ff047b4d1e0bb5ea721d  docker.deb' | sha256sum -c -
+          echo '0ae213a9640206f12edb11cf0aa7fd90f42de0a22a73883f06da002e4381eecc  containerd.deb' | sha256sum -c -
+          dpkg-deb -x docker.deb .
+          dpkg-deb -x containerd.deb .
+          docker pull python@sha256:935c3c5b12357a7e10caa9c1e6ca5692344d97cf229832ef584be2cec9fc03df
+          docker tag python@sha256:935c3c5b12357a7e10caa9c1e6ca5692344d97cf229832ef584be2cec9fc03df python:3.12-slim-bookworm
+      - name: Unit and exact-Engine disposable qualification
+        shell: bash
+        run: |
+          python -m pytest -q tests/test_capture_docker.py --junitxml="$RUNNER_TEMP/docker-unit.xml"
+          sudo timeout -k10 300 env PATH="$RUNNER_TEMP/docker-runtime/usr/bin:$PATH" PYTHONDONTWRITEBYTECODE=1 \
+            /usr/bin/python3 tests/fixtures/run_docker_authz.py --root "$RUNNER_TEMP/fc-owner-executor-ci" \
+            --dockerd "$RUNNER_TEMP/docker-runtime/usr/bin/dockerd" \
+            --containerd "$RUNNER_TEMP/docker-runtime/usr/bin/containerd"
+      - name: Read exact source and cleanup receipts
+        if: always()
+        shell: bash
+        run: |
+          sudo chmod -R a+rX "$RUNNER_TEMP/fc-owner-executor-ci" || true
+          python - <<'PY'
+          import hashlib, json, os, xml.etree.ElementTree as ET
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP'])
+          cases = list(ET.parse(root / 'docker-unit.xml').iter('testcase'))
+          assert len(cases) >= 22
+          assert all(not any(case.find(kind) is not None for kind in ('skipped', 'failure', 'error')) for case in cases)
+          receipt = json.loads((root / 'fc-owner-executor-ci/qualification.json').read_bytes())
+          assert receipt['source']['head'] == os.environ['GITHUB_SHA']
+          assert all(hashlib.sha256(Path(name).read_bytes()).hexdigest() == digest
+                     for name, digest in receipt['source']['files'].items())
+          cleanup = json.loads((root / 'fc-owner-executor-ci/cleanup.json').read_bytes())
+          assert cleanup == dict(errors=[], primary=None, own_children_exited=True)
+          assert not receipt['production_modified'] and not receipt['common_kit']
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: docker-executor-admission
+          path: |
+            ${{ runner.temp }}/docker-unit.xml
+            ${{ runner.temp }}/fc-owner-executor-ci/qualification.json
+            ${{ runner.temp }}/fc-owner-executor-ci/cleanup.json
+            ${{ runner.temp }}/fc-owner-executor-ci/native.log
+            ${{ runner.temp }}/fc-owner-executor-ci/daemon*.log
+            ${{ runner.temp }}/fc-owner-executor-ci/plugin*.log
+          if-no-files-found: error

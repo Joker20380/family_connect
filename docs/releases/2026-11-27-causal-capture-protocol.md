@@ -1,5 +1,28 @@
 # HA-02 common capture preparation — 27 November2026
 
+## Docker direct admission / actual containment counterexamples — 21:21UTC
+
+Source-only `control.capture_docker` and reproducible exact-Engine native harness added; no installed
+component or production Docker configuration changed. Unit22/0 skips PASS. Isolated q2 uses Engine
+29.1.3 binary8f1c19d2, separate containerd and private disposable roots. Direct API resource denials,
+archive-write applicability, old exec/new container ID/mount aliases, delayed admitted request,
+normal neighbor and global management failure, hook-loss/restore, daemon generation and same-process
+lost-release reconciliation are recorded. Actual late effects and automatic restart remain **uncontained**;
+the harness explicitly returns common_kit=false, process_containment=false, owner_adapter_installed=false.
+q2 cleanup: errors=[], primary=null, own_children_exited=true. Local source hashes are in the private
+receipt; its head names the preceding commit because the source was uncommitted. Exact-source CI
+is a separate required push result, not implied by that local receipt.
+
+Private evidence stays in `/mnt/data/fc-owner-executor-20261127` and q1/q2 sibling roots. Initial
+insufficient containerd isolation, protocol failures and malformed fixture failure are retained, not
+mixed with q2 acceptance. Production dockerd remains PID4386/invocation849e0a8d; console610396 and
+publisher613025 remain on the accepted images with empty CgroupParent/unless-stopped. This makes
+continuous physical executor enrollment the next concrete missing guarantee. See the
+[shared-path install/recovery plan](../operators/docker-executor-boundary.md); no global-daemon restart
+or neighboring workload change was used to compensate. MESH20:30–31 PASS is dated; vault native
+PRESTATE_EXPORT refusal still blocks consumer acceptance. No working-vault activation/write was repeated.
+HA-02/custody/restore/reboot/onboarding remain open; no encrypted kit or linked resume is claimed.
+
 ## Existing-key stage diagnostics and fresh MESH baseline — 20:38UTC
 
 Continuation from6d49a829, still one Docker executor/integration NEXT. Real probes using the existing

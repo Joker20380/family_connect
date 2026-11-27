@@ -31,6 +31,10 @@ late start and namespace views before production maintenance. Empty ExecIDs is n
 
 ## Implemented lifetime components
 
+The [exact-Engine AuthZ experiment and deployment gate](docker-executor-boundary.md) now cover direct
+socket admission and archive writes. It also proves automatic restart/old permitted work are **not**
+contained by that admission. Compose a real executor domain; do not reinterpret CLOSE as HELD.
+
 - `LaunchLock`: a dedicated spawned keeper owns the flock, never the callback/controller. It
   acquires once and cannot unlock/reacquire; PID/start/boot/nonce bind its lease. A successor gets
   a different lease and cannot satisfy the old cgroup boundary. Parent-death SIGTERM closes only
