@@ -1,5 +1,17 @@
 # Текущее состояние / Current state
 
+**27 November01:19UTC — both Amsterdam MESH services recovered on unchanged installed bytes.**
+The owner-reported stopped rows were real: both bootstrap services exhausted their restart limits.
+NL1 retained first SIGNAL_READ, subsequent seed_join_failed/provider_timeout receipts; NL2's initiating
+application cause remains unproven. This is separate from accepted panel01/support recovery.
+Fresh installed renewal evaluate NOOP, current credentials valid, no active renewal owner. One bounded
+normal start per node produced new validated READY directories on unchanged70e6c0fc/a597d2a.
+NL1 PID1990396 and NL2 PID2732173 remain active/NRestarts0; RU directory sync succeeded and exact hashes
+match both gateways. Only our brief RU timer holds removed; enabled/active/waiting restored.
+Real panel login/read/logout confirms both Amsterdam MESH rows “Процесс работает”; this is not phone E2E.
+Collector compatibility source is in progress, unqualified/uninstalled; panel01 records and192343eb
+installed collector remain unchanged. [Incident and recovery](releases/2026-11-27-mesh-recovery.md).
+
 **27 November01:39CET /00:39UTC — panel and dependencies NORMAL BASELINE PASS.**
 Normal sudo dialog obtained root; post-boot refusals/authority/history/incomplete install phases preserved.
 Actual support refusal START_AUTHORITY_CHANGED and later source-preflight SOURCE_CLOSURE were diagnosed separately.

@@ -14,6 +14,11 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
+27 November01:19UTC operational interruption: both Amsterdam MESH services recovered on their existing
+installed70e6c0fc runtime; fresh directories validated and replicated, authenticated panel rows working.
+Own RU renewal/directory timer holds removed. No collector/console/publisher candidate activation.
+Continue the same mandatory-collector compatibility/installation NEXT; unfinished tooling is not accepted.
+[MESH evidence and cause limits](releases/2026-11-27-mesh-recovery.md).
 **Owner restoration override completed,27 November01:39CET:** existing console5ce82415 and dependencies
 NORMAL BASELINE PASS. Fresh real login/5 pages/logout, independent IPC/NL1/history and normal notifications
 PASS; both user collectors also completed normal and automatic cycles. Only our holds removed; three timers
