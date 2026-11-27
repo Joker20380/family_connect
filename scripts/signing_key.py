@@ -77,7 +77,7 @@ def vault_archive(args):
     import resource
     resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
     database = private_file(args.vault)
-    memory = os.memfd_create('fc-signing-attachment', os.MFD_CLOEXEC)
+    memory = os.memfd_create('fc-vault-attachment', os.MFD_CLOEXEC)
     password = None
     stage = 'password input'
     try:
@@ -85,7 +85,7 @@ def vault_archive(args):
             raise ValueError('vault size limit')
         if args.vault_password_dialog:
             result = subprocess.run(['/usr/bin/zenity', '--password',
-                '--title=Family Connect: master password for local signing'],
+                '--title=Family Connect: ' + getattr(args, 'vault_purpose', 'master password for local signing')],
                 stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, timeout=600)
             if result.returncode:
                 raise ValueError('password entry cancelled')

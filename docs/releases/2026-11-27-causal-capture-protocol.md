@@ -44,7 +44,7 @@ local sudo dialog; sudoers/polkit are unchanged, and Docker is not used to obtai
 
 ## Review follow-up
 
-27 November16:25UTC, continued from exact ab902e274d9a208fbde16481c794c80fc58c80ef;
+27 November16:18UTC, continued from exact ab902e274d9a208fbde16481c794c80fc58c80ef;
 remote feature matched and main remained da94566acb770dc758a1e057f02bfef784585a75.
 This is source-only review correction, not a production capture or installation.
 
@@ -76,6 +76,29 @@ Outstanding OWNER native-file and remote receiver rows below still prohibit acce
 callback death and physical continuity integration must qualify before production; in-memory protocol
 replay is not fresh-process recovery. HA-02/custody/source-host-free restore/reboot/onboarding stay open.
 Applicable exact-source CI is pending the review-fix push; no pending run is counted as PASS.
+
+Review fix committed/pushed as da50370ed19221598935c98c8609c832aec4b6ad, independently matched
+remote feature. At16:27 causal46032656216, Control panel46032656358 and Android46032656463
+are SUCCESS; native support46032656146, Linux46032656237 and phase046032656208 are still running.
+Predecessor ab902e27 phase046011184148 is SUCCESS. No in-progress run is a PASS.
+
+### Dedicated HA vault consumer
+
+The separate AES consumer and encrypted-candidate preparation use the existing verified
+`vault_archive` memfd reader, not the signing loader. Fixed database/entry/attachment/member and
+purpose, exact32 raw bytes, strict exact-set archive and suppressed CLI diagnostics are tested.
+OS CSPRNG is used only for the new HA entry. Native KeePassXC import/export/readback plus AES-GCM
+roundtrip and existing signing regression:21 PASS, no skips. One initial test assertion incorrectly
+rejected the dialog's explanatory words “No signing key is used”; retained, then corrected to
+check actual CLI entry selection (no product change). Current vault remains unopened/unmodified.
+Preparation intentionally leaves a separately encrypted candidate, not automatic replacement of
+a potentially open vault. [Protected local activation workflow](../operators/ha-wrapping-key.md).
+
+Fresh panel read-only login/overview/subscriptions/payments/two existing cards/logout passes16:19.
+RU's initial16:27 SSH connect timeout is retained; one16:29 confirmation succeeds, IO pressure
+some5.00/full3.41 avg10. No recovery action or root-cause claim. NL1/NL2 preflight shows active MESH
+processes; this is not fresh traffic PASS. Local normal monitor/probe latest invocations exit0.
+Local sudo dialog is pending, not substituted by Docker; no support observer result yet this turn.
 
 ## Finite writer/endpoint matrix
 

@@ -16,7 +16,11 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
-16:25UTC review fixes: active causal validation/replay failures are terminal (118 focused PASS),
+16:31UTC dedicated HA vault consumer/preparation qualifies21 checks on disposable vaults. The
+existing application/roles/destination are unchanged; live key availability/activation still needs
+the protected local workflow, not a key path or secret in chat. Production physical adapters and
+common capture remain the selected task; encrypted candidate preparation is not a recovery kit.
+16:18UTC review fixes: active causal validation/replay failures are terminal (118 focused PASS),
 cleanup cannot replace the original cause. PG17 event-trigger refusal precedes sequence DDL;
 explicit information_schema scope and physical locks qualify26 native checks plus Docker dispatch/
 dump/independent restore/replay. Actual production prerequisites inspected read-only; no triggers,

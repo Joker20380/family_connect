@@ -1,6 +1,15 @@
 # Текущее состояние / Current state
 
-**27 November16:25UTC — review fixes qualified, production integration still incomplete.**
+**27 November16:31UTC — dedicated HA vault consumer qualified on disposable data.**
+21 native/unit tests PASS, including existing signing consumers. Exact Family-Connect.kdbx/
+HA encryption entry/attachment/member/purpose/32-byte AES contract; reader reuses memfd archive
+export, never signing_key.load. Protected preparation creates and verifies an encrypted candidate
+without replacing the live vault. Production vault has not yet been opened; no installed HA key or
+kit is claimed. [Local workflow](operators/ha-wrapping-key.md). OWNER/remote physical integration
+remains required. Panel live authentication/five pages PASS16:19; first RU SSH timeout retained,
+single16:29 confirmation succeeds without intervention (cause unknown); no production hold acquired.
+
+**27 November16:18UTC — review fixes qualified, production integration still incomplete.**
 Checkpoint ab902e27 preserved. Direct active-request/replay faults now terminalize the causal
 participant, preserve the first refusal, and record cleanup outcome separately; correct completed
 replay remains read-only. Focused118 PASS (retained pre-fix5 failures). PostgreSQL read-only preflight
