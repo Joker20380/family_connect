@@ -1,5 +1,15 @@
 # Текущее состояние / Current state
 
+**27 November04:40UTC — new MESH outage overrides capture work.** Fresh process readback finds NL1 inactive
+and NL2 failed; the02:31 traffic PASS is historical, not current availability. Panel login/five existing
+pages/logout passes again04:25; monitor/probe latest invocations0, timers enabled/active/waiting.
+New exact failed-invocation/fatal/systemd/renewal readback and bounded recovery are in progress; no cause
+is inferred from SIGNAL_READ or from a prior startup credential expiry. No common capture is attempted.
+Independent source preparation adds explicit owner-all-writer-runtime-20261127-v1 custody policy:
+188 focused tests/0 skips and actual installed-image isolated synthetic native restore/readback PASS.
+Legacy images/capsules retain their original meaning. This is source/offline qualification, not a
+fleet barrier, external settlement or deployment. [Scope and evidence](releases/2026-11-27-owner-runtime-current.md).
+
 **27 November04:14UTC — mandatory host/manual component INSTALLED; bounded normal checks PASS.**
 owner-user-collectors-mandatory-v1/sourceb49c76c0 covers the canonical manual checkout and both actual
 service roots. Three root-owned bindings pin17/17/8 source files and the existing distinct role gates.

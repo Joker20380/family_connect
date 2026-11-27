@@ -159,6 +159,18 @@ jobs:
           python -m pytest -q --junitxml="$RUNNER_TEMP/user-collector.xml" tests/test_user_collector_binding.py tests/test_capture_collectors.py tests/test_package_capture_collectors.py tests/test_technical_geoip_fleet.py
           sudo /usr/bin/python3 -I -B tests/fixtures/user_collector_binding_native.py > "$RUNNER_TEMP/user-collector-native.json"
           git rev-parse HEAD > "$RUNNER_TEMP/user-collector-source.txt"
+      - name: Explicit installed OWNER custody successor and legacy compatibility
+        run: |
+          python -m pytest -q --junitxml="$RUNNER_TEMP/owner-current.xml" tests/test_control_ha_owner_runtime.py tests/test_control_ha_owner_runtime_current.py
+          git rev-parse HEAD > "$RUNNER_TEMP/owner-current-source.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: owner-current-custody-qualification
+          path: |
+            ${{ runner.temp }}/owner-current.xml
+            ${{ runner.temp }}/owner-current-source.txt
+          if-no-files-found: error
       - uses: actions/upload-artifact@v4
         if: always()
         with:

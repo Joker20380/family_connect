@@ -47,10 +47,10 @@ def build(snapshot, extra_files, started_at_ns, finished_at_ns):
     return value
 
 
-def unpack(value):
+def unpack(value, *, purpose=PURPOSE, names=FILES):
     require(type(value) is dict and set(value) == {'purpose', 'locked_at_ns', 'captured_at_ns', 'barrier_seconds',
             'files', 'activation', 'pg_pair_fence', 'started_at_ns', 'finished_at_ns'} and
-            value['purpose'] == PURPOSE and value['activation'] is False and value['pg_pair_fence'] is False,
+            value['purpose'] == purpose and value['activation'] is False and value['pg_pair_fence'] is False,
             'DOCUMENT_SCOPE')
     require(all(type(value[name]) is int for name in ('started_at_ns', 'locked_at_ns', 'captured_at_ns', 'finished_at_ns')) and
             0 < value['started_at_ns'] <= value['locked_at_ns'] <= value['captured_at_ns'] <= value['finished_at_ns'] and
@@ -58,7 +58,7 @@ def unpack(value):
             value['captured_at_ns'] - value['locked_at_ns'] < capture.SECONDS * 1000000000 and
             type(value['barrier_seconds']) in (int, float) and 0 < value['barrier_seconds'] < capture.SECONDS,
             'CAPTURE_DEADLINE')
-    require(type(value['files']) is dict and set(value['files']) == FILES, 'FILE_COVERAGE')
+    require(type(value['files']) is dict and set(value['files']) == names, 'FILE_COVERAGE')
     files = {}
     for name, body in value['files'].items():
         require(type(body) is str and len(body) <= 2 * capture.LIMIT, 'FILE_BOUNDS')
@@ -69,14 +69,14 @@ def unpack(value):
     return files
 
 
-def environments(files):
+def environments(files, *, images=IMAGES):
     containers = document(files['containers.json'])
-    require(type(containers) is dict and set(containers) == set(IMAGES), 'CONTAINER_COVERAGE')
+    require(type(containers) is dict and set(containers) == set(images), 'CONTAINER_COVERAGE')
     environments = {}
     for role, value in containers.items():
         require(type(value) is dict and set(value) == {'name', 'id', 'image', 'started', 'environment', 'command',
                 'entrypoint', 'mounts', 'labels'} and value['name'] == f'/fc-control-plane-0-{role}-1' and
-                value['image'] == IMAGES[role] and type(value['id']) is str and re.fullmatch('[a-f0-9]{64}', value['id']),
+                value['image'] == images[role] and type(value['id']) is str and re.fullmatch('[a-f0-9]{64}', value['id']),
                 'CONTAINER_BINDING')
         require(type(value['environment']) is list and len(value['environment']) <= 64, 'ENVIRONMENT_BOUNDS')
         entries = [entry.split('=', 1) for entry in value['environment']]
@@ -89,7 +89,7 @@ def environments(files):
     secret = environments['console'].get('DJANGO_SECRET_KEY')
     require(type(password) is str and len(password) >= 20 and not password.startswith('REPLACE_') and
             type(secret) is str and len(secret) >= 48 and not secret.startswith('REPLACE_') and
-            all(environments[role].get('POSTGRES_PASSWORD') == password for role in IMAGES) and
+            all(environments[role].get('POSTGRES_PASSWORD') == password for role in images) and
             environments['system_publisher'].get('DJANGO_SECRET_KEY') == secret, 'CREDENTIAL_BINDING')
     for name in ('env-original', 'env-runtime'):
         selected = {}
@@ -110,8 +110,12 @@ def environments(files):
 
 
 def validate(value):
-    files = unpack(value)
-    environments(files)
+    return validate_files(unpack(value), images=IMAGES, names=FILES)
+
+
+def validate_files(files, *, images, names):
+    require(set(files) == names, 'FILE_COVERAGE')
+    environments(files, images=images)
     aliases = Aliases(document(files['collector-aliases.json']))
     aliases.check_key(files['inventory-hmac.key'])
     require(document(files['panel-aliases.json']) == aliases.document, 'PANEL_COLLECTOR_ALIASES')
@@ -125,7 +129,7 @@ def validate(value):
     require(type(transport) is dict and set(transport) == {'archives'} and type(transport['archives']) is dict,
             'TRANSPORT_CONFIGURATION')
     origins = document(files['origins.json'])
-    require(type(origins) is dict and set(origins) == FILES - {'origins.json'} and
+    require(type(origins) is dict and set(origins) == names - {'origins.json'} and
             all(type(source) is str and 0 < len(source) <= 4096 and
                 not any(ord(character) < 32 for character in source) for source in origins.values()), 'ORIGIN_COVERAGE')
     with closing(sqlite3.connect(':memory:')) as database:
@@ -145,7 +149,7 @@ def validate(value):
                 'SYNTHETIC_FIXTURE_REQUIRED')
         rows = inventory(database)
     return dict(result='OWNER_RUNTIME_OFFLINE_CUSTODY_PASS', files=len(files), tables=rows,
-                alias_generation=aliases.generation, images=len(IMAGES), activation=False, pg_pair_fence=False)
+                alias_generation=aliases.generation, images=len(images), activation=False, pg_pair_fence=False)
 
 
 def seal(value, key):
@@ -178,6 +182,13 @@ def unseal(capsule, key, checkpoint):
 
 def restore(value, destination):
     summary, files = validate(value), unpack(value)
+    restore_files(files, destination)
+    return summary
+
+
+def restore_files(files, destination):
+    require(all(type(name) is str and Path(name).name == name and name not in ('', '.', '..')
+                for name in files), 'RESTORE_FILE_NAMES')
     destination = Path(destination)
     require(destination.is_absolute() and '..' not in destination.parts, 'RESTORE_PATH')
     with Reader().opened(destination.parent) as descriptor:
@@ -198,4 +209,3 @@ def restore(value, destination):
             os.fsync(descriptor)
         finally:
             os.close(descriptor)
-    return summary

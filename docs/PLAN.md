@@ -16,13 +16,20 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
+04:40UTC fresh MESH process readback finds NL1 inactive/NL2 failed. Restore current availability first,
+using exact failed-invocation diagnostics and current renewal/profile authority, not speculative provider
+blocking or blind restart. Panel fresh authenticated five-page check04:25 PASS. Independent preparation:
+explicit owner-all-writer-runtime-20261127-v1 custody successor,188 tests/0 skips and isolated native
+new-image readback PASS; no common capture/permit. Existing accepted collector and installed images
+remain installed. [Current source scope/outage handoff](releases/2026-11-27-owner-runtime-current.md).
 04:14UTC host/manual component INSTALLED: owner-user-collectors-mandatory-v1/sourceb49c76c0, all4 CI PASS,
 independent artifact154 tests/64 namespace cases. Three actual roots,16 source replacements,17/17/8 pins;
 8 direct+8 CLI closed no-env refusals,64 installed-byte namespace cases and4 normal admissions PASS.
 Normal+automatic monitor/probe0, own holds removed, both timers enabled/active/waiting. Seven live-observed
 Docker import terminals0; real panel five pages/logout and observer8b support preservation PASS.
 The accepted root collector and installed12-file images were not reinstalled. Remaining NEXT is external/
-historical-dispatch fencing and compatible new-image OWNER capture tooling, then the held common cycle.
+historical-dispatch fencing and common-cycle integration of the new explicit OWNER custody policy,
+then the held common cycle, after current MESH availability is restored.
 Retain original root119 plus41 later markers, inventory3+12+6 plus8 later, probe14 and support33 separately.
 Intervening RU pressure/collection failures and successful bounded panel recovery are not erased or
 misrepresented as sustained stability. Strict drain still refuses; no capture permit or new common kit.

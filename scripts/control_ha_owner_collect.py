@@ -22,14 +22,23 @@ COMPOSE = frozenset(map(str, (RUNTIME / 'compose.yaml', ORIGINAL / 'compose.yaml
     RUNTIME / '.local/compose.nlgeo-20261122.json')))
 
 
-def selected(raw):
+def policy(baseline):
+    if baseline is None:
+        return custody
+    from scripts import control_ha_owner_runtime_current as current
+    require(baseline == current.BASELINE, 'OWNER_BASELINE_UNKNOWN')
+    return current
+
+
+def selected(raw, *, baseline=None):
+    runtime = policy(baseline)
     require(type(raw) is list and len(raw) == 3, 'CONTAINER_CENSUS')
     result = {}
     for item in raw:
-        roles = [role for role in custody.IMAGES if item['Name'] == f'/fc-control-plane-0-{role}-1']
+        roles = [role for role in runtime.IMAGES if item['Name'] == f'/fc-control-plane-0-{role}-1']
         require(len(roles) == 1 and item['State']['Running'] is True, 'RUNNING_OWNER_REQUIRED')
         role = roles[0]
-        require(role not in result and item['Image'] == custody.IMAGES[role], 'CONTAINER_IMAGE')
+        require(role not in result and item['Image'] == runtime.IMAGES[role], 'CONTAINER_IMAGE')
         result[role] = dict(name=item['Name'], id=item['Id'], image=item['Image'], started=item['State']['StartedAt'],
                            environment=item['Config']['Env'], command=item['Config']['Cmd'],
                            entrypoint=item['Config']['Entrypoint'], labels=item['Config']['Labels'],
@@ -37,12 +46,13 @@ def selected(raw):
     return result
 
 
-def inspect():
-    process = subprocess.run(['docker', 'inspect', *(f'fc-control-plane-0-{role}-1' for role in custody.IMAGES)],
+def inspect(*, baseline=None):
+    runtime = policy(baseline)
+    process = subprocess.run(['docker', 'inspect', *(f'fc-control-plane-0-{role}-1' for role in runtime.IMAGES)],
                              capture_output=True, timeout=15)
     require(process.returncode == 0 and len(process.stdout) < capture.LIMIT, 'CONTAINER_INSPECT')
     raw = custody.document(process.stdout)
-    selected(raw)
+    selected(raw, baseline=baseline)
     return raw
 
 
@@ -68,11 +78,17 @@ package=types.ModuleType('scripts');package.__path__=[];sys.modules['scripts']=p
     return custody.document(process.stdout)
 
 
-def collect(expected):
+def collect(expected, *, baseline=None, extra_reader=None):
+    runtime = policy(baseline)
+    require((baseline is None and extra_reader is None) or (baseline is not None and callable(extra_reader)),
+            'OWNER_EXTRA_READER')
     started = time.time_ns()
-    before = inspect()
-    containers = selected(before)
-    require(containers == selected(expected), 'OWNER_CHANGED_SINCE_PREFLIGHT')
+    extra = {} if extra_reader is None else extra_reader()
+    require(type(extra) is dict and set(extra) == runtime.FILES - custody.FILES and
+            all(type(raw) is bytes for raw in extra.values()), 'OWNER_EXTRA_COVERAGE')
+    before = inspect() if baseline is None else inspect(baseline=baseline)
+    containers = selected(before, baseline=baseline)
+    require(containers == selected(expected, baseline=baseline), 'OWNER_CHANGED_SINCE_PREFLIGHT')
     paths = set()
     for item in containers.values():
         paths.update(item['labels']['com.docker.compose.project.config_files'].split(','))
@@ -92,8 +108,8 @@ def collect(expected):
     snapshot = streamed(containers['console']['id'], 'print(json.dumps(package.control_ha_owner_capture.capture()))')
     reader.verify()
     require(resolved == {name: path.resolve(strict=True) for name, path in paths.items()}, 'INPUT_PATH_CHANGED')
-    after = inspect()
-    require(containers == selected(after), 'OWNER_RUNTIME_CHANGED')
+    after = inspect() if baseline is None else inspect(baseline=baseline)
+    require(containers == selected(after, baseline=baseline), 'OWNER_RUNTIME_CHANGED')
     state = lambda rows: {item['Id']: (item['State']['Pid'], item['State']['StartedAt'], item['RestartCount']) for item in rows}
     require(state(before) == state(after), 'OWNER_RESTARTED')
     files['containers.json'] = capture.encoded(containers)
@@ -101,5 +117,8 @@ def collect(expected):
     origins.update({'synthetic.sqlite': containers['console']['id'] + ':' + str(capture.ROOT / 'registry.sqlite3'),
                     'panel-aliases.json': containers['console']['id'] + ':' + str(capture.ALIASES),
                     'containers.json': 'docker-inspect:three-fixed-owner-containers'})
+    require(extra_reader is None or extra_reader() == extra, 'OWNER_EXTRA_CHANGED')
+    files.update(extra)
+    origins.update({name: 'explicit-custody-reader:' + name for name in extra})
     files['origins.json'] = capture.encoded(origins)
-    return custody.build(snapshot, files, started, time.time_ns())
+    return runtime.build(snapshot, files, started, time.time_ns())

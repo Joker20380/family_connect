@@ -1,0 +1,84 @@
+{
+  "baseline": "owner-all-writer-runtime-20261127-v1",
+  "host_source": "b49c76c02394feaa57a74747dbb75689b087691b",
+  "image_source": "7a91d1278eda8594e448e5794e183e313aed8440",
+  "image_sources": {
+    "control/capture_gate.py": "da28d940e2e17e2dbb1fbbde8cc04c59d29cffc8762ada717135504e2ffa4906",
+    "control_plane/apps/console/backend.py": "cd919dbafad74c34f6034e7e55b24b6d879957c6a1573dee82393b860bb28343",
+    "control_plane/apps/console/management/commands/publish_system_messages.py": "5ef107fbef4d4fb3d54f4c472ded22b956208dd966502ccb50a399b8a7d95e84",
+    "control_plane/apps/console/support.py": "360b485a98370ae6132b61e060378f96cc2d06c4c2602e333cb68b8cab44f1c6",
+    "control_plane/apps/console/system_publisher.py": "9b5b1e296664282a2777ab43c34b322d7476d7e4c732af9373b1d2a49f2f6926",
+    "control_plane/fc_control_plane/capture.py": "0cb1ad0190ddc0d0043c93df80a72f751627a29d054ef104fcf5d1732dca434b",
+    "control_plane/fc_control_plane/db_backend/__init__.py": "36215a73397534d7d4e7fe23fa1fb7e8dd6d5be514ccf76f181ed8e109ce88ef",
+    "control_plane/fc_control_plane/db_backend/base.py": "2e24fa26f38d28e428c2b72d217f7d69010c1cf2c844981a42d6e45953a0f1b7",
+    "control_plane/fc_control_plane/middleware.py": "edaea728f2f9d8e90fd074e1c629ed7ea020512b17fcc5f939e94f9411887928",
+    "control_plane/fc_control_plane/settings.py": "6fadcf946ac17ea4e6d6d7976a6d737e47aec62393bfa3fcea72b557179c50eb",
+    "control_plane/fc_control_plane/wsgi.py": "ce62023b21103fe375120f8e4a1c36ef90b44b5c72293d86388b36a5553a5e5b",
+    "control_plane/manage.py": "0af5a490da43696326a8f0a4e3e98551a399a0f2ea992ac874d27745a2ff234b"
+  },
+  "profiles": {
+    "inventory": {
+      "application": "/mnt/data/fc-subscription-operations-20261107/collector-runtime",
+      "binding": "/etc/family-connect/owner-user-inventory.json",
+      "sources": {
+        "control/capture_gate.py": "da28d940e2e17e2dbb1fbbde8cc04c59d29cffc8762ada717135504e2ffa4906",
+        "control/friends/__init__.py": "efb76720b2ad1c9594aee9488b342e3311ed01a4bff3082c2fa3999663354cc8",
+        "control/friends/pseudonyms.py": "ada9defd475c676e2f27398060ecbbe493a264b030385ae5ef83182b136ab6e9",
+        "control_plane/apps/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "control_plane/apps/console/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "control_plane/apps/console/collector.py": "3272f2ad2a0ac95b4a7c448853fc4bf33f2632cc1fbfaa496b1951a6c00f8bfb",
+        "control_plane/apps/console/metrics_collector.py": "f61c9004d3748011de1cb19bba75f2b6fee8ccaa7d11096f2d9988290a12669e",
+        "control_plane/apps/console/network_probe.py": "8201eabff24510623f821fef0d22f03193f886a5acd5b15ec544c19b14137d01",
+        "control_plane/apps/console/subscription_collector.py": "9739e96cbad59b92ae4366a7295a465b9642c32597712ef375ef113d02b7fbe5",
+        "control_plane/apps/console/technical_metadata_collector.py": "0f0c07e96b44654a18fcbb396666bcdc6f05643bb1c27b20cff6b70e57256540",
+        "control_plane/apps/console/transport_collector.py": "b82e5cdecf86c29ae4e0d3657ef9da71323a88dcf6fb8a6cc02930b18f62eddb",
+        "control_plane/collect_inventory.py": "92650e6c8863945c20816a4c2e0b93bdb6b23e136c83c514bdd98f6031c4cfb1",
+        "control_plane/collect_technical_metadata.py": "3c8495b7fc1a025f5fd4496d1d0ce341e50d43ccc86de5b1c4c7df9a0d066913",
+        "control_plane/collector_admission.py": "bdb9e7711cb21a889a42f663bea49fc2bab371aba5b74eacdce9c4b849954721",
+        "control_plane/collector_binding.py": "19d90668a3d261ceb361e244c6932aa4843f1c9fa3f7bc0d93450250b3dec1b9",
+        "control_plane/monitor_inventory.py": "8856e4454d4ecf68895a22a0d2cff0c87353d91b4ea5500c03383b8cd7aa3923",
+        "control_plane/probe_network.py": "cabe6f1a49f80e6aa9afff8d8f813c921a191a40eb61f7313af110a8037e64eb"
+      },
+      "uid": 1000
+    },
+    "manual": {
+      "application": "/mnt/data/PycharmProjects/family_connect",
+      "binding": "/etc/family-connect/owner-user-collectors.json",
+      "sources": {
+        "control/capture_gate.py": "da28d940e2e17e2dbb1fbbde8cc04c59d29cffc8762ada717135504e2ffa4906",
+        "control/friends/__init__.py": "efb76720b2ad1c9594aee9488b342e3311ed01a4bff3082c2fa3999663354cc8",
+        "control/friends/pseudonyms.py": "ada9defd475c676e2f27398060ecbbe493a264b030385ae5ef83182b136ab6e9",
+        "control_plane/apps/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "control_plane/apps/console/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "control_plane/apps/console/collector.py": "3272f2ad2a0ac95b4a7c448853fc4bf33f2632cc1fbfaa496b1951a6c00f8bfb",
+        "control_plane/apps/console/metrics_collector.py": "f61c9004d3748011de1cb19bba75f2b6fee8ccaa7d11096f2d9988290a12669e",
+        "control_plane/apps/console/network_probe.py": "8201eabff24510623f821fef0d22f03193f886a5acd5b15ec544c19b14137d01",
+        "control_plane/apps/console/subscription_collector.py": "9739e96cbad59b92ae4366a7295a465b9642c32597712ef375ef113d02b7fbe5",
+        "control_plane/apps/console/technical_metadata_collector.py": "77220548de461ff40456a693d2a75fd13b066c32ef12a01d9d5853511b136043",
+        "control_plane/apps/console/transport_collector.py": "8a6e4a2df2b33ebf9a4e3a91dcf2848ab1dbfaf610085439fc5fe5f08f8fa39a",
+        "control_plane/collect_inventory.py": "92650e6c8863945c20816a4c2e0b93bdb6b23e136c83c514bdd98f6031c4cfb1",
+        "control_plane/collect_technical_metadata.py": "b4e024dff980b70d00d2d013b7236e16bd71e95933f7efc6b0ca4c9c09abe5ef",
+        "control_plane/collector_admission.py": "bdb9e7711cb21a889a42f663bea49fc2bab371aba5b74eacdce9c4b849954721",
+        "control_plane/collector_binding.py": "19d90668a3d261ceb361e244c6932aa4843f1c9fa3f7bc0d93450250b3dec1b9",
+        "control_plane/monitor_inventory.py": "8856e4454d4ecf68895a22a0d2cff0c87353d91b4ea5500c03383b8cd7aa3923",
+        "control_plane/probe_network.py": "19ed2bf5e2769cc4f5f1b5bd2b94b4ac74212ecd0059d95f5ff8af6c6cd3f9bf"
+      },
+      "uid": 1000
+    },
+    "probe": {
+      "application": "/home/joker/.local/share/family-connect/control-ha/20261125-collector-activation-4sc56eop/probe-runtime",
+      "binding": "/etc/family-connect/owner-user-probe.json",
+      "sources": {
+        "control/capture_gate.py": "da28d940e2e17e2dbb1fbbde8cc04c59d29cffc8762ada717135504e2ffa4906",
+        "control_plane/apps/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "control_plane/apps/console/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "control_plane/apps/console/collector.py": "3272f2ad2a0ac95b4a7c448853fc4bf33f2632cc1fbfaa496b1951a6c00f8bfb",
+        "control_plane/apps/console/network_probe.py": "8201eabff24510623f821fef0d22f03193f886a5acd5b15ec544c19b14137d01",
+        "control_plane/collector_admission.py": "bdb9e7711cb21a889a42f663bea49fc2bab371aba5b74eacdce9c4b849954721",
+        "control_plane/collector_binding.py": "19d90668a3d261ceb361e244c6932aa4843f1c9fa3f7bc0d93450250b3dec1b9",
+        "control_plane/probe_network.py": "19ed2bf5e2769cc4f5f1b5bd2b94b4ac74212ecd0059d95f5ff8af6c6cd3f9bf"
+      },
+      "uid": 1000
+    }
+  }
+}
