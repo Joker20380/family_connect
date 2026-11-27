@@ -1,5 +1,19 @@
 # Текущее состояние / Current state
 
+**27 November13:54UTC — two source mechanisms qualified; requested production kit still NOT_CREATED.**
+Causal010d8c6c and logical-DB948978bb are pushed/remote verified, not installed. Independent CI
+artifacts verify112 and26 tests/0 skips; all four applicable948978bb workflows now SUCCESS.
+Native four-kernel causal cycle and pinned-image Docker-exec,
+held PG dump/independent restore/late replay qualify only isolated data. Installed read-only schema
+inspection finds39 tables/25 sequences/64 catalogs and takes no production lock. Panel five pages,
+support/IPC and automatic timer cycles pass13:27–13:32. Both MESH have fresh bounded traffic PASS;
+NL2's first13:31 HTTPS parse/read failure and automatic restart history are retained separately,
+not explained away by its13:34 PASS. Both process identities remain active at13:51 with no further
+restart in that interval. No production hold remains; sudo session closed, lab containers
+removed. Production OWNER/remote-file/receiver integration and wrapping-key reference still block
+the common kit; no new stopped-support capture or capture-linked resume occurred. Gate.drain and
+marker groups are unchanged. [Exact bindings, finite matrix, CI and remaining gate](releases/2026-11-27-causal-capture-protocol.md).
+
 **27 November13:25UTC — logical PostgreSQL downstream boundary qualified, not installed.**
 New dedicated-connection boundary covers exact persistent public relations, sequences and catalogs
 with continuously held transaction locks, backend/XID/scope binding and server-enforced deadline.

@@ -190,3 +190,87 @@ Causal checkpoint010d8c6c3dbe77734f6a44ed210e32ea8ecdf72f is committed/pushed an
 matches the feature remote. Causal CI46005005447, Control panel46005005254 and Android46005005298
 are SUCCESS; phase0/Linux/native support are still running at13:25. The new database-boundary
 source's applicable CI must be checked separately after its own push. No source push is deployment.
+
+## Installed schema, final service readback and CI
+
+Read-only execution of the exact new scope inspector inside the unchanged installed console
+uses its effective database configuration and mandatory application admission, plus PostgreSQL
+default_transaction_read_only=on, statement timeout3s/lock timeout100ms. It finds PostgreSQL17.11,
+39 public tables,25 sequences and64 catalog tables; scope SHA256
+69c88ee0af68132a0a0731af76b6cc32fdc9dbf3622a9955e83465049fcd2fe1. No boundary is acquired,
+no service code is replaced, no customer row is read into the report, and no production permit
+is issued. This is compatibility evidence for later integration, not a snapshot/hold.
+
+At13:27–13:28UTC the accepted read-only observer again preserves supportPID240065, archive,
+authority, mailbox generation, cursor and history exactly. Automatic notifications invocation
+23672a4e93684c6dbe42a00e165b4934, bindings1658976d26c646d494aa4fb74093b0d8,
+monitorfceef9895d4e4ec58ac1fd3e13ae1163 and probe0c56710c829948f583cd7e6521b8981c
+complete0; their four timers are enabled/active/waiting. The first final unit query used a nonexistent
+short notifications name; its not-found result is retained separately, not called a dependency outage.
+Actual loaded units are family-connect-subscription-notifications.service/timer.
+Real login, overview, subscriptions, payments, two existing cards and logout pass again13:28:29UTC.
+The three installed containers remain running at their accepted image IDs, restart counts0.
+
+At13:32UTC RU renewal invocationcc8d656c401a45249e1f13d948957b77 and directory-sync
+10ef88db002d4cd4bf1dde6aa2a3b69d have completed0; timers enabled/active/waiting.
+RU IO PSI some9.73/full6.84, disk79%/6GiB available are retained as a later bounded resource sample.
+NL1 PID2854412/invocationefa61ffa253843eb9860d03b47261008 and NL2 PID3225337/invocation
+6cec44a177224139a7343fdc21d70718 are active/running. Restart counts3/6 differ from preflight:
+automatic restart history is not erased or misattributed to a successful probe.
+
+NL1 traffic again passes4HTTPS/3DNS/expected egress at13:30:15UTC. NL2's13:31:18 verification
+**fails**: Family authentication and end-site TLS succeed, but one speed.cloudflare.com stream
+reports HTTPS response invalid, while the other three HTTPS streams pass. DNS/egress were not
+completed. The matching client error site is http.ReadResponse, not an observed SIGTERM or provider
+block. Its underlying parse/read error is not exposed by this binary. Server invocation6cec44a1
+later records RELIABLE_IDLE_TIMEOUT/FAMILY_TLS_ERROR/session close at13:31:38–39; this timing alone
+does not prove they caused the earlier HTTPS failure. Raw private client/journal evidence is kept.
+A single bounded independent recheck at13:34:27 passes4HTTPS/3DNS/expected egress on the unchanged
+NL2 service, with no restart, credential regeneration or policy change. That PASS does not explain
+the earlier refusal or establish sustained MESH stability. Current bounded availability is confirmed;
+no operator recovery or capture-linked normal resume was performed in this iteration.
+At13:51:05/06 both nodes retain those same active PIDs/invocations and restart counts3/6.
+
+Final historical readback still preserves160 prior root markers,29 inventory and14 probe byte/stat
+records. Non-atomic current names remain175/37/14; additions stay separate. Support33 history is
+unchanged. No marker is deleted/whitelisted/settled. No production holds were acquired or remain
+from this iteration; all owned disposable lab containers were removed and the sudo execution
+session was closed. The raw evidence stays private under /mnt/data/fc-ha02-common-20261127.
+
+Exact source and installed bindings:
+
+| Component | Binding |
+| --- | --- |
+| New causal protocol, source-only | 010d8c6c3dbe77734f6a44ed210e32ea8ecdf72f |
+| New logical PG boundary, source-only | 948978bb9a90891f83220d6357537aaad0afa3f2 |
+| Installed console/publisher source | 7a91d1278eda8594e448e5794e183e313aed8440 |
+| Console image, unchanged | sha256:3af9fbf95b36b33f1c0414ac41b84687f502391e311ff0bc35658cbf50da5cb1 |
+| Publisher image, unchanged | sha256:35158514371e2a321643dbfe4b64b9a87a9b85b32228a5184d2c95e3b8ac19e8 |
+| PostgreSQL image, unchanged | sha256:18cfe3ef5e6815560c98237d6216d1e5119702fb0f3894c8785dd58b8bbe5d73 |
+| Installed three-root manual bindings | b49c76c02394feaa57a74747dbb75689b087691b |
+| Installed root collector | owner-collectors-b7f4cbd2 / b7f4cbd2b96750cb9c97eee61f27a9881d5b4bdb |
+| Accepted observer/stopped/recovery | 8b9355db6a114e13f53d3d7298060057acb06da8 |
+| Prepared OWNER custody policy | d7d8b9a939a9b7d4aed548bf6f1d09b196fee437 |
+
+Both new source commits are pushed with matching independently read remote feature SHA;
+main remains da94566a. On010d8c6c, causal46005005447, Control panel46005005254,
+Android46005005298, native support46005005552 and phase046005005470 are SUCCESS.
+Linux46005005386 is CANCELLED, not PASS; the workflow has branch-scoped cancel-in-progress,
+and the newer source has its own run. No failed invocation is silently overwritten.
+
+Independent download/read of artifact15201425262 checks exact010d8c6c source,112 tests/0 skips,
+exact native module/adapter hashes and four queued/replayed synthetic journals. ZIP SHA256
+cb52aec261f0e75ec7a0f00731dc67c1994e9f9cbdaa128f69bef1228a8d04fd.
+For948978bb, all four applicable workflows finish SUCCESS by13:53:40UTC: Control panel46007308956,
+Android46007309280, phase046007309101 and Linux46007309159. Independent artifact15202367773 binds exact
+948978bb and26 checks/0 skips (20 boundary+6 late imports); ZIP SHA256
+19f398ba2b07cdd853fbeb1e8f5c44039970a5c61a5f95cd5d7a89c7380ca005.
+
+**Iteration completion remains NOT_PASS.** There is no real encrypted kit/common production
+interval/new stopped-support snapshot/independent encrypted-kit verification/linked resume.
+The immediate next implementation is the OWNER causal adapter combining this exact logical DB
+boundary with mandatory local gates and native-file boundaries, followed by the remaining matrix's
+receiver/profile-file coverage. RU /friends/notices/publish and peer/operator profile/file paths
+still need continuously held receiver-side proofs in the same operation. Arbitrary old SQL/native
+work cannot be declared replay-safe solely from the qualified import cases. The separately supplied
+32-byte HA wrapping-key reference is still unspecified; no release/signing key is substituted.

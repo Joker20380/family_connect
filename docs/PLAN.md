@@ -16,6 +16,16 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
+13:54UTC source010d8c6c/948978bb pushed/remote verified; all four applicable948978bb CI SUCCESS,
+independent artifacts112/26 zero-skips,
+native four-kernel causal cycle and exact-image20-case logical DB boundary plus actual Docker exec,
+held dump/independent restore/late replay qualified on isolated data. Actual installed schema read-only
+compatibility39/25/64 PASS, no production lock. Fresh panel/support/timers and latest both MESH
+traffic pass; retain NL2's separate13:31 HTTPS response failure and restart history. No new production
+kit/stopped snapshot/linked resume, no own holds left. **Same next step:** integrate the OWNER causal
+adapter with logical PostgreSQL, mandatory local gates/native files, then remaining receiver/file rows;
+require complete coverage and a separately supplied wrapping key before the real common operation.
+
 13:27UTC adds a qualified logical PostgreSQL boundary (20 checks plus a real pre-existing Docker
 exec/held dump/independent restore/late replay on exact installed images, synthetic data only).
 The logical mechanism now exists; production OWNER integration, native file paths and remote
