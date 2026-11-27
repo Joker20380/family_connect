@@ -18,6 +18,15 @@ is not refreshed. SQLite rollback/BEGIN between checks cannot become the old lea
 format is unchanged; the new pair receipt explicitly does not verify a stopped-support hash or
 authorize fleet capture. Exact-source CI follows push; no pending run is reported as PASS.
 
+Source6f942ec79d01dce707e91f7130b9b56480577106 pushed/remote-matched. Its first native workflow
+46059047882 fails3 Docker-create setup cases; the other31 execute successfully,0 skipped.
+Independent failed artifact15228355735 verifies ZIP SHA256
+9181303300eafadb6feca94e06b8582eb6320c1c605a4df5865adc996295f214. The original fixture failed to
+surface Docker stderr, so no exact daemon cause is claimed. The corrected fixture addresses the
+manifest-vs-config image-ID ambiguity using `postgres@sha256:18cfe3ef…`, validates RepoDigests and
+resolved container Image, and preserves bounded daemon diagnostics on failure. Product images are
+unchanged. Fresh exact-source CI is mandatory; no blind rerun or skipped failing case.
+
 Retained qualification failures: rename across mounts returned EXDEV rather than EROFS; systemctl
 serialized Conditions as `[unprintable]`; separate busctl clients let an inactive unit unload.
 The final implementation checks actual typed conditions over a single bounded sd-bus connection.

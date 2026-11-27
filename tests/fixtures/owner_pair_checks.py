@@ -21,15 +21,19 @@ def database():
     assert os.readlink('/proc/self/ns/mnt') != os.readlink('/proc/1/ns/mnt')
     assert psycopg.__version__ == '3.3.6'
     name = 'fc-ha02-pair-lab-' + uuid.uuid4().hex
-    image = os.environ.get('FC_OWNER_LAB_POSTGRES',
-        'sha256:18cfe3ef5e6815560c98237d6216d1e5119702fb0f3894c8785dd58b8bbe5d73')
+    image = 'postgres@sha256:18cfe3ef5e6815560c98237d6216d1e5119702fb0f3894c8785dd58b8bbe5d73'
     def docker(*args):
-        return subprocess.run(['docker', *args], check=True, capture_output=True, timeout=30).stdout
+        result = subprocess.run(['docker', *args], capture_output=True, timeout=30)
+        assert result.returncode == 0, ('LAB_DOCKER_COMMAND_REFUSED', args[0], result.stderr.decode()[-4096:])
+        return result.stdout
+    inspected, = json.loads(docker('image', 'inspect', image))
+    assert image in inspected['RepoDigests']
     docker('create', '--name', name, '--label', 'family-connect.owner-pair-lab=' + name,
         '--read-only', '--tmpfs', '/var/lib/postgresql/data:rw', '--tmpfs', '/var/run/postgresql:rw',
         '--publish', '127.0.0.1::5432', '--env', 'POSTGRES_PASSWORD=synthetic-owner-lab',
         '--env', 'POSTGRES_DB=fc_owner_lab', image)
     try:
+        assert docker('inspect', name, '--format', '{{.Image}}').decode().strip() == inspected['Id']
         docker('start', name)
         port = docker('port', name, '5432/tcp').decode().strip().split(':')[1]
         options = dict(host='127.0.0.1', port=int(port), user='postgres', password='synthetic-owner-lab',

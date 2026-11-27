@@ -9,6 +9,10 @@ components, NOT the production OWNER adapter. First unclosed row remains console
 launch/old exec/private-mount descendants; host unit/flock closure is not daemon-side authority.
 Stopped-support lifetime/independent receipt integration and RU notice/peer receiver files remain
 open. [Exact finite domains and required integration](operators/owner-maintenance-boundary.md).
+First exact-source CI6f942ec7 native run46059047882 retains3 Docker-create setup errors;31/34 cases
+pass with0 skips. The fixture now uses the pinned repository digest, not an ambiguous bare image-ID
+spelling, validates its resolved image and preserves Docker stderr. A later green run is not by
+itself proof of the original daemon error; the first artifact is retained independently.
 
 No production capture admission/hold/stop was acquired; installed baselines remain unchanged.
 Real panel login/five existing pages/logout PASS19:33; observer8b PASS19:35, root notifications and

@@ -17,6 +17,8 @@
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
 Current19:45UTC: finite maintenance components qualify34 local cases, not production OWNER closure.
+Exact-source native CI6f942ec7 failed3 fixture setup cases; require corrected digest binding and
+fresh CI rather than counting the local PASS as CI acceptance. Preserve the original failed artifact.
 Implement actual console/publisher Docker launch-domain authority and finish real stopped-support
 lifetime/independent reader binding; then the outstanding RU notice export and peer/receiver file rows.
 Do not reinterpret native mounts or host launch locks as Docker executor coverage. Exact matrix and
