@@ -6,6 +6,51 @@ Main remains da94566acb770dc758a1e057f02bfef784585a75. Accepted installed compon
 and source-only Docker111866ae are not reinstalled. A has production priority;
 B changes are separate source/candidate work, never a production binding change during A.
 
+## Current outcome —27 November23:20UTC
+
+A is **not complete**: no installed OWNER executor adapter, common held interval, new stopped-support
+snapshot, encrypted fleet kit, independent kit verification or linked normal resume. The concrete
+unclosed channel is create/start already accepted before first AuthZ attachment, with downstream
+containerd/shim work outside the mandatory parent. Online reload is disproved by the native test;
+finite old-generation retirement/recovery is not qualified. A shared-window proposal affects14
+excluded neighboring containers and cannot be executed under project-only authorization. Next step
+is that isolated generation-retirement/recovery qualification, not another census or production stop.
+Existing HA AES key native read/preservation/real consumer now pass; it is not the current blocker.
+Normal baseline is preserved: fresh authenticated NL1/NL2 HTTPS/DNS/egress, panel login/pages and
+collector/timer cycles pass; support PID/archive/authority/generation and marker history remain.
+No own production restrictions remain because none were acquired. No reboot-startup claim.
+
+B has actual implementation and a privately retained arm64 debug candidate, **not public rollout
+acceptance**. Sourceba56974853b69e37330dc210edb678cd79cd6cb9, candidate SHA256
+33e29f759a5740af98d028d15795d3483713931726f7ce11740059e9c1e8730e (52692778 bytes);
+a separate reader checks exact bytes, ZIP integrity, package/version and arm64 candidate build.
+215c7fcb9174588c4cfa43e9545cd83e9cbf0d97 changes fixtures/docs only;61537b1f5b7df2ecf0faf221a6d2bfedf8521923
+adds CI path coverage, not runtime code. Both pushes and remote feature SHA are verified; main remains
+da94566acb770dc758a1e057f02bfef784585a75. All actual installed A images/bindings remain unchanged.
+
+| Exact source | Gate | Observed result |
+| --- | --- | --- |
+| 894ffed3 | native-support46075423497 | SUCCESS; independent362-case artifact, zero skips |
+| da551d55 | native pre-hook46076761745 | SUCCESS as counterexample only; five source hashes/cleanup independently checked |
+| 274499b7 | Docker46079367737 / phase046079367830 / readiness46079367713 | SUCCESS |
+| 274499b7 | Linux46079367749 | FAILURE in root-owned Python3.14 launcher setup; not explained away |
+| ba569748 | readiness46079823247 | SUCCESS |
+| ba569748 | panel46079823152 / client46079823170 | FAILURE; old installed-fixture/source-guard assumptions corrected separately |
+| 215c7fcb | readiness46080709370 | SUCCESS |
+| 215c7fcb | client46080709374 | FAILURE: carrier/roombroker TestCredentialExchangeCancelBeforeCommit, cancellation extended the generation |
+| 61537b1f | panel46081203523 | SUCCESS, including full corrected installed-custody qualification |
+| 215c7fcb / 61537b1f | phase046080709385, Linux46080709373 / phase046081203525 | IN_PROGRESS at23:17 readback, not PASS |
+
+Failed Android artifact15236672338 is downloaded and independently SHA-checked:
+275a2697374550995587f0ac9f66c06bd541fb028027407ead55c0d5bd032164. Its actual log reports
+TestCredentialExchangeCancelBeforeCommit at credential_exchange_test.go:364, not a guessed cause.
+The carrier source is unchanged in B; no retry, skip, timeout increase or unrelated repair is made.
+Local candidate compilation/18 JVM checks and96 protocol/collector,32 disposable-panel checks do not
+override that full-client gate. Native UI/restore/storage-fault acceptance, per-field processing
+basis and store declaration remain open; public BASIC_METADATA_APPROVED stays false. No public
+version/catalog/signature changes. External custody, source-host-free restore, reboot-startup and
+FLEET-PRODUCTION-ONBOARDING-1 remain separate open criteria.
+
 ## A: atomic native fixture receipt
 
 Native-support46072376405 at111866ae failed359/360 in

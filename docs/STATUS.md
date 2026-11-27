@@ -1,5 +1,22 @@
 # Текущее состояние / Current state
 
+**27 November23:20UTC — checkpoint: A common kit blocked; B candidate built, not release-ready.**
+Panel46081203523 SUCCESS on61537b1f5b7df2ecf0faf221a6d2bfedf8521923, including corrected
+installed-custody fixtures with unchanged manifest/pins. Android readiness46080709370 SUCCESS
+on215c7fcb; client build46080709374 FAIL in unchanged carrier TestCredentialExchangeCancelBeforeCommit
+("cancellation extended the generation"); artifact15236672338 retained/read. No retry/skip or
+carrier change is used to claim acceptance. Broad phase0/Linux on215c7fcb and phase0 on61537b1f
+are still pending at23:17 readback.274499b7 phase046079367830 and native Docker46079367737 SUCCESS.
+Separate arm64 B APK is retained privately (sourceba569748, checksum33e29f75); local compile/JVM,
+protocol and disposable panel checks pass, native UI/restore/storage and public legal/store gates
+remain open. No production install, schema/writer mutation or public enablement.
+A's single NEXT remains old Docker handlers/containerd/shim generation fencing before the installed
+OWNER adapter: initial pre-hook create/start outside the parent is not covered. The shared-window
+plan is unqualified/unapproved (14 excluded neighbors); no shared stop or common kit/verify/resume.
+Existing HA key/native preservation consumer accepted; fresh NL1/NL2 traffic and normal services
+pass, no own holds. HA-02/custody/source-host-free restore/reboot/onboarding stay separately open.
+
+**Historical23:07UTC:**
 **27 November23:07UTC — fresh MESH PASS; B candidate separated from installed A pins.**
 NL1 23:00:55 / NL2 23:02:00: authenticated native MESH,4 HTTPS/3 DNS and expected egress each;
 normal probe cleanup and unchanged identity. No recovery/restart was needed. Root/user service

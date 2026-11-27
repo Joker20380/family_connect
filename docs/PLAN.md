@@ -16,6 +16,16 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
+Current23:20UTC checkpoint: A remains blocked by the initial pre-hook Docker execution channel,
+not the HA key or a proven MESH outage. Qualify finite retirement of the old handler/containerd/shim
+generation and bounded recovery, then obtain explicit shared-window scope before affecting14
+excluded neighbors. No installed OWNER adapter/common kit/linked resume. Do not weaken Gate.drain.
+B source/candidate implemented separately; panel exact61537b1f and wire215c7fcb CI pass. Full client
+CI on215c7fcb fails unchanged carrier TestCredentialExchangeCancelBeforeCommit; preserve its artifact,
+do not claim native/public acceptance. Broad CI pending; native UI/storage/restore, per-field basis,
+store disclosure and post-A deployment/source-binding gates remain. See the current release report.
+
+Historical23:07UTC:
 Current23:07UTC: MESH baseline refreshed on both NL (HTTPS/DNS/egress PASS), no current proven
 outage or restart loop. Existing HA consumer accepted. A remains blocked by pre-hook create/start
 outside the enrolled parent; qualify shared old-runtime retirement/recovery without touching14
