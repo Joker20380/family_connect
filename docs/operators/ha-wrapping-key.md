@@ -64,6 +64,17 @@ password, damaged database or changed secret. Resolve local unlock/read access u
 dialog before another bounded read. Secret contents are never printed. A `reconciled.json` plus
 real-consumer PASS is required before claiming activation; it still does not prove external custody.
 
+Read-only reconciliation records STARTED and terminal receipts separately for PRESTATE_EXPORT,
+WORKING_EXPORT, CANDIDATE_CONSUMER, WORKING_CONSUMER and PRESERVATION_COMPARE. Each contains only
+the stage, bounded category and native exit status (null for a pure comparison or timeout), never
+XML, CLI stderr, entry contents or key/password bytes. Additional local-unlock and encrypted-file
+pre/post checks are also explicit. A killed reader's STARTED record is not a completed stage.
+Original failed records and encrypted prestate are immutable; a new reader attempt never repeats
+add/import. The caller may pass the local unlock in memory to the purpose-separated real HA consumer
+for both vaults; its memfd reader and exact archive decoder are qualified on disposable vaults.
+No second password dialog is needed within that attempt and none may occur in a capture interval.
+Do not reinterpret NATIVE_EXIT as a wrong password or expand comparison normalization to force PASS.
+
 Joker remains responsible for signer/pins/floors; ciphertext destination remains
 NL2 `/opt/apps/family_connect/ha-recovery/`. External custody and access after laptop loss are
 separate unverified requirements. Vault preparation does not close HA-02 or source-host-free restore.

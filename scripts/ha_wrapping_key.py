@@ -59,9 +59,49 @@ def decode(raw):
         raise ValueError('HA_ARCHIVE_INVALID') from None
 
 
-def load(vault):
+class ConsumerRefused(ValueError):
+    def __init__(self, category, exit_status=None):
+        super().__init__('HA_MEMORY_CONSUMER_REFUSED')
+        self.category, self.exit_status = category, exit_status
+
+
+def memory_archive(vault, password):
+    resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
+    require(type(password) is bytes and password and b'\n' not in password and b'\r' not in password,
+            'HA_LOCAL_UNLOCK_INPUT')
+    database = memory = None
+    try:
+        database = private_file(vault)
+        require(os.fstat(database).st_size <= LIMIT, 'HA_VAULT_SIZE')
+        memory = os.memfd_create('fc-ha-consumer', os.MFD_CLOEXEC)
+        result = subprocess.run(['/usr/bin/keepassxc-cli', 'attachment-export', '-q',
+            f'/proc/self/fd/{database}', ENTRY, ATTACHMENT, f'/proc/self/fd/{memory}'],
+            input=password + b'\n', stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+            pass_fds=(database, memory), timeout=120)
+        if result.returncode:
+            raise ConsumerRefused('NATIVE_EXIT', result.returncode)
+        require(os.fstat(memory).st_size <= 8192, 'HA_ARCHIVE_SIZE')
+        os.lseek(memory, 0, os.SEEK_SET)
+        return decode(os.read(memory, 8193))
+    except ConsumerRefused:
+        raise
+    except subprocess.TimeoutExpired:
+        raise ConsumerRefused('TIMEOUT') from None
+    except OSError:
+        raise ConsumerRefused('PRIVATE_INPUT_REFUSED') from None
+    except ValueError:
+        raise ConsumerRefused('FORMAT_REFUSED', 0 if memory is not None else None) from None
+    finally:
+        for descriptor in (database, memory):
+            if descriptor is not None:
+                os.close(descriptor)
+
+
+def load(vault, *, password=None):
     vault = Path(vault)
     require(vault.name == DATABASE, 'HA_VAULT_DATABASE')
+    if password is not None:
+        return memory_archive(vault, password)
     try:
         raw = vault_archive(SimpleNamespace(vault=vault, vault_entry=ENTRY, vault_password_dialog=True,
             vault_purpose='HA custody encryption — unlock local vault'))

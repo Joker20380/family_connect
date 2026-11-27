@@ -3,6 +3,7 @@ import subprocess
 import base64
 import gzip
 import json
+import os
 import sys
 
 import pytest
@@ -74,6 +75,67 @@ def test_binary_reference_reordering_preserves_bytes_not_numeric_indices():
             '<Value Ref="' + index + '"/></Binary></Entry></Group></Root></KeePassFile>').encode()
     assert activation.entries(xml('0', b'old attachment')) == activation.entries(xml('7', b'old attachment'))
     assert activation.entries(xml('0', b'old attachment')) != activation.entries(xml('0', b'changed'))
+
+
+@pytest.mark.parametrize('failed_stage', ['PRESTATE_EXPORT', 'WORKING_EXPORT',
+    'CANDIDATE_CONSUMER', 'WORKING_CONSUMER', 'PRESERVATION_COMPARE'])
+def test_native_read_only_stage_receipts(tmp_path, monkeypatch, failed_stage):
+    password = b'disposable stage test password'
+    actual = subprocess.run
+    working = tmp_path / wrapping.DATABASE
+    result = actual(['/usr/bin/keepassxc-cli', 'db-create', '-p', '-t', '100', str(working)],
+        input=password + b'\n' + password + b'\n', capture_output=True, timeout=30)
+    assert result.returncode == 0
+    working.chmod(0o600)
+
+    def dialogs(command, **options):
+        if command[0] == '/usr/bin/zenity':
+            return subprocess.CompletedProcess(command, 0, password + b'\n')
+        if command[0] == '/usr/bin/pgrep':
+            return subprocess.CompletedProcess(command, 1)
+        return actual(command, **options)
+
+    monkeypatch.setattr(activation.subprocess, 'run', dialogs)
+    wrapping.prepare(working, tmp_path / 'candidate')
+    candidate = tmp_path / 'candidate' / wrapping.DATABASE
+    journal = tmp_path / 'activation'
+    activation.activate(candidate, working, journal)
+    activation.record(journal, 'failed.json', dict(cause='ORIGINAL_RESPONSE_LOSS'))
+    first = (journal / 'failed.json').read_bytes()
+    if failed_stage == 'PRESERVATION_COMPARE':
+        added = actual(['/usr/bin/keepassxc-cli', 'add', '-q', str(working), 'unexpected'],
+            input=password + b'\n', capture_output=True, timeout=30)
+        assert added.returncode == 0
+    original = working.read_bytes()
+
+    def refused(command, **options):
+        if command[0] == '/usr/bin/keepassxc-cli':
+            path = Path(os.readlink(command[3]))
+            stage = ('PRESTATE_EXPORT' if path.name == 'working-before.kdbx' else 'WORKING_EXPORT')
+            if command[1] == 'attachment-export':
+                stage = 'CANDIDATE_CONSUMER' if path.parent.name == 'candidate' else 'WORKING_CONSUMER'
+            if stage == failed_stage:
+                options['input'] = b'intentionally incorrect disposable password\n'
+        return dialogs(command, **options)
+
+    monkeypatch.setattr(activation.subprocess, 'run', refused)
+    with pytest.raises(activation.StageRefused) as raised:
+        activation.reconcile(candidate, working, journal)
+    assert raised.value.stage == failed_stage
+    receipt, = journal.glob(f'reconcile-*-{failed_stage}.json')
+    data = json.loads(receipt.read_bytes())
+    assert data['stage'] == failed_stage and data['vault_write'] is False
+    if failed_stage == 'PRESERVATION_COMPARE':
+        assert data['category'] == 'PRESERVATION_CHANGED' and data['exit_status'] is None
+    else:
+        assert data['category'] == 'NATIVE_EXIT' and data['exit_status'] != 0
+    assert (journal / 'failed.json').read_bytes() == first
+    assert working.read_bytes() == original
+    assert not (journal / 'reconciled.json').exists()
+    postcheck, = journal.glob('reconcile-*-WORKING_POSTCHECK.json')
+    assert json.loads(postcheck.read_bytes())['category'] == 'PASS'
+    for receipt in journal.glob('reconcile-*.json'):
+        assert password not in receipt.read_bytes() and b'<KeePassFile' not in receipt.read_bytes()
 
 
 def test_open_gui_refuses_before_vault_write(tmp_path, monkeypatch):

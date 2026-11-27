@@ -61,6 +61,12 @@ def preserved(before, after):
     key.require(titles == [key.ENTRY], 'HA_UNEXPECTED_ENTRY_ADDED')
 
 
+class StageRefused(ValueError):
+    def __init__(self, stage, category, exit_status=None):
+        super().__init__('HA_RECONCILIATION_STAGE_REFUSED')
+        self.stage, self.category, self.exit_status = stage, category, exit_status
+
+
 def reconcile(candidate, working, journal):
     resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
     candidate, working, journal = Path(candidate), Path(working), Path(journal)
@@ -68,35 +74,110 @@ def reconcile(candidate, working, journal):
     key.require((journal / 'entry-created.json').is_file() and (journal / 'failed.json').is_file(),
                 'HA_RECONCILE_PHASE_REQUIRED')
     key.require(not (journal / 'reconciled.json').exists(), 'HA_RECONCILE_ALREADY_RECORDED')
-    dialog = subprocess.run(['/usr/bin/zenity', '--password', '--title=Family Connect — read-only HA reconciliation',
-        '--text=Только проверка рабочей Family-Connect.kdbx и сохранённой зашифрованной копии. Повторного добавления записи не будет.'],
-        stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, timeout=600)
-    key.require(dialog.returncode == 0, 'HA_LOCAL_UNLOCK_CANCELLED')
-    password = dialog.stdout.rstrip(b'\n')
-    dialog = None
-    key.require(password and b'\n' not in password and b'\r' not in password, 'HA_LOCAL_UNLOCK_INPUT')
+    attempt = str(time.time_ns())
+    password = encrypted = failure = None
+    postchecked = False
+
+    def staged(stage, callback):
+        category, status = 'PASS', None
+        record(journal, f'reconcile-{attempt}-{stage}-started.json', dict(stage=stage,
+            category='STARTED', exit_status=None, vault_write=False, attempt=attempt))
+        try:
+            value, status = callback()
+        except key.ConsumerRefused as error:
+            category, status = error.category, error.exit_status
+        except subprocess.TimeoutExpired:
+            category = 'TIMEOUT'
+        except OSError:
+            category = 'PRIVATE_INPUT_REFUSED'
+        except (ValueError, ET.ParseError):
+            category = 'PRESERVATION_CHANGED' if stage == 'PRESERVATION_COMPARE' else 'FORMAT_REFUSED'
+        except Exception:
+            category = 'UNEXPECTED_REFUSAL'
+        try:
+            record(journal, f'reconcile-{attempt}-{stage}.json', dict(stage=stage,
+                category=category, exit_status=status, vault_write=False, attempt=attempt))
+        except Exception:
+            if category == 'PASS':
+                category = 'RECEIPT_WRITE_REFUSED'
+        if category == 'PASS':
+            return value
+        raise StageRefused(stage, category, status) from None
+
+    def unlock():
+        dialog = subprocess.run(['/usr/bin/zenity', '--password',
+            '--title=Family Connect — read-only HA reconciliation',
+            '--text=Только чтение working/prestate/candidate одним локальным unlock. Записи не добавляются.'],
+            stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, timeout=600)
+        if dialog.returncode:
+            raise key.ConsumerRefused('UNLOCK_CANCELLED', dialog.returncode)
+        value = dialog.stdout.rstrip(b'\n')
+        key.require(value and b'\n' not in value and b'\r' not in value, 'HA_LOCAL_UNLOCK_INPUT')
+        return value, dialog.returncode
+
     def export(path):
         descriptor = private_file(path)
         try:
             result = subprocess.run(['/usr/bin/keepassxc-cli', 'export', '-q', f'/proc/self/fd/{descriptor}'],
                 input=password + b'\n', stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
                 pass_fds=(descriptor,), timeout=120)
-            key.require(result.returncode == 0, 'HA_RECONCILE_NATIVE_READ_REFUSED')
-            return entries(result.stdout)
+            if result.returncode:
+                raise key.ConsumerRefused('NATIVE_EXIT', result.returncode)
+            try:
+                return entries(result.stdout), result.returncode
+            except Exception:
+                raise key.ConsumerRefused('FORMAT_REFUSED', result.returncode) from None
         finally:
             os.close(descriptor)
+
+    def encrypted_read(path):
+        descriptor = private_file(path)
+        try:
+            key.require(os.fstat(descriptor).st_size <= key.LIMIT, 'HA_VAULT_SIZE')
+            raw = os.read(descriptor, key.LIMIT + 1)
+            key.require(len(raw) == os.fstat(descriptor).st_size, 'HA_VAULT_READ_RACE')
+            return raw
+        finally:
+            os.close(descriptor)
+
+    def unchanged():
+        if encrypted_read(working) != encrypted:
+            raise key.ConsumerRefused('WORKING_BYTES_CHANGED')
+        return True, None
+
     try:
-        encrypted = working.read_bytes()
-        preserved(export(journal / 'working-before.kdbx'), export(working))
-        key.require(hmac.compare_digest(key.load(candidate), key.load(working)), 'HA_EXISTING_KEY_MISMATCH')
-        key.require(working.read_bytes() == encrypted, 'HA_VAULT_CHANGED_DURING_RECONCILE')
+        encrypted = staged('WORKING_PRECHECK', lambda: (encrypted_read(working), None))
+        password = staged('LOCAL_UNLOCK', unlock)
+        before = staged('PRESTATE_EXPORT', lambda: export(journal / 'working-before.kdbx'))
+        after = staged('WORKING_EXPORT', lambda: export(working))
+        candidate_key = staged('CANDIDATE_CONSUMER', lambda: (key.load(candidate, password=password), 0))
+        working_key = staged('WORKING_CONSUMER', lambda: (key.load(working, password=password), 0))
+        def compare():
+            preserved(before, after)
+            if not hmac.compare_digest(candidate_key, working_key):
+                raise key.ConsumerRefused('KEY_MISMATCH')
+            return True, None
+        staged('PRESERVATION_COMPARE', compare)
+        postchecked = True
+        staged('WORKING_POSTCHECK', unchanged)
         result = dict(result='EXISTING_HA_ENTRY_ACTIVATED_REAL_CONSUMER_PASS', reconciliation_read_only=True,
             other_entries_unchanged=True, prior_failure_retained=True, new_key_generated=False,
-            whole_vault_replaced=False, capture_started=False, external_custody=False)
+            whole_vault_replaced=False, capture_started=False, external_custody=False,
+            working_bytes_unchanged=True, attempt=attempt)
         record(journal, 'reconciled.json', result)
         return result
+    except BaseException as error:
+        failure = error
+        raise
     finally:
-        password = None
+        if encrypted is not None and not postchecked:
+            try:
+                staged('WORKING_POSTCHECK', unchanged)
+            except Exception:
+                if failure is None:
+                    raise
+                failure.add_note('HA_RECONCILIATION_POSTCHECK_REFUSED')
+        password = candidate_key = working_key = before = after = None
 
 
 def activate(candidate, working, journal):
@@ -190,11 +271,14 @@ def main():
         cause = str(error) if re.fullmatch('HA_[A-Z_]{1,96}', str(error)) else type(error).__name__
         if args.reconcile and args.journal.is_dir():
             try:
-                record(args.journal, 'reconcile-refused-' + str(time.time_ns()) + '.json',
-                       dict(result='HA_RECONCILIATION_REFUSED', cause=cause, vault_write=False))
+                detail = dict(result='HA_RECONCILIATION_REFUSED', cause=cause, vault_write=False)
+                if isinstance(error, StageRefused):
+                    detail.update(stage=error.stage, category=error.category, exit_status=error.exit_status)
+                record(args.journal, 'reconcile-refused-' + str(time.time_ns()) + '.json', detail)
             except Exception:
                 pass
-        parser.exit(1, 'HA_ACTIVATION_REFUSED: ' + cause + '; no admission closed; preserve private phase evidence\n')
+        label = 'HA_RECONCILIATION_REFUSED' if args.reconcile else 'HA_ACTIVATION_REFUSED'
+        parser.exit(1, label + ': ' + cause + '; no admission closed; preserve private phase evidence\n')
 
 
 if __name__ == '__main__':

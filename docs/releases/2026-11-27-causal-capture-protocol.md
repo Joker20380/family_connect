@@ -1,5 +1,33 @@
 # HA-02 common capture preparation — 27 November2026
 
+## Existing-key stage diagnostics and fresh MESH baseline — 20:38UTC
+
+Continuation from6d49a829, still one Docker executor/integration NEXT. Real probes using the existing
+authorized identity return family_authenticated=true,4HTTPS,3DNS,expected_egress=true,mux_pass=true
+for NL1 at1795811406 and NL2 at1795811467 (20:30:06/20:31:07UTC). At20:27 the current invocations are
+NL1 2fdff7e5defb4bd1a97f51f0ac8f8803/PID3425043 and NL2 f49083009e474f27baa9c9cb919e8d51/PID3518703,
+both started20:07 with NRestarts0. The preceding90-minute diagnostics contain no fatal/SIGNAL_READ;
+this is not proof of the cause of older client partial/timeouts. No manual restart/recovery or retry
+loop was needed for this bounded successful readback. Earlier evidence is retained unchanged.
+
+Read-only existing-key reconciliation now writes separate immutable STARTED and terminal receipts
+for PRESTATE_EXPORT, WORKING_EXPORT, CANDIDATE_CONSUMER, WORKING_CONSUMER, PRESERVATION_COMPARE and
+the local-unlock/working-byte checks. Native exit status is retained without CLI stderr/XML/contents.
+The real HA memfd consumer accepts an in-memory local unlock; no signing-key loader, new production
+key, repeated add/import or whole-vault replacement. Comparison normalization is unchanged. Native
+disposable-vault faults distinguish all five requested stages;31 tests PASS/0 skips. First local
+test invocation had five fixture failures from a missing test import; its XML is kept separately.
+The bounded local read attempt1795811841524672035 refuses specifically at PRESTATE_EXPORT,
+category NATIVE_EXIT, status1. LOCAL_UNLOCK returned0, which is not proof the database unlocked.
+Original failed records/encrypted prestate are retained; no later stage or working-key acceptance is
+inferred. No activation/add/import was repeated, nor is the exit diagnosed as a password/corruption cause.
+Exact-source CI follows push; no pending result is called PASS.
+
+Private evidence: `/mnt/data/fc-owner-executor-20261127`. The separate Docker Engine is exact installed
+29.1.3, dockerd SHA2568f1c19d27e182ce6c82ddfd900d596195b0fd9d6740a9ff1ccac584e04355cb0,
+with distinct socket, data/exec roots, vfs and disabled bridge/firewall management. Production daemon,
+containers and installed source/image bindings have not changed. No capture interval/kit/resume.
+
 ## Final source checkpoint and live readback — 20:07UTC
 
 **Result: incomplete OWNER integration; encrypted kit NOT_CREATED, HA-02 OPEN.** No production

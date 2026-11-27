@@ -1,5 +1,17 @@
 # Текущее состояние / Current state
 
+**27 November20:38UTC — same Docker executor/integration NEXT; common kit NOT_CREATED.**
+Fresh authorized MESH probes accept both NL1 and NL2:4HTTPS/3DNS/expected egress, family authentication
+and mux PASS at20:30–20:31. Both current invocations started20:07 with NRestarts0; bounded preceding
+diagnostics contain no fatal/SIGNAL_READ. This does not explain the preserved earlier partial failures.
+No manual recovery/restart loop was used. Read-only vault reconciliation now has separate stage/category/
+exit-status receipts and qualifies31 disposable/native checks. The bounded local read refuses specifically
+PRESTATE_EXPORT/NATIVE_EXIT/status1; production preservation/consumer acceptance remains incomplete.
+Working-vault add/import must not be repeated and the native exit is not itself a password diagnosis.
+Docker AuthZ candidate work uses a separate Engine29.1.3/socket/data-root; the production daemon and
+accepted installations are unchanged. Admission alone will not constitute writer containment or a kit.
+
+**Historical checkpoint6d49a829:**
 **27 November — same NEXT; final live readback20:07UTC, kit NOT_CREATED.**
 Source16f27176cb6f0d47d00d7032b9c5c8248863b322 is pushed and remote-matched. Native CI46061368347
 SUCCESS:37 cases/0 skips; separate artifact reader verifies exact source/member set/XML and artifact

@@ -16,6 +16,13 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
+Current20:38UTC: keep one engineering NEXT, Docker executor admission plus real OWNER composition.
+Fresh both-NL MESH traffic PASS20:30–20:31; previous failures remain unexplained history, not erased.
+Stage-specific read-only existing-key reconciliation qualifies31 tests; the bounded live attempt refuses
+PRESTATE_EXPORT/NATIVE_EXIT/status1, not a permission to repeat activation. Qualify AuthZ/reload/failure effects on a separate exact29.1.3
+Engine before touching the working management path. Previously accepted components remain installed.
+
+Historical checkpoint6d49a829:
 Current final readback20:07UTC: common capture is still prohibited by real Docker executor/launch and
 stopped-support/custody-format integration plus remote file rows. Source16f27176cb6f0d47d00d7032b9c5c8248863b322
 is pushed/remote-matched; native CI46061368347 SUCCESS37/0 skips, exact artifact15228164580 independently
