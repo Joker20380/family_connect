@@ -32,6 +32,25 @@ Initial lab Docker bridge setup failed (docker0 absent); no host network repair 
 Only the disposable test container was recreated on loopback port53487. The first psql setup used
 the wrong default port; retained separately, corrected to53487. Neither is a production outage claim.
 
+### Carrier cancellation correction
+
+Original client artifact15236672338/275a2697 remains unchanged. A deterministic test holds the
+context's asynchronous Reset callbacks, cancels at the client-commit Write boundary, and demonstrates
+that old MuxStream.Write still admits it. This identifies a transport admission defect, not a claim
+that the historical CI scheduler followed that exact interleaving. MuxStream now remembers its
+OpenTCP request context and checks cancellation synchronously under its queue lock before enqueue.
+No timeout increase, retry, removed assertion or change to renewal commit semantics.
+Post-transfer cancellation is not retroactive: another deterministic barrier at server-committed
+proves the peer generation advanced, client generation did not, and both sessions close. Existing
+corrupt/lost-confirmation and partial-commit runtime tests remain. Focused Go race qualification
+passes both tcpforward and roombroker. A broader single go test -race ./... retains separate failures
+in publisher-recovery's configuration test and Telemost local process/idle fixtures (including an
+unsynchronized diagnostic bytes.Buffer read). These are not silently rerun to PASS or attributed to
+the repaired metadata/renewal defect. Exact client workflow remains mandatory.
+Phase0 failed artifact15237149062 is retained/read (SHA256
+6f3d6b8351817a4b9f7dad84f1a0ed750dfc452532836c66223c5524ca3c20a2), Linux15237569058 retained/read
+(414eab843a69484386af903f0ce974aa1fa19eddc58ea9c9a578edd600cde446). Source-only; no carrier installed.
+
 A is **not complete**: no installed OWNER executor adapter, common held interval, new stopped-support
 snapshot, encrypted fleet kit, independent kit verification or linked normal resume. The concrete
 unclosed channel is create/start already accepted before first AuthZ attachment, with downstream

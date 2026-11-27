@@ -11,6 +11,11 @@ PG17.11 installed-v1 import/business/replay qualification55/55 and panel34/34 pa
 database. Full exact-source CI pending. No production changes or new kit/holds.
 Active NEXT: deterministic carrier cancellation, then isolated finite initial Docker transition
 and basic Android runtime acceptance. Shared production Docker/neighbor stop remains excluded.
+Carrier now rejects writes synchronously against the OpenTCP request context, before enqueue;
+delayed Reset cannot admit a post-cancel client-commit. Deterministic pre-fix refusal retained;
+focused race checks pass, including actual peer commit followed by cancellation/closed sessions.
+Broader local go test -race ./... fails separately in publisher-recovery configuration and Telemost
+local-process diagnostics/data race/idle deadline; full CI is not claimed green.
 
 **Historical27 November23:20UTC — checkpoint: A common kit blocked; B candidate built, not release-ready.**
 Panel46081203523 SUCCESS on61537b1f5b7df2ecf0faf221a6d2bfedf8521923, including corrected

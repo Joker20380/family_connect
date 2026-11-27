@@ -21,6 +21,9 @@ qualify carrier cancellation ordering, then the same isolated initial Docker gen
 with bounded recovery and the existing B Android candidate. Production shared daemon/neighbor
 stop and AuthZ installation excluded. New B schema requires a new versioned HA restore contract;
 no importer weakening or automatic migration. No kit or HA-02 acceptance.
+Carrier pre-enqueue cancellation defect has a deterministic regression and synchronous transport
+fix; exact-source CI remains required. Preserve separate broad local Go failures. Continue the
+finite Docker transition and native Android gates, without any production shared-runtime action.
 
 Historical23:20UTC:
 Current23:20UTC checkpoint: A remains blocked by the initial pre-hook Docker execution channel,

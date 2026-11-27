@@ -25,6 +25,78 @@ type renewalTestChannel struct {
 	transform func([]byte) []byte
 }
 
+type delayedRenewalReset struct{ context.Context }
+
+func (ctx delayedRenewalReset) Value(key any) any { return nil }
+func (ctx delayedRenewalReset) AfterFunc(callback func()) func() bool {
+	return func() bool { return true }
+}
+
+func TestCredentialExchangeCancelBeforeEnqueueWithResetDelayed(test *testing.T) {
+	profiles := newRotationProfiles(test, true)
+	fixture, results := renewalExchangeFixture(test, profiles, nil)
+	before := fixture.secured.SecurityDeadline()
+	clientNext, serverNext := profiles.successor(test, false)
+	replaceRotationProfile(test, fixture.path, serverNext)
+	parent, cancel := context.WithCancel(fixture.ctx)
+	defer cancel()
+	ctx := delayedRenewalReset{parent}
+	reached := false
+	err := exchangeCredentials(test, fixture, clientNext, ctx, func(raw []byte) []byte {
+		if bytes.Contains(raw, []byte(`"kind":"client-commit"`)) {
+			reached = true
+			cancel()
+		}
+		return raw
+	})
+	if !reached || err == nil || awaitCredentialResult(test, results) == nil {
+		test.Fatal("cancel-before-enqueue not rejected", err)
+	}
+	if !fixture.secured.SecurityDeadline().Equal(before) || !fixture.clientSecured.SecurityDeadline().Equal(before) {
+		test.Fatal("cancelled write delivered commit before delayed reset")
+	}
+}
+
+func TestCredentialExchangeCancelAfterPeerCommitRecordsActualPhase(test *testing.T) {
+	profiles := newRotationProfiles(test, true)
+	committed, release := make(chan struct{}), make(chan struct{})
+	fixture, results := renewalExchangeFixture(test, profiles, func(raw []byte) []byte {
+		if bytes.Contains(raw, []byte(`"kind":"server-committed"`)) {
+			close(committed)
+			<-release
+		}
+		return raw
+	})
+	before := fixture.secured.SecurityDeadline()
+	clientNext, serverNext := profiles.successor(test, false)
+	replaceRotationProfile(test, fixture.path, serverNext)
+	ctx, cancel := context.WithCancel(fixture.ctx)
+	defer cancel()
+	completed := make(chan error, 1)
+	go func() { completed <- exchangeCredentials(test, fixture, clientNext, ctx, nil) }()
+	select {
+	case <-committed:
+	case <-time.After(3 * time.Second):
+		close(release)
+		test.Fatal("peer did not reach committed phase")
+	}
+	cancel()
+	close(release)
+	if awaitCredentialResult(test, completed) == nil || awaitCredentialResult(test, results) == nil {
+		test.Fatal("ambiguous commit reported success")
+	}
+	if !fixture.secured.SecurityDeadline().After(before) || !fixture.clientSecured.SecurityDeadline().Equal(before) {
+		test.Fatal("actual peer commit phase was lost")
+	}
+	for _, session := range []*familysession.Session{fixture.clientSecured, fixture.secured} {
+		select {
+		case <-session.Done():
+		case <-time.After(time.Second):
+			test.Fatal("ambiguous commit left live unilateral authorization")
+		}
+	}
+}
+
 func (channel renewalTestChannel) Write(raw []byte) (int, error) {
 	if channel.transform != nil {
 		raw = channel.transform(bytes.Clone(raw))

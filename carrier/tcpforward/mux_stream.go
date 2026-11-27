@@ -16,6 +16,7 @@ type MuxStream struct {
 	mux              *Mux
 	id               uint32
 	ctx              context.Context
+	openContext      context.Context
 	cancel           context.CancelFunc
 	stop             func() bool
 	writeMu          sync.Mutex
@@ -90,6 +91,7 @@ func (mux *Mux) OpenTCP(ctx context.Context, request OpenRequest) (*MuxStream, e
 		return nil, ErrIDExhausted
 	}
 	stream := mux.makeStreamLocked(mux.nextID)
+	stream.openContext = ctx
 	stream.lease = lease
 	mux.nextID += 2
 	payload, _ := json.Marshal(request)
@@ -217,6 +219,10 @@ func (stream *MuxStream) Write(payload []byte) (int, error) {
 	defer mux.mu.Unlock()
 	total := 0
 	for len(payload) > 0 {
+		if stream.openContext != nil && stream.openContext.Err() != nil {
+			stream.resetLocked(ErrReset)
+			return total, stream.openContext.Err()
+		}
 		if stream.terminal != nil {
 			return total, stream.terminal
 		}
