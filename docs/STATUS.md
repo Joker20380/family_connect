@@ -1,6 +1,24 @@
 # Текущее состояние / Current state
 
-**27 November02:31UTC — fresh panel/MESH checks; OWNER/all-writer continues.**
+**27 November03:10UTC — exact12-file console/publisher component INSTALLED and checked.**
+Baseline owner-console-publisher-7a91d127: console3af9fbf9 and publisher35158514 are running their
+exact12 pinned files, effective installed configuration and separate mounted gates. Original containers
+are retained stopped for code-only rollback; PostgreSQL PID/volume and support are unchanged.
+HTTP503 while closed/200 after reopening, both fresh no-environment ORM/management refusal paths,
+normal admitted ORM reads, applied migration plan and later publisher cycles PASS. Real login/five
+existing pages/logout PASS.22 business/fleet/authorization/migration table counts+row digests unchanged;
+ordinary observation tables and normal authentication/session updates are not claimed frozen.
+Seven normal Docker imports have matched create/start/exec_die0 evidence, not just client completion.
+Only own user timer holds removed; successful initial and later automatic cycles, enabled/active/waiting.
+Observer8b9355db preserves supportPID240065/archive/authority/NL1 generation/cursor/history; notifications0.
+Root119, inventory3+12+6 and probe14 are byte/metadata-identical; support33 remains separately preserved.
+Strict local drain passes for the new empty console/publisher gates only. Full all-writer/capture remains
+NOT_PASS: host collector manual/no-environment and direct technical-metadata entry still need closure;
+older external dispatch history is not settled by these recent receipts. No common capture was attempted.
+Console still requires the support runtime directory before startup; automatic reboot startup is unqualified.
+[Installed bindings, preserved refusals, rollback and remaining gate](releases/2026-11-27-owner-installed-console-publisher.md).
+
+**Historical27 November02:31UTC — fresh panel/MESH checks before replacement.**
 Real panel login/five existing pages/logout PASS; compatible read-only observer8b9355db preserves
 supportPID240065/authorityb0c470dc/NL1 generationb75ef2a2. NL1 traffic4HTTPS/3DNS/expected exit PASS.
 Its exact failed invocation81d9b8d records WebSocket CONNECTION_RESET with active context, exit1;
@@ -25,8 +43,9 @@ authorityb0c470dc and NL1 generationb75ef2a2; authenticated panel five pages/log
 refuses UNSETTLED_OPERATION. Source-only exclusive maintenance is NOT drain/capture/dispatch settlement.
 Original inventory3+12 and probe14 retained;6 additional inventory markers dated00:43–01:10UTC are separately
 retained (before this install), not folded into the original UNKNOWN3. Support33 remains separate.
-NEXT: exact12-file console/publisher candidates, remaining manual/ORM/CLI and external dispatch settlement,
-then fresh common capture/independent verify/normal resume. No all-writer/common-capture PASS yet.
+This mandatory-component handoff preceded the now installed12-file console/publisher component.
+NEXT remains host manual/external-dispatch closure, then common capture/independent verify/normal resume.
+No full all-writer/common-capture PASS yet.
 [Installed result, exact pins, tests and limits](releases/2026-11-27-mandatory-collector-transition.md).
 
 **Historical01:19UTC — both Amsterdam MESH services recovered on unchanged installed bytes.**
@@ -59,7 +78,7 @@ Notifications and both user collectors have completed successful normal and auto
 holds removed, all three timers enabled/active/waiting. Separate3+12 inventory,14 probe and33 support markers
 remain unchanged, NOT settled. Gate.drain remains strict; no common HA capture or new overlay was installed.
 That restoration handoff is complete: mandatory owner-collectors-b7f4cbd2 and compatible8b9355db tooling
-are installed and accepted. Current NEXT is console/publisher and remaining manual/external writers.
+are installed and accepted. The console/publisher step is also installed; NEXT is remaining host manual/external writers.
 Do not edit the accepted panel01 operation or reuse the pre-boot plan. Console verification must check
 the support runtime-directory mount before startup; restoration did NOT fix or prove automatic reboot startup.
 Custody remains separate and nonblocking.
@@ -89,13 +108,13 @@ capture → independent verify → normal resume; e4eace1a — только ис
 Custody: Joker, NL2 и KeePassXC известны; история проекта называет Family-Connect.kdbx.
 Уточняются только фактическая off-laptop copy и laptop-loss recovery;
 custody не ограничена USB и не блокирует engineering.
-[Текущий checkpoint](releases/2026-11-26-control-ha-owner-all-writer.md).
-Direct-ORM guard подготовлен, НЕ установлен. Full94fe9760 CI выявил20 связанных standalone/package
+[Исторический checkpoint](releases/2026-11-26-control-ha-owner-all-writer.md).
+На26 November Direct-ORM guard был подготовлен, ещё не установлен. Full94fe9760 CI выявил20 связанных standalone/package
 отказов; тогда установка не выполнялась. Исправлены Django-free cleanup, общий scope двух import paths
 и reviewed helper pins:383 panel/101 standalone + native image activation/revert PASS;
 329 OWNER/gate checks ранее PASS. Все4 workflow точного7a91d127 PASS;
 full-pytest artifact15153881426 независимо сверён, failure/error IDs пусты.
-Текущие support bindings и cursor/queue повторно проверены; рабочие контейнеры не изменены.
+Тогдашние support bindings и cursor/queue были повторно проверены; рабочие контейнеры тогда не изменялись.
 **21:42–21:43UTC: root collector barrier установлен и независимо проверен.**
 4 exact files192343eb; gate внутри /var/lib/fc-support-bindings, без изменения unit permissions.
 Оба oneshot и direct API отказали75 при закрытии; exact projection bytes совпали.
