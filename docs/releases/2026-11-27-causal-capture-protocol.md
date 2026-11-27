@@ -1,5 +1,43 @@
 # HA-02 common capture preparation — 27 November2026
 
+## Final operational readback and exact-source native artifact — 21:52UTC
+
+Source111866ae9f212765ca534a3bcf48befc85ba9031 is committed, pushed and matched to the feature remote;
+main remains da94566acb770dc758a1e057f02bfef784585a75. Native Docker CI46072376420 SUCCESS. Independent
+reader downloads artifact15234245063, checks ZIP SHA256
+`ddb6a0799174ea274fda59fd24fa134295554d388e56be2a93a7950b3fb114b6`, exact20 members, exact8-file source
+closure against git111866ae,36 passing cases/0 skips, all four domain-mode receipts and cleanup.
+The independent result explicitly retains installed_owner_adapter=false/common_kit=false. This is
+component qualification, not a recovery-kit verification. Android46072376388 SUCCESS;
+phase046072376425/native-support46072376405/Linux46072376409 remain pending at21:50. Earlier
+10581ad7 Docker failure/artifact and local q3/q5/q6 failures remain separate, not erased by this success.
+
+Fresh authorized NL1/NL2 traffic at1795815812/1795815873 (21:43:32/21:44:33UTC) each confirms4HTTPS,
+3DNS, expected egress, family authentication and mux. No manual restart or repeated-until-pass loop.
+The accepted read-only observer8b at21:43:36 returns ACCEPTED_SUPPORT_READ_ONLY_NORMAL and
+MANDATORY_BOUND_NO_ENVIRONMENT; PID240065, archive/authority, NL1 generation, history and cursor match
+the accepted panel01 closure. Completed Resume.run was not used. Root bindings invocation
+3fc247deb9dd4911b1c088744c8d92b6 completes0 at21:43:35; notificationsb323f36740ae40eab5a90eb5c425c06f
+completes0 at21:43:23; both timers enabled/active/waiting. User cycles/timers and real authenticated
+panel readback are recorded below. These are fresh normal-baseline observations, not a linked resume
+from a capture that never started. Systemd manager reloads for disposable slice units did not restart
+product services; the working Docker daemon was not reconfigured/reloaded and remains PID4386 with
+invocation849e0a8de257429892b378bcfc482fcf.
+
+Explicit lab cleanup verifies q4/q5/q6/q7 cgroups and transient unit files absent and all own children
+exited. The two early disposable container records in the initially reused containerd namespace return
+NOT_FOUND; no unrelated container was stopped. Root execution session closed21:51:39. No own production
+gate/hold was acquired or remains. Evidence and original UNKNOWN groups (root119, inventory3+12+6,
+probe14, support33) are not deleted/whitelisted/settled; strict Gate.drain is unchanged.
+
+The existing vault still fails the bounded read-only PRESTATE_EXPORT with native exit1; no further
+activation, import, key generation or whole-file replacement. Successful local read of the retained
+encrypted prestate plus working/candidate consumer and preservation comparison remain required.
+No password, entry contents or key is in this report. Initial Docker pre-hook dispatch containment is
+the one selected engineering gap; source-only qualification is not its production installation.
+Full OWNER and remote receiver composition, common encrypted kit and linked normal resume remain
+unperformed. Independent custody/source-host-free restore/reboot/onboarding retain their separate gates.
+
 ## Resource-enrolled Docker domain composition — 21:45UTC
 
 `control.capture_docker_domain` combines mandatory parent/private-namespace/restart=no admission
@@ -24,7 +62,7 @@ registry manifest digest. No unobserved cause of the earlier CI failure is asser
 Commits already remote-verified: abd4b7f80fcca64fb08a6f4808d80e5b1abc28f5 (vault diagnostics; all four
 applicable workflows SUCCESS),10581ad702d8106f39db02e5bfa190c0493a1962 (admission checkpoint;
 phase0/Android/native-support SUCCESS, Docker FAILED, Linux pending at21:41). Main unchanged da94566a.
-No product reinstallation/shared daemon reload/stop/admission hold occurred. Panel real login/five
+No product reinstallation/production Docker daemon reload/stop/admission hold occurred. Panel real login/five
 existing pages/logout PASS21:36:48, no test messages/business mutations. User monitor invocation
 9c7c6869019047ba87eee03bea7b72d6 exits0 at21:41:09; probe74589cfae519470f99da7ee59d81a00e exits0
 at21:40:42; both timers enabled/active/waiting. Current vault consumer remains NOT_ACCEPTED at

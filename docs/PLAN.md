@@ -16,7 +16,15 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
-Current21:45UTC: same Docker executor/integration NEXT. Source-only enrolled-domain composition q7
+Current21:52UTC: source111866ae9f212765ca534a3bcf48befc85ba9031 is pushed/remote-matched;
+native Docker CI46072376420 and independent artifact15234245063 verification PASS (20 members,
+36/0 skips, exact8-file closure). Keep the same initial-cutover/enrollment integration NEXT below.
+Fresh both-NL traffic, accepted observer, panel and ordinary timers/services PASS; no own production
+holds remain. No common encrypted kit/verify/linked resume; existing-vault prestate export still refuses.
+No accepted component was reinstalled. Other applicable CI is reported separately, not assumed green.
+
+Historical21:45UTC:
+Same Docker executor/integration NEXT. Source-only enrolled-domain composition q7
 passes real clean child/FD/mmap termination, retained physical freeze on enforcer/controller loss and
 normal lab resume. It is NOT an installed OWNER adapter. Next prove initial attachment/enrollment:
 pre-hook Docker create/start with protected volumes must not run outside the configured parent.

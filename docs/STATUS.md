@@ -1,5 +1,20 @@
 # Текущее состояние / Current state
 
+**27 November21:52UTC — source checkpoint111866ae; common kit NOT_CREATED.**
+Exact Docker native CI46072376420 SUCCESS; independent reader verifies artifact15234245063:
+20 members, all8 source hashes at111866ae9f212765ca534a3bcf48befc85ba9031,36 tests/0 skips,
+physical-fault cleanup and normal disposable-container resume. This does NOT install OWNER or prove
+initial production cutover. Android also SUCCESS; phase0/native-support/Linux pending at21:50.
+Fresh NL1/NL2 traffic21:43:32/21:44:33 PASS4HTTPS/3DNS/expected egress/authentication/mux each.
+Observer8b21:43:36 PASS, same supportPID240065/authority/archive/NL1 generation/history/cursor;
+both root and user normal cycles complete0 and four timers enabled/active/waiting. Real panel
+login/five pages/logout PASS21:36:48. Production has no own holds; all own lab children/cgroups
+are removed and the root session is closed. No outage recovery or linked capture resume was needed.
+Existing-vault preservation/consumer remains unaccepted (PRESTATE_EXPORT/NATIVE_EXIT/status1).
+One engineering NEXT: prove the initial pre-hook Docker create/start resource-domain cutover, then
+complete actual OWNER/stopped-support/reader/custody composition. No common encrypted kit or HA-02 PASS.
+
+**Historical21:45UTC:**
 **27 November21:45UTC — enrolled Docker domain composition qualified locally; NOT_INSTALLED.**
 Source adds a mandatory resource→CgroupParent/restart=no policy and ExecutorBoundary composition with
 the existing continuous empty/frozen cgroup. Exact Engine29.1.3 q7 proves clean termination of real
