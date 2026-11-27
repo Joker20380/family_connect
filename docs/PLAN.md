@@ -16,6 +16,11 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
+Host/manual continuation: owner-user-collectors-mandatory-v1 is source-qualified (149 tests,32 isolated
+namespace cases), not yet installed. Next within this task: exact-source CI, fresh held installation of
+the host binding/code without replacing historical role gates, then normal service cycles and observer8b.
+The accepted root collector and installed12-file images must not be reinstalled for this host-only change.
+[Host transition](releases/2026-11-27-owner-user-collectors.md).
 03:10UTC installed component PASS: owner-console-publisher-7a91d127, console3af9fbf9/publisher35158514,
 12/12 loaded source checks each; actual mounted gates, HTTP and no-env ORM/CLI negative+normal paths,
 real authenticated panel, scheduler, normal user services/timers, observer8b9355db and22 stable-table

@@ -154,6 +154,20 @@ jobs:
         run: node --test control_plane/tests/support_form.test.cjs
       - name: External system publisher deployment boundary
         run: python -m pytest -q tests/test_system_message_deployment.py
+      - name: Mandatory OWNER user collector source and namespace checks
+        run: |
+          python -m pytest -q --junitxml="$RUNNER_TEMP/user-collector.xml" tests/test_user_collector_binding.py tests/test_capture_collectors.py tests/test_package_capture_collectors.py tests/test_technical_geoip_fleet.py
+          sudo /usr/bin/python3 -I -B tests/fixtures/user_collector_binding_native.py > "$RUNNER_TEMP/user-collector-native.json"
+          git rev-parse HEAD > "$RUNNER_TEMP/user-collector-source.txt"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: owner-user-collector-qualification
+          path: |
+            ${{ runner.temp }}/user-collector.xml
+            ${{ runner.temp }}/user-collector-native.json
+            ${{ runner.temp }}/user-collector-source.txt
+          if-no-files-found: error
       - name: Build the actual allowlisted panel
         run: |
           python control_plane/prepare_local.py

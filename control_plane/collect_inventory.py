@@ -14,7 +14,7 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from control.friends.pseudonyms import seal
 from control_plane.collector_admission import run_cli
-from control_plane.fc_control_plane.capture import operation
+from control_plane.collector_binding import operation
 
 if __package__:
     from .apps.console.collector import ACTIVE_SOURCES, SOURCES
@@ -59,7 +59,7 @@ def main():
     collect(args, parser)
 
 
-@operation()
+@operation('inventory')
 def collect(args, parser):
     try:
         command = ssh_command(args.source, args.known_hosts)

@@ -1,5 +1,13 @@
 # Текущее состояние / Current state
 
+**27 November — host/manual successor SOURCE QUALIFIED; installation pending.**
+Separate owner-user-collectors-mandatory-v1 closes the fixed installed host entrypoints without relying
+on unit environment or gate existence. Root-owned binding pins both existing role gates and17 source
+files; direct technical metadata now enters the inventory gate.149 narrow tests/0 skips and32 isolated
+mount+network-namespace fresh-process cases PASS, including normal admission and four closed CLIs.
+Accepted root collector and12-file console/publisher runtime are unchanged; this source checkpoint is
+not all-writer acceptance or a capture permit. [Transition and remaining installation gate](releases/2026-11-27-owner-user-collectors.md).
+
 **27 November03:10UTC — exact12-file console/publisher component INSTALLED and checked.**
 Baseline owner-console-publisher-7a91d127: console3af9fbf9 and publisher35158514 are running their
 exact12 pinned files, effective installed configuration and separate mounted gates. Original containers

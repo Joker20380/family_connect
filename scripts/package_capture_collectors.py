@@ -14,22 +14,28 @@ LIMIT = 256 * 1024
 ADMISSION = {
     'control/capture_gate.py': 'da28d940e2e17e2dbb1fbbde8cc04c59d29cffc8762ada717135504e2ffa4906',
     'control_plane/fc_control_plane/capture.py': '0cb1ad0190ddc0d0043c93df80a72f751627a29d054ef104fcf5d1732dca434b',
-    'control_plane/collector_admission.py': '1e2e52abb618b620f9ba1e38dc9011d0143021d98cb3e5bfa535a3f79669808f',
+    'control_plane/collector_admission.py': 'bdb9e7711cb21a889a42f663bea49fc2bab371aba5b74eacdce9c4b849954721',
+    'control_plane/collector_binding.py': '8b9d47fe38fd32bcdca0c9ea24641a00fb8ed00cb2773c4c9c885616006230bb',
 }
 ADMISSION_HISTORY = {
     'control_plane/fc_control_plane/capture.py': ('d4f5a258232d505f3ded09b7ce16a58f013a48dd451fa878d2a191c42ac7d60d',),
+    'control_plane/collector_admission.py': ('1e2e52abb618b620f9ba1e38dc9011d0143021d98cb3e5bfa535a3f79669808f',),
 }
 ENTRIES = {
     'control_plane/monitor_inventory.py': ('2b56e0c3504e28bf644e17cf0cc4c14d5106c9862a9af80e97c8d7d62b490fd7',
                                          '8856e4454d4ecf68895a22a0d2cff0c87353d91b4ea5500c03383b8cd7aa3923'),
     'control_plane/collect_inventory.py': ('a848b67feb86d8fa89722327c43539456ef20cb4cac60b4e2caefccc52e9b976',
+                                         '92650e6c8863945c20816a4c2e0b93bdb6b23e136c83c514bdd98f6031c4cfb1',
                                          'd3ed036ccd4824e93c50ab8a5fcd26a243664671f8620e245f4b2adba8d16a4a'),
+    'control_plane/collect_technical_metadata.py': ('6442b9463082a7f2b19914a1e8df8e51ad3d6c85ccdc37c710bf8f323f806423',
+                                                 '3c8495b7fc1a025f5fd4496d1d0ce341e50d43ccc86de5b1c4c7df9a0d066913'),
     'control_plane/probe_network.py': ('cabe6f1a49f80e6aa9afff8d8f813c921a191a40eb61f7313af110a8037e64eb',
                                      '19ed2bf5e2769cc4f5f1b5bd2b94b4ac74212ecd0059d95f5ff8af6c6cd3f9bf',
                                      '0adde03f5dc2a01756c42c5335f8cf4ff53f8c9d8651a4a3f0b9fa36d8f4407a'),
 }
 ROLES = {
-    'inventory': ('control_plane/monitor_inventory.py', 'control_plane/collect_inventory.py'),
+    'inventory': ('control_plane/monitor_inventory.py', 'control_plane/collect_inventory.py',
+                  'control_plane/collect_technical_metadata.py'),
     'probe': ('control_plane/probe_network.py',),
 }
 COMMON = ('control_plane/apps/console/collector.py', 'control_plane/apps/__init__.py',
@@ -107,7 +113,8 @@ def build(baseline, role, pins, output, source=ROOT):
         compile(raw, name, 'exec')
         after[name] = raw
     require(pins == {name: digest(raw) for name, raw in snapshot(baseline, role).items()}, 'BASELINE_CHANGED')
-    receipt = dict(schema=1, role=role, before=pins, after={name: digest(raw) for name, raw in after.items()},
+    receipt = dict(schema=1, baseline='owner-user-collectors-mandatory-v1', role=role,
+                   before=pins, after={name: digest(raw) for name, raw in after.items()},
                    changed=sorted(name for name, raw in after.items() if digest(raw) != pins[name]),
                    installed=False, capture_permitted=False, runtime_qualified=False)
     receipt['restore_on_rollback'] = {name: pins[name] for name in receipt['changed'] if before[name] is not None}
