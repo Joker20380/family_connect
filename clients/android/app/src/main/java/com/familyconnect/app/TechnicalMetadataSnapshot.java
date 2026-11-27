@@ -18,6 +18,11 @@ final class TechnicalMetadataSnapshot {
         result.addProperty("operation",enabled?"sample":"revoke");
         result.add("observations",enabled?observations:new JsonObject());return result;
     }
+    static JsonObject basicReport(long epoch,long sequence,JsonObject observations){
+        JsonObject result=report(epoch,sequence,true,observations);
+        result.addProperty("schema",2);result.addProperty("processing_mode","automatic_basic");
+        result.addProperty("policy_version",TechnicalMetadataPolicy.POLICY);return result;
+    }
     static JsonObject observation(String source,String status,String reason,JsonObject values,long sampled,long age){
         JsonObject result=new JsonObject();result.addProperty("sampled_at_ms",Math.max(0,sampled));
         result.addProperty("age_ms",Math.max(0,age));result.addProperty("source",source);

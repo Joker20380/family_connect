@@ -12,6 +12,16 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class TechnicalMetadataRuntimeTest {
+    @Test public void basicPublicApiSnapshotOmitsExtendedFields(){
+        Context context=InstrumentationRegistry.getInstrumentation().getTargetContext();
+        JsonObject groups=TechnicalMetadataAndroid.sample(context,true);
+        JsonObject profile=groups.getAsJsonObject("profile").getAsJsonObject("values");
+        assertEquals(3,profile.size());assertEquals("Android",profile.get("os").getAsString());
+        assertEquals(Build.VERSION.RELEASE,profile.get("os_version").getAsString());
+        for(String forbidden:new String[]{"manufacturer","model","radio","radio_reason","readiness","preference","city","country","region","ip"})
+            assertFalse(groups.toString().contains("\""+forbidden+"\""));
+        assertTrue(groups.getAsJsonObject("mobile").getAsJsonObject("values").has("sim_reason"));
+    }
     @Test public void publicApiProfileAndRadioFallbackWithoutNewPhonePermission(){
         Context context=InstrumentationRegistry.getInstrumentation().getTargetContext();
         assertNotEquals(PackageManager.PERMISSION_GRANTED,context.checkSelfPermission(android.Manifest.permission.READ_PHONE_STATE));

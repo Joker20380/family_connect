@@ -115,6 +115,26 @@ class Database:
 
 
 @pytest.mark.parametrize('source', collector.NL_SOURCES)
+def test_basic_nl_passes_asn_only_without_implicit_consent(registry, monkeypatch, source):
+    class AsnOnly(Database):
+        def lookup(self, address, *, origin, sampled_at, asn_only=False):
+            assert asn_only
+            result = geoip.unknown('none', self.now, origin)
+            result.update(status='available', asn=13335, organization='Network only',
+                          sampled_at=sampled_at, expires_at=sampled_at + 604800)
+            return result
+    monkeypatch.setattr(geoip, 'Database', AsnOnly)
+    entry = row(source)
+    entry.update(consent='not_requested', processing_mode='automatic_basic', policy_version='basic-2026-11-v1')
+    target, = collector.geoip_targets([entry], registry, NOW)
+    samples = {source: dict(source=source, observed_at=NOW, status='ok',
+        peers=[dict(target=target, endpoint='1.1.1.1:51820', handshake=NOW - 10)])}
+    result, = collector.enrich_nl_peers([entry], samples, geoip, registry, now=NOW)
+    assert result['geoip']['asn'] == 13335 and result['geoip']['city'] is None
+    assert result['consent'] == 'not_requested' and '1.1.1.1' not in json.dumps(result)
+
+
+@pytest.mark.parametrize('source', collector.NL_SOURCES)
 def test_enrichment_discards_ip_and_binds_exact_consent_sequence(registry, monkeypatch, source):
     monkeypatch.setattr(geoip, 'Database', Database)
     entry = row(source)

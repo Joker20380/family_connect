@@ -23,7 +23,7 @@ def geoip_targets(rows, registry=REGISTRY, now=None):
     for row in rows:
         session = row.get('observations', {}).get('session', {})
         values = session.get('values', {})
-        if (row['consent'] == 'enabled' and values.get('gateway') in NL_SOURCES and
+        if (row['consent'] in ('enabled', 'not_requested') and values.get('gateway') in NL_SOURCES and
                 values.get('transport') == 'AWG' and values.get('state') == 'CONNECTED' and
                 now - 180 <= session.get('received_at', 0) <= now and
                 session.get('expires_at', 0) > now and
@@ -119,7 +119,8 @@ def enrich_nl_peers(rows, samples, geo, registry=REGISTRY, database_root=GEOIP_R
             if type(handshake) is not int or not now - 180 <= handshake <= sample['observed_at']:
                 row['geoip'] = geo.unknown('peer_observation_stale', now)
             elif address:
-                row['geoip'] = database.lookup(address, origin='authenticated_awg_peer', sampled_at=handshake)
+                options = dict(asn_only=True) if row.get('processing_mode') == 'automatic_basic' else {}
+                row['geoip'] = database.lookup(address, origin='authenticated_awg_peer', sampled_at=handshake, **options)
     return rows
 
 

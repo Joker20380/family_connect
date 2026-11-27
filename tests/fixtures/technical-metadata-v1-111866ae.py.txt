@@ -1,0 +1,110 @@
+"""Separately consented, latest-only observations; never an access authority."""
+from contextlib import closing, contextmanager, nullcontext
+import hashlib
+import json
+import os
+from pathlib import Path
+import sqlite3
+import stat
+import time
+
+from .access import Rejected
+from .diagnostics import unique
+from .referrals import RateLimited
+
+MAX_REPORT = 6144
+MAX_DEVICES = 5000
+RETENTION = 7 * 86400
+MIN_INTERVAL = 60
+MAX_INTEGER = 2**53 - 1
+REPOSITORY_PURPOSE = 'family-connect/ha-metadata-synthetic/v1/db-only'
+SOURCES = {
+    'profile': {'android_build_package'},
+    'network': {'tunnel_socket', 'vpn_transport_capabilities', 'android_default_network', 'unavailable'},
+    'mobile': {'android_telephony_public'},
+    'session': {'connection_service'},
+    'diagnostic': {'connection_terminal'},
+}
+REASONS = {'none', 'permission_not_granted', 'api_not_supported', 'no_sim',
+           'no_registered_network', 'not_cellular', 'ambiguous_subscription',
+           'not_observed', 'network_unavailable', 'underlay_not_exposed',
+           'service_unavailable', 'stale', 'clock_skew'}
+FIELDS = {
+    'profile': {'manufacturer': 80, 'model': 100, 'android_version': 40,
+                'api_level': int, 'app_version': 64, 'version_code': int},
+    'network': {'kind': {'WIFI', 'CELLULAR', 'ETHERNET', 'OFFLINE', 'UNKNOWN'},
+                'scope': {'session_underlay', 'default_network', 'unknown'}},
+    'mobile': {'sim_operator': 100, 'registered_operator': 100,
+               'radio': {'2G', '3G', 'LTE_4G', '5G', 'UNKNOWN'},
+               'sim_reason': REASONS, 'registered_reason': REASONS, 'radio_reason': REASONS},
+    'session': {'preference': {'AUTO', 'AWG', 'TCP', 'MESH', 'UNKNOWN'},
+                'attempt': {'AWG', 'TCP', 'MESH', 'NONE', 'UNKNOWN'},
+                'transport': {'AWG', 'TCP', 'MESH', 'NONE', 'UNKNOWN'},
+                'gateway': {'gateway-ru', 'nl-amsterdam-1', 'nl-amsterdam-2', 'UNKNOWN'},
+                'state': {'DISCONNECTED', 'CONNECTING', 'CONNECTED', 'RESTORING',
+                          'FAILED', 'STOPPING', 'UNKNOWN'}},
+    'diagnostic': {'error': {'NONE', 'CANCELLED', 'AUTH', 'READINESS', 'NETWORK',
+                            'TIMEOUT', 'TRANSPORT', 'PERMISSION', 'UNKNOWN'},
+                   'error_at_ms': int, 'readiness': {'READY', 'NOT_READY', 'UNKNOWN'}},
+}
+
+
+def require(condition):
+    if not condition:
+        raise ValueError('Technical metadata contract')
+
+
+def integer(value, minimum=0):
+    return type(value) is int and minimum <= value <= MAX_INTEGER
+
+
+def validate(raw):
+    require(isinstance(raw, str) and len(raw.encode('utf-8')) <= MAX_REPORT)
+    report = json.loads(raw, object_pairs_hook=unique, parse_constant=lambda value: require(False))
+    require(type(report) is dict and set(report) == {
+        'schema', 'report_id', 'consent_epoch', 'sequence', 'operation', 'observations'})
+    require(type(report['schema']) is int and report['schema'] == 1)
+    require(integer(report['consent_epoch'], 1) and integer(report['sequence'], 1))
+    require(report['report_id'] == f"{report['consent_epoch']:016x}{report['sequence']:016x}")
+    require(report['operation'] in ('sample', 'revoke'))
+    observations = report['observations']
+    require(type(observations) is dict)
+    require(set(observations) == (set(SOURCES) if report['operation'] == 'sample' else set()))
+    validate_observations(observations)
+    return report
+
+
+def validate_observations(observations, complete=False):
+    require(type(observations) is dict and set(observations) <= set(SOURCES))
+    require(not complete or set(observations) == set(SOURCES))
+    for group, observation in observations.items():
+        require(type(observation) is dict and set(observation) == {
+            'sampled_at_ms', 'age_ms', 'source', 'status', 'reason', 'values'})
+        require(integer(observation['sampled_at_ms']) and integer(observation['age_ms']))
+        require(isinstance(observation['source'], str) and observation['source'] in SOURCES[group])
+        require(observation['status'] in ('available', 'partial', 'unknown', 'unavailable', 'stale'))
+        require(isinstance(observation['reason'], str) and observation['reason'] in REASONS)
+        values = observation['values']
+        require(type(values) is dict and set(values) == set(FIELDS[group]))
+        for name, specification in FIELDS[group].items():
+            value = values[name]
+            if value is None:
+                require(observation['status'] != 'available')
+            elif specification is int:
+                require(integer(value))
+            elif type(specification) is int:
+                require(isinstance(value, str) and 0 < len(value) <= specification
+                        and all(character.isprintable() for character in value))
+            else:
+                require(isinstance(value, str) and value in specification)
+        if group == 'network':
+            require(values['scope'] != 'session_underlay' or observation['source'] in {
+                'tunnel_socket', 'vpn_transport_capabilities'})
+        if group == 'session':
+            require(values['state'] in ('CONNECTED', 'RESTORING') or
+                    values['transport'] in ('NONE', 'UNKNOWN', None))
+        if group == 'mobile':
+            for name, reason in (('sim_operator', 'sim_reason'), ('registered_operator', 'registered_reason'),
+                                ('radio', 'radio_reason')):
+                require(values[reason] is not None)
+                require(values[name] not in (None, 'UNKNOWN') or values[reason] != 'none')

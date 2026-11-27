@@ -63,6 +63,20 @@ def test_local_pair_returns_only_needed_fields(database):
     assert not any(field in json.dumps(result) for field in ('1.1.1.1', 'latitude', 'longitude'))
 
 
+def test_basic_asn_never_queries_city_database(database, monkeypatch):
+    original = Reader.get
+    def no_city(self, address):
+        assert self.kind != 'city', 'basic must not query detailed geography'
+        return original(self, address)
+    monkeypatch.setattr(Reader, 'get', no_city)
+    with closing(geoip.Database(database[0], NOW)) as reader:
+        result = reader.lookup('1.1.1.1', origin='authenticated_awg_peer', sampled_at=NOW - 30, asn_only=True)
+        assert reader.lookup('1.1.1.1', origin='relay', sampled_at=NOW, asn_only=True)['status'] == 'unavailable'
+    assert result['asn'] == 13335 and result['status'] == 'available'
+    assert all(result[name] is None for name in ('city', 'country', 'region', 'retail_isp'))
+    assert result['expires_at'] == NOW - 30 + 7 * 86400
+
+
 @pytest.mark.parametrize('address,origin,age,reason', [
     ('1.1.1.1', 'unknown', 0, 'origin_unverified'),
     ('1.1.1.1', 'relay', 0, 'origin_unverified'),

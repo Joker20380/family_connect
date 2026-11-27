@@ -12,6 +12,8 @@ dependencies {
 }
 sourceSets.main.java.include '**/ReadinessBootstrapRoute.java'
 sourceSets.test.java.include '**/ReadinessBootstrapRouteTest.java'
+sourceSets.main.java.include '**/TechnicalMetadataPolicy.java'
+sourceSets.test.java.include '**/TechnicalMetadataPolicyTest.java'
 test { testLogging { events 'passed', 'failed'; showStandardStreams = true } }
 tasks.register('goldenClasspath') {
     dependsOn testClasses

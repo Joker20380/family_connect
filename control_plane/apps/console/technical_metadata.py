@@ -88,7 +88,10 @@ def ingest(data):
     require(source.observed_at <= data['observed_at'])
     seen = set()
     for entry in data['devices']:
-        fields(entry, 'pseudonym consent_epoch sequence consent received_at observations' + (' geoip' if 'geoip' in entry else ''))
+        basic = entry.get('processing_mode') == contract.BASIC_MODE
+        fields(entry, 'pseudonym consent_epoch sequence consent received_at observations' +
+               (' geoip' if 'geoip' in entry else '') + (' processing_mode policy_version' if basic else ''))
+        require(not basic or entry['policy_version'] == contract.BASIC_POLICY)
         location = entry.get('geoip')
         if location is not None:
             fields(location, ' '.join(geoip.FIELDS))
@@ -107,7 +110,8 @@ def ingest(data):
                 require(location[name] is None or geoip.text(location[name]) == location[name])
             require(location['country'] is None or re.fullmatch('[A-Z]{2}', location['country']))
             require(location['status'] != 'unavailable' or all(location[name] is None for name in ('country', 'region', 'city', 'asn', 'organization')))
-            require(location['status'] != 'available' or location['city'] is not None and location['asn'] is not None and location['reason'] == 'none')
+            require(location['status'] != 'available' or (basic or location['city'] is not None) and location['asn'] is not None and location['reason'] == 'none')
+            require(not basic or all(location[name] is None for name in ('country', 'region', 'city', 'retail_isp')))
             if location['database'] is not None:
                 fields(location['database'], 'version city_sha256 asn_sha256')
                 require(isinstance(location['database']['version'], str) and re.fullmatch(r'20\d{2}-\d{2}', location['database']['version']))
@@ -118,12 +122,12 @@ def ingest(data):
         require(isinstance(entry['pseudonym'], str) and re.fullmatch('[0-9a-f]{64}', entry['pseudonym']) is not None)
         require(entry['pseudonym'] not in seen)
         seen.add(entry['pseudonym'])
-        require(entry['consent'] in ('enabled', 'revoked'))
+        require(entry['consent'] in (('not_requested', 'revoked') if basic else ('enabled', 'revoked')))
         require(contract.integer(entry['received_at']) and entry['received_at'] <= data['observed_at'])
         observations = entry['observations']
         require(type(observations) is dict and set(observations) <= set(contract.SOURCES))
-        require(entry['consent'] == 'enabled' or not observations)
-        require(entry['consent'] == 'enabled' or location is None)
+        require(entry['consent'] != 'revoked' or not observations)
+        require(entry['consent'] != 'revoked' or location is None)
         for group, observation in observations.items():
             fields(observation, 'sampled_at_ms age_ms source status reason values received_at age_at_receive_ms clock_status expires_at')
             require(all(contract.integer(observation[name]) for name in ('received_at', 'age_at_receive_ms', 'expires_at')))
@@ -135,7 +139,7 @@ def ingest(data):
             'received_at', 'age_at_receive_ms', 'clock_status', 'expires_at'}} for name, observation in observations.items()}
         try:
             require(contract.integer(entry['consent_epoch'], 1) and contract.integer(entry['sequence'], 1))
-            contract.validate_observations(raw_observations, complete=False)
+            contract.validate_observations(raw_observations, complete=False, basic=basic)
         except (ValueError, TypeError, KeyError):
             require(False)
         row = TechnicalMetadata.objects.select_for_update().filter(pseudonym=entry['pseudonym']).first()
@@ -147,12 +151,15 @@ def ingest(data):
             require(entry['consent_epoch'] > row.consent_epoch or row.consent != 'revoked' or entry['consent'] == 'revoked')
             if (entry['consent_epoch'], entry['sequence']) == (row.consent_epoch, row.sequence):
                 require(entry['consent'] == row.consent and entry['received_at'] == row.received_at)
+                require(entry.get('processing_mode', 'consented_extended') == row.processing_mode and
+                        entry.get('policy_version', 'legacy-v1') == row.policy_version)
                 require({name: value for name, value in observations.items() if value['expires_at'] > now} ==
                         {name: value for name, value in row.observations.items() if value['expires_at'] > now})
                 row.geoip = location
                 row.save(update_fields=['geoip'])
                 continue
         TechnicalMetadata.objects.update_or_create(pseudonym=entry['pseudonym'], defaults={
+            'processing_mode': 'consented_extended', 'policy_version': 'legacy-v1',
             **{key: value for key, value in entry.items() if key not in ('pseudonym', 'geoip')}, 'geoip': location})
     prune()
     source.observed_at, source.status = data['observed_at'], data['status']
@@ -176,6 +183,8 @@ def presentation(row, now, source=None, supported=None):
         value['received'] = datetime.fromtimestamp(value['received_at'], utc.utc)
         value['clock_label'] = LABELS.get(value['clock_status'], '')
     profile = observations.get('profile', {}).get('values', {})
+    if row and row.processing_mode == contract.BASIC_MODE:
+        profile = dict(profile, android_version=profile.get('os_version'))
     network = observations.get('network', {}).get('values', {})
     mobile = observations.get('mobile', {}).get('values', {})
     session = observations.get('session', {}).get('values', {})
@@ -189,6 +198,7 @@ def presentation(row, now, source=None, supported=None):
         location['sampled'] = datetime.fromtimestamp(location['sampled_at'], utc.utc)
         terms += [location.get(name) for name in ('city', 'country', 'region', 'asn', 'organization')]
     return dict(status=status, label=LABELS[status], observations=observations, profile=profile,
+                processing_mode=row.processing_mode if row else None, policy_version=row.policy_version if row else None,
                 network=network, mobile=mobile, session=session, geoip=location, error_time=error_time,
                 geoip_label=location_label(status, location, observations),
                 search=' '.join(str(value) for value in terms if value is not None).casefold())

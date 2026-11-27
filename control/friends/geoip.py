@@ -91,7 +91,7 @@ class Database:
     def close(self):
         self.stack.close()
 
-    def lookup(self, address, *, origin, sampled_at):
+    def lookup(self, address, *, origin, sampled_at, asn_only=False):
         result = unknown('origin_unverified', self.now, origin)
         if origin not in ('authenticated_awg_peer', 'authenticated_direct_service'):
             return result
@@ -110,7 +110,8 @@ class Database:
             if self.error:
                 result['reason'] = self.error
                 return result
-            city, asn = self.readers['city'].get(str(address)) or {}, self.readers['asn'].get(str(address)) or {}
+            city = {} if asn_only else self.readers['city'].get(str(address)) or {}
+            asn = self.readers['asn'].get(str(address)) or {}
             country = text(city.get('country', {}).get('iso_code'))
             if country and not re.fullmatch('[A-Z]{2}', country):
                 country = None
@@ -122,6 +123,11 @@ class Database:
                           organization=text(asn.get('autonomous_system_organization')))
             result.update(status='available' if result['city'] and result['asn'] else 'partial',
                           reason='none' if result['city'] and result['asn'] else 'no_asn' if result['city'] else 'no_city' if country else 'lookup_miss')
+            if asn_only:
+                result.update(status='available' if result['asn'] else 'unavailable',
+                              reason='none' if result['asn'] else 'no_asn')
+                if not result['asn']:
+                    result['organization'] = None
         except Exception:
             result = unknown('lookup_failed', self.now, origin)
         return result
@@ -129,7 +135,7 @@ class Database:
 
 def enrich_ru_peers(rows, registry, database_root, *, command=subprocess.run, now=None):
     now = int(time.time()) if now is None else now
-    eligible = [row for row in rows if row['consent'] == 'enabled' and
+    eligible = [row for row in rows if row['consent'] in ('enabled', 'not_requested') and
                 row.get('observations', {}).get('session', {}).get('values', {}).get('gateway') == 'gateway-ru' and
                 row['observations']['session']['values'].get('transport') == 'AWG' and
                 row['observations']['session']['values'].get('state') == 'CONNECTED' and
@@ -161,7 +167,8 @@ def enrich_ru_peers(rows, registry, database_root, *, command=subprocess.run, no
                 handshake = int(observed['latest-handshakes'].get(public, 0))
                 address = peer_address(endpoint)
                 if public and address and now - 180 <= handshake <= now:
-                    row['geoip'] = database.lookup(address, origin='authenticated_awg_peer', sampled_at=handshake)
+                    options = dict(asn_only=True) if row.get('processing_mode') == 'automatic_basic' else {}
+                    row['geoip'] = database.lookup(address, origin='authenticated_awg_peer', sampled_at=handshake, **options)
     except (OSError, ValueError, sqlite3.Error, subprocess.SubprocessError):
         for row in eligible:
             row['geoip'] = unknown('peer_source_unavailable', now)

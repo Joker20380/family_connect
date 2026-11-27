@@ -23,6 +23,7 @@ android {
         versionName '0.1.18-beta126'
         buildConfigField 'boolean', 'PROVISIONING_TEST_SEAM', 'false'
         buildConfigField 'String', 'PROVISIONING_SEAM_SOURCE', '""'
+        buildConfigField 'boolean', 'BASIC_METADATA_APPROVED', 'false'
         manifestPlaceholders = [appLabel: 'family_connect', launcherActivity: 'com.familyconnect.app.MainActivity']
     }
     compileOptions {
@@ -54,9 +55,15 @@ android {
     } }
     buildTypes {
         debug {
+            buildConfigField 'boolean', 'BASIC_METADATA_APPROVED', providers.gradleProperty('fcBasicMetadataCandidate').getOrElse('false')
             // Technical pilots coexist with old CI-signed installs; never uninstall their data.
             applicationIdSuffix orchestratorDiagnostic ? '.orchestrator' : restrictedDiagnostic ? '.eu6' : '.pilot'
             manifestPlaceholders = [appLabel: 'family_connect_pilot', launcherActivity: 'com.familyconnect.app.MainActivity']
+            if (providers.gradleProperty('fcBasicMetadataCandidate').getOrElse('false') == 'true') {
+                applicationIdSuffix '.metadata'
+                versionNameSuffix '-basic-candidate'
+                manifestPlaceholders = [appLabel: 'FC basic candidate', launcherActivity: 'com.familyconnect.app.FriendsActivity']
+            }
         }
         release { minifyEnabled false }
         friends {

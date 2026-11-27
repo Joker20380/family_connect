@@ -74,6 +74,8 @@ class TechnicalMetadata(models.Model):
     consent_epoch = models.BigIntegerField()
     sequence = models.BigIntegerField()
     consent = models.CharField(max_length=16)
+    processing_mode = models.CharField(max_length=32, default='consented_extended')
+    policy_version = models.CharField(max_length=32, default='legacy-v1')
     received_at = models.BigIntegerField()
     observations = models.JSONField(default=dict)
     geoip = models.JSONField(null=True, default=None)

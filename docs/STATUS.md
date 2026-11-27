@@ -1,5 +1,21 @@
 # Текущее состояние / Current state
 
+**27 November23:02UTC — B source/arm64 candidate built; A not installed, common kit absent.**
+B implements automatic-basic schema2/policy basic-2026-11-v1 with pre-sample disclosure, privacy
+objection, atomic initialization/counters, preserved legacy refusals/revokes and restore blocking.
+No automatic consent claim or extended enrichment; qualified RU/NL AWG ASN only, TCP/MESH UNKNOWN.
+96 protocol/collector checks,32 disposable-Postgres panel checks and18 Android JVM checks PASS;
+debug arm64 APK/instrumentation APK compile. Device UI/storage-failure acceptance remains open.
+Public builds default BASIC_METADATA_APPROVED=false pending per-field processing-basis/store review;
+only the distinct .metadata debug candidate opts into qualification. No production schema/writer
+or installed image changed. [Contract, migration and release gates](operators/basic-metadata-v2.md).
+A: existing HA consumer/preservation PASS; initial Docker pre-hook dispatch remains unfenced.
+Shared-window plan is NOT qualified/authorized and impacts14 excluded neighbors; no shared stop.
+Qualified observer22:45 PASS, same support PID240065 and accepted history; real login/five pages/
+logout22:46 PASS. No own production holds. Latest MESH traffic remains21:43–21:44 PASS, not refreshed
+by these panel checks. Common kit/independent kit verify/linked resume NOT_CREATED/NOT_RUN.
+
+**Historical22:54UTC:**
 **27 November22:54UTC — exact native receipt and pre-hook CI PASS; A transition still blocked.**
 894ffed3 native-support46075423497 SUCCESS, independently checked artifact15234942307:
 362 tests, zero skips, exact source. da551d55 native pre-hook46076761745 SUCCESS; the reproduced

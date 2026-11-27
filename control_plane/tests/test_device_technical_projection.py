@@ -25,6 +25,26 @@ def observation():
         observations=contract.project(dict(profile=profile), now))])
 
 
+def test_basic_projection_mode_source_unknown_expiry_and_no_old_geography(db):
+    data = observation()
+    entry = data['devices'][0]
+    entry.update(processing_mode=contract.BASIC_MODE, policy_version=contract.BASIC_POLICY, consent='not_requested')
+    entry['observations']['profile']['values'] = dict(os='Android', os_version='15', app_version='candidate')
+    technical_metadata.ingest(data)
+    row = TechnicalMetadata.objects.get()
+    value = technical_metadata.presentation(row, timezone.now(), TechnicalMetadataSource.objects.get())
+    assert value['processing_mode'] == 'automatic_basic' and value['profile']['android_version'] == '15'
+    assert value['observations']['profile']['source'] == 'android_build_package'
+    assert value['mobile'] == {} and value['geoip'] is None
+    assert row.consent == 'not_requested'
+    changed = deepcopy(data)
+    changed['devices'][0]['observations']['profile']['values']['model'] = 'must reject'
+    with pytest.raises(ValueError):
+        technical_metadata.ingest(changed)
+    value = technical_metadata.presentation(row, timezone.now() + timedelta(days=8), TechnicalMetadataSource.objects.get())
+    assert not value['observations'] and not value['profile'].get('os_version')
+
+
 def test_latest_only_full_hmac_no_audit_or_snapshot_copy(db):
     data = observation()
     technical_metadata.ingest(data)

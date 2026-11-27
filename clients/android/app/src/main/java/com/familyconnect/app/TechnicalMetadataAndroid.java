@@ -13,15 +13,20 @@ import com.google.gson.JsonObject;
 final class TechnicalMetadataAndroid {
     private TechnicalMetadataAndroid(){}
     static JsonObject sample(Context context){
+        return sample(context,false);
+    }
+    static JsonObject sample(Context context,boolean basic){
         long generation=ConnectionService.sessionId;String rawState=ConnectionService.status;
         long now=System.currentTimeMillis();JsonObject groups=new JsonObject();
-        JsonObject profile=new JsonObject();profile.addProperty("manufacturer",TechnicalMetadataSnapshot.text(Build.MANUFACTURER,80));
+        JsonObject profile=new JsonObject();
+        if(!basic){profile.addProperty("manufacturer",TechnicalMetadataSnapshot.text(Build.MANUFACTURER,80));
         profile.addProperty("model",TechnicalMetadataSnapshot.text(Build.MODEL,100));
         profile.addProperty("android_version",TechnicalMetadataSnapshot.text(Build.VERSION.RELEASE,40));
         profile.addProperty("api_level",Build.VERSION.SDK_INT);profile.addProperty("app_version",BuildConfig.VERSION_NAME);
         profile.addProperty("version_code",BuildConfig.VERSION_CODE);
+        }else{profile.addProperty("os","Android");profile.addProperty("os_version",TechnicalMetadataSnapshot.text(Build.VERSION.RELEASE,40));profile.addProperty("app_version",BuildConfig.VERSION_NAME);}
         groups.add("profile",TechnicalMetadataSnapshot.observation("android_build_package","partial","none",profile,now,0));
-        groups.add("network",network(context,now));groups.add("mobile",mobile(context,now));
+        groups.add("network",network(context,now));groups.add("mobile",mobile(context,now,basic));
         String active=ConnectionService.activeTransport,gateway=ConnectionService.observedGateway,preference=ConnectionService.requestedTransport;
         ConnectionTerminal.Snapshot terminal=ConnectionTerminal.VPN.snapshot();String attempt="NONE";
         if("connecting".equals(rawState)||"restoring".equals(rawState))for(ConnectionTerminal.Stage stage:terminal.lines){
@@ -41,9 +46,14 @@ final class TechnicalMetadataAndroid {
         if(terminal.failureAt>0&&now-terminal.failureAt<TechnicalMetadataSnapshot.RETENTION_MS){error=terminal.failureStage==ConnectionTerminal.Stage.CANCELLED?"CANCELLED":terminal.failureStage==ConnectionTerminal.Stage.AUTH?"AUTH":"TRANSPORT";}
         diagnostic.addProperty("error",error);diagnostic.addProperty("error_at_ms",!"NONE".equals(error)?terminal.failureAt:null);
         String readiness="UNKNOWN";
-        try{JsonObject current=Diagnostics.supportSnapshot(context);String value=current.has("restricted_readiness")?current.get("restricted_readiness").getAsString():"UNKNOWN";if("READY".equals(value)||"NOT_READY".equals(value))readiness=value;}catch(RuntimeException ignored){}
+        if(!basic)try{JsonObject current=Diagnostics.supportSnapshot(context);String value=current.has("restricted_readiness")?current.get("restricted_readiness").getAsString():"UNKNOWN";if("READY".equals(value)||"NOT_READY".equals(value))readiness=value;}catch(RuntimeException ignored){}
         diagnostic.addProperty("readiness",readiness);
         groups.add("diagnostic",TechnicalMetadataSnapshot.observation("connection_terminal","partial","not_observed",diagnostic,now,0));
+        if(basic){
+            groups.getAsJsonObject("session").getAsJsonObject("values").remove("preference");
+            groups.getAsJsonObject("session").getAsJsonObject("values").remove("attempt");
+            diagnostic.remove("readiness");
+        }
         return groups;
     }
     static String kind(NetworkCapabilities caps){
@@ -77,6 +87,9 @@ final class TechnicalMetadataAndroid {
         return TechnicalMetadataSnapshot.observation(source,"UNKNOWN".equals(type)?"unavailable":"available",reason,values,now,0);
     }
     static JsonObject mobile(Context context,long now){
+        return mobile(context,now,false);
+    }
+    static JsonObject mobile(Context context,long now,boolean basic){
         String sim=null,registered=null,radio="UNKNOWN",simReason="service_unavailable",registeredReason="service_unavailable",radioReason="permission_not_granted";
         try{
             TelephonyManager manager=context.getSystemService(TelephonyManager.class);
@@ -87,7 +100,7 @@ final class TechnicalMetadataAndroid {
                     sim=TechnicalMetadataSnapshot.text(manager.getSimOperatorName(),100);
                     registered=TechnicalMetadataSnapshot.text(manager.getNetworkOperatorName(),100);
                     simReason=sim==null?"no_sim":"none";registeredReason=registered==null?"no_registered_network":"none";
-                    if(Build.VERSION.SDK_INT>=33&&context.checkSelfPermission(android.Manifest.permission.READ_BASIC_PHONE_STATE)==PackageManager.PERMISSION_GRANTED){
+                    if(!basic&&Build.VERSION.SDK_INT>=33&&context.checkSelfPermission(android.Manifest.permission.READ_BASIC_PHONE_STATE)==PackageManager.PERMISSION_GRANTED){
                         int type=manager.getDataNetworkType();
                         radio=type==TelephonyManager.NETWORK_TYPE_NR?"5G":type==TelephonyManager.NETWORK_TYPE_LTE?"LTE_4G":"UNKNOWN";
                         radioReason="UNKNOWN".equals(radio)?"not_observed":"none";
@@ -101,6 +114,7 @@ final class TechnicalMetadataAndroid {
         catch(RuntimeException unavailable){radioReason="service_unavailable";}
         JsonObject values=new JsonObject();values.addProperty("sim_operator",sim);values.addProperty("registered_operator",registered);
         values.addProperty("radio",radio);values.addProperty("sim_reason",simReason);values.addProperty("registered_reason",registeredReason);values.addProperty("radio_reason",radioReason);
+        if(basic){values.remove("radio");values.remove("radio_reason");}
         return TechnicalMetadataSnapshot.observation("android_telephony_public","partial","not_observed",values,now,0);
     }
 }

@@ -9,33 +9,78 @@ import android.net.NetworkCapabilities;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
+import android.util.AtomicFile;
+import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 import com.google.gson.JsonObject;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 final class TechnicalMetadataUpload {
     private static TechnicalMetadataUpload instance;
     private final Context context;
     private final SharedPreferences prefs;
+    private final TechnicalMetadataPolicy policy;
     private final Handler main=new Handler(Looper.getMainLooper());
     private final TechnicalMetadataSchedule schedule=new TechnicalMetadataSchedule();
     private final Runnable flush=this::flush;
     private FriendsAccessAndroid request;
     private ConnectivityManager.NetworkCallback callback;
-    private boolean dirty;
-    private boolean forcedOff;
-    private boolean storageFault;
-    private String status="OFF";
-    private TechnicalMetadataUpload(Context context){this.context=context.getApplicationContext();prefs=context.getSharedPreferences("technical-metadata-v1",Context.MODE_PRIVATE);}
+    private boolean dirty,noticeOpen;
+    private String status="WAITING";
+    private TechnicalMetadataUpload(Context owner){
+        context=owner.getApplicationContext();prefs=context.getSharedPreferences("technical-metadata-v1",Context.MODE_PRIVATE);
+        policy=new TechnicalMetadataPolicy(new TechnicalMetadataPolicy.Store(){
+            public Map<String,Object> read(){return new HashMap<>(prefs.getAll());}
+            public boolean commit(Map<String,Object> values){
+                SharedPreferences.Editor edit=prefs.edit();
+                for(Map.Entry<String,Object> item:values.entrySet()){
+                    Object value=item.getValue();String name=item.getKey();
+                    if(value instanceof String)edit.putString(name,(String)value);
+                    else if(value instanceof Long)edit.putLong(name,(Long)value);
+                    else if(value instanceof Integer)edit.putInt(name,(Integer)value);
+                    else if(value instanceof Boolean)edit.putBoolean(name,(Boolean)value);
+                    else return false;
+                }
+                if(!values.containsKey("notice_policy"))edit.remove("notice_policy");
+                boolean saved=edit.commit();if(!saved)persistFault();return saved;
+            }
+        });
+        try{
+            if(new File(context.getNoBackupFilesDir(),"technical-storage-fault").exists()){policy.failStorage();return;}
+            File file=new File(context.getNoBackupFilesDir(),"technical-installation");
+            AtomicFile binding=new AtomicFile(file);String identity;
+            boolean absent=!file.exists();
+            if(absent){
+                identity=UUID.randomUUID().toString();FileOutputStream output=binding.startWrite();
+                try{output.write(identity.getBytes(StandardCharsets.US_ASCII));binding.finishWrite(output);}
+                catch(Exception error){binding.failWrite(output);throw error;}
+            }else identity=new String(binding.readFully(),StandardCharsets.US_ASCII);
+            if(!identity.matches("[0-9a-f-]{36}"))throw new IllegalStateException("Metadata installation binding");
+            android.content.pm.PackageInfo installed=context.getPackageManager().getPackageInfo(context.getPackageName(),0);
+            boolean fresh=absent&&prefs.getAll().isEmpty()&&installed.firstInstallTime==installed.lastUpdateTime
+                &&!new File(context.getFilesDir(),"friends-identity.enc").exists();
+            policy.initialize(fresh,identity);
+        }catch(Exception refused){policy.failStorage();persistFault();}
+    }
+    private void persistFault(){
+        AtomicFile file=new AtomicFile(new File(context.getNoBackupFilesDir(),"technical-storage-fault"));
+        try{FileOutputStream output=file.startWrite();try{output.write(1);file.finishWrite(output);}catch(Exception failure){file.failWrite(output);}}
+        catch(Exception unavailable){}
+    }
     private static synchronized TechnicalMetadataUpload get(Context context){if(instance==null)instance=new TechnicalMetadataUpload(context);return instance;}
     static void start(Context context){get(context).changed();}
     static void changed(Context context){get(context).changed();}
-    private synchronized boolean enabled(){return !forcedOff&&prefs.getBoolean("enabled",false);}
+    static void foreground(Activity activity){activity.runOnUiThread(()->get(activity).disclose(activity));}
+    private synchronized boolean enabled(){return BuildConfig.BASIC_METADATA_APPROVED&&policy.enabled();}
     private synchronized void changed(){
-        boolean enabled=enabled(),revoke=prefs.getBoolean("revoke_pending",false);
-        ConnectionTerminal.VPN.observeTechnical(enabled);
-        if(!enabled&&!revoke){detach();return;}
+        boolean enabled=enabled(),revoke=policy.pending();ConnectionTerminal.VPN.observeTechnical(enabled);
+        if(policy.faulted()||!enabled&&!revoke){detach();return;}
         if(callback==null){
             ConnectivityManager manager=context.getSystemService(ConnectivityManager.class);
             if(manager!=null){
@@ -44,76 +89,68 @@ final class TechnicalMetadataUpload {
                     @Override public void onLost(Network network){changed();}
                     @Override public void onCapabilitiesChanged(Network network,NetworkCapabilities capabilities){changed();}
                 };
-                try{manager.registerDefaultNetworkCallback(candidate);callback=candidate;}catch(RuntimeException ignored){}
+                try{manager.registerDefaultNetworkCallback(candidate);callback=candidate;}catch(RuntimeException unavailable){}
             }
         }
         dirty=true;main.removeCallbacks(flush);main.postDelayed(flush,schedule.delay(SystemClock.elapsedRealtime(),revoke));
     }
     private synchronized void detach(){
         main.removeCallbacks(flush);dirty=false;
-        if(callback!=null){try{context.getSystemService(ConnectivityManager.class).unregisterNetworkCallback(callback);}catch(RuntimeException ignored){}callback=null;}
+        if(callback!=null){try{context.getSystemService(ConnectivityManager.class).unregisterNetworkCallback(callback);}catch(RuntimeException unavailable){}callback=null;}
     }
-    private synchronized boolean consent(boolean enabled){
-        if(!enabled){forcedOff=true;ConnectionTerminal.VPN.observeTechnical(false);if(request!=null)request.cancel();}
-        long epoch=prefs.getLong("epoch",0)+1;
-        storageFault=!prefs.edit().putLong("epoch",epoch).putBoolean("enabled",enabled).putBoolean("revoke_pending",!enabled).commit();
-        if(storageFault){forcedOff=true;prefs.edit().putBoolean("enabled",false).putBoolean("revoke_pending",true).apply();status="LOCAL_STORAGE_FAILURE";schedule.revoke();changed();return false;}
-        forcedOff=!enabled;
-        if(request!=null)request.cancel();status=enabled?"PENDING":"REVOCATION_PENDING";
-        schedule.revoke();changed();return true;
+    private synchronized void object(){
+        if(request!=null)request.cancel();ConnectionTerminal.VPN.observeTechnical(false);
+        policy.object();schedule.revoke();changed();
     }
     private synchronized void flush(){
-        if(storageFault){
-            if(!prefs.edit().putBoolean("enabled",false).putBoolean("revoke_pending",true).commit()){main.postDelayed(flush,60000);return;}
-            storageFault=false;
-        }
-        boolean enabled=enabled(),revoke=prefs.getBoolean("revoke_pending",false);
-        if(!enabled&&!revoke){detach();return;}
-        if(!schedule.begin(SystemClock.elapsedRealtime(),revoke)){main.postDelayed(flush,schedule.delay(SystemClock.elapsedRealtime(),revoke));return;}
-        long epoch=prefs.getLong("epoch",0),sequence=prefs.getLong("sequence",0)+1;
-        if(!prefs.edit().putLong("sequence",sequence).commit()){schedule.finish(SystemClock.elapsedRealtime(),false);changed();return;}
-        status=revoke?"REVOCATION_PENDING":"SENDING";dirty=false;
-        new Thread(()->send(epoch,sequence,enabled),"technical-metadata-upload").start();
+        if(policy.faulted()||!enabled()&&!policy.pending()){detach();return;}
+        if(!schedule.begin(SystemClock.elapsedRealtime(),policy.pending())){changed();return;}
+        TechnicalMetadataPolicy.Ticket ticket=policy.reserve();
+        if(ticket==null){schedule.finish(SystemClock.elapsedRealtime(),false);changed();return;}
+        status=ticket.sample?"SENDING_BASIC":"REVOKING";dirty=false;
+        new Thread(()->send(ticket),"technical-metadata-upload").start();
     }
-    private void send(long epoch,long sequence,boolean enabled){
+    private void send(TechnicalMetadataPolicy.Ticket ticket){
         boolean success=false;String result="UNAVAILABLE";
         try{
-            JsonObject report;
-            FriendsAccessAndroid client;
+            JsonObject report;FriendsAccessAndroid client;
             synchronized(this){
-                if(epoch!=prefs.getLong("epoch",0)||enabled!=enabled())return;
-                report=TechnicalMetadataSnapshot.report(epoch,sequence,enabled,enabled?TechnicalMetadataAndroid.sample(context):new JsonObject());
+                if(!policy.current(ticket)||ticket.sample&&!enabled())return;
+                report=ticket.sample?TechnicalMetadataSnapshot.basicReport(ticket.epoch,ticket.sequence,TechnicalMetadataAndroid.sample(context,true))
+                    :TechnicalMetadataSnapshot.report(ticket.epoch,ticket.sequence,false,new JsonObject());
                 client=new FriendsAccessAndroid(context);request=client;
             }
-            client.technicalMetadata(report);success=true;result=enabled?"STORED":"REVOKED";
+            client.technicalMetadata(report);success=true;result=ticket.sample?"BASIC_STORED_NO_CONSENT_CLAIM":"REVOKED";
         }catch(FriendsAccessAndroid.SupportRateLimited limited){result="RATE_LIMITED";}
-        catch(FriendsAccessAndroid.Denied denied){result="AUTH_REJECTED";}
+        catch(FriendsAccessAndroid.Denied denied){result="AUTH_OR_CONTRACT_REFUSED";}
         catch(Exception unavailable){result="UNAVAILABLE";}
         finally{
             synchronized(this){
                 request=null;schedule.finish(SystemClock.elapsedRealtime(),success);
-                if(epoch==prefs.getLong("epoch",0)){
-                    status=!enabled&&!success?"REVOCATION_PENDING":result;
-                    if(!enabled&&success)prefs.edit().putBoolean("revoke_pending",false).commit();
-                    dirty=dirty||!success;
-                }else schedule.revoke();
-                if(!enabled()&&!prefs.getBoolean("revoke_pending",false)){detach();return;}
-                main.removeCallbacks(flush);main.postDelayed(flush,dirty||prefs.getBoolean("revoke_pending",false)?schedule.delay(SystemClock.elapsedRealtime(),prefs.getBoolean("revoke_pending",false)):6L*3600000);
+                if(policy.current(ticket)){status=result;if(success)policy.acknowledge(ticket);dirty=dirty||!success;}else schedule.revoke();
+                if(policy.faulted()||!enabled()&&!policy.pending()){detach();return;}
+                main.removeCallbacks(flush);main.postDelayed(flush,dirty||policy.pending()?schedule.delay(SystemClock.elapsedRealtime(),policy.pending()):6L*3600000);
             }
         }
     }
+    private synchronized void disclose(Activity activity){
+        if(!BuildConfig.BASIC_METADATA_APPROVED||!policy.needsNotice()||noticeOpen||activity.isFinishing())return;
+        noticeOpen=true;
+        new android.app.AlertDialog.Builder(activity).setTitle("Базовые технические сведения / Basic technical data")
+            .setMessage("Автоматически: ОС и версия приложения, тип связи, доступные SIM/зарегистрированный оператор (отдельные источники), фактические transport/gateway и категория ошибки. Сервер определяет ASN/организацию по подтверждённому временному IP-наблюдению, не по VPN/relay IP. Цель — диагностика совместимости и подключения. Только последнее наблюдение, до 7 дней. Без модели, города, географии и истории IP. Это уведомление, не согласие. Возражение и дополнительная диагностика: Поддержка → Конфиденциальность. Отказ не ограничивает VPN, оплату, обновления и поддержку.\nAutomatic basic data, latest only up to 7 days; no model, location or IP history. Privacy/objection in Support → Privacy. Acknowledgment is not consent.")
+            .setNegativeButton("Возражаю / Object",(dialog,which)->object())
+            .setPositiveButton("Понятно / Understood",(dialog,which)->{synchronized(this){policy.noticeShown(BuildConfig.BASIC_METADATA_APPROVED);changed();}})
+            .setOnDismissListener(dialog->{synchronized(this){noticeOpen=false;}}).show();
+    }
     static void controls(Activity activity,LinearLayout panel){
-        TechnicalMetadataUpload upload=get(activity);Switch toggle=new Switch(activity);
-        toggle.setText("Технические сведения для поддержки / Support technical information");toggle.setChecked(upload.enabled());panel.addView(toggle);
+        TechnicalMetadataUpload upload=get(activity);
+        TextView heading=new TextView(activity);heading.setText("Конфиденциальность / Privacy · basic-2026-11-v1");panel.addView(heading);
         TextView status=new TextView(activity);panel.addView(status);
-        Runnable render=()->status.setText(upload.storageFault?"OFF · ошибка сохранения; не перезапускайте приложение до сохранения отзыва / storage failure; revocation not durable yet":upload.enabled()?"ON · до выключения / until disabled · "+upload.status:upload.prefs.getBoolean("revoke_pending",false)?"OFF · отзыв ожидает связи / revocation pending":"OFF");render.run();
-        toggle.setOnCheckedChangeListener((button,checked)->{
-            if(!checked){if(upload.enabled())upload.consent(false);render.run();return;}
-            new android.app.AlertDialog.Builder(activity).setTitle("Технические сведения / Technical information")
-                .setMessage("Модель, Android и версия приложения; тип связи, доступный оператор SIM и зарегистрированной сети, радио; фактическая VPN-сессия, gateway, ограниченная ошибка/readiness; приблизительные страна/регион/город и ASN по подходящему IP-наблюдению. IP-география не GPS и не доказывает местонахождение. Без номера, IMEI, SSID/BSSID, cell ID, приложений, сайтов, сообщений и ключей. Только последние сведения, включая аппаратный профиль, до 7 дней. Сбор действует ДО ВЫКЛЮЧЕНИЯ, отдельно от прежней 7-дневной диагностики. Выключение останавливает сбор немедленно; сервер удаляет данные после получения отзыва. В офлайне отзыв ожидает связи. Отказ не ограничивает VPN, оплату, обновления или поддержку.\nModel/OS/app, connection/operator/radio, VPN/session/error, approximate IP geography/ASN. Latest only, hardware included: up to 7 days. Enabled until switched off; offline revocation remains pending. No GPS or traffic content; optional for all services.")
-                .setNegativeButton(android.R.string.cancel,(dialog,which)->toggle.setChecked(false))
-                .setOnCancelListener(dialog->toggle.setChecked(false))
-                .setPositiveButton(android.R.string.ok,(dialog,which)->{if(!upload.consent(true))toggle.setChecked(false);render.run();}).show();
-        });
+        Runnable render=()->status.setText(upload.policy.mode()+" · "+upload.status+(upload.policy.pending()?" · offline revocation pending":"")
+            +(BuildConfig.BASIC_METADATA_APPROVED?"":" · public activation blocked pending processing-basis review"));render.run();
+        Button stop=new Button(activity);stop.setText("Отключить / возразить против технических сведений");panel.addView(stop);
+        stop.setOnClickListener(view->{upload.object();render.run();});
+        Button resume=new Button(activity);resume.setText("Пересмотреть базовый режим / Review basic mode");panel.addView(resume);
+        resume.setOnClickListener(view->{synchronized(upload){upload.policy.resumeBasic(BuildConfig.BASIC_METADATA_APPROVED);upload.disclose(activity);render.run();}});
     }
 }

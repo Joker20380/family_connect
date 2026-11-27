@@ -5,6 +5,24 @@ General retention rules outside the explicit technical-information limits below,
 a public operator contact and a formal policy remain to be established.
 Check [STATUS](STATUS.md) for the actual deployed versions.
 
+## Basic candidate v2 — source only, not publicly enabled
+
+The separate basic candidate removes the support enable switch: after ordinary setup it shows
+a short notice before the first new sample. Acknowledging that notice is **not consent**.
+Its automatic processing mode is `automatic_basic`, policy `basic-2026-11-v1`; the server receipt
+uses `consent=not_requested`, never `enabled`. All public build types keep automatic activation
+disabled pending the field-by-field processing-basis review and operational deployment gates in
+[the candidate contract](operators/basic-metadata-v2.md). This does not change the deployed126
+opt-in description below. No current production schema, writer or source binding is changed.
+
+Basic includes OS/app version, connection type, SIM/registered-network names as distinct sourced
+observations, actual transport/gateway and bounded error, and ASN/organization from a qualified
+ephemeral server observation. It excludes model/manufacturer, radio detail, readiness detail and
+all country/region/city enrichment. City lookup is not invoked for basic; no raw IP/history is added.
+Latest-only observations expire within seven days. Payload-free replay/revocation floors remain
+for the device lifetime. Support → Privacy offers an objection/disable action; offline revoke
+remains pending. VPN, payment, updates and support do not depend on metadata acceptance.
+
 ## On the device
 
 Public Android126 technical information uses new, separate,
@@ -27,9 +45,10 @@ database and panel projection must not enter indefinite backups or append-only l
 The compatible server/collector/panel path and public126 are deployed; installed
 opt-in/revoke/deletion acceptance passes. Previous125 downloads/admissions remain.
 [Public release and bounded acceptance](releases/2026-11-16-android126-publication.md).
-The first geographic source is only a recent RU/AWG
-peer endpoint joined through the authenticated device's canonical AWG key. NL/TCP
-and MESH have no qualified direct-IP source here: show unavailable or an older
+Current qualified geographic sources are recent RU/AWG and NL1/NL2 AWG
+peer endpoints joined through the authenticated device's canonical AWG key, with exact source
+archive and current transport-state binding. TCP and MESH have no qualified direct-IP source
+in this collector: show unavailable or an older
 suitable observation with its own age. Ordinary HTTP/VPN-exit/relay addresses do
 not establish the client's city. Local DB-IP Lite supplies network geography/ASN,
 not GPS, retail ISP certainty or proof of a person's physical location; an upstream

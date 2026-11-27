@@ -1797,6 +1797,7 @@ installed/deployed versions; dated reports preserve what was checked at that tim
 
 ## Operators
 
+- [Automatic basic metadata v2: separate non-public candidate, privacy/migration and rollout gates](operators/basic-metadata-v2.md).
 - [Friends deployment](../deploy/friends/README.md).
 - [Fleet leases/IPAM: хранение, API и recovery](fleet-leases.ru.md).
 - [Fleet proof авторизация и scheduler](fleet-access-scheduler.ru.md).

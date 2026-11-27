@@ -16,6 +16,18 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
+Current23:02UTC: A remains production priority; initial pre-hook Docker create/start needs proven
+old runtime-generation retirement and bounded recovery before installed OWNER composition. Shared
+stop would affect14 excluded neighbors and has not been performed/authorized. Existing HA key
+preservation and real consumer PASS. No common kit/verify/resume; retain strict drain and UNKNOWN.
+Separately authorized B now has implemented source + distinct arm64 debug candidate, not a deployed
+schema/writer change. [Basic v2 gates](operators/basic-metadata-v2.md): exact-source CI, native
+UI/storage/restore acceptance and documented processing basis/store disclosure before public enable;
+then stage compatible API/collectors/panel after A with new exact bindings. Do not silently activate
+public telemetry or start another queued task.96 Python protocol/collector,32 panel and18 JVM checks
+PASS; old-server refusal causes backoff, never v1 extended fallback or VPN refusal.
+
+Historical22:54UTC:
 Current22:54UTC: native receipt894ffed3 and pre-hookda551d55 exact-source CI SUCCESS. Preserve
 the original native failure plus phase0/Linux's14 fixture permission failures. Isolate fake Engine
 runtime paths without weakening production fail-closed checks;37 focused checks PASS, broad CI

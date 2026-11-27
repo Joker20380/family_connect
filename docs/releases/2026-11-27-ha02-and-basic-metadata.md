@@ -48,6 +48,50 @@ approval and isolated old runtime-generation/recovery qualification. No shared s
 hold or application recreation occurred. Native-support fix894ffed3 is pushed/remote-matched;
 run46075423497 is in progress, Android46075423494 SUCCESS, other applicable runs pending.
 
+## B: separate implemented candidate, not public enablement
+
+The prior B prompt was not implemented at entry. This change adds automatic_basic/schema2,
+basic-2026-11-v1 across Android, authenticated endpoint, receipt, SQLite store, RU/NL collectors
+and console model/projection/template. Console migration0016 is source-only. No working database,
+writer closure, image or collector is updated. HA03 canonical PG intentionally refuses schema2;
+the actual SQLite endpoint remains the candidate's supported server path.
+
+Ordinary foreground setup presents notice before any sample, without the old support enable Switch.
+Acknowledgment records notice, not consent. Privacy objection/offline revoke does not gate VPN,
+payment, updates or support. Positive epoch/sequence and installation binding commit before collection;
+legacy enabled becomes basic NOTICE_PENDING, absence is explicitly LEGACY_UNDECIDED, prior refusal/
+pending revoke survives, failed commits fail closed, restored installation is blocked. A late ACK
+cannot clear revoke; no epoch advance bypasses pending revocation. Late/restored v1 samples cannot
+downgrade an identity already accepted as basic, including after a payload-free v1 revoke.
+
+Basic fields are OS/version/app, connection type, separate public SIM/registered-network sources,
+actual transport/gateway/state and bounded error/time; local ASN/organization only from qualified
+ephemeral direct AWG peer observation on RU/NL1/NL2. TCP/MESH intermediary IP is not substituted.
+Model/manufacturer/radio/readiness/geography are excluded from automatic payload/enrichment;
+ASN-only lookup never queries city records. Latest-only observations expire within7 days, old/future
+samples cannot refresh their age; replay floors are payload-free. Panel preserves UNKNOWN/reason,
+source and age, policy identity and not_requested instead of consent=enabled.
+
+Local checks:96 Python protocol/collector tests;32 panel tests against disposable PostgreSQL17.11;
+18 Android JVM tests (7 policy,11 existing wire/schedule); arm64 debug and instrumentation APK builds
+PASS. Real device instrumentation/UI/storage fault/restore acceptance is NOT_RUN. The legacy validator
+fixture is the validation prefix of111866ae technical_metadata.py (trailing blank lines removed), SHA256
+c0adf82aee5afd4fb71a51ba7b13ebe25f4ccab62eb4ffbde1ae72e59c49734a;
+compatibility runs without relying on CI fetching old Git history. Candidate package
+com.familyconnect.app.metadata, version0.1.18-beta126-basic-candidate, debug signing only;
+APK SHA25633e29f759a5740af98d028d15795d3483713931726f7ce11740059e9c1e8730e.
+Native library rebuild was needed because the historical generated GoBackend lacked ownedHandle;
+fresh builder closure atda551d55 retains engineb5928efb/Android54200111 pins. Initial stale-library,
+offline dependency, Python environment and disposable Docker network failures are retained privately;
+successful corrected builds do not erase them. No emulator, phone install or transport release claim.
+
+Public release/friends builds keep BASIC_METADATA_APPROVED=false. Only explicit separate debug
+qualification enables it; no new public version/catalog or signing. Per-field necessity/legal basis,
+native acceptance and store declaration remain mandatory before public enablement. Rollout/rollback
+requires A completion and renewed exact source/image closures, API/collectors/console first; no database
+rollback from old bytes or automatic interpretation of basic rows as old consent. See the
+[field purposes/sources/retention/basis and migration contract](../operators/basic-metadata-v2.md).
+
 ## Outstanding acceptance
 
 ### Exact-source follow-up and distinct broad-CI failure
@@ -76,7 +120,8 @@ generation maintenance window is not automatically authorized; first qualify its
 old runtime completion and bounded recovery. Existing HA key reconciliation now passes;
 independent external custody remains open.
 No installed OWNER adapter, coherent encrypted kit, independent kit verification or linked resume.
-Part B has no implementation acceptance yet. External custody, source-host-free restore,
+Part B has an implemented/tested source and debug candidate, not native/public rollout acceptance.
+External custody, source-host-free restore,
 console reboot-startup and FLEET-PRODUCTION-ONBOARDING-1 remain separate and open.
 Required product outcome: «Подготовил VPS → указал IP, доступ и роли → запустил ввод →
 получил проверенный активный узел».
