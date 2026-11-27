@@ -63,10 +63,11 @@ UNKNOWN need not become settled; its possible future effects must be covered by 
 | OWNER support lifetime writer ↔ NL1 mailbox | Spool/RNS persistence, cursor, mailbox queues/dedup/floors; old links/envelopes | Accepted managed stop plus closed mailbox generation | New stopped-support snapshot inside the common interval, closed receiver/readback, final persistence and independent exit proof | Accepted fresh linked forward resume and old-generation/link rejection; preserve support33 and all queue/history bytes |
 | Paid-watch/deny and transport runtime | Enforcement and runtime-derived leases, not permission to activate stale authority | Do not disable enforcement or change its timing/policy | Explicitly distinguish captured durable authority from ephemeral runtime state; bounded barriers must preserve ordinary watchdog behavior | Restore/reconcile from current authority; no stale lease or stopped enforcement shortcut |
 
-The immediate concrete blocker is the OWNER Docker-import/accepted PostgreSQL/native-write
-row: the installed admission gates and replay semantics do not supply a continuous
-all-database downstream lease. The new protocol deliberately has no production adapter
-for that row and always reports capture_permitted=false. No manifest-only or source-only
+The immediate concrete blocker is production integration of the OWNER Docker-import/accepted
+PostgreSQL/native-write row. The isolated logical boundary qualified below now supplies an actual
+database lock mechanism, but installed admission gates/replay alone and native file paths are not
+its equivalent. The causal protocol still has no integrated production adapter for that row and
+always reports capture_permitted=false. No manifest-only or source-only
 maintenance hold can satisfy it. Remote/file rows must also be covered before final acceptance.
 
 ## Causal protocol and independent reader
@@ -132,8 +133,8 @@ a protected path was requested, never the secret in chat. Joker, NL2 destination
 Actual off-laptop custody/access remains unconfirmed. This input is not the only blocker:
 the production downstream adapters above are still required independently.
 
-**One next step within the same NEXT:** implement/qualify the OWNER Docker-import plus
-accepted PostgreSQL/native-write physical boundary, connect it to the causal participant,
+**One next step within the same NEXT:** connect the qualified OWNER logical PostgreSQL boundary
+to the causal participant with exact installed database/schema/readback binding and native-file coverage,
 then complete the remaining matrix coverage before any production common stop/capture.
 There is no production kit ID, new stopped-support snapshot, independent encrypted-kit
 PASS or linked normal-resume receipt from this iteration. e4eace1a remains history.
@@ -143,3 +144,49 @@ accepted support/IPC recovery and effective-config console startup in an isolate
 before any installed startup change. Current HTTP success is not reboot acceptance.
 Onboarding remains the separate required result: prepared VPS → IP/access/roles →
 normal enrollment → verified active node, not a consequence of an encrypted recovery kit.
+
+## Logical PostgreSQL boundary follow-up
+
+13:25UTC source-only `fc_control_plane.capture_pg_boundary.PostgresBoundary` closes a concrete
+mechanism gap rather than treating an empty ExecIDs census as proof. It holds SHARE locks on the
+exact persistent public tables and PostgreSQL catalogs and ShareRowExclusive locks on all sequences.
+Sequence locks are obtained by same-value ALTER CACHE inside the never-committed transaction;
+release rolls it back. It refuses unsupported/uncovered relations, changed schema, an already
+accepted conflicting transaction, reacquired/different XID, missing locks and expired deadline.
+PostgreSQL17 transaction/idle timeouts bound an abandoned controller independently of its client.
+The first failure survives a cleanup failure. Logical read/dump remains possible while writes wait.
+
+This is a dedicated database/cluster operation, not a general-purpose host fence. It does not
+cover native filesystem/configuration writes, external SQL-function effects, another database,
+arbitrary unknown SQL replay or remote receivers. No integration or installation into working
+console/publisher images is claimed. Existing helpers and their accepted meanings are unchanged.
+
+Exact final native operation2cbcb034addbfbb90ac7851eb19bcd04, boundary source SHA256
+96ce0c6354ba69fb1c8279abe39de42823d2594c518a1cea121a226d3f0b0b28:
+
+- 20 checks PASS on console3af9fbf9/PostgreSQL18cfe3ef, private network/tmpfs, no product mounts.
+- INSERT/UPDATE/DELETE/TRUNCATE, nextval/setval, table/schema DDL and large-object writes block;
+  reads remain usable. Incomplete coverage, an active earlier transaction, lost/reacquired barrier,
+  server timeout and killed controller are explicitly exercised. A pre-existing CACHE32 sequence
+  allocation cannot bypass the lock; last_value/is_called/cache survive the barrier unchanged.
+  Original history/schema survives.
+- An actual Docker exec and its DB connection exist **before** the boundary. Its late INSERT
+  independently appears as a server lock wait. The barrier holder reads no late effect; pg_dump
+  succeeds. After release, the original request and identical retry leave one unique effect.
+- A separate pg_restore/psql reader restores that held dump into another disposable database and
+  finds only the original history/unchanged sequence. Dump SHA256
+  1b6fc5561008bd37dc88cefd34c0b1a8e4e721ca2ddf0cf8fa6d562cd9c81949,2241 bytes.
+  Reader projection SHA2567f224f12486feedd0a36c93a3ae9c8ba3432a3620307a3d7383a28bf610b2b89.
+- Native01 retains the fixture's malformed Docker mount argument refusal before console execution.
+  Native02 retains17 PASS/one failed test expectation: PostgreSQL reports TransactionTimeout during
+  rollback after its timeout already releases locks. Explicit failure/cleanup behavior is now tested;
+  it is not hidden as a normal release. Native03–06 remain earlier qualification receipts.
+
+This dump is **synthetic and unencrypted**, not a component of the requested production kit.
+The actual delayed business-import replay checks remain the separate6-case qualified scope.
+No history marker is settled by the new boundary; ordinary Gate.drain is unchanged.
+
+Causal checkpoint010d8c6c3dbe77734f6a44ed210e32ea8ecdf72f is committed/pushed and independently
+matches the feature remote. Causal CI46005005447, Control panel46005005254 and Android46005005298
+are SUCCESS; phase0/Linux/native support are still running at13:25. The new database-boundary
+source's applicable CI must be checked separately after its own push. No source push is deployment.

@@ -16,6 +16,13 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
+13:27UTC adds a qualified logical PostgreSQL boundary (20 checks plus a real pre-existing Docker
+exec/held dump/independent restore/late replay on exact installed images, synthetic data only).
+The logical mechanism now exists; production OWNER integration, native file paths and remote
+receiver coverage remain outstanding. No production capture permit, encrypted kit or new stop/resume.
+Source010d8c6c causal checkpoint pushed/remote verified; applicable CI readback continues.
+[Boundary scope, preserved refusals and remaining integration](releases/2026-11-27-causal-capture-protocol.md#logical-postgresql-boundary-follow-up).
+
 27 November12:28–13:00UTC fresh panel/support/both MESH bounded baseline PASS; no installed component
 reinstallation or production stop/hold. New causal four-host protocol qualifies112 checks and a real
 four-kernel synthetic interval/exact-set reader/queued-replay reconciliation. Exact installed images

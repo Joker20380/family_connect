@@ -17,12 +17,13 @@ def command(arguments, **options):
                           check=True, **options)
 
 
-def main(output):
+def main(output, *, pg_boundary=False):
     root = Path(output)
     root.mkdir(mode=0o700, exist_ok=False)
     os.umask(0o077)
     repository = Path(__file__).resolve().parents[2]
-    test = repository / 'control_plane/tests/test_capture_late_imports.py'
+    test_name = 'test_capture_pg_boundary.py' if pg_boundary else 'test_capture_late_imports.py'
+    test = repository / 'control_plane/tests' / test_name
     operation = secrets.token_hex(16)
     database, console = 'fc-ha02-late-pg-' + operation, 'fc-ha02-late-console-' + operation
     label = 'family-connect.causal-lab=' + operation
@@ -51,21 +52,28 @@ from fc_control_plane.capture import operation
 import pytest
 with operation():
     result=pytest.main(['-q','-p','no:cacheprovider','--basetemp=/tmp/fixture',
-        'tests/test_capture_late_imports.py'])
+        'tests/TEST_NAME'])
 sources={str(item.relative_to(pathlib.Path('/app/control_plane'))):hashlib.sha256(item.read_bytes()).hexdigest()
     for item in [pathlib.Path('/app/control_plane/apps/console')/name for name in
         ('inventory.py','probe_inventory.py','subscriptions.py','technical_metadata.py','observability_models.py')]}
 print('NATIVE_LOADED_SOURCES='+json.dumps(sources,sort_keys=True))
 sys.exit(result)
-'''
+'''.replace('TEST_NAME', test_name)
+        if pg_boundary:
+            setup = setup.replace('sys.exit(result)', "print('NATIVE_BOUNDARY_SOURCE='+hashlib.sha256("
+                "pathlib.Path('/app/control_plane/fc_control_plane/capture_pg_boundary.py').read_bytes()).hexdigest())\nsys.exit(result)")
         arguments = ['create', '--name', console, '--network', 'container:' + database, '--read-only',
             '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges', '--label', label,
             '--tmpfs', '/tmp:rw,uid=10001,gid=10001,mode=700', '--tmpfs', '/run:rw,uid=10001,gid=10001,mode=700',
             '--tmpfs', '/app/control_plane/.local:rw,uid=10001,gid=10001,mode=700',
-            '--mount', 'type=bind,source=' + str(test) + ',destination=/app/control_plane/tests/test_capture_late_imports.py,readonly',
+            '--mount', 'type=bind,source=' + str(test) + ',destination=/app/control_plane/tests/' + test_name + ',readonly',
             '-e', 'CONTROL_PLANE_MODE=synthetic', '-e', 'DJANGO_SECRET_KEY=synthetic-capture-lab-secret-used-only-in-isolated-fixture-20261127',
             '-e', 'POSTGRES_PASSWORD=synthetic-capture-lab-not-a-secret', '-e', 'POSTGRES_HOST=127.0.0.1',
             '--entrypoint', 'python', CONSOLE, '-B', '-c', setup]
+        boundary_module = repository / 'control_plane/fc_control_plane/capture_pg_boundary.py'
+        if pg_boundary:
+            arguments[1:1] = ['--mount', 'type=bind,source=' + str(boundary_module) +
+                ',destination=/app/control_plane/fc_control_plane/capture_pg_boundary.py,readonly']
         command(arguments)
         containers.append(console)
         inspected = json.loads(command(['inspect', database, console]).stdout)
@@ -74,7 +82,8 @@ sys.exit(result)
             assert not item['HostConfig']['Privileged'] and item['HostConfig']['ReadonlyRootfs']
             assert item['HostConfig']['CapDrop'] == ['ALL'] and not item['HostConfig']['PortBindings']
             assert all(mount['Type'] == 'tmpfs' or
-                       mount['Type'] == 'bind' and mount['Source'] == str(test) and not mount['RW']
+                       mount['Type'] == 'bind' and mount['Source'] in
+                       ([str(test), str(boundary_module)] if pg_boundary else [str(test)]) and not mount['RW']
                        for mount in item['Mounts']), 'UNEXPECTED_MOUNT'
         execution = subprocess.run(['docker', 'start', '-a', console], capture_output=True, timeout=100)
         (root / 'stdout.log').write_bytes(execution.stdout)
@@ -82,15 +91,23 @@ sys.exit(result)
         assert execution.returncode == 0, 'ISOLATED_CONSOLE_TEST_FAILED'
         final = json.loads(command(['inspect', console]).stdout)[0]
         assert final['State']['Status'] == 'exited' and final['State']['ExitCode'] == 0
-        assert b'6 passed' in execution.stdout, 'INCOMPLETE_NATIVE_CHECKS'
+        count = 20 if pg_boundary else 6
+        assert str(count).encode() + b' passed' in execution.stdout, 'INCOMPLETE_NATIVE_CHECKS'
         loaded = execution.stdout.split(b'NATIVE_LOADED_SOURCES=', 1)[1].splitlines()[0]
         sources = json.loads(loaded)
         assert all(hashlib.sha256((repository / 'control_plane' / name).read_bytes()).hexdigest() == digest
                    for name, digest in sources.items()), 'BUSINESS_SOURCE_DIFFERENCE'
-        result = dict(result='PINNED_IMAGE_READ_MODEL_LATE_REPLAY_PASS', operation=operation,
-            console_image=CONSOLE, postgres_image=POSTGRES, tests=6, sources=sources,
+        result = dict(result='PINNED_IMAGE_LOGICAL_PG_BOUNDARY_PASS' if pg_boundary else
+            'PINNED_IMAGE_READ_MODEL_LATE_REPLAY_PASS', operation=operation,
+            console_image=CONSOLE, postgres_image=POSTGRES, tests=count, sources=sources,
             test_sha256=hashlib.sha256(test.read_bytes()).hexdigest(), product_mounts=0,
             production_epoch_fenced=False, capture_permitted=False)
+        if pg_boundary:
+            result['boundary_sha256'] = hashlib.sha256(boundary_module.read_bytes()).hexdigest()
+            loaded_boundary = execution.stdout.split(b'NATIVE_BOUNDARY_SOURCE=', 1)[1].splitlines()[0].decode()
+            assert loaded_boundary == result['boundary_sha256'], 'BOUNDARY_LOADED_SOURCE_CHANGED'
+            from pg_boundary_docker_dispatch import run
+            result['docker_dispatch'] = run(command, database, CONSOLE, boundary_module, root, operation, containers)
         (root / 'result.json').write_text(json.dumps(result, sort_keys=True))
         print(json.dumps(result, sort_keys=True))
     finally:
@@ -111,4 +128,4 @@ sys.exit(result)
 
 
 if __name__ == '__main__':
-    main(sys.argv[1])
+    main(sys.argv[1], pg_boundary='--pg-boundary' in sys.argv[2:])

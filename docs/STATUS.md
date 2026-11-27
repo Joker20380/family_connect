@@ -1,5 +1,16 @@
 # Текущее состояние / Current state
 
+**27 November13:25UTC — logical PostgreSQL downstream boundary qualified, not installed.**
+New dedicated-connection boundary covers exact persistent public relations, sequences and catalogs
+with continuously held transaction locks, backend/XID/scope binding and server-enforced deadline.
+20 isolated tests PASS on installed console3af9fbf9/PostgreSQL18cfe3ef; a pre-existing Docker exec
+waits on the actual DB lock, the held dump restores independently without its late effect, then
+release/replay leaves one effect. This is synthetic qualification, not a production barrier/kit.
+Causal source010d8c6c is pushed and remote SHA verified; causal/Control panel/Android CI SUCCESS,
+other applicable jobs still running at this readback. Existing accepted installations remain untouched.
+Next: integrate the qualified logical DB boundary with OWNER and remaining file/remote receiver
+coverage; no production stop/hold or encrypted kit exists. [Exact scope and refusals](releases/2026-11-27-causal-capture-protocol.md#logical-postgresql-boundary-follow-up).
+
 **27 November12:28–13:00UTC — fresh normal baseline; causal protocol qualified, production kit NOT_CREATED.**
 Real panel login/five pages/logout, observer8b support/IPC/history and both authorized MESH
 4HTTPS/3DNS/expected egress PASS. Accepted images/bindings/support are unchanged; no production holds
