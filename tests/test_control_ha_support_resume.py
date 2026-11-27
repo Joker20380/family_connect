@@ -6,10 +6,13 @@ import secrets
 
 import pytest
 
+from control.capture_gate import Gate, GateError
 from scripts import control_ha_mailbox_generation as generation
 from scripts import control_ha_mailbox_startup as startup
 from scripts import control_ha_support_resume as resume
 from scripts import control_ha_support_replace as replace
+from scripts import control_ha_support_observe as observer
+from scripts import control_ha_support_stopped as stopped_support
 from test_control_ha_support_handoff import paired, run, notice_snapshot, chat_runtime
 from test_control_ha_support_replace import service
 from test_control_ha_legacy_support import installed, wait_for, read, install_collector_sources
@@ -55,8 +58,10 @@ def prepared(paired, monkeypatch, installed_collectors=False):
     return newer, Channel(mailbox), before, authority, history
 
 
-def stage_generation(previous, newer, participant, mailbox, reclosure, monkeypatch, installed_collectors=False):
-    next_plan = resume.prepare(previous, newer, participant, installed_collectors=installed_collectors)
+def stage_generation(previous, newer, participant, mailbox, reclosure, monkeypatch, installed_collectors=False,
+                     baseline_variant=None):
+    next_plan = resume.prepare(previous, newer, participant, installed_collectors=installed_collectors,
+                              baseline_variant=baseline_variant)
     interpreter = os.environ['FC_TEST_SUPPORT_PYTHON']
     wrapper = Path(__file__).parent / 'fixtures/support_ptracer.py'
     raw = (newer / 'support.conf').read_bytes().replace(('ExecStart=' + interpreter).encode(),
@@ -137,6 +142,113 @@ def test_stale_boot_or_ticket_refuses_same_resume_operation(paired, monkeypatch,
 
 class ControllerInterrupted(BaseException):
     pass
+
+
+@pytest.mark.parametrize('service', [True], indirect=True)
+@pytest.mark.parametrize('previous_boot', [False, True])
+def test_mandatory_transition_observer_stopped_capture_and_forward_recovery(paired, monkeypatch, tmp_path, previous_boot):
+    manager, plan, root, data, mailbox = paired
+    current, channel, before, old_authority, old_history = prepared(paired, monkeypatch, installed_collectors=True)
+    assert resume.Resume(current, channel).run() == 'FORWARD_RESUME_OPEN_CAPTURE_DENIED'
+    current_plan = read(current / 'plan.json')
+    binding = read(current / 'accepted.json')['binding']
+    authority_path = Path(current_plan['start_authority'])
+    authority = authority_path.read_bytes()
+    history = {str(path.relative_to(current)): (path.read_bytes(), path.stat().st_mtime_ns)
+               for path in current.rglob('*') if path.is_file()}
+    install_collector_sources(Path(plan['baseline']), mandatory=True)
+    variant = replace.admission.MANDATORY_COLLECTOR_BASELINE
+    with pytest.raises(ValueError, match='SOURCE_PIN'):
+        replace.Replacement(current).validate()
+
+    actions = []
+    original_call = channel.call
+
+    def read_only_call(action, payload=None):
+        actions.append(action)
+        assert action == 'observe' and payload is None
+        return original_call(action, payload)
+
+    def mutation_forbidden(*args, **kwargs):
+        pytest.fail('read-only observer attempted a write-capable recovery operation')
+
+    with monkeypatch.context() as readonly:
+        readonly.setattr(channel, 'call', read_only_call)
+        readonly.setattr(resume.Resume, 'run', mutation_forbidden)
+        for name in ('record', 'attest', 'terminal_failure'):
+            readonly.setattr(replace.Replacement, name, mutation_forbidden)
+        for repetition in range(2):
+            observed = observer.observe(current, channel, baseline_variant=variant)
+            assert observed['result'] == 'ACCEPTED_SUPPORT_READ_ONLY_NORMAL'
+            assert observed['binding'] == binding
+        assert actions == ['observe', 'observe']
+        actions.clear()
+        readonly.setattr(observer.socket, 'socket', mutation_forbidden)
+        with pytest.raises(ValueError, match='BASELINE_VARIANT'):
+            observer.observe(current, channel, baseline_variant='unknown')
+        target = Path(plan['baseline']) / 'provisioning/owner_capture.py'
+        raw = target.read_bytes()
+        for damage in ('changed', 'missing', 'extra'):
+            extra = target.parent / 'unreviewed.py'
+            if damage == 'changed':
+                target.write_bytes(raw + b'\n')
+            elif damage == 'missing':
+                target.unlink()
+            else:
+                extra.write_text('unreviewed = True\n')
+            with pytest.raises(ValueError, match='SOURCE_'):
+                observer.observe(current, channel, baseline_variant=variant)
+            target.write_bytes(raw)
+            extra.unlink(missing_ok=True)
+        assert actions == []
+    assert authority_path.read_bytes() == authority
+    assert {str(path.relative_to(current)): (path.read_bytes(), path.stat().st_mtime_ns)
+            for path in current.rglob('*') if path.is_file()} == history
+    assert notice_snapshot(data, binding['pid']) == before
+    with pytest.raises(ValueError, match='SERVICE_NOT_EMPTY'):
+        resume.prepare(current, tmp_path / 'forbidden-live', data / 'forbidden-live', baseline_variant=variant)
+    assert not (tmp_path / 'forbidden-live').exists()
+
+    controller = stopped_support.StoppedSupport(current, tmp_path / 'mandatory-stopped', channel,
+                                                baseline_variant=variant)
+    assert controller.stop() == 'SUPPORT_STOPPED_HISTORY_UNSETTLED'
+    with pytest.raises(GateError, match='UNSETTLED_OPERATION'):
+        with Gate(plan['gate']).drain(.1):
+            pytest.fail('mandatory baseline must not settle historical markers')
+    receipt = controller.capture()
+    assert receipt['reader']['result'] == 'SUPPORT_COMPONENT_BYTES_VERIFIED_NOT_FLEET_BACKUP'
+    assert controller.capture() == receipt
+    with pytest.raises(ValueError, match='STOPPED_OPERATION_BINDING'):
+        stopped_support.StoppedSupport(current, controller.root, channel)
+    assert authority_path.read_bytes() == authority
+    assert all((current / name).read_bytes() == value[0] for name, value in history.items())
+    if previous_boot:
+        accepted = read(current / 'accepted.json')
+        accepted['binding']['boot'] = '11111111-1111-1111-1111-111111111111'
+        (current / 'accepted.json').write_text(json.dumps(accepted))
+        opened = read(current / 'handoff-open.json')
+        opened['candidate_binding'] = accepted['binding']
+        (current / 'handoff-open.json').write_text(json.dumps(opened))
+        value = read(authority_path)
+        value['binding'] = accepted['binding']
+        authority_path.write_text(json.dumps(value))
+    retained = {name: (current / name).read_bytes() for name in history}
+    authority = authority_path.read_bytes()
+    pending = {path.name: path.read_bytes() for path in (Path(plan['gate']) / 'pending').iterdir()}
+    newer = tmp_path / 'mandatory-forward'
+    stage_generation(current, newer, data / 'mandatory-forward', mailbox, channel.call('observe'), monkeypatch,
+                     baseline_variant=variant)
+    proof = read(newer / 'predecessor.json')['absence']
+    assert proof['reason'] == ('BOOT_CHANGED' if previous_boot else 'CLEAN_UNIT_EXIT')
+    assert proof['baseline_transition']['variant'] == variant
+    assert resume.Resume(newer, channel).run() == 'FORWARD_RESUME_OPEN_CAPTURE_DENIED'
+    assert observer.observe(newer, channel)['baseline_variant'] == variant
+    assert notice_snapshot(data, int(manager.state()['MainPID'])) == before
+    assert authority_path.read_bytes() == authority
+    assert all((current / name).read_bytes() == value for name, value in retained.items())
+    assert all((Path(plan['gate']) / 'pending' / name).read_bytes() == raw for name, raw in pending.items())
+    assert Path(plan['start_authority']).read_bytes() == old_authority
+    assert all((root / name).read_bytes() == value for name, value in old_history.items())
 
 
 @pytest.mark.parametrize('service', [True], indirect=True)

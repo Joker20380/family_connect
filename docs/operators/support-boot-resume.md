@@ -5,6 +5,38 @@ This procedure restores service, not a coherent capture or HA trust authorizatio
 Do not run it against the currently accepted, active support merely to refresh tooling.
 [Actual incident, qualification and immutable receipts](../releases/2026-11-26-control-ha-owner-boot-resume.md).
 
+## Mandatory collector successor tooling
+
+The separately named successor `owner-collectors-b7f4cbd2` selects the four exact
+collector source pins in `control_ha_legacy_support.MANDATORY_COLLECTOR_SOURCES`.
+It does not redefine `owner-collectors-192343eb` or change the original19-file
+manifest. The owner-capture file is exactb7f4cbd2 source; the other three collector
+files retain their reviewed192343eb bytes. Unknown, incomplete or modified source
+sets still refuse. Installation/qualification status and the exact tooling capsule
+are recorded in the [transition report](../releases/2026-11-27-mandatory-collector-transition.md).
+
+The existing accepted panel01 plan, authority, receipts and capsule stay immutable
+through the hot collector transition. With the new qualified tooling, use
+`scripts.control_ha_support_observe --root ACCEPTED_ROOT --mailbox-channel CHANNEL
+--collector-baseline owner-collectors-b7f4cbd2` for read-only observation. It validates
+source closure before cursor IPC/SSH, matches the live accepted binding/authority,
+retained runtime attestation and exact NL1 consumed request, and checks the fresh
+no-environment mandatory binding. It never injects code, records recovery receipts,
+issues authority, resumes or recloses NL1, including on refusal.
+
+For a separately authorized stopped component, pass the same `--collector-baseline`
+to `control_ha_support_stopped` on stop, capture and repeat. The new stop operation
+records that selection; reopening it with a different selection refuses. Strict
+`Gate.drain` still rejects historical uncertainty. For a genuinely absent accepted
+predecessor after clean stop or boot loss, pass the selection to **new**
+`control_ha_support_resume --prepare-from ...` preparation. The new operation records
+the successor variant/pins and future default maintenance inherits them.
+
+Never call `resume.prepare()` against live panel01 to update tooling. Never use its
+old completed `Resume.run()` as a health check after changing the collector baseline:
+that mutating controller's refusal path can reclose NL1. Keep using the separately
+qualified read-only observer; old operation scripts retain their original meaning.
+
 ## Inputs and prestate
 
 Use the exact qualified controller source `39caf062cf6b6b58977dfb7d7a3428246aac852c`

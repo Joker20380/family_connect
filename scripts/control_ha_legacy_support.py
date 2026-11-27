@@ -76,14 +76,26 @@ COLLECTOR_SOURCES = {
     'provisioning/support_bindings.py': 'afba534e17ec3a57f5431bd611d66b94a56f7e5f969e167ca5afe2834d430bc2',
     'provisioning/subscription_collector.py': '3bb9954c8edfba64f4b2aeb63fb174669fa2fc8e37f71c193c9a18da895193cb',
 }
+MANDATORY_COLLECTOR_BASELINE = 'owner-collectors-b7f4cbd2'
+MANDATORY_COLLECTOR_SOURCES = COLLECTOR_SOURCES | {
+    'provisioning/owner_capture.py': 'b7b1fb3ffe69d9428cb419a30d2473a2bb73a6ffb2e7c6390b6878afc953a45d',
+}
+COLLECTOR_VARIANTS = {
+    COLLECTOR_BASELINE: COLLECTOR_SOURCES,
+    MANDATORY_COLLECTOR_BASELINE: MANDATORY_COLLECTOR_SOURCES,
+}
 
 
-def sources(root, expected, *, installed_collectors=False):
+def sources(root, expected, *, installed_collectors=False, baseline_variant=None):
     require(digest(json.dumps(expected, sort_keys=True, separators=(',', ':')).encode()) == BASELINE,
             'BASELINE_PIN')
     require(type(installed_collectors) is bool, 'COLLECTOR_BASELINE_OPTION')
+    require(baseline_variant is None or baseline_variant in COLLECTOR_VARIANTS, 'BASELINE_VARIANT')
+    require(not installed_collectors or baseline_variant in (None, COLLECTOR_BASELINE), 'BASELINE_VARIANT_CONFLICT')
     if installed_collectors:
-        expected = expected | COLLECTOR_SOURCES
+        baseline_variant = COLLECTOR_BASELINE
+    if baseline_variant is not None:
+        expected = expected | COLLECTOR_VARIANTS[baseline_variant]
     root = Path(root).absolute()
     require(not any(path.is_symlink() for path in (root, *root.parents)), 'SOURCE_SYMLINK')
     require({path.relative_to(root).as_posix() for path in root.rglob('*.py')} == set(expected),

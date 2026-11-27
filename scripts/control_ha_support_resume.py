@@ -64,7 +64,8 @@ def unadmitted_absence(previous):
 
 def absence(previous, *, installed_collectors=False):
     replace.require(not previous.terminal_failure(), 'PREDECESSOR_TERMINAL_FAILURE')
-    replace.require(not installed_collectors or previous.has('accepted'), 'ACCEPTED_COLLECTOR_PREDECESSOR_REQUIRED')
+    transition = installed_collectors or previous.baseline_variant != previous.plan.get('baseline_variant')
+    replace.require(not transition or previous.has('accepted'), 'ACCEPTED_COLLECTOR_PREDECESSOR_REQUIRED')
     if not previous.has('accepted'):
         return unadmitted_absence(previous)
     accepted = document(previous.root / 'accepted.json')
@@ -97,8 +98,8 @@ def absence(previous, *, installed_collectors=False):
                 graceful_exit_proven=not cold, settlement_proven=False, capture_permitted=False)
 
 
-def prepare(previous_root, root, participant, *, installed_collectors=False):
-    previous = replace.Replacement(previous_root)
+def prepare(previous_root, root, participant, *, installed_collectors=False, baseline_variant=None):
+    previous = replace.Replacement(previous_root, baseline_variant=baseline_variant)
     root, participant = Path(root).absolute(), Path(participant).absolute()
     replace.require(os.geteuid() == 0 or previous.plan['user'], 'ROOT_RESUME_REQUIRED')
     if not previous.plan['user'] and not previous.manager.fixture:
@@ -154,6 +155,10 @@ def prepare(previous_root, root, participant, *, installed_collectors=False):
             plan['baseline_variant'] = replace.admission.COLLECTOR_BASELINE
             proof['baseline_transition'] = dict(variant=replace.admission.COLLECTOR_BASELINE,
                                                source_pins=replace.admission.COLLECTOR_SOURCES)
+        elif previous.baseline_variant is not None:
+            plan['baseline_variant'] = previous.baseline_variant
+            proof['baseline_transition'] = dict(variant=previous.baseline_variant,
+                source_pins=replace.admission.COLLECTOR_VARIANTS[previous.baseline_variant])
         previous.validate(installed_collectors=installed_collectors)
         replace.require(previous.manager.state() == before, 'PRESTATE_CHANGED')
         replace.admission.write(root / 'plan.json', plan)
@@ -320,11 +325,14 @@ def main():
     parser.add_argument('--participant', type=Path)
     parser.add_argument('--mailbox-channel', type=Path)
     parser.add_argument('--installed-collectors', action='store_true')
+    parser.add_argument('--collector-baseline', choices=replace.admission.COLLECTOR_VARIANTS)
     args = parser.parse_args()
     replace.require(not args.installed_collectors or args.prepare_from is not None, 'COLLECTOR_PREPARE_ONLY')
+    replace.require(args.collector_baseline is None or args.prepare_from is not None, 'COLLECTOR_PREPARE_ONLY')
     if args.prepare_from:
         replace.require(args.participant is not None, 'PARTICIPANT_REQUIRED')
-        prepare(args.prepare_from, args.root, args.participant, installed_collectors=args.installed_collectors)
+        prepare(args.prepare_from, args.root, args.participant, installed_collectors=args.installed_collectors,
+                baseline_variant=args.collector_baseline)
         result = 'RESUME_PREPARED_NOT_AUTHORIZED'
     else:
         replace.require(args.mailbox_channel is not None, 'MAILBOX_CHANNEL_REQUIRED')

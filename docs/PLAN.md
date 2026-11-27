@@ -16,6 +16,10 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
+Mandatory successor preparation: owner-collectors-b7f4cbd2 now has explicit compatible observer,
+stopped-capture and new-operation recovery source;16 isolated checks pass. Finish exact qualification,
+then install from fresh panel01 without modifying/replaying old authority/plan/completed Resume.run.
+[Coherent transition and installed acceptance gate](releases/2026-11-27-mandatory-collector-transition.md).
 27 November01:19UTC operational interruption: both Amsterdam MESH services recovered on their existing
 installed70e6c0fc runtime; fresh directories validated and replicated, authenticated panel rows working.
 Own RU renewal/directory timer holds removed. No collector/console/publisher candidate activation.

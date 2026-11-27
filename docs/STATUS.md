@@ -1,5 +1,12 @@
 # Текущее состояние / Current state
 
+**27 November — mandatory collector maintenance transition, source preparation.**
+New named baseline owner-collectors-b7f4cbd2 retains192343eb's meaning and immutable panel01 records.
+Read-only observer, explicit stopped-capture selection and fresh-operation forward recovery added;
+initial16 isolated checks pass, broader/CI qualification and actual installation remain required.
+Installed source is still192343eb; no new mandatory binding or candidate overlay activated.
+[Transition scope and exact pins](releases/2026-11-27-mandatory-collector-transition.md).
+
 **27 November01:19UTC — both Amsterdam MESH services recovered on unchanged installed bytes.**
 The owner-reported stopped rows were real: both bootstrap services exhausted their restart limits.
 NL1 retained first SIGNAL_READ, subsequent seed_join_failed/provider_timeout receipts; NL2's initiating

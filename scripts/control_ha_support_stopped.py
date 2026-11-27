@@ -126,8 +126,8 @@ def collect(source_roots):
 
 
 class StoppedSupport:
-    def __init__(self, previous, operation, mailbox):
-        self.previous = replace.Replacement(previous)
+    def __init__(self, previous, operation, mailbox, *, baseline_variant=None):
+        self.previous = replace.Replacement(previous, baseline_variant=baseline_variant)
         self.root, self.mailbox = Path(operation).absolute(), mailbox
         require(not any(path.is_symlink() for path in (self.root, *self.root.parents)), 'STOPPED_OPERATION_PATH')
         require(all(self.root != Path(value) and Path(value) not in self.root.parents
@@ -152,7 +152,9 @@ class StoppedSupport:
         if names - temporary - {'controller.lock'}:
             operation = document(self.root / 'operation.json')
             require(operation['purpose'] == PURPOSE and operation['predecessor'] == str(self.previous.root) and
-                    operation['plan_sha256'] == replace.digest(self.previous.root / 'plan.json'),
+                    operation['plan_sha256'] == replace.digest(self.previous.root / 'plan.json') and
+                    operation.get('baseline_variant', self.previous.plan.get('baseline_variant')) ==
+                    self.previous.baseline_variant,
                     'STOPPED_OPERATION_BINDING')
 
     def save(self, name, value):
@@ -174,6 +176,7 @@ class StoppedSupport:
             require(not self.previous.terminal_failure(), 'STOPPED_TERMINAL_FAILURE')
             accepted = self.binding()
             self.save('operation', dict(schema=1, purpose=PURPOSE, predecessor=str(self.previous.root),
+                baseline_variant=self.previous.baseline_variant,
                 plan_sha256=replace.digest(self.previous.root / 'plan.json'), binding=accepted,
                 source_sha256=replace.digest(Path(__file__)), history_settled=False))
             state = self.previous.validate()
@@ -238,7 +241,7 @@ class StoppedSupport:
                         raise ValueError('STOPPED_GATE_BUSY') from None
             started = time.time_ns()
             boundary = dict(started_at_ns=started, absence=before, mailbox=remote_before,
-                            gate_pins=gate.pins, history_settled=False)
+                            gate_pins=gate.pins, baseline_variant=self.previous.baseline_variant, history_settled=False)
             yield boundary
             require(resume.absence(self.previous) == before, 'STOPPED_ABSENCE_CHANGED')
             closed(self.mailbox.call('observe'), ticket)
@@ -310,8 +313,10 @@ def main():
     parser.add_argument('--operation', type=Path, required=True)
     parser.add_argument('--mailbox-channel', type=Path, required=True)
     parser.add_argument('--stop', action='store_true')
+    parser.add_argument('--collector-baseline', choices=replace.admission.COLLECTOR_VARIANTS)
     args = parser.parse_args()
-    controller = StoppedSupport(args.previous, args.operation, handoff.SSHMailbox(args.mailbox_channel))
+    controller = StoppedSupport(args.previous, args.operation, handoff.SSHMailbox(args.mailbox_channel),
+                                baseline_variant=args.collector_baseline)
     value = dict(result=controller.stop(), capture_permitted=False) if args.stop else controller.capture()
     print(encoded(value).decode())
 

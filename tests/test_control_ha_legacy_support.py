@@ -43,9 +43,11 @@ def installed(tmp_path):
     return source
 
 
-def install_collector_sources(baseline):
-    for name, expected in bridge.COLLECTOR_SOURCES.items():
-        raw = subprocess.check_output(['git', 'show', '192343eb7433a98eb8ec3f92c0d0c78f8b49f845:' + name], cwd=ROOT)
+def install_collector_sources(baseline, *, mandatory=False):
+    commit = 'b7f4cbd2b96750cb9c97eee61f27a9881d5b4bdb' if mandatory else '192343eb7433a98eb8ec3f92c0d0c78f8b49f845'
+    pins = bridge.MANDATORY_COLLECTOR_SOURCES if mandatory else bridge.COLLECTOR_SOURCES
+    for name, expected in pins.items():
+        raw = subprocess.check_output(['git', 'show', commit + ':' + name], cwd=ROOT)
         assert bridge.digest(raw) == expected
         target = baseline / name
         target.parent.mkdir(parents=True, exist_ok=True)
@@ -65,9 +67,10 @@ def test_installed_collectors_require_explicit_exact_closed_source_variant(insta
 
 
 @pytest.mark.parametrize('damage', ['extra', 'missing', 'changed-collector', 'changed-support', 'symlink', 'pins'])
-def test_installed_collector_variant_never_accepts_unreviewed_source(installed, damage):
+@pytest.mark.parametrize('mandatory', [False, True])
+def test_installed_collector_variant_never_accepts_unreviewed_source(installed, damage, mandatory):
     expected = read(ROOT / 'deploy/support-chat/support-capture-v1.json')['baseline']
-    install_collector_sources(installed)
+    install_collector_sources(installed, mandatory=mandatory)
     collector = installed / 'provisioning/owner_capture.py'
     if damage == 'extra':
         (installed / 'extra.py').write_text('value = True\n')
@@ -85,7 +88,23 @@ def test_installed_collector_variant_never_accepts_unreviewed_source(installed, 
     else:
         expected['provisioning/support_bindings.py'] = bridge.COLLECTOR_SOURCES['provisioning/support_bindings.py']
     with pytest.raises(ValueError):
+        bridge.sources(installed, expected, baseline_variant=(bridge.MANDATORY_COLLECTOR_BASELINE
+                                                             if mandatory else bridge.COLLECTOR_BASELINE))
+
+
+def test_mandatory_baseline_has_independent_meaning_and_exact_pins(installed):
+    expected = read(ROOT / 'deploy/support-chat/support-capture-v1.json')['baseline']
+    install_collector_sources(installed, mandatory=True)
+    with pytest.raises(ValueError, match='SOURCE_PIN'):
         bridge.sources(installed, expected, installed_collectors=True)
+    with pytest.raises(ValueError, match='BASELINE_VARIANT'):
+        bridge.sources(installed, expected, baseline_variant='unreviewed')
+    with pytest.raises(ValueError, match='BASELINE_VARIANT_CONFLICT'):
+        bridge.sources(installed, expected, installed_collectors=True,
+                       baseline_variant=bridge.MANDATORY_COLLECTOR_BASELINE)
+    observed = bridge.sources(installed, expected, baseline_variant=bridge.MANDATORY_COLLECTOR_BASELINE)
+    assert all(bridge.digest(raw) == (expected | bridge.MANDATORY_COLLECTOR_SOURCES)[name]
+               for name, raw in observed.items())
 
 
 @pytest.fixture

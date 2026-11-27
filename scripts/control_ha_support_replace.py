@@ -248,9 +248,15 @@ def supervisor_unit(plan, interpreter):
 
 
 class Replacement:
-    def __init__(self, root):
+    def __init__(self, root, *, baseline_variant=None):
         self.root = Path(root).absolute()
         self.plan = json.loads(admission.read(self.root / 'plan.json'))
+        selected = self.plan.get('baseline_variant')
+        require(selected is None or selected in admission.COLLECTOR_VARIANTS, 'BASELINE_VARIANT')
+        require(baseline_variant is None or baseline_variant in admission.COLLECTOR_VARIANTS, 'BASELINE_VARIANT')
+        require(baseline_variant is None or selected in (None, baseline_variant, admission.COLLECTOR_BASELINE),
+                'BASELINE_VARIANT_DOWNGRADE')
+        self.baseline_variant = baseline_variant if baseline_variant is not None else selected
         require(self.plan['schema'] == 1 and self.plan['root'] == str(self.root) and
                 self.root.stat().st_uid == os.geteuid() and self.root.stat().st_mode & 0o777 == 0o700, 'PRIVATE_PLAN')
         self.manager = Manager(self.plan['unit'], self.plan['user'])
@@ -299,10 +305,8 @@ class Replacement:
         plan = self.plan
         require(all(digest(self.root / name) == value for name, value in plan['sources'].items()), 'SUPERVISOR_PIN')
         require(digest(plan['artifact']) == CANDIDATE and digest(plan['executable']) == plan['executable_sha256'], 'SOURCE_PIN')
-        variant = plan.get('baseline_variant')
-        require(variant in (None, admission.COLLECTOR_BASELINE), 'BASELINE_VARIANT')
         admission.sources(plan['baseline'], plan['baseline_pins'],
-                          installed_collectors=installed_collectors or variant == admission.COLLECTOR_BASELINE)
+                          installed_collectors=installed_collectors, baseline_variant=self.baseline_variant)
         require(all(digest(path) == value for path, value in plan['files'].items()), 'ORIGINAL_UNIT_CHANGED')
         require(all(digest(path) == value for path, value in plan['env_files'].items()), 'ENVIRONMENT_CHANGED')
         require(pins(Path(plan['gate'])) == plan['gate_pins'], 'GATE_REPLACED')
