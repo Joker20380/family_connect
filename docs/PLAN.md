@@ -16,6 +16,12 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
+17:20UTC bounded renewal incident reconciliation takes operational priority within the same NEXT.
+Two own RU timer holds remain until normal dependencies are demonstrated. A one-shot pinned TCP
+establishment-only recovery is prepared/isolated-qualified, not yet executed; no RPC retry or old
+transaction rewrite. Preserve b873 native support CI1/360 failure. HA encrypted candidate exists
+and reads back; original vault unchanged, live merge/custody not accepted. Common capture still
+requires OWNER/native/receiver physical adapters; no source/manifest-only acceptance.
 16:36UTC dedicated participant callback/death bounds qualify130 focused cases. This closes a
 process-execution prerequisite, not OWNER native-file/receiver coverage. Existing-journal fresh
 process refuses; reconciliation/new operation is still required. No production capture permit.

@@ -1,5 +1,18 @@
 # Текущее состояние / Current state
 
+**27 November17:20UTC — renewal connectivity incident; bounded recovery prepared, NOT run.**
+RU normal renewal fails before a new transaction is acquired; the previous14:12 COMMITTED
+transaction and all three terminal ledgers are retained. Own RU renewal/directory timer holds
+remain enabled/inactive; no capture barrier or support stop was acquired. A separate read-only
+RPC fails at TCP connect. Dual-host packet evidence sees NL1 SYN-ACK output but no corresponding
+RU input for that flow; upstream cause is not established. Prepared one-shot recovery changes
+only bounded TCP connection attempts, never retries an RPC/result, and requires exact pins,
+fresh committed predecessor and held timers. Native disposable OpenSSH: three connection attempts,
+one effect; lost reply: one connection/one effect/no retry. Not yet an installed runtime change.
+HA encrypted vault candidate was successfully prepared/read back; original unchanged, candidate
+not merged into live vault. Real encrypted kit remains NOT_CREATED. Latest b873 native support
+CI has1/360 failure in unchanged legacy detached-reader drain; retained, not qualified as PASS.
+
 **27 November16:36UTC — bounded participant execution qualified; common capture still refused.**
 130 focused checks PASS. Dedicated `serve` uses a Linux kernel SIGKILL deadline around acquisition,
 snapshot and cleanup, with250ms cleanup allowance that does not extend capture validity. Hanging

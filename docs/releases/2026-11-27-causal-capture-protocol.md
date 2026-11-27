@@ -1,5 +1,62 @@
 # HA-02 common capture preparation — 27 November2026
 
+## Bounded operational continuation — 17:20UTC
+
+Review source commits da50370ed19221598935c98c8609c832aec4b6ad,
+4dddd5ec73a76244f8d2447555a3fea19ab4b602 and b87397a55637972a2feaa74c149418fb0d880764
+are pushed and remote SHA verified. No accepted console/publisher/collector/manual component
+was reinstalled. Independent CI artifact byte verification: causal130/0 skips
+artifact15216401637/910040d9040288ea3e193a9d14f0f5bccdfb2e70d514aa4ac6769a7427900dc5;
+vault21/0 skips15215866749/2bfe80ef69e967b8673cdfad811a8eddb8d3f0c186a3d5f8db7f6c880e0394b1;
+PG32/0 skips15215067000/b7a75332f73fadd199ad2d7330db36e0bf3e91fb0d8f9ece18d72afe14d93fd5.
+b873 causal/Android/Linux/phase0 CI SUCCESS; native support46034920447 FAILED:
+`test_old_detached_reader_must_finish_before_application_drain[True]` did not produce
+drained.json (359 pass,1 fail,0 skips). Artifact15217791584, exact SHA
+47a4269e2bc39a5512c96f2b460678de4888b9003e552ba99102a490e7d2be77 is retained. This is
+unchanged legacy support code, not an explained-away timing failure or full native PASS.
+Earlier Linux runs cancelled by subsequent pushes remain CANCELLED, not acceptance.
+
+Fresh observer8b at16:51 returns ACCEPTED_SUPPORT_READ_ONLY_NORMAL with unchanged PID240065,
+archive621009b8, authorityb0c470dc, NL1 generationb75ef2a2 and cursor52bd903e. Panel actual
+login/five existing pages/logout PASS16:19. NL1 real traffic PASS16:34. NL2 first16:35 response
+failure is retained; one16:42 confirmation passes4 HTTPS/3 DNS/expected egress without restart.
+Later RELIABLE_FRAME_TIMEOUT/session-close diagnostics do not prove the initiating cause.
+Reviewed PG source read-only production scope PASS:39 tables/25 sequences,68 catalog tables,
+69 information_schema objects; no triggers. No production ALTER/lock was taken.
+
+RU renewal invocation56c13e5a88f74d18ae49ae52b25b431f failed16:41 with
+REMOTE_OUTCOME_UNKNOWN_READBACK_REQUIRED. One controlled normal invocation
+5d03860eb7164711968a3d846149ef5e also fails before ACQUIRING. Previous operation
+scheduled-1795788667-d73ff598aee18ca8 remains COMMITTED, transaction SHA
+025cc60dae673e075f7386f5ae87afa4fd8fa0bef4a7f1e3fec335aeb63c5069; all three terminal
+ledgers read independently, no owner record. Own renewal/directory-sync timers are held
+inactive but remain enabled under `/root/fc-ha02-review-reconcile-20261127-1650` on RU.
+No capture/support barrier exists. Fresh read-only RPC diagnostics preserve the original
+67-byte SSH TCP-connect timeout. At17:10 dual-host header-only captures see repeated NL1
+SYN-ACK output for RU port43958 but no corresponding RU input; neighboring flows succeed.
+Kernel capture reports zero dropped packets. This localizes the observation, not a provider,
+SIGTERM, SSH policy or ultimate network-root-cause verdict. No firewall/policy was changed.
+
+`scripts/renewal_connect_recovery.py` prepares one fresh scheduled operation using the unchanged
+installed runtime/config and exact source/config/committed-transaction pins. Both own timer
+holds and inactive services are mandatory. A new immutable journal directory refuses repeats.
+Only OpenSSH ConnectionAttempts=3 is added; original8s connect timeout/120s RPC timeout, strict
+pins, authentication and downstream policy remain unchanged. RPC results/lost replies never
+trigger a second RPC. This is an explicit bounded recovery path, not automatic retry of an
+uncertain operation or a permanently installed wrapper. Native isolated NL2 OpenSSH qualifies
+two refused TCP connects then one command/effect, and lost reply with one connection/effect
+and no retry. Synthetic daemon stops afterward; no production paths are used. Recovery has
+not yet run; both RU holds must be explicitly reconciled before ending this operation.
+
+Dedicated HA AES key preparation succeeds in an encrypted Family-Connect.kdbx candidate;
+attachment export/readback succeeds and original vault bytes remain unchanged. Candidate
+activation/live-vault merge and independent custody are not claimed. No real encrypted recovery
+kit exists. Root119/earlier41 and inventory29/probe14 exact retained records remain unchanged;
+new marker names are saved separately, not settled. Native-file experiment2 confirms EPERM for
+an old FD and SIGBUS for a prefaulted mapping on one synthetic NL2 inode; original experiment
+without terminal receipt remains a failure, and neither is complete tree/continuous-lease coverage.
+Private evidence: `/mnt/data/fc-ha02-review-20261127`; secrets/raw state never enter Git.
+
 ## Result and exact boundary
 
 The requested **production encrypted RU/NL1/NL2/OWNER kit does not exist yet**.
