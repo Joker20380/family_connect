@@ -22,7 +22,8 @@ Read-only verification of the dedicated entry:
 python3 -m scripts.ha_wrapping_key check
 ```
 
-If the dedicated entry is absent, prepare a new encrypted vault candidate:
+The current HA continuation already has a generated candidate. **Do not generate another key.**
+The following preparation command is only for a genuinely new installation with no existing entry:
 
 ```sh
 python3 -m scripts.ha_wrapping_key prepare --destination /private/new-ha-vault-candidate
@@ -40,6 +41,28 @@ the new entry and merge only it into the current vault using the normal applicat
 save, then run `check` against the actual current vault. This tool deliberately does not replace
 a possibly open/edited live vault. A prepared candidate is not an installed key or recovery kit.
 Do not put a master password in a shell command, chat, environment variable or a file.
+
+The qualified selective CLI workflow is `scripts.ha_wrapping_activate`: local confirmation requires
+saving/closing KeePassXC, then only the existing HA attachment is added. An encrypted working-before
+backup and immutable phases are retained. Existing UUIDs, values, attachments and history are checked
+in memory; attachment references use content rather than export-local numeric IDs. A real HA consumer
+readback is required. Never replace the working vault wholesale with a stale candidate.
+
+Current local operation `ha-activation-20261127-02` reached add/import, then failed its original
+comparison. Do **not** invoke `activate` or `prepare` again for it. Its read-only reconciliation is:
+
+```sh
+python3 -m scripts.ha_wrapping_activate --reconcile \
+  --candidate "$HOME/.local/share/family-connect-vault/ha-candidate-20261127-01/Family-Connect.kdbx" \
+  --working "$HOME/.local/share/family-connect-vault/Family-Connect.kdbx" \
+  --journal "$HOME/.local/share/family-connect-vault/ha-activation-20261127-02"
+```
+
+This performs no vault write or new key generation. A failed native read is recorded separately
+from the first comparison refusal and is not automatically retried. It does not prove a wrong
+password, damaged database or changed secret. Resolve local unlock/read access using the native
+dialog before another bounded read. Secret contents are never printed. A `reconciled.json` plus
+real-consumer PASS is required before claiming activation; it still does not prove external custody.
 
 Joker remains responsible for signer/pins/floors; ciphertext destination remains
 NL2 `/opt/apps/family_connect/ha-recovery/`. External custody and access after laptop loss are

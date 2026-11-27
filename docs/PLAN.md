@@ -26,6 +26,9 @@ traffic is partial FAIL19:39, retained while bounded availability readback proce
 checks and the unresolved key-reconciliation attempt do not satisfy the selected capture NEXT.
 
 Historical key checkpoint:
+The follow-up read-only reconciliation is specifically blocked by `HA_RECONCILE_NATIVE_READ_REFUSED`;
+preserve its separate receipt and the original comparison refusal. Resolve local native unlock/read
+without repeating add/import or generating a key; no password dialog inside any held interval.
 Continuation from ff20b55c: selective activation sourcefa24461f vault CI SUCCESS; live add/import
 reached the comparison phase but did not pass. Do not repeat writing: use the new read-only
 reconciliation against its encrypted prestate after exact-source qualification (25 local checks).

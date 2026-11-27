@@ -2,6 +2,8 @@ from pathlib import Path
 import subprocess
 import base64
 import gzip
+import json
+import sys
 
 import pytest
 
@@ -82,3 +84,22 @@ def test_open_gui_refuses_before_vault_write(tmp_path, monkeypatch):
         activation.activate(tmp_path / 'candidate/Family-Connect.kdbx', tmp_path / 'Family-Connect.kdbx',
                             tmp_path / 'journal')
     assert not (tmp_path / 'journal').exists()
+
+
+def test_reconciliation_refusal_records_safe_code_without_overwriting_first_cause(tmp_path, monkeypatch, capsys):
+    journal = tmp_path / 'journal'
+    journal.mkdir(mode=0o700)
+    activation.record(journal, 'failed.json', dict(cause='HA_OTHER_ENTRIES_CHANGED'))
+    original = (journal / 'failed.json').read_bytes()
+    def refused(*args):
+        raise ValueError('HA_RECONCILE_NATIVE_READ_REFUSED')
+    monkeypatch.setattr(activation, 'reconcile', refused)
+    monkeypatch.setattr(sys, 'argv', ['activate', '--reconcile', '--candidate', '/candidate/Family-Connect.kdbx',
+        '--working', '/working/Family-Connect.kdbx', '--journal', str(journal)])
+    with pytest.raises(SystemExit) as error:
+        activation.main()
+    assert error.value.code == 1
+    assert 'HA_RECONCILE_NATIVE_READ_REFUSED' in capsys.readouterr().err
+    assert (journal / 'failed.json').read_bytes() == original
+    attempt, = journal.glob('reconcile-refused-*.json')
+    assert json.loads(attempt.read_bytes())['vault_write'] is False

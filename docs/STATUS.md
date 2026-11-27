@@ -17,6 +17,9 @@ returns partial FAIL19:39 (family auth/TLS verified,2/4HTTPS,0DNS); exact eviden
 bounded readback continues. This is not full normal MESH acceptance or proof of a provider cause.
 Key selective import still requires successful read-only preservation/consumer reconciliation;
 candidate/working backups and first refusal remain private, no new key was generated.
+The classified follow-up refuses `HA_RECONCILE_NATIVE_READ_REFUSED`; no further vault writes or
+automatic unlock retries follow. This is missing successful local read authorization/verification,
+not a request for another key path and not proof of a password or database-corruption cause.
 
 **Historical19:30UTC — selective key reconciliation source checkpoint.**
 **27 November — selective HA-key reconciliation pending; no production capture holds.**

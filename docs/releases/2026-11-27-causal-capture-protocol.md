@@ -44,6 +44,13 @@ qualify old exec/detached/late starts under the same lease, not repeat a general
 
 ## Continuation from ff20b55c — selective existing-key activation
 
+Follow-up reconciliation on corrected593ae4dd source cannot complete the native encrypted-vault
+read: classified `HA_RECONCILE_NATIVE_READ_REFUSED`. No contents/credentials are printed and no
+new vault write occurs. Separate immutable refusal evidence is added without changing the original
+`HA_OTHER_ENTRIES_CHANGED` record. The actual difference is still unverified; there is no activated-key
+PASS. Diagnostic-only follow-up source has26 native/unit checks/0 skips and records safe HA error
+codes, preserving first cause. No automatic repeated unlock/read loop is left running.
+
 Sourcefa24461f84d0431605dc696cc79ae4e2629ed704 pushed and remote-matched; vault run46056036135
 SUCCESS. The real selective operation `ha-activation-20261127-02` reached entry-created and native
 attachment import, then refused `HA_OTHER_ENTRIES_CHANGED`. Its encrypted working-before copy,

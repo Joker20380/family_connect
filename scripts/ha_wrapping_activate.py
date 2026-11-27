@@ -11,6 +11,7 @@ from pathlib import Path
 import resource
 import re
 import subprocess
+import time
 from types import SimpleNamespace
 import xml.etree.ElementTree as ET
 
@@ -185,8 +186,15 @@ def main():
     try:
         action = reconcile if args.reconcile else activate
         print(json.dumps(action(args.candidate, args.working, args.journal), sort_keys=True))
-    except Exception:
-        parser.exit(1, 'HA_ACTIVATION_REFUSED; no admission closed; preserve private phase evidence\n')
+    except Exception as error:
+        cause = str(error) if re.fullmatch('HA_[A-Z_]{1,96}', str(error)) else type(error).__name__
+        if args.reconcile and args.journal.is_dir():
+            try:
+                record(args.journal, 'reconcile-refused-' + str(time.time_ns()) + '.json',
+                       dict(result='HA_RECONCILIATION_REFUSED', cause=cause, vault_write=False))
+            except Exception:
+                pass
+        parser.exit(1, 'HA_ACTIVATION_REFUSED: ' + cause + '; no admission closed; preserve private phase evidence\n')
 
 
 if __name__ == '__main__':
