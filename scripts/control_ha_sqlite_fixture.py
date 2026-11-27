@@ -4,15 +4,17 @@ from copy import copy
 from dataclasses import dataclass, field
 import hashlib
 import json
+from pathlib import Path
 import secrets
 import sqlite3
+import types
 
 import RNS
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 
 from control.friends import chat_service, diagnostics, gateway_routing, gateway_selection
 from control.friends import notices, readiness_receipts, restricted, restricted_admin, support, support_ids
-from control.friends import technical_metadata as metadata, transport_policy
+from control.friends import transport_policy
 from control.friends.access import Access
 from control.friends.chat import ChatAccess
 from control.friends.referrals import Referrals
@@ -30,6 +32,19 @@ from scripts.paid_postgres_rehearsal import apply
 from scripts.referral_postgres_rehearsal import NOW, proof, refused
 from scripts.restricted_postgres_rehearsal import synthetic_service, issue_proof, receipt, ack_proof
 from scripts.service_notices import Notices
+
+
+def installed_metadata():
+    source = (Path(__file__).resolve().parents[1] / 'tests/fixtures/technical_metadata_installed_v1.py.txt').read_bytes()
+    require(hashlib.sha256(source).hexdigest() == 'aa9ca52f9d4a36bf0c0dc5740f81cc83cb8a6262a5aefbc1a7862b01abe87205',
+            'INSTALLED_METADATA_SOURCE_CHANGED')
+    module = types.ModuleType('control.friends.installed_metadata_v1')
+    module.__package__ = 'control.friends'
+    exec(compile(source, '<installed metadata v1>', 'exec'), module.__dict__)
+    return module
+
+
+metadata = installed_metadata()
 
 
 def image(path):

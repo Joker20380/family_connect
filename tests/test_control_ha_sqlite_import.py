@@ -50,6 +50,15 @@ def test_actual_application_schemas_and_29_tables_are_preserved(joint):
     assert 'SYNTHETIC_STORAGE_SENTINEL' not in str(frozen.rows)
 
 
+def test_candidate_policy_schema_requires_its_own_recovery_contract(joint):
+    from tests.fixtures.basic_metadata_schema import migrate_disposable
+    from scripts.control_ha_sqlite_fixture import image
+    migrate_disposable(joint.paths['metadata'])
+    joint.stores['metadata'] = image(joint.paths['metadata'])
+    with pytest.raises(ImportRejected, match='SOURCE_SCHEMA_UNSUPPORTED'):
+        capture(joint)
+
+
 @pytest.mark.parametrize('store', ['registry', 'metadata', 'diagnostics', 'notices'])
 @pytest.mark.parametrize('change', ['missing', 'corrupt', 'extra', 'version', 'application', 'index'])
 def test_unknown_incomplete_or_changed_sources_refuse(joint, store, change):

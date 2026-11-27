@@ -45,6 +45,29 @@ def test_basic_projection_mode_source_unknown_expiry_and_no_old_geography(db):
     assert not value['observations'] and not value['profile'].get('os_version')
 
 
+@pytest.mark.parametrize('revoke', [False, True])
+def test_higher_legacy_counter_cannot_downgrade_basic_policy_floor(db, revoke):
+    data = observation()
+    entry = data['devices'][0]
+    entry.update(processing_mode=contract.BASIC_MODE, policy_version=contract.BASIC_POLICY, consent='not_requested')
+    entry['observations']['profile']['values'] = dict(os='Android', os_version='15', app_version='candidate')
+    technical_metadata.ingest(data)
+    legacy = observation()
+    legacy['devices'][0].update(consent_epoch=2, sequence=99)
+    if revoke:
+        legacy['devices'][0].update(consent='revoked', observations={})
+        technical_metadata.ingest(legacy)
+        technical_metadata.ingest(legacy)
+    else:
+        with pytest.raises(ValueError):
+            technical_metadata.ingest(legacy)
+    row = TechnicalMetadata.objects.get()
+    assert row.processing_mode == contract.BASIC_MODE and row.policy_version == contract.BASIC_POLICY
+    assert row.consent == ('revoked' if revoke else 'not_requested')
+    assert bool(row.observations) != revoke
+    assert row.geoip is None
+
+
 def test_latest_only_full_hmac_no_audit_or_snapshot_copy(db):
     data = observation()
     technical_metadata.ingest(data)

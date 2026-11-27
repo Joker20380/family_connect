@@ -143,6 +143,9 @@ def ingest(data):
         except (ValueError, TypeError, KeyError):
             require(False)
         row = TechnicalMetadata.objects.select_for_update().filter(pseudonym=entry['pseudonym']).first()
+        if row and row.processing_mode == contract.BASIC_MODE and not basic:
+            require(entry['consent'] == 'revoked')
+            entry = dict(entry, processing_mode=row.processing_mode, policy_version=row.policy_version)
         if entry['consent'] == 'enabled' and (location is None or location['status'] == 'unavailable') and row and row.consent_epoch == entry['consent_epoch']:
             if row.geoip and row.geoip['status'] in ('available', 'partial') and row.geoip['expires_at'] > now:
                 location = row.geoip

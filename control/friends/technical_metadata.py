@@ -143,11 +143,6 @@ def store(path):
             digest TEXT NOT NULL, enabled INTEGER NOT NULL, received INTEGER NOT NULL,
             payload TEXT NOT NULL)''')
         database.execute('BEGIN IMMEDIATE')
-        columns = {row[1] for row in database.execute('PRAGMA table_info(device_metadata)')}
-        if 'processing_mode' not in columns:
-            database.execute("ALTER TABLE device_metadata ADD COLUMN processing_mode TEXT NOT NULL DEFAULT 'consented_extended'")
-        if 'policy_version' not in columns:
-            database.execute("ALTER TABLE device_metadata ADD COLUMN policy_version TEXT NOT NULL DEFAULT 'legacy-v1'")
         yield database
 
 
@@ -193,7 +188,7 @@ class MetadataTransaction:
         return self.fetch('SELECT COUNT(*) AS total FROM device_metadata')[0]['total']
 
     def supports_basic(self):
-        return self.placeholder == '?' and {'processing_mode', 'policy_version'} <= {
+        return self.placeholder == '?' and self.database.execute('PRAGMA user_version').fetchone()[0] == 2 and {'processing_mode', 'policy_version'} <= {
             row['name'] for row in self.fetch('PRAGMA table_info(device_metadata)')}
 
     def rows(self):

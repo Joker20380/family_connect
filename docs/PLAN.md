@@ -16,6 +16,13 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
+Current28 November: repair explicit installed-v1/B-schema boundaries and panel policy floor,
+qualify carrier cancellation ordering, then the same isolated initial Docker generation transition
+with bounded recovery and the existing B Android candidate. Production shared daemon/neighbor
+stop and AuthZ installation excluded. New B schema requires a new versioned HA restore contract;
+no importer weakening or automatic migration. No kit or HA-02 acceptance.
+
+Historical23:20UTC:
 Current23:20UTC checkpoint: A remains blocked by the initial pre-hook Docker execution channel,
 not the HA key or a proven MESH outage. Qualify finite retirement of the old handler/containerd/shim
 generation and bounded recovery, then obtain explicit shared-window scope before affecting14

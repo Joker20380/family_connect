@@ -200,7 +200,7 @@ def test_metadata_projection_preserves_floor_and_replay_does_not_restore_observa
         transaction = technical_metadata.MetadataTransaction(restored)
         previous = transaction.previous('device')
         assert previous['enabled'] == enabled and previous['payload'] == '{}'
-        report = dict(consent_epoch=3, sequence=4, operation='sample' if enabled else 'revoke',
+        report = dict(schema=1, consent_epoch=3, sequence=4, operation='sample' if enabled else 'revoke',
                       report_id='00000000000000030000000000000004', observations={})
         technical_metadata.record(transaction, 'device', report, 'a' * 64, 200)
         assert transaction.previous('device') == previous

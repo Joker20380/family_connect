@@ -1,6 +1,18 @@
 # Текущее состояние / Current state
 
-**27 November23:20UTC — checkpoint: A common kit blocked; B candidate built, not release-ready.**
+**28 November — A/B schema correction in qualification, source-only.**
+Entry local/remote8fa79a13 match. Completed215c7fcb phase046080709385/Linux46080709373 FAIL;
+client46080709374 FAIL at carrier cancellation; earlier records/artifacts retained.
+Implicit metadata ALTER removed; installed-v1 fixture uses pinned111866ae module bytes and old
+schema. Disposable B schema2 is separate and rejected by A capture/import. B server/migration
+installation is closed pending a new HA restore contract. Panel legacy higher-counter samples
+cannot replace basic; revokes retain its policy floor.127 focused checks pass/12 PG skips;
+PG17.11 installed-v1 import/business/replay qualification55/55 and panel34/34 pass in a disposable
+database. Full exact-source CI pending. No production changes or new kit/holds.
+Active NEXT: deterministic carrier cancellation, then isolated finite initial Docker transition
+and basic Android runtime acceptance. Shared production Docker/neighbor stop remains excluded.
+
+**Historical27 November23:20UTC — checkpoint: A common kit blocked; B candidate built, not release-ready.**
 Panel46081203523 SUCCESS on61537b1f5b7df2ecf0faf221a6d2bfedf8521923, including corrected
 installed-custody fixtures with unchanged manifest/pins. Android readiness46080709370 SUCCESS
 on215c7fcb; client build46080709374 FAIL in unchanged carrier TestCredentialExchangeCancelBeforeCommit

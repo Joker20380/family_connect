@@ -8,7 +8,14 @@ import pytest
 
 from control.friends import technical_metadata as metadata
 from control.friends.access import Rejected
-from test_technical_metadata import setup, report, submit
+from test_technical_metadata import setup as legacy_setup, report, submit
+from tests.fixtures.basic_metadata_schema import migrate_disposable
+
+
+@pytest.fixture
+def setup(legacy_setup):
+    migrate_disposable(legacy_setup[2])
+    return legacy_setup
 
 
 def basic(epoch=1, sequence=1, operation='sample'):
@@ -88,6 +95,9 @@ def test_late_or_restored_v1_cannot_downgrade_basic_even_with_higher_epoch(setup
     row, = metadata.read_all(setup[2], setup[3][0])
     assert row['processing_mode'] == metadata.BASIC_MODE
     assert row['consent'] == ('revoked' if revoke_first else 'not_requested')
+    assert row['policy_version'] == metadata.BASIC_POLICY
+    if revoke_first:
+        assert row['observations'] == {} and row['consent_epoch'] == 2 and row['sequence'] == 2
 
 
 def test_delayed_first_sample_cannot_refresh_old_bytes_as_clock_skew(setup):
@@ -110,6 +120,7 @@ def test_legacy_database_migration_preserves_pending_floor(tmp_path):
         connection.execute('CREATE TABLE device_metadata(device TEXT PRIMARY KEY, epoch INTEGER, sequence INTEGER, digest TEXT, enabled INTEGER, received INTEGER, payload TEXT)')
         connection.execute('INSERT INTO device_metadata VALUES (?,?,?,?,?,?,?)', ('device', 7, 9, 'prior', 0, 1, '{}'))
     path.chmod(0o600)
+    migrate_disposable(path)
     with metadata.store(path) as connection:
         transaction = metadata.MetadataTransaction(connection)
         assert transaction.supports_basic()
@@ -117,3 +128,24 @@ def test_legacy_database_migration_preserves_pending_floor(tmp_path):
             metadata.record(transaction, 'device', basic(epoch=7, sequence=10), 'changed', 999)
     row, = metadata.read_all(path, 999)
     assert row['consent_epoch'] == 7 and row['sequence'] == 9 and row['observations'] == {}
+
+
+def test_request_and_retention_never_migrate_installed_schema(legacy_setup):
+    submit(legacy_setup, report())
+    with sqlite3.connect(legacy_setup[2]) as connection:
+        before = connection.execute('SELECT * FROM sqlite_master ORDER BY name').fetchall()
+    with pytest.raises(ValueError):
+        submit(legacy_setup, basic(epoch=2, sequence=2))
+    metadata.prune(legacy_setup[2], legacy_setup[3][0])
+    metadata.read_all(legacy_setup[2], legacy_setup[3][0])
+    with sqlite3.connect(legacy_setup[2]) as connection:
+        assert connection.execute('SELECT * FROM sqlite_master ORDER BY name').fetchall() == before
+        assert not metadata.MetadataTransaction(connection).supports_basic()
+
+
+def test_candidate_schema_is_not_accepted_by_installed_capture(setup):
+    from scripts.control_ha_live_sqlite import metadata_image
+    submit(setup, basic())
+    with sqlite3.connect(setup[2]) as connection:
+        with pytest.raises(ValueError, match='METADATA_SCHEMA_UNSUPPORTED'):
+            metadata_image(connection)

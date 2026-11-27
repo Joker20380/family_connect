@@ -70,7 +70,15 @@ be completed before public release. Clearing app data/uninstall is not a recomme
 
 ## Server, collector and console rollout (NOT EXECUTED)
 
-SQLite store migration adds explicit processing_mode/policy_version columns; tombstones contain
+**Deployment gate: CLOSED.** Installed-v1 SQLite has user_version=0 and seven metadata columns.
+Request/read/retention never migrates it. V2 samples on that schema fail without changing its
+schema. The disposable B fixture explicitly migrates to user_version=2 and nine columns; this is
+not a production migration entrypoint. Installed A capture/import rejects it as unsupported.
+Before deploying B API, any migration, collectors or console0016, qualify a separate versioned
+HA contract with capture/restore of policy, revoke, replay floors and original expiry. The Android
+public flag is not a server migration barrier. No accepted importer allowlist/pins are widened.
+
+The candidate SQLite schema adds explicit processing_mode/policy_version columns; tombstones contain
 no observations. Console migration0016 adds the same policy identity. Collectors pass these fields
 without translating them into consent; basic queries ASN only, never city. Panel rejects basic
 rows containing geography/extended fields, displays source/reason/age and distinguishes UNKNOWN

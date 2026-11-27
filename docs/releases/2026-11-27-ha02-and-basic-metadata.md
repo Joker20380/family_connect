@@ -8,6 +8,30 @@ B changes are separate source/candidate work, never a production binding change 
 
 ## Current outcome —27 November23:20UTC
 
+### 28 November follow-up (source-only qualification)
+
+Entry8fa79a1307c1332d22560cb2145949402fab56a0 equals remote feature SHA; no rollback/newer work lost.
+Completed215c7fcb phase046080709385 and Linux46080709373 FAIL, including schema incompatibility;
+phase0 failover has a separate build failure, not explained by the schema trace.61537b1f phase0
+46081203525 also fails. Client46080709374 carrier failure remains an independent mandatory gate.
+No original failure/artifact/UNKNOWN removed or classified as resolved by a retry.
+
+Request/read/retention no longer ALTER the installed SQLite schema. Joint HA fixture loads exact
+111866ae metadata source (SHA256 aa9ca52f9d4a36bf0c0dc5740f81cc83cb8a6262a5aefbc1a7862b01abe87205),
+not the evolving B implementation; importer contracts/pins unchanged. Disposable B fixture makes
+the migration explicit (user_version2, policy/mode columns), with negative A capture/import checks.
+Its production installation remains closed until a separate versioned HA capture/restore contract
+preserves policy/revoke/floors/expiry. Internal replay reports now include schema1, external validator
+unchanged. Panel refuses higher-counter legacy samples after basic and keeps basic floor on revoke.
+127 focused schema/protocol/capture/restore checks pass;12 PG-dependent checks skipped locally,
+not claimed as native acceptance. Follow-up panel/full CI and carrier/transition/Android remain.
+Source rollback only; no installed image, data, schema, key or gate was changed.
+Native disposable PG17.11 qualification55/55 passes, including installed-v1 import and continued
+business/replay operations; panel34/34 passes including both higher-counter downgrade cases.
+Initial lab Docker bridge setup failed (docker0 absent); no host network repair was attempted.
+Only the disposable test container was recreated on loopback port53487. The first psql setup used
+the wrong default port; retained separately, corrected to53487. Neither is a production outage claim.
+
 A is **not complete**: no installed OWNER executor adapter, common held interval, new stopped-support
 snapshot, encrypted fleet kit, independent kit verification or linked normal resume. The concrete
 unclosed channel is create/start already accepted before first AuthZ attachment, with downstream
