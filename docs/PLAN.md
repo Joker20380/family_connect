@@ -16,6 +16,16 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
+27 November12:28–13:00UTC fresh panel/support/both MESH bounded baseline PASS; no installed component
+reinstallation or production stop/hold. New causal four-host protocol qualifies112 checks and a real
+four-kernel synthetic interval/exact-set reader/queued-replay reconciliation. Exact installed images
+pass6 isolated late read-model import checks. This is not a production kit or physical coverage permit.
+The finite writer matrix names the immediate blocker: continuously fence accepted OWNER Docker imports
+and PostgreSQL/native writes, then integrate the remaining physical adapters with the causal protocol.
+No weakening of Gate.drain or marker settlement; approved HA wrapping-key reference remains missing.
+[Current evidence, exact boundary and next step](releases/2026-11-27-causal-capture-protocol.md).
+
+Historical05:05UTC checkpoint:
 05:05UTC bounded current-profile MESH forward reconciliation COMMITTED; independent three-node terminal
 archives/absent owners/retained intents PASS. Both NL fresh4HTTPS/3DNS/expected egress and real panel
 five pages/logout PASS; normal dependencies0 and only own timer holds removed, enabled/active/waiting.

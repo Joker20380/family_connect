@@ -1,6 +1,19 @@
 # Текущее состояние / Current state
 
-**27 November05:05UTC — bounded MESH forward recovery and panel normal baseline PASS.**
+**27 November12:28–13:00UTC — fresh normal baseline; causal protocol qualified, production kit NOT_CREATED.**
+Real panel login/five pages/logout, observer8b support/IPC/history and both authorized MESH
+4HTTPS/3DNS/expected egress PASS. Accepted images/bindings/support are unchanged; no production holds
+or stop/resume operation. All five d7d8b9a9 CI workflows now independently read back SUCCESS.
+New signed causal protocol passes112 focused tests and a real four-kernel synthetic cycle with
+independent exact-set reader and four queued/replayed effects reconciled once. A retained journal-rebind
+counterexample is fixed and requalified. Exact installed console/PG images pass6 narrow late-import
+checks using isolated data only. No production encrypted kit or fresh stopped-support snapshot exists:
+OWNER accepted Docker/PG/native-write physical boundary and the remaining finite matrix adapters still
+block capture. Gate.drain stays strict; original marker groups remain unchanged, additional names retained.
+Approved HA wrapping-key reference is also missing; independent custody/recovery/onboarding stay open.
+[Finite endpoint matrix, proofs, retained failures and one next step](releases/2026-11-27-causal-capture-protocol.md).
+
+**Historical27 November05:05UTC — bounded MESH forward recovery and panel normal baseline PASS.**
 Current committed renewal scheduled-1795749826-f5ee70e0e85b504d had remained RECOVERY_REQUIRED after
 SERVICE_ACTION_FAILED. Under coordinator/node locks, one explicit current-profile start per NL preserved
 old intents and authority/grants; normal controller recovery completed COMMITTED. Independent RU/NL1/NL2

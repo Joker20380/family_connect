@@ -1,0 +1,50 @@
+name: HA-02 causal capture protocol
+on:
+  push:
+    paths: ['control/capture_fleet.py', 'scripts/control_ha_fleet_lab.py', 'tests/test_capture_fleet.py', 'tests/fixtures/fleet_causal_lab.py', '.github/workflows/ha02-causal.yml']
+  pull_request:
+    paths: ['control/capture_fleet.py', 'scripts/control_ha_fleet_lab.py', 'tests/test_capture_fleet.py', 'tests/fixtures/fleet_causal_lab.py', '.github/workflows/ha02-causal.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  causal:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m pip install -r control/requirements.lock -r device_identity/requirements.lock
+      - name: Negative protocol and unchanged local gate contracts
+        run: python -m pytest -q tests/test_capture_fleet.py tests/test_capture_group.py tests/test_capture_gate.py --junitxml="$RUNNER_TEMP/causal.xml"
+      - name: Real held SQLite boundaries and queued late effects in isolated processes
+        run: python -m scripts.control_ha_fleet_lab --destination "$RUNNER_TEMP/causal-lab" > "$RUNNER_TEMP/causal-lab.log"
+      - name: Require exact source and zero skipped cases
+        if: always()
+        run: |
+          python - <<'PY'
+          import hashlib, json, os, subprocess, xml.etree.ElementTree as ET
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP'])
+          source = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
+          assert source == os.environ['GITHUB_SHA']
+          cases = list(ET.parse(root / 'causal.xml').iter('testcase'))
+          assert cases and all(not any(case.find(name) is not None for name in ('skipped', 'failure', 'error')) for case in cases)
+          native = json.loads((root / 'causal-lab/result.json').read_bytes())
+          assert native['result'] == 'CAUSAL_INTERVAL_AND_EXACT_SET_VERIFIED'
+          assert native['fixture_only'] and not native['capture_permitted'] and native['product_paths_opened'] == 0
+          assert native['late_work'] == 'FOUR_SYNTHETIC_JOURNALS_EXACTLY_ONCE'
+          assert native['protocol_sha256'] == hashlib.sha256(Path('control/capture_fleet.py').read_bytes()).hexdigest()
+          assert native['adapter_sha256'] == hashlib.sha256(Path('tests/fixtures/fleet_causal_lab.py').read_bytes()).hexdigest()
+          (root / 'causal-receipt.json').write_text(json.dumps(dict(source_commit=source, tests=len(cases), skips=0, result='PASS', native=native)) + '\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ha02-causal-qualification
+          path: |
+            ${{ runner.temp }}/causal.xml
+            ${{ runner.temp }}/causal-receipt.json
+            ${{ runner.temp }}/causal-lab.log

@@ -1,6 +1,10 @@
 # Explicit installed OWNER custody successor — 27 November2026
 
 Source checkpoint: d7d8b9a939a9b7d4aed548bf6f1d09b196fee437, pushed and remote SHA verified.
+Later27 November readback confirms all five applicable workflows SUCCESS, including Linux preview
+and phase0 previously still running. Native360/0 skips is accepted. This remains the qualified
+custody format, not a real common kit; [the next bounded protocol qualification](2026-11-27-causal-capture-protocol.md)
+preserves that distinction.
 The intervening outage is [boundedly recovered](2026-11-27-mesh-forward-reconciliation.md);
 its original failure evidence below remains history, not a current stopped-service claim.
 
