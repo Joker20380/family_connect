@@ -16,6 +16,8 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
+17:49UTC scoped RU connect wrapper installed, directory normal invocation now0; timer holds
+remain until exec-ready namespace and automatic normal cycles are proved.
 17:43UTC renewal recovery committed; independent9/8/8 archives PASS and normal renewal NOOP.
 Directory read failures still require its own bounded-connect qualification before releasing own
 RU timer holds. No common capture is permitted while that dependency remains abnormal.

@@ -1,6 +1,10 @@
 # Текущее состояние / Current state
 
 **27 November17:43UTC — renewal COMMITTED and independently verified; directory timer still held.**
+17:49 update: scoped4da8d7dc SSH namespace is installed only for the two RU units; original
+ExecStart/config/runtime/host SSH unchanged. Directory invocation5c66ea4f completes0. An early
+MainPID mount assertion is retained as an unqualified observation; require exec-ready readback
+and strengthened namespace qualification without a caller-supplied retry option before resume.
 New operation ha02-connect-20261127-1729-e28a771d completes COMMITTED without first_cause.
 Independent RU/NL1/NL2 terminal ledgers/exact archives verify9/8/8 files; no owner records remain.
 Normal original renewal invocation d0c39213 returns NOOP/0. Original directory-sync twice refuses

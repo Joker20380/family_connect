@@ -2,6 +2,17 @@
 
 ## Renewal committed; directory dependency reconciliation — 17:43UTC
 
+At17:46 the two scoped4da8d7dc drop-ins are installed after CI46044326107/native namespace PASS.
+Wrapper SHA6aa6d6797cc7aa94a0376d67e22cfdd6a60e33dac5649df7d0ecdcbd37cf5d2b;
+drop-in SHA377d4dbfa7bb90ca5057ddc68792a905c65302957efd7e0e15a446355aec6835;
+unchanged host SSH SHAaf809334cc71603f0e27a53e2234e15bd3c36503b3af7d367d103d2db2ffc15f.
+Original unit files/ExecStart/runtime/config bytes compare unchanged. Normal directory invocation
+5c66ea4fd6dd4a24a12bc1af571bde46 completes0. Initial /proc/MainPID mount assertion was attempted
+without first proving exec-ready identity; it is retained and NOT a successful loaded-code proof.
+The native namespace fixture is strengthened to assert actual wrapper bytes/original ELF and to
+remove the caller's own ConnectionAttempts option. Without the wrapper it must fail. No timers
+are released on the basis of the earlier insufficient namespace fixture alone.
+
 Corrected e28a771d79c7d49b2fedfd2e5180b55f97976d59 launcher SHA
 af6fdf10c4fb6d3cef7db6bcbe75b6ff224d9010f6fd70e5a0e17596242f38af runs once in transient
 invocation82fcf10e75a54aa4bffc066336956f5d. Operation ha02-connect-20261127-1729-e28a771d

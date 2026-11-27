@@ -24,6 +24,7 @@ jobs:
           sudo install -m 755 deploy/friends/restricted/ssh-connect-bounded /usr/local/lib/fc-ssh-connect-lab
           sudo systemd-run --unit=fc-connect-namespace-lab --collect --wait --pipe \
             -p NoNewPrivileges=yes -p PrivateTmp=yes \
+            -p Environment=FC_TEST_CONNECT_WRAPPER=1 \
             -p BindReadOnlyPaths=/usr/bin/ssh:/run/family-connect-ssh-original \
             -p BindReadOnlyPaths=/usr/local/lib/fc-ssh-connect-lab:/usr/bin/ssh \
             python3 "$PWD/tests/fixtures/renewal_connect_native.py" > connect-namespace.json

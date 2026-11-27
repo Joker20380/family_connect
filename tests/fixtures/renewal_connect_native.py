@@ -14,6 +14,11 @@ import time
 def main():
     assert os.geteuid() == 0
     os.umask(0o077)
+    wrapped = os.environ.get('FC_TEST_CONNECT_WRAPPER') == '1'
+    if wrapped:
+        assert hashlib.sha256(Path('/usr/bin/ssh').read_bytes()).hexdigest() == \
+            '6aa6d6797cc7aa94a0376d67e22cfdd6a60e33dac5649df7d0ecdcbd37cf5d2b'
+        assert Path('/run/family-connect-ssh-original').read_bytes()[:4] == b'\x7fELF'
     root = Path(tempfile.mkdtemp(prefix='fc-connect-native-', dir='/root'))
     for name in ('host', 'client'):
         subprocess.run(['ssh-keygen', '-q', '-t', 'ed25519', '-N', '', '-f', str(root / name)],
@@ -47,6 +52,9 @@ def main():
         '-o', 'ConnectTimeout=8', '-o', 'LogLevel=DEBUG1', '-o', 'IdentitiesOnly=yes',
         '-o', 'StrictHostKeyChecking=yes', '-o', 'UserKnownHostsFile=' + str(root / 'known_hosts'),
         '-i', str(root / 'client'), '-p', str(port), 'root@127.0.0.1', 'restricted-sync']
+    if wrapped:
+        offset = command.index('ConnectionAttempts=3')
+        del command[offset - 1:offset + 1]
     try:
         first = subprocess.run(command, capture_output=True, timeout=30)
         thread.join(5)
@@ -61,7 +69,8 @@ def main():
         assert (root / 'effects').read_bytes() == b'once\nonce\n'
         print(json.dumps(dict(result='CONNECT_RETRY_ONLY_PASS', first_connections=3,
             first_effects=1, lost_reply_connections=1, lost_reply_effects=1, rpc_retries=0,
-            production_paths=0, source_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest())))
+            production_paths=0, actual_wrapper_verified=wrapped,
+            source_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest())))
     finally:
         thread.join(5)
         for process in servers:
