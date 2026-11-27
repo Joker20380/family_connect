@@ -16,18 +16,24 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
-Host/manual continuation: owner-user-collectors-mandatory-v1 is source-qualified (154 tests,64 isolated
-namespace cases), not yet installed. Next within this task: exact-source CI, fresh held installation of
-the host binding/code without replacing historical role gates, then normal service cycles and observer8b.
-The accepted root collector and installed12-file images must not be reinstalled for this host-only change.
+04:14UTC host/manual component INSTALLED: owner-user-collectors-mandatory-v1/sourceb49c76c0, all4 CI PASS,
+independent artifact154 tests/64 namespace cases. Three actual roots,16 source replacements,17/17/8 pins;
+8 direct+8 CLI closed no-env refusals,64 installed-byte namespace cases and4 normal admissions PASS.
+Normal+automatic monitor/probe0, own holds removed, both timers enabled/active/waiting. Seven live-observed
+Docker import terminals0; real panel five pages/logout and observer8b support preservation PASS.
+The accepted root collector and installed12-file images were not reinstalled. Remaining NEXT is external/
+historical-dispatch fencing and compatible new-image OWNER capture tooling, then the held common cycle.
+Retain original root119 plus41 later markers, inventory3+12+6 plus8 later, probe14 and support33 separately.
+Intervening RU pressure/collection failures and successful bounded panel recovery are not erased or
+misrepresented as sustained stability. Strict drain still refuses; no capture permit or new common kit.
 [Host transition](releases/2026-11-27-owner-user-collectors.md).
 03:10UTC installed component PASS: owner-console-publisher-7a91d127, console3af9fbf9/publisher35158514,
 12/12 loaded source checks each; actual mounted gates, HTTP and no-env ORM/CLI negative+normal paths,
 real authenticated panel, scheduler, normal user services/timers, observer8b9355db and22 stable-table
 digest comparisons PASS. Original containers retained stopped, no DB restore/recreation. Seven normal
 Docker imports have server create/start/exec_die0 receipts. Root119/inventory3+12+6/probe14/support33 retained.
-Remaining installed all-writer gap: host collector manual/no-environment and direct technical-metadata
-entry; recent Docker receipts do not settle older external uncertainty. No common capture permit yet.
+The host/manual gap observed at03:10 is closed by the later installation above; recent Docker receipts
+still do not settle older external uncertainty. No common capture permit yet.
 [Installed component, rollback and concrete remaining gate](releases/2026-11-27-owner-installed-console-publisher.md).
 02:31UTC: fresh panel and both authorized MESH traffic probes PASS after one bounded NL2 unchanged-runtime
 recovery; prior two NL2 failures preserved. NL1 exact failed invocation correlates to WebSocket read
@@ -40,8 +46,8 @@ normal+automatic collector invocations and timer resume PASS; real authenticated
 119 root-collector markers retained separately; strict drain still refuses. Source-only exclusive
 maintenance does not settle external work or authorize capture. Original inventory3+12/probe14/support33
 remain;6 later inventory markers00:43–01:10UTC also retained separately, predating this installation.
-Continue remaining host manual/CLI and external-dispatch closure after the installed console/publisher
-component, then fresh common capture/independent verify/normal resume. Never replay old Resume.run as health.
+After the installed host/manual and console/publisher components, continue external-dispatch closure and
+capture compatibility, then common capture/independent verify/normal resume. Never replay old Resume.run as health.
 [Coherent transition and installed acceptance gate](releases/2026-11-27-mandatory-collector-transition.md).
 27 November01:19UTC operational interruption: both Amsterdam MESH services recovered on their existing
 installed70e6c0fc runtime; fresh directories validated and replicated, authenticated panel rows working.
@@ -73,8 +79,8 @@ empty Docker ExecIDs never establishes historical dispatch settlement.
 Console/publisher, services/timers, CLI/manual/direct-ORM и dispatchers входят в обязательный охват.
 Повторный drain работающего lifetime support writer не выполняется; Gate.drain не ослабляется.
 Mandatory collector b7f4cbd2 и совместимость8b9355db уже приняты; повторная установка не требуется.
-Точные12-file console3af9fbf9/publisher35158514 теперь установлены. Следующий installed шаг — оставшиеся
-host manual/no-environment и external dispatch paths. Проверка console включает фактический
+Точные12-file console3af9fbf9/publisher35158514 и host mandatory bindingsb49c76c0 установлены.
+Остаются historical/external dispatch fencing и совместимый OWNER capture variant. Проверка console включает фактический
 support runtime-directory mount; автоматический старт после reboot пока НЕ исправлен/доказан.
 
 Владелец принял stopped-support stop/capture/forward-resume как завершённый компонент
@@ -84,8 +90,8 @@ fleet kit: общий цикл требует нового снимка внут
 Последний independently observed runtime: OWNER PID240065, authorityb0c470dc…,
 linked operation ha02-forward-20261127-panel01/source39caf062, generationb75ef2a2…;
 NL1 PID3705,100%CPU/768MiB. Эти pins — observation, не разрешение будущему процессу.
-Support/IPC/NL1/history independently rechecked after the console/publisher installation with observer8b9355db;
-notifications success/0 at03:07:01UTC. Перед новыми изменениями необходим свежий runtime readback.
+Support/IPC/NL1/history independently rechecked after both installations with observer8b9355db;
+notifications success/0 observed again at03:54:38UTC. Перед новыми изменениями необходим свежий runtime readback.
 The former2/12 census,94fe9760 failure and corrected7a91d127 candidate qualification are
 [history](releases/2026-11-26-control-ha-owner-all-writer.md); installed runtime is now12/12 each.
 Full OWNER/all-writer closure and the common interval remain incomplete within this same NEXT.

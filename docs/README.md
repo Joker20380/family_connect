@@ -1,6 +1,7 @@
 # Documentation
 
-[CONTROL-HA · 27 November03:10UTC: exact12-file console/publisher component installed; HTTP/no-env ORM/CLI, panel, scheduler and normal timers PASS; seven Docker imports terminal; host manual/external closure and common capture remain](releases/2026-11-27-owner-installed-console-publisher.md).
+[CONTROL-HA · 27 November04:14UTC: host/manual mandatory bindings installed on three actual roots; no-env negative/normal paths, automatic timers and seven live Docker terminals PASS; historical external fencing and common capture remain](releases/2026-11-27-owner-user-collectors.md).
+[CONTROL-HA · 27 November03:10UTC: exact12-file console/publisher component installed; HTTP/no-env ORM/CLI, panel, scheduler and normal timers PASS; earlier host manual gap is historical](releases/2026-11-27-owner-installed-console-publisher.md).
 
 [CONTROL-HA · 27 November01:53UTC: mandatory owner-collectors-b7f4cbd2 installed; compatible observer/stopped capture/forward recovery8b9355db accepted](releases/2026-11-27-mandatory-collector-transition.md).
 

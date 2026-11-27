@@ -92,10 +92,11 @@ the support runtime mount. Never run both generations, restore product DB/queue/
 replay old support Resume or invoke base Compose seed_demo. Preserve every phase record.
 No client version, installer, public catalog or release tag changes.
 
-Concrete remaining gap: host `collector_admission.cycle_lock()` and inventory direct
+Historical03:10 gap, subsequently closed by the [host installation](2026-11-27-owner-user-collectors.md):
+host `collector_admission.cycle_lock()` and inventory direct
 admission still depend on inherited FC_CONTROL_CAPTURE_GATE outside containers;
 direct `collect_technical_metadata.collect()` has no independent gate. These manual/
-no-environment paths need qualified mandatory role bindings and source closure. Recent
+no-environment paths needed qualified mandatory role bindings and source closure. Recent
 Docker terminal receipts and stopped old containers do not settle every older external
 UNKNOWN. No fresh common RU/NL1/NL2/OWNER capture is attempted before that gate closes.
 The subsequent cycle must hold proven barriers, take a new stopped-support snapshot,
