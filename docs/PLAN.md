@@ -16,6 +16,14 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
+03:10UTC installed component PASS: owner-console-publisher-7a91d127, console3af9fbf9/publisher35158514,
+12/12 loaded source checks each; actual mounted gates, HTTP and no-env ORM/CLI negative+normal paths,
+real authenticated panel, scheduler, normal user services/timers, observer8b9355db and22 stable-table
+digest comparisons PASS. Original containers retained stopped, no DB restore/recreation. Seven normal
+Docker imports have server create/start/exec_die0 receipts. Root119/inventory3+12+6/probe14/support33 retained.
+Remaining installed all-writer gap: host collector manual/no-environment and direct technical-metadata
+entry; recent Docker receipts do not settle older external uncertainty. No common capture permit yet.
+[Installed component, rollback and concrete remaining gate](releases/2026-11-27-owner-installed-console-publisher.md).
 02:31UTC: fresh panel and both authorized MESH traffic probes PASS after one bounded NL2 unchanged-runtime
 recovery; prior two NL2 failures preserved. NL1 exact failed invocation correlates to WebSocket read
 CONNECTION_RESET, not SIGTERM; reset initiator unproven. [Current operational checkpoint](releases/2026-11-27-owner-all-writer-next.md).
@@ -27,8 +35,8 @@ normal+automatic collector invocations and timer resume PASS; real authenticated
 119 root-collector markers retained separately; strict drain still refuses. Source-only exclusive
 maintenance does not settle external work or authorize capture. Original inventory3+12/probe14/support33
 remain;6 later inventory markers00:43–01:10UTC also retained separately, predating this installation.
-Continue exact12-file console/publisher installation, manual/ORM/CLI and external-dispatch completion,
-then fresh common capture/independent verify/normal resume. Never replay old completed Resume.run as health.
+Continue remaining host manual/CLI and external-dispatch closure after the installed console/publisher
+component, then fresh common capture/independent verify/normal resume. Never replay old Resume.run as health.
 [Coherent transition and installed acceptance gate](releases/2026-11-27-mandatory-collector-transition.md).
 27 November01:19UTC operational interruption: both Amsterdam MESH services recovered on their existing
 installed70e6c0fc runtime; fresh directories validated and replicated, authenticated panel rows working.
@@ -43,7 +51,7 @@ new accepted support operation ha02-forward-20261127-panel01, fresh generation/a
 All3+12 inventory,14 probe and33 support history markers remain separately unchanged, NOT settled.
 **Restoration handoff, now completed for mandatory collectors:** fresh panel01 operation with exact8b9355db
 tooling, not pre-boot collector-operation-bound or39caf062 on the new baseline. Current NEXT continues
-exact12-file console/publisher bindings, manual/external-dispatch closure and fresh common capture →
+remaining manual/external-dispatch closure and fresh common capture →
 independent verify → normal resume. No new overlays/common capture occurred during panel restoration
 or collector installation. KeePassXC custody remains nonblocking.
 [Evidence and retained failures](releases/2026-11-27-control-ha-owner-resume.md).
@@ -60,8 +68,8 @@ empty Docker ExecIDs never establishes historical dispatch settlement.
 Console/publisher, services/timers, CLI/manual/direct-ORM и dispatchers входят в обязательный охват.
 Повторный drain работающего lifetime support writer не выполняется; Gate.drain не ослабляется.
 Mandatory collector b7f4cbd2 и совместимость8b9355db уже приняты; повторная установка не требуется.
-Следующий installed шаг — точные12-file candidates console3af9fbf9/publisher35158514, затем оставшиеся
-manual/no-environment/ORM/CLI и external/Docker dispatch paths. Проверка console включает фактический
+Точные12-file console3af9fbf9/publisher35158514 теперь установлены. Следующий installed шаг — оставшиеся
+host manual/no-environment и external dispatch paths. Проверка console включает фактический
 support runtime-directory mount; автоматический старт после reboot пока НЕ исправлен/доказан.
 
 Владелец принял stopped-support stop/capture/forward-resume как завершённый компонент
@@ -71,13 +79,11 @@ fleet kit: общий цикл требует нового снимка внут
 Последний independently observed runtime: OWNER PID240065, authorityb0c470dc…,
 linked operation ha02-forward-20261127-panel01/source39caf062, generationb75ef2a2…;
 NL1 PID3705,100%CPU/768MiB. Эти pins — observation, не разрешение будущему процессу.
-Support/IPC/NL1/history independently rechecked27November00:36:59UTC; notifications success/0 at00:39:12UTC,
-timer enabled/active/waiting. Перед изменениями необходим свежий runtime readback.
-OWNER/all-writer gate пока НЕ установлен; свежий source census2/12 в console/publisher.
-Full94fe9760 CI FAIL:20 related standalone/package cases; тогда без installation. Corrected helper
-and reviewed pins:383 panel/101 standalone + native image activation/revert PASS;
-329 OWNER-gate tests ранее PASS; все4 workflow7a91d127 PASS. Новые12-file candidates не установлены;
-установленное закрытие остальных writer paths и общий интервал остаются в этом же NEXT.
+Support/IPC/NL1/history independently rechecked after the console/publisher installation with observer8b9355db;
+notifications success/0 at03:07:01UTC. Перед новыми изменениями необходим свежий runtime readback.
+The former2/12 census,94fe9760 failure and corrected7a91d127 candidate qualification are
+[history](releases/2026-11-26-control-ha-owner-all-writer.md); installed runtime is now12/12 each.
+Full OWNER/all-writer closure and the common interval remain incomplete within this same NEXT.
 Original192343eb installation/EROFS rollback and source-only b7f4cbd2 states are
 [historical evidence](releases/2026-11-26-control-ha-owner-all-writer.md), not the installed baseline.
 Use only read-only observer8b9355db; never replay an old completed Resume.run as a health check.

@@ -1,5 +1,8 @@
 # OWNER/all-writer NEXT — 27 November 2026
 
+**Historical02:31UTC pre-install checkpoint.** The later [installed console/publisher result](2026-11-27-owner-installed-console-publisher.md)
+supersedes pending-image/current-container statements below; failure and traffic evidence remain unchanged.
+
 Selected task remains CONTROL-HA-20261123 / HA-02. Mandatory collector
 owner-collectors-b7f4cbd2 and compatible maintenance tooling8b9355db are accepted,
 not pending. Original192343eb and old panel01 plan/authority/receipts/capsule retain
