@@ -1,6 +1,6 @@
 # Текущее состояние / Current state
 
-**27 November00:38CET /26 November23:38UTC — existing panel restored; dependency recovery in progress.**
+**27 November01:15CET /00:15UTC — existing panel restored; dependency qualification pending.**
 Local sudo dialog succeeded in the operator execution session, without sudoers/polkit changes.
 Post-boot prestate/refusals/authority/terminal and incomplete collector-install records retained privately.
 Support refused START_AUTHORITY_CHANGED on the new boot; accepted predecessor remains unchanged.
@@ -11,8 +11,14 @@ already applied,0 pending, no seed_demo. PostgreSQL/publisher IDs/start times/co
 Real browser login, overview/subscriptions/payments and2 existing device cards HTTP200, normal logout PASS.
 No messages or business mutations. Full normal baseline is NOT yet accepted: qualified support resume
 refused SOURCE_CLOSURE because the previously accepted192343eb collector install adds2/changes2 baseline files.
-A narrowly pinned recovery-source correction is under qualification; no guard bypass or collector change.
-Notifications recovery and restoration of only our two user timer holds remain pending;15/14 markers retained.
+A narrowly pinned recovery-source correction39caf062 is under qualification; no guard bypass or collector change.
+It records only the exact192343eb baseline transition in a new operation, never edits predecessor pins.
+All373 source files match the exact commit on OWNER/NL1; read-only absence preflight proves BOOT_CHANGED.
+Three exact-source CI PASS; native attempt1 has349 PASS/2 prerequisite failures, retained and not accepted.
+The same-SHA complete native repeat is pending; focused8 native resume cases and7 source checks PASS locally.
+No new production operation/authority/generation was prepared. Notifications.timer is additionally held,
+still enabled, to stop failed dependency retries. Restore it and our two user holds only after success.
+The3+12 inventory,14 probe and33 prestate support markers remain separately preserved, not settled.
 New console/publisher overlays, mandatory collector binding and common HA capture are deferred until baseline PASS.
 [Recovery evidence](releases/2026-11-27-control-ha-owner-resume.md).
 

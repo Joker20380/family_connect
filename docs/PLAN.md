@@ -20,6 +20,10 @@ PostgreSQL/publisher unchanged. Sudo obtained through local dialog; actual suppo
 START_AUTHORITY_CHANGED. Qualified resume separately refuses SOURCE_CLOSURE after accepted collector drift.
 Qualify the exact bounded baseline transition, recover support/NL1/notifications, then restore only our
 two user timer holds and verify completed service invocations. Preserve3+12 inventory and14 probe markers.
+Source correction adds explicit new-preparation selection plus closed-set negative/native resume tests;
+require exact-source native CI before activating recovery tooling, not a collector overlay.
+39caf062:3 CI PASS; native attempt1 retained349/2, same-SHA full repeat pending. No production transition.
+373-file OWNER/NL1 capsules staged/verified only; all3+12/14 user and33 support history markers unchanged.
 Defer new overlays, mandatory collector binding and common capture until that normal baseline is recorded.
 KeePassXC backup questions do not block restoration. [Evidence](releases/2026-11-27-control-ha-owner-resume.md).
 

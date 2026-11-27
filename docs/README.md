@@ -1,6 +1,6 @@
 # Documentation
 
-[CONTROL-HA · 27 November00:05CET: post-power-loss checkpoint; b7f4cbd2 exact5 CI/native342/5 sandbox independently verified,12-file candidates reverified, mandatory binding still uninstalled; support/console recovery requires root authentication, two user timers held, UNKNOWN retained](releases/2026-11-27-control-ha-owner-resume.md).
+[CONTROL-HA · 27 November01:15CET: existing panel restored and real login/pages verified; root authentication obtained; dependency recovery39caf062 under native qualification, timers held and separate UNKNOWN/history retained; new overlays/binding/capture deferred](releases/2026-11-27-control-ha-owner-resume.md).
 
 [CONTROL-HA · 26 November18:52UTC: real stopped-support component e4eace1a independently verified and normally resumed; source2f4f83dd4 CI/native342 PASS, notifications success/timer restored; OWNER/all-writer/full kit/custody/restore still open](releases/2026-11-26-control-ha-stopped-support.md).
 

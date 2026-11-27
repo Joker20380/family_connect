@@ -46,6 +46,40 @@ is being qualified to admit only that exact closed four-file source transition, 
 selected for new resume preparation, retaining all original baseline pins/history and
 every other source/process/authority/gate check. Collectors themselves are not changed.
 
+The correction exposes `--installed-collectors` only on new accepted-predecessor preparation.
+It records the exact four source pins and a baseline variant in the new operation, retaining
+the original baseline manifest. Seven focused source tests cover explicit selection and
+extra/missing/changed collector/changed support/symlink/altered-manifest refusal. Native
+forward-resume tests now cover that installed variant, nonempty queue and lost-response retry.
+The first local native run had12 PASS and one existing fixture read race (empty JSON while
+the remote test probe was writing), before exercising the transition; the diagnostic is
+retained. A complete repeat and exact-source native CI are required before activation.
+No production authority, ticket or operation was created by these isolated tests.
+The combined repeat has56 PASS/1 failure: an unmodified fixture predecessor exited78
+(`CANDIDATE_EXCEPTION`) during its initial stop, before preparing the new resume operation.
+That diagnostic is retained separately; it is not classified from exit78 alone or waived.
+Exact-source native qualification remains the activation gate. Notifications.timer is now
+temporarily held by this recovery execution, still enabled, to avoid dependency-failure loops;
+restore this additional hold only after one completed successful normal notification invocation.
+
+At27 November00:15UTC, source39caf062cf6b6b58977dfb7d7a3428246aac852c is pushed and
+independently materialized as373-file root-owned source-only capsules on OWNER and NL1.
+All files match Git; neither installed app nor an operation/authority/generation was changed.
+Corrected read-only preflight independently returns PREVIOUS_PROCESS_ABSENT / BOOT_CHANGED.
+The focused repeat passes8 native resume cases;7 source negatives/selection checks also pass.
+Android readiness, Linux preview and phase0 CI at that exact source all pass.
+Native run45913167010 attempt1 completed349 PASS/2 failures,0 skips, not acceptance.
+Artifact15162010234 SHA256541b18a7d41ee414906a8164d50d758e5585e51afa13276c6020dfc9d7b838d8
+is downloaded and independently parsed. The failures are OLD_RUNTIME_CHANGED in the legacy
+fixture's initial exit and MANUAL_RECONCILIATION_REQUIRED in initial handoff, both before
+the new baseline transition. Their initiating causes are not inferred from those labels.
+No tests or guards were weakened; one complete same-SHA native repeat is running. A private
+read-only diagnostic repeat of the two prerequisite cases also runs independently.
+The full qualification gate remains required before production recovery activation.
+Independent marker readback confirms exact names/body hashes/mtimes of3 original and12
+additional inventory markers plus14 probe markers. All33 prestate support markers remain
+unchanged separately. No old dispatch settlement or coherent capture is claimed.
+
 Private restoration evidence is at `/mnt/data/fc-ha02-panel-restore-20261127`; sensitive root
 prestate is in its root-only `root` child. Browser screenshots/credentials are not published.
 Notifications and the two held user timers remain pending support recovery. The separate

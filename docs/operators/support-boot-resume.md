@@ -15,6 +15,19 @@ independently compared to the source commit. Revalidate their bytes before reuse
 The18:52UTC working operation is pinned to2f4f83dd. Its14d4dfad predecessor and the
 earlier0e4e85b5 tool capsule remain immutable; never replace old operation source files.
 
+The accepted192343eb collector installation changes the shared baseline's closed source
+set. The older controller correctly refuses `SOURCE_CLOSURE` there. The bounded recovery
+correction adds `--installed-collectors` to **new accepted-predecessor preparation only**:
+it admits exactly the four committed192343eb file hashes, retains the original manifest,
+and records `baseline_variant` plus the exact source transition in the new operation.
+Extra/missing/changed files, source symlinks and altered original pins still refuse.
+Use it only after exact-source native qualification and independent installed-byte checks;
+the correction is not yet an installed/qualified operational checkpoint in this revision.
+Its source checkpoint is39caf062cf6b6b58977dfb7d7a3428246aac852c; see the
+[current qualification record](../releases/2026-11-27-control-ha-owner-resume.md) before any use.
+Do not alter old plans or use this option for unknown collector versions. Future resumes
+inherit the recorded variant. No collector installation or mandatory-gate fix occurs here.
+
 Obtain root using the normal local password prompt in the same execution session.
 No permanent sudoers/polkit changes. Retain private copies of effective units, journals,
 plan, authority, reservation, terminal/recovery records, pending markers and current
