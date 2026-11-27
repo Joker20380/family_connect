@@ -208,6 +208,8 @@ def test_ui_runner_offline_wait_is_bounded(monkeypatch):
 def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main(tmp_path):
     patch = ROOT / 'tests/fixtures/device_technical_metadata/beta125-to126.patch'
     assert hashlib.sha256(patch.read_bytes()).hexdigest() == 'd465e822bf098ac678f36ed4c964299d50f91634302d14b643ff6286f6df2d5e'
+    basic_patch = ROOT / 'tests/fixtures/device_technical_metadata/basic-candidate.patch'
+    assert hashlib.sha256(basic_patch.read_bytes()).hexdigest() == 'b07d103fb23d4e839909f8aa7ba4186ea420ba80ad15119dcbe5d1eaeef3dbad'
     metadata_overlay = {
         'ConnectionTerminal.java': '008f6aa25ff16fec0e49746dfe74a884e6db3b0ef47f2a804d739196478eb17a',
         'FriendsAccessAndroid.java': '97e21b93387a9a48616d291e6ab3fcce7f24eb1f72643776a7e6a29d8cc7ab39',
@@ -215,11 +217,15 @@ def test_accepted_android_ui_and_mesh_are_not_replaced_with_old_main(tmp_path):
     restored = {}
     for filename, digest in metadata_overlay.items():
         name = 'clients/android/app/src/main/java/com/familyconnect/app/' + filename
-        assert hashlib.sha256((ROOT / name).read_bytes()).hexdigest() == digest
+        current = '8e95113d7b228a915d3176732342b3e48e9267ff2456d343502dd608df97d965' if filename == 'FriendsAccessAndroid.java' else digest
+        assert hashlib.sha256((ROOT / name).read_bytes()).hexdigest() == current
         destination = tmp_path / name
         destination.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(ROOT / name, destination)
         restored[name] = destination
+    subprocess.run(['git', 'apply', '--reverse', str(basic_patch)], cwd=tmp_path, check=True, capture_output=True)
+    for filename, digest in metadata_overlay.items():
+        assert hashlib.sha256((tmp_path / 'clients/android/app/src/main/java/com/familyconnect/app' / filename).read_bytes()).hexdigest() == digest
     subprocess.run(['git', 'apply', '--reverse', str(patch)], cwd=tmp_path, check=True, capture_output=True)
     reference = json.loads((ROOT / 'clients/shared/android106-reference.json').read_text())
     reviewed_ui109 = {

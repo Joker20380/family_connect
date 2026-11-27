@@ -1,0 +1,19 @@
+diff --git a/clients/android/app/src/main/java/com/familyconnect/app/FriendsAccessAndroid.java b/clients/android/app/src/main/java/com/familyconnect/app/FriendsAccessAndroid.java
+index ba092bb9..887c8074 100644
+--- a/clients/android/app/src/main/java/com/familyconnect/app/FriendsAccessAndroid.java
++++ b/clients/android/app/src/main/java/com/familyconnect/app/FriendsAccessAndroid.java
+@@ -232,9 +232,11 @@ final class FriendsAccessAndroid {
+         try(ControlIdentity identity=identity(false)){
+             JsonObject request=new JsonObject();request.add("proof",proof(identity,"technical-metadata-v1:"+hash,""));request.addProperty("report",raw);
+             JsonObject result=post("/friends/device/technical-metadata/v1",request);
+-            fields(result,"schema report_id received_at consent retention_seconds");
+-            require(integer(result.get("schema"),1)==1&&text(result.get("report_id")).equals(text(report.get("report_id"))));
+-            require(text(result.get("consent")).equals("revoke".equals(text(report.get("operation")))?"revoked":"enabled"));
++            boolean basic=integer(report.get("schema"),1)==2;
++            fields(result,"schema report_id received_at consent retention_seconds"+(basic?" processing_mode policy_version":""));
++            require(integer(result.get("schema"),1)==(basic?2:1)&&text(result.get("report_id")).equals(text(report.get("report_id"))));
++            if(basic)require(text(result.get("processing_mode")).equals("automatic_basic")&&text(result.get("policy_version")).equals(TechnicalMetadataPolicy.POLICY));
++            require(text(result.get("consent")).equals("revoke".equals(text(report.get("operation")))?"revoked":basic?"not_requested":"enabled"));
+             require(integer(result.get("retention_seconds"),1)==604800);integer(result.get("received_at"),1);
+         }
+     }

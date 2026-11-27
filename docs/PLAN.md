@@ -16,7 +16,15 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
-Current23:02UTC: A remains production priority; initial pre-hook Docker create/start needs proven
+Current23:07UTC: MESH baseline refreshed on both NL (HTTPS/DNS/egress PASS), no current proven
+outage or restart loop. Existing HA consumer accepted. A remains blocked by pre-hook create/start
+outside the enrolled parent; qualify shared old-runtime retirement/recovery without touching14
+excluded neighbors, then request the exact expanded window before any shared stop. No kit/holds.
+B ba569748 source/candidate pushed; readiness CI PASS. Keep old installed inventory/Android pins
+immutable via explicit fixture/delta separation;127 checks PASS after preserving the original panel
+fixture refusal. Requalify exact follow-up source; native/public/legal/store/deployment gates remain.
+
+Historical22:58UTC: A remains production priority; initial pre-hook Docker create/start needs proven
 old runtime-generation retirement and bounded recovery before installed OWNER composition. Shared
 stop would affect14 excluded neighbors and has not been performed/authorized. Existing HA key
 preservation and real consumer PASS. No common kit/verify/resume; retain strict drain and UNKNOWN.

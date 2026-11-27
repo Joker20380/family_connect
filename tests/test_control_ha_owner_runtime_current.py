@@ -40,6 +40,7 @@ def current_bundle(bundle):
              for role, offset in (('inventory', 20), ('probe', 40))}
     hosts = {}
     overrides = {
+        ('inventory', 'control_plane/apps/console/technical_metadata_collector.py'): 'metadata_collector_inventory_installed.py',
         ('inventory', 'control_plane/probe_network.py'): 'probe_legacy.py',
         ('manual', 'control_plane/apps/console/transport_collector.py'): 'transport_collector_legacy.py',
         ('manual', 'control_plane/apps/console/technical_metadata_collector.py'): 'metadata_collector_legacy.py',
@@ -81,6 +82,16 @@ def current_bundle(bundle):
     files['origins.json'] = encoded({name: '/fixture/' + name for name in current.FILES - {'origins.json'}})
     value['files'] = {name: body(raw) for name, raw in files.items()}
     return value
+
+
+def test_basic_candidate_is_not_the_installed_inventory_source(current_bundle):
+    name = 'control_plane/apps/console/technical_metadata_collector.py'
+    assert digest((ROOT / name).read_bytes()) != current.manifest()['profiles']['inventory']['sources'][name]
+    hosts = legacy.document(current.unpack(current_bundle)['host-collectors.json'])
+    hosts['inventory']['sources'][name] = body((ROOT / name).read_bytes())
+    replace_file(current_bundle, 'host-collectors.json', hosts)
+    with pytest.raises(ValueError, match='HOST_SOURCE_CHANGED'):
+        current.validate(current_bundle)
 
 
 def test_exact_current_roundtrip_is_not_capture_permit(current_bundle, bundle, source, tmp_path):

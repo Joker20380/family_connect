@@ -1,6 +1,19 @@
 # Текущее состояние / Current state
 
-**27 November23:02UTC — B source/arm64 candidate built; A not installed, common kit absent.**
+**27 November23:07UTC — fresh MESH PASS; B candidate separated from installed A pins.**
+NL1 23:00:55 / NL2 23:02:00: authenticated native MESH,4 HTTPS/3 DNS and expected egress each;
+normal probe cleanup and unchanged identity. No recovery/restart was needed. Root/user service
+cycles complete0, four timers enabled/active/waiting. Qualified support observer and panel readback
+remain accepted; own root session closed, no production holds acquired.
+B source ba56974853b69e37330dc210edb678cd79cd6cb9 pushed/remote-matched; readiness46079823247
+SUCCESS. Panel46079823152 failed because a test read new B collector bytes for the old installed
+inventory pin. The fixture now retains exact installed bytes; a negative test refuses B as that
+baseline. Android old-source guard now reverses a separately pinned B delta before checking the
+unchanged accepted126/125 hashes.127 focused checks PASS; exact-source CI follows. No runtime
+baseline/manifest or accepted image was changed. A still lacks initial-generation fencing and kit.
+
+**Historical22:58UTC:**
+**27 November22:58UTC — B source/arm64 candidate built; A not installed, common kit absent.**
 B implements automatic-basic schema2/policy basic-2026-11-v1 with pre-sample disclosure, privacy
 objection, atomic initialization/counters, preserved legacy refusals/revokes and restore blocking.
 No automatic consent claim or extended enrichment; qualified RU/NL AWG ASN only, TCP/MESH UNKNOWN.
