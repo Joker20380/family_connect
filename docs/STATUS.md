@@ -1,5 +1,31 @@
 # Текущее состояние / Current state
 
+**27 November05:05UTC — bounded MESH forward recovery and panel normal baseline PASS.**
+Current committed renewal scheduled-1795749826-f5ee70e0e85b504d had remained RECOVERY_REQUIRED after
+SERVICE_ACTION_FAILED. Under coordinator/node locks, one explicit current-profile start per NL preserved
+old intents and authority/grants; normal controller recovery completed COMMITTED. Independent RU/NL1/NL2
+archive/ledger checks verify terminal CLEANED, absent owners and unchanged archived start intents.
+NL1 PID2215748/invocation3fdd38bd and NL2 PID2871488/invocation28f5a4f2 remain active with NRestarts0.
+Fresh authorized MESH traffic passes4HTTPS/3DNS/expected egress on each; real panel five pages/logout PASS.
+Normal renewal/directory-sync/monitor/probe/notifications0; only own holds removed, affected timers
+enabled/active/waiting. Observer8b preserves support PID/archive/authority/NL1 generation/cursor/history.
+NL1's03:16 failure is WebSocket IO_TIMEOUT with active context, not its separate later SIGTERM records.
+Root119+41+11, inventory3+12+6+8+2, probe14 and support33 remain separate, unchanged originals, not settled.
+Source d7d8b9a9 adds the explicit OWNER custody successor:188 local tests and native isolated image PASS;
+independent CI artifact15172353434 verifies101 tests/0 skips. Full all-writer capture remains NOT_PASS:
+historical external/downstream fencing and held common-cycle integration remain; no common kit exists.
+The root collector and12-file images were not reinstalled. [Recovery and exact limits](releases/2026-11-27-mesh-forward-reconciliation.md).
+
+**Historical27 November04:40UTC — new MESH outage overrides capture work.** Fresh process readback finds NL1 inactive
+and NL2 failed; the02:31 traffic PASS is historical, not current availability. Panel login/five existing
+pages/logout passes again04:25; monitor/probe latest invocations0, timers enabled/active/waiting.
+New exact failed-invocation/fatal/systemd/renewal readback and bounded recovery are in progress; no cause
+is inferred from SIGNAL_READ or from a prior startup credential expiry. No common capture is attempted.
+Independent source preparation adds explicit owner-all-writer-runtime-20261127-v1 custody policy:
+188 focused tests/0 skips and actual installed-image isolated synthetic native restore/readback PASS.
+Legacy images/capsules retain their original meaning. This is source/offline qualification, not a
+fleet barrier, external settlement or deployment. [Scope and evidence](releases/2026-11-27-owner-runtime-current.md).
+
 **27 November04:14UTC — mandatory host/manual component INSTALLED; bounded normal checks PASS.**
 owner-user-collectors-mandatory-v1/sourceb49c76c0 covers the canonical manual checkout and both actual
 service roots. Three root-owned bindings pin17/17/8 source files and the existing distinct role gates.

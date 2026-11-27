@@ -142,9 +142,10 @@ records. Use observer8b9355db, never completed Resume.run as a health check.
 Full all-writer acceptance still requires independently held external/downstream
 boundaries and compatible new-image OWNER capture tooling. An empty recent census,
 HTTP completion, maintenance hold or this installed component is not capture permit.
-The current owner_runtime image allowlist still describes its old baseline; qualify an
-explicit successor including current images, host binding/source custody and history
-before capture. Do not redefine old image/baseline meanings or bypass strict refusals.
+The original owner_runtime image allowlist still describes its original baseline. The
+[explicit successor](2026-11-27-owner-runtime-current.md) now qualifies current images,
+host binding/source custody and separate history offline; common-cycle integration and
+independently held downstream boundaries remain. Old meanings and strict refusals are unchanged.
 The common RU/NL1/NL2/OWNER cycle/new stopped-support snapshot/independent verification/
 normal resume has not been performed. Console startup still depends on the support
 runtime directory: reboot startup remains unqualified.
