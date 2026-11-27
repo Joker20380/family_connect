@@ -16,15 +16,21 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
-Current20:05UTC: common capture is still prohibited by real Docker executor/launch and stopped-support
-integration plus remote file rows. Native CIbe35becc34/0 skips is independently verified; a local
-37-case refinement isolates launch-lock ownership and rejects replacement keepers. No component
-installation or production hold. Full MESH traffic is not currently accepted (bounded partial HTTPS
-failures/readiness timeout); do not claim the panel/support PASS is complete normal baseline. Keep
-the existing-key read-only native-read refusal separate; no further key creation or vault writes.
+Current final readback20:07UTC: common capture is still prohibited by real Docker executor/launch and
+stopped-support/custody-format integration plus remote file rows. Source16f27176cb6f0d47d00d7032b9c5c8248863b322
+is pushed/remote-matched; native CI46061368347 SUCCESS37/0 skips, exact artifact15228164580 independently
+verified. This is source qualification only. Next implement per-console/publisher executor launch
+authority for Docker exec/start/create and enroll prior descendants/private mount namespaces; a host
+unit condition or flock is not that authority. Then compose the accepted stopped-support lifetime and
+independent reader, and close RU notice export/peer receiver-file rows in the same causal operation.
+No installed component changed, no production hold or common capture occurred. Real panel/support and
+four natural local service/timer cycles PASS20:07; full MESH traffic remains unaccepted. Retain the
+first selective-vault comparison refusal and read-only native-read refusal separately; do not repeat
+add/import, create another key or replace the working vault. Complete successful local read/consumer
+verification before any held interval. HA-02/custody/source-host-free restore/reboot/onboarding stay open.
 
 Historical19:45UTC:
-Current19:45UTC: finite maintenance components qualify34 local cases, not production OWNER closure.
+Finite maintenance components qualify34 local cases, not production OWNER closure.
 Exact-source native CI6f942ec7 failed3 fixture setup cases; require corrected digest binding and
 fresh CI rather than counting the local PASS as CI acceptance. Preserve the original failed artifact.
 Implement actual console/publisher Docker launch-domain authority and finish real stopped-support

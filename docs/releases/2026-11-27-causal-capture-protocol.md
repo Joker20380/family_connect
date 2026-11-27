@@ -1,6 +1,76 @@
 # HA-02 common capture preparation — 27 November2026
 
-## Lock ownership refinement and live readback — 20:05UTC
+## Final source checkpoint and live readback — 20:07UTC
+
+**Result: incomplete OWNER integration; encrypted kit NOT_CREATED, HA-02 OPEN.** No production
+capture operation was started: there is no common held interval, fresh stopped-support snapshot,
+kit identifier, independent kit verification or linked resume. No own production hold remains.
+The root execution session is closed; own isolated test containers/cgroups/unit markers are absent.
+The finite matrix is in [OWNER maintenance boundary](../operators/owner-maintenance-boundary.md).
+
+Source16f27176cb6f0d47d00d7032b9c5c8248863b322 and its feature remote match. Native CI46061368347
+SUCCESS37/0 skips:10 held-SQLite and27 root/private-namespace/native-pair cases. Independent artifact
+readback checks artifact15228164580, exact `owner-held.xml`, `owner-native.xml`,
+`owner-maintenance.json`, source16f27176 and all XML counters. ZIP SHA256:
+`2b3fffaf09c2e480a1f204a597151cba0a228f06ef1524d67eae1e412fa351f3`.
+The receipt explicitly says fixture_only=true, production_writer_domains_closed=false, common_kit=false.
+This is test-artifact verification, **not** recovery-kit verification. Android46061368305 also SUCCESS.
+At20:14 readback, phase046061368478, native support46061368407 and Linux46061368289 remain IN_PROGRESS;
+they are not counted as PASS. Earlier exact-source native support6f942ec7/46059047804 and vault
+c3086a0a/46059386437 SUCCESS do not substitute for pending jobs at another source. Preserve the first
+6f942ec7 native failure and its artifact separately from both subsequent green native runs.
+
+Nothing was reinstalled. Installed console3af9fbf9/publisher35158514 at their twelve-file7a91d127
+closures, three host/manual b49c76c0 bindings, collector owner-collectors-b7f4cbd2 and observer8b9355db
+remain accepted and unchanged; full pins remain in `scripts/owner_runtime_20261127.json` and the
+accepted installation reports. Future kit bindings must also include RU ru-connect-bounded-4da8d7dc
+wrapper/drop-ins. The new native/launch/held-pair source has no production installation or rollback
+to perform. Do not replace or reinterpret the accepted OWNER custody format with a local pair receipt.
+
+Final actual panel check20:07:49: штатная авторизация, overview, subscriptions, payments and two
+existing subscription pages HTTP200, then logout; no test messages or business-data writes.
+Observer8b returns ACCEPTED_SUPPORT_READ_ONLY_NORMAL; PID240065, archive, authority, NL1 generation,
+history, cursor, installed source pins and baseline variant exactly match the retained accepted read.
+Natural local cycles, all exit0 with enabled/active/waiting timers:
+
+| Service | Invocation | Completion UTC |
+| --- | --- | --- |
+| readonly-monitor | ca8d14f7e2dc463eb3582836e0735020 | 20:07:13 |
+| network-probe | b707a7c69bac4e6f9ca1692256877f9c | 20:07:40 |
+| support-bindings | 19b587a7acd141809d7a512f3afbd03e | 20:07:57 |
+| subscription-notifications | 02f6af28f2574c9a88cdb0614f059245 | 20:07:57 |
+
+Full normal baseline is **not confirmed**: retained NL1/NL2 bounded traffic checks fail as detailed
+below, despite active bootstrap processes and partial authenticated HTTPS success. No cause is
+inferred from READY, client timeout, previous IO_TIMEOUT or RU pressure; no speculative restart or
+retry loop followed. Panel/support PASS is not MESH traffic PASS, bounded recovery qualification or
+reboot-startup acceptance. These live readbacks do not authorize a maintenance interval.
+
+Existing-key activation is also **NOT_ACCEPTED**. Selective native add/attachment-import modified
+the working vault before HA_OTHER_ENTRIES_CHANGED; encrypted working-before and immutable phase
+records remain private. Read-only follow-up refuses HA_RECONCILE_NATIVE_READ_REFUSED. Neither error
+proves a password/corruption cause, nor does a comparison regression prove actual preservation.
+No repeated add/import, new production key, whole-vault replacement or later write was attempted.
+Required next vault action is successful native local unlock/read and read-only preservation plus
+real consumer verification of that existing entry, outside any held interval. Do not restore the
+whole encrypted prestate automatically over potentially newer entries.
+
+**Concrete blocking channel:** installed console Docker `/containers/{id}/exec`, `/exec/{id}/start`
+and late start/create can still supply a writer with its prior private mount view of
+`synthetic/registry.sqlite3` and its parent. Current host flock/system-unit conditions do not deny
+that executor admission. No daemon-side, per-Family-Connect launch boundary or proof of whole prior
+executor-domain completion has been installed/qualified. Native read-only mounts in one namespace
+are insufficient. Next implement that scoped authority and enrollment, then compose stopped-support
+lifetime/independent receipt binding and final custody adapter. RU `/friends/notices/publish` exports
+and peer/operator/remaining receiver-file rows still need continuous fencing; OWNER alone is not
+fleet acceptance. No marker group or historical UNKNOWN was deleted/settled; Gate.drain is unchanged.
+
+Private evidence remains under `/mnt/data/fc-owner-maintenance-20261127`; only sanitized results are
+committed. External custody, source-host-free current/post-ACK restore, panel reboot startup and
+FLEET-PRODUCTION-ONBOARDING-1 are separate/open. The required product outcome remains:
+«Подготовил VPS → указал IP, доступ и роли → запустил ввод → получил проверенный активный узел».
+
+## Historical lock ownership refinement and live readback — 20:05UTC
 
 Corrected digest fixture sourcebe35becc9a66c12af7c747da6b06452814259237 has native CI46059788659
 SUCCESS,34/0 skips. Separate reader downloads artifact15228850142, verifies ZIP SHA256

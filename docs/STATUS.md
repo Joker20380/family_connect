@@ -1,25 +1,34 @@
 # Текущее состояние / Current state
 
-**27 November20:05UTC — same NEXT, kit NOT_CREATED; no production holds.**
-Native sourcebe35becc qualifies in independent CI46059788659:34/0 skips; exact artifact15228850142
-verified. The first6f942ec7 failed artifact remains history. Additional local refinement moves the
-launch flock into a one-acquisition spawned keeper, preventing a dead/replaced keeper from satisfying
-the old lease;37 local tests pass. This remains source-only and does not close actual Docker authority.
-Vault diagnostic sourcec3086a0a CI46059386437 SUCCESS; live read-only reconciliation still refuses
-HA_RECONCILE_NATIVE_READ_REFUSED, with original encrypted prestate and first comparison refusal saved.
+**27 November — same NEXT; final live readback20:07UTC, kit NOT_CREATED.**
+Source16f27176cb6f0d47d00d7032b9c5c8248863b322 is pushed and remote-matched. Native CI46061368347
+SUCCESS:37 cases/0 skips; separate artifact reader verifies exact source/member set/XML and artifact
+15228164580. Earlier6f942ec7 failure and corrected be35becc34-case result remain distinct history.
+The finite launch/cgroup/native/SQLite-PG lifetime components are source-only, not an installed OWNER
+adapter. First unclosed channel is Docker executor admission for console registry writes, including
+previous exec/private-namespace descendants and late container start. Stopped-support lifetime/reader
+and final custody-format integration, plus RU notice export/peer receiver-file rows, also remain open.
 
-Panel/support/collector checks passed19:33–19:35; observer binding/archive/authority/generation/history/
-cursor/source pins exactly match the accepted18:12 readback. No production service was stopped or
-reinstalled. MESH full traffic is NOT_PASS: NL1 partial2/4HTTPS then a readiness TCP timeout; NL2
-two partial3/4HTTPS attempts. DNS/expected egress were not accepted. Processes remain active; no
-SIGTERM/provider root cause or successful recovery is inferred. Bounded probes stopped, not retried
-in a loop. RU19:52 has79% disk/5.9GiB available and observed IO pressure; no conflicting node owner
-or reconciliation file. Local lab containers/cgroups/unit markers were cleaned, no product fence set.
-Actual RU credential renewal628ef22868bc42f1a59b6a031ecc9f45 completes0 at19:51 and directory sync
-7758e747f3a34bcfa96d3602e3b36284 at20:00; their timers are enabled/active/waiting.
+Actual selective vault add/attachment import occurred, but activation is NOT_ACCEPTED: the first
+HA_OTHER_ENTRIES_CHANGED refusal and encrypted prestate are retained. Read-only reconciliation on
+c3086a0a (vault CI46059386437 SUCCESS) refuses HA_RECONCILE_NATIVE_READ_REFUSED. No second key,
+whole-vault replacement, further vault write or automatic unlock retry followed. Successful native
+local read/preservation and the real consumer check are still required before closing admission.
+
+Panel real login/five existing pages/logout PASS20:07. Observer8b confirms the same accepted support
+PID/archive/authority/NL1 generation/history/cursor/source pins; all four local collector/notification
+invocations complete0 and their timers are enabled/active/waiting. This is not full normal-baseline
+acceptance: MESH traffic remains NOT_PASS (NL1 partial2/4HTTPS then readiness TCP timeout; NL2 two
+partial3/4HTTPS attempts; DNS/expected egress not accepted). No SIGTERM/provider root cause or recovery
+is inferred. Bounded probes stopped. RU19:52 has79% disk/5.9GiB available and observed IO pressure;
+renewal19:51 and directory-sync20:00 complete0 with enabled/active/waiting timers.
+
+No production capture hold/admission close/service stop/reinstallation occurred; no new stopped-support
+snapshot, common interval, encrypted kit, kit verification or linked resume exists. Own lab resources
+are cleaned and the root execution session is closed. No own production restriction remains.
+[Exact bindings, retained refusals, CI status and next integration gate](releases/2026-11-27-causal-capture-protocol.md).
 
 **Historical19:45UTC — finite OWNER boundary components qualified; common kit NOT_CREATED.**
-**27 November19:45UTC — finite OWNER boundary components qualified; common kit NOT_CREATED.**
 The selected stop-writers/hold-native-files implementation now has scoped unit launch conditions,
 recursive cgroup clean-exit/late-attachment containment, mount-identity/event continuity, explicit
 external cleanup reconciliation and a held SQLite/PG operation-history pair. Local qualification:
