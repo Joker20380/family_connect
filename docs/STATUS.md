@@ -1,66 +1,39 @@
 # Текущее состояние / Current state
 
-**27 November17:43UTC — renewal COMMITTED and independently verified; directory timer still held.**
-17:49 update: scoped4da8d7dc SSH namespace is installed only for the two RU units; original
-ExecStart/config/runtime/host SSH unchanged. Directory invocation5c66ea4f completes0. An early
-MainPID mount assertion is retained as an unqualified observation; require exec-ready readback
-and strengthened namespace qualification without a caller-supplied retry option before resume.
-New operation ha02-connect-20261127-1729-e28a771d completes COMMITTED without first_cause.
-Independent RU/NL1/NL2 terminal ledgers/exact archives verify9/8/8 files; no owner records remain.
-Normal original renewal invocation d0c39213 returns NOOP/0. Original directory-sync twice refuses
-NL2 read with zero file changes; do not release either own RU timer hold yet. Both current gateway
-read-only inspections succeed separately. A scoped SSH connection-only unit namespace wrapper is
-being qualified; no RPC replay, source/config replacement, key or firewall/policy change.
-Panel authentication/five pages PASS17:31; NL1 traffic PASS17:32, NL2 first17:33 fails then17:37
-bounded confirmation passes without intervention. Retain both failures; no stability/root-cause claim.
-Support observer PAIRED_SETTINGS refusal is specifically NeedDaemonReload=yes; unchanged unit
-bytes/settings reloaded without restart, observer again PASS with original PID/archive/authority/
-generation/cursor/history. No kit/common capture/stopped snapshot/capture-linked resume exists.
+**27 November18:15UTC — normal baseline restored/read back; common encrypted kit NOT_CREATED.**
+The selected OWNER/all-writer NEXT remains IN_PROGRESS. Accepted console/publisher7a91d127,
+mandatory manual b49c76c0, collector owner-collectors-b7f4cbd2 and observer8b9355db are unchanged;
+none was reinstalled. Causal/PG review fixes and bounded dedicated-process callbacks are source-only,
+not an integrated production OWNER/remote barrier. Dedicated HA AES consumer is qualified; a new
+entry is generated/read back in a protected encrypted Family-Connect.kdbx candidate, with original
+vault unchanged. Live merge and independent external custody are not claimed.
 
-**27 November17:20UTC — renewal connectivity incident; bounded recovery prepared, NOT run.**
-17:26 update: d583 recovery unit refuses RECOVERY_PARENT before importing runtime/RPC; the
-root-owned transaction lives below the existing ubuntu-owned application ancestor. Exact data
-hash/regular-file/root-owner checks remain; root-owned ancestor checks apply to executable
-source/config, not to data. A corrected source/new attempt is required, never replay this refusal.
-RU normal renewal fails before a new transaction is acquired; the previous14:12 COMMITTED
-transaction and all three terminal ledgers are retained. Own RU renewal/directory timer holds
-remain enabled/inactive; no capture barrier or support stop was acquired. A separate read-only
-RPC fails at TCP connect. Dual-host packet evidence sees NL1 SYN-ACK output but no corresponding
-RU input for that flow; upstream cause is not established. Prepared one-shot recovery changes
-only bounded TCP connection attempts, never retries an RPC/result, and requires exact pins,
-fresh committed predecessor and held timers. Native disposable OpenSSH: three connection attempts,
-one effect; lost reply: one connection/one effect/no retry. Not yet an installed runtime change.
-HA encrypted vault candidate was successfully prepared/read back; original unchanged, candidate
-not merged into live vault. Real encrypted kit remains NOT_CREATED. Latest b873 native support
-CI has1/360 failure in unchanged legacy detached-reader drain; retained, not qualified as PASS.
+Operational preflight found renewal/SSH failures. One fresh bounded-connect operation
+ha02-connect-20261127-1729-e28a771d completes COMMITTED; independent RU/NL1/NL2 exact terminal
+archives verify9/8/8 files. Two scoped connection-only SSH namespace drop-ins are installed on RU
+as ru-connect-bounded-4da8d7dc, qualified by0b8775f3. Original runtime/config/ExecStart/host SSH,
+keys, pins and RPC replay policy are unchanged. Only own RU timer holds are removed. Natural
+renewal7fff695bfab742ae89351b6df28098cf and directory96e2575f741547549faf2607130732b6
+complete0 at18:06; both effective exec-ready namespaces verify and timers are enabled/active/waiting.
+All four applicable0b8775f3 workflows SUCCESS. No production capture barrier or support stop was acquired.
 
-**27 November16:36UTC — bounded participant execution qualified; common capture still refused.**
-130 focused checks PASS. Dedicated `serve` uses a Linux kernel SIGKILL deadline around acquisition,
-snapshot and cleanup, with250ms cleanup allowance that does not extend capture validity. Hanging
-callbacks/process death release synthetic kernel locks; existing journals refuse fresh-process replay.
-An ambiguous release is never retried automatically. No production OWNER adapter is installed.
-Isolated NL2 inode-flag experiment has no terminal receipt and is NOT qualified; its one synthetic
-flag was independently cleared, with no product paths touched. Normal production remains unmodified.
+Real panel login/five existing pages/logout PASS18:07. NL1 bounded traffic PASS17:32; NL2 first17:33
+HTTP failure is retained separately from its17:37 traffic PASS without intervention. Observer8b
+again PASS after saved unchanged units were daemon-reloaded (no support restart); PID240065,
+archive, authority, NL1 generation, cursor and accepted history compare equal at18:12. Automatic local
+notifications/bindings/monitor/probe cycles complete0 and their timers are enabled/active/waiting at
+18:13–18:14. No own holds remain. RU storage sample17:52 is79% full/5.9GiB free with high observed
+I/O pressure; successful readbacks do not explain or eliminate the network symptoms or prove sustained
+MESH stability. Initial failures and successful confirmations remain separate evidence.
 
-**27 November16:31UTC — dedicated HA vault consumer qualified on disposable data.**
-21 native/unit tests PASS, including existing signing consumers. Exact Family-Connect.kdbx/
-HA encryption entry/attachment/member/purpose/32-byte AES contract; reader reuses memfd archive
-export, never signing_key.load. Protected preparation creates and verifies an encrypted candidate
-without replacing the live vault. Production vault has not yet been opened; no installed HA key or
-kit is claimed. [Local workflow](operators/ha-wrapping-key.md). OWNER/remote physical integration
-remains required. Panel live authentication/five pages PASS16:19; first RU SSH timeout retained,
-single16:29 confirmation succeeds without intervention (cause unknown); no production hold acquired.
-
-**27 November16:18UTC — review fixes qualified, production integration still incomplete.**
-Checkpoint ab902e27 preserved. Direct active-request/replay faults now terminalize the causal
-participant, preserve the first refusal, and record cleanup outcome separately; correct completed
-replay remains read-only. Focused118 PASS (retained pre-fix5 failures). PostgreSQL read-only preflight
-finds no event triggers and the four stock information_schema tables. The boundary now rejects event
-handlers before DDL, checks explicit PG17 information_schema composition and holds its persistent
-tables. Exact installed-image isolated26 PASS plus pre-existing Docker-exec/dump/restore/late replay;
-pre-fix5 failures retained. No accepted component reinstalled; no production locks or new kit.
-OWNER physical adapter, remaining receiver/native-file fences and dedicated vault HA consumer remain
-the same NEXT. [Review evidence and limitations](releases/2026-11-27-causal-capture-protocol.md#review-follow-up).
+Strict Gate.drain and original UNKNOWN/marker groups remain unchanged. Specific blocking rows:
+OWNER synthetic registry/aliases and native projection files, RU /friends/notices/publish exports,
+peer/operator and remaining receiver file paths lack a qualified continuous physical fence for
+already accepted native/child work and safe late effects. The new RU unit/wrapper source closure
+also belongs in the next capture qualification. No common held interval, new stopped-support
+snapshot, production kit, independent kit verification or capture-linked resume is claimed.
+HA-02/custody/source-host-free restore, console reboot startup and onboarding remain separate/open.
+[Exact review, CI, operational evidence, rollback and remaining gate](releases/2026-11-27-causal-capture-protocol.md).
 
 **Historical27 November13:54UTC — two source mechanisms qualified; production kit NOT_CREATED.**
 Causal010d8c6c and logical-DB948978bb are pushed/remote verified, not installed. Independent CI

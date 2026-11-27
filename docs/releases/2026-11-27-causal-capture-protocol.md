@@ -1,6 +1,128 @@
 # HA-02 common capture preparation — 27 November2026
 
-## Renewal committed; directory dependency reconciliation — 17:43UTC
+## Current checkpoint — 18:15UTC
+
+**COMMON_ENCRYPTED_KIT_NOT_CREATED; selected OWNER/all-writer NEXT remains IN_PROGRESS.**
+Review items1/2 are fixed and qualified; item3 has a dedicated-process deadline but no complete
+production OWNER adapter; receiver/native rows of item4 remain unclosed. Item5 has a qualified
+purpose-separated consumer and a real encrypted vault candidate, not a recovery kit. No common
+production held interval, new stopped-support snapshot, independent kit verification or capture-linked
+resume occurred. There is no kit identifier. Historical e4eace1a is not reused as a current component.
+
+The operational preflight incident is recovered with a new credential-maintenance operation, not by
+replaying old capture/support operations. Operation ha02-connect-20261127-1729-e28a771d is COMMITTED;
+independent exact terminal archives verify9/8/8 files on RU/NL1/NL2, with old ledgers retained and
+no remaining owner.json for that operation. Manifest hashes and original failed invocations are below.
+The source-pinned ru-connect-bounded-4da8d7dc wrapper and two unit drop-ins are the only new permanent
+operational installation. They retry TCP connection establishment only, never an accepted RPC.
+Accepted console/publisher, three manual roots, collector and observer were not reinstalled.
+
+### Fresh normal baseline and physical readback
+
+- Natural RU renewal invocation7fff695bfab742ae89351b6df28098cf starts18:06:11UTC and completes0
+  at18:06:20; directory96e2575f741547549faf2607130732b6 completes0 at18:06:10. Both timers are
+  enabled/active/waiting. The independent watcher observed the actual exec-ready /proc/PID/root
+  namespace of each invocation: exact wrapper6aa6d679 and unchanged original SSHaf809334.
+  This is a natural timer cycle, not a manual invocation relabeled automatic. Own two RU timer
+  holds were removed after the corrected native fixture and normal unit readback; no own holds
+  remain. No production capture fence or support stop was ever acquired in this continuation.
+- Real panel login, overview/subscriptions/payments/two existing cards and normal logout PASS
+  at18:07:35; five HTTP200 authenticated pages, zero test messages/business mutations requested.
+  The shell wrapper subsequently used zsh's read-only `status` variable and exited1; the already
+  written browser receipt proves the browser checks completed. It is not a second browser failure.
+- Accepted read-only observer8b9355db PASS18:12; support PID240065 and binding, archive, authority,
+  cursor, NL1 generation and historical receipts equal the preflight/after-reload values. No completed
+  Resume.run health check or resume.prepare tooling update was used. The earlier PAIRED_SETTINGS
+  refusal is retained; NeedDaemonReload was observed, while the reason it became set is not proved.
+- Automatic notifications593eaf6b3812419f8ffa9a7957dfc12b and support bindings
+  59658efa2c2647b480395af42b2fb3e3 finish0; their timers are enabled/active/waiting18:14.
+  Monitor e26e847283b24143b09b8fcb18d490ca and probe3867a272eaf34f7996c18bd1e5616dfe finish0,
+  both user timers enabled/active/waiting18:13. An intermediate read used the wrong nonexistent
+  support-notifications unit name; the actual loaded unit is subscription-notifications and was
+  checked explicitly. That mistaken query is retained, not treated as a dependency outage.
+- Last bounded authorized MESH traffic: NL1 PASS17:32, NL2 PASS17:37,4HTTPS/3DNS/expected exit.
+  NL2's17:33 HTTP failure and later17:34 RELIABLE_FRAME_TIMEOUT remain separate evidence on the
+  same invocation. No additional restart, provider-blocking or SIGTERM explanation is claimed.
+  Passing confirmation is bounded availability, not sustained-stability acceptance. RU17:52 resource
+  sample is79% disk/5.9GiB free with substantial IO pressure, not a proven network root cause.
+
+### Exact code qualification and retained failures
+
+| Source | Scope | Result |
+| --- | --- | --- |
+| da50370ed19221598935c98c8609c832aec4b6ad | Terminal-state/PG assumptions |118 focused checks; native26 PG plus6 late-import checks/0 skips; production schema read-only39 tables/25 sequences/68 catalogs |
+| 4dddd5ec73a76244f8d2447555a3fea19ab4b602 | Separate HA vault consumer |21 native/unit checks/0 skips, signing regression preserved |
+| b87397a55637972a2feaa74c149418fb0d880764 | Hard callback deadline/release ambiguity |130 focused checks/0 skips; acquisition/snapshot/cleanup hangs and process death |
+| e28a771d79c7d49b2fedfd2e5180b55f97976d59 | One-shot TCP-only recovery |13 focused checks and native SSH effect counts; production fresh operation COMMITTED |
+| 4da8d7dcbaf407cc0cefd46d303017039a6000c5 | Scoped RU SSH namespace |Installed wrapper/two drop-ins; original unit/runtime/config/host SSH unchanged |
+| 0b8775f3bf3e57301dc113ed9d7a36d37a298e0b | Strengthened actual-wrapper fixture |13 unit checks/0 skips; native bare and actual-namespace tests; all four applicable workflows SUCCESS |
+
+Exact0b workflows: renewal-connect46044969027, Android46044968983, phase046044969070 and Linux
+46044969002 SUCCESS. Independent artifact15222445166 exact-set/readback matches0b source,13/0 skips,
+native fixture SHA5f31124d340cea8355adcc561a1440bce32510d0821c8e128ecc126d1b91a60f,
+three connect attempts/one effect and lost-reply one connection/one effect/no RPC replay. ZIP SHA256
+30c05a8d9f603bf0f8f196b9b5c60f0a9e13014b31844464e48ce9d0ff7c9076. The namespace result asserts
+actual_wrapper_verified=true after removing the caller's retry option; the bare test is separate.
+
+Independent native support run46034920447 on exactb873 first fails359/360, zero skips, in unchanged
+test_old_detached_reader_must_finish_before_application_drain[True], missing drained.json. Its
+artifact15217791584 is preserved, ZIP47a4269e2bc39a5512c96f2b460678de4888b9003e552ba99102a490e7d2be77.
+One retry of the failed job on the same source succeeds360/360, zero skips; independent artifact
+15220773170 ZIPf3e048bfe186956ef18f2174a39e2c081f5d23b89077ac86b12da032369ce04d verifies exact
+source and receipts. The successful retry does not establish the first failure's cause.
+Earlier pre-fix failures, the dedicated-process deadline race and first RECOVERY_PARENT refusal are
+retained. Canceled intervening workflow runs are not PASS. Raw artifacts/evidence remain private.
+
+### Custody, preserved history and exact remaining blocker
+
+The protected local workflow created a separate32-byte OS-CSPRNG HA encryption key and independently
+read it back from an encrypted Family-Connect.kdbx candidate. Exact entry `HA custody encryption`,
+attachment `recovery.tar.gz`, member `ha-custody/aes256gcm.raw`, purpose
+`family-connect/ha-custody-encryption/v1`. The candidate is under the owner's private vault directory
+`ha-candidate-20261127-01/Family-Connect.kdbx`; original vault bytes are unchanged. It is NOT merged
+into a potentially open live vault or copied externally. No signing key is reused and no key bytes,
+password or vault content appear in Git/logs/report. Two earlier generic key-read refusals are kept;
+they do not prove a wrong password or absence of a key. Joker/NL2 destination/KeePassXC roles remain
+as agreed. Independent external custody and loss-of-laptop access are still unconfirmed.
+
+At the17:57 historical readback, root119 plus41 earlier additions (160 byte/stat records) and
+inventory3+12+6 plus8 earlier additions (29 records) remain unchanged. Non-atomic current names
+sample246 root/101 inventory; new86/72 are separate, not merged into the original UNKNOWN groups.
+Probe14 is unchanged. Original support33 full bytes match the beginning of this continuation;
+current221 names include188 additional retained entries. Normal automatic cycles can add more;
+these samples are not a claim of a frozen final count. No marker was deleted, whitelisted or settled.
+Gate.drain remains strict.
+
+The first unclosed production channel is OWNER native writes to
+`/var/lib/docker/volumes/fc-control-plane-0_synthetic_state/_data/synthetic/registry.sqlite3`,
+`/etc/family-connect-support/panel-pseudonym-aliases.json` and native collector projections.
+A qualified PG boundary does not fence these files. There is no integrated, continuously held
+physical boundary covering already accepted file descriptors/mappings/child work with bounded
+acquire/snapshot/cleanup and safe late-effect reconciliation. A synthetic prefaulted-mapping
+experiment later observes EPERM for old-FD pwrite and SIGBUS for a mapped write under an inode flag,
+with original synthetic bytes/flags restored; this is one feasibility case, NOT a qualified adapter
+or proof of crash cleanup/tree coverage/lease continuity.
+
+RU `/friends/notices/publish` still also needs its notice DB and both export file paths (including
+temporary-file/os.replace effects) held together; peer/operator/profile and remaining receiver-file
+rows below remain open. Receiver subprocess lifetime must be covered independently of a dead parent
+or completed SSH/HTTP client. New RU wrapper/drop-in source closure must join the exact kit binding.
+No source-only maintenance hold, empty ExecIDs or stored intent substitutes for these guarantees.
+
+**Next concrete step:** implement/qualify the exact OWNER native-file boundary, then compose it with
+the qualified PG transaction, installed mandatory gates and accepted stopped-support procedure in
+one bounded participant lease. Do not start common capture with partial coverage. This is unfinished
+engineering, not a request for another key path or new inventory. HA-02 independent custody,
+source-host-free current/post-ACK recovery, console reboot startup and
+FLEET-PRODUCTION-ONBOARDING-1 remain separate/open. Current HTTP PASS is not reboot acceptance.
+
+Code-only operational rollback removes only the two owned
+`95-ha02-connect-bounded-4da8d7dc.conf` drop-ins after holding own timers and waiting for selected
+invocations, then daemon-reloads; it does not restore databases, profiles, authority or history.
+Rollback was not needed. No public release/catalog/version change occurred. All logical source
+commits were pushed normally and remote-matched; main stays da94566a. This checkpoint is not a release.
+
+## Historical renewal/directory reconciliation — 17:43–17:49UTC
 
 At17:46 the two scoped4da8d7dc drop-ins are installed after CI46044326107/native namespace PASS.
 Wrapper SHA6aa6d6797cc7aa94a0376d67e22cfdd6a60e33dac5649df7d0ecdcbd37cf5d2b;
@@ -29,12 +151,14 @@ not a capture-linked resume or evidence of unrelated historical request completi
 Directory invocations8dbcc2b1263445278169b4054f2c390b and f97bbd1a229249e983006bd0e1ec4a0e
 return GATEWAY_CHECK_REQUIRED/NL2 GATEWAY_READ_UNAVAILABLE with zero changed files. A fresh
 separate read-only inspection of both gateways returns NOOP with over3h credential headroom.
-Both own RU timers remain held; no repeated automatic failing cycle is resumed. A two-line
+At the17:43 pre-install checkpoint both own RU timers remained held; no repeated automatic failing
+cycle was resumed. A two-line
 SSH connection wrapper is qualified in a private service mount namespace to retain original
 ExecStart, runtime/config, strict SSH pins, key paths and all receiver/RPC rules. The original
 SSH binary is bound read-only at /run/family-connect-ssh-original; only /usr/bin/ssh inside the
 two selected units is wrapped with ConnectionAttempts=3. Host SSH and unrelated services are
-unchanged. This is not installed yet. Code-only rollback removes only the two owned drop-ins;
+unchanged. This was not installed at17:43; the17:46 installation and18:06 acceptance are recorded above.
+Code-only rollback removes only the two owned drop-ins;
 it never restores product databases, old authority, credential profiles or transaction history.
 Any installed wrapper/unit source closure must be included and qualified before the common kit.
 
@@ -51,7 +175,7 @@ authority, cursor, NL1 generation and five historical receipt hashes compare equ
 support marker names remain; current215 names include182 additional records saved separately.
 An initial exact-count33 assertion is retained as a failed assumption, not a deletion or settlement.
 
-## Bounded operational continuation — 17:20UTC
+## Historical bounded operational continuation — 17:20UTC
 
 First recovery-wrapper invocation b11394dbba1c42a38988993659b92744 refuses RECOVERY_PARENT
 before its intent journal/runtime import/any RPC. The actual transaction is root-owned0600 under
@@ -118,7 +242,7 @@ an old FD and SIGBUS for a prefaulted mapping on one synthetic NL2 inode; origin
 without terminal receipt remains a failure, and neither is complete tree/continuous-lease coverage.
 Private evidence: `/mnt/data/fc-ha02-review-20261127`; secrets/raw state never enter Git.
 
-## Result and exact boundary
+## Historical pre-review result and exact boundary
 
 The requested **production encrypted RU/NL1/NL2/OWNER kit does not exist yet**.
 No production stop/capture/resume operation was started. Existing accepted components

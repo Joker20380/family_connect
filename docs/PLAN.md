@@ -16,33 +16,26 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
-17:49UTC scoped RU connect wrapper installed, directory normal invocation now0; timer holds
-remain until exec-ready namespace and automatic normal cycles are proved.
-17:43UTC renewal recovery committed; independent9/8/8 archives PASS and normal renewal NOOP.
-Directory read failures still require its own bounded-connect qualification before releasing own
-RU timer holds. No common capture is permitted while that dependency remains abnormal.
-17:26UTC first TCP recovery wrapper refuses before RPC on a data-ancestor ownership assumption;
-retain this failure and correct only the data check before a distinct fresh attempt.
-17:20UTC bounded renewal incident reconciliation takes operational priority within the same NEXT.
-Two own RU timer holds remain until normal dependencies are demonstrated. A one-shot pinned TCP
-establishment-only recovery is prepared/isolated-qualified, not yet executed; no RPC retry or old
-transaction rewrite. Preserve b873 native support CI1/360 failure. HA encrypted candidate exists
-and reads back; original vault unchanged, live merge/custody not accepted. Common capture still
-requires OWNER/native/receiver physical adapters; no source/manifest-only acceptance.
-16:36UTC dedicated participant callback/death bounds qualify130 focused cases. This closes a
-process-execution prerequisite, not OWNER native-file/receiver coverage. Existing-journal fresh
-process refuses; reconciliation/new operation is still required. No production capture permit.
-16:31UTC dedicated HA vault consumer/preparation qualifies21 checks on disposable vaults. The
-existing application/roles/destination are unchanged; live key availability/activation still needs
-the protected local workflow, not a key path or secret in chat. Production physical adapters and
-common capture remain the selected task; encrypted candidate preparation is not a recovery kit.
-16:18UTC review fixes: active causal validation/replay failures are terminal (118 focused PASS),
-cleanup cannot replace the original cause. PG17 event-trigger refusal precedes sequence DDL;
-explicit information_schema scope and physical locks qualify26 native checks plus Docker dispatch/
-dump/independent restore/replay. Actual production prerequisites inspected read-only; no triggers,
-four stock tables. No production adapter installation/capture permit. Next within this task:
-bounded OWNER physical integration and remote-file/receiver coverage, dedicated in-memory KeePassXC
-HA consumer, then complete capture/verify/resume. Source qualification is not the kit acceptance.
+Current18:15UTC: review terminal handling/PG prerequisites and bounded participant execution qualify;
+accepted installed components remain installed and unchanged. Dedicated HA consumer/encrypted vault
+candidate are prepared, not a recovery kit. A preflight renewal incident is reconciled by a new
+COMMITTED operation with independent9/8/8-file archives. Scoped RU connection-only SSH wrapper
+ru-connect-bounded-4da8d7dc is installed; actual exec-ready namespaces verify during natural renewal
+and directory cycles completing0 at18:06, both timers enabled/active/waiting. All four applicable
+0b8775f3 workflows SUCCESS. No RPC replay or original runtime/config/key/policy replacement.
+Normal baseline read back: panel18:07, observer18:12, local automatic cycles/timers18:13–18:14;
+latest bounded MESH traffic passes17:32/17:37, with NL2's17:33 failure retained, not explained away.
+No own holds remain. Preserve all original connection/probe/observer/CI refusals.
+
+Same NEXT, not a new inventory: implement the bounded OWNER causal adapter with continuous
+PostgreSQL + mandatory gates + native-file coverage + accepted stopped-support procedure; finish
+RU notice export and peer/operator/receiver physical file rows and late-effect policy. Bind the new
+RU unit/wrapper closure. Complete isolated loss/death/reacquisition/queued-work qualification,
+then one real RU/NL1/NL2/OWNER encrypted capture, exact-set reader and linked normal resume.
+A maintained service, source-only hold, prepared key or local gate PASS is not capture permission.
+Do not reinstall accepted components, weaken Gate.drain or settle historical UNKNOWN/markers.
+HA-02 custody/source-host-free restore, console reboot and FLEET-PRODUCTION-ONBOARDING-1 remain open.
+[Exact blockers and operational evidence](releases/2026-11-27-causal-capture-protocol.md).
 
 Historical readback:
 13:54UTC source010d8c6c/948978bb pushed/remote verified; all four applicable948978bb CI SUCCESS,
