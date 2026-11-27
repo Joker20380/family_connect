@@ -7,13 +7,15 @@ Do not run it against the currently accepted, active support merely to refresh t
 
 ## Inputs and prestate
 
-Use the exact qualified controller source `2f4f83dd51cd3814a2da631cb3d95140af5c2a90`
+Use the exact qualified controller source `39caf062cf6b6b58977dfb7d7a3428246aac852c`
 for a **new** operation. Its retained source capsules are
-`/opt/family-connect-support/ha02-tools-2f4f83dd` on OWNER and
-`/opt/apps/family_connect/state-ha02/tools-2f4f83dd` on NL1. All373 capsule files were
+`/opt/family-connect-support/ha02-tools-39caf062` on OWNER and
+`/opt/apps/family_connect/state-ha02/tools-39caf062` on NL1. All373 capsule files were
 independently compared to the source commit. Revalidate their bytes before reuse.
-The18:52UTC working operation is pinned to2f4f83dd. Its14d4dfad predecessor and the
-earlier0e4e85b5 tool capsule remain immutable; never replace old operation source files.
+Exact-source native qualification independently verifies351 tests/0 skips after a complete
+same-SHA repeat; prior failures are retained in the27November report. The historical18:52UTC
+operation remains pinned to2f4f83dd. Its14d4dfad predecessor and earlier0e4e85b5 capsule remain
+immutable; never replace old operation source files.
 
 The accepted192343eb collector installation changes the shared baseline's closed source
 set. The older controller correctly refuses `SOURCE_CLOSURE` there. The bounded recovery
@@ -21,12 +23,12 @@ correction adds `--installed-collectors` to **new accepted-predecessor preparati
 it admits exactly the four committed192343eb file hashes, retains the original manifest,
 and records `baseline_variant` plus the exact source transition in the new operation.
 Extra/missing/changed files, source symlinks and altered original pins still refuse.
-Use it only after exact-source native qualification and independent installed-byte checks;
-the correction is not yet an installed/qualified operational checkpoint in this revision.
-Its source checkpoint is39caf062cf6b6b58977dfb7d7a3428246aac852c; see the
-[current qualification record](../releases/2026-11-27-control-ha-owner-resume.md) before any use.
+It was qualified and used for the27November recovery after independent installed-byte checks;
+see the [qualification and installed record](../releases/2026-11-27-control-ha-owner-resume.md).
 Do not alter old plans or use this option for unknown collector versions. Future resumes
 inherit the recorded variant. No collector installation or mandatory-gate fix occurs here.
+Before installing a different collector baseline, qualify its exact recovery-source variant
+in the same task. The accepted192343eb variant must not silently accept newer source files.
 
 Obtain root using the normal local password prompt in the same execution session.
 No permanent sudoers/polkit changes. Retain private copies of effective units, journals,
@@ -34,9 +36,9 @@ plan, authority, reservation, terminal/recovery records, pending markers and cur
 store/notification state before mutation. Do not print keys, message contents or environment.
 
 Identify the **last accepted operation** from the installed entry/authority and its
-accepted binding, not from the directory's date. After the26November stopped-capture resume
-it is `/opt/family-connect-support/ha02-forward-20261126-stop01`; its linked NL1 control plan is
-`/opt/apps/family_connect/state-ha02/forward-support-20261126-stop01/control.json`.
+accepted binding, not from the directory's date. After the27November panel/dependency recovery
+it is `/opt/family-connect-support/ha02-forward-20261127-panel01`; its linked NL1 control plan is
+`/opt/apps/family_connect/state-ha02/forward-support-20261127-panel01/control.json`.
 These are predecessor examples, not paths to overwrite on a later boot.
 
 Check the current process/boot/cgroup/argv, source and archive hashes, unit settings,
@@ -66,6 +68,8 @@ Do not run the illustrative interfaces with literal placeholder paths.
    A new boot or independently proven clean exit is required. The narrow interrupted,
    never-admitted startup path additionally requires its exact retained refusal and absence
    evidence; no generic stale-PID exception is available. Active or unexplained writers refuse.
+   Add `--installed-collectors` only when explicitly migrating an older accepted plan to the
+   exact reviewed192343eb baseline. The current accepted panel01 plan already records it.
 
 2. Build a fresh private NL1 manifest from the newly prepared plan and authenticated
    predecessor manifest. Its exact five fields are:
