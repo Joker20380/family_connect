@@ -16,6 +16,12 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
+Continuation from ff20b55c: selective activation of the existing HA entry is locally qualified
+(24 checks/0 skips); exact-source CI and actual working-vault consumer acceptance remain required.
+No second production key, whole-vault replacement or production hold. The finite OWNER maintenance
+adapter and remote receiver rows remain the same NEXT; native boundary components alone do not
+authorize capture. Preserve the earlier GUI consumer refusal independently of later activation.
+
 Current18:15UTC: review terminal handling/PG prerequisites and bounded participant execution qualify;
 accepted installed components remain installed and unchanged. Dedicated HA consumer/encrypted vault
 candidate are prepared, not a recovery kit. A preflight renewal incident is reconciled by a new

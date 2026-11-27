@@ -1,5 +1,27 @@
 # HA-02 common capture preparation — 27 November2026
 
+## Continuation from ff20b55c — selective existing-key activation
+
+`scripts/ha_wrapping_activate.py` copies only the existing HA custody encryption entry's
+`recovery.tar.gz` attachment from the encrypted candidate into the saved/closed working
+Family-Connect.kdbx. No key generation and no whole-vault candidate replacement. A local native
+dialog precedes access; passwords/payload remain in memory/stdin/memfd, not argv, Git or diagnostics.
+The encrypted working prestate and phase records are private; UUID/entry/history preservation and
+the real HA consumer must pass before activation is accepted. No password dialog is permitted in
+a subsequent held interval. A partial failure is not automatically retried or declared activated.
+
+Native/unit qualification:24 PASS/0 skips, including changes made only in the working vault after
+candidate creation, no regeneration, preservation of those entries/history, exact existing-key
+readback, duplicate refusal and open-GUI refusal. First local qualification refusals (XML sibling
+whitespace comparison and a private-write call arity) are retained with their corrected checks.
+The earlier real GUI-copy attempt returned `HA_VAULT_KEY_UNAVAILABLE_PRIVATE_DIAGNOSTICS_SUPPRESSED`
+for the working vault; unchanged observed working metadata does not prove a password error.
+It is not activation PASS. Exact-source CI/remote SHA are recorded after push, not assumed here.
+
+No accepted component was reinstalled. No production admission, mount, cgroup or support hold was
+acquired in this continuation. Native OWNER maintenance components remain in progress and no
+common held interval, new stopped-support snapshot, encrypted kit or linked resume exists.
+
 ## Current checkpoint — 18:15UTC
 
 **COMMON_ENCRYPTED_KIT_NOT_CREATED; selected OWNER/all-writer NEXT remains IN_PROGRESS.**

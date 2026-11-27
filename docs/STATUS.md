@@ -1,5 +1,13 @@
 # Текущее состояние / Current state
 
+**27 November — selective existing HA-key activation source qualified; not yet activated.**
+Continuation of ff20b55c: native selective-copy checks pass24/0 skips. The workflow adds only the
+already-created HA entry/attachment to the saved, closed working Family-Connect.kdbx, preserves an
+encrypted prestate and all existing entries/history, generates no new key and requires real consumer
+readback. The earlier local GUI attempt did not produce a successful working-vault consumer read;
+its refusal is retained. This is not a kit or custody PASS. OWNER native/launch/held-SQLite adapter
+work remains uncommitted qualification in progress; no production writer was stopped or fenced.
+
 **27 November18:15UTC — normal baseline restored/read back; common encrypted kit NOT_CREATED.**
 The selected OWNER/all-writer NEXT remains IN_PROGRESS. Accepted console/publisher7a91d127,
 mandatory manual b49c76c0, collector owner-collectors-b7f4cbd2 and observer8b9355db are unchanged;
