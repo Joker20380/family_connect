@@ -13,7 +13,9 @@ import threading
 from control.capture_gate import CURRENT, Gate, GateError, external_operation, require
 
 
-INSTALLED_APP = Path('/home/joker/PycharmProjects/family_connect')
+INSTALLED_APP = Path('/mnt/data/PycharmProjects/family_connect')
+INVENTORY_APP = Path('/mnt/data/fc-subscription-operations-20261107/collector-runtime')
+PROBE_APP = Path('/home/joker/.local/share/family-connect/control-ha/20261125-collector-activation-4sc56eop/probe-runtime')
 INSTALLED_BINDING = Path('/etc/family-connect/owner-user-collectors.json')
 BINDING_UID = 0
 BASELINE = 'owner-user-collectors-mandatory-v1'
@@ -29,6 +31,19 @@ SOURCE_NAMES = (
       ('metrics', 'transport', 'subscription', 'technical_metadata')),
 )
 SCOPE = ContextVar('owner_user_collector_admission', default=None)
+PROBE_SOURCES = (
+    'control/capture_gate.py', 'control_plane/collector_binding.py', 'control_plane/collector_admission.py',
+    'control_plane/probe_network.py', 'control_plane/apps/__init__.py', 'control_plane/apps/console/__init__.py',
+    'control_plane/apps/console/collector.py', 'control_plane/apps/console/network_probe.py',
+)
+
+
+def installed_scopes():
+    return {
+        INSTALLED_APP: (INSTALLED_BINDING, SOURCE_NAMES, ROLES),
+        INVENTORY_APP: (INSTALLED_BINDING.with_name('owner-user-inventory.json'), SOURCE_NAMES, ('inventory',)),
+        PROBE_APP: (INSTALLED_BINDING.with_name('owner-user-probe.json'), PROBE_SOURCES, ('probe',)),
+    }
 
 
 def read_regular(path, owner, mode=None, limit=256 * 1024):
@@ -47,21 +62,21 @@ def read_regular(path, owner, mode=None, limit=256 * 1024):
     return raw
 
 
-def installed_binding():
-    raw = read_regular(INSTALLED_BINDING, BINDING_UID, 0o644, 16384)
+def installed_binding(application, filename, names):
+    raw = read_regular(filename, BINDING_UID, 0o644, 16384)
     binding = json.loads(raw)
     require(type(binding) is dict and set(binding) == {'schema', 'baseline', 'application', 'uid', 'sources', 'gates'} and
             type(binding['schema']) is int and binding['schema'] == 1 and binding['baseline'] == BASELINE and
-            binding['application'] == str(INSTALLED_APP) and type(binding['uid']) is int and
+            binding['application'] == str(application) and type(binding['uid']) is int and
             binding['uid'] == os.geteuid(), 'COLLECTOR_BINDING_INVALID')
     require(raw == (json.dumps(binding, sort_keys=True, separators=(',', ':')) + '\n').encode(),
             'COLLECTOR_BINDING_ENCODING')
     sources = binding['sources']
-    require(type(sources) is dict and set(sources) == set(SOURCE_NAMES) and
+    require(type(sources) is dict and set(sources) == set(names) and
             all(type(value) is str and re.fullmatch('[a-f0-9]{64}', value) for value in sources.values()),
             'COLLECTOR_SOURCE_COVERAGE')
     for name, expected in sources.items():
-        require(hashlib.sha256(read_regular(INSTALLED_APP / name, binding['uid'])).hexdigest() == expected,
+        require(hashlib.sha256(read_regular(application / name, binding['uid'])).hexdigest() == expected,
                 'COLLECTOR_SOURCE_CHANGED')
     gates = binding['gates']
     require(type(gates) is dict and set(gates) == set(ROLES), 'COLLECTOR_ROLE_COVERAGE')
@@ -86,9 +101,12 @@ def configured_gate(role):
     try:
         require(role in ROLES, 'COLLECTOR_ROLE')
         directory = os.environ.get('FC_CONTROL_CAPTURE_GATE') or None
-        source = Path(__file__).absolute()
-        if INSTALLED_APP in (source.parent.parent, source.resolve().parent.parent):
-            entry = installed_binding()['gates'][role]
+        application = Path(__file__).resolve().parent.parent
+        scope = installed_scopes().get(application)
+        if scope is not None:
+            filename, names, roles = scope
+            require(role in roles, 'COLLECTOR_INSTALLED_ROLE')
+            entry = installed_binding(application, filename, names)['gates'][role]
             require(directory in (None, entry['directory']), 'COLLECTOR_CONFIGURATION_CHANGED')
             gate = gate_for(entry['directory'])
             require(gate.pins == {name: tuple(value) for name, value in entry['pins'].items()},

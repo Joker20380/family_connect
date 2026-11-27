@@ -15,7 +15,7 @@ ADMISSION = {
     'control/capture_gate.py': 'da28d940e2e17e2dbb1fbbde8cc04c59d29cffc8762ada717135504e2ffa4906',
     'control_plane/fc_control_plane/capture.py': '0cb1ad0190ddc0d0043c93df80a72f751627a29d054ef104fcf5d1732dca434b',
     'control_plane/collector_admission.py': 'bdb9e7711cb21a889a42f663bea49fc2bab371aba5b74eacdce9c4b849954721',
-    'control_plane/collector_binding.py': '8b9d47fe38fd32bcdca0c9ea24641a00fb8ed00cb2773c4c9c885616006230bb',
+    'control_plane/collector_binding.py': 'f29de5251582210cd25287cc8f2ed37df3e9993da4c5b0ff2e10b71be67f84d6',
 }
 ADMISSION_HISTORY = {
     'control_plane/fc_control_plane/capture.py': ('d4f5a258232d505f3ded09b7ce16a58f013a48dd451fa878d2a191c42ac7d60d',),

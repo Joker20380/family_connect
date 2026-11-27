@@ -6,10 +6,12 @@ The12-file owner-console-publisher-7a91d127 component is installed and qualified
 [recorded scope](2026-11-27-owner-installed-console-publisher.md). Its two images and
 the accepted owner-collectors-b7f4cbd2 root component are not changed by this work.
 
-The separate successor is `owner-user-collectors-mandatory-v1`. On the existing physical
-OWNER checkout, admission requires `/etc/family-connect/owner-user-collectors.json`,
-root-owned0644, canonical schema1, the exact application/UID, complete17-source hash
-closure and distinct inventory/probe directory+lock inode pins. Missing binding/source,
+The separate successor is `owner-user-collectors-mandatory-v1`. The canonical OWNER
+checkout requires `/etc/family-connect/owner-user-collectors.json`; existing inventory
+and probe runtime roots require sibling `owner-user-inventory.json` and
+`owner-user-probe.json`. Bindings are root-owned0644, canonical schema1, with the exact
+application/UID, complete17/17/8-source hash closures and distinct inventory/probe
+directory+lock inode pins. Missing binding/source,
 replacement/missing/invalid gate, changed source and conflicting environment refuse.
 No existence check enables an ungated fallback for installed entrypoints. Noninstalled
 isolated source retains explicit opt-in behavior; arbitrary copied old programs and
@@ -24,19 +26,27 @@ hashes/exact rollback bytes; old capsules and root baseline meanings remain immu
 
 ## Qualification
 
-- Local CPython3.14.4:149 tests,0 skips across user binding, complete collector cycles,
+- Local CPython3.14.4:152 tests,0 skips across user binding, complete collector cycles,
   pinned packaging and technical metadata. Normal/negative paths and history retention,
   including a swallowed remote timeout followed by a successful export retaining UNKNOWN.
--32 disposable root-created mount+network namespace cases: fresh UID1000 processes,
-  fixed installed paths, no FC_CONTROL_CAPTURE_GATE/PYTHON environment. Four entrypoints
+-64 disposable root-created mount+network namespace cases: fresh UID1000 processes,
+  all three fixed installed roots, no FC_CONTROL_CAPTURE_GATE/PYTHON environment. Applicable entrypoints
   each test normal admission, closure, missing/replaced/invalid gate, missing binding,
   changed and incomplete source. All four actual closed CLIs return75 before dispatch.
 - The first namespace attempt refused an unsupported `-I` script invocation before
   admission (`apps` import missing). Retained as fixture evidence; actual installed CLI
-  invocation uses `-B` and a clean environment. Corrected independent run passes32.
+  invocation uses `-B` and a clean environment. Corrected independent run passes64.
 - Native negative namespaces have no external network; no live gate, state or database
   is mounted into them. The workflow repeats the narrow tests and native fixture at
   the exact pushed source and uploads source/JUnit/namespace receipts.
+
+Pre-install readback identifies the actual service roots: the inventory runtime under
+`/mnt/data/fc-subscription-operations-20261107/collector-runtime`, and the retained probe
+runtime under the user's control-ha activation directory. The checkout under `/home`
+is a symlink to the canonical `/mnt/data` checkout, not another deployment. The initial
+source-only4cc9adff single-root draft is superseded before any live installation; it
+would not bind both actual unit entrypoints. The corrected guard resolves the symlink,
+requires independent per-root source closure, and rejects role crossover.
 
 ## Installation and completion gate
 

@@ -60,6 +60,33 @@ def test_no_environment_admission_and_closed_refusal(installed, role):
                 pytest.fail('closed operation admitted')
 
 
+@pytest.mark.parametrize('profile', ['inventory', 'probe', 'symlink'])
+def test_actual_installed_source_scopes_and_symlink_alias(installed, monkeypatch, profile):
+    if profile == 'symlink':
+        alias = installed.application.with_name('application-alias')
+        alias.symlink_to(installed.application, target_is_directory=True)
+        monkeypatch.setattr(binding, '__file__', str(alias / 'control_plane/collector_binding.py'))
+        role = 'inventory'
+    else:
+        monkeypatch.setattr(binding, 'INSTALLED_APP', installed.application.with_name('other-checkout'))
+        monkeypatch.setattr(binding, 'INVENTORY_APP' if profile == 'inventory' else 'PROBE_APP', installed.application)
+        filename = installed.filename.with_name('owner-user-' + profile + '.json')
+        if profile == 'probe':
+            installed.document['sources'] = {name: value for name, value in installed.document['sources'].items()
+                                             if name in binding.PROBE_SOURCES}
+        write_binding(filename, installed.document)
+        role = profile
+    with binding.operation(role):
+        pass
+    with installed.gates[role].drain(.1):
+        with pytest.raises(Busy):
+            with binding.operation(role):
+                pytest.fail('installed scope lost mandatory admission')
+    if profile != 'symlink':
+        with pytest.raises(GateError, match='INSTALLED_ROLE'):
+            binding.configured_gate('inventory' if role == 'probe' else 'probe')
+
+
 @pytest.mark.parametrize('entry', ['monitor', 'inventory', 'metadata', 'probe'])
 def test_direct_entry_refuses_before_io(installed, monkeypatch, tmp_path, entry):
     def forbidden(*args, **kwargs):
