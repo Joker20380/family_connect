@@ -1,5 +1,7 @@
 from pathlib import Path
 import subprocess
+import base64
+import gzip
 
 import pytest
 
@@ -22,6 +24,12 @@ def test_native_selective_existing_key_and_changed_working_entries(tmp_path, mon
         input=password + b'\n' + password + b'\n', capture_output=True, timeout=30)
     assert result.returncode == 0
     working.chmod(0o600)
+    actual(['/usr/bin/keepassxc-cli', 'add', '-q', str(working), 'existing-attachment'],
+           input=password + b'\n', capture_output=True, check=True, timeout=30)
+    attachment = tmp_path / 'public-test-attachment'
+    attachment.write_bytes(b'public disposable existing attachment')
+    actual(['/usr/bin/keepassxc-cli', 'attachment-import', '-q', str(working), 'existing-attachment',
+            'original', str(attachment)], input=password + b'\n', capture_output=True, check=True, timeout=30)
 
     def run(command, **options):
         assert password.decode() not in ' '.join(command)
@@ -46,10 +54,24 @@ def test_native_selective_existing_key_and_changed_working_entries(tmp_path, mon
     assert (tmp_path / 'activation/working-before.kdbx').read_bytes() == encrypted_before
     assert wrapping.load(working) == existing_key
     active = working.read_bytes()
+    activation.record(tmp_path / 'activation', 'failed.json', dict(cause='SIMULATED_RESPONSE_LOSS'))
+    result = activation.reconcile(candidate, working, tmp_path / 'activation')
+    assert result['reconciliation_read_only'] and result['prior_failure_retained']
+    assert working.read_bytes() == active
     with pytest.raises(ValueError, match='HA_ACTIVATION_REFUSED'):
         activation.activate(candidate, working, tmp_path / 'duplicate')
     assert working.read_bytes() == active
     assert (tmp_path / 'duplicate/failed.json').is_file()
+
+
+def test_binary_reference_reordering_preserves_bytes_not_numeric_indices():
+    def xml(index, content):
+        data = base64.b64encode(gzip.compress(content)).decode()
+        return ('<KeePassFile><Meta><Binaries><Binary ID="' + index + '" Compressed="True">' + data +
+            '</Binary></Binaries></Meta><Root><Group><Entry><UUID>one</UUID><Binary><Key>old</Key>'
+            '<Value Ref="' + index + '"/></Binary></Entry></Group></Root></KeePassFile>').encode()
+    assert activation.entries(xml('0', b'old attachment')) == activation.entries(xml('7', b'old attachment'))
+    assert activation.entries(xml('0', b'old attachment')) != activation.entries(xml('0', b'changed'))
 
 
 def test_open_gui_refuses_before_vault_write(tmp_path, monkeypatch):

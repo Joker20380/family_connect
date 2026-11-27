@@ -16,8 +16,11 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
-Continuation from ff20b55c: selective activation of the existing HA entry is locally qualified
-(24 checks/0 skips); exact-source CI and actual working-vault consumer acceptance remain required.
+Continuation from ff20b55c: selective activation sourcefa24461f vault CI SUCCESS; live add/import
+reached the comparison phase but did not pass. Do not repeat writing: use the new read-only
+reconciliation against its encrypted prestate after exact-source qualification (25 local checks).
+Attachment references are compared by content, not export-local numeric indexes. Actual working-vault
+preservation/consumer acceptance remain required, independently of the native regression.
 No second production key, whole-vault replacement or production hold. The finite OWNER maintenance
 adapter and remote receiver rows remain the same NEXT; native boundary components alone do not
 authorize capture. Preserve the earlier GUI consumer refusal independently of later activation.

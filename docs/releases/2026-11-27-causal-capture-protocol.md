@@ -2,6 +2,21 @@
 
 ## Continuation from ff20b55c — selective existing-key activation
 
+Sourcefa24461f84d0431605dc696cc79ae4e2629ed704 pushed and remote-matched; vault run46056036135
+SUCCESS. The real selective operation `ha-activation-20261127-02` reached entry-created and native
+attachment import, then refused `HA_OTHER_ENTRIES_CHANGED`. Its encrypted working-before copy,
+intent, entry-created and first failure are retained privately. No repeated add/import, rollback of
+current user data or replacement by the old candidate is permitted as a shortcut. A separate
+read-only diagnostic failed to unlock/read its encrypted prestate; no password cause is inferred.
+
+The next source correction compares attachment references by exact decompressed content: KDBX XML
+export-local numeric IDs can change without changing attachment bytes. Isolated tests include an
+existing attachment, working-only later entry, loss-of-response reconciliation, duplicate refusal
+and changed attachment rejection:25 PASS/0 skips. Read-only reconciliation validates all old entries
+and history plus exactly the new HA entry, runs the real consumer on candidate/working and verifies
+no working bytes changed during reading. The actual private difference is not claimed explained
+until this readback succeeds. A later success retains the original refusal.
+
 `scripts/ha_wrapping_activate.py` copies only the existing HA custody encryption entry's
 `recovery.tar.gz` attachment from the encrypted candidate into the saved/closed working
 Family-Connect.kdbx. No key generation and no whole-vault candidate replacement. A local native

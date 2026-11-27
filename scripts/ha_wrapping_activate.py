@@ -1,6 +1,10 @@
 """Add only the existing HA entry to a closed working vault; no whole-vault replacement."""
 import argparse
+import base64
+import gzip
+import hashlib
 import hmac
+import io
 import json
 import os
 from pathlib import Path
@@ -22,15 +26,76 @@ def record(directory, name, value):
 def entries(raw):
     key.require(len(raw) <= 32 * 1024 * 1024 and b'<!DOCTYPE' not in raw, 'HA_VAULT_XML_BOUNDS')
     document = ET.fromstring(raw)
+    binaries = {}
+    for binary in document.findall('./Meta/Binaries/Binary'):
+        identifier = binary.get('ID')
+        key.require(identifier is not None and identifier not in binaries, 'HA_BINARY_IDENTITY')
+        body = base64.b64decode(binary.text or '', validate=True)
+        if binary.get('Compressed') == 'True':
+            with gzip.GzipFile(fileobj=io.BytesIO(body)) as stream:
+                body = stream.read(32 * 1024 * 1024 + 1)
+        key.require(len(body) <= 32 * 1024 * 1024, 'HA_BINARY_BOUNDS')
+        binaries[identifier] = hashlib.sha256(body).hexdigest()
     result = {}
     for group in document.findall('./Root/Group'):
         for nested in group.iter('Group'):
             for entry in nested.findall('Entry'):
                 identifier = entry.findtext('UUID')
                 key.require(identifier and identifier not in result, 'HA_ENTRY_IDENTITY')
+                for value in entry.findall('.//Binary/Value'):
+                    reference = value.get('Ref')
+                    key.require(reference in binaries, 'HA_BINARY_REFERENCE')
+                    value.set('Ref', 'sha256:' + binaries[reference])
                 entry.tail = None
                 result[identifier] = ET.tostring(entry)
     return result
+
+
+def preserved(before, after):
+    key.require(set(before) < set(after) and len(after) == len(before) + 1 and
+                all(after[name] == raw for name, raw in before.items()), 'HA_OTHER_ENTRIES_CHANGED')
+    added, = set(after) - set(before)
+    entry = ET.fromstring(after[added])
+    titles = [item.findtext('Value') for item in entry.findall('String') if item.findtext('Key') == 'Title']
+    key.require(titles == [key.ENTRY], 'HA_UNEXPECTED_ENTRY_ADDED')
+
+
+def reconcile(candidate, working, journal):
+    resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
+    candidate, working, journal = Path(candidate), Path(working), Path(journal)
+    key.require(candidate.name == working.name == key.DATABASE, 'HA_DATABASE_SELECTION')
+    key.require((journal / 'entry-created.json').is_file() and (journal / 'failed.json').is_file(),
+                'HA_RECONCILE_PHASE_REQUIRED')
+    key.require(not (journal / 'reconciled.json').exists(), 'HA_RECONCILE_ALREADY_RECORDED')
+    dialog = subprocess.run(['/usr/bin/zenity', '--password', '--title=Family Connect — read-only HA reconciliation',
+        '--text=Только проверка рабочей Family-Connect.kdbx и сохранённой зашифрованной копии. Повторного добавления записи не будет.'],
+        stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, timeout=600)
+    key.require(dialog.returncode == 0, 'HA_LOCAL_UNLOCK_CANCELLED')
+    password = dialog.stdout.rstrip(b'\n')
+    dialog = None
+    key.require(password and b'\n' not in password and b'\r' not in password, 'HA_LOCAL_UNLOCK_INPUT')
+    def export(path):
+        descriptor = private_file(path)
+        try:
+            result = subprocess.run(['/usr/bin/keepassxc-cli', 'export', '-q', f'/proc/self/fd/{descriptor}'],
+                input=password + b'\n', stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
+                pass_fds=(descriptor,), timeout=120)
+            key.require(result.returncode == 0, 'HA_RECONCILE_NATIVE_READ_REFUSED')
+            return entries(result.stdout)
+        finally:
+            os.close(descriptor)
+    try:
+        encrypted = working.read_bytes()
+        preserved(export(journal / 'working-before.kdbx'), export(working))
+        key.require(hmac.compare_digest(key.load(candidate), key.load(working)), 'HA_EXISTING_KEY_MISMATCH')
+        key.require(working.read_bytes() == encrypted, 'HA_VAULT_CHANGED_DURING_RECONCILE')
+        result = dict(result='EXISTING_HA_ENTRY_ACTIVATED_REAL_CONSUMER_PASS', reconciliation_read_only=True,
+            other_entries_unchanged=True, prior_failure_retained=True, new_key_generated=False,
+            whole_vault_replaced=False, capture_started=False, external_custody=False)
+        record(journal, 'reconciled.json', result)
+        return result
+    finally:
+        password = None
 
 
 def activate(candidate, working, journal):
@@ -90,9 +155,7 @@ def activate(candidate, working, journal):
         cli('attachment-import', '-q', str(working), key.ENTRY, key.ATTACHMENT,
             f'/proc/self/fd/{memory}', descriptors=(memory,))
         after_entries = entries(cli('export', '-q', str(working), output=True))
-        key.require(set(before_entries) < set(after_entries) and len(after_entries) == len(before_entries) + 1 and
-                    all(after_entries[name] == raw for name, raw in before_entries.items()),
-                    'HA_OTHER_ENTRIES_CHANGED')
+        preserved(before_entries, after_entries)
         checked_key = key.load(working)
         key.require(hmac.compare_digest(checked_key, expected_key), 'HA_EXISTING_KEY_MISMATCH')
         result = dict(result='EXISTING_HA_ENTRY_ACTIVATED_REAL_CONSUMER_PASS', new_key_generated=False,
@@ -117,9 +180,11 @@ def main():
     parser.add_argument('--candidate', type=Path, required=True)
     parser.add_argument('--working', type=Path, required=True)
     parser.add_argument('--journal', type=Path, required=True)
+    parser.add_argument('--reconcile', action='store_true')
     args = parser.parse_args()
     try:
-        print(json.dumps(activate(args.candidate, args.working, args.journal), sort_keys=True))
+        action = reconcile if args.reconcile else activate
+        print(json.dumps(action(args.candidate, args.working, args.journal), sort_keys=True))
     except Exception:
         parser.exit(1, 'HA_ACTIVATION_REFUSED; no admission closed; preserve private phase evidence\n')
 

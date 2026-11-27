@@ -1,6 +1,15 @@
 # Текущее состояние / Current state
 
-**27 November — selective existing HA-key activation source qualified; not yet activated.**
+**27 November — selective HA-key reconciliation pending; no production capture holds.**
+The selective activation on sourcefa24461f completed native add/attachment import but refused its
+other-entry comparison. Original encrypted vault and phase evidence are retained; do not repeat
+the write or replace the whole vault. Native regression now resolves renumbered KDBX attachment
+references by exact decompressed content rather than index and qualifies read-only reconciliation
+(25/0 skips). This addresses a demonstrated comparison risk; the actual vault difference still
+requires successful private readback. No key/custody/kit PASS is claimed yet. fa24461f vault CI
+46056036135 SUCCESS and remote SHA verified. Installed services and capture admission are unchanged.
+
+**Historical continuation — selective existing HA-key activation source qualified; not yet activated.**
 Continuation of ff20b55c: native selective-copy checks pass24/0 skips. The workflow adds only the
 already-created HA entry/attachment to the saved, closed working Family-Connect.kdbx, preserves an
 encrypted prestate and all existing entries/history, generates no new key and requires real consumer
