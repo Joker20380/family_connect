@@ -1,9 +1,13 @@
 """Independent local cycle: no SSH credentials, registry or VPN operations."""
-import fcntl
+import argparse
 import json
-import os
 from pathlib import Path
 import subprocess
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from control.capture_gate import external_operation
+from control_plane.collector_admission import cycle_lock, run_cli
 
 if __package__:
     from .apps.console.network_probe import ENDPOINTS, collect
@@ -14,13 +18,8 @@ BASE = Path(__file__).resolve().parent
 
 
 def cycle(base=BASE, probe=collect, run=subprocess.run):
-    local = base / '.local'
-    if any(parent.is_symlink() for parent in (local, *local.parents)):
-        raise ValueError('Unsafe local directory')
-    local.mkdir(mode=0o700, exist_ok=True)
-    descriptor = os.open(local / 'network-probe.lock', os.O_WRONLY | os.O_CREAT | os.O_NOFOLLOW, 0o600)
-    with os.fdopen(descriptor, 'w') as lock:
-        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    run = external_operation()(run)
+    with cycle_lock(base, 'network-probe.lock'):
         results = []
         for source in ENDPOINTS:
             sample = probe(source)
@@ -36,8 +35,18 @@ def cycle(base=BASE, probe=collect, run=subprocess.run):
 
 
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--runtime-base', type=Path, default=BASE,
+                        help='Existing control_plane directory containing Compose, .env and .local')
+    arguments = parser.parse_args()
     try:
-        receipt = cycle()
+        if not arguments.runtime_base.is_absolute() or not arguments.runtime_base.is_dir():
+            raise ValueError('Invalid runtime base')
+        base = arguments.runtime_base.resolve(strict=True)
+    except (OSError, ValueError):
+        parser.error('Runtime base must be an existing absolute directory')
+    try:
+        receipt = cycle(base=base)
     except BlockingIOError:
         print('Независимая сетевая проверка уже выполняется.')
         return 0
@@ -46,4 +55,4 @@ def main():
 
 
 if __name__ == '__main__':
-    raise SystemExit(main())
+    raise SystemExit(run_cli(main))

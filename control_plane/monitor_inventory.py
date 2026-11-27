@@ -1,7 +1,6 @@
 """One bounded read-only SSH collection cycle and local PostgreSQL import."""
 import argparse
 from datetime import datetime, timezone
-import fcntl
 import hashlib
 import json
 import os
@@ -11,6 +10,8 @@ import sys
 import time
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from control.friends.pseudonyms import unseal
+from control.capture_gate import external_operation
+from control_plane.collector_admission import cycle_lock, run_cli
 
 if __package__:
     from .apps.console.collector import ACTIVE_SOURCES
@@ -28,12 +29,8 @@ def instant():
 
 def cycle(base=BASE, run=subprocess.run, known_hosts=None):
     local = base / '.local'
-    local.mkdir(mode=0o700, exist_ok=True)
-    if any(parent.is_symlink() for parent in (local, *local.parents)):
-        raise ValueError('Unsafe local directory')
-    descriptor = os.open(local / 'monitor.lock', os.O_WRONLY | os.O_CREAT | os.O_NOFOLLOW, 0o600)
-    with os.fdopen(descriptor, 'w') as lock:
-        fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    run = external_operation()(run)
+    with cycle_lock(base, 'monitor.lock'):
         results = []
         for source in SOURCES:
             result = dict(source=source, attempted_at=instant(), status='FAILED', error='COLLECTION_FAILED')
@@ -135,4 +132,4 @@ def main():
 
 
 if __name__ == '__main__':
-    raise SystemExit(main())
+    raise SystemExit(run_cli(main))

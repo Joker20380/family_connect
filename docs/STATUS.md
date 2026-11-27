@@ -1,5 +1,23 @@
 # Текущее состояние / Current state
 
+**27 November04:14UTC — mandatory host/manual component INSTALLED; bounded normal checks PASS.**
+owner-user-collectors-mandatory-v1/sourceb49c76c0 covers the canonical manual checkout and both actual
+service roots. Three root-owned bindings pin17/17/8 source files and the existing distinct role gates.
+All4 CI PASS; independently verified artifact15169793932 has154 tests/0 skips and64 namespace cases.
+Sixteen source files installed with exact predecessor rollback; normal business collector protocols kept.
+Actual8 direct+8 CLI fresh no-environment closed refusals,64 installed-byte namespace cases and4 normal
+no-env admissions PASS. Normal and automatic monitor/probe invocations0; only own holds removed,
+timers enabled/active/waiting. Live Docker event subscription proves seven automatic import terminals0.
+Authenticated five-page panel/logout PASS; observer8b preserves accepted support PID/archive/authority/
+NL1 generation/cursor/history. Root collector and12-file images were not reinstalled.
+Intervening RU degradation is retained: inventory3+12+6 plus8 later markers; root119 plus41 later markers;
+probe14/support33 remain separate. Originals unchanged; no additional user markers during host install.
+RU I/O pressure was observed; its cause and sustained stability are not proven. One bounded normal
+monitor recheck restored missing subscription-card links before installation; no RU policy/tuning/restart.
+Full all-writer/common capture NOT_PASS: external historical dispatch fencing and new-image OWNER
+capture compatibility remain. Strict drain refuses UNSETTLED_OPERATION; no common capture attempted.
+[Installed pins, incident, tests, rollback and precise NEXT](releases/2026-11-27-owner-user-collectors.md).
+
 **27 November03:10UTC — exact12-file console/publisher component INSTALLED and checked.**
 Baseline owner-console-publisher-7a91d127: console3af9fbf9 and publisher35158514 are running their
 exact12 pinned files, effective installed configuration and separate mounted gates. Original containers
@@ -13,7 +31,7 @@ Only own user timer holds removed; successful initial and later automatic cycles
 Observer8b9355db preserves supportPID240065/archive/authority/NL1 generation/cursor/history; notifications0.
 Root119, inventory3+12+6 and probe14 are byte/metadata-identical; support33 remains separately preserved.
 Strict local drain passes for the new empty console/publisher gates only. Full all-writer/capture remains
-NOT_PASS: host collector manual/no-environment and direct technical-metadata entry still need closure;
+NOT_PASS at03:10: host collector manual/no-environment and direct technical-metadata entry then needed closure;
 older external dispatch history is not settled by these recent receipts. No common capture was attempted.
 Console still requires the support runtime directory before startup; automatic reboot startup is unqualified.
 [Installed bindings, preserved refusals, rollback and remaining gate](releases/2026-11-27-owner-installed-console-publisher.md).

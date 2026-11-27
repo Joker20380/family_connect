@@ -9,13 +9,19 @@ import shlex
 import subprocess
 import sys
 
-from collect_inventory import BASE, ssh_command
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from control_plane.collect_inventory import BASE, ssh_command
+from control_plane.collector_admission import run_cli
+from control_plane.collector_binding import operation
+from control.capture_gate import GateError, external_operation
 from control.friends.pseudonyms import seal
 
 MAX_EXPORT_BYTES = 64 * 1024 * 1024
 
 
+@operation('inventory')
 def collect(known_hosts=None, base=BASE, run=subprocess.run):
+    run = external_operation()(run)
     local = base / '.local'
     config_path, key_path = local / 'technical-metadata-source.json', local / 'inventory-hmac.key'
     for path in (config_path, key_path):
@@ -57,10 +63,12 @@ def main():
     args = parser.parse_args()
     try:
         raw = collect(args.known_hosts)
+    except GateError:
+        raise
     except (OSError, ValueError, KeyError, subprocess.SubprocessError):
         parser.exit(1, 'Technical metadata source unavailable; payload not logged\n')
     sys.stdout.buffer.write(raw)
 
 
 if __name__ == '__main__':
-    main()
+    raise SystemExit(run_cli(main))
