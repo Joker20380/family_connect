@@ -14,6 +14,9 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
+02:31UTC: fresh panel and both authorized MESH traffic probes PASS after one bounded NL2 unchanged-runtime
+recovery; prior two NL2 failures preserved. NL1 exact failed invocation correlates to WebSocket read
+CONNECTION_RESET, not SIGTERM; reset initiator unproven. [Current operational checkpoint](releases/2026-11-27-owner-all-writer-next.md).
 Mandatory successor INSTALLED01:53UTC: owner-collectors-b7f4cbd2 with exact8b9355db compatible observer,
 stopped-capture and new-operation recovery tooling;all4 CI PASS/native360/0 skips plus5 sandbox cases.
 New375-file OWNER/NL1 capsules independently verified; fresh panel01 operation installs mandatory binding,
@@ -54,10 +57,10 @@ empty Docker ExecIDs never establishes historical dispatch settlement.
 После принятого комплекта — source-host-free isolated restore с current/post-ACK/stale-state checks.
 Console/publisher, services/timers, CLI/manual/direct-ORM и dispatchers входят в обязательный охват.
 Повторный drain работающего lifetime support writer не выполняется; Gate.drain не ослабляется.
-Непосредственная поправка этого NEXT: закрыть воспроизведённый192343eb missing-gate fail-open
-независимым обязательным installed binding, проверить fresh process/no environment/invalid pins,
-установить и независимо сверить до продолжения console/publisher. Source34 narrow/5 native checks PASS;
-installation pending; exactb7f4cbd2 CI/independent artifact PASS. Принятый прежний collector scope не переоткрывается.
+Mandatory collector b7f4cbd2 и совместимость8b9355db уже приняты; повторная установка не требуется.
+Следующий installed шаг — точные12-file candidates console3af9fbf9/publisher35158514, затем оставшиеся
+manual/no-environment/ORM/CLI и external/Docker dispatch paths. Проверка console включает фактический
+support runtime-directory mount; автоматический старт после reboot пока НЕ исправлен/доказан.
 
 Владелец принял stopped-support stop/capture/forward-resume как завершённый компонент
 в заявленном scope. e4eace1a… остаётся историческим sensitive local snapshot, НЕ свежим
@@ -73,12 +76,9 @@ Full94fe9760 CI FAIL:20 related standalone/package cases; тогда без inst
 and reviewed pins:383 panel/101 standalone + native image activation/revert PASS;
 329 OWNER-gate tests ранее PASS; все4 workflow7a91d127 PASS. Новые12-file candidates не установлены;
 установленное закрытие остальных writer paths и общий интервал остаются в этом же NEXT.
-Root collector component192343eb установлен21:42UTC:4 files, fixed gate внутри
-/var/lib/fc-support-bindings; native342/0 skips +3 sandbox CI PASS, independent bytes/readback PASS.
-Оба oneshot/direct API при закрытии75; normal0 и timers waiting восстановлены;
-повтор завершённой operation без redispatch. Первый EROFS/refusal/rollback сохранён как история.
-Все5 workflow точного192343eb PASS, включая phase0 и Linux internal/preview.
-Closed-gate qualification проверяет exact-source exit75 отдельно от invalid gate78/source failure1.
+Original192343eb installation/EROFS rollback and source-only b7f4cbd2 states are
+[historical evidence](releases/2026-11-26-control-ha-owner-all-writer.md), not the installed baseline.
+Use only read-only observer8b9355db; never replay an old completed Resume.run as a health check.
 Историческая квалификация25–26November: user inventory gate отказал UNSETTLED_OPERATION/3 unchanged markers;
 probe local drain PASS/0. Fresh admission-only CLI refusal75 подтверждён для обоих;
 manual paths без unit environment и Docker-side completion не считаются закрытыми.

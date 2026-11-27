@@ -81,8 +81,8 @@ If the bounded first invocation had failed, the recovery controller would stop t
 failed retry cycle rather than loop; evidence remains and a fresh cause/readiness
 check is required. Do not restore stale directory/profile/database bytes.
 
-The accepted PANEL_AND_DEPENDENCIES_NORMAL_BASELINE_PASS remains intact. The
-mandatory collector maintenance-compatibility changes are unfinished source only;
-old panel01 plan/authority/receipts/capsule and installed192343eb are unchanged.
+At this historical recovery checkpoint, PANEL_AND_DEPENDENCIES_NORMAL_BASELINE_PASS remained intact
+and collector changes were source-only. The subsequent accepted [mandatory transition](2026-11-27-mandatory-collector-transition.md)
+installs owner-collectors-b7f4cbd2/8b9355db without changing old panel01 plan/authority/receipts/capsule.
 Console/publisher12-file candidates and common capture are not activated here.
 Inventory3+12, probe14 and support33 historical markers are not settled or deleted.

@@ -1,9 +1,10 @@
 # HA-02 OWNER/all-writer continuation — 26 November 2026
 
-**Subsequent reboot observation:** [27 November continuation](2026-11-27-control-ha-owner-resume.md)
-supersedes live health/PID observations below. Mandatory installed binding is still absent;
-exactb7f4cbd2 CI is independently verified. Two user timers are held after reboot failures;
-the original3 inventory UNKNOWN remain separate from additional inventory/probe markers.
+**Historical checkpoints only.** The later [27 November installed transition](2026-11-27-mandatory-collector-transition.md)
+supersedes the absent-binding, pending-installation and held-timer states below. Mandatory baseline
+owner-collectors-b7f4cbd2 with companion8b9355db is installed and accepted; original192343eb pins retain
+their historical meaning. The [panel recovery](2026-11-27-control-ha-owner-resume.md) precedes that transition.
+The original3 inventory UNKNOWN remain separate from later inventory/probe markers.
 
 The owner accepts the stopped-support stop/capture/forward-resume component in its
 stated scope. Source2f4f83dd, exact-SHA CI/native342 PASS and snapshot e4eace1a remain
