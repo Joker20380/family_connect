@@ -22,7 +22,8 @@ outside the enrolled parent; qualify shared old-runtime retirement/recovery with
 excluded neighbors, then request the exact expanded window before any shared stop. No kit/holds.
 B ba569748 source/candidate pushed; readiness CI PASS. Keep old installed inventory/Android pins
 immutable via explicit fixture/delta separation;127 checks PASS after preserving the original panel
-fixture refusal. Requalify exact follow-up source; native/public/legal/store/deployment gates remain.
+fixture refusal. Requalify exact follow-up source, including the corrected panel workflow path
+coverage; native/public/legal/store/deployment gates remain.
 
 Historical22:58UTC: A remains production priority; initial pre-hook Docker create/start needs proven
 old runtime-generation retirement and bounded recovery before installed OWNER composition. Shared

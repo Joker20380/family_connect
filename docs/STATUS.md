@@ -11,6 +11,8 @@ inventory pin. The fixture now retains exact installed bytes; a negative test re
 baseline. Android old-source guard now reverses a separately pinned B delta before checking the
 unchanged accepted126/125 hashes.127 focused checks PASS; exact-source CI follows. No runtime
 baseline/manifest or accepted image was changed. A still lacks initial-generation fencing and kit.
+Follow-up215c7fcb readiness46080709370 SUCCESS. Panel CI path coverage now includes installed-custody
+fixtures and metadata/GeoIP contracts; full panel gate must pass on the exact correction source.
 
 **Historical22:58UTC:**
 **27 November22:58UTC — B source/arm64 candidate built; A not installed, common kit absent.**

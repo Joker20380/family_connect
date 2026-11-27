@@ -94,6 +94,50 @@ rollback from old bytes or automatic interpretation of basic rows as old consent
 
 ## Outstanding acceptance
 
+### Follow-up: immutable A and accepted Android source fixtures
+
+B ba56974853b69e37330dc210edb678cd79cd6cb9 is pushed/remote-matched; readiness46079823247
+SUCCESS. Control panel46079823152 fails specifically in installed-custody fixture setup: it reads
+the new B inventory collector (cecc0f9e) against the unchanged installed pin0f0c07e9. Failed artifact
+15236991068 is retained and independently read, SHA256
+8c728a058a788ff58dc873b6de0a395f7a940aa98675693f079258eccde1123f.
+The installed manifest/validator is NOT relaxed. A new fixture retains the exact old collector bytes
+from274499b7; substituting real B bytes explicitly raises HOST_SOURCE_CHANGED. Separately, the
+Android accepted-source guard failed on the intentional v2 receipt parser delta. It now reverses
+only a separately SHA-pinned basic-candidate.patch, then verifies the original unchanged126/125
+pins and original reverse patch. Neither fixture adjustment is an installation/public acceptance.
+127 relevant custody/source-closure checks PASS, zero skips. The first added negative test's wrong
+legacy unpacker (DOCUMENT_SCOPE) is preserved; it now uses the existing current unpacker.
+
+274499b735ef686ba3b8a688f31b98cb0ef755be exact Docker46079367737 and readiness46079367713
+SUCCESS. Linux46079367749 failed earlier in isolated root-owned Python3.14 launcher setup;
+artifact15236955292 remains separate, not explained by the Docker fixture correction. Its download
+attempt failed in connector transport; no local readback of that artifact is claimed. Do not claim
+full broad CI success from component passes. Follow-up source215c7fcb preserves all installed pins.
+Readiness46080709370 SUCCESS on215c7fcb; the panel workflow previously did not trigger on its own
+custody fixtures, so no panel PASS is inferred. Its path coverage now explicitly includes those
+fixtures and metadata/GeoIP contracts; the same full panel gate runs on this exact follow-up source.
+
+Independent local reader also checks pre-hook artifact15235576433 SHA256
+cbe34fa3c59ece596b24c86b47f422f35f9d801db9c3604ecbf05284b90cd84e,
+all five source hashes atda551d55, real pre-hook create201/start204 effects after CLOSE, new create
+refusal and own-process cleanup. Both initial_admission_coverage_proven and maintenance_window_qualified
+remain false. The shared-generation maintenance plan is still NOT_QUALIFIED and NOT_AUTHORIZED.
+
+Fresh normal service evidence: qualified observer8b9355db22:45 PASS (supportPID240065 and original
+archive/authority/NL1 generation/history unchanged); real login/five existing pages/logout22:46
+PASS without messages/business mutations. NL1 23:00:55 and NL2 23:02:00 native probes each pass
+4HTTPS/3DNS/authentication/expected egress; identities unchanged and own probe children reaped.
+An initial local probe launch lacked RNS in system Python; it never reached a network test and is
+retained separately from the subsequent correct native-environment runs. No MESH recovery/restart.
+Root collector cycles23:01 and user cycles23:04–23:05 complete0; all four timers enabled/active/
+waiting. Own root session closed; no production holds, daemon reload/stop, accepted image changes
+or linked resume occurred. This is normal baseline preservation, not capture acceptance/reboot proof.
+
+The private B candidate APK and instrumentation APK plus native-build receipt are retained under
+/mnt/data/fc-ha02-followup-20261127/basic-candidate-ba569748/, not Git/public downloads. Client source
+at215c7fcb is byte-identical toba569748; the follow-up changes only test fixtures and documentation.
+
 ### Exact-source follow-up and distinct broad-CI failure
 
 894ffed37d21553dfb508609002227aa3c7949df native-support46075423497 SUCCESS;
