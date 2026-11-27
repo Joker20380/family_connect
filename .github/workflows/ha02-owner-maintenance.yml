@@ -1,0 +1,55 @@
+name: HA-02 finite OWNER native boundaries
+on:
+  push:
+    paths: ['control/capture_native.py', 'control/capture_domain.py', 'control/capture_unit_launch.py', 'scripts/control_ha_owner_held.py', 'tests/test_owner_held.py', 'tests/fixtures/owner_native_checks.py', 'tests/fixtures/owner_pair_checks.py', '.github/workflows/ha02-owner-maintenance.yml']
+  pull_request:
+    paths: ['control/capture_native.py', 'control/capture_domain.py', 'control/capture_unit_launch.py', 'scripts/control_ha_owner_held.py', 'tests/test_owner_held.py', 'tests/fixtures/owner_native_checks.py', 'tests/fixtures/owner_pair_checks.py', '.github/workflows/ha02-owner-maintenance.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        id: python
+        with:
+          python-version: '3.14'
+      - run: python -m pip install -r control/requirements.lock -r device_identity/requirements.lock 'psycopg[binary]==3.3.6'
+      - run: docker pull postgres@sha256:18cfe3ef5e6815560c98237d6216d1e5119702fb0f3894c8785dd58b8bbe5d73
+      - name: Native private-namespace and disposable database checks
+        shell: bash
+        run: |
+          python -m pytest -q tests/test_owner_held.py --junitxml="$RUNNER_TEMP/owner-held.xml"
+          sudo --preserve-env=LD_LIBRARY_PATH timeout -k5 180 unshare --mount --propagation private \
+            env FC_NATIVE_PRIVATE_NAMESPACE=1 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH="$PWD/tests:$PWD" \
+            '${{ steps.python.outputs.python-path }}' -m pytest -q -p no:cacheprovider \
+            tests/fixtures/owner_native_checks.py tests/fixtures/owner_pair_checks.py \
+            --junitxml="$RUNNER_TEMP/owner-native.xml"
+      - name: Require execution without skips on exact source
+        if: always()
+        run: |
+          python - <<'PY'
+          import json, os, subprocess, xml.etree.ElementTree as ET
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP'])
+          cases = [case for name in ('owner-held.xml', 'owner-native.xml')
+                   for case in ET.parse(root / name).iter('testcase')]
+          assert len(cases) >= 34
+          assert all(not any(case.find(kind) is not None for kind in ('skipped', 'failure', 'error')) for case in cases)
+          source = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
+          assert source == os.environ['GITHUB_SHA']
+          (root / 'owner-maintenance.json').write_text(json.dumps(dict(source=source, cases=len(cases),
+              skipped=0, fixture_only=True, production_writer_domains_closed=False, common_kit=False)))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: owner-maintenance-native
+          path: |
+            ${{ runner.temp }}/owner-held.xml
+            ${{ runner.temp }}/owner-native.xml
+            ${{ runner.temp }}/owner-maintenance.json
+          if-no-files-found: error

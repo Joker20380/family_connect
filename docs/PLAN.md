@@ -16,6 +16,16 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
+Current19:45UTC: finite maintenance components qualify34 local cases, not production OWNER closure.
+Implement actual console/publisher Docker launch-domain authority and finish real stopped-support
+lifetime/independent reader binding; then the outstanding RU notice export and peer/receiver file rows.
+Do not reinterpret native mounts or host launch locks as Docker executor coverage. Exact matrix and
+cleanup contract: [OWNER finite maintenance](operators/owner-maintenance-boundary.md). No production
+holds/stops acquired and no kit exists. Panel/support/timer readbacks pass19:33–19:35; fresh NL1
+traffic is partial FAIL19:39, retained while bounded availability readback proceeds. Source-only
+checks and the unresolved key-reconciliation attempt do not satisfy the selected capture NEXT.
+
+Historical key checkpoint:
 Continuation from ff20b55c: selective activation sourcefa24461f vault CI SUCCESS; live add/import
 reached the comparison phase but did not pass. Do not repeat writing: use the new read-only
 reconciliation against its encrypted prestate after exact-source qualification (25 local checks).

@@ -1,5 +1,47 @@
 # HA-02 common capture preparation — 27 November2026
 
+## OWNER finite maintenance source checkpoint — 19:45UTC
+
+Chosen implementation: close actual admission/launch paths, cleanly finish whole writer domains,
+then hold scoped native files and SQLite jointly with PG and the accepted stopped-support procedure.
+[Concrete domain/path/late-effect matrix and remaining guarantee](../operators/owner-maintenance-boundary.md).
+New source components are not installed. Accepted console/publisher images3af9fbf9/35158514,
+7a91d127 twelve-file closures, manual b49c76c0, collector b7f4cbd2 and observer8b remain unchanged.
+
+Native/local qualification:21 root private-namespace tests,3 actual PostgreSQL-image paired tests
+(including host store UID10001),10 held-SQLite tests, zero skips. Mount unique IDs plus retained
+kernel change notification reject both remount RW→RO and unmount/rebind; cgroup rewrite and unit
+condition rewrite are terminal. Old-FD/prefaulted mmap, bind-alias views, detached child, late launch,
+temp rename, non-exiting writer timeout, controller death/hang, lost release response and explicit
+reconciliation are covered. PG operation UNKNOWN remains UNKNOWN through capture; projection expiry
+is not refreshed. SQLite rollback/BEGIN between checks cannot become the old lease. Legacy custody
+format is unchanged; the new pair receipt explicitly does not verify a stopped-support hash or
+authorize fleet capture. Exact-source CI follows push; no pending run is reported as PASS.
+
+Retained qualification failures: rename across mounts returned EXDEV rather than EROFS; systemctl
+serialized Conditions as `[unprintable]`; separate busctl clients let an inactive unit unload.
+The final implementation checks actual typed conditions over a single bounded sd-bus connection.
+These are explained isolated test/observer failures, not erased production incidents. Ordinary
+Gate.drain, historical UNKNOWNs and marker bytes are untouched. No product path was stopped/mounted
+by the tests, only new disposable unit/cgroup/container and private namespace resources.
+
+Fresh normal checks: authenticated panel five pages/logout19:33 PASS, monitor/probe natural
+invocations a830938ddd704e0dba2ee18072a0a2ae / 962e315975834d6bbf9e8d7a32f550b2 finish0;
+observer8b `ACCEPTED_SUPPORT_READ_ONLY_NORMAL`19:35, root bindings e7504de3cc6646e38fbf50a11cb5e5d0
+and notifications fc30dddb7d514fc4b230bc6e997512d6 finish0. All four timers enabled/active/waiting.
+No completed Resume.run used. NL1 authorized traffic19:39 fails partially after family authentication
+and TLS verification (2/4HTTPS,0DNS); this failure is retained, not explained by SIGTERM/provider
+blocking. Earlier wrapper attempts failed locally before traffic (nonexistent Python path, then
+missing PYTHONPATH), independently of the actual traffic result. Bounded current readback continues.
+
+Common held interval/new stopped-support snapshot/encrypted kit/independent verification/linked
+resume remain NOT_PERFORMED. No production capture restriction was acquired; lab cleanup is not
+normal resume. Concrete blocker: continuously controlled Docker executor launches and private mount
+namespaces for console synthetic writes, plus stopped-support integration and named remote rows.
+No broad Docker/OWNER maintenance was substituted. HA-02 independent custody/source-host-free restore,
+panel reboot startup and onboarding remain open. Next: enroll that specific executor authority and
+qualify old exec/detached/late starts under the same lease, not repeat a general census.
+
 ## Continuation from ff20b55c — selective existing-key activation
 
 Sourcefa24461f84d0431605dc696cc79ae4e2629ed704 pushed and remote-matched; vault run46056036135
@@ -37,7 +79,7 @@ No accepted component was reinstalled. No production admission, mount, cgroup or
 acquired in this continuation. Native OWNER maintenance components remain in progress and no
 common held interval, new stopped-support snapshot, encrypted kit or linked resume exists.
 
-## Current checkpoint — 18:15UTC
+## Historical checkpoint — 18:15UTC
 
 **COMMON_ENCRYPTED_KIT_NOT_CREATED; selected OWNER/all-writer NEXT remains IN_PROGRESS.**
 Review items1/2 are fixed and qualified; item3 has a dedicated-process deadline but no complete

@@ -1,5 +1,24 @@
 # Текущее состояние / Current state
 
+**27 November19:45UTC — finite OWNER boundary components qualified; common kit NOT_CREATED.**
+The selected stop-writers/hold-native-files implementation now has scoped unit launch conditions,
+recursive cgroup clean-exit/late-attachment containment, mount-identity/event continuity, explicit
+external cleanup reconciliation and a held SQLite/PG operation-history pair. Local qualification:
+34 cases/0 skips, including actual PostgreSQL image18cfe3ef and store UID10001. These are source-only
+components, NOT the production OWNER adapter. First unclosed row remains console Docker executor
+launch/old exec/private-mount descendants; host unit/flock closure is not daemon-side authority.
+Stopped-support lifetime/independent receipt integration and RU notice/peer receiver files remain
+open. [Exact finite domains and required integration](operators/owner-maintenance-boundary.md).
+
+No production capture admission/hold/stop was acquired; installed baselines remain unchanged.
+Real panel login/five existing pages/logout PASS19:33; observer8b PASS19:35, root notifications and
+bindings complete0 with enabled/active/waiting timers, as do user monitor/probe. NL1 fresh traffic
+returns partial FAIL19:39 (family auth/TLS verified,2/4HTTPS,0DNS); exact evidence is retained and
+bounded readback continues. This is not full normal MESH acceptance or proof of a provider cause.
+Key selective import still requires successful read-only preservation/consumer reconciliation;
+candidate/working backups and first refusal remain private, no new key was generated.
+
+**Historical19:30UTC — selective key reconciliation source checkpoint.**
 **27 November — selective HA-key reconciliation pending; no production capture holds.**
 The selective activation on sourcefa24461f completed native add/attachment import but refused its
 other-entry comparison. Original encrypted vault and phase evidence are retained; do not repeat
