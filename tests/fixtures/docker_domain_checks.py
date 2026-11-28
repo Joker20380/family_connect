@@ -46,6 +46,8 @@ def run(engine, plugin, root, parent):
             record(root, 'domain-inventory-' + str(index + 2) + '.json',
                 dict(phase='CREATE_SYNTHETIC_INVENTORY', count=index + 2, elapsed=time.monotonic() - prepared))
     inventory = engine.json('GET', '/containers/json?all=1')
+    record(root, 'domain-inventory-observed.json',
+        dict(count=len(inventory), running=sum(row['State'] == 'running' for row in inventory)))
     assert len(inventory) == 207 and sum(row['State'] == 'running' for row in inventory) == 17
     preparation_seconds = time.monotonic() - prepared
     record(root, 'domain-inventory-ready.json', dict(count=207, running=17, elapsed=preparation_seconds))

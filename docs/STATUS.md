@@ -36,6 +36,10 @@ First207/17 native fixture46088511450 fails its120s outer preparation bound (art
 retained); vfs unnecessarily copied Python rootfs for190 never-started rows. Those rows now use a
 deterministic empty synthetic image, with real running images retained and immutable stage records.
 No timeout increase/retry on unchanged source; traversal/native acceptance remains pending.
+The next native42cbe406 refusal exposes stale-policy DELETE denials ignored by setup after SIGHUP;
+fixture now waits for that daemon's new reload-completion record and requires DELETE204 plus
+empty readback. Exact Engine source shows `/info` authorization can remain stale after reload;
+it is not used as effective-policy evidence. No mutation retry or physical-coverage inference.
 Own isolated PG/emulator cleaned up; no production holds acquired or new live-baseline assertion.
 
 **Historical27 November23:20UTC — checkpoint: A common kit blocked; B candidate built, not release-ready.**

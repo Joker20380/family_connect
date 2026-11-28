@@ -21,6 +21,16 @@ It does not produce a HELD/domain result. The vfs fixture copied the whole Pytho
 synthetic records, retain the real17 running containers, and record immutable setup milestones.
 The120s outer bound and policy2s/4s remain unchanged. This fixture correction needs a new native
 result; it is not proof that the historical timeout occurred in a particular API call.
+42cbe406 native46089264309 fails after setup reaches201 rows in18.07s; artifact15240164406 SHA256
+0e350420d0412a98ab7b19d974ba88b0a38bd2ea30eb5f4fd406dfc7e2ace796 retained. Exact daemon log records
+two DELETE denials by the old failed policy after SIGHUP; the fixture previously ignored those
+statuses and waited only on always-readable `/version`. Fix that proven setup defect: await a new
+completion record from that same daemon after SIGHUP, require each DELETE204 and empty readback;
+no replayed unknown mutation. Exact Moby docker-v29.1.3 source3ac93092 emits completion after
+SetPlugins, whereas `/info` still uses the old config AuthorizationPlugins; it cannot be the
+effective reload observer. A deterministic regression ignores the earlier completion record and
+another proves a refused DELETE stops once. The artifact also retains an EMPTY_JSON_RESPONSE during
+cleanup; its cause is not inferred. Full207-row count is now recorded before its assertion.
 
 ### Native B runtime and disclosure correction
 

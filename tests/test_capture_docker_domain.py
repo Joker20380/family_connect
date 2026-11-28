@@ -11,6 +11,45 @@ from control.capture_docker_domain import DomainAdmission
 from test_capture_docker import FakeEngine, isolate_engine_controls, request
 
 
+def test_native_reload_ignores_previous_completion_until_new_handler_returns(monkeypatch, tmp_path):
+    monkeypatch.syspath_prepend(str(Path(__file__).parent / 'fixtures'))
+    import run_docker_authz as fixture
+    calls = []
+    log = tmp_path / 'daemon.log'
+    message = b' level=info msg="Reloaded configuration"\n'
+    log.write_bytes(message)
+    class Daemon:
+        qualification_log = log
+        def send_signal(self, value):
+            calls.append(value)
+        def poll(self):
+            return None
+    def ordered_wait(predicate, seconds):
+        assert not predicate()
+        assert not predicate()
+        with log.open('ab') as stream:
+            stream.write(message)
+        assert predicate()
+    monkeypatch.setattr(fixture, 'wait', ordered_wait)
+    fixture.reload_configuration(Daemon())
+    assert calls == [fixture.signal.SIGHUP]
+
+
+def test_native_cleanup_refusal_is_not_ignored_or_replayed(monkeypatch):
+    monkeypatch.syspath_prepend(str(Path(__file__).parent / 'fixtures'))
+    import run_docker_authz as fixture
+    calls = []
+    class Engine:
+        def json(self, method, route, expected=200):
+            calls.append((method, route, expected))
+            if method == 'GET':
+                return [dict(Id='old', Names=['/fc-authz-old'])]
+            raise AssertionError('DELETE_REFUSED')
+    with pytest.raises(AssertionError, match='DELETE_REFUSED'):
+        fixture.remove_fixture_containers(Engine())
+    assert calls == [('GET', '/containers/json?all=1', 200), ('DELETE', '/containers/old?force=1', 204)]
+
+
 class EnrolledEngine(FakeEngine):
     def __init__(self, root):
         super().__init__(root)

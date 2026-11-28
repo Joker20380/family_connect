@@ -35,6 +35,26 @@ def wait(test, seconds=15):
     raise AssertionError('LAB_WAIT_DEADLINE')
 
 
+def reload_configuration(daemon, seconds=15):
+    log = Path(daemon.qualification_log)
+    offset = log.stat().st_size
+    daemon.send_signal(signal.SIGHUP)
+    def completed():
+        assert daemon.poll() is None
+        with log.open('rb') as stream:
+            stream.seek(offset)
+            return b' level=info msg="Reloaded configuration"' in stream.read(1024 * 1024)
+    wait(completed, seconds)
+
+
+def remove_fixture_containers(engine):
+    rows = engine.json('GET', '/containers/json?all=1')
+    assert all(all(name.startswith('/fc-authz-') for name in row['Names']) for row in rows)
+    for row in rows:
+        engine.json('DELETE', '/containers/' + row['Id'] + '?force=1', expected=204)
+    assert engine.json('GET', '/containers/json?all=1') == []
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--root', type=Path, required=True)
@@ -77,6 +97,7 @@ def main():
         handles.append(output)
         process = subprocess.Popen(command, stdout=output, stderr=subprocess.STDOUT,
             env={**os.environ, 'PYTHONPATH': str(Path.cwd()), 'PYTHONDONTWRITEBYTECODE': '1'})
+        process.qualification_log = output.name
         processes.append(process)
         return process
     engine = API(runtime / 'docker.sock')
@@ -126,8 +147,7 @@ def main():
             client = API(path)
             wait(lambda: client.json('POST', '/Plugin.Activate', {})['Implements'] == ['authz'])
             configuration([name])
-            daemon.send_signal(signal.SIGHUP)
-            wait(lambda: engine.json('GET', '/version')['Version'] == '29.1.3')
+            reload_configuration(daemon)
             assert daemon.poll() is None
             return process, client, journal, path
         first, client, journal, path = plugin(1)
@@ -183,24 +203,22 @@ def main():
         assert Path(f'/proc/{neighbor}').exists() and daemon.poll() is None
         results['enforcement_death'] = 'NEIGHBOR_API_REFUSED_RUNNING_PROCESS_RETAINED'
         configuration([])
-        daemon.send_signal(signal.SIGHUP)
-        wait(lambda: engine.json('GET', '/version')['Version'] == '29.1.3')
+        reload_configuration(daemon)
         fourth, client, journal, path = plugin(4)
         client.json('POST', '/fc-control', dict(command='CLOSE'))
         before = config.read_bytes()
         configuration([])
-        daemon.send_signal(signal.SIGHUP)
-        wait(lambda: engine.json('POST', '/containers/fc-authz-neighbor/exec', dict(Cmd=['true']), 201))
+        reload_configuration(daemon)
+        engine.json('POST', '/containers/fc-authz-neighbor/exec', dict(Cmd=['true']), 201)
         config.write_bytes(before)
-        daemon.send_signal(signal.SIGHUP)
+        reload_configuration(daemon)
         status, unused = client.call('POST', '/fc-control', dict(command='CHECK'))
         assert status == 503
         assert json.loads((journal / 'failed').read_bytes())['reason'] == 'DOCKER_HOOK_CONFIGURATION_CHANGED'
         results['hook_remove_restore'] = 'OLD_LEASE_FAILED'
         results['valid_reload_same_daemon_pid'] = daemon.pid
         configuration([])
-        daemon.send_signal(signal.SIGHUP)
-        wait(lambda: engine.json('GET', '/version')['Version'] == '29.1.3')
+        reload_configuration(daemon)
         fifth, client, journal, path = plugin(5)
         client.json('POST', '/fc-control', dict(command='CLOSE'))
         old_pid = daemon.pid
@@ -213,11 +231,8 @@ def main():
         assert json.loads((journal / 'failed').read_bytes())['reason'] == 'DOCKER_DAEMON_GENERATION_CHANGED'
         results['daemon_generation'] = 'OLD_LEASE_FAILED'
         configuration([])
-        daemon.send_signal(signal.SIGHUP)
-        wait(lambda: engine.json('GET', '/version')['Version'] == '29.1.3')
-        for row in engine.json('GET', '/containers/json?all=1'):
-            assert all(name.startswith('/fc-authz-') for name in row['Names'])
-            engine.call('DELETE', '/containers/' + row['Id'] + '?force=1')
+        reload_configuration(daemon)
+        remove_fixture_containers(engine)
         unit.write_text('[Unit]\nDescription=Disposable FC Docker domain qualification\n[Slice]\n')
         subprocess.run(['systemctl', 'daemon-reload'], check=True, timeout=10)
         subprocess.run(['systemctl', 'start', parent], check=True, timeout=10)
@@ -233,16 +248,14 @@ def main():
             domain_client = API(path)
             wait(lambda: domain_client.json('POST', '/Plugin.Activate', {})['Implements'] == ['authz'])
             configuration([name])
-            daemon.send_signal(signal.SIGHUP)
-            time.sleep(.2)
+            reload_configuration(daemon)
             subprocess.run([sys.executable, 'tests/fixtures/docker_domain_checks.py', '--engine', str(runtime / 'docker.sock'),
                 '--plugin', str(path), '--root', str(root), '--parent', parent, '--mode', mode,
                 '--enforcer', str(enforcer.pid)], check=True, timeout=120 if mode == 'normal' else 45,
                 env={**os.environ, 'PYTHONPATH': str(Path.cwd()), 'PYTHONDONTWRITEBYTECODE': '1'})
             results['domain'][mode] = json.loads((root / ('domain-' + mode + '.json')).read_bytes())
             configuration([])
-            daemon.send_signal(signal.SIGHUP)
-            wait(lambda: engine.json('GET', '/version')['Version'] == '29.1.3')
+            reload_configuration(daemon)
         (root / 'qualification.json').write_text(json.dumps(results, sort_keys=True))
         print(json.dumps(results, sort_keys=True))
     finally:
@@ -251,13 +264,9 @@ def main():
         try:
             if daemon is not None and daemon.poll() is None:
                 configuration([])
-                daemon.send_signal(signal.SIGHUP)
                 try:
-                    wait(lambda: engine.json('GET', '/version')['Version'] == '29.1.3', 5)
-                    rows = engine.json('GET', '/containers/json?all=1')
-                    assert all(all(name.startswith('/fc-authz-') for name in row['Names']) for row in rows)
-                    for row in rows:
-                        engine.call('DELETE', '/containers/' + row['Id'] + '?force=1')
+                    reload_configuration(daemon, 5)
+                    remove_fixture_containers(engine)
                 finally:
                     daemon.terminate()
                     daemon.wait(35)
