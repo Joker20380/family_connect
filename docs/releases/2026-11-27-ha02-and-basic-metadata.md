@@ -9,6 +9,62 @@ B changes are separate source/candidate work, never a production binding change 
 
 ## Current follow-up —28 November (source-only)
 
+### Current result and acceptance boundary
+
+All changes below are source/isolated qualification, not a production installation. Accepted
+console/publisher/collector/manual bindings, business data and the existing HA key are untouched.
+No production gate/hold was acquired. Own disposable PG container/volume and emulator are cleaned
+up; the emulator lock is released. There is no fresh production panel/MESH baseline assertion.
+
+| Result | Exact evidence / limitation |
+| --- | --- |
+| A/B compatibility | 0dc11ad9 plus f3777381: installed-v1 frozen source aa9ca52f9d4a36bf0c0dc5740f81cc83cb8a6262a5aefbc1a7862b01abe87205, unchanged HA pins/importer; native PG17.11 import/business/replay passes. B schema2 migration is explicit and disposable-only; A refuses it. No implicit request/read ALTER. |
+| Projection policy | Higher-counter v1 sample after basic refuses; valid v1 revoke clears payload while retaining basic mode/policy floor. Endpoint/collector/panel checks retain revoke, replay and original expiry semantics. |
+| Carrier cancellation | 91641224 checks the OpenTCP context synchronously before enqueue, even while Reset is delayed. After an actual peer commit, the changed peer generation remains recorded and both sessions close; no false rollback or live unilateral authority. |
+| Docker component | a72dfed5592ff5e36da4cf00811cd59c2454ef83, native46090457835 SUCCESS; real207 registered/17 running, setup15.10311823s, enrolled-domain acquisition0.489574299s. Original2s/4s policy bounds and death/hang assertions retained. |
+| Initial transition | NOT QUALIFIED. af113b02 native46086314293 proves shim-owned FD/mmap/rename writes continue after dockerd/containerd retirement. Lab API return10.115281063s is not console/support or replacement-controller recovery. |
+| B native subset | fcb25335d7a714be0dd9c23e734486702aff51c7, NVIDIA/KVM emulator: durable storage faults/process restart, restored binding, OFF/revoke, disclosure/Back/reentry, late ACK and public-disabled branch. Actual manifest launchers; no test skip. |
+| B release/install | CLOSED: separate HA schema capture/restore contract, authenticated synthetic upload, VPN traffic independence, production-ID/signing-chain upgrade, per-field basis/store conditions remain unaccepted. BASIC_METADATA_APPROVED=false for friends/release. |
+| Fleet result | No installed OWNER adapter, shared held interval, fresh stopped-support component, encrypted kit, independent kit verify or linked resume. HA-02 remains open. |
+
+Independent reader verifies artifact15240514416, ZIP SHA256
+42b6d47ec728e78c2a4be6e3e11e0c100be5f81531801a3b72bbc15b2031b2a3, all eight exact a72dfed5
+source hashes against both Git and the unchanged current component closure, measured inventory,
+normal/domain-loss/release/resume receipts and own-process cleanup. The component explicitly retains
+initial_admission_coverage_proven=false. This is independent **CI artifact** verification, not a
+recovery-kit verification. Prior fixture refusals and their artifacts remain below without inferred
+historical causes or retry-until-PASS.
+
+Final source CI: a72dfed5 Linux46090457807/phase046090457821 SUCCESS. fcb25335
+Client46090897516 FAILURE; phase046090897840 SUCCESS, including both tests and failover jobs.
+f3777381 phase046087459691/native-support46087459733 and a72dfed5 native46090457835 SUCCESS;
+fcb25335 readiness46090897618 SUCCESS. A workflow on an earlier source is not relabeled as HEAD.
+
+Final client failure is retained separately from the original carrier and candidate-only test
+failures: job140811336327 passes carrier race/JVM/builds/lint and the new basic storage/UI cases.
+The first recorded failing lifecycle case is AutoRuntimeTest's system VPN handover:
+`System VPN confirmation not found: roots=441, system_roots=0, buttons=0, enabled=0,
+interactive=true, locked=false`. Later failures report VPN remaining/operation ownership, including
+the underlay observation's no-active-VPN precondition. Eleven failures are recorded; they are not
+called eleven independently explained defects. Artifact15241932100 SHA256
+a36d6fec2eff53d3f93e1cbd656fd5baf0d509afe2925d00455595a4e40c5238 is independently read and
+preserved, along with the exact failed IDs. The dialog's original absence is not explained by the
+passing local B tests or by unchanged carrier source. No unchanged rerun, timeout increase, skip or
+unrelated VPN behavior patch is used. Full client acceptance remains blocked on that native gate;
+Android8.1/9/12 and release-payload downstream stages did not run in this failed workflow.
+
+Single next engineering step: executable **cold kernel-generation transition with boot-time Docker
+interlock**, qualified in a disposable VM with replacement-controller recovery and exact installed
+console/publisher configuration plus support runtime-directory/IPC. The old dispatch generation
+must be unable to run, and persisted restart policy must not launch protected containers before
+mandatory enrollment. The impact packet is not ready for production scope approval: all17 running
+containers/14 excluded neighbors and, for this fallback, other host services would be affected;
+their bounded application recovery/downtime is unqualified. No shared stop, reboot or AuthZ install
+was attempted. External custody, source-host-free restore, panel reboot-startup and onboarding
+remain separate acceptance items, not consequences of these component results.
+
+### Historical qualification sequence within this iteration
+
 Native inventory follow-up adds207 disposable containers,17 running, to the exact-Engine domain
 fixture. It exercises the actual API rather than treating a fake207-row list as latency proof.
 Normal setup budget becomes120s solely for206 additional container creates; policy2s/4s and fault
@@ -171,13 +227,15 @@ NL1/NL2/panel/collector observations below are historical, not a fresh maintenan
 No own production restrictions were acquired. Own synthetic PG container/volume and NVIDIA emulator
 are stopped/removed (AVD/evidence retained); shared emulator lock is released. No reboot-startup claim.
 
-Current private B candidate: sourceba25c0543afeca81c2a004bc0f1ca54a62443873,
+Current private B candidate: sourcefcb25335d7a714be0dd9c23e734486702aff51c7,
 com.familyconnect.app.metadata,126,0.1.18-beta126-basic-candidate,x86_64/debug.
-APK SHA2566d99e0d7aea7dcf0a88508c56c3afd6e039c36b8546a2d9ccac541879db81d50;
-instrumentation SHA256db872022dd0637f83c30e153ed457f7e297484d64cbbf7c3c882eeee74cb7860.
+APK SHA256f0742dfa195864f5921b46a737a00c0cf9db9d88431b61e9b0c29b367be3adc2;
+instrumentation SHA25664736b7bbeae660fa24d1e5da7ac3aed531c1761d6a9890667bddaa5c2ca6c13.
 Independent ZIP/native-library and apksigner readback confirms source closure and debug signer
 a159f53e421755eea528fa0af5d5cd34ef39892bf514b237aa65871cf6fffe64. Native restricted/awg closure
-at af194acb is unchanged through this UI source. Initial apksigner invocation lacked java in PATH;
+at af194acb is unchanged through this UI source. This rebuilt target APK was installed only on the
+isolated emulator and its native UI passes; earlier ba25c054 APK6d99e0d7 is historical, not proof
+of the new bytes. Initial apksigner invocation lacked java in PATH;
 correct JDK-path verification is recorded separately, not hidden. Generated friends/release
 BuildConfig both retain BASIC_METADATA_APPROVED=false even with the debug-candidate property true.
 No public artifact, version catalog, installed client, server schema or binding changed.

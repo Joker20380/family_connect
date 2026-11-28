@@ -14,7 +14,12 @@ initial admission coverage, and the result explicitly retains coverage=false.
 The native follow-up also creates207 disposable containers/17 running to exercise real Engine
 inspection under those unchanged2s/4s policy bounds. Only normal fixture setup gets120s (creating
 206 extra disposable containers); hang/death assertions and their45s outer bound stay unchanged.
-Its measured acquisition is recorded separately from initial-transition/production downtime.
+At a72dfed5592ff5e36da4cf00811cd59c2454ef83 native46090457835 SUCCESS: setup15.10311823s,
+207 total/17 running, acquisition0.489574299s, own-process cleanup confirmed. Independent reader
+checks artifact15240514416 SHA25642b6d47ec728e78c2a4be6e3e11e0c100be5f81531801a3b72bbc15b2031b2a3
+and all eight source hashes. These are component timings, not initial-transition/production downtime.
+Earlier setup timeout/reload refusals remain in the release report; checked reload completion and
+DELETE204 prevent their observed fixture defects without mutation retries or relaxed policy bounds.
 
 ## Exact qualification, 27 November 2026
 

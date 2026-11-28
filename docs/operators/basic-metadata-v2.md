@@ -21,6 +21,12 @@ failure before and after publication, separate-process reopen, oldOFF/revoke and
 After Understood, the real consumer reserves only after storing notice, rejects absent synthetic
 identity locally and retains backoff/VPN status. No authenticated synthetic backend transmission,
 VPN traffic independence or production-package/signature upgrade acceptance is implied.
+Final private candidate sourcefcb25335d7a714be0dd9c23e734486702aff51c7 is rebuilt as
+com.familyconnect.app.metadata,126/0.1.18-beta126-basic-candidate,x86_64/debug;
+APK SHA256f0742dfa195864f5921b46a737a00c0cf9db9d88431b61e9b0c29b367be3adc2.
+The rebuilt APK's native UI passes. The ordinary public-disabled variant also passes a separate
+native branch: no disclosure, reservation or network callback, even with a stored notice. Both
+use their real manifest launcher; no skipped test or replacement of the owner's app is involved.
 
 Wire schema2 on the existing authenticated `/friends/device/technical-metadata/v1` endpoint:
 `processing_mode=automatic_basic`, `policy_version=basic-2026-11-v1`, receipt

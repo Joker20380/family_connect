@@ -1,52 +1,41 @@
 # Текущее состояние / Current state
 
-**28 November00:30UTC — source-only A/B correction; native B subset accepted.**
-Entry local/remote8fa79a13 match. Completed215c7fcb phase046080709385/Linux46080709373 FAIL;
-client46080709374 FAIL at carrier cancellation; earlier records/artifacts retained.
-Implicit metadata ALTER removed; installed-v1 fixture uses pinned111866ae module bytes and old
-schema. Disposable B schema2 is separate and rejected by A capture/import. B server/migration
-installation is closed pending a new HA restore contract. Panel legacy higher-counter samples
-cannot replace basic; revokes retain its policy floor.127 focused checks pass/12 PG skips;
-PG17.11 installed-v1 import/business/replay qualification55/55 and panel34/34 pass in a disposable
-database. Full exact-source CI pending. No production changes or new kit/holds.
-Active engineering NEXT: qualify the cold-generation/boot-interlock Docker transition and bounded
-application recovery in a disposable VM. Shared production Docker/neighbor stop remains excluded.
-Carrier now rejects writes synchronously against the OpenTCP request context, before enqueue;
-delayed Reset cannot admit a post-cancel client-commit. Deterministic pre-fix refusal retained;
-focused race checks pass, including actual peer commit followed by cancellation/closed sessions.
-Broader local go test -race ./... fails separately in publisher-recovery configuration and Telemost
-local-process diagnostics/data race/idle deadline; full CI is not claimed green.
-0dc11ad9 panel46084776337/readiness46084776413/native-support46084776350 SUCCESS.
-B real NVIDIA/KVM Android: storage prepare/verify across a force-stop, API collection and
-Back/foreground disclosure checks pass. A deterministic synchronized UI regression finds that
-onCreate-only disclosure did not return after Back/Home; onPostResume fixes it. Sampling stays
-closed before notice; notice precedes reservation and local authentication refusal, with backoff
-and unchanged VPN status. This is not authenticated backend upload, traffic or production-ID upgrade
-acceptance. Public enablement remains false. New x86_64 debug APK is bound toba25c054,
-SHA2566d99e0d7aea7dcf0a88508c56c3afd6e039c36b8546a2d9ccac541879db81d50; no owner app replaced.
-Docker207-entry complete traversal and terminal tail/change/overflow checks pass42/42 locally.
-Exact-Engine retirement46086314293 SUCCESS, independently read: old FD/mmap/rename writes survive
-dockerd/containerd death. Lab API recovery10.115s is not application recovery/initial coverage.
-Frozen-v1 capsule omission and extended control timeout corrected atf3777381; Docker46087459683
-and readiness46087459696 SUCCESS. Full broad/native CI pending. Initial transition not qualified
-or installed. No kit, production restrictions or existing key changes.
-207/17 native inventory qualification is now added to the isolated Engine gate, beyond the unit
-matrix; policy deadlines and fault assertions remain unchanged. Exact-source native result pending.
-First207/17 native fixture46088511450 fails its120s outer preparation bound (artifact15240022429
-retained); vfs unnecessarily copied Python rootfs for190 never-started rows. Those rows now use a
-deterministic empty synthetic image, with real running images retained and immutable stage records.
-No timeout increase/retry on unchanged source; traversal/native acceptance remains pending.
-The next native42cbe406 refusal exposes stale-policy DELETE denials ignored by setup after SIGHUP;
-fixture now waits for that daemon's new reload-completion record and requires DELETE204 plus
-empty readback. Exact Engine source shows `/info` authorization can remain stale after reload;
-it is not used as effective-policy evidence. No mutation retry or physical-coverage inference.
-Full f3777381 phase046087459691/native-support46087459733 SUCCESS. ba25c054 client46088130879
-passes carrier race/JVM/build/lint but fails the new UI test's candidate-only package assertion in
-the ordinary public-disabled variant. Fix test coverage to assert that variant cannot sample even
-with stored notice, without skipping it; native candidate notice assertions remain intact.
-Both corrected branches now pass on the isolated NVIDIA/KVM emulator, using their actual manifest
-launchers. Final exact-source client CI still required; the original package/launcher failures stay.
-Own isolated PG/emulator cleaned up; no production holds acquired or new live-baseline assertion.
+**28 November — source-only A/B corrections; initial Docker transition remains unqualified.**
+Entry local/remote8fa79a13 matched; accepted production components were not reinstalled.
+Installed-v1 has a frozen aa9ca52f source closure and unchanged HA pins/importer. Its native PG
+import/business/replay checks pass; the separate explicit B schema2 is refused by A. Request/read
+does not ALTER the installed schema. B server/migration is CLOSED pending its own HA restore
+contract. Higher-counter legacy samples cannot downgrade basic; revokes preserve its policy floor.
+Carrier91641224 synchronously rejects a cancelled write before enqueue, including delayed Reset.
+After peer commit, tests retain the actual advanced generation and close both sessions; no live
+unilateral authorization is accepted. Original failures and unrelated local broad-Go failures stay.
+
+A sourcea72dfed5: real Engine29.1.3 inventory207/17 and enrolled-domain qualification46090457835
+SUCCESS. Independent artifact15240514416 matches eight source files; acquisition0.489574299s,
+setup15.10311823s. Policy2s/4s and fault assertions are unchanged. This is not initial coverage.
+Negative retirement46086314293 independently proves old shim FD/mmap/rename writes survive
+dockerd/containerd death;10.115s lab API recovery is not application recovery. No OWNER adapter,
+common held interval, stopped-support capture, encrypted kit, independent kit verify or linked resume.
+Single engineering NEXT: executable disposable-VM cold kernel-generation/boot-interlock transition,
+including bounded replacement-controller and exact-image/support-IPC application recovery.
+Shared production Docker/neighbor stop, reboot and AuthZ installation remain outside this task.
+
+B sourcefcb25335: rebuilt private `.metadata`126/0.1.18-beta126-basic-candidate x86_64 APK
+SHA256f0742dfa195864f5921b46a737a00c0cf9db9d88431b61e9b0c29b367be3adc2. Real NVIDIA/KVM checks
+cover storage faults across process restart, oldOFF/revoke/restored binding, disclosure before
+sampling, Back/reentry and public-disabled runtime. onPostResume fixes reproduced notice loss.
+Final APK UI passes; local auth refusal/backoff leaves VPN status unchanged. Authenticated synthetic
+upload, actual VPN independence and matching production-ID/signing-chain upgrade are not accepted.
+Public flag remains false; legal/store conditions and the new HA schema contract remain open.
+
+Completed f3777381 native-support46087459733 and a72dfed5 Linux46090457807/phase046090457821
+SUCCESS. Final fcb25335 client46090897516 FAIL: carrier/JVM/build/lint and new basic runtime checks
+pass, but AutoRuntimeTest cannot find the system VPN confirmation; later cases retain VPN/owner
+state failures. Artifact15241932100 is preserved; root cause is not proved or hidden by a rerun.
+fcb25335 phase046090897840 SUCCESS. Full client acceptance is NOT green. Earlier refusals stay
+in the release report, not converted into unexplained PASS by repetition. No production changes,
+new key/import, holds or fresh live-baseline assertion. Own disposable PG/emulator are cleaned up.
+External custody, source-host-free restore, panel reboot-startup and onboarding remain separate.
 
 **Historical27 November23:20UTC — checkpoint: A common kit blocked; B candidate built, not release-ready.**
 Panel46081203523 SUCCESS on61537b1f5b7df2ecf0faf221a6d2bfedf8521923, including corrected

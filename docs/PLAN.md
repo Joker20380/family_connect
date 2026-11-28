@@ -16,29 +16,25 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
-Current28 November00:30UTC: A/B schema separation, panel floor, deterministic carrier pre-enqueue
-cancellation and capsule/control-bound follow-ups are implemented. Final broad CI remains a gate.
-Single engineering NEXT: disposable-VM cold kernel-generation/boot-interlock transition with
-bounded new-controller/application recovery. Exact Engine46086314293 independently proves that
-killing dockerd/containerd leaves old shim FD/mmap/rename effects alive; do not repeat census or
-promote10.115s lab API recovery to initial coverage. No production shared stop, reboot or AuthZ
-installation; wider scope review only after executable recovery/impact qualification.
-B NVIDIA/KVM native storage, restored-binding, notice/Back/reentry and local auth-refusal subset
-passes; onPostResume fixes a reproduced disclosure reentry defect. Sourceba25c054 APK is built,
-privately hash/signature-checked; exact client/broad CI remains pending, not acceptance by inference.
-Authenticated synthetic backend, actual VPN independence and matching production-ID/signing-chain
-upgrade remain unaccepted. New B schema needs its own versioned HA restore contract; public flag,
-legal/store gates remain closed. No kit or HA-02 acceptance; installed components unchanged.
-Finish the207/17 real-Engine traversal gate under unchanged policy bounds alongside final CI;
-this validates inventory capacity, not the selected initial-generation physical fence.
-Retain46088511450 outer fixture timeout; qualify the changed lightweight stopped-row fixture
-under the same deadlines before claiming207/17 native capacity.
-Close the concrete fixture reload-readback/ignored-DELETE defect found by that run; correlated
-reload completion plus checked API effects replace version-only readiness, never physical coverage.
-Before final B acceptance, qualify the public-disabled branch of the new native UI regression;
-the exactba25c054 client gate fails that package assertion, not carrier cancellation.
-Native public-disabled/candidate launcher regressions now pass locally; obtain the exact follow-up
-client workflow result before claiming the full Android gate.
+Current28 November: explicit installed-v1/B-schema separation, basic policy floor, carrier
+pre-enqueue cancellation and source-capsule/control-bound corrections are implemented. Native
+207/17 Docker46090457835 SUCCESS on a72dfed5; independently checked acquisition0.489574299s
+under the unchanged2s/4s bounds. Old initial dispatches are not covered by this component.
+**Single engineering NEXT:** executable disposable-VM cold kernel-generation/boot-interlock
+transition with bounded replacement-controller and exact installed-image/support-IPC recovery.
+Negative46086314293 proves that retiring dockerd/containerd leaves shim FD/mmap/rename effects;
+do not repeat census or call10.115s lab API return application/initial-transition acceptance.
+No production shared stop, reboot or AuthZ installation; wider scope review only after executable
+application recovery and a measured impact package. No installed OWNER adapter or common kit.
+B fcb25335 rebuilt private candidate passes the available NVIDIA/KVM storage/notice/reentry and
+public-disabled subset. a72dfed5 Linux/phase0 SUCCESS; fcb25335 client46090897516 FAIL at the
+system VPN confirmation (carrier and new basic checks pass). Retain artifact15241932100; do not
+rerun unchanged or infer the dialog's root cause. Full client release remains blocked. Source-only
+is not installation; final fcb25335 phase046090897840 SUCCESS.
+Authenticated synthetic upload, actual VPN independence and matching production-ID/signing-chain
+upgrade remain unaccepted. B deployment needs a separate versioned HA schema capture/restore
+contract; public flag, legal/store conditions remain closed. Historical failures/UNKNOWN remain.
+External custody, source-host-free restore, panel reboot-startup and onboarding stay independent.
 
 Historical23:20UTC:
 Current23:20UTC checkpoint: A remains blocked by the initial pre-hook Docker execution channel,
