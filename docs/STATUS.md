@@ -16,6 +16,10 @@ delayed Reset cannot admit a post-cancel client-commit. Deterministic pre-fix re
 focused race checks pass, including actual peer commit followed by cancellation/closed sessions.
 Broader local go test -race ./... fails separately in publisher-recovery configuration and Telemost
 local-process diagnostics/data race/idle deadline; full CI is not claimed green.
+0dc11ad9 exact panel46084776337/readiness46084776413 SUCCESS; broad/native runs pending.
+B native storage instrumentation compiles; prepare/verify phases cover separate process launches,
+init/notice/reserve/ACK failure before or after publication, oldOFF/revoke and missing binding.
+Runtime results/APK rebinding remain pending; this test-source checkpoint is not Android acceptance.
 
 **Historical27 November23:20UTC — checkpoint: A common kit blocked; B candidate built, not release-ready.**
 Panel46081203523 SUCCESS on61537b1f5b7df2ecf0faf221a6d2bfedf8521923, including corrected

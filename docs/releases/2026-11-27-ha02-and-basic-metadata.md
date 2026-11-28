@@ -51,6 +51,17 @@ Phase0 failed artifact15237149062 is retained/read (SHA256
 6f3d6b8351817a4b9f7dad84f1a0ed750dfc452532836c66223c5524ca3c20a2), Linux15237569058 retained/read
 (414eab843a69484386af903f0ce974aa1fa19eddc58ea9c9a578edd600cde446). Source-only; no carrier installed.
 
+### B native-storage qualification checkpoint
+
+BasicMetadataStorageRuntimeTest compiles against the actual Android SharedPreferences/AtomicFile
+consumer, with test-only Context wrappers. Init/notice/reserve/ACK errors are injected both before
+publication and after a real successful write with a lost success result. The existing consumer's
+durable fault marker must close sampling; prepare/verify are separate instrumentation invocations
+with an intervening process stop. OldOFF/pending revoke, absent installation binding and late sample
+ACK are covered. Compilation passes; runtime/device/UI/backend/upgrade acceptance is not inferred.
+No production code or public flag changed in this checkpoint. A new source-bound APK is still
+required because carrier code changed; the earlier ba569748 APK is not evidence for this source.
+
 A is **not complete**: no installed OWNER executor adapter, common held interval, new stopped-support
 snapshot, encrypted fleet kit, independent kit verification or linked normal resume. The concrete
 unclosed channel is create/start already accepted before first AuthZ attachment, with downstream

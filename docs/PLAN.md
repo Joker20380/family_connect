@@ -24,6 +24,8 @@ no importer weakening or automatic migration. No kit or HA-02 acceptance.
 Carrier pre-enqueue cancellation defect has a deterministic regression and synchronous transport
 fix; exact-source CI remains required. Preserve separate broad local Go failures. Continue the
 finite Docker transition and native Android gates, without any production shared-runtime action.
+B native storage test source compiles; run prepare and verify in distinct instrumentation processes
+on the NVIDIA/KVM isolated testbed. Do not count compilation as runtime or upgrade acceptance.
 
 Historical23:20UTC:
 Current23:20UTC checkpoint: A remains blocked by the initial pre-hook Docker execution channel,
