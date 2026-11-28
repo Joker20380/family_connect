@@ -35,7 +35,7 @@ from scripts.service_notices import Notices
 
 
 def installed_metadata():
-    source = (Path(__file__).resolve().parents[1] / 'tests/fixtures/technical_metadata_installed_v1.py.txt').read_bytes()
+    source = (Path(__file__).resolve().parents[1] / 'control/friends/technical_metadata_installed_v1.py').read_bytes()
     require(hashlib.sha256(source).hexdigest() == 'aa9ca52f9d4a36bf0c0dc5740f81cc83cb8a6262a5aefbc1a7862b01abe87205',
             'INSTALLED_METADATA_SOURCE_CHANGED')
     module = types.ModuleType('control.friends.installed_metadata_v1')

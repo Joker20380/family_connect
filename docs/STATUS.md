@@ -23,6 +23,10 @@ Runtime results/APK rebinding remain pending; this test-source checkpoint is not
 Docker207-entry complete traversal and terminal tail/change/overflow checks pass42/42 locally.
 New isolated retirement negative and bounded lab API recovery are queued for exact-Engine CI;
 no initial physical-generation transition is qualified or installed. Production unchanged.
+Follow-up CI refuses a missing frozen-v1 file in source-host-free capsules: relocate the identical
+pinned bytes under control/friends (already in the strict source closure). Preserve the refusal.
+Native Docker af113b02 fails enforcer-hang after the timeout extension; restore original2s/4s bounds
+and add a real hung-socket regression. Neither refusal is hidden by retries.
 
 **Historical27 November23:20UTC — checkpoint: A common kit blocked; B candidate built, not release-ready.**
 Panel46081203523 SUCCESS on61537b1f5b7df2ecf0faf221a6d2bfedf8521923, including corrected

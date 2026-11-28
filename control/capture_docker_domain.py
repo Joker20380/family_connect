@@ -16,7 +16,7 @@ from control.capture_native import fingerprint, record, require
 
 class DomainAdmission(Admission):
     inventory_limit = 1024
-    inventory_seconds = 8
+    inventory_seconds = 2
     def __init__(self, *args, parent, **kwargs):
         require(re.fullmatch(r'fc[a-z0-9]+\.slice', parent), 'DOCKER_DOMAIN_PARENT')
         self.parent = parent
@@ -84,9 +84,9 @@ class DomainClient:
         self.lease = None
 
     def command(self, command):
-        connection = http.client.HTTPConnection('localhost', timeout=12)
+        connection = http.client.HTTPConnection('localhost', timeout=4)
         channel = socket.socket(socket.AF_UNIX)
-        channel.settimeout(12)
+        channel.settimeout(4)
         try:
             channel.connect(self.path)
             connection.sock = channel

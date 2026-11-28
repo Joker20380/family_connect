@@ -29,6 +29,8 @@ on the NVIDIA/KVM isolated testbed. Do not count compilation as runtime or upgra
 Initial Docker transition still unqualified: run the new old-shim retirement counterexample on
 exact Engine, then qualify the finite cold-generation/interlock fallback if no common old-domain
 physical boundary exists. No further census substitutes, shared production stop or scope request.
+Close newly observed source-closure and enforcer-hang regressions before accepting final CI:
+frozen-v1 module must travel in the existing Python closure, and original control deadlines hold.
 
 Historical23:20UTC:
 Current23:20UTC checkpoint: A remains blocked by the initial pre-hook Docker execution channel,

@@ -74,6 +74,21 @@ Finite fallback is cold kernel-generation retirement plus a boot interlock, not 
 online proof. It needs isolated VM/new-controller/application recovery qualification and explicit
 broader scope review before installation. No measured production outage budget is claimed.
 
+### Exact follow-up refusals and corrections
+
+0dc11ad9 broad CI46084776329/46084776392 fails because recovery/native capsules intentionally carry
+Python sources, not tests/*.txt: the new frozen fixture was absent after source removal. Artifact
+15239067681/adace812745433b59468a7fdef702e849179fde340603005338d0fba16b64ca1 preserves the exact
+FileNotFoundError. Move the identical aa9ca52f bytes into control/friends/technical_metadata_installed_v1.py,
+an existing supported source-root/type; no source/import allowlist is widened. The fixture remains
+explicitly loaded under its pinned legacy identity, never the production endpoint.
+
+Native Docker46086314275 fails after the changed12s control timeout violates the existing <6s
+enforcer-hang gate. Artifact15239236864/ede5565e9bffbd64319e0c3fbb3d4795bf6e8132a83c26c6e382a86a1b1ef03d
+retains the failure and successful normal-domain phase/cleanup. Restore original2s work/4s control
+deadlines and retain complete207-row traversal; new real hung-socket regression enforces the bound.
+No test deadline is increased or assertion dropped. Exact follow-up qualification remains required.
+
 A is **not complete**: no installed OWNER executor adapter, common held interval, new stopped-support
 snapshot, encrypted fleet kit, independent kit verification or linked normal resume. The concrete
 unclosed channel is create/start already accepted before first AuthZ attachment, with downstream

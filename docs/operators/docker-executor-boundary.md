@@ -5,10 +5,11 @@ management-path change, not a per-project failure-isolated service. No fleet cap
 issued by `control.capture_docker`; CLOSE means admission only, never HELD writers.
 
 28 November candidate: full `/containers/json?all=1` traversal is bounded to1024 entries and the
-existing4MiB API response cap, with duplicate/shape checks, an8-second work deadline and stable
+existing4MiB API response cap, with duplicate/shape checks, a2-second work deadline and stable
 end-set readback.207-entry tests place the uncontained protected row last and require refusal;
-an oversized or changed set is terminal. Control timeout12s covers the work deadline plus a bounded
-3s Engine read. This fixes inventory capacity only: stability is NOT old-handler completion or
+an oversized or changed set is terminal. The original2s work and4s control deadlines are retained;
+the attempted8s/12s extension failed native enforcer-hang qualification and was removed, not waived.
+This fixes inventory capacity only: stability is NOT old-handler completion or
 initial admission coverage, and the result explicitly retains coverage=false.
 
 ## Exact qualification, 27 November 2026

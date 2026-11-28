@@ -1,6 +1,9 @@
 import json
 import os
 from pathlib import Path
+import socket
+import threading
+import time
 
 import pytest
 
@@ -100,6 +103,32 @@ def test_inventory_is_bounded_complete_and_stable(policy, monkeypatch, fault):
     with pytest.raises(ValueError, match='DOCKER_DOMAIN_CENSUS_'):
         policy.control('CLOSE')
     assert policy.phase == 'FAILED'
+
+
+def test_enforcer_hang_keeps_original_control_deadline(tmp_path):
+    from control.capture_docker_domain import DomainClient
+    path = tmp_path / 'control.sock'
+    listener = socket.socket(socket.AF_UNIX)
+    listener.bind(str(path))
+    listener.listen()
+    release = threading.Event()
+    def server():
+        channel, unused = listener.accept()
+        with channel:
+            channel.recv(8192)
+            release.wait(20)
+    worker = threading.Thread(target=server)
+    worker.start()
+    started = time.monotonic()
+    try:
+        with pytest.raises(TimeoutError):
+            DomainClient(path, 'fcfixture.slice').command('CLOSE')
+        assert time.monotonic() - started < 6
+    finally:
+        release.set()
+        listener.close()
+        worker.join(2)
+    assert not worker.is_alive()
 
 
 @pytest.mark.parametrize('path', ['/sys/fs/cgroup', '/proc', '/dev', 'config', 'journal'])
