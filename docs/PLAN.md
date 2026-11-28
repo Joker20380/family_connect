@@ -22,6 +22,13 @@ pre-enqueue cancellation and source-capsule/control-bound corrections are implem
 under the unchanged2s/4s bounds. Old initial dispatches are not covered by this component.
 **Single engineering NEXT:** executable disposable-VM cold kernel-generation/boot-interlock
 transition with bounded replacement-controller and exact installed-image/support-IPC recovery.
+28 November follow-up: durable source-only interlock and real VM kernel transition now execute;
+operation9fd9171a01717f98f6c1cc73f51ea043 has independent runtime-only readback (new data-root,
+AuthZ, systemd physical parent, immutable source/config pins, old runtime closed). Runtime active
+10.404432s after boot and image/enrollment recovery29.343414288s do not qualify application recovery.
+Missing acceptance is real support new authority/IPC, installed-image console/publisher/PG recovery,
+bounded replacement-controller fault matrix, capture/release and subsequent reboot ordering.
+Retain the earlier vfs capacity and cgroupfs physical-parent refusals; production scope is unchanged.
 Negative46086314293 proves that retiring dockerd/containerd leaves shim FD/mmap/rename effects;
 do not repeat census or call10.115s lab API return application/initial-transition acceptance.
 No production shared stop, reboot or AuthZ installation; wider scope review only after executable

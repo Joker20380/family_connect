@@ -1,5 +1,51 @@
 # HA-02 continuation and separate basic metadata candidate
 
+## 28 November continuation from b3d66cb5 — runtime checkpoint
+
+Local/remote entryb3d66cb59c92c9ad1a60a06f27232e8593be935b matched; no reset or installation.
+New A sources: durable `control/docker_cold.py`, lazy pre-daemon AuthZ activation wrapper,
+guest-only `tests/fixtures/docker_cold_guest.py` and regression tests. New-controller reconciliation
+does not replay an unknown effect or adopt a capture lease; atomic records retain first failures.
+Eight isolated journal/controller tests pass, including actual SIGKILL after a published effect
+and failure-record I/O preserving the original exception. The latter defensive error-record change
+is unit-qualified after the VM run, not retroactively included in its executed source closure.
+
+Private QEMU/KVM Ubuntu26.04 base SHA256
+7b90593f5532b49b7e3fe3d2743f0d1f0d822e5b07cebcd8e00c0df8069ecab9;
+Engine29.1.3 executable8f1c19d27e182ce6c82ddfd900d596195b0fd9d6740a9ff1ccac584e04355cb0.
+Image transfer80d175a2713f4e2b6c2f287a5368be1a249fe57a3041150358b0fa2ae37f10d3 contains the
+accepted console3af9fbf9/publisher35158514 and disposable PG/Python images. Loading those images
+is NOT restoring those applications.
+
+Actual cold runtime operation9fd9171a01717f98f6c1cc73f51ea043:
+oldboot392fb7de-7c4e-4b04-82ac-1cdb09fbf6b8 → b3f68919-fa73-457f-8fa6-5131ab4bd887.
+Old handler callbacks enter before reboot; persisted unless-stopped containers/old data-root
+are never reopened. New API denies unenrolled protected create, then starts a supported enrolled
+container; independent readback confirms its physical root cgroup, systemd driver, pinned AuthZ,
+exact sources and old-runtime inactivity. Runtime active10.404432s after boot; reader image/load/
+enrollment stage29.343414288s. Application/support/IPC recovery is explicitly false, not measured.
+Private independent runtime readback SHA256
+91ef17db9cccee473739d3054471814a2135c903c146db2c255ef6139af532cd;
+executed docker_cold.py5d495a6aa55f446ece5b2420c2b8492b948500288b0ba228e529d061659dce75.
+This is neither independent kit verification nor whole-transition acceptance.
+One local combined test run reports two207-container unit refusals (False/True); a targeted
+diagnostic run subsequently passes22/22. The first trace was not retained beyond failing test
+names, and the later success does not establish its cause or replace the exact-source CI gate.
+
+Original lab failures are retained: missing docker-proxy with default proxy=true; vfs capacity
+failure (full failed VM compressed and compared identical before reclaiming its uncompressed
+copy); cgroupfs physical-parent mismatch in operation6ef2e419577ff094b7269a7a70b0c920, whose
+first reason and internal disk snapshot remain. The corrected operation uses the actual installed
+systemd driver, not an expanded accepted-parent allowlist. No shared production daemon, neighbor,
+owner session, keys, data, boot units or gates were modified. No production holds or new baseline.
+
+Remaining A gate: executable whole-application recovery with real support new authority/generation,
+IPC and exact images/configuration, bounded VM fault/replacement matrix, normal capture/release,
+future reboot order and measured host-wide impact packet. No installed adapter/common kit/
+independent kit verification/linked resume or HA-02 acceptance. B changes are kept separate.
+
+## Historical entry and earlier checkpoints
+
 Current entry: feature/device-technical-metadata-20261115, local/remote
 8fa79a1307c1332d22560cb2145949402fab56a0; no newer change at entry. Earlier
 fa27314589a8c1ce611913dedbaa7e4da421aa02 entry remains historical evidence below.

@@ -1,5 +1,22 @@
 # Текущее состояние / Current state
 
+**28 November — cold-VM runtime checkpoint, not application recovery acceptance.**
+Entry local/remoteb3d66cb5 matched. New source-only durable transition/interlock and disposable
+Engine29.1.3 fixture executed a real kernel transition. Operation9fd9171a01717f98f6c1cc73f51ea043
+opens a new empty data-root with mandatory AuthZ/systemd cgroup admission; old persisted runtime
+stays closed. Independent runtime readback confirms pins, driver, physical parent and no old socket.
+Runtime unit enters active10.404432s after boot; enrollment/image recovery29.343414288s after the
+reader starts. These are NOT support, panel or full application recovery times. No installed OWNER
+adapter/kit/resume. VM/application qualification and the host-wide impact packet remain incomplete.
+Preserved local refusals: missing docker-proxy configuration, vfs image-import capacity, and
+LAB_PHYSICAL_PARENT with cgroupfs under a system service. Match the installed systemd driver;
+do not reinterpret that refused operation as accepted. Its disk snapshot and first reason remain.
+No production service, boot config, key, data or shared Docker change; no production holds.
+Single A NEXT remains exact-image/support-IPC application recovery inside this cold-VM procedure,
+including bounded replacement-controller, ordinary capture/release and subsequent reboot order.
+B lifecycle/disclosure work remains separate and uncommitted at this A checkpoint.
+
+**Historical checkpointb3d66cb5:**
 **28 November — source-only A/B corrections; initial Docker transition remains unqualified.**
 Entry local/remote8fa79a13 matched; accepted production components were not reinstalled.
 Installed-v1 has a frozen aa9ca52f source closure and unchanged HA pins/importer. Its native PG

@@ -1,5 +1,34 @@
 # Initial Docker generation transition — NOT AUTHORIZED / NOT QUALIFIED
 
+## Executable disposable-VM checkpoint (28 November)
+
+`control/docker_cold.py` stores immutable intent/effect/readback records, locks a controller,
+pins sources/Engine/configuration/units, and refuses the old kernel. A lost effect response is
+reconciled by a new process using independent readback; absent/changed effects are terminal,
+not replay permission. No record contains or transfers a capture lease. A further boot requires
+a new operation, not reuse of the previous kernel receipt. This is not yet an application boot
+coordinator or a production installer.
+
+`tests/fixtures/docker_cold_guest.py` requires a marked KVM/QEMU guest and the exact29.1.3 Engine
+binary. Commands `legacy`, `arm`, `attack`, `recover` use disposable data only. Arming writes
+interlocks for legacy Docker socket/service/containerd before enabling a separate policy/runtime
+unit. The new runtime uses a new **empty** data-root; it never imports legacy Docker/containerd
+task metadata. Load pinned images and enroll containers through the supported API with restart=no
+and the mandatory systemd parent. Do not edit Docker's internal container JSON. Business-data
+recovery and future automatic starts need a separately qualified application coordinator.
+
+Operation9fd9171a01717f98f6c1cc73f51ea043 actually crossed kernels with old FD/mmap/rename work,
+pre-hook Create/Mount callbacks and persisted unless-stopped settings. Old runtime remained
+interlocked. Independent reader confirms new root, AuthZ, source pins and the physical parent.
+The first cgroupfs attempt correctly refused LAB_PHYSICAL_PARENT: a relative parent beneath a
+system service was `/system.slice/fccold.slice`, not `/fccold.slice`. The installed driver is
+systemd; the corrected fixture uses that driver and pins its slice unit. Preserve both receipts.
+Runtime active10.404432s after boot and image/enrollment recovery29.343414288s are runtime-only
+measurements. Whole application recovery, fault matrix, ordinary capture/release, subsequent boot
+and complete impact packet remain NOT QUALIFIED. Do not request production scope on this basis.
+
+## Retained negative evidence and required full gate
+
 28 November exact-Engine negative retirement scenario (`--retire-control-processes`) is qualified
 at af113b020c0821990f081f2c50fae79f72b7dcdc, workflow46086314293 SUCCESS. Independent artifact
 reader checks15239555906/0f761c3849cb89c96f3957a8707aeee206d7be593e9043fb097f111ce50ca7e7,
