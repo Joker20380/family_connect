@@ -26,8 +26,10 @@ transition with bounded replacement-controller and exact installed-image/support
 operation9fd9171a01717f98f6c1cc73f51ea043 has independent runtime-only readback (new data-root,
 AuthZ, systemd physical parent, immutable source/config pins, old runtime closed). Runtime active
 10.404432s after boot and image/enrollment recovery29.343414288s do not qualify application recovery.
-Missing acceptance is real support new authority/IPC, installed-image console/publisher/PG recovery,
-bounded replacement-controller fault matrix, capture/release and subsequent reboot ordering.
+Replacement-controller SIGKILL/accepted-create response-loss reconciliation and same-boot enrolled
+domain capture/release now pass in the VM, without effect replay or lease adoption. Missing
+acceptance is real support new authority/IPC, installed-image console/publisher/PG recovery,
+remaining boot-interruption matrix, full application capture/release and subsequent reboot ordering.
 Retain the earlier vfs capacity and cgroupfs physical-parent refusals; production scope is unchanged.
 Separate B follow-up removes the enabling-click condition: visible disclosure draw plus durable
 commit precede automatic basic. Native API35 UI/refusal and fresh/prior system authorization

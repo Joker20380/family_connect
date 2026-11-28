@@ -14,6 +14,12 @@ do not reinterpret that refused operation as accepted. Its disk snapshot and fir
 No production service, boot config, key, data or shared Docker change; no production holds.
 Single A NEXT remains exact-image/support-IPC application recovery inside this cold-VM procedure,
 including bounded replacement-controller, ordinary capture/release and subsequent reboot order.
+Additional VM qualification now executes Docker create followed by controller SIGKILL, and a
+separate accepted-create/lost-response case. New processes reconcile exact ID/image/labels/mount/
+parent receipts without replaying the effect or inheriting a capture lease. An enrolled-domain
+capture/release runs in the same boot: graceful full-domain drain, physical freeze/check, denied
+start while held, unchanged files and linked domain restart. No domain hold remains. This is not
+the OWNER PG/SQLite/support capture or whole-application recovery; those and reboot order remain.
 B source-only follow-up: basic starts after a visible/focused disclosure draw and successful
 notice-state commit, without an enabling click; Close only dismisses. OFF, objection and fault
 guards remain. Real NVIDIA/API35 checks cover automatic reservation while the dialog stays open,

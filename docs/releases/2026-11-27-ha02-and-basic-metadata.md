@@ -2,6 +2,27 @@
 
 ## 28 November continuation from b3d66cb5 — runtime checkpoint
 
+### Replacement controller and ordinary enrolled-domain cycle
+
+Executable `tests/fixtures/docker_cold_reconcile.py` runs against the same disposable VM operation
+9fd9171a01717f98f6c1cc73f51ea043. An actual Docker create completes before SIGKILL (exit137);
+a new process reconciles its exact container/image/label/resource/parent evidence and the completed
+repeat does not issue another create. A separate create deliberately loses its reply (exit1,
+SYNTHETIC_RESPONSE_LOST_AFTER_CREATE); a replacement process preserves that first failure record
+and reconciles the actual effect. Neither returns the deceased controller's capture lease.
+
+The ordinary enrolled-domain cycle uses a fresh physical lease without another reboot. AuthZ
+closes admission, the graceful writer exits0, the entire domain drains and freezes, start is403,
+files remain unchanged, the same lease checks continuously, release is idempotent and the writer
+starts normally afterward. Private `replacement-and-cycle.log` and guest operation receipts retain
+all exits and exact bindings. This qualifies only executor-domain composition, NOT OWNER PG/SQLite,
+support, a coherent kit or whole-application recovery. No own domain hold remains. The previously
+reported VM core hash is unchanged; the later error-record defensive patch remains unit-only.
+
+Whole-application support/IPC recovery, console/publisher user checks, subsequent reboot ordering,
+boot-interruption qualification and measured full-host impact packet remain the single A NEXT.
+No production daemon, application, boot configuration or wider scope was changed.
+
 Local/remote entryb3d66cb59c92c9ad1a60a06f27232e8593be935b matched; no reset or installation.
 New A sources: durable `control/docker_cold.py`, lazy pre-daemon AuthZ activation wrapper,
 guest-only `tests/fixtures/docker_cold_guest.py` and regression tests. New-controller reconciliation
