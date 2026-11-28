@@ -24,7 +24,8 @@ killing dockerd/containerd leaves old shim FD/mmap/rename effects alive; do not 
 promote10.115s lab API recovery to initial coverage. No production shared stop, reboot or AuthZ
 installation; wider scope review only after executable recovery/impact qualification.
 B NVIDIA/KVM native storage, restored-binding, notice/Back/reentry and local auth-refusal subset
-passes; onPostResume fixes a reproduced disclosure reentry defect. Final-source APK/CI follows.
+passes; onPostResume fixes a reproduced disclosure reentry defect. Sourceba25c054 APK is built,
+privately hash/signature-checked; exact client/broad CI remains pending, not acceptance by inference.
 Authenticated synthetic backend, actual VPN independence and matching production-ID/signing-chain
 upgrade remain unaccepted. New B schema needs its own versioned HA restore contract; public flag,
 legal/store gates remain closed. No kit or HA-02 acceptance; installed components unchanged.

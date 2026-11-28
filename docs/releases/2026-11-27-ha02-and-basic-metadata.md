@@ -1,7 +1,8 @@
 # HA-02 continuation and separate basic metadata candidate
 
-Entry: feature/device-technical-metadata-20261115, local/remote
-fa27314589a8c1ce611913dedbaa7e4da421aa02; no newer change at entry.
+Current entry: feature/device-technical-metadata-20261115, local/remote
+8fa79a1307c1332d22560cb2145949402fab56a0; no newer change at entry. Earlier
+fa27314589a8c1ce611913dedbaa7e4da421aa02 entry remains historical evidence below.
 Main remains da94566acb770dc758a1e057f02bfef784585a75. Accepted installed components
 and source-only Docker111866ae are not reinstalled. A has production priority;
 B changes are separate source/candidate work, never a production binding change during A.
@@ -79,7 +80,7 @@ Phase0 failed artifact15237149062 is retained/read (SHA256
 6f3d6b8351817a4b9f7dad84f1a0ed750dfc452532836c66223c5524ca3c20a2), Linux15237569058 retained/read
 (414eab843a69484386af903f0ce974aa1fa19eddc58ea9c9a578edd600cde446). Source-only; no carrier installed.
 
-### B native-storage qualification checkpoint
+### Historical B native-storage source checkpoint (superseded by native results above)
 
 BasicMetadataStorageRuntimeTest compiles against the actual Android SharedPreferences/AtomicFile
 consumer, with test-only Context wrappers. Init/notice/reserve/ACK errors are injected both before
@@ -92,12 +93,15 @@ required because carrier code changed; the earlier ba569748 APK is not evidence 
 
 ### Docker inventory and finite retirement investigation
 
-Full inventory now covers207 rows, including a protected unenrolled final row; duplicate/over1024/
-changed sets refuse terminally, under4MiB/8-second bounds.42 focused checks pass. This is admission
-scope validation, explicitly not initial coverage. New exact-Engine harness mode kills/reaps the
-old control processes with pre-hook requests pending and checks actual detached-child FD/mmap/rename
-effects after their death, then bounds disposable API recovery. CI qualification is pending; no
-production daemon touched. The normal local sudo dialog is pending, not an authentication success.
+Full inventory covers207 rows, including a protected unenrolled final row; duplicate/over1024/
+changed sets refuse terminally under4MiB/2-second work bounds (the failed8s extension is historical).
+Exact-Engine46086314293 SUCCESS, independently checked artifact15239555906 SHA256
+0f761c3849cb89c96f3957a8707aeee206d7be593e9043fb097f111ce50ca7e7 and five af113b02 source hashes.
+Old shim-owned FD/mmap/rename effects continue after both control processes die: retirement
+0.005498427s, disposable API recovery10.115281063s. Initial coverage/maintenance remain false.
+Local normal-sudo run exits0, but its root-owned receipt was not independently reread; CI artifact
+is the accepted negative evidence. No production daemon touched. Lab API recovery is not panel/IPC
+or a replacement controller/application transition proof. No recovery kit was verified.
 Finite fallback is cold kernel-generation retirement plus a boot interlock, not an invented narrow
 online proof. It needs isolated VM/new-controller/application recovery qualification and explicit
 broader scope review before installation. No measured production outage budget is claimed.
@@ -107,7 +111,7 @@ broader scope review before installation. No measured production outage budget i
 0dc11ad9 broad CI46084776329/46084776392 fails because recovery/native capsules intentionally carry
 Python sources, not tests/*.txt: the new frozen fixture was absent after source removal. Artifact
 15239067681/adace812745433b59468a7fdef702e849179fde340603005338d0fba16b64ca1 preserves the exact
-FileNotFoundError. Move the identical aa9ca52f bytes into control/friends/technical_metadata_installed_v1.py,
+FileNotFoundError. f3777381 moves the identical aa9ca52f bytes into control/friends/technical_metadata_installed_v1.py,
 an existing supported source-root/type; no source/import allowlist is widened. The fixture remains
 explicitly loaded under its pinned legacy identity, never the production endpoint.
 
@@ -115,7 +119,13 @@ Native Docker46086314275 fails after the changed12s control timeout violates the
 enforcer-hang gate. Artifact15239236864/ede5565e9bffbd64319e0c3fbb3d4795bf6e8132a83c26c6e382a86a1b1ef03d
 retains the failure and successful normal-domain phase/cleanup. Restore original2s work/4s control
 deadlines and retain complete207-row traversal; new real hung-socket regression enforces the bound.
-No test deadline is increased or assertion dropped. Exact follow-up qualification remains required.
+No test deadline is increased or assertion dropped. Follow-up native46087459683 SUCCESS;
+independent artifact15240255408 SHA2567580178d660f55469dadfe1a0164f90a20086be3387ba6288e060fe1c22d6235
+matches all eight source files atf3777381, domain loss/cleanup receipts and unchanged coverage=false.
+56 local closure/domain checks pass. This is CI artifact verification, not recovery-kit verification.
+The0dc11ad9 failover build artifact15239267123 SHA256
+9e739591141364f6381f9b3a675ff859ba8a286baa587e3fd77604251bc57e7d independently shows the same
+missing frozen fixture in its root-owned source capsule. It is not guessed from the ordinary job.
 
 A is **not complete**: no installed OWNER executor adapter, common held interval, new stopped-support
 snapshot, encrypted fleet kit, independent kit verification or linked normal resume. The concrete
@@ -125,9 +135,23 @@ finite old-generation retirement/recovery is not qualified. A shared-window prop
 excluded neighboring containers and cannot be executed under project-only authorization. Next step
 is that isolated generation-retirement/recovery qualification, not another census or production stop.
 Existing HA AES key native read/preservation/real consumer now pass; it is not the current blocker.
-Normal baseline is preserved: fresh authenticated NL1/NL2 HTTPS/DNS/egress, panel login/pages and
-collector/timer cycles pass; support PID/archive/authority/generation and marker history remain.
-No own production restrictions remain because none were acquired. No reboot-startup claim.
+Production is untouched in this iteration; no new live-baseline PASS is claimed. The27 November
+NL1/NL2/panel/collector observations below are historical, not a fresh maintenance preflight.
+No own production restrictions were acquired. Own synthetic PG container/volume and NVIDIA emulator
+are stopped/removed (AVD/evidence retained); shared emulator lock is released. No reboot-startup claim.
+
+Current private B candidate: sourceba25c0543afeca81c2a004bc0f1ca54a62443873,
+com.familyconnect.app.metadata,126,0.1.18-beta126-basic-candidate,x86_64/debug.
+APK SHA2566d99e0d7aea7dcf0a88508c56c3afd6e039c36b8546a2d9ccac541879db81d50;
+instrumentation SHA256db872022dd0637f83c30e153ed457f7e297484d64cbbf7c3c882eeee74cb7860.
+Independent ZIP/native-library and apksigner readback confirms source closure and debug signer
+a159f53e421755eea528fa0af5d5cd34ef39892bf514b237aa65871cf6fffe64. Native restricted/awg closure
+at af194acb is unchanged through this UI source. Initial apksigner invocation lacked java in PATH;
+correct JDK-path verification is recorded separately, not hidden. Generated friends/release
+BuildConfig both retain BASIC_METADATA_APPROVED=false even with the debug-candidate property true.
+No public artifact, version catalog, installed client, server schema or binding changed.
+
+## Historical27 November23:20UTC checkpoint
 
 B has actual implementation and a privately retained arm64 debug candidate, **not public rollout
 acceptance**. Sourceba56974853b69e37330dc210edb678cd79cd6cb9, candidate SHA256

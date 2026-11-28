@@ -1,11 +1,15 @@
 # Initial Docker generation transition — NOT AUTHORIZED / NOT QUALIFIED
 
-28 November source follow-up adds an executable negative retirement scenario (`--retire-control-processes`)
-to the isolated exact-Engine harness. It kills and reaps dockerd/containerd while pre-hook create/start
-handlers are held, then tests an already detached shim-owned writer through its open FD, shared mmap
-and rename, and recovers only the disposable Engine. Until its independent result is accepted, it
-is a candidate, not proof. Even successful lab API recovery is not console/support recovery, and
-does not establish new-controller cleanup or a production window.
+28 November exact-Engine negative retirement scenario (`--retire-control-processes`) is qualified
+at af113b020c0821990f081f2c50fae79f72b7dcdc, workflow46086314293 SUCCESS. Independent artifact
+reader checks15239555906/0f761c3849cb89c96f3957a8707aeee206d7be593e9043fb097f111ce50ca7e7,
+all five exact source hashes, result and own-process cleanup. It kills/reaps dockerd/containerd
+with pre-hook create/start handlers held; detached shim-owned FD/mmap/rename writes continue.
+Control retirement took0.005498427s; disposable API recovery10.115281063s. The result is
+CONTROL_PROCESS_RETIREMENT_NOT_RUNTIME_FENCE, coverage=false, maintenance_window_qualified=false.
+These are not console/support recovery times or new-controller transition acceptance. The local
+normal sudo-authorized equivalent also exits0; its root-owned result was not independently read
+in that execution session. CI's independently read artifact is the accepted negative evidence.
 
 Finite architecture decision: do not promote either online hook attachment or control-process
 retirement to initial coverage. If the old generation cannot be placed under one independently
@@ -15,6 +19,14 @@ has host-wide impact beyond the14 containers and itself needs disposable-VM qual
 boot-time prevention of legacy automatic restart, durable failed phases and new-controller recovery)
 before any production scope request. No host reboot, interlock installation or shared stop is authorized
 or executed here. This is the finite fallback, not another census-based proposed proof.
+
+The boot interlock must run before Docker socket activation, daemon/containerd task recovery and
+all legacy automatic restart. A new boot ID alone is not enrollment: old persisted restart settings
+must not launch protected containers outside the mandatory parent. The replacement controller may
+reconcile a durable failed transition but cannot adopt its old capture lease. If these conditions
+are not met, keep the transition NO_CAPTURE and recover only through the separately qualified
+application path. No stock offline metadata rewrite, stale data rollback, timeout-based opening or
+unverified cold boot is accepted as that path. This executable VM/recovery stage is still missing.
 
 The27 November isolated stock Engine29.1.3 pre-hook test deliberately blocks Create/Mount
 inside a disposable volume driver, after the actual Engine handler accepted the request.
@@ -37,6 +49,22 @@ docker-current-private.json receipt. Names/configuration of neighbors are not pu
 Shared Docker shutdown would interrupt those14 explicitly excluded applications and PostgreSQL,
 not only console/publisher. Project maintenance authorization does **not** cover this action.
 Do not execute a global stop, socket disable, killall, reboot or containerd restart under this plan.
+
+## Impact packet status: not ready for scope approval
+
+| Boundary | Required behavior / current evidence |
+| --- | --- |
+| One-time impact | All17 running containers and shared Docker/containerd management, including14 excluded neighbors; cold-generation fallback additionally affects host services. No per-VPN isolation claim. |
+| Configuration | Preserve daemon `runtimes`, all other owners' policy/config, business volumes and exact installed images. Only Family Connect enrollment changes parent/restart settings after its gate passes. |
+| Downtime | Lab control retirement0.0055s/API return10.1153s measured; application/host recovery budget NOT QUALIFIED. No requested production window yet. |
+| Console dependency | Prepare accepted support runtime-directory ownership/mode, restore support/IPC, then exact installed console config; never base synthetic/seed_demo compose. Login and existing subscription pages are required. |
+| Neighbor API, policy alive | Reads, nonprotected create/start/exec/stop/restart/delete, logs/inspect and ordinary policy changes must stay supported; neighbor exec is already demonstrated. Full owner-specific operational acceptance still required. |
+| AuthZ unavailable | Native artifact15240255408: neighbor management API refuses while its running process survives. This is shared API unavailability, not per-project fail-isolation. |
+| Abort | Missing old-dispatch coverage, loss of same physical lease, unexpected image/mount/config, unbounded dependent recovery or missing owner coverage: NO_CAPTURE; preserve first failure and do not replay unknown work. |
+| Recovery | New controller reconciles durable phases and explicit external restrictions; code rollback must not overwrite business data. Installed-image/support/IPC/neighbor recovery remains unqualified for this transition. |
+
+Do not ask to stop the14 neighbors on the strength of this packet: measured full application
+recovery and the executable cold-generation/interlock procedure must precede that scope request.
 
 ## Candidate one-time window, still requiring isolated qualification
 

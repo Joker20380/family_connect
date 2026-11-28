@@ -22,7 +22,8 @@ Back/foreground disclosure checks pass. A deterministic synchronized UI regressi
 onCreate-only disclosure did not return after Back/Home; onPostResume fixes it. Sampling stays
 closed before notice; notice precedes reservation and local authentication refusal, with backoff
 and unchanged VPN status. This is not authenticated backend upload, traffic or production-ID upgrade
-acceptance. Public enablement remains false; final-source APK rebinding/CI follows this checkpoint.
+acceptance. Public enablement remains false. New x86_64 debug APK is bound toba25c054,
+SHA2566d99e0d7aea7dcf0a88508c56c3afd6e039c36b8546a2d9ccac541879db81d50; no owner app replaced.
 Docker207-entry complete traversal and terminal tail/change/overflow checks pass42/42 locally.
 Exact-Engine retirement46086314293 SUCCESS, independently read: old FD/mmap/rename writes survive
 dockerd/containerd death. Lab API recovery10.115s is not application recovery/initial coverage.
@@ -31,6 +32,7 @@ and readiness46087459696 SUCCESS. Full broad/native CI pending. Initial transiti
 or installed. No kit, production restrictions or existing key changes.
 207/17 native inventory qualification is now added to the isolated Engine gate, beyond the unit
 matrix; policy deadlines and fault assertions remain unchanged. Exact-source native result pending.
+Own isolated PG/emulator cleaned up; no production holds acquired or new live-baseline assertion.
 
 **Historical27 November23:20UTC — checkpoint: A common kit blocked; B candidate built, not release-ready.**
 Panel46081203523 SUCCESS on61537b1f5b7df2ecf0faf221a6d2bfedf8521923, including corrected
