@@ -60,10 +60,10 @@ public final class FriendsActivity extends LocalizedActivity {
     private long telemetryAttempt=-1,telemetrySession=-1;
     private boolean telemetryConnected;
     private final Runnable refresh=new Runnable(){public void run(){render();handler.postDelayed(this,500);}};
+    @Override protected void onPostResume(){super.onPostResume();TechnicalMetadataUpload.foreground(this);}
     @Override public void onCreate(Bundle state){
         super.onCreate(state);getWindow().addFlags(android.view.WindowManager.LayoutParams.FLAG_SECURE);transport=getPreferences(MODE_PRIVATE).getString("transport","auto");country=getPreferences(MODE_PRIVATE).getString("country","nl");
         TechnicalMetadataUpload.start(this);
-        handler.post(()->TechnicalMetadataUpload.foreground(this));
         String selectedGateway=getPreferences(MODE_PRIVATE).getString("gateway_id","");lastManualGateway=ControlFriendsCatalog.explicit(selectedGateway)?selectedGateway:"nl-amsterdam-1";
         country=GatewayPicker.target(country,lastManualGateway,transport);gatewayTargets=GatewayPicker.targets(transport);
         motion=getPreferences(MODE_PRIVATE).getBoolean("motion",true);activeCountry=getPreferences(MODE_PRIVATE).getString("session_country",country);

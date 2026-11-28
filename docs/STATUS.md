@@ -1,6 +1,6 @@
 # Текущее состояние / Current state
 
-**28 November — A/B schema correction in qualification, source-only.**
+**28 November00:30UTC — source-only A/B correction; native B subset accepted.**
 Entry local/remote8fa79a13 match. Completed215c7fcb phase046080709385/Linux46080709373 FAIL;
 client46080709374 FAIL at carrier cancellation; earlier records/artifacts retained.
 Implicit metadata ALTER removed; installed-v1 fixture uses pinned111866ae module bytes and old
@@ -9,24 +9,26 @@ installation is closed pending a new HA restore contract. Panel legacy higher-co
 cannot replace basic; revokes retain its policy floor.127 focused checks pass/12 PG skips;
 PG17.11 installed-v1 import/business/replay qualification55/55 and panel34/34 pass in a disposable
 database. Full exact-source CI pending. No production changes or new kit/holds.
-Active NEXT: deterministic carrier cancellation, then isolated finite initial Docker transition
-and basic Android runtime acceptance. Shared production Docker/neighbor stop remains excluded.
+Active engineering NEXT: qualify the cold-generation/boot-interlock Docker transition and bounded
+application recovery in a disposable VM. Shared production Docker/neighbor stop remains excluded.
 Carrier now rejects writes synchronously against the OpenTCP request context, before enqueue;
 delayed Reset cannot admit a post-cancel client-commit. Deterministic pre-fix refusal retained;
 focused race checks pass, including actual peer commit followed by cancellation/closed sessions.
 Broader local go test -race ./... fails separately in publisher-recovery configuration and Telemost
 local-process diagnostics/data race/idle deadline; full CI is not claimed green.
-0dc11ad9 exact panel46084776337/readiness46084776413 SUCCESS; broad/native runs pending.
-B native storage instrumentation compiles; prepare/verify phases cover separate process launches,
-init/notice/reserve/ACK failure before or after publication, oldOFF/revoke and missing binding.
-Runtime results/APK rebinding remain pending; this test-source checkpoint is not Android acceptance.
+0dc11ad9 panel46084776337/readiness46084776413/native-support46084776350 SUCCESS.
+B real NVIDIA/KVM Android: storage prepare/verify across a force-stop, API collection and
+Back/foreground disclosure checks pass. A deterministic synchronized UI regression finds that
+onCreate-only disclosure did not return after Back/Home; onPostResume fixes it. Sampling stays
+closed before notice; notice precedes reservation and local authentication refusal, with backoff
+and unchanged VPN status. This is not authenticated backend upload, traffic or production-ID upgrade
+acceptance. Public enablement remains false; final-source APK rebinding/CI follows this checkpoint.
 Docker207-entry complete traversal and terminal tail/change/overflow checks pass42/42 locally.
-New isolated retirement negative and bounded lab API recovery are queued for exact-Engine CI;
-no initial physical-generation transition is qualified or installed. Production unchanged.
-Follow-up CI refuses a missing frozen-v1 file in source-host-free capsules: relocate the identical
-pinned bytes under control/friends (already in the strict source closure). Preserve the refusal.
-Native Docker af113b02 fails enforcer-hang after the timeout extension; restore original2s/4s bounds
-and add a real hung-socket regression. Neither refusal is hidden by retries.
+Exact-Engine retirement46086314293 SUCCESS, independently read: old FD/mmap/rename writes survive
+dockerd/containerd death. Lab API recovery10.115s is not application recovery/initial coverage.
+Frozen-v1 capsule omission and extended control timeout corrected atf3777381; Docker46087459683
+and readiness46087459696 SUCCESS. Full broad/native CI pending. Initial transition not qualified
+or installed. No kit, production restrictions or existing key changes.
 
 **Historical27 November23:20UTC — checkpoint: A common kit blocked; B candidate built, not release-ready.**
 Panel46081203523 SUCCESS on61537b1f5b7df2ecf0faf221a6d2bfedf8521923, including corrected

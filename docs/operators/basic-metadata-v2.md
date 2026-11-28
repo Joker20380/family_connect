@@ -13,6 +13,15 @@ queue a payload-free revoke. These choices do not gate VPN, payment, updates or 
 optional diagnostic controls remain independent. A review/resume after objection requires the
 previous revoke acknowledgment first, then a new notice; the epoch is never raised to bypass it.
 
+28 November native candidate checks use an isolated `.metadata` package, NVIDIA host GPU and KVM.
+Disclosure is invoked onPostResume, not only onCreate: Back keeps NOTICE_PENDING, and returning
+to the same activity shows it again before sampling. The synchronized old-APK regression fails;
+the fixed UI passes. Native SharedPreferences/AtomicFile checks cover init/notice/reserve/ACK
+failure before and after publication, separate-process reopen, oldOFF/revoke and missing binding.
+After Understood, the real consumer reserves only after storing notice, rejects absent synthetic
+identity locally and retains backoff/VPN status. No authenticated synthetic backend transmission,
+VPN traffic independence or production-package/signature upgrade acceptance is implied.
+
 Wire schema2 on the existing authenticated `/friends/device/technical-metadata/v1` endpoint:
 `processing_mode=automatic_basic`, `policy_version=basic-2026-11-v1`, receipt
 `consent=not_requested`. The retained `consent_epoch` wire name is only the monotonic decision

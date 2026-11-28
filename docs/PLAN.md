@@ -16,21 +16,18 @@
 
 
 **CONTROL-HA-20261123 / HA-02 — IN_PROGRESS.**
-Current28 November: repair explicit installed-v1/B-schema boundaries and panel policy floor,
-qualify carrier cancellation ordering, then the same isolated initial Docker generation transition
-with bounded recovery and the existing B Android candidate. Production shared daemon/neighbor
-stop and AuthZ installation excluded. New B schema requires a new versioned HA restore contract;
-no importer weakening or automatic migration. No kit or HA-02 acceptance.
-Carrier pre-enqueue cancellation defect has a deterministic regression and synchronous transport
-fix; exact-source CI remains required. Preserve separate broad local Go failures. Continue the
-finite Docker transition and native Android gates, without any production shared-runtime action.
-B native storage test source compiles; run prepare and verify in distinct instrumentation processes
-on the NVIDIA/KVM isolated testbed. Do not count compilation as runtime or upgrade acceptance.
-Initial Docker transition still unqualified: run the new old-shim retirement counterexample on
-exact Engine, then qualify the finite cold-generation/interlock fallback if no common old-domain
-physical boundary exists. No further census substitutes, shared production stop or scope request.
-Close newly observed source-closure and enforcer-hang regressions before accepting final CI:
-frozen-v1 module must travel in the existing Python closure, and original control deadlines hold.
+Current28 November00:30UTC: A/B schema separation, panel floor, deterministic carrier pre-enqueue
+cancellation and capsule/control-bound follow-ups are implemented. Final broad CI remains a gate.
+Single engineering NEXT: disposable-VM cold kernel-generation/boot-interlock transition with
+bounded new-controller/application recovery. Exact Engine46086314293 independently proves that
+killing dockerd/containerd leaves old shim FD/mmap/rename effects alive; do not repeat census or
+promote10.115s lab API recovery to initial coverage. No production shared stop, reboot or AuthZ
+installation; wider scope review only after executable recovery/impact qualification.
+B NVIDIA/KVM native storage, restored-binding, notice/Back/reentry and local auth-refusal subset
+passes; onPostResume fixes a reproduced disclosure reentry defect. Final-source APK/CI follows.
+Authenticated synthetic backend, actual VPN independence and matching production-ID/signing-chain
+upgrade remain unaccepted. New B schema needs its own versioned HA restore contract; public flag,
+legal/store gates remain closed. No kit or HA-02 acceptance; installed components unchanged.
 
 Historical23:20UTC:
 Current23:20UTC checkpoint: A remains blocked by the initial pre-hook Docker execution channel,

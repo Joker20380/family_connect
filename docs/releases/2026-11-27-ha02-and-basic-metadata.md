@@ -6,7 +6,29 @@ Main remains da94566acb770dc758a1e057f02bfef784585a75. Accepted installed compon
 and source-only Docker111866ae are not reinstalled. A has production priority;
 B changes are separate source/candidate work, never a production binding change during A.
 
-## Current outcome —27 November23:20UTC
+## Current follow-up —28 November (source-only)
+
+### Native B runtime and disclosure correction
+
+The isolated x86_64 API35 emulator uses KVM and actual guest NVIDIA GTX1650Ti GLES, one emulator
+under the shared qualification lock. Storage prepare3/verify1 pass in separate instrumentation
+processes with an intervening force-stop; all eight before/after-publication fault states stay
+closed on reopening. Existing native API4 tests pass. OldOFF/pending revoke, missing installation
+binding, positive initialization and rejection of late sample ACK are exercised on real storage.
+
+A synchronized native UI test waits for notice dismissal and the actual launcher before reentry.
+The earlier APK then deterministically fails to show notice again; onPostResume instead of
+onCreate-only scheduling fixes this. The final UI test passes: sequence1/NOTICE_PENDING before
+and after Back; Understood persists the policy before sequence2, then the real consumer returns
+local AUTH_OR_CONTRACT_REFUSED for absent test identity. Another callback respects backoff; VPN
+status/health do not change. This does not establish authenticated backend upload or VPN traffic.
+Earlier unsynchronized Home/reentry attempts failed on both builds and remain as test evidence,
+not a claimed application cause. No timeout was increased or assertion dropped to obtain PASS.
+
+Source-only client change; no owner application/data touched. Public BASIC_METADATA_APPROVED stays
+false. Matching production application/signing upgrade, authenticated synthetic backend flow,
+legal/store basis and a new HA schema contract remain separate release gates. Final-source APK
+is rebound after this commit; ba569748/af113b02 APKs cannot prove the changed UI source.
 
 ### 28 November follow-up (source-only qualification)
 
