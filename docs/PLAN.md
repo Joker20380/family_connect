@@ -35,6 +35,10 @@ Retain46088511450 outer fixture timeout; qualify the changed lightweight stopped
 under the same deadlines before claiming207/17 native capacity.
 Close the concrete fixture reload-readback/ignored-DELETE defect found by that run; correlated
 reload completion plus checked API effects replace version-only readiness, never physical coverage.
+Before final B acceptance, qualify the public-disabled branch of the new native UI regression;
+the exactba25c054 client gate fails that package assertion, not carrier cancellation.
+Native public-disabled/candidate launcher regressions now pass locally; obtain the exact follow-up
+client workflow result before claiming the full Android gate.
 
 Historical23:20UTC:
 Current23:20UTC checkpoint: A remains blocked by the initial pre-hook Docker execution channel,

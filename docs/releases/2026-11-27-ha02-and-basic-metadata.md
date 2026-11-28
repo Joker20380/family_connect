@@ -34,6 +34,20 @@ cleanup; its cause is not inferred. Full207-row count is now recorded before its
 
 ### Native B runtime and disclosure correction
 
+ba25c054 client46088130879: carrier race, JVM, builds and lint PASS; full Android lifecycle gate
+FAILS the new BasicMetadataUiRuntimeTest candidate-only `.metadata` assertion in ordinary `.pilot`.
+Artifact15240886398 SHA2565341af88f6539dbb047c796988bb40d8f804efc60aec0546e63aeed3b2f33e80
+retains the exact single failure (78 instrumentation cases). This is a test applicability defect,
+not a reproduced transport failure. Replace the unconditional package assertion with the exact
+flag/package relationship and real public-disabled checks: no notice, no sequence reservation or
+network callback even after a stored notice. Candidate branch keeps its Back/reentry/upload-order
+assertions; no Assume, skip or assertion deletion is used to claim native acceptance.
+Local real NVIDIA/KVM qualification passes both public-disabled and candidate branches. The first
+public-disabled attempt also exposed that `.pilot` declares MainActivity, not FriendsActivity;
+the test now launches the actual manifest launcher instead of assuming the candidate's activity.
+That ActivityNotFoundException is retained separately. The changed instrumentation is rebuilt and
+rerun; it does not replace or update the owner's application. Final exact-source client CI follows.
+
 The isolated x86_64 API35 emulator uses KVM and actual guest NVIDIA GTX1650Ti GLES, one emulator
 under the shared qualification lock. Storage prepare3/verify1 pass in separate instrumentation
 processes with an intervening force-stop; all eight before/after-publication fault states stay

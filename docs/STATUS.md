@@ -40,6 +40,12 @@ The next native42cbe406 refusal exposes stale-policy DELETE denials ignored by s
 fixture now waits for that daemon's new reload-completion record and requires DELETE204 plus
 empty readback. Exact Engine source shows `/info` authorization can remain stale after reload;
 it is not used as effective-policy evidence. No mutation retry or physical-coverage inference.
+Full f3777381 phase046087459691/native-support46087459733 SUCCESS. ba25c054 client46088130879
+passes carrier race/JVM/build/lint but fails the new UI test's candidate-only package assertion in
+the ordinary public-disabled variant. Fix test coverage to assert that variant cannot sample even
+with stored notice, without skipping it; native candidate notice assertions remain intact.
+Both corrected branches now pass on the isolated NVIDIA/KVM emulator, using their actual manifest
+launchers. Final exact-source client CI still required; the original package/launcher failures stay.
 Own isolated PG/emulator cleaned up; no production holds acquired or new live-baseline assertion.
 
 **Historical27 November23:20UTC — checkpoint: A common kit blocked; B candidate built, not release-ready.**

@@ -27,7 +27,7 @@ public class BasicMetadataUiRuntimeTest {
     }
     @Test public void backAndForegroundKeepNoticeBeforeSampling() throws Exception {
         assertEquals("ranchu", Build.HARDWARE);
-        assertTrue(BuildConfig.APPLICATION_ID.endsWith(".metadata"));
+        assertEquals(BuildConfig.BASIC_METADATA_APPROVED, BuildConfig.APPLICATION_ID.endsWith(".metadata"));
         Instrumentation instrumentation = InstrumentationRegistry.getInstrumentation();
         BasicMetadataStorageRuntimeTest.Storage storage = new BasicMetadataStorageRuntimeTest.Storage("metadata-ui-" + UUID.randomUUID());
         Constructor<TechnicalMetadataUpload> constructor = TechnicalMetadataUpload.class.getDeclaredConstructor(Context.class);
@@ -41,9 +41,26 @@ public class BasicMetadataUiRuntimeTest {
         changed.invoke(upload);
         assertFalse(storage.actual().contains("notice_policy"));
         assertEquals(1, storage.actual().getLong("sequence", 0));
-        Intent intent = new Intent(instrumentation.getTargetContext(), FriendsActivity.class)
-            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        Intent intent = instrumentation.getTargetContext().getPackageManager()
+            .getLaunchIntentForPackage(BuildConfig.APPLICATION_ID);
+        assertNotNull(intent);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         instrumentation.getTargetContext().startActivity(intent);
+        instrumentation.waitForIdleSync();
+        if (!BuildConfig.BASIC_METADATA_APPROVED) {
+            assertFalse(notice(instrumentation));
+            Field policyField = TechnicalMetadataUpload.class.getDeclaredField("policy");
+            policyField.setAccessible(true);
+            TechnicalMetadataPolicy policy = (TechnicalMetadataPolicy) policyField.get(upload);
+            assertTrue(policy.noticeShown(true));
+            changed.invoke(upload);
+            assertEquals(1, storage.actual().getLong("sequence", 0));
+            Field callback = TechnicalMetadataUpload.class.getDeclaredField("callback");
+            callback.setAccessible(true);
+            assertNull(callback.get(upload));
+            assertFalse(notice(instrumentation));
+            return;
+        }
         requireNotice(instrumentation);
         assertEquals("NOTICE_PENDING", storage.actual().getString("mode", ""));
         assertEquals(1, storage.actual().getLong("sequence", 0));
