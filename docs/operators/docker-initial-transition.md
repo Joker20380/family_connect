@@ -1,5 +1,21 @@
 # Initial Docker generation transition — NOT AUTHORIZED / NOT QUALIFIED
 
+28 November source follow-up adds an executable negative retirement scenario (`--retire-control-processes`)
+to the isolated exact-Engine harness. It kills and reaps dockerd/containerd while pre-hook create/start
+handlers are held, then tests an already detached shim-owned writer through its open FD, shared mmap
+and rename, and recovers only the disposable Engine. Until its independent result is accepted, it
+is a candidate, not proof. Even successful lab API recovery is not console/support recovery, and
+does not establish new-controller cleanup or a production window.
+
+Finite architecture decision: do not promote either online hook attachment or control-process
+retirement to initial coverage. If the old generation cannot be placed under one independently
+held physical ancestor with all dispatches covered, require a cold kernel-generation transition
+under a boot-time Docker admission interlock; a different dockerd PID is insufficient. That fallback
+has host-wide impact beyond the14 containers and itself needs disposable-VM qualification (including
+boot-time prevention of legacy automatic restart, durable failed phases and new-controller recovery)
+before any production scope request. No host reboot, interlock installation or shared stop is authorized
+or executed here. This is the finite fallback, not another census-based proposed proof.
+
 The27 November isolated stock Engine29.1.3 pre-hook test deliberately blocks Create/Mount
 inside a disposable volume driver, after the actual Engine handler accepted the request.
 No HTTP proxy or AuthZ hook delays these initial requests. Containers use protected Binds,

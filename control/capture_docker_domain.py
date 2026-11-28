@@ -15,6 +15,8 @@ from control.capture_native import fingerprint, record, require
 
 
 class DomainAdmission(Admission):
+    inventory_limit = 1024
+    inventory_seconds = 8
     def __init__(self, *args, parent, **kwargs):
         require(re.fullmatch(r'fc[a-z0-9]+\.slice', parent), 'DOCKER_DOMAIN_PARENT')
         self.parent = parent
@@ -55,13 +57,20 @@ class DomainAdmission(Admission):
         result = super().control(command)
         if command in ('CLOSE', 'CHECK') and result['phase'] == 'CLOSED':
             try:
-                deadline = time.monotonic() + 2
+                deadline = time.monotonic() + self.inventory_seconds
                 rows = self.scope.engine.get('/containers/json?all=1')
-                require(isinstance(rows, list) and len(rows) <= 128, 'DOCKER_DOMAIN_CENSUS_BOUNDS')
+                require(isinstance(rows, list) and len(rows) <= self.inventory_limit, 'DOCKER_DOMAIN_CENSUS_BOUNDS')
+                identities = [row.get('Id') for row in rows if isinstance(row, dict)]
+                require(len(identities) == len(rows) and all(isinstance(value, str) and value for value in identities)
+                        and len(set(identities)) == len(identities), 'DOCKER_DOMAIN_CENSUS_INVALID')
                 for row in rows:
                     require(time.monotonic() < deadline, 'DOCKER_DOMAIN_CHECK_DEADLINE')
                     if self.scope.container(row['Id']):
                         self.enrolled(self.scope.engine.get('/containers/' + row['Id'] + '/json')['HostConfig'])
+                after = self.scope.engine.get('/containers/json?all=1')
+                require(isinstance(after, list) and len(after) == len(rows) and
+                        sorted(row.get('Id', '') for row in after if isinstance(row, dict)) == sorted(identities),
+                        'DOCKER_DOMAIN_CENSUS_CHANGED')
                 require(time.monotonic() < deadline, 'DOCKER_DOMAIN_CHECK_DEADLINE')
             except BaseException as error:
                 self.fail(error)
@@ -75,9 +84,9 @@ class DomainClient:
         self.lease = None
 
     def command(self, command):
-        connection = http.client.HTTPConnection('localhost', timeout=4)
+        connection = http.client.HTTPConnection('localhost', timeout=12)
         channel = socket.socket(socket.AF_UNIX)
-        channel.settimeout(4)
+        channel.settimeout(12)
         try:
             channel.connect(self.path)
             connection.sock = channel

@@ -4,6 +4,13 @@ Selected HA-02 NEXT: executor admission **and** lifetime containment. AuthZ is a
 management-path change, not a per-project failure-isolated service. No fleet capture permit is
 issued by `control.capture_docker`; CLOSE means admission only, never HELD writers.
 
+28 November candidate: full `/containers/json?all=1` traversal is bounded to1024 entries and the
+existing4MiB API response cap, with duplicate/shape checks, an8-second work deadline and stable
+end-set readback.207-entry tests place the uncontained protected row last and require refusal;
+an oversized or changed set is terminal. Control timeout12s covers the work deadline plus a bounded
+3s Engine read. This fixes inventory capacity only: stability is NOT old-handler completion or
+initial admission coverage, and the result explicitly retains coverage=false.
+
 ## Exact qualification, 27 November 2026
 
 Installed Engine29.1.3, Ubuntu build29.1.3-0ubuntu4.1, binary SHA256

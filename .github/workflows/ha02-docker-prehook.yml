@@ -51,6 +51,30 @@ jobs:
           assert not result['production_modified'] and not result['initial_admission_coverage_proven']
           assert json.loads((root / 'cleanup.json').read_bytes()) == dict(own_processes_exited=True, production_modified=False, capture_lease_adopted=False)
           PY
+      - name: Old shims after bounded control-process retirement
+        run: |
+          sudo timeout -k10 180 env PATH="$RUNNER_TEMP/docker-runtime/usr/bin:$PATH" PYTHONDONTWRITEBYTECODE=1 \
+            /usr/bin/python3 tests/fixtures/docker_prehook_transition.py --root "$RUNNER_TEMP/fc-owner-executor-retired" \
+            --dockerd "$RUNNER_TEMP/docker-runtime/usr/bin/dockerd" \
+            --containerd "$RUNNER_TEMP/docker-runtime/usr/bin/containerd" --retire-control-processes
+      - name: Independent retirement and lab recovery readback
+        if: always()
+        run: |
+          sudo chmod -R a+rX "$RUNNER_TEMP/fc-owner-executor-retired" || true
+          python - <<'PY'
+          import hashlib, json, os
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP']) / 'fc-owner-executor-retired'
+          value = json.loads((root / 'result.json').read_bytes())
+          assert value['source']['head'] == os.environ['GITHUB_SHA']
+          assert all(hashlib.sha256(Path(name).read_bytes()).hexdigest() == digest for name, digest in value['source']['files'].items())
+          assert value['conclusion'] == 'CONTROL_PROCESS_RETIREMENT_NOT_RUNTIME_FENCE'
+          assert value['old_fd_mmap_rename_after_daemons_exited']
+          assert not value['initial_admission_coverage_proven'] and not value['maintenance_window_qualified']
+          assert 0 < value['control_process_retirement_seconds'] < 12
+          assert 0 < value['lab_api_recovery_seconds'] < 30
+          assert json.loads((root / 'cleanup.json').read_bytes())['own_processes_exited']
+          PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -59,4 +83,7 @@ jobs:
             ${{ runner.temp }}/fc-owner-executor-prehook/result.json
             ${{ runner.temp }}/fc-owner-executor-prehook/cleanup.json
             ${{ runner.temp }}/fc-owner-executor-prehook/*.log
+            ${{ runner.temp }}/fc-owner-executor-retired/result.json
+            ${{ runner.temp }}/fc-owner-executor-retired/cleanup.json
+            ${{ runner.temp }}/fc-owner-executor-retired/*.log
           if-no-files-found: error

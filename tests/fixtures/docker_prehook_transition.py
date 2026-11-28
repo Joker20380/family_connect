@@ -70,6 +70,7 @@ def main():
     parser.add_argument('--root', type=Path, required=True)
     parser.add_argument('--dockerd', default='/usr/bin/dockerd')
     parser.add_argument('--containerd', default='/usr/bin/containerd')
+    parser.add_argument('--retire-control-processes', action='store_true')
     args = parser.parse_args()
     root = args.root.absolute()
     assert os.geteuid() == 0 and root.name.startswith('fc-owner-executor-') and not root.exists()
@@ -112,14 +113,16 @@ def main():
             '\nstate = ' + json.dumps(str(runtime / 'ctr-state')) +
             '\ndisabled_plugins = ["io.containerd.cri.v1.images", "io.containerd.cri.v1.runtime"]\n[grpc]\naddress = ' +
             json.dumps(str(runtime / 'containerd.sock')) + '\n')
-        spawn([args.containerd, '--config', str(root / 'containerd.toml')], 'containerd')
+        containerd_command = [args.containerd, '--config', str(root / 'containerd.toml')]
+        containerd = spawn(containerd_command, 'containerd')
         wait(lambda: (runtime / 'containerd.sock').exists())
-        daemon = spawn([args.dockerd, '--host=unix://' + str(runtime / 'docker.sock'),
+        daemon_command = [args.dockerd, '--host=unix://' + str(runtime / 'docker.sock'),
             '--containerd=' + str(runtime / 'containerd.sock'), '--containerd-namespace=fc-prehook-lab',
             '--containerd-plugins-namespace=fc-prehook-lab-plugins', '--data-root=' + str(root / 'engine-data'),
             '--exec-root=' + str(runtime / 'exec'), '--pidfile=' + str(runtime / 'docker.pid'),
             '--config-file=' + str(config), '--storage-driver=vfs', '--bridge=none', '--iptables=false',
-            '--ip6tables=false', '--ip-masq=false', '--ip-forward=false'], 'daemon')
+            '--ip6tables=false', '--ip-masq=false', '--ip-forward=false']
+        daemon = spawn(daemon_command, 'daemon')
         wait(lambda: engine.json('GET', '/version')['Version'] == '29.1.3')
         assert engine.json('GET', '/info')['DockerRootDir'] == str(root / 'engine-data')
         installed = json.loads(subprocess.check_output(['docker', 'image', 'inspect', IMAGE], timeout=10))[0]
@@ -141,6 +144,30 @@ def main():
         assert old_value['HostConfig']['RestartPolicy']['Name'] == 'unless-stopped'
         result['old_container'] = old
 
+        if args.retire_control_processes:
+            writer = engine.json('POST', '/containers/create?name=prior-writer', dict(Image=IMAGE,
+                Cmd=['sleep', 'infinity'], HostConfig=dict(NetworkMode='none',
+                    RestartPolicy=dict(Name='unless-stopped'), Binds=[str(root / 'protected') + ':/data'])), 201)['Id']
+            engine.call('POST', '/containers/' + writer + '/start')
+            program = '''import os,time,mmap
+if os.fork(): os._exit(0)
+os.setsid()
+descriptor=os.open('/data/old-fd',os.O_CREAT|os.O_WRONLY|os.O_APPEND,0o600)
+mapped=os.open('/data/old-mmap',os.O_CREAT|os.O_RDWR,0o600)
+os.ftruncate(mapped,4096)
+memory=mmap.mmap(mapped,4096)
+while True:
+ os.write(descriptor,b'x');memory[0:8]=str(time.monotonic_ns()).encode()[-8:];memory.flush()
+ with open('/data/temporary','w') as target: target.write(str(time.monotonic_ns()))
+ os.replace('/data/temporary','/data/renamed')
+ time.sleep(.02)
+'''
+            execution = engine.json('POST', '/containers/' + writer + '/exec',
+                dict(Cmd=['python', '-c', program], AttachStdout=False, AttachStderr=False), 201)['Id']
+            engine.call('POST', '/exec/' + execution + '/start', dict(Detach=True))
+            wait(lambda: (root / 'protected/old-fd').exists())
+            result['writer'] = writer
+
         def request(label, route, value=None):
             try:
                 status, raw = engine.call('POST', route, value)
@@ -154,6 +181,31 @@ def main():
             thread.start()
         wait(lambda: (root / 'Create-entered').exists() and (root / 'Mount-entered').exists())
         assert not (root / 'protected/started').exists()
+        if args.retire_control_processes:
+            started = time.monotonic()
+            try:
+                for process in (daemon, containerd):
+                    process.kill()
+                    process.wait(5)
+                result['control_process_retirement_seconds'] = time.monotonic() - started
+                before = {name: (root / 'protected' / name).read_bytes() for name in ('old-fd', 'old-mmap', 'renamed')}
+                for phase in ('Create', 'Mount'):
+                    (root / (phase + '-release')).touch()
+                for thread in threads:
+                    thread.join(12)
+                    assert not thread.is_alive()
+                wait(lambda: all((root / 'protected' / name).read_bytes() != raw for name, raw in before.items()))
+                result.update(old_fd_mmap_rename_after_daemons_exited=True, requests=requests,
+                    conclusion='CONTROL_PROCESS_RETIREMENT_NOT_RUNTIME_FENCE', maintenance_window_qualified=False)
+                (root / 'result.json').write_text(json.dumps(result))
+            finally:
+                recovery_started = time.monotonic()
+                containerd = spawn(containerd_command, 'containerd-recovery')
+                daemon = spawn(daemon_command, 'daemon-recovery')
+                wait(lambda: engine.json('GET', '/version')['Version'] == '29.1.3')
+                result['lab_api_recovery_seconds'] = time.monotonic() - recovery_started
+                (root / 'result.json').write_text(json.dumps(result))
+            return
         spawn([sys.executable, '-m', 'control.capture_docker', '--socket', str(paths[1]),
             '--engine', str(runtime / 'docker.sock'), '--pidfile', str(runtime / 'docker.pid'),
             '--daemon-config', str(config), '--journal', str(root / 'authz'), '--protect', str(root / 'protected')], 'authz')

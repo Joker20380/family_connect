@@ -20,6 +20,9 @@ local-process diagnostics/data race/idle deadline; full CI is not claimed green.
 B native storage instrumentation compiles; prepare/verify phases cover separate process launches,
 init/notice/reserve/ACK failure before or after publication, oldOFF/revoke and missing binding.
 Runtime results/APK rebinding remain pending; this test-source checkpoint is not Android acceptance.
+Docker207-entry complete traversal and terminal tail/change/overflow checks pass42/42 locally.
+New isolated retirement negative and bounded lab API recovery are queued for exact-Engine CI;
+no initial physical-generation transition is qualified or installed. Production unchanged.
 
 **Historical27 November23:20UTC — checkpoint: A common kit blocked; B candidate built, not release-ready.**
 Panel46081203523 SUCCESS on61537b1f5b7df2ecf0faf221a6d2bfedf8521923, including corrected

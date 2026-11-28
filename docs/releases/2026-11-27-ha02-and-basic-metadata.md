@@ -62,6 +62,18 @@ ACK are covered. Compilation passes; runtime/device/UI/backend/upgrade acceptanc
 No production code or public flag changed in this checkpoint. A new source-bound APK is still
 required because carrier code changed; the earlier ba569748 APK is not evidence for this source.
 
+### Docker inventory and finite retirement investigation
+
+Full inventory now covers207 rows, including a protected unenrolled final row; duplicate/over1024/
+changed sets refuse terminally, under4MiB/8-second bounds.42 focused checks pass. This is admission
+scope validation, explicitly not initial coverage. New exact-Engine harness mode kills/reaps the
+old control processes with pre-hook requests pending and checks actual detached-child FD/mmap/rename
+effects after their death, then bounds disposable API recovery. CI qualification is pending; no
+production daemon touched. The normal local sudo dialog is pending, not an authentication success.
+Finite fallback is cold kernel-generation retirement plus a boot interlock, not an invented narrow
+online proof. It needs isolated VM/new-controller/application recovery qualification and explicit
+broader scope review before installation. No measured production outage budget is claimed.
+
 A is **not complete**: no installed OWNER executor adapter, common held interval, new stopped-support
 snapshot, encrypted fleet kit, independent kit verification or linked normal resume. The concrete
 unclosed channel is create/start already accepted before first AuthZ attachment, with downstream

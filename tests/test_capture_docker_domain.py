@@ -58,6 +58,50 @@ def test_prior_unenrolled_container_terminalizes_close(policy):
     assert json.loads((policy.journal / 'failed').read_bytes())['reason'] == 'DOCKER_DOMAIN_NOT_ENROLLED'
 
 
+@pytest.mark.parametrize('tail_unenrolled', [False, True])
+def test_complete_207_container_inventory_includes_tail(policy, monkeypatch, tail_unenrolled):
+    original = policy.scope.engine.get
+    inspected = set()
+    def get(path):
+        if path == '/containers/json?all=1':
+            return [dict(Id=f'container-{index}') for index in range(207)]
+        if path.startswith('/containers/container-'):
+            inspected.add(path.split('/')[2])
+            value = original('/containers/protected/json')
+            if path == '/containers/container-206/json' and tail_unenrolled:
+                value['HostConfig']['CgroupParent'] = ''
+            return value
+        return original(path)
+    monkeypatch.setattr(policy.scope.engine, 'get', get)
+    if tail_unenrolled:
+        with pytest.raises(ValueError, match='DOCKER_DOMAIN_NOT_ENROLLED'):
+            policy.control('CLOSE')
+        assert policy.phase == 'FAILED'
+    else:
+        result = policy.control('CLOSE')
+        assert result['phase'] == 'CLOSED' and not result['initial_admission_coverage_proven']
+    assert len(inspected) == 207
+
+
+@pytest.mark.parametrize('fault', ['oversize', 'duplicate', 'changed'])
+def test_inventory_is_bounded_complete_and_stable(policy, monkeypatch, fault):
+    original = policy.scope.engine.get
+    reads = []
+    def get(path):
+        if path != '/containers/json?all=1':
+            return original(path)
+        reads.append(path)
+        if fault == 'oversize':
+            return [dict(Id=str(index)) for index in range(1025)]
+        if fault == 'duplicate':
+            return [dict(Id='protected'), dict(Id='protected')]
+        return [dict(Id='protected')] if len(reads) == 1 else []
+    monkeypatch.setattr(policy.scope.engine, 'get', get)
+    with pytest.raises(ValueError, match='DOCKER_DOMAIN_CENSUS_'):
+        policy.control('CLOSE')
+    assert policy.phase == 'FAILED'
+
+
 @pytest.mark.parametrize('path', ['/sys/fs/cgroup', '/proc', '/dev', 'config', 'journal'])
 def test_indirect_control_mount_is_not_an_unprotected_neighbor(policy, path):
     source = policy.config if path == 'config' else policy.journal if path == 'journal' else Path(path)
