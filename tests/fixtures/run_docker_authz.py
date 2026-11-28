@@ -226,7 +226,7 @@ def main():
             time.sleep(.2)
             subprocess.run([sys.executable, 'tests/fixtures/docker_domain_checks.py', '--engine', str(runtime / 'docker.sock'),
                 '--plugin', str(path), '--root', str(root), '--parent', parent, '--mode', mode,
-                '--enforcer', str(enforcer.pid)], check=True, timeout=45,
+                '--enforcer', str(enforcer.pid)], check=True, timeout=120 if mode == 'normal' else 45,
                 env={**os.environ, 'PYTHONPATH': str(Path.cwd()), 'PYTHONDONTWRITEBYTECODE': '1'})
             results['domain'][mode] = json.loads((root / ('domain-' + mode + '.json')).read_bytes())
             configuration([])

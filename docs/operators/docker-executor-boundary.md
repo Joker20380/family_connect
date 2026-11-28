@@ -11,6 +11,10 @@ an oversized or changed set is terminal. The original2s work and4s control deadl
 the attempted8s/12s extension failed native enforcer-hang qualification and was removed, not waived.
 This fixes inventory capacity only: stability is NOT old-handler completion or
 initial admission coverage, and the result explicitly retains coverage=false.
+The native follow-up also creates207 disposable containers/17 running to exercise real Engine
+inspection under those unchanged2s/4s policy bounds. Only normal fixture setup gets120s (creating
+206 extra disposable containers); hang/death assertions and their45s outer bound stay unchanged.
+Its measured acquisition is recorded separately from initial-transition/production downtime.
 
 ## Exact qualification, 27 November 2026
 

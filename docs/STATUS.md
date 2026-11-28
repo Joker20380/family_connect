@@ -29,6 +29,8 @@ dockerd/containerd death. Lab API recovery10.115s is not application recovery/in
 Frozen-v1 capsule omission and extended control timeout corrected atf3777381; Docker46087459683
 and readiness46087459696 SUCCESS. Full broad/native CI pending. Initial transition not qualified
 or installed. No kit, production restrictions or existing key changes.
+207/17 native inventory qualification is now added to the isolated Engine gate, beyond the unit
+matrix; policy deadlines and fault assertions remain unchanged. Exact-source native result pending.
 
 **Historical27 November23:20UTC — checkpoint: A common kit blocked; B candidate built, not release-ready.**
 Panel46081203523 SUCCESS on61537b1f5b7df2ecf0faf221a6d2bfedf8521923, including corrected

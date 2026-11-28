@@ -8,6 +8,12 @@ B changes are separate source/candidate work, never a production binding change 
 
 ## Current follow-up —28 November (source-only)
 
+Native inventory follow-up adds207 disposable containers,17 running, to the exact-Engine domain
+fixture. It exercises the actual API rather than treating a fake207-row list as latency proof.
+Normal setup budget becomes120s solely for206 additional container creates; policy2s/4s and fault
+phase45s/<6s bounds remain unchanged. Final acquisition measurement/native CI is pending at commit.
+This does not improve initial_admission_coverage_proven or authorize shared-runtime maintenance.
+
 ### Native B runtime and disclosure correction
 
 The isolated x86_64 API35 emulator uses KVM and actual guest NVIDIA GTX1650Ti GLES, one emulator

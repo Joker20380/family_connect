@@ -34,6 +34,14 @@ def run(engine, plugin, root, parent):
     assert engine.call('POST', '/containers/create?name=fc-authz-bypass', rejected)[0] == 403
     container = engine.json('POST', '/containers/create?name=fc-authz-domain', base, 201)['Id']
     engine.json('POST', '/containers/' + container + '/start', expected=204)
+    for index in range(206):
+        neighbor = engine.json('POST', '/containers/create?name=fc-authz-inventory-' + str(index),
+            dict(Image='python:3.12-slim-bookworm', Cmd=['sleep', '300'],
+                HostConfig=dict(NetworkMode='none', RestartPolicy=dict(Name='no'))), 201)['Id']
+        if index < 16:
+            engine.json('POST', '/containers/' + neighbor + '/start', expected=204)
+    inventory = engine.json('GET', '/containers/json?all=1')
+    assert len(inventory) == 207 and sum(row['State'] == 'running' for row in inventory) == 17
     assert engine.call('POST', '/containers/' + container + '/update',
         dict(RestartPolicy=dict(Name='always')))[0] == 403
     child_code = ('import os,time,mmap,signal\n'
@@ -59,7 +67,9 @@ def run(engine, plugin, root, parent):
     client = DomainClient(plugin, parent)
     with LaunchLock(lock_path, expected) as launch:
         boundary = ExecutorBoundary(client, launch, directory, root / 'executor-boundary')
+        started = time.monotonic()
         boundary.acquire()
+        acquisition_seconds = time.monotonic() - started
         assert boundary.check() == boundary.lease
         assert (source / 'domain-child-finished').exists()
         assert (source / 'domain-fd').read_bytes().startswith(b'clean')
@@ -78,6 +88,7 @@ def run(engine, plugin, root, parent):
     state = engine.json('GET', '/containers/' + container + '/json')['State']
     assert not state['Running'] and state['ExitCode'] == 0
     return dict(resource_domain_parent=parent, clean_full_domain=True, old_fd_mmap_child='GRACEFUL_EXIT_BEFORE_HELD',
+        complete_inventory=207, initial_running=17, acquisition_seconds=acquisition_seconds,
         automatic_restart_policy='DENIED_BEFORE_HOLD', direct_start_create='DENIED_WHILE_HELD',
         same_cgroup_lease=True, repeat_release='NO_EFFECT_REPLAY', normal_container_resume=True,
         initial_production_admission_coverage=False, installed_owner_adapter=False, common_kit=False)

@@ -57,6 +57,8 @@ jobs:
           cleanup = json.loads((root / 'fc-owner-executor-ci/cleanup.json').read_bytes())
           assert cleanup == dict(errors=[], primary=None, own_children_exited=True)
           assert not receipt['production_modified'] and not receipt['common_kit']
+          assert receipt['domain']['normal']['complete_inventory'] == 207
+          assert receipt['domain']['normal']['initial_running'] == 17
           PY
       - uses: actions/upload-artifact@v4
         if: always()

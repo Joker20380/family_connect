@@ -28,6 +28,8 @@ passes; onPostResume fixes a reproduced disclosure reentry defect. Final-source 
 Authenticated synthetic backend, actual VPN independence and matching production-ID/signing-chain
 upgrade remain unaccepted. New B schema needs its own versioned HA restore contract; public flag,
 legal/store gates remain closed. No kit or HA-02 acceptance; installed components unchanged.
+Finish the207/17 real-Engine traversal gate under unchanged policy bounds alongside final CI;
+this validates inventory capacity, not the selected initial-generation physical fence.
 
 Historical23:20UTC:
 Current23:20UTC checkpoint: A remains blocked by the initial pre-hook Docker execution channel,
