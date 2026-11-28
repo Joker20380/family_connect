@@ -1,6 +1,7 @@
 """Start an explicitly separate containerd and exact Docker Engine for native AuthZ evidence."""
 import argparse
 import hashlib
+import io
 import json
 import os
 from pathlib import Path
@@ -8,6 +9,7 @@ import signal
 import socket
 import subprocess
 import sys
+import tarfile
 import threading
 import time
 import traceback
@@ -98,6 +100,15 @@ def main():
         subprocess.run(['docker', 'image', 'save', '-o', str(image), IMAGE], check=True, timeout=90)
         subprocess.run([*own, 'load', '-i', str(image)], check=True, stdout=subprocess.DEVNULL, timeout=90)
         image.unlink()
+        empty = io.BytesIO()
+        with tarfile.open(fileobj=empty, mode='w'):
+            pass
+        status, response = engine.call('POST', '/images/create?fromSrc=-&repo=fc-inventory-empty&tag=synthetic',
+            raw=empty.getvalue(), content_type='application/x-tar')
+        assert status == 200 and b'"error"' not in response
+        results['inventory_fixture'] = dict(empty_rootfs_sha256=hashlib.sha256(empty.getvalue()).hexdigest(),
+            stopped_image=engine.json('GET', '/images/fc-inventory-empty:synthetic/json')['Id'],
+            running_image=IMAGE_SHA)
         for name in ('protected', 'neighbor'):
             subprocess.run([*own, 'run', '-d', '--name', 'fc-authz-' + name, '--network=none',
                 '-v', str(root / name) + ':/data', IMAGE, 'sleep', 'infinity'], check=True,

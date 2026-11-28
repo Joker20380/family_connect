@@ -32,6 +32,10 @@ and readiness46087459696 SUCCESS. Full broad/native CI pending. Initial transiti
 or installed. No kit, production restrictions or existing key changes.
 207/17 native inventory qualification is now added to the isolated Engine gate, beyond the unit
 matrix; policy deadlines and fault assertions remain unchanged. Exact-source native result pending.
+First207/17 native fixture46088511450 fails its120s outer preparation bound (artifact15240022429
+retained); vfs unnecessarily copied Python rootfs for190 never-started rows. Those rows now use a
+deterministic empty synthetic image, with real running images retained and immutable stage records.
+No timeout increase/retry on unchanged source; traversal/native acceptance remains pending.
 Own isolated PG/emulator cleaned up; no production holds acquired or new live-baseline assertion.
 
 **Historical27 November23:20UTC — checkpoint: A common kit blocked; B candidate built, not release-ready.**

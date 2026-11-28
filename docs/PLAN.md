@@ -31,6 +31,8 @@ upgrade remain unaccepted. New B schema needs its own versioned HA restore contr
 legal/store gates remain closed. No kit or HA-02 acceptance; installed components unchanged.
 Finish the207/17 real-Engine traversal gate under unchanged policy bounds alongside final CI;
 this validates inventory capacity, not the selected initial-generation physical fence.
+Retain46088511450 outer fixture timeout; qualify the changed lightweight stopped-row fixture
+under the same deadlines before claiming207/17 native capacity.
 
 Historical23:20UTC:
 Current23:20UTC checkpoint: A remains blocked by the initial pre-hook Docker execution channel,

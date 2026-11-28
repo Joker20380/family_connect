@@ -14,6 +14,13 @@ fixture. It exercises the actual API rather than treating a fake207-row list as 
 Normal setup budget becomes120s solely for206 additional container creates; policy2s/4s and fault
 phase45s/<6s bounds remain unchanged. Final acquisition measurement/native CI is pending at commit.
 This does not improve initial_admission_coverage_proven or authorize shared-runtime maintenance.
+The first native207/17 run46088511450 fails with TimeoutExpired and clean own-process cleanup;
+artifact15240022429/fbbc60b7ce0d3528a7c7e282ba049c00dcf5b529ed281ad22f6ab837833cfe11 is retained.
+It does not produce a HELD/domain result. The vfs fixture copied the whole Python rootfs for all
+206 rows, including190 never-started ones. Use a deterministic empty image only for those stopped
+synthetic records, retain the real17 running containers, and record immutable setup milestones.
+The120s outer bound and policy2s/4s remain unchanged. This fixture correction needs a new native
+result; it is not proof that the historical timeout occurred in a particular API call.
 
 ### Native B runtime and disclosure correction
 
