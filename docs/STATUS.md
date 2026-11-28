@@ -14,7 +14,16 @@ do not reinterpret that refused operation as accepted. Its disk snapshot and fir
 No production service, boot config, key, data or shared Docker change; no production holds.
 Single A NEXT remains exact-image/support-IPC application recovery inside this cold-VM procedure,
 including bounded replacement-controller, ordinary capture/release and subsequent reboot order.
-B lifecycle/disclosure work remains separate and uncommitted at this A checkpoint.
+B source-only follow-up: basic starts after a visible/focused disclosure draw and successful
+notice-state commit, without an enabling click; Close only dismisses. OFF, objection and fault
+guards remain. Real NVIDIA/API35 checks cover automatic reservation while the dialog stays open,
+objection/reentry, notice storage failure and oldOFF. The test fixture now completes its previous
+activity lifecycle before starting another case; original fixture refusals remain recorded.
+System handover now waits for the matching permission RESULT_OK and activity destruction, not
+merely an injected tap. Fresh/prior test-APK authorization cases pass. This does not prove the
+root cause of46090897516 or active-VPN/Auto/full-client acceptance; full exact-source CI remains.
+Private x86_64 candidate126 SHA256a2e9979306a1b2413805d6e6e8ba7ee2a124201870ed115383657b4334ebf7a0;
+authenticated synthetic upload and real VPN independence remain pending. No public flag/install.
 
 **Historical checkpointb3d66cb5:**
 **28 November — source-only A/B corrections; initial Docker transition remains unqualified.**

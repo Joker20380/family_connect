@@ -21,6 +21,28 @@ public class AwgRuntimeTest {
         return "[Interface]\nPrivateKey = AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE=\nAddress = "+address+"\nDNS = 1.1.1.1\nMTU = 1280\n"+awg+"[Peer]\nPublicKey = zo060cy2M+x7cMF4FKXHbs0CloUFDTRHRboFhw5YfVk=\nEndpoint = 10.0.2.2:"+(type==Transport.WG?51820:51821)+"\nAllowedIPs = 0.0.0.0/0, ::/0\nPersistentKeepalive = 25\n";
     }
     void shell(String command)throws Exception{try(ParcelFileDescriptor fd=InstrumentationRegistry.getInstrumentation().getUiAutomation().executeShellCommand(command);InputStream in=new ParcelFileDescriptor.AutoCloseInputStream(fd)){while(in.read()!=-1){}}}
+    void handoverCommand(String phase,String command)throws Exception{
+        assertTrue("Only fixed handover commands",command.matches("[a-zA-Z0-9_. /=-]+"));
+        String script=("timeout 12 "+command+"; echo FC_EXIT:$?").replace(" ","${IFS}");
+        try(ParcelFileDescriptor descriptor=InstrumentationRegistry.getInstrumentation().getUiAutomation().executeShellCommand("sh -c "+script);InputStream stream=new ParcelFileDescriptor.AutoCloseInputStream(descriptor)){
+            ByteArrayOutputStream output=new ByteArrayOutputStream();
+            int next;while(output.size()<4096&&(next=stream.read())!=-1)output.write(next);
+            byte[] bytes=output.toByteArray();
+            android.util.Log.i("FC-VPN-HANDOVER",phase+" "+new String(bytes,StandardCharsets.UTF_8).replace('\n',' '));
+            assertTrue("Bounded handover command output",bytes.length<4096);
+            assertTrue("Handover command failed: "+phase,new String(bytes,StandardCharsets.UTF_8).contains("FC_EXIT:0"));
+        }
+    }
+    void handoverState(String phase){
+        boolean idle=true;try{ControlOperations.APP.requireIdle();}catch(IOException occupied){idle=false;}
+        ConnectivityManager manager=context.getSystemService(ConnectivityManager.class);
+        StringBuilder networks=new StringBuilder();
+        for(Network network:manager.getAllNetworks()){
+            NetworkCapabilities capabilities=manager.getNetworkCapabilities(network);
+            if(capabilities!=null&&capabilities.hasTransport(NetworkCapabilities.TRANSPORT_VPN))networks.append(network).append(':').append(android.os.Build.VERSION.SDK_INT>=29?capabilities.getOwnerUid():-1).append(' ');
+        }
+        android.util.Log.i("FC-VPN-HANDOVER",phase+" package="+context.getPackageName()+" uid="+context.getApplicationInfo().uid+" prepared="+(VpnService.prepare(context)==null)+" idle="+idle+" status="+ConnectionService.status+" vpn="+networks);
+    }
     void waitState(String state)throws Exception{
         long until=System.currentTimeMillis()+30000;
         while(System.currentTimeMillis()<until){if(ConnectionService.status.equals(state))return;if(ConnectionService.failed&&!ConnectionService.status.equals("off"))fail("Service failed: "+ConnectionService.status);Thread.sleep(100);}
@@ -78,9 +100,25 @@ public class AwgRuntimeTest {
         info.flags|=android.accessibilityservice.AccessibilityServiceInfo.FLAG_REPORT_VIEW_IDS|android.accessibilityservice.AccessibilityServiceInfo.FLAG_RETRIEVE_INTERACTIVE_WINDOWS|android.accessibilityservice.AccessibilityServiceInfo.FLAG_INCLUDE_NOT_IMPORTANT_VIEWS;
         automation.setServiceInfo(info);
         String testPackage=InstrumentationRegistry.getInstrumentation().getContext().getPackageName();
+        String nonce=UUID.randomUUID().toString();
+        java.util.concurrent.CountDownLatch destroyed=new java.util.concurrent.CountDownLatch(1);
+        java.util.concurrent.atomic.AtomicInteger result=new java.util.concurrent.atomic.AtomicInteger(Activity.RESULT_CANCELED);
+        BroadcastReceiver receiver=new BroadcastReceiver(){
+            @Override public void onReceive(Context source,Intent event){
+                if(!nonce.equals(event.getStringExtra("nonce")))return;
+                if("result".equals(event.getStringExtra("phase")))result.set(event.getIntExtra("result",Activity.RESULT_CANCELED));
+                if("destroy".equals(event.getStringExtra("phase")))destroyed.countDown();
+            }
+        };
+        IntentFilter filter=new IntentFilter("com.familyconnect.app.TEST_VPN_HANDOVER");
+        if(android.os.Build.VERSION.SDK_INT>=33)context.registerReceiver(receiver,filter,Context.RECEIVER_EXPORTED);
+        else context.registerReceiver(receiver,filter);
+        try{
         // Each test must exercise a fresh system confirmation, even after another handover.
-        shell("appops set "+testPackage+" ACTIVATE_VPN deny");
-        shell("am start -W -n "+testPackage+"/"+RevokeVpnActivity.class.getName());
+        handoverState("before");
+        handoverCommand("reset-test-authorization","appops set "+testPackage+" ACTIVATE_VPN deny");
+        handoverCommand("read-test-authorization","appops get "+testPackage+" ACTIVATE_VPN");
+        handoverCommand("start-test-activity","am start -W -n "+testPackage+"/"+RevokeVpnActivity.class.getName()+" --es handover_target "+context.getPackageName()+" --es handover_nonce "+nonce);
         long until=android.os.SystemClock.elapsedRealtime()+15000;boolean clicked=false;
         int observedRoots=0,systemRoots=0,observedButtons=0,enabledButtons=0;
         while(android.os.SystemClock.elapsedRealtime()<until&&!clicked){
@@ -109,8 +147,13 @@ public class AwgRuntimeTest {
             }
             if(!clicked)Thread.sleep(100);
         }
+        handoverState(clicked?"touch-injected":"confirmation-missing");
         if(!clicked)automation.performGlobalAction(android.accessibilityservice.AccessibilityService.GLOBAL_ACTION_BACK);
         assertTrue("System VPN confirmation not found: roots="+observedRoots+", system_roots="+systemRoots+", buttons="+observedButtons+", enabled="+enabledButtons+", interactive="+power.isInteractive()+", locked="+keyguard.isKeyguardLocked(),clicked);
+        assertTrue("Injected touch is not completed permission handover",destroyed.await(Math.max(1,until-android.os.SystemClock.elapsedRealtime()),java.util.concurrent.TimeUnit.MILLISECONDS));
+        assertEquals("Permission activity did not accept transfer",Activity.RESULT_OK,result.get());
+        handoverState("result-accepted-and-activity-destroyed");
+        }finally{context.unregisterReceiver(receiver);}
     }
     void quietNotification(){
         android.app.NotificationManager manager=context.getSystemService(android.app.NotificationManager.class);

@@ -13,8 +13,16 @@ queue a payload-free revoke. These choices do not gate VPN, payment, updates or 
 optional diagnostic controls remain independent. A review/resume after objection requires the
 previous revoke acknowledgment first, then a new notice; the epoch is never raised to bypass it.
 
-28 November native candidate checks use an isolated `.metadata` package, NVIDIA host GPU and KVM.
-Disclosure is invoked onPostResume, not only onCreate: Back keeps NOTICE_PENDING, and returning
+28 November follow-up candidate: information is committed only after a visible/focused draw of
+the disclosure, then basic starts automatically; no Understood/enabling click is required. Close
+only dismisses; Object revokes and reentry does not undo it. Failed notice persistence stays closed.
+API35/NVIDIA native tests cover automatic reservation with the notice still open, explicit objection,
+oldOFF and a drawn-notice storage failure. This remains a source-only private candidate, not public
+processing-basis approval or authenticated-upload/traffic acceptance. Candidate126 x86_64 debug
+SHA256a2e9979306a1b2413805d6e6e8ba7ee2a124201870ed115383657b4334ebf7a0.
+
+Historicalfcb25335 native candidate checks used an isolated `.metadata` package, NVIDIA host GPU and KVM.
+Disclosure was invoked onPostResume, not only onCreate: Back kept NOTICE_PENDING, and returning
 to the same activity shows it again before sampling. The synchronized old-APK regression fails;
 the fixed UI passes. Native SharedPreferences/AtomicFile checks cover init/notice/reserve/ACK
 failure before and after publication, separate-process reopen, oldOFF/revoke and missing binding.

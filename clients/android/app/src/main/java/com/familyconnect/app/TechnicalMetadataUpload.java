@@ -136,11 +136,27 @@ final class TechnicalMetadataUpload {
     private synchronized void disclose(Activity activity){
         if(!BuildConfig.BASIC_METADATA_APPROVED||!policy.needsNotice()||noticeOpen||activity.isFinishing())return;
         noticeOpen=true;
-        new android.app.AlertDialog.Builder(activity).setTitle("Базовые технические сведения / Basic technical data")
+        android.app.AlertDialog notice=new android.app.AlertDialog.Builder(activity).setTitle("Базовые технические сведения / Basic technical data")
             .setMessage("Автоматически: ОС и версия приложения, тип связи, доступные SIM/зарегистрированный оператор (отдельные источники), фактические transport/gateway и категория ошибки. Сервер определяет ASN/организацию по подтверждённому временному IP-наблюдению, не по VPN/relay IP. Цель — диагностика совместимости и подключения. Только последнее наблюдение, до 7 дней. Без модели, города, географии и истории IP. Это уведомление, не согласие. Возражение и дополнительная диагностика: Поддержка → Конфиденциальность. Отказ не ограничивает VPN, оплату, обновления и поддержку.\nAutomatic basic data, latest only up to 7 days; no model, location or IP history. Privacy/objection in Support → Privacy. Acknowledgment is not consent.")
             .setNegativeButton("Возражаю / Object",(dialog,which)->object())
-            .setPositiveButton("Понятно / Understood",(dialog,which)->{synchronized(this){policy.noticeShown(BuildConfig.BASIC_METADATA_APPROVED);changed();}})
-            .setOnDismissListener(dialog->{synchronized(this){noticeOpen=false;}}).show();
+            .setPositiveButton("Закрыть / Close",null)
+            .setOnDismissListener(dialog->{synchronized(this){noticeOpen=false;}}).create();
+        notice.show();
+        android.view.View content=notice.findViewById(android.R.id.message);
+        content.getViewTreeObserver().addOnDrawListener(new android.view.ViewTreeObserver.OnDrawListener(){
+            private boolean posted;
+            @Override public void onDraw(){
+                if(posted||!content.isShown()||!content.hasWindowFocus())return;
+                posted=true;
+                content.post(()->{
+                    if(content.getViewTreeObserver().isAlive())content.getViewTreeObserver().removeOnDrawListener(this);
+                    synchronized(TechnicalMetadataUpload.this){
+                        if(notice.isShowing()&&content.isShown()&&!activity.isFinishing()&&!activity.isDestroyed()
+                            &&policy.needsNotice()&&policy.noticeShown(BuildConfig.BASIC_METADATA_APPROVED))changed();
+                    }
+                });
+            }
+        });
     }
     static void controls(Activity activity,LinearLayout panel){
         TechnicalMetadataUpload upload=get(activity);

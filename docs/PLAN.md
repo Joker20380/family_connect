@@ -29,6 +29,11 @@ AuthZ, systemd physical parent, immutable source/config pins, old runtime closed
 Missing acceptance is real support new authority/IPC, installed-image console/publisher/PG recovery,
 bounded replacement-controller fault matrix, capture/release and subsequent reboot ordering.
 Retain the earlier vfs capacity and cgroupfs physical-parent refusals; production scope is unchanged.
+Separate B follow-up removes the enabling-click condition: visible disclosure draw plus durable
+commit precede automatic basic. Native API35 UI/refusal and fresh/prior system authorization
+checks pass. Handover waits for result/destruction; active-VPN/Auto and exact full Client workflow,
+authenticated synthetic endpoint→collector→panel and traffic independence remain open. Historical
+46090897516 is not explained by a later successful isolated handover. Public activation stays false.
 Negative46086314293 proves that retiring dockerd/containerd leaves shim FD/mmap/rename effects;
 do not repeat census or call10.115s lab API return application/initial-transition acceptance.
 No production shared stop, reboot or AuthZ installation; wider scope review only after executable

@@ -44,6 +44,37 @@ IPC and exact images/configuration, bounded VM fault/replacement matrix, normal 
 future reboot order and measured host-wide impact packet. No installed adapter/common kit/
 independent kit verification/linked resume or HA-02 acceptance. B changes are kept separate.
 
+## B separate follow-up: displayed notice and permission-result boundary
+
+New basic UX commits notice only after the visible, focused message view draws; successful commit
+automatically schedules basic without a button. Close only dismisses, not consent or enablement.
+Object/OFF, pending revoke, restore and storage-fault guards remain. API35/KVM renderer is actual
+NVIDIA GTX1650Ti, not software. Native tests pass automatic reservation while the notice remains
+visible, objection/reentry, oldOFF and drawn-notice commit failure. The earlier combined-case refusal
+was isolated to the fixture retaining an activity across tests: completing that lifecycle makes
+the combined sequence pass without enlarging its bounds. Initial failures/logs remain private.
+Public flag is unchanged false. Rebuilt `.metadata`126/0.1.18-beta126-basic-candidate x86_64 debug
+APK SHA256a2e9979306a1b2413805d6e6e8ba7ee2a124201870ed115383657b4334ebf7a0; this is neither
+ARM64 physical-device nor production-identity/signature upgrade acceptance.
+
+Original debug artifact15241842209 is downloaded and independently SHA256 checked:
+b3ef806fb112e9f5f22e72178b18d04fc4c48119c5eb8b76097eef7193e4089a.
+Its crash log is empty; the retained bounded app log starts after the failing handover began.
+Suppressed teardown reports off vs cleanup-required; missing system roots do not prove why the
+permission activity was not observed. Historical46090897516 root cause remains unproved.
+New bounded diagnostics record appops/am status, package/UID, prepare-null/Intent, result/lifecycle,
+VPN owner network and ControlOperations occupancy without credentials/profiles. An isolated repeat
+demonstrates that injected touch alone can return while appops still says deny. The helper now
+waits for a nonce-matched RESULT_OK and destruction of that permission activity, before returning.
+Fresh/default and previously allowed test-APK cases pass with real system dialogs; the existing
+15-second bound and permission assertion remain. Added active-application case is still pending
+native/full Client qualification. No carrier change or historical-cause inference.
+
+25 source release guards pass. New exact-source Client workflow is required; old native/source
+PASS is not relabeled as new source. Authenticated synthetic upload/collector/panel and real VPN
+traffic under endpoint faults remain open; no successful upload is inferred from an auth refusal.
+No production schemas/writers/bindings, owner application, working vault or release flag changed.
+
 ## Historical entry and earlier checkpoints
 
 Current entry: feature/device-technical-metadata-20261115, local/remote
